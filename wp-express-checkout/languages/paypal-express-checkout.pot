@@ -1,0 +1,620 @@
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:154
+msgid "PayPal Express Checkout Settings"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:154
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:319
+msgid "Settings"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:165
+msgid "Plugin Documentation"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:167
+msgid "Global Settings"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:168
+msgid "PayPal Credentials"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:169
+msgid "Button Style"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:170
+msgid "Disable Funding"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:172
+msgid "Currency Code"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:172
+msgid "Example: USD, CAD etc"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:174
+msgid ""
+"Check this to run the transaction in live mode. When unchecked it will run "
+"in sandbox mode."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:174
+msgid "Live Mode"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:175
+msgid "Live Client ID"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:176
+msgid "Sandbox Client ID"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:179
+msgid "Credit or debit cards"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:179
+msgid "Disabled Funding Options"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:179
+msgid "PayPal Credit"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:179
+msgid "SEPA-Lastschrift"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:180
+msgid "American Express"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:180
+msgid "Disabled Cards"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:180
+msgid "Discover"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:180
+msgid "Elo"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:180
+msgid "Hiper"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:180
+msgid "JCB"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:180
+msgid "Mastercard"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:180
+msgid "Visa"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:182
+msgid "Button Type"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:182
+msgid "Buy Now"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:182
+msgid "Checkout"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:182
+msgid "Pay"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:182
+msgid "PayPal"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:183
+msgid "Button Shape"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:183
+msgid "Pill"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:183
+msgid "Rectangle"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:184
+msgid ""
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:184
+msgid "Button Layout"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:184
+msgid "Horizontal"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:184
+msgid "Vertical"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:185
+msgid "Button Height"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:185
+msgid "Extra Large"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:185
+msgid "Large"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:185
+msgid "Medium"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:185
+msgid "Small"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:186
+msgid "Button Width"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:186
+msgid ""
+"Button width in pixels. Minimum width is 150px. Leave it blank for auto "
+"width."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:187
+msgid "Black"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:187
+msgid "Blue"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:187
+msgid "Button Color"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:187
+msgid "Button preview:"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:187
+msgid "Gold"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:187
+msgid "Silver"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:187
+msgid "White"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:193
+msgid ""
+"Please read the <a target=\"_blank\" href=\"https://www.tipsandtricks-hq.com/"
+"paypal-for-digital-goods-wordpress-plugin\">PayPal for Digital Goods</a> "
+"plugin setup instructions to configure and use it."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:201
+msgid ""
+"By default, funding source eligibility is smartly decided based on a variety "
+"of factors. You can force disable funding options by selecting them below."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:204
+msgid ""
+"Note: disabled options will disappear from button preview once you save "
+"changes."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/class-ppdg-admin.php:290
+msgid "You must specify payment curency."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:21
+msgctxt "Post Type General Name"
+msgid "Orders"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:22
+msgctxt "Post Type Singular Name"
+msgid "Order"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:23
+msgid "Digital Goods Orders"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:24
+msgid "Parent Order:"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:25
+msgid "Orders"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:26
+msgid "View Order"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:27
+msgid "Add New Order"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:28
+msgid "Add New"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:29
+msgid "Edit Order"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:30
+msgid "Update Order"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:31
+msgid "Search Order"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:32
+#: paypal-for-digital-goods/admin/includes/class-products.php:40
+msgid "Not found"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:33
+#: paypal-for-digital-goods/admin/includes/class-products.php:41
+msgid "Not found in Trash"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:36
+msgid "orders"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:37
+msgid "PPDG Orders"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:112
+msgid "<h2>Order Details</h2>"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:113
+msgid "Order Time: "
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:114
+msgid "Transaction ID: "
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:116
+msgid "Product Name: "
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:117
+msgid "Quantity: "
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:118
+msgid "Price: "
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:120
+msgid "Total Amount: "
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:124
+msgid "<h2>Customer Details</h2>"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:125
+msgid "Name: "
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:126
+msgid "Payer ID: "
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:127
+msgid "E-Mail Address: "
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-order.php:128
+msgid "Country Code: "
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:16
+msgid "Description"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:17
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:32
+#: paypal-for-digital-goods/admin/includes/class-products.php:99
+msgid "Price"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:18
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:44
+msgid "Quantity"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:19
+msgid "Download URL"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:20
+#: paypal-for-digital-goods/admin/includes/class-products.php:100
+msgid "Shortcode"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:24
+msgid "Add a description for your product."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:35
+msgid ""
+"Item price. Numbers only, no need to put currency symbol. Example: 99.95"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:47
+msgid "Item quantity."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:50
+msgid "Allow customers to specify quantity"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:52
+msgid ""
+"When checked, customers can enter quantity they want to buy. You can set "
+"initial quantity using field above."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:59
+msgid "URL of your product."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:65
+msgid ""
+"Manually enter a valid URL of the file in the text box below, or click "
+"\"Select File\" button to upload (or choose) the downloadable file."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:69
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:87
+msgid "Select File"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:73
+msgid "Steps to upload a file or choose one from your media library:"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:75
+msgid "Hit the \"Select File\" button."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:76
+msgid "Upload a new file or choose an existing one from your media library."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:77
+msgid ""
+"Click the \"Insert\" button, this will populate the uploaded file's URL in "
+"the above text field."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:89
+msgid "Insert"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:109
+msgid "Use this shortcode to display button for your product."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:129
+msgid "Please specify product name."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:137
+msgid "Please specify product download URL."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:151
+msgid "Ivalid product price."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:29
+msgctxt "Post Type General Name"
+msgid "Products"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:30
+msgctxt "Post Type Singular Name"
+msgid "Product"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:31
+msgid "PayPal Express Checkout"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:33
+msgid "Products"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:34
+msgid "View Product"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:35
+#: paypal-for-digital-goods/admin/includes/class-products.php:36
+msgid "Add New Product"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:37
+msgid "Edit Product"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:38
+msgid "Update Products"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:39
+msgid "Search Product"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:80
+msgid "View product"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:82
+msgid "Preview product"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:84
+#: paypal-for-digital-goods/admin/includes/class-products.php:85
+msgid "Product updated."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:86
+msgid "Product published."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:87
+msgid "Product saved."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:88
+msgid "Product submitted."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:89
+msgid "Product draft updated."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:97
+msgid "Product Name"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:98
+msgid "ID"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/includes/class-products.php:101
+msgid "Date"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/views/admin.php:41
+msgid "To get your client ID or set up a new one:"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/views/admin.php:43
+msgid ""
+"Navigate to <a href=\"https://developer.paypal.com/developer/applications/\" "
+"target=\"_blank\">My Apps &amp; Credentials</a> and click <strong>Log into "
+"Dashboard</strong> in the top, right corner of the page."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/views/admin.php:44
+msgid ""
+"Scroll down to <strong>REST API Apps</strong> and click the name of your app "
+"to see the app's details. If you don't have any apps, create one now:"
+msgstr ""
+
+#: paypal-for-digital-goods/admin/views/admin.php:45
+msgid "a. Click <strong>Create App</strong>."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/views/admin.php:46
+msgid ""
+"b. In <strong>App Name</strong>, enter a name and then click <strong>Create "
+"App</strong> again. The app is created and your client ID is displayed."
+msgstr ""
+
+#: paypal-for-digital-goods/admin/views/admin.php:47
+msgid ""
+"Click the <strong>Sandbox</strong> / <strong>Live</strong> toggle to display "
+"and copy the client ID for each environment."
+msgstr ""
+
+#: paypal-for-digital-goods/paypal-for-digital-goods.php:67
+msgid "No payment data received."
+msgstr ""
+
+#: paypal-for-digital-goods/paypal-for-digital-goods.php:74
+#, php-format
+msgid "Payment is not approved. Status: %s"
+msgstr ""
+
+#: paypal-for-digital-goods/paypal-for-digital-goods.php:85
+msgid "No transaction info found in transient."
+msgstr ""
+
+#: paypal-for-digital-goods/paypal-for-digital-goods.php:103
+msgid "Payment amount mismatch original price."
+msgstr ""
+
+#: paypal-for-digital-goods/paypal-for-digital-goods.php:110
+msgid "Payment currency mismatch."
+msgstr ""
+
+#: paypal-for-digital-goods/paypal-for-digital-goods.php:132
+msgid "Payment Completed"
+msgstr ""
+
+#: paypal-for-digital-goods/paypal-for-digital-goods.php:134
+msgid "Thank you for your purchase."
+msgstr ""
+
+#: paypal-for-digital-goods/paypal-for-digital-goods.php:135
+#, php-format
+msgid "Please <a href=\"%s\">click here</a> to download the file."
+msgstr ""
+
+#: paypal-for-digital-goods/public/includes/class-shortcode-ppdg.php:67
+msgid "Error: product ID is invalid."
+msgstr ""
+
+#: paypal-for-digital-goods/public/includes/class-shortcode-ppdg.php:74
+#, php-format
+msgid "Can't find product with ID %s"
+msgstr ""
+
+#: paypal-for-digital-goods/public/includes/class-shortcode-ppdg.php:107
+msgid "Please specify a digital url for your product"
+msgstr ""
+
+#: paypal-for-digital-goods/public/includes/class-shortcode-ppdg.php:140
+#, php-format
+msgid "Please enter %s Client ID in the settings."
+msgstr ""
+
+#: paypal-for-digital-goods/public/includes/class-shortcode-ppdg.php:171
+msgid "Error occurred"
+msgstr ""
+
+#: paypal-for-digital-goods/public/includes/class-shortcode-ppdg.php:172
+msgid "Payment for"
+msgstr ""
+
+#: paypal-for-digital-goods/public/includes/class-shortcode-ppdg.php:173
+msgid "Please enter valid quantity"
+msgstr ""

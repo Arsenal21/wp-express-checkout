@@ -1,0 +1,62 @@
+/* This stylesheet is used to style the public-facing components of the plugin. */
+
+/* Spinner */
+.wp-ppec-spinner {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+}
+.wp-ppec-spinner div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 51px;
+    height: 51px;
+    margin: 6px;
+    border: 6px solid #005ea6;
+    border-radius: 50%;
+    animation: wp-ppec-spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #005ea6 transparent transparent transparent;
+}
+.wp-ppec-spinner div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+.wp-ppec-spinner div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+.wp-ppec-spinner div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+@keyframes wp-ppec-spinner {
+    0% {
+	transform: rotate(0deg);
+    }
+    100% {
+	transform: rotate(360deg);
+    }
+}
+
+.wp-ppec-overlay {
+    z-index: 10000;
+    display: none;
+    background-color: white;
+    width: 100%;
+    opacity: 0.7;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.wp-ppec-button-container {
+    margin: 10px 0;
+}
+
+.wp-ppec-form-error-msg {
+    display: none;
+    color: red;
+}
