@@ -28,7 +28,7 @@ class PPECProducts {
 	$labels		 = array(
 	    'name'			 => _x( 'Products', 'Post Type General Name', 'paypal-express-checkout' ),
 	    'singular_name'		 => _x( 'Product', 'Post Type Singular Name', 'paypal-express-checkout' ),
-	    'menu_name'		 => __( 'PayPal Express Checkout', 'paypal-express-checkout' ),
+	    'menu_name'		 => __( 'WP Express Checkout', 'paypal-express-checkout' ),
 //	    'parent_item_colon'	 => __( 'Parent Order:', 'paypal-express-checkout' ),
 	    'all_items'		 => __( 'Products', 'paypal-express-checkout' ),
 	    'view_item'		 => __( 'View Product', 'paypal-express-checkout' ),

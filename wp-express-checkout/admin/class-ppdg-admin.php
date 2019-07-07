@@ -151,7 +151,7 @@ class PPDG_Admin {
 	 *   For reference: http://codex.wordpress.org/Roles_and_Capabilities
 	 */
 	$this->plugin_screen_hook_suffix = add_submenu_page(
-	'edit.php?post_type=' . PPECProducts::$products_slug, __( 'PayPal Express Checkout Settings', 'paypal-express-checkout' ), __( 'Settings', 'paypal-express-checkout' ), 'manage_options', 'ppec-settings-page', array( $this, 'display_plugin_admin_page' )
+	'edit.php?post_type=' . PPECProducts::$products_slug, __( 'WP Express Checkout Settings', 'paypal-express-checkout' ), __( 'Settings', 'paypal-express-checkout' ), 'manage_options', 'ppec-settings-page', array( $this, 'display_plugin_admin_page' )
 	);
 	add_action( 'admin_init', array( $this, 'register_settings' ) );
     }

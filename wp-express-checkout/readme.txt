@@ -1,14 +1,14 @@
 === PayPal for Digital Goods ===
 Contributors: Tips and Tricks HQ
-Donate link: https://www.tipsandtricks-hq.com/paypal-for-digital-goods-wordpress-plugin
-Tags: paypal, payment, express checkout, digital goods, payment gateway, instant payment, digital downloads, e-commerce
+Donate link: https://www.tipsandtricks-hq.com/
+Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 3.5
 Tested up to: 5.2
-Stable tag: 1.6
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Allows you to use the PayPal Express Checkout API to accept payment for a digital item in a popup.
+Allows you to use the PayPal Express Checkout API to accept payment quickly for an item in a popup.
 
 == Description ==
 

@@ -1,5 +1,5 @@
 #: paypal-for-digital-goods/admin/class-ppdg-admin.php:154
-msgid "PayPal Express Checkout Settings"
+msgid "WP Express Checkout Settings"
 msgstr ""
 
 #: paypal-for-digital-goods/admin/class-ppdg-admin.php:154
@@ -453,7 +453,7 @@ msgid "Product"
 msgstr ""
 
 #: paypal-for-digital-goods/admin/includes/class-products.php:31
-msgid "PayPal Express Checkout"
+msgid "WP Express Checkout"
 msgstr ""
 
 #: paypal-for-digital-goods/admin/includes/class-products.php:33
