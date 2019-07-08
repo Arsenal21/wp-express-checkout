@@ -250,7 +250,7 @@ class PPDG {
 		switch ( $settings[ 'btn_size' ] ) {
 		    case 'small':
 			$settings[ 'btn_height' ]	 = 'small';
-			$settings[ 'btn_width' ]	 = 150;
+			$settings[ 'btn_width' ]	 = 200;
 			break;
 		    case 'medium':
 			$settings[ 'btn_height' ]	 = 'medium';

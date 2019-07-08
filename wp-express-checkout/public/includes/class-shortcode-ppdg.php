@@ -98,7 +98,7 @@ class PPDGShortcode {
 	}
 
         $args = array('name' => $title, 'price' => $price, 'quantity' => $quantity, 'custom_quantity' => $custom_quantity, 'url' => $url );
-	$output .= generate_pp_express_checkout_button($args);
+	$output .= $this->generate_pp_express_checkout_button($args);
 	return $output;
     }
 
@@ -236,20 +236,19 @@ class PPDGShortcode {
 
 	$output .= '<div class = "wp-ppec-button-container">';
 
-	$output .= sprintf( '<div id = "%s"style = "margin: 0 auto;%s"></div>  ', $button_id, $btn_width ? ' width: ' . $btn_width . 'px;
-	    ' : '' );
+	$output .= sprintf( '<div id="%s" style="max-width:%s"></div>', $button_id, $btn_width ? $btn_width . 'px;' : '' );
 
 	$output .= '</div>';
 
 	$data = array(
-	    'id'			 => $button_id,
-	    'env'			 => $env,
+	    'id'		 => $button_id,
+	    'env'		 => $env,
 	    'client_id'		 => $client_id,
-	    'price'			 => $price,
+	    'price'		 => $price,
 	    'quantity'		 => $quantity,
 	    'custom_quantity'	 => $custom_quantity,
 	    'currency'		 => $currency,
-	    'name'			 => $name,
+	    'name'		 => $name,
 	    'btnStyle'		 => array(
 		'height' => $btn_height,
 		'shape'	 => $btn_shape,
