@@ -24,7 +24,7 @@ class PPDGShortcode {
 	add_shortcode( 'paypal_for_digital_goods', array( $this, 'shortcode_paypal_for_digital_goods' ) );
 	add_shortcode( 'ppdg_checkout', array( $this, 'shortcode_ppdg_checkout' ) );
 
-	add_shortcode( 'paypal_express_checkout', array( $this, 'shortcode_paypal_express_checkout' ) );
+	add_shortcode( 'wp_express_checkout', array( $this, 'shortcode_wp_express_checkout' ) );
 
 	if ( ! is_admin() ) {
 	    add_filter( 'widget_text', 'do_shortcode' );
@@ -52,7 +52,7 @@ class PPDGShortcode {
 	global $post;
 	if ( isset( $post ) ) {
 	    if ( $post->post_type === PPECProducts::$products_slug ) {//Handle the content for product type post
-		return do_shortcode( '[paypal_express_checkout product_id="' . $post->ID . '" is_post_tpl="1" in_the_loop="' . +in_the_loop() . '"]' );
+		return do_shortcode( '[wp_express_checkout product_id="' . $post->ID . '" is_post_tpl="1" in_the_loop="' . +in_the_loop() . '"]' );
 	    }
 	}
 	return $content;
@@ -62,7 +62,7 @@ class PPDGShortcode {
 	return sprintf( '<div class="wp-ppec-error-msg" style="color: red;">%s</div>', $msg );
     }
 
-    function shortcode_paypal_express_checkout( $atts ) {
+    function shortcode_wp_express_checkout( $atts ) {
 	if ( empty( $atts[ 'product_id' ] ) ) {
 	    $error_msg	 = __( "Error: product ID is invalid.", 'paypal-express-checkout' );
 	    $err		 = $this->show_err_msg( $error_msg );

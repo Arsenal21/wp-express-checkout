@@ -120,7 +120,7 @@ class PPECProducts {
 		break;
 	    case 'shortcode':
 		?>
-		<input type="text" name="ppec_product_shortcode" class="ppec-select-on-click" readonly value="[paypal_express_checkout product_id=&quot;<?php echo $post_id; ?>&quot;]">
+		<input type="text" name="ppec_product_shortcode" class="ppec-select-on-click" readonly value="[wp_express_checkout product_id=&quot;<?php echo $post_id; ?>&quot;]">
 		<?php
 		break;
 	}

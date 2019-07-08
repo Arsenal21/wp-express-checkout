@@ -105,7 +105,7 @@ class PPECProductsMetaboxes {
 
     function display_shortcode_meta_box( $post ) {
 	?>
-	<input type="text" name="ppec_product_shortcode" style="width: 100%;" class="ppec-select-on-click" readonly value="[paypal_express_checkout product_id=&quot;<?php echo $post->ID; ?>&quot;]">
+	<input type="text" name="ppec_product_shortcode" style="width: 100%;" class="ppec-select-on-click" readonly value="[wp_express_checkout product_id=&quot;<?php echo $post->ID; ?>&quot;]">
 	<p class="description"><?php _e( 'Use this shortcode to display button for your product.', 'paypal-express-checkout' ); ?></p>
 	<?php
     }
