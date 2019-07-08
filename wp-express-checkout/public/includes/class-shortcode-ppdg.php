@@ -21,9 +21,6 @@ class PPDGShortcode {
 	//handle single product page display
 	add_filter( 'the_content', array( $this, 'filter_post_type_content' ) );
 
-	add_shortcode( 'paypal_for_digital_goods', array( $this, 'shortcode_paypal_for_digital_goods' ) );
-	add_shortcode( 'ppdg_checkout', array( $this, 'shortcode_ppdg_checkout' ) );
-
 	add_shortcode( 'wp_express_checkout', array( $this, 'shortcode_wp_express_checkout' ) );
 
 	if ( ! is_admin() ) {
@@ -100,27 +97,28 @@ class PPDGShortcode {
 	    $output	 .= $content;
 	}
 
-	$sc	 = sprintf( '[paypal_for_digital_goods name="%s" price="%s" quantity="%d" custom_quantity="%d" url="%s"]', $title, $price, $quantity, $custom_quantity, $url );
-	$output	 .= do_shortcode( $sc );
+        $args = array('name' => $title, 'price' => $price, 'quantity' => $quantity, 'custom_quantity' => $custom_quantity, 'url' => $url );
+	$output .= generate_pp_express_checkout_button($args);
 	return $output;
     }
 
-    function shortcode_paypal_for_digital_goods( $atts ) {
+    function generate_pp_express_checkout_button( $args ) {
 
 	extract( shortcode_atts( array(
-	    'name'			 => 'Item Name',
-	    'price'			 => '0',
+	    'name'		 => 'Item Name',
+	    'price'		 => '0',
 	    'quantity'		 => 1,
-	    'url'			 => '',
+	    'url'		 => '',
 	    'custom_quantity'	 => 0,
 	    'currency'		 => $this->ppdg->get_setting( 'currency_code' ),
 	    'btn_shape'		 => $this->ppdg->get_setting( 'btn_shape' ) !== false ? $this->ppdg->get_setting( 'btn_shape' ) : 'pill',
 	    'btn_type'		 => $this->ppdg->get_setting( 'btn_type' ) !== false ? $this->ppdg->get_setting( 'btn_type' ) : 'checkout',
-	    'btn_height'		 => $this->ppdg->get_setting( 'btn_height' ) !== false ? $this->ppdg->get_setting( 'btn_height' ) : 'small',
+	    'btn_height'	 => $this->ppdg->get_setting( 'btn_height' ) !== false ? $this->ppdg->get_setting( 'btn_height' ) : 'small',
 	    'btn_width'		 => $this->ppdg->get_setting( 'btn_width' ) !== false ? $this->ppdg->get_setting( 'btn_width' ) : 0,
-	    'btn_layout'		 => $this->ppdg->get_setting( 'btn_layout' ) !== false ? $this->ppdg->get_setting( 'btn_layout' ) : 'horizontal',
+	    'btn_layout'	 => $this->ppdg->get_setting( 'btn_layout' ) !== false ? $this->ppdg->get_setting( 'btn_layout' ) : 'horizontal',
 	    'btn_color'		 => $this->ppdg->get_setting( 'btn_color' ) !== false ? $this->ppdg->get_setting( 'btn_color' ) : 'gold',
-	), $atts ) );
+	), $args ) );
+        
 	if ( empty( $url ) ) {
 	    $err_msg = __( "Please specify a digital url for your product", 'paypal-express-checkout' );
 	    $err	 = $this->show_err_msg( $err_msg );
@@ -267,11 +265,6 @@ class PPDGShortcode {
 	$output .= '</div>';
 
 	return $output;
-    }
-
-    public function shortcode_ppdg_checkout() {
-
-	return '';
     }
 
 }

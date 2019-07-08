@@ -49,33 +49,7 @@ https://www.youtube.com/watch?v=nIv8D-qTY4g
 
 This plugin adds the following shortcode to your site:
 
-[paypal_for_digital_goods]
-
-It supports the following attributes in the shortcode -
-
-    name:
-    (string) (required) Name of the product
-    Possible Values: 'Awesome Script', 'My Ebook', 'Wooden Table' etc.
-
-
-    price:
-    (number) (required) Price of the product or item
-    Possible Values: '9.90', '29.95', '50' etc.
-
-    quantity:
-    (number) (optional) Number of products to be charged.
-    Possible Values: '1', '5' etc.
-    Default: 1
-
-    currency:
-    (string) (optional) Currency of the price specified.
-    Possible Values: 'USD', 'GBP' etc
-    Default: The one set up in Settings area.
-    
-    url:
-    (URL) (optional) URL of the downloadable file.
-    Possible Values: http://example.com/my-downloads/product.zip
-
+[wp_express_checkout id="123"]
 
 Please visit Settings -> PayPal for Digital Goods admin area to configure default options. 
 
@@ -83,7 +57,7 @@ You can also test it on PayPal Sandbox before going Live.
 
 == Usage ==
 
-[paypal_for_digital_goods name="Cool Script" price="50" url="http://example.com/downloads/my-script.zip"]
+[wp_express_checkout id="123"]
 
 == Installation ==
 
