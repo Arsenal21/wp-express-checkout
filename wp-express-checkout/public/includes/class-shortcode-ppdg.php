@@ -119,13 +119,13 @@ class PPDGShortcode {
 	    'btn_color'		 => $this->ppdg->get_setting( 'btn_color' ) !== false ? $this->ppdg->get_setting( 'btn_color' ) : 'gold',
 	), $args ) );
         
-	if ( empty( $url ) ) {
-	    $err_msg = __( "Please specify a digital url for your product", 'paypal-express-checkout' );
-	    $err	 = $this->show_err_msg( $err_msg );
-	    return $err;
+        //Lets check the digital item URL.
+	if ( ! empty( $url ) ) {
+	    $url = base64_encode( $url );
 	}
-	$url			 = base64_encode( $url );
-	$button_id		 = 'paypal_button_' . count( self::$payment_buttons );
+	
+        //The button ID
+	$button_id = 'paypal_button_' . count( self::$payment_buttons );
 	self::$payment_buttons[] = $button_id;
 
 	$quantity = empty( $quantity ) ? 1 : $quantity;
