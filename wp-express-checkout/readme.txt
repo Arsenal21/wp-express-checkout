@@ -1,10 +1,10 @@
-=== PayPal for Digital Goods ===
+=== WP Express Checkout ===
 Contributors: Tips and Tricks HQ
-Donate link: https://www.tipsandtricks-hq.com/
+Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 3.5
 Tested up to: 5.2
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -115,22 +115,9 @@ None
 
 == Changelog ==
 
-= 1.6 =
+= 1.1 =
 * Updated the plugin's code to use the new PayPal's express checkout API.
 * Added a new filter to allow customization of the Thank You message.
-
-= 1.4 and 1.5 =
-* Re-worked the price hashing code to remove any chance of any kind of price field manipulation.
-
-= 1.3 =
-* Updated the return and cancel URL construction to use the "add_query_arg()" function for better compatibility.
-
-= 1.2 =
-* Added extra validation in the plugin.
-* Also tested on WordPress 4.3.
-
-= 1.1 =
-* Added session start call when the plugin initializes.
 
 = 1.0 =
 * First Release

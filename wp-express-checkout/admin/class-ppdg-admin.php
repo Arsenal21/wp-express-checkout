@@ -35,8 +35,9 @@ class PPDG_Admin {
 	$this->plugin_slug	 = $plugin->get_plugin_slug();
 
 	// Load admin style sheet and JavaScript.
-	// add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
+	add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
 	// add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+        
 	// Add the options page and menu item.
 	add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
 
@@ -96,14 +97,7 @@ class PPDG_Admin {
      */
     public function enqueue_admin_styles() {
 
-	if ( ! isset( $this->plugin_screen_hook_suffix ) ) {
-	    return;
-	}
-
-	$screen = get_current_screen();
-	if ( $this->plugin_screen_hook_suffix == $screen->id ) {
-	    wp_enqueue_style( $this->plugin_slug . '-admin-styles', plugins_url( 'assets/css/admin.css', __FILE__ ), array(), PPDG::VERSION );
-	}
+	wp_enqueue_style( $this->plugin_slug . '-admin-styles', plugins_url( 'assets/css/admin.css', __FILE__ ), array(), PPDG::VERSION );
     }
 
     /**
