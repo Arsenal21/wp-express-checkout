@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Plugin Name:       WP Express Checkout
  * Description:       This plugin allows you to generate a customizable PayPal payment button that lets the customers pay quickly in a popup via PayPal.
  * Version:           1.1
  * Author:            Tips and Tricks HQ
  * Author URI:        https://www.tipsandtricks-hq.com/
- * Plugin URI:        https://www.wp-express-checkout.com/
+ * Plugin URI:        https://wp-express-checkout.com/
  * License:           GPL2
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  */
@@ -40,8 +39,8 @@ register_activation_hook( __FILE__, array( 'PPDG', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'PPDG', 'deactivate' ) );
 
 /*
+ * Load admin side class
  */
-
 
 if ( is_admin() ) {
     require_once( plugin_dir_path( __FILE__ ) . 'admin/class-ppdg-admin.php' );
