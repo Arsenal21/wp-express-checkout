@@ -2,10 +2,10 @@
 
 class PPECProductsMetaboxes {
 
-    var $PPECAdmin;
+    var $WPECAdmin;
 
     public function __construct() {
-	$this->PPECAdmin = PPDG_Admin::get_instance();
+	$this->WPECAdmin = WPEC_Admin::get_instance();
 	remove_post_type_support( PPECProducts::$products_slug, 'editor' );
 	add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 	//products post save action
@@ -127,7 +127,7 @@ class PPECProductsMetaboxes {
 	if ( empty( $title ) ) {
 	    //Display error message of product name is empty
 	    $text = __( 'Please specify product name.', 'paypal-express-checkout' );
-	    $this->PPECAdmin->add_admin_notice( $text, 'error' );
+	    $this->WPECAdmin->add_admin_notice( $text, 'error' );
 	}
 
 	//download url
@@ -135,7 +135,7 @@ class PPECProductsMetaboxes {
 	if ( empty( $product_url ) ) {
 	    //url is empty
 	    $text = __( 'Please specify product download URL.', 'paypal-express-checkout' );
-	    $this->PPECAdmin->add_admin_notice( $text, 'error' );
+	    $this->WPECAdmin->add_admin_notice( $text, 'error' );
 	} else {
 	    update_post_meta( $post_id, 'ppec_product_upload', esc_url( $product_url, array( 'http', 'https', 'dropbox' ) ) );
 	}
@@ -149,7 +149,7 @@ class PPECProductsMetaboxes {
 	} else {
 	    //invalid price
 	    $text = __( 'Ivalid product price.', 'paypal-express-checkout' );
-	    $this->PPECAdmin->add_admin_notice( $text, 'error' );
+	    $this->WPECAdmin->add_admin_notice( $text, 'error' );
 	}
 
 	//quantity

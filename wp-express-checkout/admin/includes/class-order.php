@@ -1,6 +1,6 @@
 <?php
 
-class OrdersPPDG {
+class OrdersWPEC {
 
     /**
      * Instance of this class.

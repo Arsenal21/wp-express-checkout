@@ -43,16 +43,16 @@ register_deactivation_hook( __FILE__, array( 'PPDG', 'deactivate' ) );
  */
 
 if ( is_admin() ) {
-    require_once( plugin_dir_path( __FILE__ ) . 'admin/class-ppdg-admin.php' );
-    add_action( 'plugins_loaded', array( 'PPDG_Admin', 'get_instance' ) );
+    require_once( plugin_dir_path( __FILE__ ) . 'admin/class-wpec-admin.php' );
+    add_action( 'plugins_loaded', array( 'WPEC_Admin', 'get_instance' ) );
 }
 
 //Register post types
 $PPECProducts = PPECProducts::get_instance();
 add_action( 'init', array( $PPECProducts, 'register_post_type' ), 0 );
 
-$OrdersPPDG = OrdersPPDG::get_instance();
-add_action( 'init', array( $OrdersPPDG, 'register_post_type' ), 0 );
+$OrdersWPEC = OrdersWPEC::get_instance();
+add_action( 'init', array( $OrdersWPEC, 'register_post_type' ), 0 );
 
 add_action( 'plugins_loaded', array( 'PPDG', 'get_instance' ) );
 add_action( 'plugins_loaded', array( 'PPDGShortcode', 'get_instance' ) );
@@ -111,7 +111,7 @@ function wp_ppdg_process_payment() {
 
     //if code execution got this far, it means everything is ok with payment
     //let's insert order
-    $order = OrdersPPDG::get_instance();
+    $order = OrdersWPEC::get_instance();
 
     $order->insert( array(
 	'item_name'	 => $item_name,

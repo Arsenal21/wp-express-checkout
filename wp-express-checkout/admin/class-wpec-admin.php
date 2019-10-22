@@ -1,6 +1,6 @@
 <?php
 
-class PPDG_Admin {
+class WPEC_Admin {
 
     /**
      * Instance of this class.
