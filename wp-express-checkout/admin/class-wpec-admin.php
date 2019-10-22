@@ -31,7 +31,7 @@ class WPEC_Admin {
 	/*
 	 * Call $plugin_slug from public plugin class.
 	 */
-	$plugin			 = PPDG::get_instance();
+	$plugin			 = WPEC_Main::get_instance();
 	$this->plugin_slug	 = $plugin->get_plugin_slug();
 
 	// Load admin style sheet and JavaScript.
@@ -97,15 +97,11 @@ class WPEC_Admin {
      */
     public function enqueue_admin_styles() {
 
-	wp_enqueue_style( $this->plugin_slug . '-admin-styles', plugins_url( 'assets/css/admin.css', __FILE__ ), array(), PPDG::VERSION );
+	wp_enqueue_style( $this->plugin_slug . '-admin-styles', plugins_url( 'assets/css/admin.css', __FILE__ ), array(), WPEC_Main::VERSION );
     }
 
     /**
      * Register and enqueue admin-specific JavaScript.
-     *
-     * @TODO:
-     *
-     * - Rename "PPDG" to the name your plugin
      *
      * @since     1.0.0
      *
@@ -119,7 +115,7 @@ class WPEC_Admin {
 
 	$screen = get_current_screen();
 	if ( $this->plugin_screen_hook_suffix == $screen->id ) {
-	    wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/admin.js', __FILE__ ), array( 'jquery' ), PPDG::VERSION );
+	    wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/admin.js', __FILE__ ), array( 'jquery' ), WPEC_Main::VERSION );
 	}
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-class PPDGShortcode {
+class WPECShortcode {
 
     var $ppdg	 = null;
     var $paypaldg = null;
@@ -16,7 +16,7 @@ class PPDGShortcode {
     protected static $payment_buttons	 = array();
 
     function __construct() {
-	$this->ppdg = PPDG::get_instance();
+	$this->ppdg = WPEC_Main::get_instance();
 
 	//handle single product page display
 	add_filter( 'the_content', array( $this, 'filter_post_type_content' ) );

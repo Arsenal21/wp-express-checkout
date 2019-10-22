@@ -12,7 +12,7 @@ class OrdersWPEC {
     protected static $instance = null;
 
     function __construct() {
-	$this->ppdg		 = PPDG::get_instance();
+	$this->ppdg		 = WPEC_Main::get_instance();
 	$this->text_domain	 = $this->ppdg->get_plugin_slug();
     }
 
@@ -34,7 +34,7 @@ class OrdersWPEC {
 	);
 	$args	 = array(
 	    'label'			 => __( 'orders', 'paypal-express-checkout' ),
-	    'description'		 => __( 'PPDG Orders', 'paypal-express-checkout' ),
+	    'description'		 => __( 'WPEC Orders', 'paypal-express-checkout' ),
 	    'labels'		 => $labels,
 	    'supports'		 => array( 'title', 'editor', 'excerpt', 'revisions', 'custom-fields', ),
 	    'hierarchical'		 => false,

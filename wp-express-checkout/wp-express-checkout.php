@@ -25,7 +25,7 @@ define( 'WP_PPEC_PLUGIN_FILE', __FILE__ );
  * Public-Facing Functionality
  * ---------------------------------------------------------------------------- */
 
-require_once( plugin_dir_path( __FILE__ ) . 'public/class-ppdg.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'public/class-wpec-main.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'public/includes/class-shortcode-ppdg.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'admin/includes/class-products.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'admin/includes/class-order.php' );
@@ -35,8 +35,8 @@ require_once( plugin_dir_path( __FILE__ ) . 'admin/includes/class-order.php' );
  * Register hooks that are fired when the plugin is activated or deactivated.
  */
 
-register_activation_hook( __FILE__, array( 'PPDG', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'PPDG', 'deactivate' ) );
+register_activation_hook( __FILE__, array( 'WPEC_Main', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'WPEC_Main', 'deactivate' ) );
 
 /*
  * Load admin side class
@@ -54,8 +54,8 @@ add_action( 'init', array( $PPECProducts, 'register_post_type' ), 0 );
 $OrdersWPEC = OrdersWPEC::get_instance();
 add_action( 'init', array( $OrdersWPEC, 'register_post_type' ), 0 );
 
-add_action( 'plugins_loaded', array( 'PPDG', 'get_instance' ) );
-add_action( 'plugins_loaded', array( 'PPDGShortcode', 'get_instance' ) );
+add_action( 'plugins_loaded', array( 'WPEC_Main', 'get_instance' ) );
+add_action( 'plugins_loaded', array( 'WPECShortcode', 'get_instance' ) );
 add_action( 'wp_ajax_wp_ppdg_process_payment', 'wp_ppdg_process_payment' );
 add_action( 'wp_ajax_nopriv_wp_ppdg_process_payment', 'wp_ppdg_process_payment' );
 

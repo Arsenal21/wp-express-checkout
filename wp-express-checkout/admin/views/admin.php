@@ -48,7 +48,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	    </ol>
 	</div>
 	<?php
-	$ppdg			 = PPDG::get_instance();
+	$ppdg			 = WPEC_Main::get_instance();
 	$args			 = array();
 	$disabled_funding	 = $ppdg->get_setting( 'disabled_funding' );
 	if ( ! empty( $disabled_funding ) ) {
