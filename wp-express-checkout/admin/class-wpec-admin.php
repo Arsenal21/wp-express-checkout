@@ -180,7 +180,7 @@ class WPEC_Admin {
     public function general_documentation_callback( $args ) {
 	?>
 	<div style="background: none repeat scroll 0 0 #FFF6D5;border: 1px solid #D1B655;color: #3F2502;margin: 10px 0;padding: 5px 5px 5px 10px;text-shadow: 1px 1px #FFFFFF;">
-	    <p><?php _e( 'Please read the <a target="_blank" href="https://www.tipsandtricks-hq.com/paypal-for-digital-goods-wordpress-plugin">PayPal for Digital Goods</a> plugin setup instructions to configure and use it.', 'paypal-express-checkout' ); ?>
+	    <p><?php _e( 'Please read the <a target="_blank" href="https://wp-express-checkout.com/">WP Express Checkout</a> plugin setup instructions to configure and use it.', 'paypal-express-checkout' ); ?>
 	    </p>
 	</div>
 	<?php

@@ -26,7 +26,7 @@ define( 'WP_PPEC_PLUGIN_FILE', __FILE__ );
  * ---------------------------------------------------------------------------- */
 
 require_once( plugin_dir_path( __FILE__ ) . 'public/class-wpec-main.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'public/includes/class-shortcode-ppdg.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'public/includes/class-shortcode-ppec.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'admin/includes/class-products.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'admin/includes/class-order.php' );
 

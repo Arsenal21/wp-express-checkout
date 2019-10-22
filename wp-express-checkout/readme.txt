@@ -108,7 +108,7 @@ Yes, please visit Settings > PayPal for Digital Goods screen for options.
 
 == Screenshots ==
 See the following page for screenshots
-https://www.tipsandtricks-hq.com/paypal-for-digital-goods-wordpress-plugin
+https://wp-express-checkout.com/
 
 == Upgrade Notice ==
 None
