@@ -293,7 +293,7 @@ class WPEC_Admin {
 				}
 				break;
 			case 'textarea':
-				echo "<textarea name='ppdg-settings[{$field}]' id='wp-ppdg-{$field}' {$_class} cols='90' rows='7'>" . esc_textarea( $field_value ) . '</textarea>';
+				echo "<textarea name='ppdg-settings[{$field}]' id='wp-ppdg-{$field}' {$_class} style='width:100%;' rows='7'>" . esc_textarea( $field_value ) . '</textarea>';
 				break;
 			default:
 				echo "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='ppdg-settings[{$field}]' value='{$field_value}' size='{$size}' />";
