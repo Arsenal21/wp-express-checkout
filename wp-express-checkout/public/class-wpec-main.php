@@ -221,56 +221,87 @@ class WPEC_Main {
 	return $wpdb->get_col( $sql );
     }
 
-    /**
-     * Fired for each blog when the plugin is activated.
-     *
-     * @since    1.0.0
-     */
-    private static function single_activate() {
-	// Check if its a first install
-	$default	 = array(
-	    'is_live'		 => 0,
-	    'currency_code'		 => 'USD',
-	    'btn_shape'		 => 'pill',
-	    'btn_color'		 => 'gold',
-	    'btn_type'		 => 'checkout',
-	    'btn_height'		 => 'xlarge',
-	    'btn_width'		 => 0,
-	    'btn_layout'		 => 'vertical',
-	    'disabled_funding'	 => array(),
-	    'disabled_cards'	 => array(),
-	);
-	$settings	 = get_option( 'ppdg-settings' );
-	if ( empty( $settings ) ) {
-	    add_option( 'ppdg-settings', $default );
-	} else {
-	    $settings = array_merge( $default, $settings );
-	    //replace unsupported btn_size option if it's set
-	    if ( isset( $settings[ 'btn_size' ] ) ) {
-		switch ( $settings[ 'btn_size' ] ) {
-		    case 'small':
-			$settings[ 'btn_height' ]	 = 'small';
-			$settings[ 'btn_width' ]	 = 200;
-			break;
-		    case 'medium':
-			$settings[ 'btn_height' ]	 = 'medium';
-			$settings[ 'btn_width' ]	 = 250;
-			break;
-		    case 'medium':
-			$settings[ 'btn_height' ]	 = 'large';
-			$settings[ 'btn_width' ]	 = 350;
-			break;
-		    case 'responsive':
-			$settings[ 'btn_height' ]	 = 'xlarge';
-			$settings[ 'btn_width' ]	 = 0;
-			break;
-		}
-	    }
-	    update_option( 'ppdg-settings', $settings );
-	}
-    }
+	/**
+	 * Retrieves the plugin defaults/
+	 *
+	 * @return array
+	 */
+	public static function get_defaults() {
+		$defaults = array(
+			'is_live'              => 0,
+			'live_client_id'       => '',
+			'sandbox_client_id'    => '',
+			'currency_code'        => 'USD',
+			'btn_shape'            => 'pill',
+			'btn_color'            => 'gold',
+			'btn_type'             => 'checkout',
+			'btn_height'           => 'xlarge',
+			'btn_width'            => 0,
+			'btn_layout'           => 'vertical',
+			'disabled_funding'     => array(),
+			'disabled_cards'       => array(),
+			'send_buyer_email'     => 1,
+			'buyer_from_email'     => get_bloginfo( 'name' ) . ' <sales@your-domain.com>',
+			'buyer_email_subj'     => 'Thank you for the purchase',
+			'buyer_email_body'     => ''
+									. "Dear {first_name} {last_name}\n"
+									. "\nThank you for your purchase! You ordered the following item(s):\n"
+									. "\n{product_details}",
+			'send_seller_email'    => '',
+			'notify_email_address' => get_bloginfo( 'admin_email' ),
+			'seller_email_subj'    => 'Notification of product sale',
+			'seller_email_body'    => ''
+									. "Dear Seller\n"
+									. "\nThis mail is to notify you of a product sale.\n"
+									. "\n{product_details}"
+									. "\n\nThe sale was made to {first_name} {last_name} ({payer_email})"
+									. "\n\nThanks",
+		);
 
-    public static function create_post( $postType, $title, $name, $content, $parentId = NULL ) {
+		return $defaults;
+	}
+
+	/**
+	 * Fired for each blog when the plugin is activated.
+	 *
+	 * @since    1.0.0
+	 */
+	private static function single_activate() {
+		// Check if its a first install.
+		$default = self::get_defaults();
+
+		$settings = get_option( 'ppdg-settings' );
+
+		if ( empty( $settings ) ) {
+			add_option( 'ppdg-settings', $default );
+		} else {
+			$settings = array_merge( $default, $settings );
+			// replace unsupported btn_size option if it's set.
+			if ( isset( $settings['btn_size'] ) ) {
+				switch ( $settings['btn_size'] ) {
+					case 'small':
+						$settings['btn_height'] = 'small';
+						$settings['btn_width']  = 200;
+						break;
+					case 'medium':
+						$settings['btn_height'] = 'medium';
+						$settings['btn_width']  = 250;
+						break;
+					case 'medium':
+						$settings['btn_height'] = 'large';
+						$settings['btn_width']  = 350;
+						break;
+					case 'responsive':
+						$settings['btn_height'] = 'xlarge';
+						$settings['btn_width']  = 0;
+						break;
+				}
+			}
+			update_option( 'ppdg-settings', $settings );
+		}
+	}
+
+	public static function create_post( $postType, $title, $name, $content, $parentId = NULL ) {
 	$post = array(
 	    'post_title'	 => $title,
 	    'post_name'	 => $name,
