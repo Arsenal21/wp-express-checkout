@@ -67,7 +67,7 @@ class PPECProductsMetaboxes {
 	</div>
 	<p>
 	    <input id="ppec_select_upload_btn" type="button" class="button" value="<?php echo __( 'Select File', 'paypal-express-checkout' ); ?>" />
-	    <?php do_action( 'ppec_product_upload_metabox_after_button', $post ); ?>
+	    <?php do_action( 'wpec_product_upload_metabox_after_button', $post ); ?>
 	</p>
 	<div>
 	    <?php _e( 'Steps to upload a file or choose one from your media library:', 'paypal-express-checkout' ); ?>

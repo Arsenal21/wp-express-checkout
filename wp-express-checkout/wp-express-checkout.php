@@ -56,10 +56,10 @@ add_action( 'init', array( $OrdersWPEC, 'register_post_type' ), 0 );
 
 add_action( 'plugins_loaded', array( 'WPEC_Main', 'get_instance' ) );
 add_action( 'plugins_loaded', array( 'WPECShortcode', 'get_instance' ) );
-add_action( 'wp_ajax_wp_ppdg_process_payment', 'wp_ppdg_process_payment' );
-add_action( 'wp_ajax_nopriv_wp_ppdg_process_payment', 'wp_ppdg_process_payment' );
+add_action( 'wp_ajax_wpec_process_payment', 'wpec_process_payment' );
+add_action( 'wp_ajax_nopriv_wpec_process_payment', 'wpec_process_payment' );
 
-function wp_ppdg_process_payment() {
+function wpec_process_payment() {
     if ( ! isset( $_POST[ 'wp_ppdg_payment' ] ) ) {
 	//no payment data provided
 	_e( 'No payment data received.', 'paypal-express-checkout' );
@@ -124,7 +124,7 @@ function wp_ppdg_process_payment() {
 	'create_time'	 => $payment[ 'create_time' ],
     ), $payment[ 'payer' ] );
 
-    do_action( 'ppdg_payment_completed', $payment );
+    do_action( 'wpec_payment_completed', $payment );
 
     $res		 = array();
     $res[ 'title' ]	 = __( 'Payment Completed', 'paypal-express-checkout' );

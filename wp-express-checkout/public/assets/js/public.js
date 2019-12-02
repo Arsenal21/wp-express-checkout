@@ -3,7 +3,7 @@ var ppecHandler = function (data) {
     var parent = this;
 
     this.processPayment = function (payment) {
-	jQuery.post(ppecFrontVars.ajaxUrl, {action: "wp_ppdg_process_payment", wp_ppdg_payment: payment})
+	jQuery.post(ppecFrontVars.ajaxUrl, {action: "wpec_process_payment", wp_ppdg_payment: payment})
 		.done(function (data) {
 		    var ret = true;
 		    try {
