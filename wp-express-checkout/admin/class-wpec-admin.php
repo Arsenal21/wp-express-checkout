@@ -365,7 +365,12 @@ class WPEC_Admin {
 						break;
 
 					default:
-						$input[ $field ] = wp_kses_data( $input[ $field ] );
+						// Exception for `From Email Address` field as it should allow tags.
+						if ( 'buyer_from_email' === $field ) {
+							$input[ $field ] = stripslashes( $input[ $field ] );
+						} else {
+							$input[ $field ] = wp_kses_data( $input[ $field ] );
+						}
 						break;
 				}
 			}
