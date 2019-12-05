@@ -159,14 +159,20 @@ class WPEC_Admin {
 		add_settings_section( 'ppdg-credentials-section', __( 'PayPal Credentials', 'paypal-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-button-style-section', __( 'Button Style', 'paypal-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-disable-funding-section', __( 'Disable Funding', 'paypal-express-checkout' ), array( $this, 'disable_funding_note' ), $this->plugin_slug );
-                add_settings_section( 'ppdg-debug-logging-section', __( 'Debeg Logging', 'paypal-express-checkout' ), array( $this, 'debug_logging_note' ), $this->plugin_slug );
+		add_settings_section( 'ppdg-debug-logging-section', __( 'Debug Logging', 'paypal-express-checkout' ), array( $this, 'debug_logging_note' ), $this->plugin_slug );
 
 		add_settings_section( 'ppdg-emails-section', __( 'Purchase Confirmation Email Settings', 'paypal-express-checkout' ), array( $this, 'emails_note' ), $this->plugin_slug . '-emails' );
 
-		add_settings_field( 'currency_code', __( 'Currency Code', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section', array( 'field' => 'currency_code', 'type' => 'text', 'desc' => __( 'Example: USD, CAD, GBP etc', 'paypal-express-checkout' ), 'size' => 10, 'required' => true, ) );
+		add_settings_field( 'currency_code', __( 'Currency Code', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section', array( 'field' => 'currency_code', 'type' => 'select', 'desc' => __( 'Example: USD, CAD, GBP etc', 'paypal-express-checkout' ), 'size' => 10, 'required' => true,
+			'vals'  => array( 'USD', 'EUR', 'GBP', 'AUD', 'BRL', 'CAD', 'CNY', 'CZK', 'DKK', 'HKD', 'HUF', 'INR', 'IDR', 'ILS', 'JPY', 'MYR', 'MXN', 'NZD', 'NOK', 'PHP', 'PLN', 'SGD', 'ZAR', 'KRW', 'SEK', 'CHF', 'TWD', 'THB', 'TRY', 'VND', 'RUB', ),
+			'texts' => array( __( 'US Dollars (USD)', 'paypal-express-checkout' ), __( 'Euros (EUR)', 'paypal-express-checkout' ), __( 'Pounds Sterling (GBP)', 'paypal-express-checkout' ), __( 'Australian Dollars (AUD)', 'paypal-express-checkout' ), __( 'Brazilian Real (BRL)', 'paypal-express-checkout' ), __( 'Canadian Dollars (CAD)', 'paypal-express-checkout' ), __( 'Chinese Yuan (CNY)', 'paypal-express-checkout' ), __( 'Czech Koruna (CZK)', 'paypal-express-checkout' ), __( 'Danish Krone (DKK)', 'paypal-express-checkout' ), __( 'Hong Kong Dollar (HKD)', 'paypal-express-checkout' ), __( 'Hungarian Forint (HUF)', 'paypal-express-checkout' ), __( 'Indian Rupee (INR)', 'paypal-express-checkout' ), __( 'Indonesia Rupiah (IDR)', 'paypal-express-checkout' ),
+				__( 'Israeli Shekel (ILS)', 'paypal-express-checkout' ), __( 'Japanese Yen (JPY)', 'paypal-express-checkout' ), __( 'Malaysian Ringgits (MYR)', 'paypal-express-checkout' ), __( 'Mexican Peso (MXN)', 'paypal-express-checkout' ), __( 'New Zealand Dollar (NZD)', 'paypal-express-checkout' ), __( 'Norwegian Krone (NOK)', 'paypal-express-checkout' ), __( 'Philippine Pesos (PHP)', 'paypal-express-checkout' ), __( 'Polish Zloty (PLN)', 'paypal-express-checkout' ), __( 'Singapore Dollar (SGD)', 'paypal-express-checkout' ), __( 'South African Rand (ZAR)', 'paypal-express-checkout' ), __( 'South Korean Won (KRW)', 'paypal-express-checkout' ), __( 'Swedish Krona (SEK)', 'paypal-express-checkout' ), __( 'Swiss Franc (CHF)', 'paypal-express-checkout' ),
+				__( 'Taiwan New Dollars (TWD)', 'paypal-express-checkout' ), __( 'Thai Baht (THB)', 'paypal-express-checkout' ), __( 'Turkish Lira (TRY)', 'paypal-express-checkout' ), __( 'Vietnamese Dong (VND)', 'paypal-express-checkout' ), __( 'Russian Ruble (RUB)', 'paypal-express-checkout' ),
+			),
+		) );
 
 		add_settings_field( 'is_live', __( 'Live Mode', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'is_live', 'type' => 'checkbox', 'desc' => __( 'Check this to run the transaction in live mode. When unchecked it will run in sandbox mode.', 'paypal-express-checkout' ) ) );
-		add_settings_field( 'live_client_id', __( 'Live Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'live_client_id', 'type' => 'text', 'desc' => 'Enter your PayPal Client ID for live mode. <a href="https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/" target="_blank">Read this documentation</a> to learn how to locate your Client ID.' ) );
+		add_settings_field( 'live_client_id', __( 'Live Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'live_client_id', 'type' => 'text', 'desc' => sprintf( __( 'Enter your PayPal Client ID for live mode. <a href="%s" target="_blank">Read this documentation</a> to learn how to locate your Client ID.', 'paypal-express-checkout'), 'https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/' ) ) );
 		add_settings_field( 'sandbox_client_id', __( 'Sandbox Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'sandbox_client_id', 'type' => 'text', 'desc' => __( 'Enter your PayPal Client ID for sandbox mode.', 'paypal-express-checkout') ) );
 
 		// button style section
@@ -180,15 +186,15 @@ class WPEC_Admin {
 		// disable funding section
 		add_settings_field( 'disabled_funding', __( 'Disabled Funding Options', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_funding', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'card', 'credit', 'sepa' ), 'texts' => array( __( 'Credit or debit cards', 'paypal-express-checkout' ), __( 'PayPal Credit', 'paypal-express-checkout' ), __( 'SEPA-Lastschrift', 'paypal-express-checkout' ) ) ) );
 		add_settings_field( 'disabled_cards', __( 'Disabled Cards', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_cards', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'visa', 'mastercard', 'amex', 'discover', 'jcb', 'elo', 'hiper' ), 'texts' => array( __( 'Visa', 'paypal-express-checkout' ), __( 'Mastercard', 'paypal-express-checkout' ), __( 'American Express', 'paypal-express-checkout' ), __( 'Discover', 'paypal-express-checkout' ), __( 'JCB', 'paypal-express-checkout' ), __( 'Elo', 'paypal-express-checkout' ), __( 'Hiper', 'paypal-express-checkout' ) ) ) );
-                
-                // debug logging section
-                add_settings_field( 'enable_debug_logging', __( 'Enable Debug Logging', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-debug-logging-section', array( 'field' => 'enable_debug_logging', 'type' => 'checkbox', 'desc' => __( 'Check this option to enable debug logging.', 'paypal-express-checkout' ) ) );
-                
-                /***********************/
-                /* Email Settings Menu Tab */
-                /***********************/
-                
-                // emails section
+
+		// debug logging section
+		add_settings_field( 'enable_debug_logging', __( 'Enable Debug Logging', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-debug-logging-section', array( 'field' => 'enable_debug_logging', 'type' => 'checkbox', 'desc' => __( 'Check this option to enable debug logging.', 'paypal-express-checkout' ) ) );
+
+		/***********************/
+		/* Email Settings Menu Tab */
+		/***********************/
+
+		// emails section
 		add_settings_field( 'send_buyer_email', __( 'Send Emails to Buyer After Purchase', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'send_buyer_email', 'type' => 'checkbox', 'desc' => __( 'If checked the plugin will send an email to the buyer with the sale details. If digital goods are purchased then the email will contain the download links for the purchased products.', 'paypal-express-checkout' ) ) );
 		add_settings_field( 'buyer_from_email', __( 'From Email Address', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_from_email', 'type' => 'text', 'desc' => __( 'Example: Your Name &lt;sales@your-domain.com&gt; This is the email address that will be used to send the email to the buyer. This name and email address will appear in the from field of the email.', 'paypal-express-checkout' ) ) );
 		add_settings_field( 'buyer_email_subj', __( 'Buyer Email Subject', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_subj', 'type' => 'text', 'desc' => __( 'This is the subject of the email that will be sent to the buyer.', 'paypal-express-checkout' ) ) );
@@ -262,7 +268,7 @@ class WPEC_Admin {
 		_e( 'Debug logging can be useful to troubleshoot transaction processing related issues on your site.', 'paypal-express-checkout' );
 		echo '</p></i>';
 	}
-        
+
 	/**
 	 * Settings HTML
 	 *

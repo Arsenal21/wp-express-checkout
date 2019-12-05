@@ -240,6 +240,7 @@ class WPEC_Main {
 			'btn_layout'           => 'vertical',
 			'disabled_funding'     => array(),
 			'disabled_cards'       => array(),
+			'enable_debug_logging' => 0,
 			'send_buyer_email'     => 1,
 			'buyer_from_email'     => get_bloginfo( 'name' ) . ' <sales@your-domain.com>',
 			'buyer_email_subj'     => 'Thank you for the purchase',
