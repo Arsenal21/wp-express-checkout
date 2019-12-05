@@ -165,8 +165,8 @@ class WPEC_Admin {
 		add_settings_field( 'currency_code', __( 'Currency Code', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section', array( 'field' => 'currency_code', 'type' => 'text', 'desc' => __( 'Example: USD, CAD etc', 'paypal-express-checkout' ), 'size' => 10, 'required' => true, ) );
 
 		add_settings_field( 'is_live', __( 'Live Mode', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'is_live', 'type' => 'checkbox', 'desc' => __( 'Check this to run the transaction in live mode. When unchecked it will run in sandbox mode.', 'paypal-express-checkout' ) ) );
-		add_settings_field( 'live_client_id', __( 'Live Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'live_client_id', 'type' => 'text', 'desc' => '' ) );
-		add_settings_field( 'sandbox_client_id', __( 'Sandbox Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'sandbox_client_id', 'type' => 'text', 'desc' => '' ) );
+		add_settings_field( 'live_client_id', __( 'Live Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'live_client_id', 'type' => 'text', 'desc' => 'Enter your PayPal Client ID for live mode. <a href="https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/" target="_blank">Read this documentation</a> to learn how to locate your Client ID.' ) );
+		add_settings_field( 'sandbox_client_id', __( 'Sandbox Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'sandbox_client_id', 'type' => 'text', 'desc' => __( 'Enter your PayPal Client ID for sandbox mode.', 'paypal-express-checkout') ) );
 
 		// disable funding section
 		add_settings_field( 'disabled_funding', __( 'Disabled Funding Options', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_funding', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'card', 'credit', 'sepa' ), 'texts' => array( __( 'Credit or debit cards', 'paypal-express-checkout' ), __( 'PayPal Credit', 'paypal-express-checkout' ), __( 'SEPA-Lastschrift', 'paypal-express-checkout' ) ) ) );
@@ -219,7 +219,7 @@ class WPEC_Admin {
 	public function general_documentation_callback() {
 		?>
 		<div style="background: none repeat scroll 0 0 #FFF6D5;border: 1px solid #D1B655;color: #3F2502;margin: 10px 0;padding: 5px 5px 5px 10px;text-shadow: 1px 1px #FFFFFF;">
-			<p><?php _e( 'Please read the <a target="_blank" href="https://wp-express-checkout.com/">WP Express Checkout</a> plugin setup instructions to configure and use it.', 'paypal-express-checkout' ); ?>
+			<p><?php _e( 'Please read the <a target="_blank" href="https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/">WP Express Checkout</a> plugin setup instructions to configure and use it.', 'paypal-express-checkout' ); ?>
 			</p>
 		</div>
 		<?php
