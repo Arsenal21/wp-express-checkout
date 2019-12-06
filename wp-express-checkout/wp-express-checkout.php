@@ -26,6 +26,7 @@ define( 'WPEC_LOG_FILE', WPEC_PLUGIN_PATH . 'wpec-debug-log.txt' );
  * Includes
  * ---------------------------------------------------------------------------- */
 include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-debug-logger.php');
+include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-init-time-tasks.php');
 include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-process-ipn.php');
 
 require_once( WPEC_PLUGIN_PATH . 'public/class-wpec-main.php' );
@@ -57,6 +58,11 @@ add_action( 'init', array( $OrdersWPEC, 'register_post_type' ), 0 );
 
 add_action( 'plugins_loaded', array( 'WPEC_Main', 'get_instance' ) );
 add_action( 'plugins_loaded', array( 'WPECShortcode', 'get_instance' ) );
+
+/*
+ * Do init time tasks
+ */
+$init_time_tasks = new WPEC_Init_Time_Tasks();
 
 /*
  * Listen and handle payment processing. IPN handling.

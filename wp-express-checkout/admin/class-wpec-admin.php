@@ -150,10 +150,12 @@ class WPEC_Admin {
 	 * Register Admin page settings
 	 */
 	public function register_settings() {
-
+            
+                //Register the settings
 		register_setting( 'ppdg-settings-group', 'ppdg-settings', array( $this, 'settings_sanitize_field_callback' ) );
 
-		add_settings_section( 'ppdg-documentation', '', array( $this, 'general_documentation_callback' ), $this->plugin_slug . '-docs' );
+                //Add the sections
+		add_settings_section( 'ppdg-documentation', '', array( $this, 'general_documentation_and_misc_output_callback' ), $this->plugin_slug . '-docs' );
 
 		add_settings_section( 'ppdg-global-section', __( 'Global Settings', 'paypal-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-credentials-section', __( 'PayPal Credentials', 'paypal-express-checkout' ), null, $this->plugin_slug );
@@ -163,6 +165,7 @@ class WPEC_Admin {
 
 		add_settings_section( 'ppdg-emails-section', __( 'Purchase Confirmation Email Settings', 'paypal-express-checkout' ), array( $this, 'emails_note' ), $this->plugin_slug . '-emails' );
 
+                //Add the fields
 		add_settings_field( 'currency_code', __( 'Currency Code', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section', array( 'field' => 'currency_code', 'type' => 'select', 'desc' => __( 'Example: USD, CAD, GBP etc', 'paypal-express-checkout' ), 'size' => 10, 'required' => true,
 			'vals'  => array( 'USD', 'EUR', 'GBP', 'AUD', 'BRL', 'CAD', 'CNY', 'CZK', 'DKK', 'HKD', 'HUF', 'INR', 'IDR', 'ILS', 'JPY', 'MYR', 'MXN', 'NZD', 'NOK', 'PHP', 'PLN', 'SGD', 'ZAR', 'KRW', 'SEK', 'CHF', 'TWD', 'THB', 'TRY', 'VND', 'RUB', ),
 			'texts' => array( __( 'US Dollars (USD)', 'paypal-express-checkout' ), __( 'Euros (EUR)', 'paypal-express-checkout' ), __( 'Pounds Sterling (GBP)', 'paypal-express-checkout' ), __( 'Australian Dollars (AUD)', 'paypal-express-checkout' ), __( 'Brazilian Real (BRL)', 'paypal-express-checkout' ), __( 'Canadian Dollars (CAD)', 'paypal-express-checkout' ), __( 'Chinese Yuan (CNY)', 'paypal-express-checkout' ), __( 'Czech Koruna (CZK)', 'paypal-express-checkout' ), __( 'Danish Krone (DKK)', 'paypal-express-checkout' ), __( 'Hong Kong Dollar (HKD)', 'paypal-express-checkout' ), __( 'Hungarian Forint (HUF)', 'paypal-express-checkout' ), __( 'Indian Rupee (INR)', 'paypal-express-checkout' ), __( 'Indonesia Rupiah (IDR)', 'paypal-express-checkout' ),
@@ -188,7 +191,18 @@ class WPEC_Admin {
 		add_settings_field( 'disabled_cards', __( 'Disabled Cards', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_cards', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'visa', 'mastercard', 'amex', 'discover', 'jcb', 'elo', 'hiper' ), 'texts' => array( __( 'Visa', 'paypal-express-checkout' ), __( 'Mastercard', 'paypal-express-checkout' ), __( 'American Express', 'paypal-express-checkout' ), __( 'Discover', 'paypal-express-checkout' ), __( 'JCB', 'paypal-express-checkout' ), __( 'Elo', 'paypal-express-checkout' ), __( 'Hiper', 'paypal-express-checkout' ) ) ) );
 
 		// debug logging section
-		add_settings_field( 'enable_debug_logging', __( 'Enable Debug Logging', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-debug-logging-section', array( 'field' => 'enable_debug_logging', 'type' => 'checkbox', 'desc' => __( 'Check this option to enable debug logging.', 'paypal-express-checkout' ) ) );
+		add_settings_field( 'enable_debug_logging', __( 'Enable Debug Logging', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-debug-logging-section', 
+                        array( 
+                            'field' => 'enable_debug_logging', 
+                            'type' => 'checkbox', 
+                            'desc' => __( 'Check this option to enable debug logging.', 'paypal-express-checkout' ) . 
+                            '<p class="description"><a href="' . get_admin_url() . '?wpec-debug-action=view_log" target="_blank">' .
+                            __( 'Click here', 'paypal-express-checkout' ) . '</a>' .
+                            __( ' to view log file.', 'paypal-express-checkout' ) . '<br>' .
+                            '<a id="wpec-reset-log" href="#0" style="color: red">' . __( 'Click here', 'paypal-express-checkout' ) . '</a>' .
+                            __( ' to reset log file.', 'paypal-express-checkout' ) . '</p>'
+                            ) 
+                );
 
 		/***********************/
 		/* Email Settings Menu Tab */
@@ -228,16 +242,31 @@ class WPEC_Admin {
 			. '<br />{coupon_code} – ' . __( 'Coupon code applied to the purchase', 'paypal-express-checkout' ),
 		) );
 	}
-
+               
 	/**
 	 * The section `ppdg-documentation` callback.
 	 */
-	public function general_documentation_callback() {
+	public function general_documentation_and_misc_output_callback() {
 		?>
 		<div style="background: none repeat scroll 0 0 #FFF6D5;border: 1px solid #D1B655;color: #3F2502;margin: 10px 0;padding: 5px 5px 5px 10px;text-shadow: 1px 1px #FFFFFF;">
 			<p><?php _e( 'Please read the <a target="_blank" href="https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/">WP Express Checkout</a> plugin setup instructions to configure and use it.', 'paypal-express-checkout' ); ?>
 			</p>
 		</div>
+
+                <script type="text/javascript">
+                    jQuery(document).ready(function($){
+                        $('a#wpec-reset-log').click(function (e) {
+                        e.preventDefault();
+                        $.post(ajaxurl,
+                                {'action': 'wpec_reset_log'},
+                                function (result) {
+                                    if (result === '1') {
+                                        alert('Log file has been reset.');
+                                    }
+                                });
+                        });
+                    });
+                </script>
 		<?php
 	}
 
