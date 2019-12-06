@@ -57,10 +57,14 @@ class WPEC_Process_IPN {
 
 		if ( strtoupper( $payment['status'] ) !== 'COMPLETED' ) {
 			// payment is unsuccessful.
+                        WPEC_Debug_Logger::log('Payment is not approved. Payment status: ' . $payment['status'], false);
 			printf( __( 'Payment is not approved. Status: %s', 'paypal-express-checkout' ), $payment['status'] );
 			exit;
 		}
 
+                //Log debug (if enabled)
+                WPEC_Debug_Logger::log('Received IPN. Processing payment ...');
+                    
 		// get item name.
 		$item_name = $payment['purchase_units'][0]['description'];
 		// let's check if the payment matches transient data.
@@ -68,6 +72,8 @@ class WPEC_Process_IPN {
 		$trans      = get_transient( $trans_name );
 		if ( ! $trans ) {
 			// no price set.
+                        WPEC_Debug_Logger::log('Error! No transaction info found in transient.', false);
+                    
 			_e( 'No transaction info found in transient.', 'paypal-express-checkout' );
 			exit;
 		}
@@ -84,8 +90,10 @@ class WPEC_Process_IPN {
 		$amount = $payment['purchase_units'][0]['amount']['value'];
 
 		// check if amount paid matches price x quantity.
-		if ( $amount != $price * $quantity ) {
+                $original_price_amt = $price * $quantity;
+		if ( $amount != $original_price_amt ) {
 			// payment amount mismatch.
+                        WPEC_Debug_Logger::log('Error! Payment amount mismatch. Original: ' . $original_price_amt . ', Received: ' . $amount, false);
 			_e( 'Payment amount mismatch original price.', 'paypal-express-checkout' );
 			exit;
 		}
@@ -93,6 +101,7 @@ class WPEC_Process_IPN {
 		// check if payment currency matches.
 		if ( $payment['purchase_units'][0]['amount']['currency_code'] !== $currency ) {
 			// payment currency mismatch.
+                        WPEC_Debug_Logger::log('Error! Payment currency mismatch.', false);
 			_e( 'Payment currency mismatch.', 'paypal-express-checkout' );
 			exit;
 		}
@@ -139,10 +148,12 @@ class WPEC_Process_IPN {
 			'order_id'        => $order_id,
 		);
 
-		// Send email to buyer if needs.
-		if ( $wpec_plugin->get_setting( 'send_buyer_email' ) && ! empty( $payment['payer']['email_address'] ) ) {
+		// Send email to buyer if enabled.
+		if ( $wpec_plugin->get_setting( 'send_buyer_email' ) ) {
 
 			$buyer_email = $payment['payer']['email_address'];
+                        WPEC_Debug_Logger::log('Sending buyer notification email.');
+                        
 			$from_email  = $wpec_plugin->get_setting( 'buyer_from_email' );
 			$subject     = $wpec_plugin->get_setting( 'buyer_email_subj' );
 			$subject     = $this->apply_dynamic_tags( $subject, $args );
@@ -156,13 +167,15 @@ class WPEC_Process_IPN {
 			$headers = 'From: ' . $from_email . "\r\n";
 
 			wp_mail( $buyer_email, $subject, $body, $headers );
-
+                        WPEC_Debug_Logger::log('Buyer email notification sent to: ' . $buyer_email . '. From email address value used: ' . $from_email);
+                        
 			update_post_meta( $order_id, 'wpsc_buyer_email_sent', 'Email sent to: ' . $buyer_email );
 		}
 
 		// Send email to seller if needs.
 		if ( $wpec_plugin->get_setting( 'send_seller_email' ) && ! empty( $wpec_plugin->get_setting( 'notify_email_address' ) ) ) {
-
+                        WPEC_Debug_Logger::log('Sending seller notification email.');
+                        
 			$notify_email = $wpec_plugin->get_setting( 'notify_email_address' );
 
 			$seller_email_subject = $wpec_plugin->get_setting( 'seller_email_subj' );
@@ -173,10 +186,12 @@ class WPEC_Process_IPN {
 			$seller_email_body = apply_filters( 'wpec_seller_notification_email_body', $seller_email_body, $payment, $args );
 
 			wp_mail( $notify_email, $seller_email_subject, $seller_email_body, $headers );
+                        WPEC_Debug_Logger::log('Seller email notification sent to: ' . $notify_email);
 		}
 
 		// Trigger the action hook.
 		do_action( 'wpec_payment_completed', $payment );
+                WPEC_Debug_Logger::log('Payment processing completed');
 
 		// Thank you message.
 		$res = array(
