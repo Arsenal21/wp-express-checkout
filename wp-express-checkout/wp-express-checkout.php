@@ -47,15 +47,7 @@ if ( is_admin() ) {
 register_activation_hook( __FILE__, array( 'WPEC_Main', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WPEC_Main', 'deactivate' ) );
 
-/*
- * Register custom post types
- */
-$PPECProducts = PPECProducts::get_instance();
-add_action( 'init', array( $PPECProducts, 'register_post_type' ), 0 );
-
-$OrdersWPEC = OrdersWPEC::get_instance();
-add_action( 'init', array( $OrdersWPEC, 'register_post_type' ), 0 );
-
+//Plugins loaded hook
 add_action( 'plugins_loaded', array( 'WPEC_Main', 'get_instance' ) );
 add_action( 'plugins_loaded', array( 'WPECShortcode', 'get_instance' ) );
 

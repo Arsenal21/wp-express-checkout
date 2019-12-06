@@ -12,16 +12,32 @@ class WPEC_Init_Time_Tasks {
     }
 
     public function do_init_time_tasks() {
-        //General init time tasks
+        /*
+         * General init time tasks
+         */
+        
+        //Register the post types
+        $PPECProducts = PPECProducts::get_instance();
+        $PPECProducts->register_post_type();
+
+        $OrdersWPEC = OrdersWPEC::get_instance();
+        $OrdersWPEC->register_post_type();
+
+        
         add_action('wp_ajax_wpec_reset_log', array($this, 'wpec_handle_reset_log'));
 
         if ( is_admin() ) {
-            //Do admin side only tasks
+            /*
+             * Do admin side only tasks
+             */
             
             $this->handle_view_log_action();
             
         } else {
-            //Front-end only tasks
+            /*
+             * Front-end only tasks
+             */
+            
             //NOP
         }
         
