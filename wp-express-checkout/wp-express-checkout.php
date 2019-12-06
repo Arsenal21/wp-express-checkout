@@ -17,22 +17,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //Define constants
-define( 'WP_PPEC_PLUGIN_URL', plugins_url( '', __FILE__ ) );
-define( 'WP_PPEC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-define( 'WP_PPEC_PLUGIN_FILE', __FILE__ );
+define( 'WPEC_PLUGIN_URL', plugins_url( '', __FILE__ ) );
+define( 'WPEC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+define( 'WPEC_PLUGIN_FILE', __FILE__ );
+define( 'WPEC_LOG_FILE', WPEC_PLUGIN_PATH . 'wpec-debug-log.txt' );
 
 /* ----------------------------------------------------------------------------*
  * Includes
  * ---------------------------------------------------------------------------- */
-require_once( WP_PPEC_PLUGIN_PATH . 'public/class-wpec-main.php' );
-require_once( WP_PPEC_PLUGIN_PATH . 'public/includes/class-shortcode-ppec.php' );
-require_once( WP_PPEC_PLUGIN_PATH . 'admin/includes/class-products.php' );
-require_once( WP_PPEC_PLUGIN_PATH . 'admin/includes/class-order.php' );
-include_once( WP_PPEC_PLUGIN_PATH . 'includes/class-wpec-process-ipn.php');
+include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-debug-logger.php');
+include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-process-ipn.php');
+
+require_once( WPEC_PLUGIN_PATH . 'public/class-wpec-main.php' );
+require_once( WPEC_PLUGIN_PATH . 'public/includes/class-shortcode-ppec.php' );
+
+require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-products.php' );
+require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-order.php' );
 
 //Load admin side class
 if ( is_admin() ) {
-    require_once( WP_PPEC_PLUGIN_PATH . 'admin/class-wpec-admin.php' );
+    require_once( WPEC_PLUGIN_PATH . 'admin/class-wpec-admin.php' );
     add_action( 'plugins_loaded', array( 'WPEC_Admin', 'get_instance' ) );
 }
 

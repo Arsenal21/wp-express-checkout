@@ -68,10 +68,10 @@ class WPEC_Main {
     }
 
     public function enqueue_styles() {
-	wp_register_script( 'wp-ppec-frontend-script', WP_PPEC_PLUGIN_URL . '/public/assets/js/public.js', array( 'jquery' ), false, true );
+	wp_register_script( 'wp-ppec-frontend-script', WPEC_PLUGIN_URL . '/public/assets/js/public.js', array( 'jquery' ), false, true );
 
-	wp_register_style( 'wp-ppec-jquery-ui-style', WP_PPEC_PLUGIN_URL . '/public/assets/css/smoothness/jquery-ui.min.css' );
-	wp_register_style( 'wp-ppec-frontend-style', WP_PPEC_PLUGIN_URL . '/public/assets/css/public.css' );
+	wp_register_style( 'wp-ppec-jquery-ui-style', WPEC_PLUGIN_URL . '/public/assets/css/smoothness/jquery-ui.min.css' );
+	wp_register_style( 'wp-ppec-frontend-style', WPEC_PLUGIN_URL . '/public/assets/css/public.css' );
 
 	wp_enqueue_script( 'jquery-ui-dialog' );
 	wp_enqueue_script( 'wp-ppec-frontend-script' );

@@ -8,7 +8,7 @@ class PPECProducts {
     function __construct() {
 	if ( is_admin() ) {
 	    //products meta boxes handler
-	    require_once(WP_PPEC_PLUGIN_PATH . 'admin/includes/class-products-meta-boxes.php');
+	    require_once(WPEC_PLUGIN_PATH . 'admin/includes/class-products-meta-boxes.php');
 	}
     }
 
@@ -42,7 +42,7 @@ class PPECProducts {
 	);
         
         //Using custom dashicon font icon.
-	$menu_icon	 = 'dashicons-wpec-dashicon-1'; //WP_PPEC_PLUGIN_URL . '/admin/assets/img/wpec-dashicon.png';
+	$menu_icon	 = 'dashicons-wpec-dashicon-1'; //WPEC_PLUGIN_URL . '/admin/assets/img/wpec-dashicon.png';
         
 	$slug		 = untrailingslashit( self::$products_slug );
 	$args		 = array(
