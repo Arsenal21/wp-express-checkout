@@ -151,10 +151,10 @@ class WPEC_Admin {
 	 */
 	public function register_settings() {
             
-                //Register the settings
+                /* Register the settings */
 		register_setting( 'ppdg-settings-group', 'ppdg-settings', array( $this, 'settings_sanitize_field_callback' ) );
 
-                //Add the sections
+                /* Add the sections */
 		add_settings_section( 'ppdg-documentation', '', array( $this, 'general_documentation_and_misc_output_callback' ), $this->plugin_slug . '-docs' );
 
 		add_settings_section( 'ppdg-global-section', __( 'Global Settings', 'paypal-express-checkout' ), null, $this->plugin_slug );
@@ -165,7 +165,8 @@ class WPEC_Admin {
 
 		add_settings_section( 'ppdg-emails-section', __( 'Purchase Confirmation Email Settings', 'paypal-express-checkout' ), array( $this, 'emails_note' ), $this->plugin_slug . '-emails' );
 
-                //Add the fields
+                /* Add the settings fields */
+                //Global settings fields
 		add_settings_field( 'currency_code', __( 'Currency Code', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section', array( 'field' => 'currency_code', 'type' => 'select', 'desc' => __( 'Example: USD, CAD, GBP etc', 'paypal-express-checkout' ), 'size' => 10, 'required' => true,
 			'vals'  => array( 'USD', 'EUR', 'GBP', 'AUD', 'BRL', 'CAD', 'CNY', 'CZK', 'DKK', 'HKD', 'HUF', 'INR', 'IDR', 'ILS', 'JPY', 'MYR', 'MXN', 'NZD', 'NOK', 'PHP', 'PLN', 'SGD', 'ZAR', 'KRW', 'SEK', 'CHF', 'TWD', 'THB', 'TRY', 'VND', 'RUB', ),
 			'texts' => array( __( 'US Dollars (USD)', 'paypal-express-checkout' ), __( 'Euros (EUR)', 'paypal-express-checkout' ), __( 'Pounds Sterling (GBP)', 'paypal-express-checkout' ), __( 'Australian Dollars (AUD)', 'paypal-express-checkout' ), __( 'Brazilian Real (BRL)', 'paypal-express-checkout' ), __( 'Canadian Dollars (CAD)', 'paypal-express-checkout' ), __( 'Chinese Yuan (CNY)', 'paypal-express-checkout' ), __( 'Czech Koruna (CZK)', 'paypal-express-checkout' ), __( 'Danish Krone (DKK)', 'paypal-express-checkout' ), __( 'Hong Kong Dollar (HKD)', 'paypal-express-checkout' ), __( 'Hungarian Forint (HUF)', 'paypal-express-checkout' ), __( 'Indian Rupee (INR)', 'paypal-express-checkout' ), __( 'Indonesia Rupiah (IDR)', 'paypal-express-checkout' ),
@@ -173,10 +174,33 @@ class WPEC_Admin {
 				__( 'Taiwan New Dollars (TWD)', 'paypal-express-checkout' ), __( 'Thai Baht (THB)', 'paypal-express-checkout' ), __( 'Turkish Lira (TRY)', 'paypal-express-checkout' ), __( 'Vietnamese Dong (VND)', 'paypal-express-checkout' ), __( 'Russian Ruble (RUB)', 'paypal-express-checkout' ),
 			),
 		) );
+                add_settings_field( 'thank_you_url', __( 'Thank You Page URL', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section', 
+                        array(
+                        'field' => 'thank_you_url', 
+                        'type' => 'text', 
+                        'desc' => sprintf( __( 'This is the thank you page. This page is automatically created for you when you install the plugin. Do not delete this page from the pages menu of your site. The plugin will send the customers to this page after the payment.', 'paypal-express-checkout') ),
+                        'size' => 100,    
+                        )
+                );
 
+                //API details
 		add_settings_field( 'is_live', __( 'Live Mode', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'is_live', 'type' => 'checkbox', 'desc' => __( 'Check this to run the transaction in live mode. When unchecked it will run in sandbox mode.', 'paypal-express-checkout' ) ) );
-		add_settings_field( 'live_client_id', __( 'Live Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'live_client_id', 'type' => 'text', 'desc' => sprintf( __( 'Enter your PayPal Client ID for live mode. <a href="%s" target="_blank">Read this documentation</a> to learn how to locate your Client ID.', 'paypal-express-checkout'), 'https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/' ) ) );
-		add_settings_field( 'sandbox_client_id', __( 'Sandbox Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'sandbox_client_id', 'type' => 'text', 'desc' => __( 'Enter your PayPal Client ID for sandbox mode.', 'paypal-express-checkout') ) );
+		add_settings_field( 'live_client_id', __( 'Live Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', 
+                        array( 
+                            'field' => 'live_client_id', 
+                            'type' => 'text', 
+                            'desc' => sprintf( __( 'Enter your PayPal Client ID for live mode. <a href="%s" target="_blank">Read this documentation</a> to learn how to locate your Client ID.', 'paypal-express-checkout'), 'https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/' ),
+                            'size' => 100,
+                            ) 
+                );
+		add_settings_field( 'sandbox_client_id', __( 'Sandbox Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', 
+                        array( 
+                            'field' => 'sandbox_client_id', 
+                            'type' => 'text', 
+                            'desc' => __( 'Enter your PayPal Client ID for sandbox mode.', 'paypal-express-checkout'),
+                            'size' => 100,
+                            ) 
+                );
 
 		// button style section
 		add_settings_field( 'btn_type', __( 'Button Type', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_type', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'checkout', 'pay', 'paypal', 'buynow' ), 'texts' => array( __( 'Checkout', 'paypal-express-checkout' ), __( 'Pay', 'paypal-express-checkout' ), __( 'PayPal', 'paypal-express-checkout' ), __( 'Buy Now', 'paypal-express-checkout' ) ) ) );

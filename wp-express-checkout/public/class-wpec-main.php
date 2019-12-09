@@ -232,6 +232,7 @@ class WPEC_Main {
 			'live_client_id'       => '',
 			'sandbox_client_id'    => '',
 			'currency_code'        => 'USD',
+                        'thank_you_url'        => '',
 			'btn_shape'            => 'pill',
 			'btn_color'            => 'gold',
 			'btn_type'             => 'checkout',
