@@ -64,7 +64,7 @@ class WPEC_Main {
 	    add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 	}
 	// add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-	add_action( 'after_switch_theme', array( $this, 'rewrite_flush' ) );
+	add_action( 'after_switch_theme', array( __CLASS__, 'rewrite_flush' ) );
     }
 
     public function enqueue_styles() {
@@ -268,7 +268,7 @@ class WPEC_Main {
 	 */
 	private static function single_activate() {
 		//Plugin activation.
-            
+
                 //Get the default values of the various settings fields. Then check if first-time install or an upgrade.
 		$default = self::get_defaults();
 
@@ -301,10 +301,16 @@ class WPEC_Main {
 			}
 			update_option( 'ppdg-settings', $settings );
 		}
-                
+
                 //Check and create required pages
                 self::check_and_create_thank_you_page();//Create the thank you page.
-                
+
+		// Explicitly register post types and flush rewrite rules.
+		$PPECProducts = PPECProducts::get_instance();
+		$PPECProducts->register_post_type();
+		$OrdersWPEC = OrdersWPEC::get_instance();
+		$OrdersWPEC->register_post_type();
+		self::rewrite_flush();
 	}
 
         public static function check_and_create_thank_you_page(){
@@ -313,7 +319,7 @@ class WPEC_Main {
 			'post_type' => 'page',
 		);
 		$pages = get_pages( $args );
-                
+
 		$ty_page_id = '';
 		foreach ( $pages as $page ) {
                         //Check if there is a page that contins our thank you page shortcode.
@@ -326,7 +332,7 @@ class WPEC_Main {
 			$ty_page_id  = self::create_post( 'page', 'Thank You', 'Thank-You-Transaction-Result', '[wpec_thank_you]' );
 			$ty_page     = get_post( $ty_page_id );
 			$ty_page_url = $ty_page->guid;
-                        
+
                         //Save the Thank you page URL in settings.
 			$settings = get_option( 'ppdg-settings' );
 			if ( ! empty( $settings ) ) {//Settings should already be initialized when this function is called.
@@ -335,7 +341,7 @@ class WPEC_Main {
 				update_option( 'ppdg-settings', $settings );
 			}
 		}
-                
+
         }
 
         public static function create_post( $postType, $title, $name, $content, $parentId = NULL ) {
@@ -379,14 +385,14 @@ class WPEC_Main {
 	load_plugin_textdomain( $domain, FALSE, basename( plugin_dir_path( dirname( __FILE__ ) ) ) . '/languages/' );
     }
 
-    /**
-     * @since    1.0.0
-     */
-    public function rewrite_flush() {
-	flush_rewrite_rules();
-    }
+	/**
+	 * @since    1.0.0
+	 */
+	public static function rewrite_flush() {
+		flush_rewrite_rules();
+	}
 
-    // public function get_plugin_slug()
+	// public function get_plugin_slug()
     // {
     // 	return $this->plugin_slug;
     // }
