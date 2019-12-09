@@ -264,11 +264,11 @@ class WPEC_Main {
 
 	/**
 	 * Fired for each blog when the plugin is activated.
-	 *
-	 * @since    1.0.0
 	 */
 	private static function single_activate() {
-		// Check if its a first install.
+		//Plugin activation.
+            
+                //Get the default values of the various settings fields. Then check if first-time install or an upgrade.
 		$default = self::get_defaults();
 
 		$settings = get_option( 'ppdg-settings' );
@@ -300,9 +300,44 @@ class WPEC_Main {
 			}
 			update_option( 'ppdg-settings', $settings );
 		}
+                
+                //Check and create required pages
+                self::check_and_create_thank_you_page();//Create the thank you page.
+                
 	}
 
-	public static function create_post( $postType, $title, $name, $content, $parentId = NULL ) {
+        public static function check_and_create_thank_you_page(){
+		//Check if Thank You page exists. Create new if it doesn't exist.
+		$args = array(
+			'post_type' => 'page',
+		);
+		$pages = get_pages( $args );
+                
+		$ty_page_id = '';
+		foreach ( $pages as $page ) {
+                        //Check if there is a page that contins our thank you page shortcode.
+			if ( strpos( $page->post_content, 'wpec_thank_you' ) !== false ) {
+				$ty_page_id = $page->ID;
+			}
+		}
+		if ( $ty_page_id === '') {
+                        //Thank you page missing. Create a new one.
+			$ty_page_id  = self::create_post( 'page', 'Thank You', 'Thank-You-Transaction-Result', '[wpec_thank_you]' );
+			$ty_page     = get_post( $ty_page_id );
+			$ty_page_url = $ty_page->guid;
+                        
+                        //Save the Thank you page URL in settings.
+			$settings = get_option( 'ppdg-settings' );
+			if ( ! empty( $settings ) ) {//Settings should already be initialized when this function is called.
+				$settings['thank_you_url'] = $ty_page_url;
+				$settings['thank_you_page_id'] = $ty_page_id;
+				update_option( 'ppdg-settings', $settings );
+			}
+		}
+                
+        }
+
+        public static function create_post( $postType, $title, $name, $content, $parentId = NULL ) {
 	$post = array(
 	    'post_title'	 => $title,
 	    'post_name'	 => $name,
