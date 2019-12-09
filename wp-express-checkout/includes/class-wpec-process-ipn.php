@@ -198,10 +198,10 @@ class WPEC_Process_IPN {
 			'title' => __( 'Payment Completed', 'paypal-express-checkout' ),
 		);
 
-		$thank_you_msg  = '<div class="wp_ppdg_thank_you_message"><p>' . __( 'Thank you for your purchase.', 'paypal-express-checkout' ) . '</p>';
+		$thank_you_msg  = '<div class="wpec_thank_you_message"><p>' . __( 'Thank you for your purchase.', 'paypal-express-checkout' ) . '</p>';
 		$click_here_str = sprintf( __( 'Please <a href="%s">click here</a> to download the file.', 'paypal-express-checkout' ), base64_decode( $url ) );
 		$thank_you_msg .= '<br /><p>' . $click_here_str . '</p></div>';
-		$thank_you_msg  = apply_filters( 'wp_ppdg_thank_you_message', $thank_you_msg );
+		$thank_you_msg  = apply_filters( 'wpec_thank_you_message', $thank_you_msg );
 
 		$res['msg'] = $thank_you_msg;
 
