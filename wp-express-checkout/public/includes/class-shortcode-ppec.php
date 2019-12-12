@@ -276,7 +276,7 @@ class WPECShortcode {
 	 */
 	public function shortcode_wpec_thank_you() {
 
-		if ( empty( $_GET['_wpnonce'] ) || empty( $_GET['order_id'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'thank_you_url' ) ) {
+		if ( empty( $_GET['_wpnonce'] ) || empty( $_GET['order_id'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'thank_you_url' . $_GET['order_id'] ) ) {
 			return __( 'Invalid request or session expired.', 'paypal-express-checkout' );
 		}
 

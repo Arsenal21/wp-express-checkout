@@ -199,7 +199,7 @@ class WPEC_Process_IPN {
 			$redirect_url = add_query_arg(
 				array(
 					'order_id' => $order_id,
-					'_wpnonce' => wp_create_nonce( 'thank_you_url' ),
+					'_wpnonce' => wp_create_nonce( 'thank_you_url' . $order_id ),
 				),
 				$wpec_plugin->get_setting( 'thank_you_url' )
 			);
