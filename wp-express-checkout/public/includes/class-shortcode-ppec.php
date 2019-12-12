@@ -22,6 +22,7 @@ class WPECShortcode {
 	add_filter( 'the_content', array( $this, 'filter_post_type_content' ) );
 
 	add_shortcode( 'wp_express_checkout', array( $this, 'shortcode_wp_express_checkout' ) );
+	add_shortcode( 'wpec_thank_you', array( $this, 'shortcode_wpec_thank_you' ) );
 
 	if ( ! is_admin() ) {
 	    add_filter( 'widget_text', 'do_shortcode' );
@@ -268,4 +269,36 @@ class WPECShortcode {
 	return $output;
     }
 
+	/**
+	 * Thank You page shortcode.
+	 *
+	 * @return string
+	 */
+	public function shortcode_wpec_thank_you() {
+
+		if ( empty( $_GET['_wpnonce'] ) || empty( $_GET['order_id'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'thank_you_url' ) ) {
+			return __( 'Invalid request or session expired.', 'paypal-express-checkout' );
+		}
+
+		$order = get_post_meta( (int) $_GET['order_id'], 'ppec_payment_details', true );
+
+		if ( empty( $order ) ) {
+			return __( 'Incorrect order ID.', 'paypal-express-checkout' );
+		}
+
+		if ( 'COMPLETED' !== $order['state'] ) {
+			return printf( __( 'Payment is not approved. Status: %s', 'paypal-express-checkout' ), $order['state'] );
+		}
+
+		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $order['item_name'] );
+		$trans      = get_transient( $trans_name );
+		$url        = $trans['url'];
+
+		$thank_you_msg  = '<div class="wpec_thank_you_message"><p>' . __( 'Thank you for your purchase.', 'paypal-express-checkout' ) . '</p>';
+		$click_here_str = sprintf( __( 'Please <a href="%s">click here</a> to download the file.', 'paypal-express-checkout' ), base64_decode( $url ) );
+		$thank_you_msg .= '<br /><p>' . $click_here_str . '</p></div>';
+		$thank_you_msg  = apply_filters( 'wpec_thank_you_message', $thank_you_msg );
+
+		return $thank_you_msg;
+	}
 }
