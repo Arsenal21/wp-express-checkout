@@ -205,7 +205,7 @@ class WPEC_Process_IPN {
 			);
 			$res['redirect_url'] = esc_url_raw( $redirect_url );
 		} else {
-			_e( 'Missed Thank You page URL.', 'paypal-express-checkout' );
+			_e( 'Error! Thank you page URL configuration is wrong in the plugin settings.', 'paypal-express-checkout' );
 			exit;
 		}
 
