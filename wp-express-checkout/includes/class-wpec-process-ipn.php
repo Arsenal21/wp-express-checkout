@@ -64,7 +64,7 @@ class WPEC_Process_IPN {
 
                 //Log debug (if enabled)
                 WPEC_Debug_Logger::log('Received IPN. Processing payment ...');
-                    
+
 		// get item name.
 		$item_name = $payment['purchase_units'][0]['description'];
 		// let's check if the payment matches transient data.
@@ -73,7 +73,7 @@ class WPEC_Process_IPN {
 		if ( ! $trans ) {
 			// no price set.
                         WPEC_Debug_Logger::log('Error! No transaction info found in transient.', false);
-                    
+
 			_e( 'No transaction info found in transient.', 'paypal-express-checkout' );
 			exit;
 		}
@@ -153,7 +153,7 @@ class WPEC_Process_IPN {
 
 			$buyer_email = $payment['payer']['email_address'];
                         WPEC_Debug_Logger::log('Sending buyer notification email.');
-                        
+
 			$from_email  = $wpec_plugin->get_setting( 'buyer_from_email' );
 			$subject     = $wpec_plugin->get_setting( 'buyer_email_subj' );
 			$subject     = $this->apply_dynamic_tags( $subject, $args );
@@ -168,14 +168,14 @@ class WPEC_Process_IPN {
 
 			wp_mail( $buyer_email, $subject, $body, $headers );
                         WPEC_Debug_Logger::log('Buyer email notification sent to: ' . $buyer_email . '. From email address value used: ' . $from_email);
-                        
+
 			update_post_meta( $order_id, 'wpsc_buyer_email_sent', 'Email sent to: ' . $buyer_email );
 		}
 
 		// Send email to seller if needs.
 		if ( $wpec_plugin->get_setting( 'send_seller_email' ) && ! empty( $wpec_plugin->get_setting( 'notify_email_address' ) ) ) {
                         WPEC_Debug_Logger::log('Sending seller notification email.');
-                        
+
 			$notify_email = $wpec_plugin->get_setting( 'notify_email_address' );
 
 			$seller_email_subject = $wpec_plugin->get_setting( 'seller_email_subj' );
@@ -194,7 +194,7 @@ class WPEC_Process_IPN {
                 WPEC_Debug_Logger::log('Payment processing completed');
 
 		// Thank you message.
-		$res = array(
+		/*$res = array(
 			'title' => __( 'Payment Completed', 'paypal-express-checkout' ),
 		);
 
@@ -203,7 +203,23 @@ class WPEC_Process_IPN {
 		$thank_you_msg .= '<br /><p>' . $click_here_str . '</p></div>';
 		$thank_you_msg  = apply_filters( 'wpec_thank_you_message', $thank_you_msg );
 
-		$res['msg'] = $thank_you_msg;
+		$res['msg'] = $thank_you_msg;*/
+
+		$res = array();
+
+		if ( wp_http_validate_url( $wpec_plugin->get_setting( 'thank_you_url' ) ) ) {
+			$redirect_url = add_query_arg(
+				array(
+					'order_id' => $order_id,
+					'_wpnonce' => wp_create_nonce( 'thank_you_url' ),
+				),
+				$wpec_plugin->get_setting( 'thank_you_url' )
+			);
+			$res['redirect_url'] = esc_url_raw( $redirect_url );
+		} else {
+			_e( 'Missed Thank You page URL.', 'paypal-express-checkout' );
+			exit;
+		}
 
 		echo wp_json_encode( $res );
 

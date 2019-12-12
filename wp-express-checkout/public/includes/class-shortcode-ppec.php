@@ -118,12 +118,12 @@ class WPECShortcode {
 	    'btn_layout'	 => $this->ppdg->get_setting( 'btn_layout' ) !== false ? $this->ppdg->get_setting( 'btn_layout' ) : 'horizontal',
 	    'btn_color'		 => $this->ppdg->get_setting( 'btn_color' ) !== false ? $this->ppdg->get_setting( 'btn_color' ) : 'gold',
 	), $args ) );
-        
+
         //Lets check the digital item URL.
 	if ( ! empty( $url ) ) {
 	    $url = base64_encode( $url );
 	}
-	
+
         //The button ID
 	$button_id = 'paypal_button_' . count( self::$payment_buttons );
 	self::$payment_buttons[] = $button_id;
@@ -182,15 +182,17 @@ class WPECShortcode {
 	    // insert the below only once on a page
 	    ob_start();
 
-	    $frontVars		 = array(
-		'str'		 => array(
-		    'errorOccurred'	 => __( 'Error occurred', 'paypal-express-checkout' ),
-		    'paymentFor'	 => __( 'Payment for', 'paypal-express-checkout' ),
-		    'enterQuantity'	 => __( 'Please enter valid quantity', 'paypal-express-checkout' ),
-		),
-		'ajaxUrl'	 => get_admin_url() . 'admin-ajax.php'
-	    );
-	    ?>
+		$frontVars = array(
+			'str' => array(
+				'errorOccurred'    => __( 'Error occurred', 'paypal-express-checkout' ),
+				'paymentFor'       => __( 'Payment for', 'paypal-express-checkout' ),
+				'enterQuantity'    => __( 'Please enter valid quantity', 'paypal-express-checkout' ),
+				'paymentCompleted' => __( 'Payment Completed', 'paypal-express-checkout' ),
+				'redirectMsg'      => __( 'You are now being redirected to the order summary page.', 'paypal-express-checkout' ),
+			),
+			'ajaxUrl' => get_admin_url() . 'admin-ajax.php'
+		);
+		?>
 	    <script>var ppecFrontVars = <?php echo json_encode( $frontVars ); ?>;</script>
 	    <?php
 	    $args			 = array();
