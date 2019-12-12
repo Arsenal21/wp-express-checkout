@@ -367,7 +367,7 @@ class WPEC_Admin {
 				break;
 			case 'radio':
 				foreach ( $vals as $key => $value ) {
-					echo '<label><input type="radio" id="wp-ppdg-' . $field . '" ' . $_class . ' name="ppdg-settings[' . $field . ']" value="' . $value . '"' . ($value === $field_value ? ' checked' : (empty( $field_value ) && $value === "vertical") ? ' checked' : '') . '>' . $texts[$key] . '</label> ';
+					echo '<label><input type="radio" id="wp-ppdg-' . $field . '" ' . $_class . ' name="ppdg-settings[' . $field . ']" value="' . $value . '"' . ($value === $field_value ? ' checked' : ( ( empty( $field_value ) && $value === "vertical" ) ? ' checked' : '' ) ) . '>' . $texts[$key] . '</label> ';
 				}
 				break;
 			case 'textarea':
