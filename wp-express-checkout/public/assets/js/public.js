@@ -8,8 +8,8 @@ var ppecHandler = function (data) {
 		    var ret = true;
 		    try {
 			var res = JSON.parse(data);
-			dlgTitle = res.title;
-			dlgMsg = res.msg;
+			var dlgTitle = res.title;
+			var dlgMsg = res.msg;
 		    } catch (e) {
 			dlgTitle = ppecFrontVars.str.errorOccurred;
 			dlgMsg = data;
@@ -17,17 +17,6 @@ var ppecHandler = function (data) {
 		    }
 		    jQuery('div#wp-ppdg-dialog-message').attr('title', dlgTitle);
 		    jQuery('p#wp-ppdg-dialog-msg').html(dlgMsg);
-		    jQuery("#wp-ppdg-dialog-message").dialog({
-			modal: true,
-			width: 'auto',
-			draggable: false,
-			resizable: false,
-			buttons: {
-			    Ok: function () {
-				jQuery(this).dialog("close");
-			    }
-			}
-		    });
 		    jQuery('div.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]').hide();
 		    return ret;
 		});
