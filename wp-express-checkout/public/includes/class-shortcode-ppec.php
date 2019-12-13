@@ -276,14 +276,27 @@ class WPECShortcode {
 	 */
 	public function shortcode_wpec_thank_you() {
 
-		if ( empty( $_GET['_wpnonce'] ) || empty( $_GET['order_id'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'thank_you_url' . $_GET['order_id'] ) ) {
-			return __( 'Invalid request or session expired.', 'paypal-express-checkout' );
+		$error_message = '';
+
+		if ( !isset ( $_GET['order_id'] ) ){
+			$error_message .= '<p>' . __( 'This page is used to show the transaction result after a customer makes a payment.', 'paypal-express-checkout' ) . '</p>';
+			$error_message .= '<p>' . __( 'It will dynamically show the order details to the customers when they are redirected here after a payment. Do not access this page directly.', 'paypal-express-checkout' ) . '</p>';
+			$error_message .= '<p class="wpec-error-message">' . __( 'Error! Order ID value is missing in the URL.', 'paypal-express-checkout' ) . '</p>';
+			return $error_message;
 		}
 
+		if ( !isset ( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'thank_you_url' . $_GET['order_id'] ) ) {
+			$error_message .= '<p>' . __( 'This page is used to show the transaction result after a customer makes a payment.', 'paypal-express-checkout' ) . '</p>';
+			$error_message .= '<p>' . __( 'It will dynamically show the order details to the customers when they are redirected here after a payment. Do not access this page directly.', 'paypal-express-checkout' ) . '</p>';
+			$error_message .= '<p class="wpec-error-message">' . __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'paypal-express-checkout' ) . '</p>';
+			return $error_message;
+		}
+
+		//Retrieve the order data.
 		$order = get_post_meta( (int) $_GET['order_id'], 'ppec_payment_details', true );
 
 		if ( empty( $order ) ) {
-			return __( 'Incorrect order ID.', 'paypal-express-checkout' );
+			return __( 'Error! Incorrect order ID. Could not find that order in the orders table.', 'paypal-express-checkout' );
 		}
 
 		if ( 'COMPLETED' !== $order['state'] ) {
@@ -294,9 +307,15 @@ class WPECShortcode {
 		$trans      = get_transient( $trans_name );
 		$url        = $trans['url'];
 
-		$thank_you_msg  = '<div class="wpec_thank_you_message"><p>' . __( 'Thank you for your purchase.', 'paypal-express-checkout' ) . '</p>';
+		$thank_you_msg = '';
+		$thank_you_msg  .= '<div class="wpec_thank_you_message">';
+		$thank_you_msg  .= '<p>' . __( 'Thank you for your purchase.', 'paypal-express-checkout' ) . '</p>';
+
 		$click_here_str = sprintf( __( 'Please <a href="%s">click here</a> to download the file.', 'paypal-express-checkout' ), base64_decode( $url ) );
-		$thank_you_msg .= '<br /><p>' . $click_here_str . '</p></div>';
+		$thank_you_msg .= '<p>' . $click_here_str . '</p>';
+
+		$thank_you_msg .= '</div>';//end .wpec_thank_you_message
+
 		$thank_you_msg  = apply_filters( 'wpec_thank_you_message', $thank_you_msg );
 
 		return $thank_you_msg;

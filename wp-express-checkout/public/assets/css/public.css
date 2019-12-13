@@ -1,5 +1,10 @@
 /* This stylesheet is used to style the public-facing components of the plugin. */
 
+.wpec-error-message{
+	color: red;
+	font-weight: bold;
+}
+
 /* Spinner */
 .wp-ppec-spinner {
     display: inline-block;
