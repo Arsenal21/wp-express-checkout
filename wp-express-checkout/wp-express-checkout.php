@@ -25,6 +25,7 @@ define( 'WPEC_LOG_FILE', WPEC_PLUGIN_PATH . 'wpec-debug-log.txt' );
 /* ----------------------------------------------------------------------------*
  * Includes
  * ---------------------------------------------------------------------------- */
+include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-utility-functions.php');
 include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-debug-logger.php');
 include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-init-time-tasks.php');
 include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-process-ipn.php');

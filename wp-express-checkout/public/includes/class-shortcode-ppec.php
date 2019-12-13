@@ -293,7 +293,8 @@ class WPECShortcode {
 		}
 
 		//Retrieve the order data.
-		$order = get_post_meta( (int) $_GET['order_id'], 'ppec_payment_details', true );
+		$order_id = (int) $_GET['order_id'];
+		$order = get_post_meta( $order_id, 'ppec_payment_details', true );
 
 		if ( empty( $order ) ) {
 			return __( 'Error! Incorrect order ID. Could not find that order in the orders table.', 'paypal-express-checkout' );
@@ -311,11 +312,21 @@ class WPECShortcode {
 		$thank_you_msg  .= '<div class="wpec_thank_you_message">';
 		$thank_you_msg  .= '<p>' . __( 'Thank you for your purchase.', 'paypal-express-checkout' ) . '</p>';
 
-		$click_here_str = sprintf( __( 'Please <a href="%s">click here</a> to download the file.', 'paypal-express-checkout' ), base64_decode( $url ) );
-		$thank_you_msg .= '<p>' . $click_here_str . '</p>';
+		$thank_you_msg  .= '<p>' . __( 'Your purchase details are below:', 'paypal-express-checkout' ) . '</p>';
+		$thank_you_msg  .= '<p>' . '{product_details}' . '</p>';
+		$thank_you_msg  .= '<p>' . __( 'Transaction ID: ', 'paypal-express-checkout' ) . '{transaction_id}' . '</p>';
+
+		if (!empty ($url)){
+			$click_here_str = sprintf( __( 'Please <a href="%s">click here</a> to download the file.', 'paypal-express-checkout' ), base64_decode( $url ) );
+			$thank_you_msg .= '<p>' . $click_here_str . '</p>';
+		}
 
 		$thank_you_msg .= '</div>';//end .wpec_thank_you_message
 
+		//Apply the dynamic tags
+		$thank_you_msg = WPEC_Utility_Functions::replace_dynamic_order_tags($thank_you_msg, $order_id);
+
+		//Trigger the filter
 		$thank_you_msg  = apply_filters( 'wpec_thank_you_message', $thank_you_msg );
 
 		return $thank_you_msg;
