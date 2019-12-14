@@ -229,7 +229,7 @@ class WPEC_Main {
 			'live_client_id'       => '',
 			'sandbox_client_id'    => '',
 			'currency_code'        => 'USD',
-                        'thank_you_url'        => '',
+			'thank_you_url'        => '',
 			'btn_shape'            => 'pill',
 			'btn_color'            => 'gold',
 			'btn_type'             => 'checkout',
@@ -264,43 +264,17 @@ class WPEC_Main {
 	 * Fired for each blog when the plugin is activated.
 	 */
 	private static function single_activate() {
-		//Plugin activation.
+		// Plugin activation.
 
-                //Get the default values of the various settings fields. Then check if first-time install or an upgrade.
-		$default = self::get_defaults();
+		// Get the default values of the various settings fields. Then check if
+		// first-time install or an upgrade.
+		$settings = get_option( 'ppdg-settings', self::get_defaults() );
+		$settings = array_merge( self::get_defaults(), $settings );
 
-		$settings = get_option( 'ppdg-settings' );
+		update_option( 'ppdg-settings', $settings );
 
-		if ( empty( $settings ) ) {
-			add_option( 'ppdg-settings', $default );
-		} else {
-			$settings = array_merge( $default, $settings );
-			// replace unsupported btn_size option if it's set.
-			if ( isset( $settings['btn_size'] ) ) {
-				switch ( $settings['btn_size'] ) {
-					case 'small':
-						$settings['btn_height'] = 'small';
-						$settings['btn_width']  = 200;
-						break;
-					case 'medium':
-						$settings['btn_height'] = 'medium';
-						$settings['btn_width']  = 250;
-						break;
-					case 'medium':
-						$settings['btn_height'] = 'large';
-						$settings['btn_width']  = 350;
-						break;
-					case 'responsive':
-						$settings['btn_height'] = 'xlarge';
-						$settings['btn_width']  = 0;
-						break;
-				}
-			}
-			update_option( 'ppdg-settings', $settings );
-		}
-
-                //Check and create required pages
-                self::check_and_create_thank_you_page();//Create the thank you page.
+		// Check and create required pages
+		self::check_and_create_thank_you_page(); // Create the thank you page.
 
 		// Explicitly register post types and flush rewrite rules.
 		$PPECProducts = PPECProducts::get_instance();
@@ -310,7 +284,7 @@ class WPEC_Main {
 		self::rewrite_flush();
 	}
 
-        public static function check_and_create_thank_you_page(){
+	public static function check_and_create_thank_you_page(){
 		//Check if Thank You page exists. Create new if it doesn't exist.
 		$args = array(
 			'post_type' => 'page',
