@@ -11,212 +11,230 @@
  */
 class WPEC_Main {
 
-    /**
-     * Plugin version, used for cache-busting of style and script file references.
-     *
-     * @since   1.0.0
-     *
-     * @var     string
-     */
-    const VERSION = '1.0.0';
+	/**
+	 * Plugin version, used for cache-busting of style and script file references.
+	 *
+	 * @since   1.0.0
+	 *
+	 * @var     string
+	 */
+	const VERSION = '1.0.0';
 
-    /**
-     *
-     * Unique identifier for your plugin.
-     *
-     * The variable name is used as the text domain when internationalizing strings
-     * of text. Its value should match the Text Domain file header in the main
-     * plugin file.
-     *
-     * @since    1.0.0
-     *
-     * @var      string
-     */
-    protected $plugin_slug = 'paypal-for-digital-goods';
+	/**
+	 *
+	 * Unique identifier for your plugin.
+	 *
+	 * The variable name is used as the text domain when internationalizing strings
+	 * of text. Its value should match the Text Domain file header in the main
+	 * plugin file.
+	 *
+	 * @since    1.0.0
+	 *
+	 * @var      string
+	 */
+	protected $plugin_slug = 'paypal-for-digital-goods';
 
-    /**
-     * Instance of this class.
-     *
-     * @since    1.0.0
-     *
-     * @var      object
-     */
-    protected static $instance	 = null;
-    private $settings		 = null;
+	/**
+	 * Instance of this class.
+	 *
+	 * @since    1.0.0
+	 *
+	 * @var      object
+	 */
+	protected static $instance = null;
 
-    /**
-     * Initialize the plugin by setting localization and loading public scripts
-     * and styles.
-     *
-     * @since     1.0.0
-     */
-    private function __construct() {
-	$this->settings = (array) get_option( 'ppdg-settings' );
+	/**
+	 * The Plugin settings array.
+	 *
+	 * @var array
+	 */
+	private $settings = null;
 
-	// Load plugin text domain
-	add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+	/**
+	 * Initialize the plugin by setting localization and loading public scripts
+	 * and styles.
+	 *
+	 * @since     1.0.0
+	 */
+	private function __construct() {
+		$this->settings = (array) get_option( 'ppdg-settings' );
 
-	// Activate plugin when new blog is added
-	add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
+		// Load plugin text domain.
+		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
-	// Load public-facing style sheet and JavaScript.
-	if ( ! is_admin() ) {
-	    add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
-	}
-	// add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-	add_action( 'after_switch_theme', array( __CLASS__, 'rewrite_flush' ) );
-    }
+		// Activate plugin when new blog is added.
+		add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
 
-    public function enqueue_styles() {
-	wp_register_script( 'wp-ppec-frontend-script', WPEC_PLUGIN_URL . '/public/assets/js/public.js', array( 'jquery' ), false, true );
-
-	wp_register_style( 'wp-ppec-frontend-style', WPEC_PLUGIN_URL . '/public/assets/css/public.css' );
-
-	wp_enqueue_script( 'wp-ppec-frontend-script' );
-
-	wp_enqueue_style( 'wp-ppec-frontend-style' );
-    }
-
-    public function get_setting( $field ) {
-	if ( isset( $this->settings[ $field ] ) )
-	    return $this->settings[ $field ];
-	return false;
-    }
-
-    /**
-     * Return the plugin slug.
-     *
-     * @since    1.0.0
-     *
-     * @return    Plugin slug variable.
-     */
-    public function get_plugin_slug() {
-	return $this->plugin_slug;
-    }
-
-    /**
-     * Return an instance of this class.
-     *
-     * @since     1.0.0
-     *
-     * @return    object    A single instance of this class.
-     */
-    public static function get_instance() {
-
-	// If the single instance hasn't been set, set it now.
-	if ( null == self::$instance ) {
-	    self::$instance = new self;
+		// Load public-facing style sheet and JavaScript.
+		if ( ! is_admin() ) {
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		}
+		// add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'after_switch_theme', array( __CLASS__, 'rewrite_flush' ) );
 	}
 
-	return self::$instance;
-    }
+	/**
+	 * Enqueue public styles and scripts.
+	 *
+	 * @since     1.0.0
+	 */
+	public function enqueue_styles() {
+		wp_register_script( 'wp-ppec-frontend-script', WPEC_PLUGIN_URL . '/public/assets/js/public.js', array( 'jquery' ), WPEC_PLUGIN_VER, true );
 
-    /**
-     * Fired when the plugin is activated.
-     *
-     * @since    1.0.0
-     *
-     * @param    boolean    $network_wide    True if WPMU superadmin uses
-     *                                       "Network Activate" action, false if
-     *                                       WPMU is disabled or plugin is
-     *                                       activated on an individual blog.
-     */
-    public static function activate( $network_wide ) {
+		wp_register_style( 'wp-ppec-frontend-style', WPEC_PLUGIN_URL . '/public/assets/css/public.css', array(), WPEC_PLUGIN_VER );
 
-	if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+		wp_enqueue_script( 'wp-ppec-frontend-script' );
 
-	    if ( $network_wide ) {
+		wp_enqueue_style( 'wp-ppec-frontend-style' );
+	}
 
-		// Get all blog ids
-		$blog_ids = self::get_blog_ids();
+	/**
+	 * Retrieves the setting field value.
+	 *
+	 * @param string $field The field name.
+	 *
+	 * @return mixed
+	 */
+	public function get_setting( $field ) {
+		if ( isset( $this->settings[ $field ] ) ) {
+			return $this->settings[ $field ];
+		}
+		return false;
+	}
 
-		foreach ( $blog_ids as $blog_id ) {
-		    switch_to_blog( $blog_id );
-		    self::single_activate();
+	/**
+	 * Return the plugin slug.
+	 *
+	 * @since    1.0.0
+	 *
+	 * @return    Plugin slug variable.
+	 */
+	public function get_plugin_slug() {
+		return $this->plugin_slug;
+	}
+
+	/**
+	 * Return an instance of this class.
+	 *
+	 * @since     1.0.0
+	 *
+	 * @return    object    A single instance of this class.
+	 */
+	public static function get_instance() {
+
+		// If the single instance hasn't been set, set it now.
+		if ( null === self::$instance ) {
+			self::$instance = new self();
 		}
 
-		restore_current_blog();
-	    } else {
+		return self::$instance;
+	}
+
+	/**
+	 * Fired when the plugin is activated.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param boolean $network_wide True if WPMU super admin uses "Network
+	 *                              Activate" action, false if WPMU is disabled
+	 *                              or plugin is activated on an individual blog.
+	 */
+	public static function activate( $network_wide ) {
+
+		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+
+			if ( $network_wide ) {
+
+				// Get all blog ids.
+				$blog_ids = self::get_blog_ids();
+
+				foreach ( $blog_ids as $blog_id ) {
+					switch_to_blog( $blog_id );
+					self::single_activate();
+				}
+
+				restore_current_blog();
+			} else {
+				self::single_activate();
+			}
+		} else {
+			self::single_activate();
+		}
+	}
+
+	/**
+	 * Fired when the plugin is deactivated.
+	 *
+	 * @since    1.0.0
+	 *
+	 * @param boolean $network_wide True if WPMU super admin uses "Network
+	 *                              Deactivate" action, false if WPMU is
+	 *                              disabled or plugin is deactivated on an
+	 *                              individual blog.
+	 */
+	public static function deactivate( $network_wide ) {
+
+		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+
+			if ( $network_wide ) {
+
+				// Get all blog ids.
+				$blog_ids = self::get_blog_ids();
+
+				foreach ( $blog_ids as $blog_id ) {
+
+					switch_to_blog( $blog_id );
+					self::single_deactivate();
+				}
+
+				restore_current_blog();
+			} else {
+				self::single_deactivate();
+			}
+		} else {
+			self::single_deactivate();
+		}
+	}
+
+	/**
+	 * Fired when a new site is activated with a WPMU environment.
+	 *
+	 * @since    1.0.0
+	 *
+	 * @param int $blog_id ID of the new blog.
+	 */
+	public function activate_new_site( $blog_id ) {
+
+		if ( 1 !== did_action( 'wpmu_new_blog' ) ) {
+			return;
+		}
+
+		switch_to_blog( $blog_id );
 		self::single_activate();
-	    }
-	} else {
-	    self::single_activate();
-	}
-    }
-
-    /**
-     * Fired when the plugin is deactivated.
-     *
-     * @since    1.0.0
-     *
-     * @param    boolean    $network_wide    True if WPMU superadmin uses
-     *                                       "Network Deactivate" action, false if
-     *                                       WPMU is disabled or plugin is
-     *                                       deactivated on an individual blog.
-     */
-    public static function deactivate( $network_wide ) {
-
-	if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-
-	    if ( $network_wide ) {
-
-		// Get all blog ids
-		$blog_ids = self::get_blog_ids();
-
-		foreach ( $blog_ids as $blog_id ) {
-
-		    switch_to_blog( $blog_id );
-		    self::single_deactivate();
-		}
-
 		restore_current_blog();
-	    } else {
-		self::single_deactivate();
-	    }
-	} else {
-	    self::single_deactivate();
-	}
-    }
-
-    /**
-     * Fired when a new site is activated with a WPMU environment.
-     *
-     * @since    1.0.0
-     *
-     * @param    int    $blog_id    ID of the new blog.
-     */
-    public function activate_new_site( $blog_id ) {
-
-	if ( 1 !== did_action( 'wpmu_new_blog' ) ) {
-	    return;
 	}
 
-	switch_to_blog( $blog_id );
-	self::single_activate();
-	restore_current_blog();
-    }
+	/**
+	 * Get all blog ids of blogs in the current network that are:
+	 * - not archived
+	 * - not spam
+	 * - not deleted
+	 *
+	 * @since    1.0.0
+	 *
+	 * @return   array|false    The blog ids, false if no matches.
+	 */
+	private static function get_blog_ids() {
 
-    /**
-     * Get all blog ids of blogs in the current network that are:
-     * - not archived
-     * - not spam
-     * - not deleted
-     *
-     * @since    1.0.0
-     *
-     * @return   array|false    The blog ids, false if no matches.
-     */
-    private static function get_blog_ids() {
+		global $wpdb;
 
-	global $wpdb;
-
-	// get an array of blog ids
-	$sql = "SELECT blog_id FROM $wpdb->blogs
+		// get an array of blog ids.
+		$sql = "SELECT blog_id FROM $wpdb->blogs
 			WHERE archived = '0' AND spam = '0'
 			AND deleted = '0'";
 
-	return $wpdb->get_col( $sql );
-    }
+		return $wpdb->get_col( $sql );
+	}
 
 	/**
 	 * Retrieves the plugin defaults/
@@ -273,7 +291,7 @@ class WPEC_Main {
 
 		update_option( 'ppdg-settings', $settings );
 
-		// Check and create required pages
+		// Check and create required pages.
 		self::check_and_create_thank_you_page(); // Create the thank you page.
 
 		// Explicitly register post types and flush rewrite rules.
@@ -284,79 +302,94 @@ class WPEC_Main {
 		self::rewrite_flush();
 	}
 
-	public static function check_and_create_thank_you_page(){
-		//Check if Thank You page exists. Create new if it doesn't exist.
-		$args = array(
+	/**
+	 * Creates the Thank You page.
+	 */
+	public static function check_and_create_thank_you_page() {
+		// Check if Thank You page exists. Create new if it doesn't exist.
+		$args  = array(
 			'post_type' => 'page',
 		);
 		$pages = get_pages( $args );
 
 		$ty_page_id = '';
 		foreach ( $pages as $page ) {
-                        //Check if there is a page that contins our thank you page shortcode.
+			// Check if there is a page that contins our thank you page shortcode.
 			if ( strpos( $page->post_content, 'wpec_thank_you' ) !== false ) {
 				$ty_page_id = $page->ID;
 			}
 		}
-		if ( $ty_page_id === '') {
-                        //Thank you page missing. Create a new one.
+		if ( '' === $ty_page_id ) {
+			// Thank you page missing. Create a new one.
 			$ty_page_id  = self::create_post( 'page', 'Thank You', 'Thank-You-Transaction-Result', '[wpec_thank_you]' );
 			$ty_page     = get_post( $ty_page_id );
 			$ty_page_url = $ty_page->guid;
 
-                        //Save the Thank you page URL in settings.
+			// Save the Thank you page URL in settings.
 			$settings = get_option( 'ppdg-settings' );
-			if ( ! empty( $settings ) ) {//Settings should already be initialized when this function is called.
-				$settings['thank_you_url'] = $ty_page_url;
+			if ( ! empty( $settings ) ) { // Settings should already be initialized when this function is called.
+				$settings['thank_you_url']     = $ty_page_url;
 				$settings['thank_you_page_id'] = $ty_page_id;
 				update_option( 'ppdg-settings', $settings );
 			}
 		}
-
-        }
-
-        public static function create_post( $postType, $title, $name, $content, $parentId = NULL ) {
-	$post = array(
-	    'post_title'	 => $title,
-	    'post_name'	 => $name,
-	    'comment_status' => 'closed',
-	    'ping_status'	 => 'closed',
-	    'post_content'	 => $content,
-	    'post_status'	 => 'publish',
-	    'post_type'	 => $postType
-	);
-
-	if ( $parentId !== NULL ) {
-	    $post[ 'post_parent' ] = $parentId;
 	}
-	$postId = wp_insert_post( $post );
-	return $postId;
-    }
-
-    /**
-     * Fired for each blog when the plugin is deactivated.
-     *
-     * @since    1.0.0
-     */
-    private static function single_deactivate() {
-	// @TODO: Define deactivation functionality here
-    }
-
-    /**
-     * Load the plugin text domain for translation.
-     *
-     * @since    1.0.0
-     */
-    public function load_plugin_textdomain() {
-
-	$domain	 = 'paypal-express-checkout';
-	$locale	 = apply_filters( 'plugin_locale', get_locale(), $domain );
-
-	load_textdomain( $domain, trailingslashit( WP_LANG_DIR ) . $domain . '/' . $domain . '-' . $locale . '.mo' );
-	load_plugin_textdomain( $domain, FALSE, basename( plugin_dir_path( dirname( __FILE__ ) ) ) . '/languages/' );
-    }
 
 	/**
+	 * Creates a single post by given parameters.
+	 *
+	 * @param string $post_type The post type.
+	 * @param string $title     The post title.
+	 * @param string $name      The post name.
+	 * @param string $content   The post content.
+	 * @param int    $parent_id Set this for the post it belongs to, if any.
+	 *
+	 * @return int The post ID
+	 */
+	public static function create_post( $post_type, $title, $name, $content, $parent_id = null ) {
+		$post = array(
+			'post_title'     => $title,
+			'post_name'      => $name,
+			'comment_status' => 'closed',
+			'ping_status'    => 'closed',
+			'post_content'   => $content,
+			'post_status'    => 'publish',
+			'post_type'      => $post_type,
+		);
+
+		if ( null !== $parent_id ) {
+			$post['post_parent'] = $parent_id;
+		}
+		$post_id = wp_insert_post( $post );
+		return $post_id;
+	}
+
+	/**
+	 * Fired for each blog when the plugin is deactivated.
+	 *
+	 * @since    1.0.0
+	 */
+	private static function single_deactivate() {
+		// @TODO: Define deactivation functionality here
+	}
+
+	/**
+	 * Load the plugin text domain for translation.
+	 *
+	 * @since    1.0.0
+	 */
+	public function load_plugin_textdomain() {
+
+		$domain = 'paypal-express-checkout';
+		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
+
+		load_textdomain( $domain, trailingslashit( WP_LANG_DIR ) . $domain . '/' . $domain . '-' . $locale . '.mo' );
+		load_plugin_textdomain( $domain, false, basename( plugin_dir_path( dirname( __FILE__ ) ) ) . '/languages/' );
+	}
+
+	/**
+	 *  Remove rewrite rules and then recreate rewrite rules.
+	 *
 	 * @since    1.0.0
 	 */
 	public static function rewrite_flush() {
@@ -364,7 +397,7 @@ class WPEC_Main {
 	}
 
 	// public function get_plugin_slug()
-    // {
-    // 	return $this->plugin_slug;
-    // }
+	// {
+	// 	return $this->plugin_slug;
+	// }
 }
