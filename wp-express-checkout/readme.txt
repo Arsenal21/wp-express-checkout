@@ -12,13 +12,13 @@ Allows you to use the PayPal Express Checkout API to accept payment quickly for 
 
 == Description ==
 
-This plugin provides you a shortcode to generate a customizable PayPal payment button that allows a customer to pay for an item instantly via a popup using the PayPal's Express Checkout API/Gateway.
+This plugin provides you a shortcode to generate a customizable PayPal payment button that allows a customer to pay for an item instantly via a popup using the PayPal's Express Checkout API/Gateway. The checkout process is quick and easy.
 
 The full checkout takes place in a payment popup window and the customer never leaves your site.
 
 This is ideal for selling a product or service via PayPal.
 
-View configuration and usage details on the [WP Express Checkout](https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/) plugin's page
+View configuration and usage details on the [WP Express Checkout](https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/) plugin's documentation page
 
 = Basic Setup and Usage Video =
 
