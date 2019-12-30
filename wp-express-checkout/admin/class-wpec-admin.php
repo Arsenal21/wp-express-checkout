@@ -141,7 +141,7 @@ class WPEC_Admin {
 	 *   For reference: http://codex.wordpress.org/Roles_and_Capabilities
 	 */
 	$this->plugin_screen_hook_suffix = add_submenu_page(
-	'edit.php?post_type=' . PPECProducts::$products_slug, __( 'WP Express Checkout Settings', 'paypal-express-checkout' ), __( 'Settings', 'paypal-express-checkout' ), 'manage_options', 'ppec-settings-page', array( $this, 'display_plugin_admin_page' )
+	'edit.php?post_type=' . PPECProducts::$products_slug, __( 'WP Express Checkout Settings', 'wp-express-checkout' ), __( 'Settings', 'wp-express-checkout' ), 'manage_options', 'ppec-settings-page', array( $this, 'display_plugin_admin_page' )
 	);
 	add_action( 'admin_init', array( $this, 'register_settings' ) );
     }
@@ -150,82 +150,82 @@ class WPEC_Admin {
 	 * Register Admin page settings
 	 */
 	public function register_settings() {
-            
+
                 /* Register the settings */
 		register_setting( 'ppdg-settings-group', 'ppdg-settings', array( $this, 'settings_sanitize_field_callback' ) );
 
                 /* Add the sections */
 		add_settings_section( 'ppdg-documentation', '', array( $this, 'general_documentation_and_misc_output_callback' ), $this->plugin_slug . '-docs' );
 
-		add_settings_section( 'ppdg-global-section', __( 'Global Settings', 'paypal-express-checkout' ), null, $this->plugin_slug );
-		add_settings_section( 'ppdg-credentials-section', __( 'PayPal Credentials', 'paypal-express-checkout' ), null, $this->plugin_slug );
-		add_settings_section( 'ppdg-button-style-section', __( 'Button Style', 'paypal-express-checkout' ), null, $this->plugin_slug );
-		add_settings_section( 'ppdg-disable-funding-section', __( 'Disable Funding', 'paypal-express-checkout' ), array( $this, 'disable_funding_note' ), $this->plugin_slug );
-		add_settings_section( 'ppdg-debug-logging-section', __( 'Debug Logging', 'paypal-express-checkout' ), array( $this, 'debug_logging_note' ), $this->plugin_slug );
+		add_settings_section( 'ppdg-global-section', __( 'Global Settings', 'wp-express-checkout' ), null, $this->plugin_slug );
+		add_settings_section( 'ppdg-credentials-section', __( 'PayPal Credentials', 'wp-express-checkout' ), null, $this->plugin_slug );
+		add_settings_section( 'ppdg-button-style-section', __( 'Button Style', 'wp-express-checkout' ), null, $this->plugin_slug );
+		add_settings_section( 'ppdg-disable-funding-section', __( 'Disable Funding', 'wp-express-checkout' ), array( $this, 'disable_funding_note' ), $this->plugin_slug );
+		add_settings_section( 'ppdg-debug-logging-section', __( 'Debug Logging', 'wp-express-checkout' ), array( $this, 'debug_logging_note' ), $this->plugin_slug );
 
-		add_settings_section( 'ppdg-emails-section', __( 'Purchase Confirmation Email Settings', 'paypal-express-checkout' ), array( $this, 'emails_note' ), $this->plugin_slug . '-emails' );
+		add_settings_section( 'ppdg-emails-section', __( 'Purchase Confirmation Email Settings', 'wp-express-checkout' ), array( $this, 'emails_note' ), $this->plugin_slug . '-emails' );
 
                 /* Add the settings fields */
                 //Global settings fields
-		add_settings_field( 'currency_code', __( 'Currency Code', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section', array( 'field' => 'currency_code', 'type' => 'select', 'desc' => __( 'Example: USD, CAD, GBP etc', 'paypal-express-checkout' ), 'size' => 10, 'required' => true,
+		add_settings_field( 'currency_code', __( 'Currency Code', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section', array( 'field' => 'currency_code', 'type' => 'select', 'desc' => __( 'Example: USD, CAD, GBP etc', 'wp-express-checkout' ), 'size' => 10, 'required' => true,
 			'vals'  => array( 'USD', 'EUR', 'GBP', 'AUD', 'BRL', 'CAD', 'CNY', 'CZK', 'DKK', 'HKD', 'HUF', 'INR', 'IDR', 'ILS', 'JPY', 'MYR', 'MXN', 'NZD', 'NOK', 'PHP', 'PLN', 'SGD', 'ZAR', 'KRW', 'SEK', 'CHF', 'TWD', 'THB', 'TRY', 'VND', 'RUB', ),
-			'texts' => array( __( 'US Dollars (USD)', 'paypal-express-checkout' ), __( 'Euros (EUR)', 'paypal-express-checkout' ), __( 'Pounds Sterling (GBP)', 'paypal-express-checkout' ), __( 'Australian Dollars (AUD)', 'paypal-express-checkout' ), __( 'Brazilian Real (BRL)', 'paypal-express-checkout' ), __( 'Canadian Dollars (CAD)', 'paypal-express-checkout' ), __( 'Chinese Yuan (CNY)', 'paypal-express-checkout' ), __( 'Czech Koruna (CZK)', 'paypal-express-checkout' ), __( 'Danish Krone (DKK)', 'paypal-express-checkout' ), __( 'Hong Kong Dollar (HKD)', 'paypal-express-checkout' ), __( 'Hungarian Forint (HUF)', 'paypal-express-checkout' ), __( 'Indian Rupee (INR)', 'paypal-express-checkout' ), __( 'Indonesia Rupiah (IDR)', 'paypal-express-checkout' ),
-				__( 'Israeli Shekel (ILS)', 'paypal-express-checkout' ), __( 'Japanese Yen (JPY)', 'paypal-express-checkout' ), __( 'Malaysian Ringgits (MYR)', 'paypal-express-checkout' ), __( 'Mexican Peso (MXN)', 'paypal-express-checkout' ), __( 'New Zealand Dollar (NZD)', 'paypal-express-checkout' ), __( 'Norwegian Krone (NOK)', 'paypal-express-checkout' ), __( 'Philippine Pesos (PHP)', 'paypal-express-checkout' ), __( 'Polish Zloty (PLN)', 'paypal-express-checkout' ), __( 'Singapore Dollar (SGD)', 'paypal-express-checkout' ), __( 'South African Rand (ZAR)', 'paypal-express-checkout' ), __( 'South Korean Won (KRW)', 'paypal-express-checkout' ), __( 'Swedish Krona (SEK)', 'paypal-express-checkout' ), __( 'Swiss Franc (CHF)', 'paypal-express-checkout' ),
-				__( 'Taiwan New Dollars (TWD)', 'paypal-express-checkout' ), __( 'Thai Baht (THB)', 'paypal-express-checkout' ), __( 'Turkish Lira (TRY)', 'paypal-express-checkout' ), __( 'Vietnamese Dong (VND)', 'paypal-express-checkout' ), __( 'Russian Ruble (RUB)', 'paypal-express-checkout' ),
+			'texts' => array( __( 'US Dollars (USD)', 'wp-express-checkout' ), __( 'Euros (EUR)', 'wp-express-checkout' ), __( 'Pounds Sterling (GBP)', 'wp-express-checkout' ), __( 'Australian Dollars (AUD)', 'wp-express-checkout' ), __( 'Brazilian Real (BRL)', 'wp-express-checkout' ), __( 'Canadian Dollars (CAD)', 'wp-express-checkout' ), __( 'Chinese Yuan (CNY)', 'wp-express-checkout' ), __( 'Czech Koruna (CZK)', 'wp-express-checkout' ), __( 'Danish Krone (DKK)', 'wp-express-checkout' ), __( 'Hong Kong Dollar (HKD)', 'wp-express-checkout' ), __( 'Hungarian Forint (HUF)', 'wp-express-checkout' ), __( 'Indian Rupee (INR)', 'wp-express-checkout' ), __( 'Indonesia Rupiah (IDR)', 'wp-express-checkout' ),
+				__( 'Israeli Shekel (ILS)', 'wp-express-checkout' ), __( 'Japanese Yen (JPY)', 'wp-express-checkout' ), __( 'Malaysian Ringgits (MYR)', 'wp-express-checkout' ), __( 'Mexican Peso (MXN)', 'wp-express-checkout' ), __( 'New Zealand Dollar (NZD)', 'wp-express-checkout' ), __( 'Norwegian Krone (NOK)', 'wp-express-checkout' ), __( 'Philippine Pesos (PHP)', 'wp-express-checkout' ), __( 'Polish Zloty (PLN)', 'wp-express-checkout' ), __( 'Singapore Dollar (SGD)', 'wp-express-checkout' ), __( 'South African Rand (ZAR)', 'wp-express-checkout' ), __( 'South Korean Won (KRW)', 'wp-express-checkout' ), __( 'Swedish Krona (SEK)', 'wp-express-checkout' ), __( 'Swiss Franc (CHF)', 'wp-express-checkout' ),
+				__( 'Taiwan New Dollars (TWD)', 'wp-express-checkout' ), __( 'Thai Baht (THB)', 'wp-express-checkout' ), __( 'Turkish Lira (TRY)', 'wp-express-checkout' ), __( 'Vietnamese Dong (VND)', 'wp-express-checkout' ), __( 'Russian Ruble (RUB)', 'wp-express-checkout' ),
 			),
 		) );
-                add_settings_field( 'thank_you_url', __( 'Thank You Page URL', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section', 
+                add_settings_field( 'thank_you_url', __( 'Thank You Page URL', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section',
                         array(
-                        'field' => 'thank_you_url', 
-                        'type' => 'text', 
-                        'desc' => sprintf( __( 'This is the thank you page. This page is automatically created for you when you install the plugin. Do not delete this page from the pages menu of your site. The plugin will send the customers to this page after the payment.', 'paypal-express-checkout') ),
-                        'size' => 100,    
+                        'field' => 'thank_you_url',
+                        'type' => 'text',
+                        'desc' => sprintf( __( 'This is the thank you page. This page is automatically created for you when you install the plugin. Do not delete this page from the pages menu of your site. The plugin will send the customers to this page after the payment.', 'wp-express-checkout') ),
+                        'size' => 100,
                         )
                 );
 
                 //API details
-		add_settings_field( 'is_live', __( 'Live Mode', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'is_live', 'type' => 'checkbox', 'desc' => __( 'Check this to run the transaction in live mode. When unchecked it will run in sandbox mode.', 'paypal-express-checkout' ) ) );
-		add_settings_field( 'live_client_id', __( 'Live Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', 
-                        array( 
-                            'field' => 'live_client_id', 
-                            'type' => 'text', 
-                            'desc' => sprintf( __( 'Enter your PayPal Client ID for live mode. <a href="%s" target="_blank">Read this documentation</a> to learn how to locate your Client ID.', 'paypal-express-checkout'), 'https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/' ),
+		add_settings_field( 'is_live', __( 'Live Mode', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'is_live', 'type' => 'checkbox', 'desc' => __( 'Check this to run the transaction in live mode. When unchecked it will run in sandbox mode.', 'wp-express-checkout' ) ) );
+		add_settings_field( 'live_client_id', __( 'Live Client ID', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section',
+                        array(
+                            'field' => 'live_client_id',
+                            'type' => 'text',
+                            'desc' => sprintf( __( 'Enter your PayPal Client ID for live mode. <a href="%s" target="_blank">Read this documentation</a> to learn how to locate your Client ID.', 'wp-express-checkout'), 'https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/' ),
                             'size' => 100,
-                            ) 
+                            )
                 );
-		add_settings_field( 'sandbox_client_id', __( 'Sandbox Client ID', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', 
-                        array( 
-                            'field' => 'sandbox_client_id', 
-                            'type' => 'text', 
-                            'desc' => __( 'Enter your PayPal Client ID for sandbox mode.', 'paypal-express-checkout'),
+		add_settings_field( 'sandbox_client_id', __( 'Sandbox Client ID', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section',
+                        array(
+                            'field' => 'sandbox_client_id',
+                            'type' => 'text',
+                            'desc' => __( 'Enter your PayPal Client ID for sandbox mode.', 'wp-express-checkout'),
                             'size' => 100,
-                            ) 
+                            )
                 );
 
 		// button style section
-		add_settings_field( 'btn_type', __( 'Button Type', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_type', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'checkout', 'pay', 'paypal', 'buynow' ), 'texts' => array( __( 'Checkout', 'paypal-express-checkout' ), __( 'Pay', 'paypal-express-checkout' ), __( 'PayPal', 'paypal-express-checkout' ), __( 'Buy Now', 'paypal-express-checkout' ) ) ) );
-		add_settings_field( 'btn_shape', __( 'Button Shape', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_shape', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'pill', 'rect' ), 'texts' => array( __( 'Pill', 'paypal-express-checkout' ), __( 'Rectangle', 'paypal-express-checkout' ) ) ) );
-		add_settings_field( 'btn_layout', __( 'Button Layout', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_layout', 'type' => 'radio', 'class' => 'wp-ppdg-button-style', 'desc' => __( '', 'paypal-express-checkout' ), 'vals' => array( 'vertical', 'horizontal' ), 'texts' => array( __( 'Vertical', 'paypal-express-checkout' ), __( 'Horizontal', 'paypal-express-checkout' ) ) ) );
-		add_settings_field( 'btn_height', __( 'Button Height', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_height', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'small', 'medium', 'large', 'xlarge' ), 'texts' => array( __( 'Small', 'paypal-express-checkout' ), __( 'Medium', 'paypal-express-checkout' ), __( 'Large', 'paypal-express-checkout' ), __( 'Extra Large', 'paypal-express-checkout' ) ) ) );
-		add_settings_field( 'btn_width', __( 'Button Width', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_width', 'type' => 'number', 'class' => 'wp-ppdg-button-style', 'placeholder' => __( 'Auto', 'paypal-express-checkout' ), 'desc' => __( 'Button width in pixels. Minimum width is 150px. Leave it blank for auto width.', 'paypal-express-checkout' ), 'size' => 10 ) );
-		add_settings_field( 'btn_color', __( 'Button Color', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_color', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '<div id="wp-ppdg-preview-container"><p>' . __( 'Button preview:', 'paypal-express-checkout' ) . '</p><br /><div id="paypal-button-container"></div><div id="wp-ppdg-preview-protect"></div></div>', 'vals' => array( 'gold', 'blue', 'silver', 'white', 'black' ), 'texts' => array( __( 'Gold', 'paypal-express-checkout' ), __( 'Blue', 'paypal-express-checkout' ), __( 'Silver', 'paypal-express-checkout' ), __( 'White', 'paypal-express-checkout' ), __( 'Black', 'paypal-express-checkout' ) ) ) );
+		add_settings_field( 'btn_type', __( 'Button Type', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_type', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'checkout', 'pay', 'paypal', 'buynow' ), 'texts' => array( __( 'Checkout', 'wp-express-checkout' ), __( 'Pay', 'wp-express-checkout' ), __( 'PayPal', 'wp-express-checkout' ), __( 'Buy Now', 'wp-express-checkout' ) ) ) );
+		add_settings_field( 'btn_shape', __( 'Button Shape', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_shape', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'pill', 'rect' ), 'texts' => array( __( 'Pill', 'wp-express-checkout' ), __( 'Rectangle', 'wp-express-checkout' ) ) ) );
+		add_settings_field( 'btn_layout', __( 'Button Layout', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_layout', 'type' => 'radio', 'class' => 'wp-ppdg-button-style', 'desc' => __( '', 'wp-express-checkout' ), 'vals' => array( 'vertical', 'horizontal' ), 'texts' => array( __( 'Vertical', 'wp-express-checkout' ), __( 'Horizontal', 'wp-express-checkout' ) ) ) );
+		add_settings_field( 'btn_height', __( 'Button Height', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_height', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'small', 'medium', 'large', 'xlarge' ), 'texts' => array( __( 'Small', 'wp-express-checkout' ), __( 'Medium', 'wp-express-checkout' ), __( 'Large', 'wp-express-checkout' ), __( 'Extra Large', 'wp-express-checkout' ) ) ) );
+		add_settings_field( 'btn_width', __( 'Button Width', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_width', 'type' => 'number', 'class' => 'wp-ppdg-button-style', 'placeholder' => __( 'Auto', 'wp-express-checkout' ), 'desc' => __( 'Button width in pixels. Minimum width is 150px. Leave it blank for auto width.', 'wp-express-checkout' ), 'size' => 10 ) );
+		add_settings_field( 'btn_color', __( 'Button Color', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_color', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '<div id="wp-ppdg-preview-container"><p>' . __( 'Button preview:', 'wp-express-checkout' ) . '</p><br /><div id="paypal-button-container"></div><div id="wp-ppdg-preview-protect"></div></div>', 'vals' => array( 'gold', 'blue', 'silver', 'white', 'black' ), 'texts' => array( __( 'Gold', 'wp-express-checkout' ), __( 'Blue', 'wp-express-checkout' ), __( 'Silver', 'wp-express-checkout' ), __( 'White', 'wp-express-checkout' ), __( 'Black', 'wp-express-checkout' ) ) ) );
 
 		// disable funding section
-		add_settings_field( 'disabled_funding', __( 'Disabled Funding Options', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_funding', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'card', 'credit', 'sepa' ), 'texts' => array( __( 'Credit or debit cards', 'paypal-express-checkout' ), __( 'PayPal Credit', 'paypal-express-checkout' ), __( 'SEPA-Lastschrift', 'paypal-express-checkout' ) ) ) );
-		add_settings_field( 'disabled_cards', __( 'Disabled Cards', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_cards', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'visa', 'mastercard', 'amex', 'discover', 'jcb', 'elo', 'hiper' ), 'texts' => array( __( 'Visa', 'paypal-express-checkout' ), __( 'Mastercard', 'paypal-express-checkout' ), __( 'American Express', 'paypal-express-checkout' ), __( 'Discover', 'paypal-express-checkout' ), __( 'JCB', 'paypal-express-checkout' ), __( 'Elo', 'paypal-express-checkout' ), __( 'Hiper', 'paypal-express-checkout' ) ) ) );
+		add_settings_field( 'disabled_funding', __( 'Disabled Funding Options', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_funding', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'card', 'credit', 'sepa' ), 'texts' => array( __( 'Credit or debit cards', 'wp-express-checkout' ), __( 'PayPal Credit', 'wp-express-checkout' ), __( 'SEPA-Lastschrift', 'wp-express-checkout' ) ) ) );
+		add_settings_field( 'disabled_cards', __( 'Disabled Cards', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_cards', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'visa', 'mastercard', 'amex', 'discover', 'jcb', 'elo', 'hiper' ), 'texts' => array( __( 'Visa', 'wp-express-checkout' ), __( 'Mastercard', 'wp-express-checkout' ), __( 'American Express', 'wp-express-checkout' ), __( 'Discover', 'wp-express-checkout' ), __( 'JCB', 'wp-express-checkout' ), __( 'Elo', 'wp-express-checkout' ), __( 'Hiper', 'wp-express-checkout' ) ) ) );
 
 		// debug logging section
-		add_settings_field( 'enable_debug_logging', __( 'Enable Debug Logging', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-debug-logging-section', 
-                        array( 
-                            'field' => 'enable_debug_logging', 
-                            'type' => 'checkbox', 
-                            'desc' => __( 'Check this option to enable debug logging.', 'paypal-express-checkout' ) . 
+		add_settings_field( 'enable_debug_logging', __( 'Enable Debug Logging', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-debug-logging-section',
+                        array(
+                            'field' => 'enable_debug_logging',
+                            'type' => 'checkbox',
+                            'desc' => __( 'Check this option to enable debug logging.', 'wp-express-checkout' ) .
                             '<p class="description"><a href="' . get_admin_url() . '?wpec-debug-action=view_log" target="_blank">' .
-                            __( 'Click here', 'paypal-express-checkout' ) . '</a>' .
-                            __( ' to view log file.', 'paypal-express-checkout' ) . '<br>' .
-                            '<a id="wpec-reset-log" href="#0" style="color: red">' . __( 'Click here', 'paypal-express-checkout' ) . '</a>' .
-                            __( ' to reset log file.', 'paypal-express-checkout' ) . '</p>'
-                            ) 
+                            __( 'Click here', 'wp-express-checkout' ) . '</a>' .
+                            __( ' to view log file.', 'wp-express-checkout' ) . '<br>' .
+                            '<a id="wpec-reset-log" href="#0" style="color: red">' . __( 'Click here', 'wp-express-checkout' ) . '</a>' .
+                            __( ' to reset log file.', 'wp-express-checkout' ) . '</p>'
+                            )
                 );
 
 		/***********************/
@@ -233,47 +233,47 @@ class WPEC_Admin {
 		/***********************/
 
 		// emails section
-		add_settings_field( 'send_buyer_email', __( 'Send Emails to Buyer After Purchase', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'send_buyer_email', 'type' => 'checkbox', 'desc' => __( 'If checked the plugin will send an email to the buyer with the sale details. If digital goods are purchased then the email will contain the download links for the purchased products.', 'paypal-express-checkout' ) ) );
-		add_settings_field( 'buyer_from_email', __( 'From Email Address', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_from_email', 'type' => 'text', 'desc' => __( 'Example: Your Name &lt;sales@your-domain.com&gt; This is the email address that will be used to send the email to the buyer. This name and email address will appear in the from field of the email.', 'paypal-express-checkout' ) ) );
-		add_settings_field( 'buyer_email_subj', __( 'Buyer Email Subject', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_subj', 'type' => 'text', 'desc' => __( 'This is the subject of the email that will be sent to the buyer.', 'paypal-express-checkout' ) ) );
-		add_settings_field( 'buyer_email_body', __( 'Buyer Email Body', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_body', 'type' => 'textarea', 'desc' => ''
+		add_settings_field( 'send_buyer_email', __( 'Send Emails to Buyer After Purchase', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'send_buyer_email', 'type' => 'checkbox', 'desc' => __( 'If checked the plugin will send an email to the buyer with the sale details. If digital goods are purchased then the email will contain the download links for the purchased products.', 'wp-express-checkout' ) ) );
+		add_settings_field( 'buyer_from_email', __( 'From Email Address', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_from_email', 'type' => 'text', 'desc' => __( 'Example: Your Name &lt;sales@your-domain.com&gt; This is the email address that will be used to send the email to the buyer. This name and email address will appear in the from field of the email.', 'wp-express-checkout' ) ) );
+		add_settings_field( 'buyer_email_subj', __( 'Buyer Email Subject', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_subj', 'type' => 'text', 'desc' => __( 'This is the subject of the email that will be sent to the buyer.', 'wp-express-checkout' ) ) );
+		add_settings_field( 'buyer_email_body', __( 'Buyer Email Body', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_body', 'type' => 'textarea', 'desc' => ''
 			. 'This is the body of the email that will be sent to the buyer. Do not change the text within the braces {}. You can use the following email tags in this email body field:'
-			. '<br />{first_name} – ' . __( 'First name of the buyer', 'paypal-express-checkout' )
-			. '<br />{last_name} – ' . __( 'Last name of the buyer', 'paypal-express-checkout' )
-			. '<br />{payer_email} – ' . __( 'Email Address of the buyer', 'paypal-express-checkout' )
-			. '<br />{address} – ' . __( 'Address of the buyer', 'paypal-express-checkout' )
-			. '<br />{product_details} – ' . __( 'The item details of the purchased product (this will include the download link for digital items).', 'paypal-express-checkout' )
-			. '<br />{transaction_id} – ' . __( 'The unique transaction ID of the purchase', 'paypal-express-checkout' )
-			. '<br />{order_id} – ' . __( 'The order ID reference of this transaction in the cart orders menu', 'paypal-express-checkout' )
-			. '<br />{purchase_amt} – ' . __( 'The amount paid for the current transaction', 'paypal-express-checkout' )
-			. '<br />{purchase_date} – ' . __( 'The date of the purchase', 'paypal-express-checkout' )
-			. '<br />{coupon_code} – ' . __( 'Coupon code applied to the purchase', 'paypal-express-checkout' ),
+			. '<br />{first_name} – ' . __( 'First name of the buyer', 'wp-express-checkout' )
+			. '<br />{last_name} – ' . __( 'Last name of the buyer', 'wp-express-checkout' )
+			. '<br />{payer_email} – ' . __( 'Email Address of the buyer', 'wp-express-checkout' )
+			. '<br />{address} – ' . __( 'Address of the buyer', 'wp-express-checkout' )
+			. '<br />{product_details} – ' . __( 'The item details of the purchased product (this will include the download link for digital items).', 'wp-express-checkout' )
+			. '<br />{transaction_id} – ' . __( 'The unique transaction ID of the purchase', 'wp-express-checkout' )
+			. '<br />{order_id} – ' . __( 'The order ID reference of this transaction in the cart orders menu', 'wp-express-checkout' )
+			. '<br />{purchase_amt} – ' . __( 'The amount paid for the current transaction', 'wp-express-checkout' )
+			. '<br />{purchase_date} – ' . __( 'The date of the purchase', 'wp-express-checkout' )
+			. '<br />{coupon_code} – ' . __( 'Coupon code applied to the purchase', 'wp-express-checkout' ),
 		) );
-		add_settings_field( 'send_seller_email', __( 'Send Emails to Seller After Purchase', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'send_seller_email', 'type' => 'checkbox', 'desc' => __( 'If checked the plugin will send an email to the seller with the sale details', 'paypal-express-checkout' ) ) );
-		add_settings_field( 'notify_email_address', __( 'Notification Email Address*', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'notify_email_address', 'type' => 'text', 'desc' => __( 'This is the email address where the seller will be notified of product sales. You can put multiple email addresses separated by comma (,) in the above field to send the notification to multiple email addresses.', 'paypal-express-checkout' ), 'required' => true, ) );
-		add_settings_field( 'seller_email_subj', __( 'Seller Email Subject*', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'seller_email_subj', 'type' => 'text', 'desc' => __( 'This is the subject of the email that will be sent to the seller for record.', 'paypal-express-checkout' ), 'required' => true, ) );
-		add_settings_field( 'seller_email_body', __( 'Seller Email Body*', 'paypal-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'seller_email_body', 'type' => 'textarea', 'required' => true, 'desc' => ''
+		add_settings_field( 'send_seller_email', __( 'Send Emails to Seller After Purchase', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'send_seller_email', 'type' => 'checkbox', 'desc' => __( 'If checked the plugin will send an email to the seller with the sale details', 'wp-express-checkout' ) ) );
+		add_settings_field( 'notify_email_address', __( 'Notification Email Address*', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'notify_email_address', 'type' => 'text', 'desc' => __( 'This is the email address where the seller will be notified of product sales. You can put multiple email addresses separated by comma (,) in the above field to send the notification to multiple email addresses.', 'wp-express-checkout' ), 'required' => true, ) );
+		add_settings_field( 'seller_email_subj', __( 'Seller Email Subject*', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'seller_email_subj', 'type' => 'text', 'desc' => __( 'This is the subject of the email that will be sent to the seller for record.', 'wp-express-checkout' ), 'required' => true, ) );
+		add_settings_field( 'seller_email_body', __( 'Seller Email Body*', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'seller_email_body', 'type' => 'textarea', 'required' => true, 'desc' => ''
 			. 'This is the body of the email that will be sent to the seller for record. Do not change the text within the braces {}. You can use the following email tags in this email body field:'
-			. '<br />{first_name} – ' . __( 'First name of the buyer', 'paypal-express-checkout' )
-			. '<br />{last_name} – ' . __( 'Last name of the buyer', 'paypal-express-checkout' )
-			. '<br />{payer_email} – ' . __( 'Email Address of the buyer', 'paypal-express-checkout' )
-			. '<br />{address} – ' . __( 'Address of the buyer', 'paypal-express-checkout' )
-			. '<br />{product_details} – ' . __( 'The item details of the purchased product (this will include the download link for digital items).', 'paypal-express-checkout' )
-			. '<br />{transaction_id} – ' . __( 'The unique transaction ID of the purchase', 'paypal-express-checkout' )
-			. '<br />{order_id} – ' . __( 'The order ID reference of this transaction in the cart orders menu', 'paypal-express-checkout' )
-			. '<br />{purchase_amt} – ' . __( 'The amount paid for the current transaction', 'paypal-express-checkout' )
-			. '<br />{purchase_date} – ' . __( 'The date of the purchase', 'paypal-express-checkout' )
-			. '<br />{coupon_code} – ' . __( 'Coupon code applied to the purchase', 'paypal-express-checkout' ),
+			. '<br />{first_name} – ' . __( 'First name of the buyer', 'wp-express-checkout' )
+			. '<br />{last_name} – ' . __( 'Last name of the buyer', 'wp-express-checkout' )
+			. '<br />{payer_email} – ' . __( 'Email Address of the buyer', 'wp-express-checkout' )
+			. '<br />{address} – ' . __( 'Address of the buyer', 'wp-express-checkout' )
+			. '<br />{product_details} – ' . __( 'The item details of the purchased product (this will include the download link for digital items).', 'wp-express-checkout' )
+			. '<br />{transaction_id} – ' . __( 'The unique transaction ID of the purchase', 'wp-express-checkout' )
+			. '<br />{order_id} – ' . __( 'The order ID reference of this transaction in the cart orders menu', 'wp-express-checkout' )
+			. '<br />{purchase_amt} – ' . __( 'The amount paid for the current transaction', 'wp-express-checkout' )
+			. '<br />{purchase_date} – ' . __( 'The date of the purchase', 'wp-express-checkout' )
+			. '<br />{coupon_code} – ' . __( 'Coupon code applied to the purchase', 'wp-express-checkout' ),
 		) );
 	}
-               
+
 	/**
 	 * The section `ppdg-documentation` callback.
 	 */
 	public function general_documentation_and_misc_output_callback() {
 		?>
 		<div style="background: none repeat scroll 0 0 #FFF6D5;border: 1px solid #D1B655;color: #3F2502;margin: 10px 0;padding: 5px 5px 5px 10px;text-shadow: 1px 1px #FFFFFF;">
-			<p><?php _e( 'Please read the <a target="_blank" href="https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/">WP Express Checkout</a> plugin setup instructions to configure and use it.', 'paypal-express-checkout' ); ?>
+			<p><?php _e( 'Please read the <a target="_blank" href="https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/">WP Express Checkout</a> plugin setup instructions to configure and use it.', 'wp-express-checkout' ); ?>
 			</p>
 		</div>
 
@@ -298,7 +298,7 @@ class WPEC_Admin {
 	 * The section `ppdg-emails-section` callback.
 	 */
 	public function emails_note() {
-		printf( '<p><i>%s</p></i>', esc_html__( 'The following options affect the emails that gets sent to your buyers after a purchase.', 'paypal-express-checkout' ) );
+		printf( '<p><i>%s</p></i>', esc_html__( 'The following options affect the emails that gets sent to your buyers after a purchase.', 'wp-express-checkout' ) );
 	}
 
 	/**
@@ -306,10 +306,10 @@ class WPEC_Admin {
 	 */
 	public function disable_funding_note() {
 		echo '<p><i>';
-		_e( 'By default, funding source eligibility is smartly decided based on a variety of factors. You can force disable funding options by selecting them below.', 'paypal-express-checkout' );
+		_e( 'By default, funding source eligibility is smartly decided based on a variety of factors. You can force disable funding options by selecting them below.', 'wp-express-checkout' );
 		echo '</p></i>';
 		echo '<p><i>';
-		_e( 'Note: disabled options will disappear from button preview once you save changes.', 'paypal-express-checkout' );
+		_e( 'Note: disabled options will disappear from button preview once you save changes.', 'wp-express-checkout' );
 		echo '</p></i>';
 	}
 
@@ -318,7 +318,7 @@ class WPEC_Admin {
 	 */
 	public function debug_logging_note() {
 		echo '<p><i>';
-		_e( 'Debug logging can be useful to troubleshoot transaction processing related issues on your site.', 'paypal-express-checkout' );
+		_e( 'Debug logging can be useful to troubleshoot transaction processing related issues on your site.', 'wp-express-checkout' );
 		echo '</p></i>';
 	}
 
@@ -416,7 +416,7 @@ class WPEC_Admin {
 				// Validate required fields.
 				if ( ! empty( $args['args']['required'] ) && empty( $input[ $field ] ) ) {
 					/* translators: "%s" - field title */
-					$message = sprintf( __( 'You must specify "%s".', 'paypal-express-checkout' ), $args['title'] );
+					$message = sprintf( __( 'You must specify "%s".', 'wp-express-checkout' ), $args['title'] );
 					add_settings_error( 'ppdg-settings', 'invalid-' . $field, $message );
 					$action_type = 'error';
 				}
@@ -481,7 +481,7 @@ class WPEC_Admin {
 	public function add_action_links( $links ) {
 
 		return array_merge(
-			array( 'settings' => '<a href="' . admin_url( 'edit.php?post_type=' . PPECProducts::$products_slug . '&page=ppec-settings-page' ) . '">' . __( 'Settings', 'paypal-express-checkout' ) . '</a>' ),
+			array( 'settings' => '<a href="' . admin_url( 'edit.php?post_type=' . PPECProducts::$products_slug . '&page=ppec-settings-page' ) . '">' . __( 'Settings', 'wp-express-checkout' ) . '</a>' ),
 			$links
 		);
 	}

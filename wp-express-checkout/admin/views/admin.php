@@ -38,8 +38,8 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	$wpec_admin = WPEC_Admin::get_instance();
 
 	$wpec_plugin_tabs = array(
-		'ppec-settings-page'                       => __( 'General Settings', 'paypal-express-checkout' ),
-		'ppec-settings-page&action=email-settings' => __( 'Email Settings', 'paypal-express-checkout' ),
+		'ppec-settings-page'                       => __( 'General Settings', 'wp-express-checkout' ),
+		'ppec-settings-page&action=email-settings' => __( 'Email Settings', 'wp-express-checkout' ),
 	);
 
 	$current = "";

@@ -26,19 +26,19 @@ class PPECProducts {
 
 	// Products post type
 	$labels		 = array(
-	    'name'			 => _x( 'Products', 'Post Type General Name', 'paypal-express-checkout' ),
-	    'singular_name'		 => _x( 'Product', 'Post Type Singular Name', 'paypal-express-checkout' ),
-	    'menu_name'		 => __( 'WP Express Checkout', 'paypal-express-checkout' ),
-//	    'parent_item_colon'	 => __( 'Parent Order:', 'paypal-express-checkout' ),
-	    'all_items'		 => __( 'Products', 'paypal-express-checkout' ),
-	    'view_item'		 => __( 'View Product', 'paypal-express-checkout' ),
-	    'add_new_item'		 => __( 'Add New Product', 'paypal-express-checkout' ),
-	    'add_new'		 => __( 'Add New Product', 'paypal-express-checkout' ),
-	    'edit_item'		 => __( 'Edit Product', 'paypal-express-checkout' ),
-	    'update_item'		 => __( 'Update Products', 'paypal-express-checkout' ),
-	    'search_items'		 => __( 'Search Product', 'paypal-express-checkout' ),
-	    'not_found'		 => __( 'Not found', 'paypal-express-checkout' ),
-	    'not_found_in_trash'	 => __( 'Not found in Trash', 'paypal-express-checkout' ),
+	    'name'			 => _x( 'Products', 'Post Type General Name', 'wp-express-checkout' ),
+	    'singular_name'		 => _x( 'Product', 'Post Type Singular Name', 'wp-express-checkout' ),
+	    'menu_name'		 => __( 'WP Express Checkout', 'wp-express-checkout' ),
+//	    'parent_item_colon'	 => __( 'Parent Order:', 'wp-express-checkout' ),
+	    'all_items'		 => __( 'Products', 'wp-express-checkout' ),
+	    'view_item'		 => __( 'View Product', 'wp-express-checkout' ),
+	    'add_new_item'		 => __( 'Add New Product', 'wp-express-checkout' ),
+	    'add_new'		 => __( 'Add New Product', 'wp-express-checkout' ),
+	    'edit_item'		 => __( 'Edit Product', 'wp-express-checkout' ),
+	    'update_item'		 => __( 'Update Products', 'wp-express-checkout' ),
+	    'search_items'		 => __( 'Search Product', 'wp-express-checkout' ),
+	    'not_found'		 => __( 'Not found', 'wp-express-checkout' ),
+	    'not_found_in_trash'	 => __( 'Not found in Trash', 'wp-express-checkout' ),
 	);
         
         //Using custom dashicon font icon.
@@ -80,16 +80,16 @@ class PPECProducts {
 	$slug		 = self::$products_slug;
 	if ( $post_type === self::$products_slug ) {
 	    $permalink		 = get_permalink( $post->ID );
-	    $view_link		 = sprintf( ' <a href="%s">%s</a>', esc_url( $permalink ), __( 'View product', 'paypal-express-checkout' ) );
+	    $view_link		 = sprintf( ' <a href="%s">%s</a>', esc_url( $permalink ), __( 'View product', 'wp-express-checkout' ) );
 	    $preview_permalink	 = add_query_arg( 'preview', 'true', $permalink );
-	    $preview_link		 = sprintf( ' <a target="_blank" href="%s">%s</a>', esc_url( $preview_permalink ), __( 'Preview product', 'paypal-express-checkout' ) );
+	    $preview_link		 = sprintf( ' <a target="_blank" href="%s">%s</a>', esc_url( $preview_permalink ), __( 'Preview product', 'wp-express-checkout' ) );
 	    $messages[ $slug ]	 = $messages[ 'post' ];
-	    $messages[ $slug ][ 1 ]	 = __( "Product updated.", 'paypal-express-checkout' ) . $view_link;
-	    $messages[ $slug ][ 4 ]	 = __( "Product updated.", 'paypal-express-checkout' );
-	    $messages[ $slug ][ 6 ]	 = __( "Product published.", 'paypal-express-checkout' ) . $view_link;
-	    $messages[ $slug ][ 7 ]	 = __( "Product saved.", 'paypal-express-checkout' );
-	    $messages[ $slug ][ 8 ]	 = __( "Product submitted.", 'paypal-express-checkout' ) . $preview_link;
-	    $messages[ $slug ][ 10 ] = __( "Product draft updated.", 'paypal-express-checkout' ) . $preview_link;
+	    $messages[ $slug ][ 1 ]	 = __( "Product updated.", 'wp-express-checkout' ) . $view_link;
+	    $messages[ $slug ][ 4 ]	 = __( "Product updated.", 'wp-express-checkout' );
+	    $messages[ $slug ][ 6 ]	 = __( "Product published.", 'wp-express-checkout' ) . $view_link;
+	    $messages[ $slug ][ 7 ]	 = __( "Product saved.", 'wp-express-checkout' );
+	    $messages[ $slug ][ 8 ]	 = __( "Product submitted.", 'wp-express-checkout' ) . $preview_link;
+	    $messages[ $slug ][ 10 ] = __( "Product draft updated.", 'wp-express-checkout' ) . $preview_link;
 	}
 	return $messages;
     }
@@ -97,11 +97,11 @@ class PPECProducts {
     function manage_columns( $columns ) {
 	unset( $columns );
 	$columns = array(
-	    "title"		 => __( 'Product Name', 'paypal-express-checkout' ),
-	    "id"		 => __( "ID", 'paypal-express-checkout' ),
-	    "price"		 => __( "Price", 'paypal-express-checkout' ),
-	    "shortcode"	 => __( "Shortcode", 'paypal-express-checkout' ),
-	    "date"		 => __( "Date", 'paypal-express-checkout' ),
+	    "title"		 => __( 'Product Name', 'wp-express-checkout' ),
+	    "id"		 => __( "ID", 'wp-express-checkout' ),
+	    "price"		 => __( "Price", 'wp-express-checkout' ),
+	    "shortcode"	 => __( "Shortcode", 'wp-express-checkout' ),
+	    "date"		 => __( "Date", 'wp-express-checkout' ),
 	);
 	return $columns;
     }

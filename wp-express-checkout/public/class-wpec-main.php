@@ -380,7 +380,7 @@ class WPEC_Main {
 	 */
 	public function load_plugin_textdomain() {
 
-		$domain = 'paypal-express-checkout';
+		$domain = 'wp-express-checkout';
 		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
 
 		load_textdomain( $domain, trailingslashit( WP_LANG_DIR ) . $domain . '/' . $domain . '-' . $locale . '.mo' );

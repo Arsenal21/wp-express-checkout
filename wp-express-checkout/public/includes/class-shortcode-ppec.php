@@ -62,14 +62,14 @@ class WPECShortcode {
 
     function shortcode_wp_express_checkout( $atts ) {
 	if ( empty( $atts[ 'product_id' ] ) ) {
-	    $error_msg	 = __( "Error: product ID is invalid.", 'paypal-express-checkout' );
+	    $error_msg	 = __( "Error: product ID is invalid.", 'wp-express-checkout' );
 	    $err		 = $this->show_err_msg( $error_msg );
 	    return $err;
 	}
 	$post_id = intval( $atts[ 'product_id' ] );
 	$post	 = get_post( $post_id );
 	if ( ! $post || get_post_type( $post_id ) !== PPECProducts::$products_slug ) {
-	    $error_msg	 = sprintf( __( "Can't find product with ID %s", 'paypal-express-checkout' ), $post_id );
+	    $error_msg	 = sprintf( __( "Can't find product with ID %s", 'wp-express-checkout' ), $post_id );
 	    $err		 = $this->show_err_msg( $error_msg );
 	    return $err;
 	}
@@ -154,7 +154,7 @@ class WPECShortcode {
 	}
 
 	if ( empty( $client_id ) ) {
-	    $err_msg = sprintf( __( "Please enter %s Client ID in the settings.", 'paypal-express-checkout' ), $env );
+	    $err_msg = sprintf( __( "Please enter %s Client ID in the settings.", 'wp-express-checkout' ), $env );
 	    $err	 = $this->show_err_msg( $err_msg );
 	    return $err;
 	}
@@ -185,11 +185,11 @@ class WPECShortcode {
 
 		$frontVars = array(
 			'str' => array(
-				'errorOccurred'    => __( 'Error occurred', 'paypal-express-checkout' ),
-				'paymentFor'       => __( 'Payment for', 'paypal-express-checkout' ),
-				'enterQuantity'    => __( 'Please enter valid quantity', 'paypal-express-checkout' ),
-				'paymentCompleted' => __( 'Payment Completed', 'paypal-express-checkout' ),
-				'redirectMsg'      => __( 'You are now being redirected to the order summary page.', 'paypal-express-checkout' ),
+				'errorOccurred'    => __( 'Error occurred', 'wp-express-checkout' ),
+				'paymentFor'       => __( 'Payment for', 'wp-express-checkout' ),
+				'enterQuantity'    => __( 'Please enter valid quantity', 'wp-express-checkout' ),
+				'paymentCompleted' => __( 'Payment Completed', 'wp-express-checkout' ),
+				'redirectMsg'      => __( 'You are now being redirected to the order summary page.', 'wp-express-checkout' ),
 			),
 			'ajaxUrl' => get_admin_url() . 'admin-ajax.php'
 		);
@@ -279,16 +279,16 @@ class WPECShortcode {
 		$error_message = '';
 
 		if ( !isset ( $_GET['order_id'] ) ){
-			$error_message .= '<p>' . __( 'This page is used to show the transaction result after a customer makes a payment.', 'paypal-express-checkout' ) . '</p>';
-			$error_message .= '<p>' . __( 'It will dynamically show the order details to the customers when they are redirected here after a payment. Do not access this page directly.', 'paypal-express-checkout' ) . '</p>';
-			$error_message .= '<p class="wpec-error-message">' . __( 'Error! Order ID value is missing in the URL.', 'paypal-express-checkout' ) . '</p>';
+			$error_message .= '<p>' . __( 'This page is used to show the transaction result after a customer makes a payment.', 'wp-express-checkout' ) . '</p>';
+			$error_message .= '<p>' . __( 'It will dynamically show the order details to the customers when they are redirected here after a payment. Do not access this page directly.', 'wp-express-checkout' ) . '</p>';
+			$error_message .= '<p class="wpec-error-message">' . __( 'Error! Order ID value is missing in the URL.', 'wp-express-checkout' ) . '</p>';
 			return $error_message;
 		}
 
 		if ( !isset ( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'thank_you_url' . $_GET['order_id'] ) ) {
-			$error_message .= '<p>' . __( 'This page is used to show the transaction result after a customer makes a payment.', 'paypal-express-checkout' ) . '</p>';
-			$error_message .= '<p>' . __( 'It will dynamically show the order details to the customers when they are redirected here after a payment. Do not access this page directly.', 'paypal-express-checkout' ) . '</p>';
-			$error_message .= '<p class="wpec-error-message">' . __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'paypal-express-checkout' ) . '</p>';
+			$error_message .= '<p>' . __( 'This page is used to show the transaction result after a customer makes a payment.', 'wp-express-checkout' ) . '</p>';
+			$error_message .= '<p>' . __( 'It will dynamically show the order details to the customers when they are redirected here after a payment. Do not access this page directly.', 'wp-express-checkout' ) . '</p>';
+			$error_message .= '<p class="wpec-error-message">' . __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'wp-express-checkout' ) . '</p>';
 			return $error_message;
 		}
 
@@ -297,11 +297,11 @@ class WPECShortcode {
 		$order = get_post_meta( $order_id, 'ppec_payment_details', true );
 
 		if ( empty( $order ) ) {
-			return __( 'Error! Incorrect order ID. Could not find that order in the orders table.', 'paypal-express-checkout' );
+			return __( 'Error! Incorrect order ID. Could not find that order in the orders table.', 'wp-express-checkout' );
 		}
 
 		if ( 'COMPLETED' !== $order['state'] ) {
-			return printf( __( 'Payment is not approved. Status: %s', 'paypal-express-checkout' ), $order['state'] );
+			return printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $order['state'] );
 		}
 
 		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $order['item_name'] );
@@ -310,14 +310,14 @@ class WPECShortcode {
 
 		$thank_you_msg = '';
 		$thank_you_msg  .= '<div class="wpec_thank_you_message">';
-		$thank_you_msg  .= '<p>' . __( 'Thank you for your purchase.', 'paypal-express-checkout' ) . '</p>';
+		$thank_you_msg  .= '<p>' . __( 'Thank you for your purchase.', 'wp-express-checkout' ) . '</p>';
 
-		$thank_you_msg  .= '<p>' . __( 'Your purchase details are below:', 'paypal-express-checkout' ) . '</p>';
+		$thank_you_msg  .= '<p>' . __( 'Your purchase details are below:', 'wp-express-checkout' ) . '</p>';
 		$thank_you_msg  .= '<p>' . '{product_details}' . '</p>';
-		$thank_you_msg  .= '<p>' . __( 'Transaction ID: ', 'paypal-express-checkout' ) . '{transaction_id}' . '</p>';
+		$thank_you_msg  .= '<p>' . __( 'Transaction ID: ', 'wp-express-checkout' ) . '{transaction_id}' . '</p>';
 
 		if (!empty ($url)){
-			$click_here_str = sprintf( __( 'Please <a href="%s">click here</a> to download the file.', 'paypal-express-checkout' ), base64_decode( $url ) );
+			$click_here_str = sprintf( __( 'Please <a href="%s">click here</a> to download the file.', 'wp-express-checkout' ), base64_decode( $url ) );
 			$thank_you_msg .= '<p>' . $click_here_str . '</p>';
 		}
 

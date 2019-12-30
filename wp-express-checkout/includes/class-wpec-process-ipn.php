@@ -49,7 +49,7 @@ class WPEC_Process_IPN {
 
 		if ( ! isset( $_POST['wp_ppdg_payment'] ) ) {
 			// no payment data provided.
-			_e( 'No payment data received.', 'paypal-express-checkout' );
+			_e( 'No payment data received.', 'wp-express-checkout' );
 			exit;
 		}
 
@@ -58,7 +58,7 @@ class WPEC_Process_IPN {
 		if ( strtoupper( $payment['status'] ) !== 'COMPLETED' ) {
 			// payment is unsuccessful.
                         WPEC_Debug_Logger::log('Payment is not approved. Payment status: ' . $payment['status'], false);
-			printf( __( 'Payment is not approved. Status: %s', 'paypal-express-checkout' ), $payment['status'] );
+			printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $payment['status'] );
 			exit;
 		}
 
@@ -74,7 +74,7 @@ class WPEC_Process_IPN {
 			// no price set.
                         WPEC_Debug_Logger::log('Error! No transaction info found in transient.', false);
 
-			_e( 'No transaction info found in transient.', 'paypal-express-checkout' );
+			_e( 'No transaction info found in transient.', 'wp-express-checkout' );
 			exit;
 		}
 		$price    = $trans['price'];
@@ -94,7 +94,7 @@ class WPEC_Process_IPN {
 		if ( $amount != $original_price_amt ) {
 			// payment amount mismatch.
                         WPEC_Debug_Logger::log('Error! Payment amount mismatch. Original: ' . $original_price_amt . ', Received: ' . $amount, false);
-			_e( 'Payment amount mismatch original price.', 'paypal-express-checkout' );
+			_e( 'Payment amount mismatch original price.', 'wp-express-checkout' );
 			exit;
 		}
 
@@ -102,7 +102,7 @@ class WPEC_Process_IPN {
 		if ( $payment['purchase_units'][0]['amount']['currency_code'] !== $currency ) {
 			// payment currency mismatch.
                         WPEC_Debug_Logger::log('Error! Payment currency mismatch.', false);
-			_e( 'Payment currency mismatch.', 'paypal-express-checkout' );
+			_e( 'Payment currency mismatch.', 'wp-express-checkout' );
 			exit;
 		}
 
@@ -128,7 +128,7 @@ class WPEC_Process_IPN {
 
 		$product_details = $item_name . ' x ' . $quantity . ' - ' . number_format( $amount, 2, '.', '' ) . ' ' . $currency . "\n";
 		/* translators:  %s - download link */
-		$product_details .= sprintf( __( 'Download Link: %s', 'paypal-express-checkout' ), base64_decode( $url ) ) . "\n";
+		$product_details .= sprintf( __( 'Download Link: %s', 'wp-express-checkout' ), base64_decode( $url ) ) . "\n";
 
 		$address = '';
 		if ( ! empty( $payment['purchase_units'][0]['shipping']['address'] ) ) {
@@ -205,7 +205,7 @@ class WPEC_Process_IPN {
 			);
 			$res['redirect_url'] = esc_url_raw( $redirect_url );
 		} else {
-			_e( 'Error! Thank you page URL configuration is wrong in the plugin settings.', 'paypal-express-checkout' );
+			_e( 'Error! Thank you page URL configuration is wrong in the plugin settings.', 'wp-express-checkout' );
 			exit;
 		}
 
