@@ -1,5 +1,5 @@
 === WP Express Checkout ===
-Contributors: Tips and Tricks HQ
+Contributors: Tips and Tricks HQ, dikiy_forester
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
