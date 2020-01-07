@@ -254,7 +254,7 @@ class WPEC_Main {
 			'btn_height'           => 'xlarge',
 			'btn_width'            => 0,
 			'btn_layout'           => 'vertical',
-			'disabled_funding'     => array(),
+			'disabled_funding'     => array( 'card' ),
 			'disabled_cards'       => array(),
 			'enable_debug_logging' => 0,
 			'send_buyer_email'     => 1,
