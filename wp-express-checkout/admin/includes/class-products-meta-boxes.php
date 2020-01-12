@@ -133,9 +133,7 @@ class PPECProductsMetaboxes {
 	//download url
 	$product_url = filter_input( INPUT_POST, 'ppec_product_upload', FILTER_SANITIZE_URL );
 	if ( empty( $product_url ) ) {
-	    //url is empty
-	    $text = __( 'Please specify product download URL.', 'wp-express-checkout' );
-	    $this->WPECAdmin->add_admin_notice( $text, 'error' );
+	    //URL is empty. Maybe not a digital product.
 	} else {
 	    update_post_meta( $post_id, 'ppec_product_upload', esc_url( $product_url, array( 'http', 'https', 'dropbox' ) ) );
 	}

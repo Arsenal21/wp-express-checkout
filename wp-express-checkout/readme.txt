@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.3
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 1.2 =
+* Removed the requirement to have to specify a download URL for products.
+* Plugin's language text domain updated.
 
 = 1.1 =
 * Minor improvements to the settings menu.

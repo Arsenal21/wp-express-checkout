@@ -127,8 +127,11 @@ class WPEC_Process_IPN {
 		$wpec_plugin = WPEC_Main::get_instance();
 
 		$product_details = $item_name . ' x ' . $quantity . ' - ' . number_format( $amount, 2, '.', '' ) . ' ' . $currency . "\n";
-		/* translators:  %s - download link */
-		$product_details .= sprintf( __( 'Download Link: %s', 'wp-express-checkout' ), base64_decode( $url ) ) . "\n";
+		if (!empty($url)){
+			//Include the download link in the product details.
+			/* Translators:  %s - download link */
+			$product_details .= sprintf( __( 'Download Link: %s', 'wp-express-checkout' ), base64_decode( $url ) ) . "\n";
+		}
 
 		$address = '';
 		if ( ! empty( $payment['purchase_units'][0]['shipping']['address'] ) ) {
