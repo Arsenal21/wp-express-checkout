@@ -49,8 +49,8 @@ class WPECShortcode {
 	public static function filter_post_type_content( $content ) {
 		global $post;
 		if ( isset( $post ) ) {
-			if ( PPECProducts::$products_slug === $post->post_type ) { // Handle the content for product type post.
-				return do_shortcode( '[wp_express_checkout product_id="' . $post->ID . '" is_post_tpl="1" in_the_loop="' . + in_the_loop() . '"]' );
+			if ( is_single( $post ) && is_singular( PPECProducts::$products_slug ) && PPECProducts::$products_slug === $post->post_type ) { // Handle the content for product type post.
+				return $content . do_shortcode( '[wp_express_checkout product_id="' . $post->ID . '" template="2" is_post_tpl="1" in_the_loop="' . + in_the_loop() . '"]' );
 			}
 		}
 		return $content;
@@ -61,6 +61,8 @@ class WPECShortcode {
 	}
 
 	function shortcode_wp_express_checkout( $atts ) {
+		global $wp_query;
+
 		if ( empty( $atts['product_id'] ) ) {
 			$error_msg = __( 'Error: product ID is invalid.', 'wp-express-checkout' );
 			$err       = $this->show_err_msg( $error_msg );
@@ -79,27 +81,46 @@ class WPECShortcode {
 		$quantity        = get_post_meta( $post_id, 'ppec_product_quantity', true );
 		$custom_quantity = get_post_meta( $post_id, 'ppec_product_custom_quantity', true );
 		$url             = get_post_meta( $post_id, 'ppec_product_upload', true );
-		$content         = $post->post_content;
 
 		$output = '';
 
-		// output content if needed.
-		if ( ! empty( $content ) ) {
-			global $wp_embed;
-			if ( isset( $wp_embed ) && is_object( $wp_embed ) ) {
-				if ( method_exists( $wp_embed, 'autoembed' ) ) {
-					$content = $wp_embed->autoembed( $content );
-				}
-				if ( method_exists( $wp_embed, 'run_shortcode' ) ) {
-					$content = $wp_embed->run_shortcode( $content );
-				}
-			}
-			$content = wpautop( do_shortcode( $content ) );
-			$output .= $content;
+		$args = array(
+			'name'            => $title,
+			'price'           => $price,
+			'quantity'        => $quantity,
+			'custom_quantity' => $custom_quantity,
+			'url'             => $url,
+			'product_id'      => $post_id,
+		);
+
+		$template = empty( $atts['template'] ) ? 0 : intval( $atts['template'] );
+		$name     = "content-product-{$template}.php";
+		$default  = WPEC_PLUGIN_PATH . '/public/views/templates/' . $name;
+		$located  = locate_template( 'wpec/' . $name );
+
+		// Try to locate template in the theme or child theme:
+		// yourtheme/wpec/content-product-{$template}.php,
+		// otherwise try to locate default template in the plugin directory:
+		// wp-express-checkout/public/views/templates/content-product-{$template}.php
+		// If no template found - render only the button.
+
+		if ( ! $located && file_exists( $default ) ) {
+			$located = $default;
 		}
 
-		$args = array( 'name' => $title, 'price' => $price, 'quantity' => $quantity, 'custom_quantity' => $custom_quantity, 'url' => $url );
-		$output .= $this->generate_pp_express_checkout_button( $args );
+		if ( $located ) {
+			ob_start();
+			$post->post_content = strip_shortcodes( $post->post_content );
+			$GLOBALS['post'] = $post;
+			setup_postdata( $post );
+			$wp_query->set( 'wpec_button_args', $args );
+			load_template( $located, false );
+			wp_reset_postdata();
+			$output .= ob_get_clean();
+		} else {
+			$output .= $this->generate_pp_express_checkout_button( $args );
+		}
+
 		return $output;
 	}
 

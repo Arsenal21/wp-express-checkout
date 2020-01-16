@@ -40,10 +40,10 @@ class PPECProducts {
 	    'not_found'		 => __( 'Not found', 'wp-express-checkout' ),
 	    'not_found_in_trash'	 => __( 'Not found in Trash', 'wp-express-checkout' ),
 	);
-        
+
         //Using custom dashicon font icon.
 	$menu_icon	 = 'dashicons-wpec-dashicon-1'; //WPEC_PLUGIN_URL . '/admin/assets/img/wpec-dashicon.png';
-        
+
 	$slug		 = untrailingslashit( self::$products_slug );
 	$args		 = array(
 	    'labels'		 => $labels,
@@ -55,7 +55,7 @@ class PPECProducts {
 	    'has_archive'		 => false,
 	    'hierarchical'		 => false,
 	    'rewrite'		 => array( 'slug' => $slug ),
-	    'supports'		 => array( 'title' ),
+	    'supports'		 => array( 'title', 'thumbnail' ),
 	    'show_ui'		 => true,
 	    'show_in_nav_menus'	 => true,
 	    'show_in_admin_bar'	 => true,
