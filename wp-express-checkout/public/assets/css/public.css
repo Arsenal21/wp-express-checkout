@@ -1,5 +1,47 @@
 /* This stylesheet is used to style the public-facing components of the plugin. */
 
+.wpec-product-item {
+    display: block;
+    border: 1px solid #E7E9EB;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 15px;
+}
+.wpec-product-item-thumbnail img {
+    width: 75px;
+    height: 75px;
+    float: left;
+    margin-right: 10px;
+}
+
+.wpec-product-name {
+    float: left;
+}
+
+.wpec-product-name .wpec-entry-title {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 75px;
+	margin: 0;
+}
+
+.wpec-product-description {
+    margin: 15px 0 15px 0;
+    border-bottom: 1px solid #EEEEEE;
+}
+
+.wpec-price-container {
+    font-weight: bold;
+    margin: 5px 0px;
+}
+
+@media (max-width: 500px) {
+    .wpec-price-container {
+		text-align: center;
+    }
+}
+
 .wpec-error-message{
 	color: red;
 	font-weight: bold;
