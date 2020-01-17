@@ -1,5 +1,5 @@
 # WP Express Checkout
-WP Express Checkout Plugin
+<strong>WP Express Checkout Plugin</strong>
 
 https://wordpress.org/plugins/wp-express-checkout/
 
