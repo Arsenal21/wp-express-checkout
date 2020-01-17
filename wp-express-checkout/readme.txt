@@ -20,6 +20,10 @@ This is ideal for selling a product or service via PayPal.
 
 View configuration and usage details on the [WP Express Checkout](https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/) plugin's documentation page
 
+= Checkout Demonstration =
+
+https://www.youtube.com/watch?v=jdeZcs-90DY
+
 = Basic Setup and Usage Video =
 
 https://www.youtube.com/watch?v=WpCZ1vxMu14
