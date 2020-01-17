@@ -55,7 +55,7 @@ class PPECProducts {
 	    'has_archive'		 => false,
 	    'hierarchical'		 => false,
 	    'rewrite'		 => array( 'slug' => $slug ),
-	    'supports'		 => array( 'title', 'thumbnail' ),
+	    'supports'		 => array( 'title' ),
 	    'show_ui'		 => true,
 	    'show_in_nav_menus'	 => true,
 	    'show_in_admin_bar'	 => true,

@@ -19,7 +19,7 @@ class WPECShortcode {
 		$this->ppdg = WPEC_Main::get_instance();
 
 		// handle single product page display.
-		add_filter( 'the_content', array( $this, 'filter_post_type_content' ) );
+		add_filter( 'the_content', array( __CLASS__, 'filter_post_type_content' ), 10 );
 
 		add_shortcode( 'wp_express_checkout', array( $this, 'shortcode_wp_express_checkout' ) );
 		add_shortcode( 'wpec_thank_you', array( $this, 'shortcode_wpec_thank_you' ) );
@@ -50,7 +50,9 @@ class WPECShortcode {
 		global $post;
 		if ( isset( $post ) ) {
 			if ( is_single( $post ) && is_singular( PPECProducts::$products_slug ) && PPECProducts::$products_slug === $post->post_type ) { // Handle the content for product type post.
-				return $content . do_shortcode( '[wp_express_checkout product_id="' . $post->ID . '" template="2" is_post_tpl="1" in_the_loop="' . + in_the_loop() . '"]' );
+				remove_filter( 'the_content', array( __CLASS__, 'filter_post_type_content' ), 10 );
+				$content = do_shortcode( '[wp_express_checkout product_id="' . $post->ID . '" template="2" is_post_tpl="1" in_the_loop="' . + in_the_loop() . '"]' );
+				add_filter( 'the_content', array( __CLASS__, 'filter_post_type_content' ), 10 );
 			}
 		}
 		return $content;
@@ -81,6 +83,7 @@ class WPECShortcode {
 		$quantity        = get_post_meta( $post_id, 'ppec_product_quantity', true );
 		$custom_quantity = get_post_meta( $post_id, 'ppec_product_custom_quantity', true );
 		$url             = get_post_meta( $post_id, 'ppec_product_upload', true );
+		$thumb_url       = get_post_meta( $post_id, 'wpec_product_thumbnail', true );
 
 		$output = '';
 
@@ -91,6 +94,7 @@ class WPECShortcode {
 			'custom_quantity' => $custom_quantity,
 			'url'             => $url,
 			'product_id'      => $post_id,
+			'thumbnail_url'   => $thumb_url,
 		);
 
 		$template = empty( $atts['template'] ) ? 0 : intval( $atts['template'] );

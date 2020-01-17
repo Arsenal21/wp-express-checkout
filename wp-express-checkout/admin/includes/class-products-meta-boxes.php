@@ -17,6 +17,7 @@ class PPECProductsMetaboxes {
 		add_meta_box( 'ppec_price_meta_box', esc_html( __( 'Price', 'wp-express-checkout' ) ), array( $this, 'display_price_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'ppec_quantity_meta_box', esc_html( __( 'Quantity', 'wp-express-checkout' ) ), array( $this, 'display_quantity_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'ppec_upload_meta_box', __( 'Download URL', 'wp-express-checkout' ), array( $this, 'display_upload_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
+		add_meta_box( 'wpec_thumbnail_meta_box', __( 'Product Thumbnail', 'wp-express-checkout' ), array( $this, 'display_thumbnail_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'ppec_shortcode_meta_box', __( 'Shortcode', 'wp-express-checkout' ), array( $this, 'display_shortcode_meta_box' ), PPECProducts::$products_slug, 'side', 'default' );
 	}
 
@@ -42,7 +43,7 @@ class PPECProductsMetaboxes {
 
 		$allow_custom_quantity = get_post_meta( $post->ID, 'ppec_product_custom_quantity', true );
 		?>
-		<label><?php esc_html_e( 'Quantity', 'stripe-payments' ); ?></label>
+		<label><?php esc_html_e( 'Quantity', 'wp-express-checkout' ); ?></label>
 		<br/>
 		<input type="number" name="ppec_product_quantity" value="<?php echo esc_attr( $current_val ); ?>">
 		<p class="description"><?php esc_html_e( 'Item quantity.', 'wp-express-checkout' ); ?></p>
@@ -85,9 +86,9 @@ class PPECProductsMetaboxes {
 				$( '#ppec_select_upload_btn' ).click( function( e ) {
 					e.preventDefault();
 					ppec_selectFileFrame = wp.media( {
-						title: "<?php echo esc_js( 'Select File', 'wp-express-checkout' ); ?>",
+						title: "<?php echo esc_js( __( 'Select File', 'wp-express-checkout' ) ); ?>",
 						button: {
-							text: "<?php echo esc_js( 'Insert', 'wp-express-checkout' ); ?>"
+							text: "<?php echo esc_js( __( 'Insert', 'wp-express-checkout' ) ); ?>"
 						},
 						multiple: false
 					} );
@@ -103,6 +104,62 @@ class PPECProductsMetaboxes {
 		</script>
 		<?php
 	}
+
+	public function display_thumbnail_meta_box( $post ) {
+		$current_val = get_post_meta( $post->ID, 'wpec_product_thumbnail', true );
+		?>
+<div>
+	<input id="wpec_product_thumbnail" type="text" style="width: 100%" name="wpec_product_thumbnail" value="<?php echo esc_attr( $current_val ); ?>" placeholder="https://..." />
+
+	<p class="description">
+		<?php esc_html_e( 'Manually enter a valid URL, or click "Select Image" to upload (or choose) the file thumbnail image.', 'wp-express-checkout' ); ?>
+	</p>
+</div>
+<p>
+	<input id="wpec_select_thumbnail_btn" type="button" class="button" value="<?php esc_html_e( 'Select Image', 'wp-express-checkout' ); ?>" />
+	<input id="wpec_remove_thumbnail_button" class="button" value="<?php esc_html_e( 'Remove Image', 'wp-express-checkout' ); ?>" type="button">
+</p>
+<div>
+	<span id="wpec_admin_thumb_preview">
+		<?php if ( $current_val ) { ?>
+		<img id="wpec_thumbnail_image" src="<?php echo esc_url( $current_val ); ?>" style="max-width:200px;" />
+		<?php } ?>
+	</span>
+</div>
+<script>
+jQuery(document).ready(function($) {
+	var wpec_selectFileFrame;
+	$('#wpec_select_thumbnail_btn').click(function(e) {
+		e.preventDefault();
+		wpec_selectFileFrame = wp.media({
+			title: "<?php echo esc_js( __( 'Select Image', 'wp-express-checkout' ) ); ?>",
+			button: {
+				text: "<?php echo esc_js( __( 'Insert', 'wp-express-checkout' ) ); ?>"
+			},
+			multiple: false,
+			library: {
+				type: 'image'
+			}
+		});
+		wpec_selectFileFrame.open();
+		wpec_selectFileFrame.on('select', function() {
+			var attachment = wpec_selectFileFrame.state().get('selection').first().toJSON();
+			$('#wpec_thumbnail_image').remove();
+			$('#wpec_admin_thumb_preview').html('<img id="wpec_thumbnail_image" src="' + attachment.url + '" style="max-width:200px;" />');
+			$('#wpec_product_thumbnail').val(attachment.url);
+		});
+		return false;
+	});
+	$('#wpec_remove_thumbnail_button').click(function(e) {
+		e.preventDefault();
+		$('#wpec_thumbnail_image').remove();
+		$('#wpec_product_thumbnail').val('');
+	});
+});
+</script>
+		<?php
+	}
+
 
 	function display_shortcode_meta_box( $post ) {
 		?>
@@ -138,6 +195,11 @@ class PPECProductsMetaboxes {
 		} else {
 			update_post_meta( $post_id, 'ppec_product_upload', esc_url( $product_url, array( 'http', 'https', 'dropbox' ) ) );
 		}
+
+		// product thumbnail.
+		$thumb_url_raw = filter_input( INPUT_POST, 'wpec_product_thumbnail', FILTER_SANITIZE_URL );
+		$thumb_url     = esc_url( $thumb_url_raw, array( 'http', 'https' ) );
+		update_post_meta( $post_id, 'wpec_product_thumbnail', $thumb_url );
 
 		// price.
 		$price = filter_input( INPUT_POST, 'ppec_product_price', FILTER_SANITIZE_STRING );

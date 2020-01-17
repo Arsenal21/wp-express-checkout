@@ -36,6 +36,27 @@
     margin: 5px 0px;
 }
 
+/* Post Item */
+.wpec-post-item {
+    width: 90%;
+}
+.wpec-post-item-top {
+    display: block;
+}
+
+.wpec-post-thumbnail img {
+    width: 100%;
+    border: 1px solid #e8e4e3;
+    padding: 5px;
+}
+
+.wpec-post-title {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+
 @media (max-width: 500px) {
     .wpec-price-container {
 		text-align: center;
