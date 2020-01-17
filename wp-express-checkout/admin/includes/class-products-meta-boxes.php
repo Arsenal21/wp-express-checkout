@@ -21,7 +21,7 @@ class PPECProductsMetaboxes {
 	}
 
 	function display_description_meta_box( $post ) {
-		_e( 'Add a description for your product.', 'wp-express-checkout' );
+		esc_html_e( 'Add a description for your product.', 'wp-express-checkout' );
 		echo '<br /><br />';
 		wp_editor( $post->post_content, 'content', array( 'textarea_name' => 'content' ) );
 	}
@@ -29,10 +29,10 @@ class PPECProductsMetaboxes {
 	function display_price_meta_box( $post ) {
 		$current_price = get_post_meta( $post->ID, 'ppec_product_price', true );
 		?>
-		<label><?php _e( 'Price', 'wp-express-checkout' ); ?></label>
+		<label><?php esc_html_e( 'Price', 'wp-express-checkout' ); ?></label>
 		<br/>
-		<input type="text" name="ppec_product_price" value="<?php echo $current_price; ?>">
-		<p class="description"><?php echo __( 'Item price. Numbers only, no need to put currency symbol. Example: 99.95', 'wp-express-checkout' ); ?></p>
+		<input type="text" name="ppec_product_price" value="<?php echo esc_attr( $current_price ); ?>">
+		<p class="description"><?php esc_html_e( 'Item price. Numbers only, no need to put currency symbol. Example: 99.95', 'wp-express-checkout' ); ?></p>
 		<?php
 	}
 
@@ -42,40 +42,40 @@ class PPECProductsMetaboxes {
 
 		$allow_custom_quantity = get_post_meta( $post->ID, 'ppec_product_custom_quantity', true );
 		?>
-		<label><?php _e( 'Quantity', 'stripe-payments' ); ?></label>
+		<label><?php esc_html_e( 'Quantity', 'stripe-payments' ); ?></label>
 		<br/>
-		<input type="number" name="ppec_product_quantity" value="<?php echo $current_val; ?>">
-		<p class="description"><?php echo __( 'Item quantity.', 'wp-express-checkout' ); ?></p>
+		<input type="number" name="ppec_product_quantity" value="<?php echo esc_attr( $current_val ); ?>">
+		<p class="description"><?php esc_html_e( 'Item quantity.', 'wp-express-checkout' ); ?></p>
 		<label>
 			<input type="checkbox" name="ppec_product_custom_quantity" value="1"<?php echo $allow_custom_quantity ? ' checked' : ''; ?>>
-			<?php echo __( 'Allow customers to specify quantity', 'wp-express-checkout' ); ?>
+			<?php esc_html_e( 'Allow customers to specify quantity', 'wp-express-checkout' ); ?>
 		</label>
-		<p class="description"><?php echo __( "When checked, customers can enter quantity they want to buy. You can set initial quantity using field above.", 'wp-express-checkout' ); ?></p>
+		<p class="description"><?php esc_html_e( 'When checked, customers can enter quantity they want to buy. You can set initial quantity using field above.', 'wp-express-checkout' ); ?></p>
 		<?php
 	}
 
 	public function display_upload_meta_box( $post ) {
 		$current_val = get_post_meta( $post->ID, 'ppec_product_upload', true );
 		?>
-		<p><?php echo __( 'URL of your product.', 'wp-express-checkout' ); ?></p>
+		<p><?php esc_html_e( 'URL of your product.', 'wp-express-checkout' ); ?></p>
 
 		<div>
 			<input id="ppec_product_upload" type="text" style="width: 100%" name="ppec_product_upload" value="<?php echo esc_attr( $current_val ); ?>" placeholder="https://..." />
 
 			<p class="description">
-				<?php _e( 'Manually enter a valid URL of the file in the text box below, or click "Select File" button to upload (or choose) the downloadable file.', 'wp-express-checkout' ); ?>
+				<?php esc_html_e( 'Manually enter a valid URL of the file in the text box below, or click "Select File" button to upload (or choose) the downloadable file.', 'wp-express-checkout' ); ?>
 			</p>
 		</div>
 		<p>
-			<input id="ppec_select_upload_btn" type="button" class="button" value="<?php echo __( 'Select File', 'wp-express-checkout' ); ?>" />
+			<input id="ppec_select_upload_btn" type="button" class="button" value="<?php esc_html_e( 'Select File', 'wp-express-checkout' ); ?>" />
 			<?php do_action( 'wpec_product_upload_metabox_after_button', $post ); ?>
 		</p>
 		<div>
-			<?php _e( 'Steps to upload a file or choose one from your media library:', 'wp-express-checkout' ); ?>
+			<?php esc_html_e( 'Steps to upload a file or choose one from your media library:', 'wp-express-checkout' ); ?>
 			<ol>
-				<li><?php _e( 'Hit the "Select File" button.', 'wp-express-checkout' ); ?></li>
-				<li><?php _e( 'Upload a new file or choose an existing one from your media library.', 'wp-express-checkout' ) ?></li>
-				<li><?php _e( 'Click the "Insert" button, this will populate the uploaded file\'s URL in the above text field.', 'wp-express-checkout' ) ?></li>
+				<li><?php esc_html_e( 'Hit the "Select File" button.', 'wp-express-checkout' ); ?></li>
+				<li><?php esc_html_e( 'Upload a new file or choose an existing one from your media library.', 'wp-express-checkout' ); ?></li>
+				<li><?php esc_html_e( 'Click the "Insert" button, this will populate the uploaded file\'s URL in the above text field.', 'wp-express-checkout' ); ?></li>
 			</ol>
 		</div>
 		<script>
@@ -85,9 +85,9 @@ class PPECProductsMetaboxes {
 				$( '#ppec_select_upload_btn' ).click( function( e ) {
 					e.preventDefault();
 					ppec_selectFileFrame = wp.media( {
-						title: "<?php echo __( 'Select File', 'wp-express-checkout' ); ?>",
+						title: "<?php echo esc_js( 'Select File', 'wp-express-checkout' ); ?>",
 						button: {
-							text: "<?php echo __( 'Insert', 'wp-express-checkout' ); ?>"
+							text: "<?php echo esc_js( 'Insert', 'wp-express-checkout' ); ?>"
 						},
 						multiple: false
 					} );
@@ -107,7 +107,7 @@ class PPECProductsMetaboxes {
 	function display_shortcode_meta_box( $post ) {
 		?>
 		<input type="text" name="ppec_product_shortcode" style="width: 100%;" class="ppec-select-on-click" readonly value="[wp_express_checkout product_id=&quot;<?php echo $post->ID; ?>&quot;]">
-		<p class="description"><?php _e( 'Use this shortcode to display button for your product.', 'wp-express-checkout' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Use this shortcode to display button for your product.', 'wp-express-checkout' ); ?></p>
 		<?php
 	}
 
