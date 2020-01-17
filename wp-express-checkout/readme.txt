@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.3
-Stable tag: 1.2
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,10 @@ https://www.youtube.com/watch?v=WpCZ1vxMu14
 This plugin adds the following shortcode to your site:
 
 [wp_express_checkout id="123"]
+
+Or use the following shortcode to output product details and the express checkout payment button:
+
+[wp_express_checkout id="123" template="1"]
 
 You can also test it on PayPal Sandbox mode before going Live.
 
@@ -89,6 +93,9 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 1.3 =
+* Added a new template to display the product with item details and a PayPal express checkout payment button.
 
 = 1.2 =
 * Removed the requirement to have to specify a download URL for products.
