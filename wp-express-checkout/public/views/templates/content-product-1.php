@@ -19,7 +19,7 @@ $wpec_shortcode = WPECShortcode::get_instance();
 	</div>
 	<div style="clear:both;"></div>
 	<div class="wpec-product-description">
-		<?php the_excerpt(); ?>
+		<?php the_content(); ?>
 	</div>
 	<div class="wpec-price-container">
 		<span class="wpec-price-amount"><?php echo WPEC_Utility_Functions::price_format( $wpec_button_args['price'] ) ?></span> <span class="wpec-new-price-amount"></span> <!--<span class="wpec-quantity"></span>-->
