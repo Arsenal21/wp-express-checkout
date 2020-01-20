@@ -176,6 +176,19 @@ class WPEC_Admin {
 				__( 'Taiwan New Dollars (TWD)', 'wp-express-checkout' ), __( 'Thai Baht (THB)', 'wp-express-checkout' ), __( 'Turkish Lira (TRY)', 'wp-express-checkout' ), __( 'Vietnamese Dong (VND)', 'wp-express-checkout' ), __( 'Russian Ruble (RUB)', 'wp-express-checkout' ),
 			),
 		) );
+		add_settings_field(
+			'currency_symbol',
+			__( 'Currency Symbol', 'wp-express-checkout' ),
+			array( &$this, 'settings_field_callback' ),
+			$this->plugin_slug,
+			'ppdg-global-section',
+			array(
+				'field' => 'currency_symbol',
+				'type'  => 'text',
+				'desc'  => '',
+				'size'  => 10,
+			)
+		);
 		add_settings_field( 'thank_you_url', __( 'Thank You Page URL', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section',
 			array(
 				'field' => 'thank_you_url',

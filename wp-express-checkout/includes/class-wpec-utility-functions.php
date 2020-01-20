@@ -11,14 +11,23 @@ class WPEC_Utility_Functions {
 	 *
 	 * @param  int    $price             The numerical value to format.
 	 * @param  string $override_currency The currency the value is in.
+	 * @param  string $override_position The currency the position is in.
 	 * @return string                    The formatted price.
 	 */
-	public static function price_format( $price, $override_currency = '' ) {
+	public static function price_format( $price, $override_currency = '', $override_position = '' ) {
 		$ppdg = WPEC_Main::get_instance();
 
 		$formatted_price = number_format( $price, 2, '.', '' );
-		$currency_code   = ( empty( $override_currency ) ) ? $ppdg->get_setting( 'currency_code' ) : $override_currency;
-		$position        = 'right_space'; // Expected to be a setting.
+		$position        = ( empty( $override_position ) ) ? 'left' : $override_position; // Expected to be a setting.
+
+		if ( ! empty( $override_currency ) ) {
+			$currency_code = $override_currency;
+		} elseif ( ! empty( $ppdg->get_setting( 'currency_symbol' ) ) ) {
+			$currency_code = $ppdg->get_setting( 'currency_symbol' );
+		} else {
+			$currency_code = $ppdg->get_setting( 'currency_code' );
+			$position      = 'right_space';
+		}
 
 		$formats = array(
 			'left'        => '{symbol}{price}',
