@@ -38,8 +38,9 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	$wpec_admin = WPEC_Admin::get_instance();
 
 	$wpec_plugin_tabs = array(
-		'ppec-settings-page'                       => __( 'General Settings', 'wp-express-checkout' ),
-		'ppec-settings-page&action=email-settings' => __( 'Email Settings', 'wp-express-checkout' ),
+		'ppec-settings-page'                          => __( 'General Settings', 'wp-express-checkout' ),
+		'ppec-settings-page&action=email-settings'    => __( 'Email Settings', 'wp-express-checkout' ),
+		'ppec-settings-page&action=advanced-settings' => __( 'Advanced Settings', 'wp-express-checkout' ),
 	);
 
 	$current = "";
@@ -78,6 +79,10 @@ if ( ! current_user_can( 'manage_options' ) ) {
 					case 'email-settings':
 						$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-emails' );
 						echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-emails' ) . "' />";
+						break;
+					case 'advanced-settings':
+						$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-advanced' );
+						echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-advanced' ) . "' />";
 						break;
 				}
 			} else {

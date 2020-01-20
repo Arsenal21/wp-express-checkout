@@ -152,6 +152,8 @@ class WPEC_Admin {
 	 */
 	public function register_settings() {
 
+		$wpec = WPEC_Main::get_instance();
+
 		/* Register the settings */
 		register_setting( 'ppdg-settings-group', 'ppdg-settings', array( $this, 'settings_sanitize_field_callback' ) );
 
@@ -165,6 +167,8 @@ class WPEC_Admin {
 		add_settings_section( 'ppdg-debug-logging-section', __( 'Debug Logging', 'wp-express-checkout' ), array( $this, 'debug_logging_note' ), $this->plugin_slug );
 
 		add_settings_section( 'ppdg-emails-section', __( 'Purchase Confirmation Email Settings', 'wp-express-checkout' ), array( $this, 'emails_note' ), $this->plugin_slug . '-emails' );
+
+		add_settings_section( 'ppdg-price-display-section', __( 'Price Display Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
 
 		/* Add the settings fields */
 
@@ -280,6 +284,66 @@ class WPEC_Admin {
 			. '<br />{purchase_date} – ' . __( 'The date of the purchase', 'wp-express-checkout' )
 			. '<br />{coupon_code} – ' . __( 'Coupon code applied to the purchase', 'wp-express-checkout' ),
 		) );
+
+		/******************************/
+		/* Advanced Settings Menu Tab */
+		/******************************/
+
+		// Price Display section
+		add_settings_field(
+			'price_currency_pos',
+			__( 'Currency Position', 'wp-express-checkout' ),
+			array( &$this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'ppdg-price-display-section',
+			array(
+				'field' => 'price_currency_pos',
+				'type'  => 'select',
+				'desc'  => __( 'This controls the position of the currency symbol.', 'wp-express-checkout' ),
+				'vals'  => array( 'left', 'left_space', 'right', 'right_space' ),
+				'texts' => array(
+					sprintf( __( 'Left (%s1.00)', 'wp-express-checkout' ), $wpec->get_setting( 'currency_symbol' ) ),
+					sprintf( __( 'Left with space (%s 1.00)', 'wp-express-checkout' ), $wpec->get_setting( 'currency_symbol' ) ),
+					sprintf( __( 'Right (1.00%s)', 'wp-express-checkout' ), $wpec->get_setting( 'currency_symbol' ) ),
+					sprintf( __( 'Right with space (1.00 %s)', 'wp-express-checkout' ), $wpec->get_setting( 'currency_symbol' ) ), )
+			)
+		);
+		add_settings_field(
+			'price_decimal_sep',
+			__( 'Decimal Separator', 'wp-express-checkout' ),
+			array( &$this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'ppdg-price-display-section',
+			array(
+				'field' => 'price_decimal_sep',
+				'type'  => 'text',
+				'desc'  => __( 'This sets the decimal separator of the displayed price.', 'wp-express-checkout' ),
+			)
+		);
+		add_settings_field(
+			'price_thousand_sep',
+			__( 'Thousand Separator', 'wp-express-checkout' ),
+			array( &$this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'ppdg-price-display-section',
+			array(
+				'field' => 'price_thousand_sep',
+				'type'  => 'text',
+				'desc'  => __( 'This sets the thousand separator of the displayed price.', 'wp-express-checkout' ),
+			)
+		);
+		add_settings_field(
+			'price_decimals_num',
+			__( 'Number of Decimals', 'wp-express-checkout' ),
+			array( &$this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'ppdg-price-display-section',
+			array(
+				'field' => 'price_decimals_num',
+				'type'  => 'text',
+				'desc'  => __( 'This sets the number of decimal points shown in the displayed price.', 'wp-express-checkout' ),
+			)
+		);
 	}
 
 	/**

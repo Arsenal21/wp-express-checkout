@@ -17,8 +17,9 @@ class WPEC_Utility_Functions {
 	public static function price_format( $price, $override_currency = '', $override_position = '' ) {
 		$ppdg = WPEC_Main::get_instance();
 
-		$formatted_price = number_format( $price, 2, '.', '' );
-		$position        = ( empty( $override_position ) ) ? 'left' : $override_position; // Expected to be a setting.
+		$decimals        = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : 2;
+		$formatted_price = number_format( $price, $decimals, $ppdg->get_setting( 'price_decimal_sep' ), $ppdg->get_setting( 'price_thousand_sep' ) );
+		$position        = ( empty( $override_position ) ) ? $ppdg->get_setting( 'price_currency_pos' ) : $override_position;
 
 		if ( ! empty( $override_currency ) ) {
 			$currency_code = $override_currency;
