@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.3
-Stable tag: 1.3
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,8 +33,14 @@ https://www.youtube.com/watch?v=WpCZ1vxMu14
 * Sell products or services using a quick checkout process.
 * Sell files, digital goods or downloads.
 * Sell music, video, ebook, PDF or any other digital media files.
-* Allow the customers to automatically download the file once the purchase is complete via paypal.
+* Allow the customers to automatically download the file once the purchase is complete via PayPal.
 * View the transactions from your WordPress admin dashboard.
+* Option to configure a notification email to be sent to the buyer and seller after the purchase.
+* Ability to set a product thumbnail for a product.
+* Use a simple shortcode to add a payment button anywhere on your site.
+* Create a PayPal payment button widget and add it to your sidebar.
+
+The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
 
 = Shortcode Attributes =
 
@@ -50,8 +56,7 @@ You can also test it on PayPal Sandbox mode before going Live.
 
 == Usage ==
 
-View the following usage documentation:
-https://wp-express-checkout.com/basic-installation-and-setup-of-wp-express-checkout/
+View [this usage documentation](https://wp-express-checkout.com/basic-installation-and-setup-of-wp-express-checkout/) page for additional info.
 
 == Installation ==
 
@@ -97,6 +102,11 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 1.4 =
+* Added new settings to allow customization of currency formatting.
+* Added a new settings option to specify the currency symbol.
+* There is a "Product Thumbnail" field that you can use to specify a thumbnail image of a product.
 
 = 1.3 =
 * Added a new template to display the product with item details and a PayPal express checkout payment button.
