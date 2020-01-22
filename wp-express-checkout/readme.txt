@@ -26,7 +26,7 @@ https://www.youtube.com/watch?v=jdeZcs-90DY
 
 = Basic Setup and Usage Video =
 
-https://www.youtube.com/watch?v=WpCZ1vxMu14
+https://www.youtube.com/watch?v=3LsfLd03VnE
 
 = Features =
 
