@@ -29,11 +29,17 @@ class PPECProductsMetaboxes {
 
 	function display_price_meta_box( $post ) {
 		$current_price = get_post_meta( $post->ID, 'ppec_product_price', true );
+		$allow_custom_amount = get_post_meta( $post->ID, 'wpec_product_custom_amount', true );
 		?>
 		<label><?php esc_html_e( 'Price', 'wp-express-checkout' ); ?></label>
 		<br/>
 		<input type="text" name="ppec_product_price" value="<?php echo esc_attr( $current_price ); ?>">
 		<p class="description"><?php esc_html_e( 'Item price. Numbers only, no need to put currency symbol. Example: 99.95', 'wp-express-checkout' ); ?></p>
+		<label>
+			<input type="checkbox" name="wpec_product_custom_amount" value="1" <?php checked( $allow_custom_amount ); ?>>
+			<?php esc_html_e( 'Allow customers to enter amount', 'wp-express-checkout' ); ?>
+		</label>
+		<p class="description"><?php esc_html_e( 'When checked, customers can change amount they want to pay. You can set initial amount using field above.', 'wp-express-checkout' ); ?></p>
 		<?php
 	}
 
@@ -212,6 +218,10 @@ jQuery(document).ready(function($) {
 			$text = __( 'Ivalid product price.', 'wp-express-checkout' );
 			$this->WPECAdmin->add_admin_notice( $text, 'error' );
 		}
+
+		// allow custom amount.
+		$custom_amount = filter_input( INPUT_POST, 'wpec_product_custom_amount', FILTER_SANITIZE_NUMBER_INT );
+		update_post_meta( $post_id, 'wpec_product_custom_amount', $custom_amount );
 
 		// quantity.
 		$quantity = filter_input( INPUT_POST, 'ppec_product_quantity', FILTER_SANITIZE_NUMBER_INT );
