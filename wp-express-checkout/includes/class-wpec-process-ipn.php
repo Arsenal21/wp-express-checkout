@@ -87,6 +87,11 @@ class WPEC_Process_IPN {
 			$quantity = $payment['purchase_units'][0]['items'][0]['quantity'];
 		}
 
+		if ( $trans['custom_amount'] ) {
+			// custom amount enabled. let's take quantity from PayPal results.
+			$price = $payment['purchase_units'][0]['items'][0]['unit_amount']['value'];
+		}
+
 		$amount = $payment['purchase_units'][0]['amount']['value'];
 
 		// check if amount paid matches price x quantity.
@@ -126,7 +131,7 @@ class WPEC_Process_IPN {
 
 		$wpec_plugin = WPEC_Main::get_instance();
 
-		$product_details = $item_name . ' x ' . $quantity . ' - ' . number_format( $amount, 2, '.', '' ) . ' ' . $currency . "\n";
+		$product_details = $item_name . ' x ' . $quantity . ' - ' . WPEC_Utility_Functions::price_format( $amount, $currency ) . "\n";
 		if (!empty($url)){
 			//Include the download link in the product details.
 			/* Translators:  %s - download link */

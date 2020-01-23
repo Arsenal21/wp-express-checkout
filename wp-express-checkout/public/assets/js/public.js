@@ -52,6 +52,26 @@ var ppecHandler = function( data ) {
 		return !error;
 	};
 
+	this.isValidCustomAmount = function() {
+		var input = jQuery( 'input#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' );
+		var errMsgCont = input.siblings( '.wp-ppec-form-error-msg' );
+		var val_orig = input.val();
+		var val = parseFloat( val_orig );
+		var error = false;
+		var errMsg = ppecFrontVars.str.enterAmount;
+		if ( ! isNaN( val ) && 0 < val ) {
+			input.removeClass( 'hasError' );
+			errMsgCont.fadeOut( 'fast' );
+			parent.data.price = val;
+		} else {
+			input.addClass( 'hasError' );
+			errMsgCont.html( errMsg );
+			errMsgCont.fadeIn( 'slow' );
+			error = true;
+		}
+		return !error;
+	};
+
 	if ( this.data.btnStyle.layout === 'horizontal' ) {
 		this.data.btnStyle.tagline = false;
 	}
@@ -68,14 +88,26 @@ var ppecHandler = function( data ) {
 		style: parent.data.btnStyle,
 		commit: true,
 		onInit: function( data, actions ) {
+			var enable_actions = true;
+			console.log(parent.data);
 			if ( parent.data.custom_quantity === "1" ) {
 				jQuery( 'input#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
-					if ( parent.isValidCustomQuantity() ) {
-						actions.enable();
-					} else {
-						actions.disable();
+					if ( ! parent.isValidCustomQuantity() ) {
+						enable_actions = false;
 					}
 				} );
+			}
+			if ( parent.data.custom_amount === "1" ) {
+				jQuery( 'input#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
+					if ( ! parent.isValidCustomAmount() ) {
+						enable_actions = false;
+					}
+				} );
+			}
+			if ( enable_actions ) {
+				actions.enable();
+			} else {
+				actions.disable();
 			}
 		},
 		onClick: function() {

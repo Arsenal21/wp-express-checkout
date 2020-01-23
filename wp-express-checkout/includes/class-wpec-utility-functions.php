@@ -21,7 +21,7 @@ class WPEC_Utility_Functions {
 		$formatted_price = number_format( $price, $decimals, $ppdg->get_setting( 'price_decimal_sep' ), $ppdg->get_setting( 'price_thousand_sep' ) );
 		$position        = ( empty( $override_position ) ) ? $ppdg->get_setting( 'price_currency_pos' ) : $override_position;
 
-		if ( ! empty( $override_currency ) ) {
+		if ( ! empty( $override_currency ) && $override_currency !== $ppdg->get_setting( 'currency_code' ) ) {
 			$currency_code = $override_currency;
 		} elseif ( ! empty( $ppdg->get_setting( 'currency_symbol' ) ) ) {
 			$currency_code = $ppdg->get_setting( 'currency_symbol' );

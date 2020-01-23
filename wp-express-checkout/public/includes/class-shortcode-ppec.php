@@ -80,6 +80,7 @@ class WPECShortcode {
 
 		$title           = get_the_title( $post_id );
 		$price           = get_post_meta( $post_id, 'ppec_product_price', true );
+		$custom_amount   = get_post_meta( $post_id, 'wpec_product_custom_amount', true );
 		$quantity        = get_post_meta( $post_id, 'ppec_product_quantity', true );
 		$custom_quantity = get_post_meta( $post_id, 'ppec_product_custom_quantity', true );
 		$url             = get_post_meta( $post_id, 'ppec_product_upload', true );
@@ -90,6 +91,7 @@ class WPECShortcode {
 		$args = array(
 			'name'            => $title,
 			'price'           => $price,
+			'custom_amount'   => $custom_amount,
 			'quantity'        => $quantity,
 			'custom_quantity' => $custom_quantity,
 			'url'             => $url,
@@ -137,6 +139,7 @@ class WPECShortcode {
 					'price'           => '0',
 					'quantity'        => 1,
 					'url'             => '',
+					'custom_amount'   => 0,
 					'custom_quantity' => 0,
 					'currency'        => $this->ppdg->get_setting( 'currency_code' ),
 					'btn_shape'       => $this->ppdg->get_setting( 'btn_shape' ) !== false ? $this->ppdg->get_setting( 'btn_shape' ) : 'pill',
@@ -170,6 +173,7 @@ class WPECShortcode {
 			'quantity'        => $quantity,
 			'url'             => $url,
 			'custom_quantity' => $custom_quantity,
+			'custom_amount'   => $custom_amount,
 		);
 
 		set_transient( $trans_name, $trans_data, 2 * 3600 );
@@ -219,6 +223,7 @@ class WPECShortcode {
 					'errorOccurred'    => __( 'Error occurred', 'wp-express-checkout' ),
 					'paymentFor'       => __( 'Payment for', 'wp-express-checkout' ),
 					'enterQuantity'    => __( 'Please enter valid quantity', 'wp-express-checkout' ),
+					'enterAmount'    => __( 'Please enter valid amount', 'wp-express-checkout' ),
 					'paymentCompleted' => __( 'Payment Completed', 'wp-express-checkout' ),
 					'redirectMsg'      => __( 'You are now being redirected to the order summary page.', 'wp-express-checkout' ),
 				),
@@ -263,9 +268,20 @@ class WPECShortcode {
 
 		// custom quantity.
 		if ( $custom_quantity ) {
-			$output .= '<label>Quantity:</label>';
+			$output .= '<div>';
+			$output .= '<label>' . esc_html__( 'Quantity:', 'wp-express-checkout' ) . '</label>';
 			$output .= '<input id="wp-ppec-custom-quantity" data-ppec-button-id="' . $button_id . '" type="number" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-quantity" min="1" value="' . $quantity . '">';
 			$output .= '<div class="wp-ppec-form-error-msg"></div>';
+			$output .= '</div>';
+		}
+
+		if ( $custom_amount ) {
+			$step    = pow( 10, -intval( $this->ppdg->get_setting( 'price_decimals_num' ) ) );
+			$output .= '<div>';
+			$output .= '<label>' . sprintf( __( 'Amount (%s):', 'wp-express-checkout' ), $currency ) . '</label>';
+			$output .= '<input id="wp-ppec-custom-amount" data-ppec-button-id="' . $button_id . '" type="number" step="' . $step . '" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-amount" min="0" value="' . $price . '">';
+			$output .= '<div class="wp-ppec-form-error-msg"></div>';
+			$output .= '</div>';
 		}
 
 		$output .= '<div class = "wp-ppec-button-container">';
@@ -281,6 +297,7 @@ class WPECShortcode {
 			'price'           => $price,
 			'quantity'        => $quantity,
 			'custom_quantity' => $custom_quantity,
+			'custom_amount'   => $custom_amount,
 			'currency'        => $currency,
 			'name'            => $name,
 			'btnStyle'        => array(
