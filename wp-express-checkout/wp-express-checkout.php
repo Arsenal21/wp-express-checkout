@@ -49,6 +49,16 @@ if ( is_admin() ) {
 register_activation_hook( __FILE__, array( 'WPEC_Main', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WPEC_Main', 'deactivate' ) );
 
+//Add settings link in plugins listing page
+function wpec_add_settings_link($links, $file) {
+    if ($file == plugin_basename(__FILE__)) {
+        $settings_link = '<a href="edit.php?post_type=ppec-products&page=ppec-settings-page">Settings</a>';
+        array_unshift($links, $settings_link);
+    }
+    return $links;
+}
+add_filter('plugin_action_links', 'wpec_add_settings_link', 10, 2);
+
 //Plugins loaded hook
 add_action( 'plugins_loaded', array( 'WPEC_Main', 'get_instance' ) );
 add_action( 'plugins_loaded', array( 'WPECShortcode', 'get_instance' ) );

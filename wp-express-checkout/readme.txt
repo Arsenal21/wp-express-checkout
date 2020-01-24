@@ -103,6 +103,10 @@ None
 
 == Changelog ==
 
+= WIP 1.5 =
+* Added a new feature that allows the admin to configure products where the customer can specify the amount. Useful for accepting donations.
+* Added settings link in the plugin's menu listing page.
+
 = 1.4 =
 * Added new settings to allow customization of currency formatting.
 * Added a new settings option to specify the currency symbol.

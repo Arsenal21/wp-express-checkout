@@ -277,9 +277,11 @@ class WPECShortcode {
 
 		if ( $custom_amount ) {
 			$step    = pow( 10, -intval( $this->ppdg->get_setting( 'price_decimals_num' ) ) );
-			$output .= '<div>';
-			$output .= '<label>' . sprintf( __( 'Amount (%s):', 'wp-express-checkout' ), $currency ) . '</label>';
+			$output .= '<div class="wpec-custom-amount-section">';
+			$output .= '<span class="wpec-custom-amount-label-field"><label>' . sprintf( __( 'Enter Amount (%s): ', 'wp-express-checkout' ), $currency ) . '</label></span>';
+			$output .= '<span class="wpec-custom-amount-input-field">';
 			$output .= '<input id="wp-ppec-custom-amount" data-ppec-button-id="' . $button_id . '" type="number" step="' . $step . '" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-amount" min="0" value="' . $price . '">';
+			$output .= '</span>';
 			$output .= '<div class="wp-ppec-form-error-msg"></div>';
 			$output .= '</div>';
 		}
