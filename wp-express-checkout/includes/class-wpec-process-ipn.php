@@ -174,7 +174,7 @@ class WPEC_Process_IPN {
 
 			$headers = 'From: ' . $from_email . "\r\n";
 
-			wp_mail( $buyer_email, $subject, $body, $headers );
+			wp_mail( $buyer_email, wp_specialchars_decode( $subject, ENT_QUOTES ), html_entity_decode( $body ), $headers );
                         WPEC_Debug_Logger::log('Buyer email notification sent to: ' . $buyer_email . '. From email address value used: ' . $from_email);
 
 			update_post_meta( $order_id, 'wpsc_buyer_email_sent', 'Email sent to: ' . $buyer_email );
@@ -193,7 +193,7 @@ class WPEC_Process_IPN {
 			$seller_email_body = $this->apply_dynamic_tags( $seller_email_body, $args );
 			$seller_email_body = apply_filters( 'wpec_seller_notification_email_body', $seller_email_body, $payment, $args );
 
-			wp_mail( $notify_email, $seller_email_subject, $seller_email_body, $headers );
+			wp_mail( $notify_email, wp_specialchars_decode( $seller_email_subject, ENT_QUOTES ), html_entity_decode( $seller_email_body ), $headers );
                         WPEC_Debug_Logger::log('Seller email notification sent to: ' . $notify_email);
 		}
 
