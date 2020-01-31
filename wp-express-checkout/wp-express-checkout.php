@@ -30,6 +30,7 @@ include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-utility-functions.php');
 include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-debug-logger.php');
 include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-init-time-tasks.php');
 include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-process-ipn.php');
+include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-view-download.php');
 
 require_once( WPEC_PLUGIN_PATH . 'public/class-wpec-main.php' );
 require_once( WPEC_PLUGIN_PATH . 'public/includes/class-shortcode-ppec.php' );
@@ -62,6 +63,7 @@ add_filter('plugin_action_links', 'wpec_add_settings_link', 10, 2);
 //Plugins loaded hook
 add_action( 'plugins_loaded', array( 'WPEC_Main', 'get_instance' ) );
 add_action( 'plugins_loaded', array( 'WPECShortcode', 'get_instance' ) );
+add_action( 'plugins_loaded', array( 'WPEC_View_Download', 'get_instance' ) );
 
 /*
  * Do init time tasks
