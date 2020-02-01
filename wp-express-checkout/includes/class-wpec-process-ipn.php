@@ -80,7 +80,7 @@ class WPEC_Process_IPN {
 		$price    = $trans['price'];
 		$quantity = $trans['quantity'];
 		$currency = $trans['currency'];
-		$url      = $trans['url'];
+		$item_id  = $trans['product_id'];
 
 		if ( $trans['custom_quantity'] ) {
 			// custom quantity enabled. let's take quantity from PayPal results.
@@ -117,6 +117,7 @@ class WPEC_Process_IPN {
 
 		$order_id = $order->insert(
 			array(
+				'item_id'     => $item_id,
 				'item_name'   => $item_name,
 				'price'       => $price,
 				'quantity'    => $quantity,
@@ -129,13 +130,15 @@ class WPEC_Process_IPN {
 			$payment['payer']
 		);
 
+		$url = WPEC_View_Download::get_download_url( $order_id );
+
 		$wpec_plugin = WPEC_Main::get_instance();
 
 		$product_details = $item_name . ' x ' . $quantity . ' - ' . WPEC_Utility_Functions::price_format( $amount, $currency ) . "\n";
-		if (!empty($url)){
-			//Include the download link in the product details.
+		if ( ! empty( $url ) ) {
+			// Include the download link in the product details.
 			/* Translators:  %s - download link */
-			$product_details .= sprintf( __( 'Download Link: %s', 'wp-express-checkout' ), base64_decode( $url ) ) . "\n";
+			$product_details .= sprintf( __( 'Download Link: %s', 'wp-express-checkout' ), $url ) . "\n";
 		}
 
 		$address = '';

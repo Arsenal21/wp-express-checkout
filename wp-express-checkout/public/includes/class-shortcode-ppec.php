@@ -139,6 +139,7 @@ class WPECShortcode {
 					'price'           => '0',
 					'quantity'        => 1,
 					'url'             => '',
+					'product_id'      => '',
 					'custom_amount'   => 0,
 					'custom_quantity' => 0,
 					'currency'        => $this->ppdg->get_setting( 'currency_code' ),
@@ -174,6 +175,7 @@ class WPECShortcode {
 			'url'             => $url,
 			'custom_quantity' => $custom_quantity,
 			'custom_amount'   => $custom_amount,
+			'product_id'      => $product_id,
 		);
 
 		set_transient( $trans_name, $trans_data, 2 * 3600 );
@@ -353,9 +355,7 @@ class WPECShortcode {
 			return printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $order['state'] );
 		}
 
-		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $order['item_name'] );
-		$trans      = get_transient( $trans_name );
-		$url        = $trans['url'];
+		$url = esc_url( WPEC_View_Download::get_download_url( $order_id ) );
 
 		$thank_you_msg = '';
 		$thank_you_msg .= '<div class="wpec_thank_you_message">';
@@ -366,7 +366,7 @@ class WPECShortcode {
 		$thank_you_msg .= '<p>' . __( 'Transaction ID: ', 'wp-express-checkout' ) . '{transaction_id}</p>';
 
 		if ( ! empty( $url ) ) {
-			$click_here_str = sprintf( __( 'Please <a href="%s">click here</a> to download the file.', 'wp-express-checkout' ), base64_decode( $url ) );
+			$click_here_str = sprintf( __( 'Please <a href="%s">click here</a> to download the file.', 'wp-express-checkout' ), $url );
 			$thank_you_msg .= '<p>' . $click_here_str . '</p>';
 		}
 

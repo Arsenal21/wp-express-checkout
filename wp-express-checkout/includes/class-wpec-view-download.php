@@ -40,6 +40,38 @@ class WPEC_View_Download {
 	}
 
 	/**
+	 * Retrieves secure download URL for given order
+	 *
+	 * @param int $order_id The order id.
+	 */
+	public static function get_download_url( $order_id ) {
+		$download_url = '';
+
+		$order = get_post_meta( $order_id, 'ppec_payment_details', true );
+
+		if ( $order && ! empty( $order['item_id'] ) ) {
+			$order_timestamp = get_the_time( 'U', $order_id );
+
+			$product_id = (int) $order['item_id'];
+
+			$key  = "{$product_id}|{$order_id}|{$order_timestamp}";
+			$hash = substr( wp_hash( $key ), 0, 20 );
+
+			$download_url = add_query_arg(
+				array(
+					'wpec_download_file' => $product_id,
+					'order_id'           => $order_id,
+					'key'                => $hash,
+				),
+				home_url()
+			);
+
+		}
+
+		return $download_url;
+	}
+
+	/**
 	 * Checks whether a download request is valid.
 	 *
 	 * @return boolean
@@ -59,7 +91,7 @@ class WPEC_View_Download {
 
 		$product = get_post( absint( $_GET['wpec_download_file'] ) );
 
-		if ( empty( $product ) || PPECProducts::$products_slug !== $product->post_type || $order['item_name'] !== $product->post_name ) {
+		if ( empty( $product ) || PPECProducts::$products_slug !== $product->post_type || $order['item_id'] !== $product->ID ) {
 			wp_die( esc_html__( 'Invalid product ID!', 'wp-express-checkout' ) );
 		}
 
