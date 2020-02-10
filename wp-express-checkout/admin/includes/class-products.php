@@ -101,6 +101,7 @@ class PPECProducts {
 	function manage_columns( $columns ) {
 		unset( $columns );
 		$columns = array(
+			'thumbnail' => __( 'Thumbnail', 'wp-express-checkout' ),
 			'title'     => __( 'Product Name', 'wp-express-checkout' ),
 			'id'        => __( 'ID', 'wp-express-checkout' ),
 			'price'     => __( 'Price', 'wp-express-checkout' ),
@@ -114,6 +115,21 @@ class PPECProducts {
 		switch ( $column ) {
 			case 'id':
 				echo $post_id;
+				break;
+			case 'thumbnail':
+				$thumb_url = get_post_meta( $post_id, 'wpec_product_thumbnail', true );
+				if ( ! $thumb_url ) {
+					$thumb_url = WPEC_PLUGIN_URL . '/assets/product-thumb-placeholder.png';
+				}
+				$edit_link = get_edit_post_link( $post_id );
+				$title     = __( 'Edit Product', 'wp-express-checkout' );
+				?>
+				<span class="wpec-product-thumbnail-container">
+					<a href="<?php echo esc_attr( $edit_link ); ?>" title="<?php echo $title; ?>">
+						<div style="padding: 50px 0; max-width: 100px; background-image: url(<?php echo esc_url( $thumb_url ); ?>); background-size: cover; background-position: center;"></div>
+					</a>
+				</span>
+				<?php
 				break;
 			case 'price':
 				$price = get_post_meta( $post_id, 'ppec_product_price', true );
