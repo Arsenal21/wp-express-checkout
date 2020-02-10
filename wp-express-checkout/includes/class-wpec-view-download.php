@@ -63,7 +63,7 @@ class WPEC_View_Download {
 					'order_id'           => $order_id,
 					'key'                => $hash,
 				),
-				home_url()
+				home_url( '/' )
 			);
 
 		}
