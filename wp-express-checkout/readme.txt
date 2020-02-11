@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.3
-Stable tag: 1.4
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,9 +103,11 @@ None
 
 == Changelog ==
 
-= WIP 1.5 =
+= 1.5 =
 * Added a new feature that allows the admin to configure products where the customer can specify the amount. Useful for accepting donations.
 * Added settings link in the plugin's menu listing page.
+* Added new product download handing via a unique URL.
+* The product thumbnail is now shown in the products listing in the admin menu.
 
 = 1.4 =
 * Added new settings to allow customization of currency formatting.
