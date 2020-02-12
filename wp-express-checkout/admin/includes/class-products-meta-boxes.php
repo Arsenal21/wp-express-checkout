@@ -19,6 +19,7 @@ class PPECProductsMetaboxes {
 		add_meta_box( 'ppec_upload_meta_box', __( 'Download URL', 'wp-express-checkout' ), array( $this, 'display_upload_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'wpec_thumbnail_meta_box', __( 'Product Thumbnail', 'wp-express-checkout' ), array( $this, 'display_thumbnail_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'ppec_shortcode_meta_box', __( 'Shortcode', 'wp-express-checkout' ), array( $this, 'display_shortcode_meta_box' ), PPECProducts::$products_slug, 'side', 'default' );
+		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 	}
 
 	function display_description_meta_box( $post ) {
@@ -174,6 +175,33 @@ jQuery(document).ready(function($) {
 		<?php
 	}
 
+	public function display_appearance_meta_box( $post ) {
+		$button_type = get_post_meta( $post->ID, 'wpec_product_button_type', true );
+		?>
+		<fieldset>
+			<legend><?php esc_html_e( 'Button Options', 'wp-express-checkout' ); ?></legend>
+			<label><?php _e( 'Button Type', 'wp-express-checkout' ); ?></label>
+			<br />
+			<select name="wpec_product_button_type" id="wpec_product_button_type">
+				<option value=""><?php esc_html_e( '-- Deafult --', 'wp-express-checkout' ); ?></option>
+				<?php
+				$options = array(
+					'checkout' => __( 'Checkout', 'wp-express-checkout' ),
+					'pay'      => __( 'Pay', 'wp-express-checkout' ),
+					'paypal'   => __( 'PayPal', 'wp-express-checkout' ),
+					'buynow'   => __( 'Buy Now', 'wp-express-checkout' ),
+				);
+
+				foreach ( $options as $key => $value ) {
+					echo '<option value="' . $key . '"'. selected( $key, $button_type, false ) .'>' . $value . '</option>';
+				}
+				?>
+			</select>
+			<p class="description"><?php esc_html_e( 'Select a type for the product button. By default, will be used the type specified in the General settings.', 'wp-express-checkout' ); ?></p>
+		</fieldset>
+		<?php
+	}
+
 	function save_product_handler( $post_id, $post, $update ) {
 		if ( ! isset( $_POST['action'] ) ) {
 			// this is probably not edit or new post creation event.
@@ -231,6 +259,9 @@ jQuery(document).ready(function($) {
 		// allow custom quantity.
 		$quantity = filter_input( INPUT_POST, 'ppec_product_custom_quantity', FILTER_SANITIZE_NUMBER_INT );
 		update_post_meta( $post_id, 'ppec_product_custom_quantity', $quantity );
+
+		$button_type = filter_input( INPUT_POST, 'wpec_product_button_type', FILTER_SANITIZE_STRING );
+		update_post_meta( $post_id, 'wpec_product_button_type', sanitize_text_field( $button_type ) );
 	}
 
 }

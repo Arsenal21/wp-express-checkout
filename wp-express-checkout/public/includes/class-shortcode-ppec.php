@@ -154,6 +154,12 @@ class WPECShortcode {
 			)
 		);
 
+		$product_btn_type = get_post_meta( $product_id, 'wpec_product_button_type', true );
+
+		if ( ! empty( $product_btn_type ) ) {
+			$btn_type = $product_btn_type;
+		}
+
 		// Lets check the digital item URL.
 		if ( ! empty( $url ) ) {
 			$url = base64_encode( $url );
