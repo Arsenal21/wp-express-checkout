@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.3
-Stable tag: 1.5
+Stable tag: 1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,9 @@ https://www.youtube.com/watch?v=3LsfLd03VnE
 * Ability to set a product thumbnail for a product.
 * Use a simple shortcode to add a payment button anywhere on your site.
 * Create a PayPal payment button widget and add it to your sidebar.
+* Ability for a customer to enter an amount and pay what they want for a product.
+* Can be used to accept donation.
+* Option to customize the currency formatting.
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
 
@@ -102,6 +105,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 1.6 =
+* Added "Button Type" style in the individual product configuration interface. So the button type style can be set on a per product basis.
+* Added an action hook for the download request processing. Can be used to override the download request processing via an addon plugin.
 
 = 1.5 =
 * Added a new feature that allows the admin to configure products where the customer can specify the amount. Useful for accepting donations.
