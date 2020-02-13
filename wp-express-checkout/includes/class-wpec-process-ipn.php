@@ -99,7 +99,7 @@ class WPEC_Process_IPN {
 		if ( $amount != $original_price_amt ) {
 			// payment amount mismatch.
                         WPEC_Debug_Logger::log('Error! Payment amount mismatch. Original: ' . $original_price_amt . ', Received: ' . $amount, false);
-			_e( 'Payment amount mismatch original price.', 'wp-express-checkout' );
+			_e( 'Payment amount mismatch with the original price.', 'wp-express-checkout' );
 			exit;
 		}
 

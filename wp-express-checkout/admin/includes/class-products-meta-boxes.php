@@ -40,7 +40,7 @@ class PPECProductsMetaboxes {
 			<input type="checkbox" name="wpec_product_custom_amount" value="1" <?php checked( $allow_custom_amount ); ?>>
 			<?php esc_html_e( 'Allow customers to enter amount', 'wp-express-checkout' ); ?>
 		</label>
-		<p class="description"><?php esc_html_e( 'When checked, customers can change amount they want to pay. You can set initial amount using field above.', 'wp-express-checkout' ); ?></p>
+		<p class="description"><?php esc_html_e( 'When checked, customers can change the amount they want to pay. You can set the initial amount using the field above.', 'wp-express-checkout' ); ?></p>
 		<?php
 	}
 
@@ -243,7 +243,7 @@ jQuery(document).ready(function($) {
 			update_post_meta( $post_id, 'ppec_product_price', $price );
 		} else {
 			// invalid price.
-			$text = __( 'Ivalid product price.', 'wp-express-checkout' );
+			$text = __( 'Invalid product price.', 'wp-express-checkout' );
 			$this->WPECAdmin->add_admin_notice( $text, 'error' );
 		}
 

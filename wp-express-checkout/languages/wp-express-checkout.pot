@@ -435,7 +435,7 @@ msgid "Please specify product download URL."
 msgstr ""
 
 #: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:151
-msgid "Ivalid product price."
+msgid "Invalid product price."
 msgstr ""
 
 #: paypal-for-digital-goods/admin/includes/class-products.php:29
@@ -565,7 +565,7 @@ msgid "No transaction info found in transient."
 msgstr ""
 
 #: paypal-for-digital-goods/paypal-for-digital-goods.php:103
-msgid "Payment amount mismatch original price."
+msgid "Payment amount mismatch with the original price."
 msgstr ""
 
 #: paypal-for-digital-goods/paypal-for-digital-goods.php:110
