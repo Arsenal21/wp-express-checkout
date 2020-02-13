@@ -226,6 +226,7 @@ jQuery(document).ready(function($) {
 		$product_url = filter_input( INPUT_POST, 'ppec_product_upload', FILTER_SANITIZE_URL );
 		if ( empty( $product_url ) ) {
 			// URL is empty. Maybe not a digital product.
+			delete_post_meta( $post_id, 'ppec_product_upload' );
 		} else {
 			update_post_meta( $post_id, 'ppec_product_upload', esc_url( $product_url, array( 'http', 'https', 'dropbox' ) ) );
 		}
