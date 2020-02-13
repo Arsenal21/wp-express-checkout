@@ -53,6 +53,11 @@ class WPEC_View_Download {
 			$order_timestamp = get_the_time( 'U', $order_id );
 
 			$product_id = (int) $order['item_id'];
+			$product    = get_post( $product_id );
+
+			if ( empty( $product ) || PPECProducts::$products_slug !== $product->post_type || ! $product->ppec_product_upload ) {
+				return $download_url;
+			}
 
 			$key  = "{$product_id}|{$order_id}|{$order_timestamp}";
 			$hash = substr( wp_hash( $key ), 0, 20 );
