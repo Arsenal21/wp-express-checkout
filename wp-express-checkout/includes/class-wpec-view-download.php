@@ -112,15 +112,22 @@ class WPEC_View_Download {
 	}
 
 	/**
-	 * Processes the product download.
+	 * Processes the product download. This function is called AFTER the download request has been verified via the verify_request() call.
 	 */
 	private function process_download() {
+
+		//Get the product custom post type object.
 		$product = get_post( absint( $_GET['wpec_download_file'] ) );
+
+		// Trigger the action hook (product object is also passed). It can be usewd to override the download handling via an addon.
+		do_action( 'wpec_process_download_request', $product );
 
 		// clean the fileurl.
 		$file_url = stripslashes( trim( $product->ppec_product_upload ) );
 		// get filename.
 		$file_name = basename( $product->ppec_product_upload );
+
+		//WPEC_Utility_Functions::redirect_to_url($file_url);
 
 		// get file extension.
 		$file_extension = pathinfo( $file_name );
