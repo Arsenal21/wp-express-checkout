@@ -183,7 +183,7 @@ jQuery(document).ready(function($) {
 			<label><?php _e( 'Button Type', 'wp-express-checkout' ); ?></label>
 			<br />
 			<select name="wpec_product_button_type" id="wpec_product_button_type">
-				<option value=""><?php esc_html_e( '-- Deafult --', 'wp-express-checkout' ); ?></option>
+				<option value=""><?php esc_html_e( '-- Default --', 'wp-express-checkout' ); ?></option>
 				<?php
 				$options = array(
 					'checkout' => __( 'Checkout', 'wp-express-checkout' ),
