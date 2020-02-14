@@ -158,8 +158,6 @@ class WPEC_Admin {
 		register_setting( 'ppdg-settings-group', 'ppdg-settings', array( $this, 'settings_sanitize_field_callback' ) );
 
 		/* Add the sections */
-		add_settings_section( 'ppdg-documentation', '', array( $this, 'general_documentation_and_misc_output_callback' ), $this->plugin_slug . '-docs' );
-
 		add_settings_section( 'ppdg-global-section', __( 'Global Settings', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-credentials-section', __( 'PayPal Credentials', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-button-style-section', __( 'Button Style', 'wp-express-checkout' ), null, $this->plugin_slug );
@@ -344,33 +342,6 @@ class WPEC_Admin {
 				'desc'  => __( 'This sets the number of decimal points shown in the displayed price.', 'wp-express-checkout' ),
 			)
 		);
-	}
-
-	/**
-	 * The section `ppdg-documentation` callback.
-	 */
-	public function general_documentation_and_misc_output_callback() {
-		?>
-		<div style="background: none repeat scroll 0 0 #FFF6D5;border: 1px solid #D1B655;color: #3F2502;margin: 10px 0;padding: 5px 5px 5px 10px;text-shadow: 1px 1px #FFFFFF;">
-			<p><?php _e( 'Please read the <a target="_blank" href="https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/">WP Express Checkout</a> plugin setup instructions to configure and use it.', 'wp-express-checkout' ); ?>
-			</p>
-		</div>
-
-		<script type="text/javascript">
-			jQuery( document ).ready( function( $ ) {
-				$( 'a#wpec-reset-log' ).click( function( e ) {
-					e.preventDefault();
-					$.post( ajaxurl,
-							{ 'action': 'wpec_reset_log' },
-							function( result ) {
-								if ( result === '1' ) {
-									alert( 'Log file has been reset.' );
-								}
-							} );
-				} );
-			} );
-		</script>
-		<?php
 	}
 
 	/**
