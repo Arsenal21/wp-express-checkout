@@ -3,9 +3,11 @@
 class PPECProductsMetaboxes {
 
 	var $WPECAdmin;
+	var $WPEC_Main;
 
 	public function __construct() {
 		$this->WPECAdmin = WPEC_Admin::get_instance();
+		$this->WPEC_Main = WPEC_Main::get_instance();
 		remove_post_type_support( PPECProducts::$products_slug, 'editor' );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		// products post save action.
@@ -14,8 +16,9 @@ class PPECProductsMetaboxes {
 
 	function add_meta_boxes() {
 		add_meta_box( 'wsp_content', __( 'Description', 'wp-express-checkout' ), array( $this, 'display_description_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
-		add_meta_box( 'ppec_price_meta_box', esc_html( __( 'Price', 'wp-express-checkout' ) ), array( $this, 'display_price_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
-		add_meta_box( 'ppec_quantity_meta_box', esc_html( __( 'Quantity', 'wp-express-checkout' ) ), array( $this, 'display_quantity_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
+		add_meta_box( 'ppec_price_meta_box', __( 'Price', 'wp-express-checkout' ), array( $this, 'display_price_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
+		add_meta_box( 'ppec_quantity_meta_box', __( 'Quantity', 'wp-express-checkout' ), array( $this, 'display_quantity_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
+		add_meta_box( 'wpec_shipping_tax_meta_box', __( 'Shipping & Tax', 'wp-express-checkout' ), array( $this, 'display_shipping_tax_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'ppec_upload_meta_box', __( 'Download URL', 'wp-express-checkout' ), array( $this, 'display_upload_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'wpec_thumbnail_meta_box', __( 'Product Thumbnail', 'wp-express-checkout' ), array( $this, 'display_thumbnail_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'ppec_shortcode_meta_box', __( 'Shortcode', 'wp-express-checkout' ), array( $this, 'display_shortcode_meta_box' ), PPECProducts::$products_slug, 'side', 'default' );
@@ -29,12 +32,13 @@ class PPECProductsMetaboxes {
 	}
 
 	function display_price_meta_box( $post ) {
-		$current_price = get_post_meta( $post->ID, 'ppec_product_price', true );
+		$current_price       = get_post_meta( $post->ID, 'ppec_product_price', true );
 		$allow_custom_amount = get_post_meta( $post->ID, 'wpec_product_custom_amount', true );
+		$step                = pow( 10, -intval( $this->WPEC_Main->get_setting( 'price_decimals_num' ) ) );
 		?>
 		<label><?php esc_html_e( 'Price', 'wp-express-checkout' ); ?></label>
 		<br/>
-		<input type="text" name="ppec_product_price" value="<?php echo esc_attr( $current_price ); ?>">
+		<input type="number" name="ppec_product_price" step="<?php echo esc_attr( $step ); ?>" min="0" value="<?php echo esc_attr( $current_price ); ?>">
 		<p class="description"><?php esc_html_e( 'Item price. Numbers only, no need to put currency symbol. Example: 99.95', 'wp-express-checkout' ); ?></p>
 		<label>
 			<input type="checkbox" name="wpec_product_custom_amount" value="1" <?php checked( $allow_custom_amount ); ?>>
@@ -59,6 +63,36 @@ class PPECProductsMetaboxes {
 			<?php esc_html_e( 'Allow customers to specify quantity', 'wp-express-checkout' ); ?>
 		</label>
 		<p class="description"><?php esc_html_e( 'When checked, customers can enter quantity they want to buy. You can set initial quantity using field above.', 'wp-express-checkout' ); ?></p>
+		<?php
+	}
+
+	public function display_shipping_tax_meta_box( $post ) {
+		$current_shipping = get_post_meta( $post->ID, 'wpec_product_shipping', true );
+		$current_tax      = get_post_meta( $post->ID, 'wpec_product_tax', true );
+		$step             = pow( 10, -intval( $this->WPEC_Main->get_setting( 'price_decimals_num' ) ) );
+		?>
+		<div id="wpec_shipping_cost_container">
+			<label><?php esc_html_e( 'Shipping Cost', 'wp-express-checkout' ); ?></label>
+			<br />
+			<input type="number" name="wpec_product_shipping" step="<?php echo esc_attr( $step ); ?>" min="0" value="<?php echo esc_attr( $current_shipping ); ?>">
+			<p class="description">
+		<?php
+		esc_html_e( 'Numbers only, no need to put currency symbol. Example: 5.90', 'wp-express-checkout' );
+		echo '<br>';
+		esc_html_e( 'Leave it blank if you are not shipping your product or not charging additional shipping costs.', 'wp-express-checkout' );
+		?>
+			</p>
+		</div>
+		<label><?php esc_html_e( 'Tax (%)', 'wp-express-checkout' ); ?></label>
+		<br />
+		<input type="number" min="0" name="wpec_product_tax" value="<?php echo esc_attr( $current_tax ); ?>">
+		<p class="description">
+		<?php
+		esc_html_e( 'Enter tax (in percent) which should be added to product price during purchase.', 'wp-express-checkout' );
+		echo '<br>';
+		esc_html_e( 'Leave it blank if you don\'t want to apply tax.', 'wp-express-checkout' );
+		?>
+		</p>
 		<?php
 	}
 
@@ -260,6 +294,16 @@ jQuery(document).ready(function($) {
 		// allow custom quantity.
 		$quantity = filter_input( INPUT_POST, 'ppec_product_custom_quantity', FILTER_SANITIZE_NUMBER_INT );
 		update_post_meta( $post_id, 'ppec_product_custom_quantity', $quantity );
+
+		// shipping & tax.
+		$shipping = filter_input( INPUT_POST, 'wpec_product_shipping', FILTER_SANITIZE_STRING );
+		$shipping = ! empty( $shipping ) ? floatval( $shipping ) : $shipping;
+		update_post_meta( $post_id, 'wpec_product_shipping', $shipping );
+
+		$tax = filter_input( INPUT_POST, 'wpec_product_tax', FILTER_SANITIZE_STRING );
+		$tax = floatval( $tax );
+		$tax = empty( $tax ) ? '' : $tax;
+		update_post_meta( $post_id, 'wpec_product_tax', $tax );
 
 		$button_type = filter_input( INPUT_POST, 'wpec_product_button_type', FILTER_SANITIZE_STRING );
 		update_post_meta( $post_id, 'wpec_product_button_type', sanitize_text_field( $button_type ) );
