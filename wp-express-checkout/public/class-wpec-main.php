@@ -253,6 +253,8 @@ class WPEC_Main {
 			'price_thousand_sep'   => ',',
 			'price_decimals_num'   => '2',
 			'thank_you_url'        => '',
+			'shipping'             => '',
+			'tax'                  => '',
 			'btn_shape'            => 'pill',
 			'btn_color'            => 'gold',
 			'btn_type'             => 'checkout',
