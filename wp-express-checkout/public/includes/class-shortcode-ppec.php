@@ -243,6 +243,7 @@ class WPECShortcode {
 			$args = array();
 			$args['client-id'] = $client_id;
 			$args['intent']    = 'capture';
+			$args['currency']  = $currency;
 			$disabled_funding  = $this->ppdg->get_setting( 'disabled_funding' );
 			if ( ! empty( $disabled_funding ) ) {
 				$arg = '';
