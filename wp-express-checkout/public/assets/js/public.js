@@ -33,11 +33,17 @@ var ppecHandler = function( data ) {
 		var val = parseInt( val_orig );
 		var error = false;
 		var errMsg = ppecFrontVars.str.enterQuantity;
+		// Preserve original quantity.
+		if ( parent.data.quantity && ! parent.data.orig_quantity ) {
+			parent.data.orig_quantity = parent.data.quantity;
+		}
 		if ( isNaN( val ) ) {
 			error = true;
 		} else if ( val_orig % 1 !== 0 ) {
 			error = true;
 		} else if ( val <= 0 ) {
+			error = true;
+		} else if ( parent.data.orig_quantity && val > parent.data.orig_quantity ) {
 			error = true;
 		} else {
 			input.removeClass( 'hasError' );
@@ -89,7 +95,6 @@ var ppecHandler = function( data ) {
 		commit: true,
 		onInit: function( data, actions ) {
 			var enable_actions = true;
-			console.log(parent.data);
 			if ( parent.data.custom_quantity === "1" ) {
 				jQuery( 'input#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
 					if ( ! parent.isValidCustomQuantity() ) {

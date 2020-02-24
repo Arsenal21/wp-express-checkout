@@ -85,12 +85,21 @@ class WPECShortcode {
 		$custom_quantity = get_post_meta( $post_id, 'ppec_product_custom_quantity', true );
 		$url             = get_post_meta( $post_id, 'ppec_product_upload', true );
 		$thumb_url       = get_post_meta( $post_id, 'wpec_product_thumbnail', true );
+		$shipping        = get_post_meta( $post_id, 'wpec_product_shipping', true );
+		$tax             = get_post_meta( $post_id, 'wpec_product_tax', true );
+
+		// Use global options only if the product value is explicitly set to ''.
+		// So user can set product value '0' and override non-empty global option.
+		$shipping = ( '' === $shipping ) ? $this->ppdg->get_setting( 'shipping' ) : $shipping;
+		$tax      = ( '' === $tax ) ? $this->ppdg->get_setting( 'tax' ) : $tax;
 
 		$output = '';
 
 		$args = array(
 			'name'            => $title,
 			'price'           => $price,
+			'shipping'        => $shipping,
+			'tax'             => $tax,
 			'custom_amount'   => $custom_amount,
 			'quantity'        => $quantity,
 			'custom_quantity' => $custom_quantity,
@@ -136,7 +145,9 @@ class WPECShortcode {
 			shortcode_atts(
 				array(
 					'name'            => 'Item Name',
-					'price'           => '0',
+					'price'           => 0,
+					'shipping'        => 0,
+					'tax'             => 0,
 					'quantity'        => 1,
 					'url'             => '',
 					'product_id'      => '',
@@ -323,6 +334,52 @@ class WPECShortcode {
 		$output .= '<script>jQuery(document).ready(function() {new ppecHandler(' . json_encode( $data ) . ')});</script>';
 
 		$output .= '</div>';
+
+		return $output;
+	}
+
+	public function generate_price_tag( $args ) {
+		$output = '<span class="wpec-price-amount">' . esc_html( WPEC_Utility_Functions::price_format( $args['price'] ) ) . '</span>';
+		//$output .= ' <span class="wpec-new-price-amount"></span>';
+		/* translators: quantity */
+		$output .= 1 < $args['quantity'] ? ' <span class="wpec-quantity">' . esc_html( sprintf( __( 'x %d', 'wp-express-checkout' ), $args['quantity'] ) ) . '</span>' : '';
+
+		$under_price_line = '';
+		$tax_line         = '';
+		$shipping_line    = '';
+		$total_line       = '';
+		$tot_price        = ! empty( $args['quantity'] ) ? $args['price'] * $args['quantity'] : $args['price'];
+
+		if ( ! empty( $args['tax'] ) ) {
+			$tax_amount = WPEC_Utility_Functions::get_tax_amount( $tot_price, $args['tax'] );
+			$tot_price += $tax_amount;
+			if ( ! empty( $args['price'] ) ) {
+				/* translators: tax amount */
+				$tax_tag = sprintf( __( '%s (tax)', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $tax_amount ) );
+			} else {
+				/* translators: tax percent */
+				$tax_tag = sprintf( __( '%s%% tax', 'wp-express-checkout' ), $args['tax'] );
+			}
+			$tax_line = '<span class="wpec_price_tax_section">' . $tax_tag . '</span>';
+		}
+		if ( ! empty( $args['shipping'] ) ) {
+			$tot_price += $args['shipping'];
+			if ( ! empty( $args['tax'] ) ) {
+				/* translators: tax + shipping amount */
+				$shipping_tag = sprintf( __( '+ %s (shipping)', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $args['shipping'] ) );
+			} else {
+				/* translators: shipping amount */
+				$shipping_tag = sprintf( __( '%s (shipping)', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $args['shipping'] ) );
+			}
+			$shipping_line = '<span class="wpec_price_shipping_section">' . $shipping_tag . '</span>';
+		}
+
+		if ( $shipping_line || $tax_line ) {
+			$total_line       = '<div class="wpec_price_full_total">' . esc_html__( 'Total:', 'wp-express-checkout' ) . ' <span class="wpec_tot_current_price">' . esc_html( WPEC_Utility_Functions::price_format( $tot_price ) ) . '</span> <span class="wpec_tot_new_price"></span></div>';
+			$under_price_line = '<div class="wpec_under_price_line">' . $tax_line . $shipping_line . $total_line . '</div>';
+		}
+
+		$output .= $under_price_line;
 
 		return $output;
 	}

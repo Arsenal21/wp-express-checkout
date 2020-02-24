@@ -17,7 +17,7 @@ class WPEC_Utility_Functions {
 	public static function price_format( $price, $override_currency = '', $override_position = '' ) {
 		$ppdg = WPEC_Main::get_instance();
 
-		$decimals        = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : 2;
+		$decimals        = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : $ppdg->get_setting( 'price_decimals_num' );
 		$formatted_price = number_format( $price, $decimals, $ppdg->get_setting( 'price_decimal_sep' ), $ppdg->get_setting( 'price_thousand_sep' ) );
 		$position        = ( empty( $override_position ) ) ? $ppdg->get_setting( 'price_currency_pos' ) : $override_position;
 
@@ -41,6 +41,40 @@ class WPEC_Utility_Functions {
 		$replace = array( $formatted_price, $currency_code );
 
 		return str_replace( $search, $replace, $formats[ $position ] );
+	}
+
+	public static function get_tax_amount( $price, $tax ) {
+		$ppdg = WPEC_Main::get_instance();
+
+		if ( ! empty( $tax ) ) {
+			$prec       = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : $ppdg->get_setting( 'price_decimals_num' );
+			$tax_amount = round( ( $price * $tax / 100 ), $prec );
+			return $tax_amount;
+		} else {
+			return 0;
+		}
+	}
+
+	public static function apply_tax( $price, $tax ) {
+		$ppdg = WPEC_Main::get_instance();
+
+		if ( ! empty( $tax ) ) {
+			$prec       = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : $ppdg->get_setting( 'price_decimals_num' );
+			$tax_amount = round( ( $price * $tax / 100 ), $prec );
+			$price     += $tax_amount;
+		}
+		return $price;
+	}
+
+	public static function apply_shipping( $price, $shipping ) {
+		$ppdg = WPEC_Main::get_instance();
+
+		if ( ! empty( $shipping ) ) {
+			$prec   = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : $ppdg->get_setting( 'price_decimals_num' );
+			$price += floatval( $shipping );
+			$price  = round( $price, $prec );
+		}
+		return $price;
 	}
 
 	/*
