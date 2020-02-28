@@ -85,7 +85,7 @@ class PPECProductsMetaboxes {
 		</div>
 		<label><?php esc_html_e( 'Tax (%)', 'wp-express-checkout' ); ?></label>
 		<br />
-		<input type="number" min="0" name="wpec_product_tax" value="<?php echo esc_attr( $current_tax ); ?>">
+		<input type="number" min="0" step="any" name="wpec_product_tax" value="<?php echo esc_attr( $current_tax ); ?>">
 		<p class="description">
 		<?php
 		esc_html_e( 'Enter tax (in percent) which should be added to product price during purchase.', 'wp-express-checkout' );

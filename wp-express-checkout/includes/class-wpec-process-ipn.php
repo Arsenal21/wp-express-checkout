@@ -57,13 +57,13 @@ class WPEC_Process_IPN {
 
 		if ( strtoupper( $payment['status'] ) !== 'COMPLETED' ) {
 			// payment is unsuccessful.
-                        WPEC_Debug_Logger::log('Payment is not approved. Payment status: ' . $payment['status'], false);
+			WPEC_Debug_Logger::log( 'Payment is not approved. Payment status: ' . $payment['status'], false );
 			printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $payment['status'] );
 			exit;
 		}
 
-                //Log debug (if enabled)
-                WPEC_Debug_Logger::log('Received IPN. Processing payment ...');
+		// Log debug (if enabled).
+		WPEC_Debug_Logger::log( 'Received IPN. Processing payment ...' );
 
 		// get item name.
 		$item_name = $payment['purchase_units'][0]['description'];
@@ -72,13 +72,15 @@ class WPEC_Process_IPN {
 		$trans      = get_transient( $trans_name );
 		if ( ! $trans ) {
 			// no price set.
-                        WPEC_Debug_Logger::log('Error! No transaction info found in transient.', false);
+			WPEC_Debug_Logger::log( 'Error! No transaction info found in transient.', false );
 
 			_e( 'No transaction info found in transient.', 'wp-express-checkout' );
 			exit;
 		}
 		$price    = $trans['price'];
 		$quantity = $trans['quantity'];
+		$tax      = $trans['tax'];
+		$shipping = $trans['shipping'];
 		$currency = $trans['currency'];
 		$item_id  = $trans['product_id'];
 
@@ -95,10 +97,10 @@ class WPEC_Process_IPN {
 		$amount = $payment['purchase_units'][0]['amount']['value'];
 
 		// check if amount paid matches price x quantity.
-                $original_price_amt = $price * $quantity;
+		$original_price_amt = ( $price + WPEC_Utility_Functions::get_tax_amount( $price, $tax ) ) * $quantity + $shipping;
 		if ( $amount != $original_price_amt ) {
 			// payment amount mismatch.
-                        WPEC_Debug_Logger::log('Error! Payment amount mismatch. Original: ' . $original_price_amt . ', Received: ' . $amount, false);
+			WPEC_Debug_Logger::log('Error! Payment amount mismatch. Original: ' . $original_price_amt . ', Received: ' . $amount, false);
 			_e( 'Payment amount mismatch with the original price.', 'wp-express-checkout' );
 			exit;
 		}
@@ -121,6 +123,8 @@ class WPEC_Process_IPN {
 				'item_name'   => $item_name,
 				'price'       => $price,
 				'quantity'    => $quantity,
+				'tax'         => $tax,
+				'shipping'    => $shipping,
 				'amount'      => $amount,
 				'currency'    => $currency,
 				'state'       => $payment['status'],

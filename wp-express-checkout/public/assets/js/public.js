@@ -99,6 +99,8 @@ var ppecHandler = function( data ) {
 				jQuery( 'input#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
 					if ( ! parent.isValidCustomQuantity() ) {
 						enable_actions = false;
+					} else {
+						parent.updateAllAmounts();
 					}
 				} );
 			}
@@ -106,6 +108,8 @@ var ppecHandler = function( data ) {
 				jQuery( 'input#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
 					if ( ! parent.isValidCustomAmount() ) {
 						enable_actions = false;
+					} else {
+						parent.updateAllAmounts();
 					}
 				} );
 			}
@@ -123,8 +127,8 @@ var ppecHandler = function( data ) {
 			}
 		},
 		createOrder: function( data, actions ) {
-			parent.data.total = parent.data.price * parent.data.quantity;
-			return actions.order.create( {
+			parent.calcTotal();
+			var order_data = {
 				purchase_units: [ {
 						amount: {
 							value: parent.data.total,
@@ -132,7 +136,7 @@ var ppecHandler = function( data ) {
 							breakdown: {
 								item_total: {
 									currency_code: parent.data.currency,
-									value: parent.data.total
+									value: parent.data.price * parent.data.quantity
 								}
 							}
 						},
@@ -145,7 +149,24 @@ var ppecHandler = function( data ) {
 								}
 							} ]
 					} ]
-			} );
+			};
+			if ( parent.data.tax ) {
+				order_data.purchase_units[0].amount.breakdown.tax_total = {
+					currency_code: parent.data.currency,
+					value: parent.data.tax_amount * parent.data.quantity
+				};
+				order_data.purchase_units[0].items[0].tax = {
+					currency_code: parent.data.currency,
+					value: parent.data.tax_amount
+				};
+			}
+			if ( parent.data.shipping ) {
+				order_data.purchase_units[0].amount.breakdown.shipping = {
+					currency_code: parent.data.currency,
+					value: parseFloat( parent.data.shipping )
+				};
+			}
+			return actions.order.create( order_data );
 		},
 		onApprove: function( data, actions ) {
 			jQuery( 'div.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).css( 'display', 'flex' );
@@ -157,4 +178,73 @@ var ppecHandler = function( data ) {
 			alert( err );
 		}
 	} ).render( '#' + parent.data.id );
+
+	this.formatMoney = function (n) {
+		var c = isNaN(c = Math.abs(parent.data.dec_num)) ? 2 : parent.data.dec_num,
+			d = d == undefined ? "." : parent.data.dec_sep,
+			t = t == undefined ? "," : parent.data.thousand_sep,
+			s = n < 0 ? "-" : "",
+			i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+			j = (j = i.length) > 3 ? j % 3 : 0;
+
+		var result = s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+		var formats = {
+			left        : '{symbol}{price}',
+			left_space  : '{symbol} {price}',
+			right       : '{price}{symbol}',
+			right_space : '{price} {symbol}'
+		};
+
+		result = formats[parent.data.curr_pos]
+			.replace( '{symbol}', parent.data.currency )
+			.replace( '{price}', result );
+
+		return result;
+	};
+
+	this.updateAllAmounts = function() {
+		parent.calcTotal();
+		var price_cont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' ).closest( '.wpec-product-item' ).find( '.wpec-price-container' );
+		if ( price_cont.length > 0 ) {
+			var price = price_cont.find( '.wpec-price-amount' );
+			if ( price.length > 0 ) {
+				price.html( parent.formatMoney( parent.data.price ) );
+			}
+			if ( parent.data.quantity > 1 ) {
+				price_cont.find( '.wpec-quantity' ).show();
+				price_cont.find( '.wpec-quantity-val' ).html( parent.data.quantity );
+			} else {
+				price_cont.find( '.wpec-quantity' ).hide();
+			}
+			var total = price_cont.find( '.wpec_tot_current_price' );
+			if ( total.length > 0 ) {
+				total.html( parent.formatMoney( parent.data.total ) );
+			}
+			var tax_val = price_cont.find( '.wpec-tax-val' );
+			if ( tax_val.length > 0 ) {
+				tax_val.html( parent.formatMoney( parent.data.tax_amount * parent.data.quantity ) );
+			}
+		}
+	};
+
+	this.calcTotal = function() {
+		var itemSubt = parseFloat( parent.data.price );
+		var tAmount  = itemSubt * parseInt( parent.data.quantity );
+
+		if ( parent.data.tax ) {
+			var tax = parent.PHP_round( itemSubt * parent.data.tax / 100, parent.data.dec_num );
+			parent.data.tax_amount = tax;
+			tAmount += tax * parent.data.quantity;
+		}
+
+		if ( parent.data.shipping ) {
+			tAmount += parseFloat( parent.data.shipping );
+		}
+
+		parent.data.total = parent.PHP_round( tAmount, parent.data.dec_num );
+	};
+
+	this.PHP_round = function( num, dec ) {
+		return Math.round( num * Math.pow( 10, dec ) ) / Math.pow( 10, dec );
+	};
 };

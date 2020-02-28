@@ -189,6 +189,8 @@ class WPECShortcode {
 			'price'           => $price,
 			'currency'        => $currency,
 			'quantity'        => $quantity,
+			'tax'             => $tax,
+			'shipping'        => $shipping,
 			'url'             => $url,
 			'custom_quantity' => $custom_quantity,
 			'custom_amount'   => $custom_amount,
@@ -242,7 +244,7 @@ class WPECShortcode {
 					'errorOccurred'    => __( 'Error occurred', 'wp-express-checkout' ),
 					'paymentFor'       => __( 'Payment for', 'wp-express-checkout' ),
 					'enterQuantity'    => __( 'Please enter valid quantity', 'wp-express-checkout' ),
-					'enterAmount'    => __( 'Please enter valid amount', 'wp-express-checkout' ),
+					'enterAmount'      => __( 'Please enter valid amount', 'wp-express-checkout' ),
 					'paymentCompleted' => __( 'Payment Completed', 'wp-express-checkout' ),
 					'redirectMsg'      => __( 'You are now being redirected to the order summary page.', 'wp-express-checkout' ),
 				),
@@ -318,6 +320,12 @@ class WPECShortcode {
 			'client_id'       => $client_id,
 			'price'           => $price,
 			'quantity'        => $quantity,
+			'tax'             => $tax,
+			'shipping'        => $shipping,
+			'dec_num'         => intval( $this->ppdg->get_setting( 'price_decimals_num' ) ),
+			'thousand_sep'    => $this->ppdg->get_setting( 'price_thousand_sep' ),
+			'dec_sep'         => $this->ppdg->get_setting( 'price_decimal_sep' ),
+			'curr_pos'        => $this->ppdg->get_setting( 'price_currency_pos' ),
 			'custom_quantity' => $custom_quantity,
 			'custom_amount'   => $custom_amount,
 			'currency'        => $currency,
@@ -342,7 +350,7 @@ class WPECShortcode {
 		$output = '<span class="wpec-price-amount">' . esc_html( WPEC_Utility_Functions::price_format( $args['price'] ) ) . '</span>';
 		//$output .= ' <span class="wpec-new-price-amount"></span>';
 		/* translators: quantity */
-		$output .= 1 < $args['quantity'] ? ' <span class="wpec-quantity">' . esc_html( sprintf( __( 'x %d', 'wp-express-checkout' ), $args['quantity'] ) ) . '</span>' : '';
+		$output .= 1 < $args['quantity'] ? ' <span class="wpec-quantity">' . sprintf( __( 'x %s', 'wp-express-checkout' ), '<span class="wpec-quantity-val">' . $args['quantity'] . '</span>' ) . '</span>' : '';
 
 		$under_price_line = '';
 		$tax_line         = '';
@@ -351,14 +359,14 @@ class WPECShortcode {
 		$tot_price        = ! empty( $args['quantity'] ) ? $args['price'] * $args['quantity'] : $args['price'];
 
 		if ( ! empty( $args['tax'] ) ) {
-			$tax_amount = WPEC_Utility_Functions::get_tax_amount( $tot_price, $args['tax'] );
+			$tax_amount = WPEC_Utility_Functions::get_tax_amount( $args['price'], $args['tax'] ) * $args['quantity'];
 			$tot_price += $tax_amount;
 			if ( ! empty( $args['price'] ) ) {
 				/* translators: tax amount */
-				$tax_tag = sprintf( __( '%s (tax)', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $tax_amount ) );
+				$tax_tag = sprintf( __( '%s (tax)', 'wp-express-checkout' ), '<span class="wpec-tax-val">' . WPEC_Utility_Functions::price_format( $tax_amount ) . '</span>' );
 			} else {
 				/* translators: tax percent */
-				$tax_tag = sprintf( __( '%s%% tax', 'wp-express-checkout' ), $args['tax'] );
+				$tax_tag = sprintf( __( '%s%% tax', 'wp-express-checkout' ), '<span class="wpec-tax-val">' . $args['tax'] . '</span>' );
 			}
 			$tax_line = '<span class="wpec_price_tax_section">' . $tax_tag . '</span>';
 		}
@@ -374,7 +382,7 @@ class WPECShortcode {
 			$shipping_line = '<span class="wpec_price_shipping_section">' . $shipping_tag . '</span>';
 		}
 
-		if ( $shipping_line || $tax_line ) {
+		if ( floatval( $tot_price ) !== floatval( $args['price'] ) ) {
 			$total_line       = '<div class="wpec_price_full_total">' . esc_html__( 'Total:', 'wp-express-checkout' ) . ' <span class="wpec_tot_current_price">' . esc_html( WPEC_Utility_Functions::price_format( $tot_price ) ) . '</span> <span class="wpec_tot_new_price"></span></div>';
 			$under_price_line = '<div class="wpec_under_price_line">' . $tax_line . $shipping_line . $total_line . '</div>';
 		}

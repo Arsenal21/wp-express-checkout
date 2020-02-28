@@ -27,7 +27,10 @@ class WPEC_Utility_Functions {
 			$currency_code = $ppdg->get_setting( 'currency_symbol' );
 		} else {
 			$currency_code = $ppdg->get_setting( 'currency_code' );
-			$position      = 'right_space';
+		}
+
+		if ( empty( $position ) ) {
+			$position = 'right_space';
 		}
 
 		$formats = array(
