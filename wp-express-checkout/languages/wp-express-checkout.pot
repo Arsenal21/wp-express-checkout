@@ -368,7 +368,7 @@ msgstr ""
 
 #: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:35
 msgid ""
-"Item price. Numbers only, no need to put currency symbol. Example: 99.95"
+"Item price. Enter numbers only, no need to put currency symbol. Example: 39.95"
 msgstr ""
 
 #: paypal-for-digital-goods/admin/includes/class-products-meta-boxes.php:47

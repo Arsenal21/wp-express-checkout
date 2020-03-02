@@ -161,8 +161,9 @@ class WPEC_Admin {
 		add_settings_section( 'ppdg-global-section', __( 'Global Settings', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-credentials-section', __( 'PayPal Credentials', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-button-style-section', __( 'Button Style', 'wp-express-checkout' ), null, $this->plugin_slug );
-		add_settings_section( 'ppdg-shipping-tax-section', __( 'Shipping & Tax', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-disable-funding-section', __( 'Disable Funding', 'wp-express-checkout' ), array( $this, 'disable_funding_note' ), $this->plugin_slug );
+
+		add_settings_section( 'ppdg-shipping-tax-section', __( 'Shipping & Tax', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-debug-logging-section', __( 'Debug Logging', 'wp-express-checkout' ), array( $this, 'debug_logging_note' ), $this->plugin_slug );
 
 		add_settings_section( 'ppdg-emails-section', __( 'Purchase Confirmation Email Settings', 'wp-express-checkout' ), array( $this, 'emails_note' ), $this->plugin_slug . '-emails' );
@@ -228,13 +229,13 @@ class WPEC_Admin {
 		add_settings_field( 'btn_width', __( 'Button Width', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_width', 'type' => 'number', 'class' => 'wp-ppdg-button-style', 'placeholder' => __( 'Auto', 'wp-express-checkout' ), 'desc' => __( 'Button width in pixels. Minimum width is 150px. Leave it blank for auto width.', 'wp-express-checkout' ), 'size' => 10 ) );
 		add_settings_field( 'btn_color', __( 'Button Color', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_color', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '<div id="wp-ppdg-preview-container"><p>' . __( 'Button preview:', 'wp-express-checkout' ) . '</p><br /><div id="paypal-button-container"></div><div id="wp-ppdg-preview-protect"></div></div>', 'vals' => array( 'gold', 'blue', 'silver', 'white', 'black' ), 'texts' => array( __( 'Gold', 'wp-express-checkout' ), __( 'Blue', 'wp-express-checkout' ), __( 'Silver', 'wp-express-checkout' ), __( 'White', 'wp-express-checkout' ), __( 'Black', 'wp-express-checkout' ) ) ) );
 
-		// Shipping & Tax.
-		add_settings_field( 'shipping', __( 'Shipping Cost', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-shipping-tax-section', array( 'field' => 'shipping', 'type' => 'number', 'class' => 'wp-ppdg-shipping', 'desc' => __( 'Numbers only, no need to put currency symbol. Example: 5.90', 'wp-express-checkout' ) . '<br>' . __( 'Leave it blank if you are not shipping your products or not charging additional shipping costs.', 'wp-express-checkout' ), 'size' => 10 ) );
-		add_settings_field( 'tax', __( 'Tax (%)', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-shipping-tax-section', array( 'field' => 'tax', 'type' => 'number', 'class' => 'wp-ppdg-tax', 'desc' => __( 'Enter tax (in percent) which should be added to products price during purchase.', 'wp-express-checkout' ) . '<br>' . __( 'Leave it blank if you don\'t want to apply tax.', 'wp-express-checkout' ), 'size' => 10 ) );
-
 		// disable funding section.
 		add_settings_field( 'disabled_funding', __( 'Disabled Funding Options', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_funding', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'card', 'credit'/*, 'sepa'*/ ), 'texts' => array( __( 'Credit or debit cards', 'wp-express-checkout' ), __( 'PayPal Credit', 'wp-express-checkout' )/*, __( 'SEPA-Lastschrift', 'wp-express-checkout' )*/ ) ) );
 		//add_settings_field( 'disabled_cards', __( 'Disabled Cards', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_cards', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'visa', 'mastercard', 'amex', 'discover', 'jcb', 'elo', 'hiper' ), 'texts' => array( __( 'Visa', 'wp-express-checkout' ), __( 'Mastercard', 'wp-express-checkout' ), __( 'American Express', 'wp-express-checkout' ), __( 'Discover', 'wp-express-checkout' ), __( 'JCB', 'wp-express-checkout' ), __( 'Elo', 'wp-express-checkout' ), __( 'Hiper', 'wp-express-checkout' ) ) ) );
+
+		// Shipping & Tax.
+		add_settings_field( 'shipping', __( 'Shipping Cost', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-shipping-tax-section', array( 'field' => 'shipping', 'type' => 'number', 'class' => 'wp-ppdg-shipping', 'desc' => __( 'Enter numbers only. Example: 5.50', 'wp-express-checkout' ) . '<br>' . __( 'Leave it empty if you are not charging shipping cost. You can also set shipping cost on a per product basis.', 'wp-express-checkout' ), 'size' => 10 ) );
+		add_settings_field( 'tax', __( 'Tax (%)', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-shipping-tax-section', array( 'field' => 'tax', 'type' => 'number', 'class' => 'wp-ppdg-tax', 'desc' => __( 'Enter tax (in percent) which will be added to the product price.', 'wp-express-checkout' ) . '<br>' . __( 'Leave it empty if you don\'t want to apply tax.', 'wp-express-checkout' ), 'size' => 10 ) );
 
 		// debug logging section.
 		add_settings_field( 'enable_debug_logging', __( 'Enable Debug Logging', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-debug-logging-section',

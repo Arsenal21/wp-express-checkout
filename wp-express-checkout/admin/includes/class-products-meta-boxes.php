@@ -39,7 +39,7 @@ class PPECProductsMetaboxes {
 		<label><?php esc_html_e( 'Price', 'wp-express-checkout' ); ?></label>
 		<br/>
 		<input type="number" name="ppec_product_price" step="<?php echo esc_attr( $step ); ?>" min="0" value="<?php echo esc_attr( $current_price ); ?>">
-		<p class="description"><?php esc_html_e( 'Item price. Numbers only, no need to put currency symbol. Example: 99.95', 'wp-express-checkout' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Item price. Enter numbers only, no need to put currency symbol. Example: 39.95', 'wp-express-checkout' ); ?></p>
 		<label>
 			<input type="checkbox" name="wpec_product_custom_amount" value="1" <?php checked( $allow_custom_amount ); ?>>
 			<?php esc_html_e( 'Allow customers to enter amount', 'wp-express-checkout' ); ?>
@@ -77,9 +77,9 @@ class PPECProductsMetaboxes {
 			<input type="number" name="wpec_product_shipping" step="<?php echo esc_attr( $step ); ?>" min="0" value="<?php echo esc_attr( $current_shipping ); ?>">
 			<p class="description">
 		<?php
-		esc_html_e( 'Numbers only, no need to put currency symbol. Example: 5.90', 'wp-express-checkout' );
+		esc_html_e( 'Enter numbers only. Example: 5.50', 'wp-express-checkout' );
 		echo '<br>';
-		esc_html_e( 'Leave it blank if you are not shipping your product or not charging additional shipping costs.', 'wp-express-checkout' );
+		esc_html_e( 'Leave it empty if you are not charging shipping cost.', 'wp-express-checkout' );
 		?>
 			</p>
 		</div>
@@ -88,9 +88,9 @@ class PPECProductsMetaboxes {
 		<input type="number" min="0" step="any" name="wpec_product_tax" value="<?php echo esc_attr( $current_tax ); ?>">
 		<p class="description">
 		<?php
-		esc_html_e( 'Enter tax (in percent) which should be added to product price during purchase.', 'wp-express-checkout' );
+		esc_html_e( 'Enter tax (in percent) which will be added to the product price.', 'wp-express-checkout' );
 		echo '<br>';
-		esc_html_e( 'Leave it blank if you don\'t want to apply tax.', 'wp-express-checkout' );
+		esc_html_e( 'Leave it empty if you don\'t want to apply tax.', 'wp-express-checkout' );
 		?>
 		</p>
 		<?php
