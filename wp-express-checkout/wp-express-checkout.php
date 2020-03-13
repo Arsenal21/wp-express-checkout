@@ -35,6 +35,7 @@ include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-view-download.php');
 require_once( WPEC_PLUGIN_PATH . 'public/class-wpec-main.php' );
 require_once( WPEC_PLUGIN_PATH . 'public/includes/class-shortcode-ppec.php' );
 
+require_once( WPEC_PLUGIN_PATH . 'admin/views/blocks.php' );
 require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-products.php' );
 require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-order.php' );
 
