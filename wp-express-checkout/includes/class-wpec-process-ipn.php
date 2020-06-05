@@ -179,10 +179,19 @@ class WPEC_Process_IPN {
 			$body = $this->apply_dynamic_tags( $body, $args );
 			$body = apply_filters( 'wpec_buyer_notification_email_body', $body, $payment, $args );
 
-			$headers = 'From: ' . $from_email . "\r\n";
+			$headers = array();
+			if ( 'html' === $wpec_plugin->get_setting( 'buyer_email_type' ) ) {
+				$headers[] = 'Content-Type: text/html; charset=UTF-8';
+				$body      = nl2br( $body );
+			} else {
+				$body = html_entity_decode( $body );
+			}
 
-			wp_mail( $buyer_email, wp_specialchars_decode( $subject, ENT_QUOTES ), html_entity_decode( $body ), $headers );
-                        WPEC_Debug_Logger::log('Buyer email notification sent to: ' . $buyer_email . '. From email address value used: ' . $from_email);
+			$headers[] = 'From: ' . $from_email . "\r\n";
+
+			wp_mail( $buyer_email, wp_specialchars_decode( $subject, ENT_QUOTES ), $body, $headers );
+
+			WPEC_Debug_Logger::log( 'Buyer email notification sent to: ' . $buyer_email . '. From email address value used: ' . $from_email );
 
 			update_post_meta( $order_id, 'wpsc_buyer_email_sent', 'Email sent to: ' . $buyer_email );
 		}

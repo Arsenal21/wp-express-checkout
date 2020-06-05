@@ -257,9 +257,26 @@ class WPEC_Admin {
 
 		// emails section.
 		add_settings_field( 'send_buyer_email', __( 'Send Emails to Buyer After Purchase', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'send_buyer_email', 'type' => 'checkbox', 'desc' => __( 'If checked the plugin will send an email to the buyer with the sale details. If digital goods are purchased then the email will contain the download links for the purchased products.', 'wp-express-checkout' ) ) );
+		add_settings_field(
+			'buyer_email_type',
+			__( 'Buyer Email Content Type', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-emails',
+			'ppdg-emails-section',
+			array(
+				'field' => 'buyer_email_type',
+				'type'  => 'select',
+				'desc'  => __( 'Choose which format of email to send.', 'wp-express-checkout' ),
+				'vals'  => array( 'text', 'html' ),
+				'texts' => array(
+					__( 'Plain Text', 'wp-express-checkout' ),
+					__( 'HTML', 'wp-express-checkout' ),
+				),
+			)
+		);
 		add_settings_field( 'buyer_from_email', __( 'From Email Address', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_from_email', 'type' => 'text', 'desc' => __( 'Example: Your Name &lt;sales@your-domain.com&gt; This is the email address that will be used to send the email to the buyer. This name and email address will appear in the from field of the email.', 'wp-express-checkout' ) ) );
 		add_settings_field( 'buyer_email_subj', __( 'Buyer Email Subject', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_subj', 'type' => 'text', 'desc' => __( 'This is the subject of the email that will be sent to the buyer.', 'wp-express-checkout' ) ) );
-		add_settings_field( 'buyer_email_body', __( 'Buyer Email Body', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_body', 'type' => 'textarea', 'desc' => ''
+		add_settings_field( 'buyer_email_body', __( 'Buyer Email Body', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_body', 'type' => 'html' === $wpec->get_setting( 'buyer_email_type' ) ? 'editor' : 'textarea', 'desc' => ''
 			. 'This is the body of the email that will be sent to the buyer. Do not change the text within the braces {}. You can use the following email tags in this email body field:'
 			. '<br />{first_name} – ' . __( 'First name of the buyer', 'wp-express-checkout' )
 			. '<br />{last_name} – ' . __( 'Last name of the buyer', 'wp-express-checkout' )
@@ -384,7 +401,7 @@ class WPEC_Admin {
 	 * @param array $args Field arguments passed into the add_settings_field().
 	 */
 	public function settings_field_callback( $args ) {
-		$settings = (array) get_option( 'ppdg-settings' );
+		$settings = (array) get_option( 'ppdg-settings', WPEC_Main::get_defaults() );
 		$defaults = array(
 			'type'        => 'text',
 			'field'       => '',
@@ -395,7 +412,8 @@ class WPEC_Admin {
 			'class'       => '',
 		);
 
-		$args = wp_parse_args( $args, $defaults );
+		$settings = array_merge( WPEC_Main::get_defaults(), $settings );
+		$args     = wp_parse_args( $args, $defaults );
 
 		extract( $args );
 
@@ -428,6 +446,18 @@ class WPEC_Admin {
 				break;
 			case 'textarea':
 				echo "<textarea name='ppdg-settings[{$field}]' id='wp-ppdg-{$field}' {$_class} style='width:100%;' rows='7'>" . esc_textarea( $field_value ) . '</textarea>';
+				break;
+			case 'editor':
+				add_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
+				wp_editor(
+					html_entity_decode( $field_value ),
+					$field,
+					array(
+						'textarea_name' => "ppdg-settings[{$field}]",
+						'teeny'         => true,
+					)
+				);
+				remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
 				break;
 			default:
 				echo "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='ppdg-settings[{$field}]' value='{$field_value}' size='{$size}' />";
@@ -481,6 +511,7 @@ class WPEC_Admin {
 
 				switch ( $type ) {
 					case 'textarea':
+					case 'editor':
 						$input[ $field ] = wp_kses_post( $input[ $field ] );
 						break;
 					case 'radio':
@@ -579,6 +610,11 @@ class WPEC_Admin {
 			echo '</table>';
 			echo '</div></div>';
 		}
+	}
+
+	public function set_default_editor( $r ) {
+		$r = 'html';
+		return $r;
 	}
 
 }
