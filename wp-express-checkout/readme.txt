@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.4
-Stable tag: 1.7
+Stable tag: 1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,6 +107,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 1.8 =
+* Added a new feature to allow sending of HTML emails (for the buyer notification email). Thanks to Pierre.
+* Added a produuct block inserter.
 
 = 1.7 =
 * Added feature to handle shipping cost.

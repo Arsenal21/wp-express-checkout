@@ -96,10 +96,10 @@ class WPEC_Process_IPN {
 
 		$amount = $payment['purchase_units'][0]['amount']['value'];
 
-		// check if amount paid matches price x quantity.
+		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=)
 		$original_price_amt = ( $price + WPEC_Utility_Functions::get_tax_amount( $price, $tax ) ) * $quantity + $shipping;
-		if ( $amount != $original_price_amt ) {
-			// payment amount mismatch.
+		if ( $amount < $original_price_amt ) {
+			// payment amount mismatch. Amount paid is less.
 			WPEC_Debug_Logger::log('Error! Payment amount mismatch. Original: ' . $original_price_amt . ', Received: ' . $amount, false);
 			_e( 'Payment amount mismatch with the original price.', 'wp-express-checkout' );
 			exit;
