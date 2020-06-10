@@ -311,6 +311,7 @@ class WPECShortcode {
 		$output .= '<div class = "wp-ppec-button-container">';
 
 		$output .= sprintf( '<div id="%s" style="max-width:%s"></div>', $button_id, $btn_width ? $btn_width . 'px;' : '' );
+		$output .= '<div class="wpec-button-placeholder" style="border: 1px solid #E7E9EB; padding:1rem;"><i>' . __( 'This is where the Express Checkout Button will show. View it on the front-end to see how it will look to your visitors', 'wp-express-checkout' ) . '</i></div>';
 
 		$output .= '</div>';
 

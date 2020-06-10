@@ -118,6 +118,8 @@ var ppecHandler = function( data ) {
 			} else {
 				actions.disable();
 			}
+
+			jQuery( '.wpec-button-placeholder' ).remove();
 		},
 		onClick: function() {
 			var errInput = parent.scCont.find( '.hasError' ).first();

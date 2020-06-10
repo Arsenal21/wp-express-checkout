@@ -128,3 +128,7 @@
     display: none;
     color: red;
 }
+
+.wpec-button-placeholder {
+	display: none;
+}
