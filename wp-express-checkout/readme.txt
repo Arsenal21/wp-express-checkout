@@ -110,7 +110,7 @@ None
 
 = 1.8 =
 * Added a new feature to allow sending of HTML emails (for the buyer notification email). Thanks to Pierre.
-* Added a produuct block inserter.
+* Added a product block inserter.
 
 = 1.7 =
 * Added feature to handle shipping cost.
