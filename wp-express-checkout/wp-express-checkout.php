@@ -38,6 +38,7 @@ require_once( WPEC_PLUGIN_PATH . 'public/includes/class-shortcode-ppec.php' );
 require_once( WPEC_PLUGIN_PATH . 'admin/views/blocks.php' );
 require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-products.php' );
 require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-order.php' );
+require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-coupons.php' );
 
 //Load admin side class
 if ( is_admin() ) {

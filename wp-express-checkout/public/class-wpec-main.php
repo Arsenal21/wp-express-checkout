@@ -57,8 +57,6 @@ class WPEC_Main {
 	 * @since     1.0.0
 	 */
 	private function __construct() {
-		$this->settings = (array) get_option( 'ppdg-settings' );
-
 		// Load plugin text domain.
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
@@ -96,8 +94,10 @@ class WPEC_Main {
 	 * @return mixed
 	 */
 	public function get_setting( $field ) {
-		if ( isset( $this->settings[ $field ] ) ) {
-			return $this->settings[ $field ];
+		$settings = (array) get_option( 'ppdg-settings' );
+
+		if ( isset( $settings[ $field ] ) ) {
+			return $settings[ $field ];
 		}
 		return false;
 	}
@@ -281,6 +281,7 @@ class WPEC_Main {
 									. "\n{product_details}"
 									. "\n\nThe sale was made to {first_name} {last_name} ({payer_email})"
 									. "\n\nThanks",
+			'coupons_enabled'      => 0,
 		);
 
 		return $defaults;
