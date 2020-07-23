@@ -23,6 +23,7 @@ class PPECProductsMetaboxes {
 		add_meta_box( 'wpec_thumbnail_meta_box', __( 'Product Thumbnail', 'wp-express-checkout' ), array( $this, 'display_thumbnail_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'ppec_shortcode_meta_box', __( 'Shortcode', 'wp-express-checkout' ), array( $this, 'display_shortcode_meta_box' ), PPECProducts::$products_slug, 'side', 'default' );
 		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance Related', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
+		add_meta_box( 'wpec_coupons_meta_box', __( 'Coupons Settings', 'wp-express-checkout' ), array( $this, 'display_coupons_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 	}
 
 	function display_description_meta_box( $post ) {
@@ -236,6 +237,16 @@ jQuery(document).ready(function($) {
 		<?php
 	}
 
+	public function display_coupons_meta_box( $post ) {
+		$current_val = get_post_meta( $post->ID, 'wpec_product_coupons_setting', true );
+		?>
+<p><?php _e( 'Select how Coupons should be handled for this product.', 'wp-express-checkout' ); ?></p>
+<label><input type="radio" name="wpec_product_coupons_setting" value="2" <?php echo ( $current_val === '2' || $current_val === '' ) ? ' checked' : ''; ?>><?php echo __( 'Use Global Setting', 'wp-express-checkout' ); ?> </label>
+<label><input type="radio" name="wpec_product_coupons_setting" value="1" <?php echo ( $current_val === '1' ) ? ' checked' : ''; ?>><?php echo __( 'Enabled', 'wp-express-checkout' ); ?> </label>
+<label><input type="radio" name="wpec_product_coupons_setting" value="0" <?php echo ( $current_val === '0' ) ? ' checked' : ''; ?>><?php echo __( 'Disabled', 'wp-express-checkout' ); ?> </label>
+		<?php
+	}
+
 	function save_product_handler( $post_id, $post, $update ) {
 		if ( ! isset( $_POST['action'] ) ) {
 			// this is probably not edit or new post creation event.
@@ -307,6 +318,8 @@ jQuery(document).ready(function($) {
 
 		$button_type = filter_input( INPUT_POST, 'wpec_product_button_type', FILTER_SANITIZE_STRING );
 		update_post_meta( $post_id, 'wpec_product_button_type', sanitize_text_field( $button_type ) );
+
+		update_post_meta( $post_id, 'wpec_product_coupons_setting', isset( $_POST['wpec_product_coupons_setting'] ) ? sanitize_text_field( $_POST['wpec_product_coupons_setting'] ) : '0' );
 	}
 
 }
