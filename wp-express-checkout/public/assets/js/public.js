@@ -206,7 +206,7 @@ var ppecHandler = function( data ) {
 
 	this.updateAllAmounts = function() {
 		parent.calcTotal();
-		var price_cont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' ).closest( '.wpec-product-item' ).find( '.wpec-price-container' );
+		var price_cont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' ).closest( '.wpec-product-item, .wpec-post-item' ).find( '.wpec-price-container' );
 		if ( price_cont.length > 0 ) {
 			var price = price_cont.find( '.wpec-price-amount' );
 			if ( price.length > 0 ) {
