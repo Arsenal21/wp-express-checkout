@@ -88,6 +88,12 @@ class WPECShortcode {
 		$shipping        = get_post_meta( $post_id, 'wpec_product_shipping', true );
 		$tax             = get_post_meta( $post_id, 'wpec_product_tax', true );
 
+		$coupons_enabled = get_post_meta( $post_id, 'wpec_product_coupons_setting', true );
+
+		if ( ( '' === $coupons_enabled ) || '2' === $coupons_enabled ) {
+			$coupons_enabled = $this->ppdg->get_setting( 'coupons_enabled' );
+		}
+
 		// Use global options only if the product value is explicitly set to ''.
 		// So user can set product value '0' and override non-empty global option.
 		$shipping = ( '' === $shipping ) ? $this->ppdg->get_setting( 'shipping' ) : $shipping;
@@ -106,6 +112,7 @@ class WPECShortcode {
 			'url'             => $url,
 			'product_id'      => $post_id,
 			'thumbnail_url'   => $thumb_url,
+			'coupons_enabled' => $coupons_enabled,
 		);
 
 		$template = empty( $atts['template'] ) ? 0 : intval( $atts['template'] );
@@ -160,6 +167,7 @@ class WPECShortcode {
 					'btn_width'       => $this->ppdg->get_setting( 'btn_width' ) !== false ? $this->ppdg->get_setting( 'btn_width' ) : 0,
 					'btn_layout'      => $this->ppdg->get_setting( 'btn_layout' ) !== false ? $this->ppdg->get_setting( 'btn_layout' ) : 'horizontal',
 					'btn_color'       => $this->ppdg->get_setting( 'btn_color' ) !== false ? $this->ppdg->get_setting( 'btn_color' ) : 'gold',
+					'coupons_enabled' => $this->ppdg->get_setting( 'coupons_enabled' ),
 				),
 				$args
 			)
@@ -195,6 +203,7 @@ class WPECShortcode {
 			'custom_quantity' => $custom_quantity,
 			'custom_amount'   => $custom_amount,
 			'product_id'      => $product_id,
+			'coupons_enabled' => $coupons_enabled,
 		);
 
 		set_transient( $trans_name, $trans_data, 2 * 3600 );
@@ -247,6 +256,8 @@ class WPECShortcode {
 					'enterAmount'      => __( 'Please enter valid amount', 'wp-express-checkout' ),
 					'paymentCompleted' => __( 'Payment Completed', 'wp-express-checkout' ),
 					'redirectMsg'      => __( 'You are now being redirected to the order summary page.', 'wp-express-checkout' ),
+					'strRemoveCoupon'  => __( 'Remove coupon', 'wp-express-checkout' ),
+					'strRemove'        => __( 'Remove', 'wp-express-checkout' ),
 				),
 				'ajaxUrl' => get_admin_url() . 'admin-ajax.php',
 			);
@@ -306,6 +317,15 @@ class WPECShortcode {
 			$output .= '</span>';
 			$output .= '<div class="wp-ppec-form-error-msg"></div>';
 			$output .= '</div>';
+		}
+
+		// Coupons
+		if ( $coupons_enabled ) {
+			$str_coupon_label = __( 'Coupon Code:', 'wp-express-checkout' );
+			$output          .= '<div class="wpec_product_coupon_input_container"><label class="wpec_product_coupon_field_label">' . $str_coupon_label . ' ' . '</label><input id="wpec-coupon-field-' . $button_id . '" class="wpec_product_coupon_field_input" type="text" name="wpec_coupon">'
+			. '<input type="button" id="wpec-redeem-coupon-btn-' . $button_id . '" type="button" class="wpec_coupon_apply_btn" value="' . __( 'Apply', 'wp-express-checkout' ) . '">'
+			. '<div id="wpec-coupon-info-' . $button_id . '" class="wpec_product_coupon_info"></div>'
+			. '</div>';
 		}
 
 		$output .= '<div class = "wp-ppec-button-container">';

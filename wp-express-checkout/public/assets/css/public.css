@@ -132,3 +132,19 @@
 .wpec-button-placeholder {
 	display: none;
 }
+
+.wpec_product_coupon_field_label {
+    margin-right: 10px;
+}
+
+.wpec_product_coupon_input_container input {
+	display: inline-block !important;
+    line-height: 1 !important;
+    height: auto;
+}
+
+.wpec_product_coupon_input_container input.wpec_product_coupon_field_input {
+    width: auto;
+    max-width: 200px;
+    margin-right: 10px;
+}
