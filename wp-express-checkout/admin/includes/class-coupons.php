@@ -93,10 +93,6 @@ class WPEC_Coupons_Admin {
 		}
 		$coupon_code = strtoupper( $_POST['coupon_code'] );
 
-		$tax = ! empty( $_POST['tax'] ) ? intval( $_POST['tax'] ) : 0;
-
-		$shipping = ! empty( $_POST['shipping'] ) ? intval( $_POST['shipping'] ) : 0;
-
 		$coupon = self::get_coupon( $coupon_code );
 
 		if ( ! $coupon['valid'] ) {
@@ -122,32 +118,11 @@ class WPEC_Coupons_Admin {
 		$discount      = $coupon['discount'];
 		$discount_type = $coupon['discountType'];
 
-		$amount = intval( $_POST['amount'] );
-
-		$wpec = WPEC_Main::get_instance();
-		$perc = ( ! $wpec->get_setting( 'price_decimals_num' ) ) ? 0 : $wpec->get_setting( 'price_decimals_num' );
-
-		if ( $coupon['discountType'] === 'perc' ) {
-			$discount_amount = round( $amount * ( $coupon['discount'] / 100 ), 0 );
-		} else {
-			$discount_amount = $coupon['discount'] * ( $perc === 0 ? 1 : 100 );
-		}
-
-		$out['discountAmount'] = $discount_amount;
-
-		$amount = round( ( $amount - $discount_amount ) / ( $perc === 0 ? 1 : 100 ), $perc );
-		$amount = WPEC_Utility_Functions::apply_tax( $amount, $tax );
-		$amount = round( $amount + $shipping / 100, 2 );
-
-		$out['tax']          = $tax;
-		$out['shipping']     = $shipping;
-		$out['amount']       = $amount;
 		$out['success']      = true;
 		$out['code']         = $coupon_code;
 		$out['discount']     = $discount;
 		$out['discountType'] = $discount_type;
 		$out['discountStr']  = $coupon_code . ': - ' . ( $discount_type === 'perc' ? $discount . '%' : WPEC_Utility_Functions::price_format( $discount, $curr ) );
-		$out['newAmountFmt'] = WPEC_Utility_Functions::price_format( $amount, $curr );
 		wp_send_json( $out );
 	}
 

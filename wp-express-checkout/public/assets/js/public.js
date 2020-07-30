@@ -113,6 +113,73 @@ var ppecHandler = function( data ) {
 					}
 				} );
 			}
+			jQuery( 'input#wpec-redeem-coupon-btn-' + parent.data.id ).click( function( e ) {
+				e.preventDefault();
+				var couponCode = jQuery( this ).siblings( 'input#wpec-coupon-field-' + parent.data.id ).val();
+				if ( couponCode === '' ) {
+					return false;
+				}
+				var wpecCouponBtn = jQuery( this );
+				var wpecCouponSpinner = jQuery( jQuery.parseHTML( '<div class="wpec-spinner">Loading...</div>' ) );
+				wpecCouponBtn.prop( 'disabled', true );
+				wpecCouponBtn.after( wpecCouponSpinner );
+				var ajaxData = {
+					'action': 'wpec_check_coupon',
+					'product_id': parent.data.product_id,
+					'coupon_code': couponCode,
+					'curr': parent.data.currency,
+					/*'amount': parent.data.item_price,
+					'tax': parent.data.tax,
+					'shipping': parent.data.shipping*/
+				};
+				jQuery.post( ppecFrontVars.ajaxUrl, ajaxData, function( response ) {
+					if ( response.success ) {
+						parent.data.discount = response.discount;
+						parent.data.discountType = response.discountType;
+						parent.data.couponCode = response.code;
+
+						jQuery( 'div#wpec-coupon-info-' + parent.data.id ).html( response.discountStr + ' <input type="button" class="wpec_btn_normalize wpec_coupon_apply_btn" id="wpec-remove-coupon-' + parent.data.id + '" title="' + ppecFrontVars.str.strRemoveCoupon + '" value="' + ppecFrontVars.str.strRemove + '">' );
+						jQuery( 'input#wpec-redeem-coupon-btn-' + parent.data.id ).hide();
+						jQuery( 'input#wpec-coupon-field-' + parent.data.id ).hide();
+						var totalCont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' ).closest( '.wpec-product-item, .wpec-post-item' ).find( '.wpec-price-container' );
+						var totCurr;
+						var totNew;
+						if ( totalCont.find( '.wpec_price_full_total' ).length !== 0 ) {
+							totCurr = totalCont.children().find( 'span.wpec_tot_current_price' ).addClass( 'wpec_line_through' );
+							totNew = totalCont.children().find( 'span.wpec_tot_new_price' );
+						} else {
+							totCurr = totalCont.find( 'span.wpec_price_amount' ).addClass( 'wpec_line_through' );
+							totNew = totalCont.find( 'span.wpec_new_price_amount' );
+						}
+						parent.updateAllAmounts();
+						jQuery( '#wpec-remove-coupon-' + parent.data.id ).on( 'click', function( e ) {
+							e.preventDefault();
+							jQuery( 'div#wpec-coupon-info-' + parent.data.id ).html( '' );
+							jQuery( 'input#wpec-coupon-field-' + parent.data.id ).val( '' );
+							jQuery( 'input#wpec-coupon-field-' + parent.data.id ).show();
+							jQuery( 'input#wpec-redeem-coupon-btn-' + parent.data.id ).show();
+							totCurr.removeClass( 'wpec_line_through' );
+							totNew.html( '' );
+							delete parent.data.discount;
+							delete parent.data.discountType;
+							delete parent.data.couponCode;
+							delete parent.data.discountAmount;
+						} );
+					} else {
+						jQuery( 'div#wpec-coupon-info-' + parent.data.id ).html( response.msg );
+					}
+					wpecCouponSpinner.remove();
+					wpecCouponBtn.prop( 'disabled', false );
+				} );
+			} );
+
+			jQuery( 'input#wpec-coupon-field-' + parent.data.id ).keydown( function( e ) {
+				if ( e.keyCode === 13 ) {
+					e.preventDefault();
+					jQuery( 'input#wpec-redeem-coupon-btn-' + parent.data.id ).click();
+					return false;
+				}
+			} );
 			if ( enable_actions ) {
 				actions.enable();
 			} else {
@@ -155,7 +222,7 @@ var ppecHandler = function( data ) {
 			if ( parent.data.tax ) {
 				order_data.purchase_units[0].amount.breakdown.tax_total = {
 					currency_code: parent.data.currency,
-					value: parent.data.tax_amount * parent.data.quantity
+					value: parent.PHP_round( parent.data.tax_amount * parent.data.quantity, parent.data.dec_num )
 				};
 				order_data.purchase_units[0].items[0].tax = {
 					currency_code: parent.data.currency,
@@ -168,6 +235,13 @@ var ppecHandler = function( data ) {
 					value: parseFloat( parent.data.shipping )
 				};
 			}
+			if ( parent.data.discount ) {
+				order_data.purchase_units[0].amount.breakdown.discount = {
+					currency_code: parent.data.currency,
+					value: parseFloat( parent.data.discountAmount )
+				};
+			}
+
 			return actions.order.create( order_data );
 		},
 		onApprove: function( data, actions ) {
@@ -218,8 +292,13 @@ var ppecHandler = function( data ) {
 			} else {
 				price_cont.find( '.wpec-quantity' ).hide();
 			}
-			var total = price_cont.find( '.wpec_tot_current_price' );
-			if ( total.length > 0 ) {
+			var total   = price_cont.find( '.wpec_tot_current_price' );
+			var tot_new = price_cont.find( '.wpec_tot_new_price' );
+
+			if ( typeof parent.data.discountAmount !== "undefined" && total.length > 0 ) {
+				tot_new.html( parent.formatMoney( parent.data.total ) );
+				total.html( parent.formatMoney( parent.data.total + parent.data.discountAmount ) );
+			} else if ( total.length > 0 ) {
 				total.html( parent.formatMoney( parent.data.total ) );
 			}
 			var tax_val = price_cont.find( '.wpec-tax-val' );
@@ -233,8 +312,19 @@ var ppecHandler = function( data ) {
 		var itemSubt = parseFloat( parent.data.price );
 		var tAmount  = itemSubt * parseInt( parent.data.quantity );
 
+		if ( typeof parent.data.discount !== "undefined" ) {
+			var discountAmount = 0;
+			if ( parent.data.discountType === 'perc' ) {
+				discountAmount = parent.PHP_round( tAmount * parent.data.discount / 100, parent.data.dec_num );
+			} else {
+				discountAmount = data.discount;
+			}
+			tAmount = tAmount - discountAmount;
+			parent.data.discountAmount = parent.PHP_round( discountAmount, parent.data.dec_num );
+		}
+
 		if ( parent.data.tax ) {
-			var tax = parent.PHP_round( itemSubt * parent.data.tax / 100, parent.data.dec_num );
+			var tax = parent.PHP_round( tAmount / parseInt( parent.data.quantity ) * parent.data.tax / 100, parent.data.dec_num );
 			parent.data.tax_amount = tax;
 			tAmount += tax * parent.data.quantity;
 		}

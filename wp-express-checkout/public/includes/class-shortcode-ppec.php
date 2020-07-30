@@ -350,6 +350,8 @@ class WPECShortcode {
 			'custom_quantity' => $custom_quantity,
 			'custom_amount'   => $custom_amount,
 			'currency'        => $currency,
+			'coupons_enabled' => $coupons_enabled,
+			'product_id'      => $product_id,
 			'name'            => $name,
 			'btnStyle'        => array(
 				'height' => $btn_height,
