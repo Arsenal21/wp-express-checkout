@@ -98,7 +98,7 @@ class WPEC_Utility_Functions {
 			'transaction_id'  => $payment_details['id'],
 			'purchase_amt'    => $formatted_amount,
 			'purchase_date'   => date( 'Y-m-d' ),
-			'coupon_code'     => '', // Seems like not implemented yet.
+			'coupon_code'     => $payment_details['coupon_code'],
 			'address'         => '', // Not implemented yet.
 			'order_id'        => $order_id,
 		);

@@ -53,7 +53,8 @@ class WPEC_Process_IPN {
 			exit;
 		}
 
-		$payment = $_POST['wp_ppdg_payment'];
+		$payment = stripslashes_deep( $_POST['wp_ppdg_payment'] );
+		$data    = stripslashes_deep( $_POST['data'] );
 
 		if ( strtoupper( $payment['status'] ) !== 'COMPLETED' ) {
 			// payment is unsuccessful.
@@ -81,8 +82,13 @@ class WPEC_Process_IPN {
 		$quantity = $trans['quantity'];
 		$tax      = $trans['tax'];
 		$shipping = $trans['shipping'];
+		$discount = 0;
 		$currency = $trans['currency'];
 		$item_id  = $trans['product_id'];
+
+		$coupon      = null;
+		$coupon_code = '';
+		$wpec_plugin = WPEC_Main::get_instance();
 
 		if ( $trans['custom_quantity'] ) {
 			// custom quantity enabled. let's take quantity from PayPal results.
@@ -94,10 +100,32 @@ class WPEC_Process_IPN {
 			$price = $payment['purchase_units'][0]['items'][0]['unit_amount']['value'];
 		}
 
+		// For some reason PayPal is missing 'discount' items from breakdown...
+		// So code below does not work.
+		//if ( isset( $payment['purchase_units'][0]['amount']['breakdown']['discount']['value'] ) ) {
+			//$discount = $payment['purchase_units'][0]['amount']['breakdown']['discount']['value'];
+		//}
+		// Use JS data array instead.
+		if ( ! empty( $data['couponCode'] ) ) {
+			// Check the coupon code.
+			$coupon = WPEC_Coupons_Admin::get_coupon( $data['couponCode'] );
+			if ( true === $coupon['valid'] && WPEC_Coupons_Admin::is_coupon_allowed_for_product( $coupon['id'], $item_id ) ) {
+				// Get the discount amount.
+				$perc = ( ! $wpec_plugin->get_setting( 'price_decimals_num' ) ) ? 0 : $wpec_plugin->get_setting( 'price_decimals_num' );
+				if ( $coupon['discountType'] === 'perc' ) {
+					$discount = round( $price * $quantity * ( $coupon['discount'] / 100 ), $perc );
+				} else {
+					$discount = $coupon['discount'];
+				}
+				$coupon_code = $data['couponCode'];
+			}
+		}
+
 		$amount = $payment['purchase_units'][0]['amount']['value'];
 
-		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=)
-		$original_price_amt = ( $price + WPEC_Utility_Functions::get_tax_amount( $price, $tax ) ) * $quantity + $shipping;
+		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
+		$discounted_amount  = $price * $quantity - $discount;
+		$original_price_amt = $discounted_amount + WPEC_Utility_Functions::get_tax_amount( $discounted_amount, $tax ) + $shipping;
 		if ( $amount < $original_price_amt ) {
 			// payment amount mismatch. Amount paid is less.
 			WPEC_Debug_Logger::log('Error! Payment amount mismatch. Original: ' . $original_price_amt . ', Received: ' . $amount, false);
@@ -108,9 +136,16 @@ class WPEC_Process_IPN {
 		// check if payment currency matches.
 		if ( $payment['purchase_units'][0]['amount']['currency_code'] !== $currency ) {
 			// payment currency mismatch.
-                        WPEC_Debug_Logger::log('Error! Payment currency mismatch.', false);
+			WPEC_Debug_Logger::log( 'Error! Payment currency mismatch.', false );
 			_e( 'Payment currency mismatch.', 'wp-express-checkout' );
 			exit;
+		}
+
+		// Redeem coupon count if needed.
+		if ( $coupon && $coupon['valid'] ) {
+			$curr_redeem_cnt = get_post_meta( $coupon['id'], 'wpec_coupon_red_count', true );
+			$curr_redeem_cnt++;
+			update_post_meta( $coupon['id'], 'wpec_coupon_red_count', $curr_redeem_cnt );
 		}
 
 		// If code execution got this far, it means everything is ok with payment
@@ -126,6 +161,8 @@ class WPEC_Process_IPN {
 				'tax'         => $tax,
 				'shipping'    => $shipping,
 				'amount'      => $amount,
+				'discount'    => $discount,
+				'coupon_code' => $coupon_code,
 				'currency'    => $currency,
 				'state'       => $payment['status'],
 				'id'          => $payment['id'],
@@ -135,8 +172,6 @@ class WPEC_Process_IPN {
 		);
 
 		$url = WPEC_View_Download::get_download_url( $order_id );
-
-		$wpec_plugin = WPEC_Main::get_instance();
 
 		$product_details = $item_name . ' x ' . $quantity . ' - ' . WPEC_Utility_Functions::price_format( $amount, $currency ) . "\n";
 		if ( ! empty( $url ) ) {
@@ -158,7 +193,7 @@ class WPEC_Process_IPN {
 			'transaction_id'  => $payment['id'],
 			'purchase_amt'    => $amount,
 			'purchase_date'   => date( 'Y-m-d' ),
-			'coupon_code'     => '', // Seems like not implemented yet.
+			'coupon_code'     => $coupon_code,
 			'address'         => $address,
 			'order_id'        => $order_id,
 		);
@@ -167,12 +202,12 @@ class WPEC_Process_IPN {
 		if ( $wpec_plugin->get_setting( 'send_buyer_email' ) ) {
 
 			$buyer_email = $payment['payer']['email_address'];
-                        WPEC_Debug_Logger::log('Sending buyer notification email.');
+			WPEC_Debug_Logger::log( 'Sending buyer notification email.' );
 
-			$from_email  = $wpec_plugin->get_setting( 'buyer_from_email' );
-			$subject     = $wpec_plugin->get_setting( 'buyer_email_subj' );
-			$subject     = $this->apply_dynamic_tags( $subject, $args );
-			$body        = $wpec_plugin->get_setting( 'buyer_email_body' );
+			$from_email = $wpec_plugin->get_setting( 'buyer_from_email' );
+			$subject    = $wpec_plugin->get_setting( 'buyer_email_subj' );
+			$subject    = $this->apply_dynamic_tags( $subject, $args );
+			$body       = $wpec_plugin->get_setting( 'buyer_email_body' );
 
 			$args['email_body'] = $body;
 
@@ -198,7 +233,7 @@ class WPEC_Process_IPN {
 
 		// Send email to seller if needs.
 		if ( $wpec_plugin->get_setting( 'send_seller_email' ) && ! empty( $wpec_plugin->get_setting( 'notify_email_address' ) ) ) {
-                        WPEC_Debug_Logger::log('Sending seller notification email.');
+			WPEC_Debug_Logger::log( 'Sending seller notification email.' );
 
 			$notify_email = $wpec_plugin->get_setting( 'notify_email_address' );
 
@@ -210,7 +245,7 @@ class WPEC_Process_IPN {
 			$seller_email_body = apply_filters( 'wpec_seller_notification_email_body', $seller_email_body, $payment, $args );
 
 			wp_mail( $notify_email, wp_specialchars_decode( $seller_email_subject, ENT_QUOTES ), html_entity_decode( $seller_email_body ), $headers );
-                        WPEC_Debug_Logger::log('Seller email notification sent to: ' . $notify_email);
+			WPEC_Debug_Logger::log( 'Seller email notification sent to: ' . $notify_email );
 		}
 
 		// Trigger the action hook.

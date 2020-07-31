@@ -116,6 +116,8 @@ class OrdersWPEC {
 	$output	 .= __( "Product Name: " ) . $payment[ 'item_name' ] . "\n";
 	$output	 .= __( "Quantity: " ) . $payment[ 'quantity' ] . "\n";
 	$output	 .= __( "Price: " ) . WPEC_Utility_Functions::price_format( $payment[ 'price' ] ) . "\n";
+	$output	 .= ( $payment[ 'coupon_code' ] ) ? __( "Coupon Code: " ) . $payment[ 'coupon_code' ] . "\n" : '';
+	$output	 .= ( $payment[ 'discount' ] ) ? __( "Discount: " ) . WPEC_Utility_Functions::price_format( $payment[ 'discount' ] ) . "\n" : '';
 	$output	 .= ( $payment[ 'tax' ] ) ? __( "Tax: " ) . WPEC_Utility_Functions::price_format( WPEC_Utility_Functions::get_tax_amount( $payment[ 'price' ], $payment[ 'tax' ] ) * $payment[ 'quantity' ] ) . "\n" : '';
 	$output	 .= ( $payment[ 'shipping' ] ) ? __( "Shipping: " ) . WPEC_Utility_Functions::price_format( $payment[ 'shipping' ] ) . "\n" : '';
 	$output	 .= "--------------------------------" . "\n";
