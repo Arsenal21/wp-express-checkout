@@ -164,6 +164,7 @@ var ppecHandler = function( data ) {
 							delete parent.data.discountType;
 							delete parent.data.couponCode;
 							delete parent.data.discountAmount;
+							parent.updateAllAmounts();
 						} );
 					} else {
 						jQuery( 'div#wpec-coupon-info-' + parent.data.id ).html( response.msg );
@@ -272,7 +273,7 @@ var ppecHandler = function( data ) {
 		};
 
 		result = formats[parent.data.curr_pos]
-			.replace( '{symbol}', parent.data.currency )
+			.replace( '{symbol}', parent.data.currency_symbol )
 			.replace( '{price}', result );
 
 		return result;
@@ -297,7 +298,7 @@ var ppecHandler = function( data ) {
 
 			if ( typeof parent.data.discountAmount !== "undefined" && total.length > 0 ) {
 				tot_new.html( parent.formatMoney( parent.data.total ) );
-				total.html( parent.formatMoney( parent.data.total + parent.data.discountAmount ) );
+				total.html( parent.formatMoney( parent.data.subtotal ) );
 			} else if ( total.length > 0 ) {
 				total.html( parent.formatMoney( parent.data.total ) );
 			}
@@ -310,7 +311,9 @@ var ppecHandler = function( data ) {
 
 	this.calcTotal = function() {
 		var itemSubt = parseFloat( parent.data.price );
-		var tAmount  = itemSubt * parseInt( parent.data.quantity );
+		var quantity = parseInt( parent.data.quantity );
+		var tAmount  = itemSubt * quantity;
+		var subtotal = tAmount;
 
 		if ( typeof parent.data.discount !== "undefined" ) {
 			var discountAmount = 0;
@@ -324,16 +327,19 @@ var ppecHandler = function( data ) {
 		}
 
 		if ( parent.data.tax ) {
-			var tax = parent.PHP_round( tAmount / parseInt( parent.data.quantity ) * parent.data.tax / 100, parent.data.dec_num );
+			var tax = parent.PHP_round( tAmount / quantity * parent.data.tax / 100, parent.data.dec_num );
 			parent.data.tax_amount = tax;
 			tAmount += tax * parent.data.quantity;
+			subtotal += parent.PHP_round( subtotal / quantity * parent.data.tax / 100, parent.data.dec_num ) * parent.data.quantity;
 		}
 
 		if ( parent.data.shipping ) {
 			tAmount += parseFloat( parent.data.shipping );
+			subtotal += parseFloat( parent.data.shipping );
 		}
 
 		parent.data.total = parent.PHP_round( tAmount, parent.data.dec_num );
+		parent.data.subtotal = parent.PHP_round( subtotal, parent.data.dec_num );
 	};
 
 	this.PHP_round = function( num, dec ) {

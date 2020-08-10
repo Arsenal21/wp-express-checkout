@@ -350,6 +350,7 @@ class WPECShortcode {
 			'custom_quantity' => $custom_quantity,
 			'custom_amount'   => $custom_amount,
 			'currency'        => $currency,
+			'currency_symbol' => ! empty( $this->ppdg->get_setting( 'currency_symbol' ) ) ? $this->ppdg->get_setting( 'currency_symbol' ) : $currency,
 			'coupons_enabled' => $coupons_enabled,
 			'product_id'      => $product_id,
 			'name'            => $name,
