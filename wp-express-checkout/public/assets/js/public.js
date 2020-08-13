@@ -144,6 +144,8 @@ var ppecHandler = function( data ) {
 						var totalCont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' ).closest( '.wpec-product-item, .wpec-post-item' ).find( '.wpec-price-container' );
 						var totCurr;
 						var totNew;
+						var priceCurr;
+						var priceNew;
 						if ( totalCont.find( '.wpec_price_full_total' ).length !== 0 ) {
 							totCurr = totalCont.children().find( 'span.wpec_tot_current_price' ).addClass( 'wpec_line_through' );
 							totNew = totalCont.children().find( 'span.wpec_tot_new_price' );
@@ -151,6 +153,8 @@ var ppecHandler = function( data ) {
 							totCurr = totalCont.find( 'span.wpec_price_amount' ).addClass( 'wpec_line_through' );
 							totNew = totalCont.find( 'span.wpec_new_price_amount' );
 						}
+						priceCurr = totalCont.find( 'span.wpec-price-amount' ).addClass( 'wpec_line_through' );
+						priceNew = totalCont.find( 'span.wpec-new-price-amount' );
 						parent.updateAllAmounts();
 						jQuery( '#wpec-remove-coupon-' + parent.data.id ).on( 'click', function( e ) {
 							e.preventDefault();
@@ -159,11 +163,14 @@ var ppecHandler = function( data ) {
 							jQuery( 'input#wpec-coupon-field-' + parent.data.id ).show();
 							jQuery( 'input#wpec-redeem-coupon-btn-' + parent.data.id ).show();
 							totCurr.removeClass( 'wpec_line_through' );
+							priceCurr.removeClass( 'wpec_line_through' );
 							totNew.html( '' );
+							priceNew.html( '' );
 							delete parent.data.discount;
 							delete parent.data.discountType;
 							delete parent.data.couponCode;
 							delete parent.data.discountAmount;
+							delete parent.data.newPrice;
 							parent.updateAllAmounts();
 						} );
 					} else {
@@ -293,10 +300,12 @@ var ppecHandler = function( data ) {
 			} else {
 				price_cont.find( '.wpec-quantity' ).hide();
 			}
-			var total   = price_cont.find( '.wpec_tot_current_price' );
-			var tot_new = price_cont.find( '.wpec_tot_new_price' );
+			var total     = price_cont.find( '.wpec_tot_current_price' );
+			var tot_new   = price_cont.find( '.wpec_tot_new_price' );
+			var price_new = price_cont.find( '.wpec-new-price-amount' );
 
 			if ( typeof parent.data.discountAmount !== "undefined" && total.length > 0 ) {
+				price_new.html( parent.formatMoney( parent.data.newPrice ) );
 				tot_new.html( parent.formatMoney( parent.data.total ) );
 				total.html( parent.formatMoney( parent.data.subtotal ) );
 			} else if ( total.length > 0 ) {
@@ -315,6 +324,8 @@ var ppecHandler = function( data ) {
 		var tAmount  = itemSubt * quantity;
 		var subtotal = tAmount;
 
+		parent.data.newPrice = itemSubt;
+
 		if ( typeof parent.data.discount !== "undefined" ) {
 			var discountAmount = 0;
 			if ( parent.data.discountType === 'perc' ) {
@@ -324,6 +335,7 @@ var ppecHandler = function( data ) {
 			}
 			tAmount = tAmount - discountAmount;
 			parent.data.discountAmount = parent.PHP_round( discountAmount, parent.data.dec_num );
+			parent.data.newPrice = parent.PHP_round( itemSubt - discountAmount /quantity, parent.data.dec_num );
 		}
 
 		if ( parent.data.tax ) {
