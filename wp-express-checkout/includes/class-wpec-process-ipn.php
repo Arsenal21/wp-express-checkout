@@ -198,6 +198,11 @@ class WPEC_Process_IPN {
 			'order_id'        => $order_id,
 		);
 
+		$headers = array();
+		if ( 'html' === $wpec_plugin->get_setting( 'buyer_email_type' ) ) {
+			$headers[] = 'Content-Type: text/html; charset=UTF-8';
+		}
+
 		// Send email to buyer if enabled.
 		if ( $wpec_plugin->get_setting( 'send_buyer_email' ) ) {
 
@@ -214,10 +219,8 @@ class WPEC_Process_IPN {
 			$body = $this->apply_dynamic_tags( $body, $args );
 			$body = apply_filters( 'wpec_buyer_notification_email_body', $body, $payment, $args );
 
-			$headers = array();
 			if ( 'html' === $wpec_plugin->get_setting( 'buyer_email_type' ) ) {
-				$headers[] = 'Content-Type: text/html; charset=UTF-8';
-				$body      = nl2br( $body );
+				$body = nl2br( $body );
 			} else {
 				$body = html_entity_decode( $body );
 			}
@@ -244,7 +247,13 @@ class WPEC_Process_IPN {
 			$seller_email_body = $this->apply_dynamic_tags( $seller_email_body, $args );
 			$seller_email_body = apply_filters( 'wpec_seller_notification_email_body', $seller_email_body, $payment, $args );
 
-			wp_mail( $notify_email, wp_specialchars_decode( $seller_email_subject, ENT_QUOTES ), html_entity_decode( $seller_email_body ), $headers );
+			if ( 'html' === $wpec_plugin->get_setting( 'buyer_email_type' ) ) {
+				$seller_email_body = nl2br( $seller_email_body );
+			} else {
+				$seller_email_body = html_entity_decode( $seller_email_body );
+			}
+
+			wp_mail( $notify_email, wp_specialchars_decode( $seller_email_subject, ENT_QUOTES ), $seller_email_body, $headers );
 			WPEC_Debug_Logger::log( 'Seller email notification sent to: ' . $notify_email );
 		}
 
