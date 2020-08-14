@@ -3,8 +3,8 @@ Contributors: Tips and Tricks HQ, dikiy_forester
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
-Tested up to: 5.4
-Stable tag: 1.8
+Tested up to: 5.5
+Stable tag: 1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,7 @@ https://www.youtube.com/watch?v=3LsfLd03VnE
 * Option to customize the currency formatting.
 * Option to charge shipping for your items. Ability to set a shipping cost for each item separately.
 * Option to charge tax for your items.
+* Option to configure discount coupon codes.
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
 
@@ -107,6 +108,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 1.9 =
+* Added discount coupon feature. Admins can configure discount coupon that can be used by your customers.
+* The HTML email type will work with seller email also.
 
 = 1.8 =
 * Added a new feature to allow sending of HTML emails (for the buyer notification email). Thanks to Pierre.
