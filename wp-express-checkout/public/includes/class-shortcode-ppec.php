@@ -2,8 +2,8 @@
 
 class WPECShortcode {
 
-	var $ppdg     = null;
-	var $paypaldg = null;
+	public $ppdg     = null;
+	public $paypaldg = null;
 
 	/**
 	 * Instance of this class.
@@ -191,6 +191,22 @@ class WPECShortcode {
 
 		$quantity = empty( $quantity ) ? 1 : $quantity;
 
+		// Variations.
+		$variations = array();
+		$v          = new WPEC_Variations( $product_id );
+		if ( ! empty( $v->groups ) ) {
+			$variations['groups']   = $v->groups;
+			$variations_names       = get_post_meta( $product_id, 'wpec_variations_names', true );
+			$variations_prices_orig = get_post_meta( $product_id, 'wpec_variations_prices', true );
+			$variations_prices      = apply_filters( 'wpec_variations_prices_filter', $variations_prices_orig, $product_id );
+			$variations_urls        = get_post_meta( $product_id, 'wpec_variations_urls', true );
+			$variations_opts        = get_post_meta( $product_id, 'wpec_variations_opts', true );
+			$variations['names']    = $variations_names;
+			$variations['prices']   = $variations_prices;
+			$variations['urls']     = $variations_urls;
+			$variations['opts']     = $variations_opts;
+		}
+
 		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $name ); // Create key using the item name.
 
 		$trans_data = array(
@@ -319,6 +335,46 @@ class WPECShortcode {
 			$output .= '</div>';
 		}
 
+		// Variations.
+		if ( ! empty( $variations ) ) {
+			// we got variations for this product.
+			$variations_str = '';
+			foreach ( $variations['groups'] as $grp_id => $group ) {
+				if ( ! empty( $variations['names'] ) ) {
+					$variations_str .= '<div class="wpec-product-variations-cont">';
+					$variations_str .= '<label class="wpec-product-variations-label">' . $group . '</label>';
+					if ( isset( $variations['opts'][ $grp_id ] ) && $variations['opts'][ $grp_id ] === '1' ) {
+						// radio buttons output.
+					} else {
+						$variations_str .= sprintf( '<select class="wpec-product-variations-select" data-wpec-variations-group-id="%1$d" name="wpecVariations[%1$d][]">', $grp_id );
+					}
+					foreach ( $variations['names'][ $grp_id ] as $var_id => $name ) {
+						if ( isset( $variations['opts'][ $grp_id ] ) && $variations['opts'][ $grp_id ] === '1' ) {
+							$tpl = '<label class="wpec-product-variations-select-radio-label"><input class="wpec-product-variations-select-radio" data-wpec-variations-group-id="' . $grp_id . '" name="wpecVariations[' . $grp_id . '][]" type="radio" name="123" value="%d"' . ( $var_id === 0 ? 'checked' : '' ) . '>%s %s</label>';
+						} else {
+							$tpl = '<option value="%d">%s %s</option>';
+						}
+						$price_mod = $variations['prices'][ $grp_id ][ $var_id ];
+						if ( ! empty( $price_mod ) ) {
+							$fmt_price = WPEC_Utility_Functions::price_format( abs( $price_mod ), $currency );
+							$price_mod = $price_mod < 0 ? ' - ' . $fmt_price : ' + ' . $fmt_price;
+							$price_mod = '(' . $price_mod . ')';
+						} else {
+							$price_mod = '';
+						}
+						$variations_str .= sprintf( $tpl, $var_id, $name, $price_mod );
+					}
+					if ( isset( $variations['opts'][ $grp_id ] ) && $variations['opts'][ $grp_id ] === '1' ) {
+						// radio buttons output.
+					} else {
+						$variations_str .= '</select>';
+					}
+					$variations_str .= '</div>';
+				}
+			}
+			$output .= $variations_str;
+		}
+
 		// Coupons
 		if ( $coupons_enabled ) {
 			$str_coupon_label = __( 'Coupon Code:', 'wp-express-checkout' );
@@ -354,6 +410,7 @@ class WPECShortcode {
 			'coupons_enabled' => $coupons_enabled,
 			'product_id'      => $product_id,
 			'name'            => $name,
+			'variations'      => $variations,
 			'btnStyle'        => array(
 				'height' => $btn_height,
 				'shape'  => $btn_shape,
@@ -461,6 +518,7 @@ class WPECShortcode {
 		$thank_you_msg .= '<p>{product_details}</p>';
 		$thank_you_msg .= '<p>' . __( 'Transaction ID: ', 'wp-express-checkout' ) . '{transaction_id}</p>';
 
+		// TODO: Variations downloads
 		if ( ! empty( $url ) ) {
 			$click_here_str = sprintf( __( 'Please <a href="%s">click here</a> to download the file.', 'wp-express-checkout' ), $url );
 			$thank_you_msg .= '<p>' . $click_here_str . '</p>';
