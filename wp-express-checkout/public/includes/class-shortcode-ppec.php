@@ -348,7 +348,7 @@ class WPECShortcode {
 					} else {
 						$variations_str .= sprintf( '<select class="wpec-product-variations-select" data-wpec-variations-group-id="%1$d" name="wpecVariations[%1$d][]">', $grp_id );
 					}
-					foreach ( $variations['names'][ $grp_id ] as $var_id => $name ) {
+					foreach ( $variations['names'][ $grp_id ] as $var_id => $var_name ) {
 						if ( isset( $variations['opts'][ $grp_id ] ) && $variations['opts'][ $grp_id ] === '1' ) {
 							$tpl = '<label class="wpec-product-variations-select-radio-label"><input class="wpec-product-variations-select-radio" data-wpec-variations-group-id="' . $grp_id . '" name="wpecVariations[' . $grp_id . '][]" type="radio" name="123" value="%d"' . ( $var_id === 0 ? 'checked' : '' ) . '>%s %s</label>';
 						} else {
@@ -362,7 +362,7 @@ class WPECShortcode {
 						} else {
 							$price_mod = '';
 						}
-						$variations_str .= sprintf( $tpl, $var_id, $name, $price_mod );
+						$variations_str .= sprintf( $tpl, $var_id, $var_name, $price_mod );
 					}
 					if ( isset( $variations['opts'][ $grp_id ] ) && $variations['opts'][ $grp_id ] === '1' ) {
 						// radio buttons output.

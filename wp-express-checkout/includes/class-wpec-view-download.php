@@ -121,7 +121,7 @@ class WPEC_View_Download {
 	 */
 	private function process_download() {
 
-		//Get the product custom post type object.
+		// Get the product custom post type object.
 		$product = get_post( absint( $_GET['wpec_download_file'] ) );
 
 		// Trigger the action hook (product object is also passed). It can be usewd to override the download handling via an addon.
@@ -130,7 +130,7 @@ class WPEC_View_Download {
 		// Clean the file URL.
 		$file_url = stripslashes( trim( $product->ppec_product_upload ) );
 
-		WPEC_Utility_Functions::redirect_to_url($file_url);
+		WPEC_Utility_Functions::redirect_to_url( $file_url );
 
 	}
 
