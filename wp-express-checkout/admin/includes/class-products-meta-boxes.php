@@ -24,6 +24,12 @@ class PPECProductsMetaboxes {
 		add_meta_box( 'ppec_shortcode_meta_box', __( 'Shortcode', 'wp-express-checkout' ), array( $this, 'display_shortcode_meta_box' ), PPECProducts::$products_slug, 'side', 'default' );
 		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance Related', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'wpec_coupons_meta_box', __( 'Coupons Settings', 'wp-express-checkout' ), array( $this, 'display_coupons_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
+
+		// check if eMember installed
+		if ( function_exists( 'wp_eMember_install' ) ) {
+			//if it is, let's add metabox where admin can select membership level
+			add_meta_box( 'wpec_emember_meta_box', __( 'WP eMember Membership Level', 'wp-express-checkout' ), array( $this, 'display_emember_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
+		}
 	}
 
 	function display_description_meta_box( $post ) {
@@ -247,6 +253,34 @@ jQuery(document).ready(function($) {
 		<?php
 	}
 
+	public function display_emember_meta_box( $post ) {
+		$current_val = get_post_meta( $post->ID, 'wpec_product_emember_level', true );
+
+		$all_levels = dbAccess::findAll( WP_EMEMBER_MEMBERSHIP_LEVEL_TABLE, ' id != 1 ', ' id DESC ' );
+		$levels_str = '<option value="">(' . __( 'None', 'wp-express-checkout' ) . ')</option>' . "\r\n";
+
+		foreach ( $all_levels as $level ) {
+			$levels_str .= '<option value="' . $level->id . '"' . ( $level->id === $current_val ? ' selected' : '' ) . '>' . stripslashes( $level->alias ) . '</option>' . "\r\n";
+		}
+		?>
+<p><?php esc_html_e( 'If you want this product to be connected to a membership level then select the membership Level here.', 'wp-express-checkout' ); ?></p>
+<select name="wpec_product_emember_level">
+		<?php
+		echo wp_kses(
+			$levels_str,
+			array(
+				'option' => array(
+					'value'    => array(),
+					'selected' => array(),
+				),
+			)
+		);
+		?>
+</select>
+		<?php
+	}
+
+
 	function save_product_handler( $post_id, $post, $update ) {
 		if ( ! isset( $_POST['action'] ) ) {
 			// this is probably not edit or new post creation event.
@@ -320,6 +354,7 @@ jQuery(document).ready(function($) {
 		update_post_meta( $post_id, 'wpec_product_button_type', sanitize_text_field( $button_type ) );
 
 		update_post_meta( $post_id, 'wpec_product_coupons_setting', isset( $_POST['wpec_product_coupons_setting'] ) ? sanitize_text_field( $_POST['wpec_product_coupons_setting'] ) : '0' );
+		update_post_meta( $post_id, 'wpec_product_emember_level', ! empty( $_POST['wpec_product_emember_level'] ) ? intval( $_POST['wpec_product_emember_level'] ) : '' );
 	}
 
 }
