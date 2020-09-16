@@ -258,8 +258,8 @@ class WPEC_Process_IPN {
 		}
 
 		// Trigger the action hook.
-		do_action( 'wpec_payment_completed', $payment );
-                WPEC_Debug_Logger::log('Payment processing completed');
+		do_action( 'wpec_payment_completed', $payment, $order_id, $item_id );
+		WPEC_Debug_Logger::log( 'Payment processing completed' );
 
 		$res = array();
 

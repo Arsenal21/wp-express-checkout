@@ -31,6 +31,7 @@ include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-debug-logger.php');
 include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-init-time-tasks.php');
 include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-process-ipn.php');
 include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-view-download.php');
+include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-integrations.php');
 
 require_once( WPEC_PLUGIN_PATH . 'public/class-wpec-main.php' );
 require_once( WPEC_PLUGIN_PATH . 'public/includes/class-shortcode-ppec.php' );
