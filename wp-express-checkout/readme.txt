@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.5
-Stable tag: 1.9
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -108,6 +108,11 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 1.9.1 =
+* Fixed an issue with the single post page not generating the buy now button on some installs.
+* Added integration for WP eMember plugin: 
+https://www.tipsandtricks-hq.com/wordpress-membership/membership-payments-using-the-wp-express-checkout-plugin-1987
 
 = 1.9 =
 * Added discount coupon feature. Admins can configure discount coupon that can be used by your customers.
