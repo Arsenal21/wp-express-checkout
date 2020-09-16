@@ -84,6 +84,60 @@ class WPEC_Main {
 		wp_enqueue_script( 'wp-ppec-frontend-script' );
 
 		wp_enqueue_style( 'wp-ppec-frontend-style' );
+
+		wp_localize_script( 'wp-ppec-frontend-script', 'ppecFrontVars', array(
+			'str' => array(
+				'errorOccurred'    => __( 'Error occurred', 'wp-express-checkout' ),
+				'paymentFor'       => __( 'Payment for', 'wp-express-checkout' ),
+				'enterQuantity'    => __( 'Please enter valid quantity', 'wp-express-checkout' ),
+				'enterAmount'      => __( 'Please enter valid amount', 'wp-express-checkout' ),
+				'paymentCompleted' => __( 'Payment Completed', 'wp-express-checkout' ),
+				'redirectMsg'      => __( 'You are now being redirected to the order summary page.', 'wp-express-checkout' ),
+				'strRemoveCoupon'  => __( 'Remove coupon', 'wp-express-checkout' ),
+				'strRemove'        => __( 'Remove', 'wp-express-checkout' ),
+			),
+			'ajaxUrl' => get_admin_url() . 'admin-ajax.php',
+		) );
+	}
+
+	/**
+	 * Load the PayPal scripts.
+	 *
+	 * Called in the shordcode when at least one button generated.
+	 */
+	public function load_paypal_sdk() {
+		$args = array();
+		$args['client-id'] = $this->get_setting( 'is_live' ) ? $this->get_setting( 'live_client_id' ) : $this->get_setting( 'sandbox_client_id' );
+		$args['intent']    = 'capture';
+		$args['currency']  = $this->get_setting( 'currency_code' );
+		$disabled_funding  = $this->get_setting( 'disabled_funding' );
+		if ( ! empty( $disabled_funding ) ) {
+			$arg = '';
+			foreach ( $disabled_funding as $funding ) {
+				$arg .= $funding . ',';
+			}
+			$arg = rtrim( $arg, ',' );
+			$args['disable-funding'] = $arg;
+		}
+		// check if cards aren't disabled globally first.
+		if ( ! in_array( 'card', $disabled_funding, true ) ) {
+			$disabled_cards = $this->get_setting( 'disabled_cards' );
+			if ( ! empty( $disabled_cards ) ) {
+				$arg = '';
+				foreach ( $disabled_cards as $card ) {
+					$arg .= $card . ',';
+				}
+				$arg = rtrim( $arg, ',' );
+				$args['disable-card'] = $arg;
+			}
+		}
+		$script_url = add_query_arg( $args, 'https://www.paypal.com/sdk/js' );
+		printf( '<script src="%s" data-partner-attribution-id="TipsandTricks_SP"></script>', $script_url );
+		?>
+		<div id="wp-ppdg-dialog-message" title="">
+			<p id="wp-ppdg-dialog-msg"></p>
+		</div>
+		<?php
 	}
 
 	/**

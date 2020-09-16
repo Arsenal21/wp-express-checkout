@@ -18,9 +18,6 @@ class WPECShortcode {
 	function __construct() {
 		$this->ppdg = WPEC_Main::get_instance();
 
-		// handle single product page display.
-		add_filter( 'the_content', array( __CLASS__, 'filter_post_type_content' ), 10 );
-
 		add_shortcode( 'wp_express_checkout', array( $this, 'shortcode_wp_express_checkout' ) );
 		add_shortcode( 'wpec_thank_you', array( $this, 'shortcode_wpec_thank_you' ) );
 
@@ -44,18 +41,6 @@ class WPECShortcode {
 		}
 
 		return self::$instance;
-	}
-
-	public static function filter_post_type_content( $content ) {
-		global $post;
-		if ( isset( $post ) ) {
-			if ( is_single( $post ) && is_singular( PPECProducts::$products_slug ) && PPECProducts::$products_slug === $post->post_type ) { // Handle the content for product type post.
-				remove_filter( 'the_content', array( __CLASS__, 'filter_post_type_content' ), 10 );
-				$content = do_shortcode( '[wp_express_checkout product_id="' . $post->ID . '" template="2" is_post_tpl="1" in_the_loop="' . + in_the_loop() . '"]' );
-				add_filter( 'the_content', array( __CLASS__, 'filter_post_type_content' ), 10 );
-			}
-		}
-		return $content;
 	}
 
 	private function show_err_msg( $msg ) {
@@ -160,7 +145,7 @@ class WPECShortcode {
 					'product_id'      => '',
 					'custom_amount'   => 0,
 					'custom_quantity' => 0,
-					'currency'        => $this->ppdg->get_setting( 'currency_code' ),
+					'currency'        => $this->ppdg->get_setting( 'currency_code' ), // Maybe useless option, the shortcode doesn't send this parameter.
 					'btn_shape'       => $this->ppdg->get_setting( 'btn_shape' ) !== false ? $this->ppdg->get_setting( 'btn_shape' ) : 'pill',
 					'btn_type'        => $this->ppdg->get_setting( 'btn_type' ) !== false ? $this->ppdg->get_setting( 'btn_type' ) : 'checkout',
 					'btn_height'      => $this->ppdg->get_setting( 'btn_height' ) !== false ? $this->ppdg->get_setting( 'btn_height' ) : 'small',
@@ -244,61 +229,6 @@ class WPECShortcode {
 				. '</div>'
 				. '</div>';
 
-		if ( count( self::$payment_buttons ) <= 1 ) {
-			// insert the below only once on a page.
-			ob_start();
-
-			$frontVars = array(
-				'str' => array(
-					'errorOccurred'    => __( 'Error occurred', 'wp-express-checkout' ),
-					'paymentFor'       => __( 'Payment for', 'wp-express-checkout' ),
-					'enterQuantity'    => __( 'Please enter valid quantity', 'wp-express-checkout' ),
-					'enterAmount'      => __( 'Please enter valid amount', 'wp-express-checkout' ),
-					'paymentCompleted' => __( 'Payment Completed', 'wp-express-checkout' ),
-					'redirectMsg'      => __( 'You are now being redirected to the order summary page.', 'wp-express-checkout' ),
-					'strRemoveCoupon'  => __( 'Remove coupon', 'wp-express-checkout' ),
-					'strRemove'        => __( 'Remove', 'wp-express-checkout' ),
-				),
-				'ajaxUrl' => get_admin_url() . 'admin-ajax.php',
-			);
-			?>
-			<script>var ppecFrontVars = <?php echo json_encode( $frontVars ); ?>;</script>
-			<?php
-			$args = array();
-			$args['client-id'] = $client_id;
-			$args['intent']    = 'capture';
-			$args['currency']  = $currency;
-			$disabled_funding  = $this->ppdg->get_setting( 'disabled_funding' );
-			if ( ! empty( $disabled_funding ) ) {
-				$arg = '';
-				foreach ( $disabled_funding as $funding ) {
-					$arg .= $funding . ',';
-				}
-				$arg = rtrim( $arg, ',' );
-				$args['disable-funding'] = $arg;
-			}
-			// check if cards aren't disabled globally first.
-			if ( ! in_array( 'card', $disabled_funding, true ) ) {
-				$disabled_cards = $this->ppdg->get_setting( 'disabled_cards' );
-				if ( ! empty( $disabled_cards ) ) {
-					$arg = '';
-					foreach ( $disabled_cards as $card ) {
-						$arg .= $card . ',';
-					}
-					$arg = rtrim( $arg, ',' );
-					$args['disable-card'] = $arg;
-				}
-			}
-			$script_url = add_query_arg( $args, 'https://www.paypal.com/sdk/js' );
-			printf( '<script src="%s" data-partner-attribution-id="TipsandTricks_SP"></script>', $script_url );
-			?>
-			<div id="wp-ppdg-dialog-message" title="">
-				<p id="wp-ppdg-dialog-msg"></p>
-			</div>
-			<?php
-			$output .= ob_get_clean();
-		}
-
 		// custom quantity.
 		if ( $custom_quantity ) {
 			$output .= '<div>';
@@ -366,6 +296,8 @@ class WPECShortcode {
 		$output .= '<script>jQuery(document).ready(function() {new ppecHandler(' . json_encode( $data ) . ')});</script>';
 
 		$output .= '</div>';
+
+		add_action( 'wp_footer', array( $this->ppdg, 'load_paypal_sdk' ) );
 
 		return $output;
 	}
