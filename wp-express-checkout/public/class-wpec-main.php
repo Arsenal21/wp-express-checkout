@@ -253,6 +253,7 @@ class WPEC_Main {
 			'price_thousand_sep'   => ',',
 			'price_decimals_num'   => '2',
 			'thank_you_url'        => '',
+			'downloads_url'        => '',
 			'shipping'             => '',
 			'tax'                  => '',
 			'btn_shape'            => 'pill',
@@ -322,10 +323,15 @@ class WPEC_Main {
 		$pages = get_pages( $args );
 
 		$ty_page_id = '';
+		$dl_page_id = '';
 		foreach ( $pages as $page ) {
-			// Check if there is a page that contins our thank you page shortcode.
+			// Check if there is a page that contains our thank you page shortcode.
 			if ( strpos( $page->post_content, 'wpec_thank_you' ) !== false ) {
 				$ty_page_id = $page->ID;
+			}
+			// Check if there is a page that contains our downloads page shortcode.
+			if ( strpos( $page->post_content, 'wpec_downloads' ) !== false ) {
+				$dl_page_id = $page->ID;
 			}
 		}
 		if ( '' === $ty_page_id ) {
@@ -339,6 +345,20 @@ class WPEC_Main {
 			if ( ! empty( $settings ) ) { // Settings should already be initialized when this function is called.
 				$settings['thank_you_url']     = $ty_page_url;
 				$settings['thank_you_page_id'] = $ty_page_id;
+				update_option( 'ppdg-settings', $settings );
+			}
+		}
+		if ( '' === $dl_page_id ) {
+			// Downloads page missing. Create a new one.
+			$dl_page_id  = self::create_post( 'page', 'Downloads', 'wpec-downloads', '[wpec_downloads]' );
+			$dl_page     = get_post( $dl_page_id );
+			$dl_page_url = $dl_page->guid;
+
+			// Save the Downloads page URL in settings.
+			$settings = get_option( 'ppdg-settings' );
+			if ( ! empty( $settings ) ) { // Settings should already be initialized when this function is called.
+				$settings['downloads_url']    = $dl_page_url;
+				$settings['downloads_url_id'] = $dl_page_id;
 				update_option( 'ppdg-settings', $settings );
 			}
 		}

@@ -77,6 +77,94 @@ class WPEC_View_Download {
 	}
 
 	/**
+	 * Retrieves secure downloads page URL for given order
+	 *
+	 * @param int $order_id The order id.
+	 */
+	public static function get_downloads_page_url( $order_id ) {
+		$wpec_plugin = WPEC_Main::get_instance();
+
+		$download_url       = '';
+		$downloads_page_url = $wpec_plugin->get_setting( 'downloads_url' );
+
+		if ( ! wp_http_validate_url( $downloads_page_url ) ) {
+			return $download_url;
+		}
+
+		$order = get_post_meta( $order_id, 'ppec_payment_details', true );
+
+		if ( ! $order || 'COMPLETED' !== $order['state'] || empty( $order['item_id'] ) ) {
+			return $download_url;
+		}
+
+		$order_timestamp = get_the_time( 'U', $order_id );
+
+		$product_id = (int) $order['item_id'];
+		$product    = get_post( $product_id );
+
+		if ( empty( $product ) || PPECProducts::$products_slug !== $product->post_type ) {
+			return $download_url;
+		}
+
+		$downloads = self::get_order_downloads( $order_id );
+
+		if ( empty( $downloads ) ) {
+			return $download_url;
+		}
+
+		$key  = "{$order_id}|{$order_timestamp}";
+		$hash = substr( wp_hash( $key ), 0, 20 );
+
+		$download_url = add_query_arg(
+			array(
+				'wpec_downloads_key' => $hash,
+				'order_id'           => $order_id,
+			),
+			$downloads_page_url
+		);
+
+		return $download_url;
+	}
+
+	/**
+	 * Retrieves downloads list for a given order.
+	 *
+	 * @param int $order_id The order id.
+	 * @return array
+	 */
+	public static function get_order_downloads( $order_id ) {
+		$downloads = array();
+		$order     = get_post_meta( $order_id, 'ppec_payment_details', true );
+
+		if ( ! $order || empty( $order['item_id'] ) ) {
+			return $downloads;
+		}
+
+		$product_id = (int) $order['item_id'];
+		$product    = get_post( $product_id );
+
+		if ( empty( $product ) ) {
+			return $downloads;
+		}
+
+		if ( ! empty( $product->ppec_product_upload ) ) {
+			$downloads[ $order['item_name'] ] = $product->ppec_product_upload;
+		}
+
+		$var_applied = $order['var_applied'];
+
+		if ( ! empty( $var_applied ) ) {
+			foreach ( $var_applied as $var ) {
+				if ( ! empty( $var['url'] ) ) {
+					$downloads[ $var['group_name'] . ' - ' . $var['name'] ] = $var['url'];
+				}
+			}
+		}
+
+		return $downloads;
+	}
+
+	/**
 	 * Checks whether a download request is valid.
 	 *
 	 * @return boolean

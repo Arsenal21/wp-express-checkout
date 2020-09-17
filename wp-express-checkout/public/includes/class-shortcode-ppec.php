@@ -23,6 +23,7 @@ class WPECShortcode {
 
 		add_shortcode( 'wp_express_checkout', array( $this, 'shortcode_wp_express_checkout' ) );
 		add_shortcode( 'wpec_thank_you', array( $this, 'shortcode_wpec_thank_you' ) );
+		add_shortcode( 'wpec_downloads', array( $this, 'shortcode_wpec_downloads' ) );
 
 		if ( ! is_admin() ) {
 			add_filter( 'widget_text', 'do_shortcode' );
@@ -508,7 +509,70 @@ class WPECShortcode {
 			return printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $order['state'] );
 		}
 
-		$url = esc_url( WPEC_View_Download::get_download_url( $order_id ) );
+		$url = esc_url( WPEC_View_Download::get_downloads_page_url( $order_id ) );
+
+		$thank_you_msg = '';
+		$thank_you_msg .= '<div class="wpec_thank_you_message">';
+		$thank_you_msg .= '<p>' . __( 'Thank you for your purchase.', 'wp-express-checkout' ) . '</p>';
+
+		$thank_you_msg .= '<p>' . __( 'Your purchase details are below:', 'wp-express-checkout' ) . '</p>';
+		$thank_you_msg .= '<p>{product_details}</p>';
+		$thank_you_msg .= '<p>' . __( 'Transaction ID: ', 'wp-express-checkout' ) . '{transaction_id}</p>';
+
+		if ( ! empty( $url ) ) {
+			$click_here_str = sprintf( __( 'Please <a href="%s">click here</a> to open product downloads page.', 'wp-express-checkout' ), $url );
+			$thank_you_msg .= '<p>' . $click_here_str . '</p>';
+		}
+
+		$thank_you_msg .= '</div>'; // end .wpec_thank_you_message.
+		// Apply the dynamic tags.
+		$thank_you_msg = WPEC_Utility_Functions::replace_dynamic_order_tags( $thank_you_msg, $order_id );
+
+		// Trigger the filter.
+		$thank_you_msg = apply_filters( 'wpec_thank_you_message', $thank_you_msg );
+
+		return $thank_you_msg;
+	}
+
+	/**
+	 * Downloads page shortcode.
+	 *
+	 * @return string
+	 */
+	public function shortcode_wpec_downloads() {
+
+		$error_message = '';
+
+		if ( ! isset( $_GET['order_id'] ) ) {
+			$error_message .= '<p>' . __( 'This page is used to show the product downloads after a customer makes a payment.', 'wp-express-checkout' ) . '</p>';
+			$error_message .= '<p>' . __( 'It will dynamically show the downloads list to the customers when they are redirected here after a payment. Do not access this page directly.', 'wp-express-checkout' ) . '</p>';
+			$error_message .= '<p class="wpec-error-message">' . __( 'Error! Order ID value is missing in the URL.', 'wp-express-checkout' ) . '</p>';
+			return $error_message;
+		}
+
+		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'thank_you_url' . $_GET['order_id'] ) ) {
+			$error_message .= '<p>' . __( 'This page is used to show the product downloads after a customer makes a payment.', 'wp-express-checkout' ) . '</p>';
+			$error_message .= '<p>' . __( 'It will dynamically show the downloads list to the customers when they are redirected here after a payment. Do not access this page directly.', 'wp-express-checkout' ) . '</p>';
+			$error_message .= '<p class="wpec-error-message">' . __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'wp-express-checkout' ) . '</p>';
+			return $error_message;
+		}
+
+		// Retrieve the order data.
+		$order_id = (int) $_GET['order_id'];
+		$order    = get_post_meta( $order_id, 'ppec_payment_details', true );
+
+		if ( empty( $order ) ) {
+			return __( 'Error! Incorrect order ID. Could not find that order in the orders table.', 'wp-express-checkout' );
+		}
+
+		if ( 'COMPLETED' !== $order['state'] ) {
+			return printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $order['state'] );
+		}
+
+		$downloads = WPEC_View_Download::get_order_downloads( $order_id );
+
+
+		/*$url = esc_url( WPEC_View_Download::get_download_url( $order_id ) );
 
 		$thank_you_msg = '';
 		$thank_you_msg .= '<div class="wpec_thank_you_message">';
@@ -531,7 +595,7 @@ class WPECShortcode {
 		// Trigger the filter.
 		$thank_you_msg = apply_filters( 'wpec_thank_you_message', $thank_you_msg );
 
-		return $thank_you_msg;
+		return $thank_you_msg;*/
 	}
 
 }

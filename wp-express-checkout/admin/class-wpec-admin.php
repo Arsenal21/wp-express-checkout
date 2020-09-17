@@ -205,6 +205,14 @@ class WPEC_Admin {
 				'size'  => 100,
 			)
 		);
+		add_settings_field( 'downloads_url', __( 'Downloads Page URL', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section',
+			array(
+				'field' => 'downloads_url',
+				'type'  => 'text',
+				'desc'  => sprintf( __( 'This is the downloads page. This page is automatically created for you when you install the plugin. Do not delete this page from the pages menu of your site. The plugin will use it to display the list of downloads for the customers after the payment.', 'wp-express-checkout' ) ),
+				'size'  => 100,
+			)
+		);
 
 		// API details.
 		add_settings_field( 'is_live', __( 'Live Mode', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'is_live', 'type' => 'checkbox', 'desc' => __( 'Check this to run the transaction in live mode. When unchecked it will run in sandbox mode.', 'wp-express-checkout' ) ) );
