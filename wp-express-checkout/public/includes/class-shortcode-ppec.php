@@ -508,8 +508,6 @@ class WPECShortcode {
 			return printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $order['state'] );
 		}
 
-		$url = esc_url( WPEC_View_Download::get_download_url( $order_id ) );
-
 		$thank_you_msg = '';
 		$thank_you_msg .= '<div class="wpec_thank_you_message">';
 		$thank_you_msg .= '<p>' . __( 'Thank you for your purchase.', 'wp-express-checkout' ) . '</p>';
@@ -518,10 +516,20 @@ class WPECShortcode {
 		$thank_you_msg .= '<p>{product_details}</p>';
 		$thank_you_msg .= '<p>' . __( 'Transaction ID: ', 'wp-express-checkout' ) . '{transaction_id}</p>';
 
-		// TODO: Variations downloads
-		if ( ! empty( $url ) ) {
-			$click_here_str = sprintf( __( 'Please <a href="%s">click here</a> to download the file.', 'wp-express-checkout' ), $url );
-			$thank_you_msg .= '<p>' . $click_here_str . '</p>';
+		$downloads = WPEC_View_Download::get_order_downloads_list( $order_id );
+
+		if ( ! empty( $downloads ) ) {
+			$download_var_str  = '';
+			$download_var_str .= "<br /><div class='wpec-thank-you-page-download-link'>";
+			$download_var_str .= '<span>' . _n( 'Download link', 'Download links', count( $downloads ), 'wp-express-checkout' ) . ':</span><br/>';
+			$download_txt      = __( 'Click here to download', 'wp-express-checkout' );
+			$link_tpl          = apply_filters( 'wpec_downloads_list_item_template', '%1$s - <a href="%2$s">%3$s</a><br/>' );
+			foreach ( $downloads as $name => $download_url ) {
+				$download_var_str .= sprintf( $link_tpl, $name, $download_url, $download_txt );
+			}
+			$download_var_str .= '</div>';
+
+			$thank_you_msg .= $download_var_str;
 		}
 
 		$thank_you_msg .= '</div>'; // end .wpec_thank_you_message.

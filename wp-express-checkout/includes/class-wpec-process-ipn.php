@@ -205,13 +205,15 @@ class WPEC_Process_IPN {
 			$payment['payer']
 		);
 
-		$url = WPEC_View_Download::get_download_url( $order_id );
+		$downloads = WPEC_View_Download::get_order_downloads_list( $order_id );
 
 		$product_details = $item_name . ' x ' . $quantity . ' - ' . WPEC_Utility_Functions::price_format( $amount, $currency ) . "\n";
-		if ( ! empty( $url ) ) {
-			// Include the download link in the product details.
-			/* Translators:  %s - download link */
-			$product_details .= sprintf( __( 'Download Link: %s', 'wp-express-checkout' ), $url ) . "\n";
+		if ( ! empty( $downloads ) ) {
+			// Include the download links in the product details.
+			foreach ( $downloads as $name => $download_url ) {
+				/* Translators:  %1$s - download item name; %2$s - download URL */
+				$product_details .= sprintf( __( '%1$s - download link: %2$s', 'wp-express-checkout' ), $name, $download_url ) . "\n";
+			}
 		}
 
 		$address = '';
