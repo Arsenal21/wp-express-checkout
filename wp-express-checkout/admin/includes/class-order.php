@@ -116,9 +116,28 @@ class OrdersWPEC {
 	$output	 .= __( "Product Name: " ) . $payment[ 'item_name' ] . "\n";
 	$output	 .= __( "Quantity: " ) . $payment[ 'quantity' ] . "\n";
 	$output	 .= __( "Price: " ) . WPEC_Utility_Functions::price_format( $payment[ 'price' ] ) . "\n";
-	$output	 .= ( $payment[ 'coupon_code' ] ) ? __( "Coupon Code: " ) . $payment[ 'coupon_code' ] . "\n" : '';
-	$output	 .= ( $payment[ 'discount' ] ) ? __( "Discount: " ) . WPEC_Utility_Functions::price_format( $payment[ 'discount' ] ) . "\n" : '';
-	$output	 .= ( $payment[ 'tax' ] ) ? __( "Tax: " ) . WPEC_Utility_Functions::price_format( WPEC_Utility_Functions::get_tax_amount( $payment[ 'price' ] * $payment[ 'quantity' ] - $payment[ 'discount' ], $payment[ 'tax' ] ) ) . "\n" : '';
+
+	foreach ( $payment['variations'] as $var ) {
+		if ( $var[1] < 0 ) {
+			$amnt_str = '-' . WPEC_Utility_Functions::price_format( abs( $var[1] ) );
+		} else {
+			$amnt_str = WPEC_Utility_Functions::price_format( $var[1] );
+		}
+		$output .= $var[0] . ': ' . $amnt_str . "\n";
+	}
+
+	if ( $payment['discount'] || $payment['tax_total'] || $payment['shipping'] ) {
+		$output	 .= "--------------------------------" . "\n";
+		$output	 .= __( "Subtotal: " ) . WPEC_Utility_Functions::price_format( ( $payment[ 'price' ] + $payment[ 'var_amount' ] ) * $payment[ 'quantity' ] ) . "\n";
+		$output	 .= "--------------------------------" . "\n";
+	}
+
+	if ( $payment['discount'] ) {
+		$output	 .= ( $payment[ 'coupon_code' ] ) ? __( "Coupon Code: " ) . $payment[ 'coupon_code' ] . "\n" : '';
+		$output	 .= ( $payment[ 'discount' ] ) ? __( "Discount: " ) . WPEC_Utility_Functions::price_format( $payment[ 'discount' ] ) . "\n" : '';
+	}
+
+	$output	 .= ( $payment[ 'tax_total' ] ) ? __( "Tax: " ) . WPEC_Utility_Functions::price_format( $payment['tax_total'] ) . "\n" : '';
 	$output	 .= ( $payment[ 'shipping' ] ) ? __( "Shipping: " ) . WPEC_Utility_Functions::price_format( $payment[ 'shipping' ] ) . "\n" : '';
 	$output	 .= "--------------------------------" . "\n";
 	$output	 .= __( "Total Amount: " ) . $payment[ 'amount' ] . ' ' . $payment[ 'currency' ] . "\n";

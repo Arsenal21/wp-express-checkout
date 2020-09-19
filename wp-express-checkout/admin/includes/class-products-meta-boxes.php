@@ -17,6 +17,7 @@ class PPECProductsMetaboxes {
 	function add_meta_boxes() {
 		add_meta_box( 'wsp_content', __( 'Description', 'wp-express-checkout' ), array( $this, 'display_description_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'ppec_price_meta_box', __( 'Price', 'wp-express-checkout' ), array( $this, 'display_price_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
+		add_meta_box( 'wpec_variations_meta_box', __( 'Variations', 'wp-express-checkout' ), array( $this, 'display_variations_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'ppec_quantity_meta_box', __( 'Quantity', 'wp-express-checkout' ), array( $this, 'display_quantity_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'wpec_shipping_tax_meta_box', __( 'Shipping & Tax', 'wp-express-checkout' ), array( $this, 'display_shipping_tax_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
 		add_meta_box( 'ppec_upload_meta_box', __( 'Download URL', 'wp-express-checkout' ), array( $this, 'display_upload_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
@@ -53,6 +54,108 @@ class PPECProductsMetaboxes {
 		</label>
 		<p class="description"><?php esc_html_e( 'When checked, customers can change the amount they want to pay. You can set the initial amount using the field above.', 'wp-express-checkout' ); ?></p>
 		<?php
+	}
+
+	public function display_variations_meta_box( $post ) {
+		$price_mod_help  = __( 'Enter price modification - amount that will be added to product price if particular variation is selected.', 'wp-express-checkout' );
+		$price_mod_help .= '<br><br>';
+		$price_mod_help .= __( 'Put negative value if you want to substract the amount instead.', 'wp-express-checkout' );
+		?>
+<p>
+		<?php
+		// translators: %s is a link to documentation page
+		echo sprintf( __( 'You can find documentation on variations <a href="%s" target="_blank">here</a>.', 'wp-express-checkout' ), 'https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/' );
+		?>
+</p>
+		<?php
+		$current_hide_amount_input = get_post_meta( $post->ID, 'wpec_product_hide_amount_input', true );
+		?>
+<label>
+	<input type="checkbox" name="wpec_product_hide_amount_input" value="1" <?php echo esc_attr( ! empty( $current_hide_amount_input ) ? ' checked' : '' ); ?>> <?php esc_html_e( 'Use variations only to construct final product price', 'wp-express-checkout' ); ?>
+</label>
+<p class="description">
+		<?php esc_html_e( 'When enabled, the total product price will be calculated by using the variation prices only. Useful if you do not want to have a base price for this product.', 'wp-express-checkout' ); ?>
+	<br />
+		<?php esc_html_e( 'Note: To enable this option, you will need to set the product price to 0.', 'wp-express-checkout' ); ?>
+</p>
+<br />
+		<?php
+			$variations_str    = '';
+			$variations_groups = get_post_meta( $post->ID, 'wpec_variations_groups', true );
+			$variations_names  = get_post_meta( $post->ID, 'wpec_variations_names', true );
+			$variations_prices = get_post_meta( $post->ID, 'wpec_variations_prices', true );
+			$variations_urls   = get_post_meta( $post->ID, 'wpec_variations_urls', true );
+			$variations_opts   = get_post_meta( $post->ID, 'wpec_variations_opts', true );
+		if ( empty( $variations_groups ) ) {
+			$variations_str = __( 'No variations configured for this product.', 'wp-express-checkout' );
+		}
+		?>
+<div id="wpec-variations-cont-main">
+	<div id="wpec-variations-cont">
+		<span class="wpec-variations-no-variations-msg"><?php echo $variations_str; ?></span>
+	</div>
+	<button type="button" class="button" id="wpec-create-variations-group-btn"><span class="dashicons dashicons-welcome-add-page"></span> <?php esc_html_e( 'Create Group', 'wp-express-checkout' ); ?></button>
+</div>
+<div class="wpec-html-tpl wpec-html-tpl-variations-group">
+	<div class="wpec-variations-group-cont">
+		<div class="wpec-variations-group-title">
+			<span><?php esc_html_e( 'Group Name:', 'wp-express-checkout' ); ?> </span>
+			<input type="text" value="" class="wpec-variations-group-name">
+			<button type="button" class="button wpec-variations-delete-group-btn wpec-btn-small">
+				<span class="dashicons dashicons-trash" title="<?php esc_html_e( 'Delete group', 'wp-express-checkout' ); ?>"></span>
+			</button>
+			<div class="wpec-variations-display-type-cont">
+				<label><?php esc_html_e( 'Display As:', 'wp-express-checkout' ); ?> </label>
+				<select class="wpec-variations-display-type">
+					<option value="0"><?php esc_html_e( 'Dropdown', 'wp-express-checkout' ); ?></option>
+					<option value="1"><?php esc_html_e( 'Radio Buttons', 'wp-express-checkout' ); ?></option>
+				</select>
+			</div>
+		</div>
+		<table class="widefat fixed wpec-variations-tbl">
+			<tr>
+				<th width="40%"><?php echo esc_html( _x( 'Name', 'Variation name', 'wp-express-checkout' ) ); ?></th>
+				<th width="20%"><?php esc_html_e( 'Price Mod', 'wp-express-checkout' ); ?> <?php echo WPEC_Admin::gen_help_popup( $price_mod_help ); ?></th>
+				<th width="30%"><?php esc_html_e( 'Product URL', 'wp-express-checkout' ); ?></th>
+			</tr>
+		</table>
+		<div class="wpec-variations-buttons-cont">
+			<button type="button" class="button wpec-variations-add-variation-btn"><span class="dashicons dashicons-plus"></span> <?php esc_html_e( 'Add Variation', 'wp-express-checkout' ); ?></button>
+		</div>
+	</div>
+</div>
+<table class="wpec-html-tpl wpec-html-tpl-variation-row">
+	<tbody>
+		<tr>
+			<td><input type="text" value="" class="wpec-variation-name"></td>
+			<td><input type="text" value="" class="wpec-variation-price"></td>
+			<td style="position: relative;">
+				<input type="text" value="" class="wpec-variation-url">
+				<button type="button" class="button wpec-variations-select-from-ml-btn wpec-btn-small"><span class="dashicons  dashicons-admin-media" title="<?php echo esc_attr( __( 'Select from Media Library', 'wp-express-checkout' ) ); ?>"></span></button>
+			</td>
+			<td>
+				<button type="button" class="button wpec-variations-delete-variation-btn wpec-btn-small"><span class="dashicons dashicons-trash" title="<?php echo esc_attr( __( 'Delete variation', 'wp-express-checkout' ) ); ?>"></span></button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+		<?php
+			wp_localize_script(
+				'wpec-admin-edit-product-js',
+				'wpecEditProdData',
+				array(
+					'varGroups' => ! empty( $variations_groups ) ? $variations_groups : '',
+					'varNames'  => $variations_names,
+					'varPrices' => $variations_prices,
+					'varUrls'   => $variations_urls,
+					'varOpts'   => $variations_opts,
+					'str'       => array(
+						'groupDeleteConfirm' => __( 'Are you sure you want to delete this group?', 'wp-express-checkout' ),
+						'varDeleteConfirm'   => __( 'Are you sure you want to delete this variation?', 'wp-express-checkout' ),
+					),
+				)
+			);
+			wp_enqueue_script( 'wpec-admin-edit-product-js' );
 	}
 
 	function display_quantity_meta_box( $post ) {
@@ -301,6 +404,32 @@ jQuery(document).ready(function($) {
 			$this->WPECAdmin->add_admin_notice( $text, 'error' );
 		}
 
+		//handle variations
+		$variations_groups = filter_input( INPUT_POST, 'wpec-variations-group-names', FILTER_UNSAFE_RAW, FILTER_REQUIRE_ARRAY );
+		if ( ! empty( $variations_groups ) && is_array( $variations_groups ) ) {
+			//we got variations groups. Let's process them
+			update_post_meta( $post_id, 'wpec_variations_groups', $variations_groups );
+			$variations_names = filter_input( INPUT_POST, 'wpec-variation-names', FILTER_UNSAFE_RAW, FILTER_REQUIRE_ARRAY );
+			update_post_meta( $post_id, 'wpec_variations_names', $variations_names );
+			$variations_prices = filter_input( INPUT_POST, 'wpec-variation-prices', FILTER_UNSAFE_RAW, FILTER_REQUIRE_ARRAY );
+			update_post_meta( $post_id, 'wpec_variations_prices', $variations_prices );
+			$variations_urls = filter_input( INPUT_POST, 'wpec-variation-urls', FILTER_UNSAFE_RAW, FILTER_REQUIRE_ARRAY );
+			update_post_meta( $post_id, 'wpec_variations_urls', $variations_urls );
+			$variations_opts = filter_input( INPUT_POST, 'wpec-variations-opts', FILTER_UNSAFE_RAW, FILTER_REQUIRE_ARRAY );
+			update_post_meta( $post_id, 'wpec_variations_opts', $variations_opts );
+		} else {
+			//we got no variations groups. Let's clear meta values
+			update_post_meta( $post_id, 'wpec_variations_groups', false );
+			update_post_meta( $post_id, 'wpec_variations_names', false );
+			update_post_meta( $post_id, 'wpec_variations_prices', false );
+			update_post_meta( $post_id, 'wpec_variations_urls', false );
+			update_post_meta( $post_id, 'wpec_variations_opts', false );
+		}
+
+		$hide_amount_input = filter_input( INPUT_POST, 'wpec_product_hide_amount_input', FILTER_SANITIZE_STRING );
+		$hide_amount_input = ! empty( $hide_amount_input ) ? true : false;
+		update_post_meta( $post_id, 'wpec_product_hide_amount_input', $hide_amount_input );
+
 		// download url.
 		$product_url = filter_input( INPUT_POST, 'ppec_product_upload', FILTER_SANITIZE_URL );
 		if ( empty( $product_url ) ) {
@@ -318,7 +447,7 @@ jQuery(document).ready(function($) {
 		// price.
 		$price = filter_input( INPUT_POST, 'ppec_product_price', FILTER_SANITIZE_STRING );
 		$price = floatval( $price );
-		if ( ! empty( $price ) ) {
+		if ( ! empty( $price ) || $hide_amount_input ) {
 			// price seems to be valid, let's save it.
 			update_post_meta( $post_id, 'ppec_product_price', $price );
 		} else {

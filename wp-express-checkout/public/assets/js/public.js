@@ -113,6 +113,21 @@ var ppecHandler = function( data ) {
 					}
 				} );
 			}
+			parent.data.orig_price = parseFloat( parent.data.price );
+			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio' ).change( function() {
+				var grpId = jQuery( this ).data( 'wpec-variations-group-id' );
+				var varId = jQuery( this ).val();
+				if ( Object.getOwnPropertyNames( parent.data.variations ).length !== 0 ) {
+					if ( ! parent.data.variations.applied ) {
+						parent.data.variations.applied = [ ];
+					}
+					parent.data.variations.applied[grpId] = varId;
+					parent.data.price = parent.applyVariations( parent.data.orig_price );
+					parent.updateAllAmounts();
+				}
+			} );
+			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio:checked' ).change();
+
 			jQuery( 'input#wpec-redeem-coupon-btn-' + parent.data.id ).click( function( e ) {
 				e.preventDefault();
 				var couponCode = jQuery( this ).siblings( 'input#wpec-coupon-field-' + parent.data.id ).val();
@@ -356,5 +371,15 @@ var ppecHandler = function( data ) {
 
 	this.PHP_round = function( num, dec ) {
 		return Math.round( num * Math.pow( 10, dec ) ) / Math.pow( 10, dec );
+	};
+
+	this.applyVariations = function( amount ) {
+		var grpId;
+		if ( parent.data.variations.applied ) {
+			for ( grpId = 0; grpId < parent.data.variations.applied.length; ++grpId ) {
+				amount = amount + parseFloat( parent.data.variations.prices[grpId][parent.data.variations.applied[grpId]] );
+			}
+		}
+		return amount;
 	};
 };

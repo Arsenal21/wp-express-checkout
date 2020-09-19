@@ -58,6 +58,15 @@ class WPEC_Utility_Functions {
 		}
 	}
 
+	public static function round_price( $price ) {
+		$ppdg = WPEC_Main::get_instance();
+
+		$prec  = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : $ppdg->get_setting( 'price_decimals_num' );
+		$price = round( $price, $prec );
+
+		return $price;
+	}
+
 	public static function apply_tax( $price, $tax ) {
 		$ppdg = WPEC_Main::get_instance();
 

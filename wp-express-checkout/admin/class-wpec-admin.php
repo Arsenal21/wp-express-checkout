@@ -36,7 +36,7 @@ class WPEC_Admin {
 
 		// Load admin style sheet and JavaScript.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
-		// add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 		// Add the options page and menu item.
 		add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
 
@@ -112,6 +112,10 @@ class WPEC_Admin {
 		$screen = get_current_screen();
 		if ( $this->plugin_screen_hook_suffix === $screen->id ) {
 			wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/admin.js', __FILE__ ), array( 'jquery' ), WPEC_Main::VERSION );
+		}
+
+		if ( PPECProducts::$products_slug === $screen->id ) {
+			wp_enqueue_script( 'wpec-admin-edit-product-js', plugins_url( 'assets/js/edit-product.js', __FILE__ ), array( 'jquery' ), WPEC_Main::VERSION, true );
 		}
 	}
 
@@ -620,6 +624,10 @@ class WPEC_Admin {
 	public function set_default_editor( $r ) {
 		$r = 'html';
 		return $r;
+	}
+
+	public static function gen_help_popup( $contents ) {
+		return '<div class="wpec-help"><i class="dashicons dashicons-editor-help"></i><div class="wpec-help-text">' . $contents . '</div></div>';
 	}
 
 }

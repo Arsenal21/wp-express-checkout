@@ -82,9 +82,12 @@ class WPEC_Process_IPN {
 		$quantity = $trans['quantity'];
 		$tax      = $trans['tax'];
 		$shipping = $trans['shipping'];
-		$discount = 0;
 		$currency = $trans['currency'];
 		$item_id  = $trans['product_id'];
+
+		$discount   = 0;
+		$tax_total  = 0;
+		$var_amount = 0;
 
 		$coupon      = null;
 		$coupon_code = '';
@@ -95,9 +98,35 @@ class WPEC_Process_IPN {
 			$quantity = $payment['purchase_units'][0]['items'][0]['quantity'];
 		}
 
+		// check if we have variatons selected for the product.
+		$variations  = array();
+		$var_applied = array();
+		if ( ! empty( $data['variations']['applied'] ) ) {
+			// we got variations posted. Let's get variations from product.
+			$v = new WPEC_Variations( $item_id );
+			if ( ! empty( $v->variations ) ) {
+				// there are variations configured for the product.
+				$posted_v = $data['variations']['applied'];
+				foreach ( $posted_v as $grp_id => $var_id ) {
+					$var = $v->get_variation( $grp_id, $var_id[0] );
+					if ( ! empty( $var ) ) {
+						$var_amount    = $var_amount + $var['price'];
+						$variations[]  = array( $var['group_name'] . ' - ' . $var['name'], $var['price'] );
+						$var_applied[] = $var;
+					}
+				}
+			}
+		}
+
 		if ( $trans['custom_amount'] ) {
-			// custom amount enabled. let's take quantity from PayPal results.
-			$price = $payment['purchase_units'][0]['items'][0]['unit_amount']['value'];
+			// custom amount enabled. let's take amount from PayPal results.
+			// The custom amount is already have variation applied as it
+			// retrieved from the PayPal payment object.
+			$price = $payment['purchase_units'][0]['items'][0]['unit_amount']['value'] - $var_amount;
+		}
+
+		if ( ! empty( $payment['purchase_units'][0]['items'][0]['tax']['value'] ) ) {
+			$tax_total = $payment['purchase_units'][0]['amount']['breakdown']['tax_total']['value'];
 		}
 
 		// For some reason PayPal is missing 'discount' items from breakdown...
@@ -111,9 +140,8 @@ class WPEC_Process_IPN {
 			$coupon = WPEC_Coupons_Admin::get_coupon( $data['couponCode'] );
 			if ( true === $coupon['valid'] && WPEC_Coupons_Admin::is_coupon_allowed_for_product( $coupon['id'], $item_id ) ) {
 				// Get the discount amount.
-				$perc = ( ! $wpec_plugin->get_setting( 'price_decimals_num' ) ) ? 0 : $wpec_plugin->get_setting( 'price_decimals_num' );
 				if ( $coupon['discountType'] === 'perc' ) {
-					$discount = round( $price * $quantity * ( $coupon['discount'] / 100 ), $perc );
+					$discount = WPEC_Utility_Functions::round_price( ( $price + $var_amount ) * $quantity * ( $coupon['discount'] / 100 ) );
 				} else {
 					$discount = $coupon['discount'];
 				}
@@ -121,11 +149,13 @@ class WPEC_Process_IPN {
 			}
 		}
 
-		$amount = $payment['purchase_units'][0]['amount']['value'];
+		$amount = WPEC_Utility_Functions::round_price( floatval( $payment['purchase_units'][0]['amount']['value'] ) );
 
 		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
-		$discounted_amount  = $price * $quantity - $discount;
-		$original_price_amt = $discounted_amount + WPEC_Utility_Functions::get_tax_amount( $discounted_amount, $tax ) + $shipping;
+		$discounted_amount  = WPEC_Utility_Functions::round_price( ( $price + $var_amount ) * $quantity - $discount );
+		$item_tax_amount    = WPEC_Utility_Functions::round_price( WPEC_Utility_Functions::get_tax_amount( $discounted_amount / $quantity, $tax ) );
+		$original_price_amt = WPEC_Utility_Functions::round_price( $discounted_amount + $item_tax_amount * $quantity + $shipping );
+
 		if ( $amount < $original_price_amt ) {
 			// payment amount mismatch. Amount paid is less.
 			WPEC_Debug_Logger::log('Error! Payment amount mismatch. Original: ' . $original_price_amt . ', Received: ' . $amount, false);
@@ -159,6 +189,7 @@ class WPEC_Process_IPN {
 				'price'       => $price,
 				'quantity'    => $quantity,
 				'tax'         => $tax,
+				'tax_total'   => $tax_total,
 				'shipping'    => $shipping,
 				'amount'      => $amount,
 				'discount'    => $discount,
@@ -167,17 +198,22 @@ class WPEC_Process_IPN {
 				'state'       => $payment['status'],
 				'id'          => $payment['id'],
 				'create_time' => $payment['create_time'],
+				'variations'  => $variations,
+				'var_applied' => $var_applied,
+				'var_amount'  => $var_amount,
 			),
 			$payment['payer']
 		);
 
-		$url = WPEC_View_Download::get_download_url( $order_id );
+		$downloads = WPEC_View_Download::get_order_downloads_list( $order_id );
 
 		$product_details = $item_name . ' x ' . $quantity . ' - ' . WPEC_Utility_Functions::price_format( $amount, $currency ) . "\n";
-		if ( ! empty( $url ) ) {
-			// Include the download link in the product details.
-			/* Translators:  %s - download link */
-			$product_details .= sprintf( __( 'Download Link: %s', 'wp-express-checkout' ), $url ) . "\n";
+		if ( ! empty( $downloads ) ) {
+			// Include the download links in the product details.
+			foreach ( $downloads as $name => $download_url ) {
+				/* Translators:  %1$s - download item name; %2$s - download URL */
+				$product_details .= sprintf( __( '%1$s - download link: %2$s', 'wp-express-checkout' ), $name, $download_url ) . "\n";
+			}
 		}
 
 		$address = '';
