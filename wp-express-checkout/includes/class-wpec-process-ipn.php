@@ -182,33 +182,33 @@ class WPEC_Process_IPN {
 		// let's insert order.
 		$order = OrdersWPEC::get_instance();
 
-		$order_id = $order->insert(
-			array(
-				'item_id'     => $item_id,
-				'item_name'   => $item_name,
-				'price'       => $price,
-				'quantity'    => $quantity,
-				'tax'         => $tax,
-				'tax_total'   => $tax_total,
-				'shipping'    => $shipping,
-				'amount'      => $amount,
-				'discount'    => $discount,
-				'coupon_code' => $coupon_code,
-				'currency'    => $currency,
-				'state'       => $payment['status'],
-				'id'          => $payment['id'],
-				'create_time' => $payment['create_time'],
-				'variations'  => $variations,
-				'var_applied' => $var_applied,
-				'var_amount'  => $var_amount,
-			),
-			$payment['payer']
+		$payment_details = array(
+			'item_id'     => $item_id,
+			'item_name'   => $item_name,
+			'price'       => $price,
+			'quantity'    => $quantity,
+			'tax'         => $tax,
+			'tax_total'   => $tax_total,
+			'shipping'    => $shipping,
+			'amount'      => $amount,
+			'discount'    => $discount,
+			'coupon_code' => $coupon_code,
+			'currency'    => $currency,
+			'state'       => $payment['status'],
+			'id'          => $payment['id'],
+			'create_time' => $payment['create_time'],
+			'variations'  => $variations,
+			'var_applied' => $var_applied,
+			'var_amount'  => $var_amount,
 		);
+
+		$order_id = $order->insert( $payment_details, $payment['payer'] );
 
 		$downloads = WPEC_View_Download::get_order_downloads_list( $order_id );
 
-		$product_details = $item_name . ' x ' . $quantity . ' - ' . WPEC_Utility_Functions::price_format( $amount, $currency ) . "\n";
+		$product_details = WPEC_Utility_Functions::get_product_details( $payment_details );
 		if ( ! empty( $downloads ) ) {
+			$product_details .= "\n\n";
 			// Include the download links in the product details.
 			foreach ( $downloads as $name => $download_url ) {
 				/* Translators:  %1$s - download item name; %2$s - download URL */
@@ -247,12 +247,12 @@ class WPEC_Process_IPN {
 
 			$from_email = $wpec_plugin->get_setting( 'buyer_from_email' );
 			$subject    = $wpec_plugin->get_setting( 'buyer_email_subj' );
-			$subject    = $this->apply_dynamic_tags( $subject, $args );
+			$subject    = WPEC_Utility_Functions::apply_dynamic_tags( $subject, $args );
 			$body       = $wpec_plugin->get_setting( 'buyer_email_body' );
 
 			$args['email_body'] = $body;
 
-			$body = $this->apply_dynamic_tags( $body, $args );
+			$body = WPEC_Utility_Functions::apply_dynamic_tags( $body, $args );
 			$body = apply_filters( 'wpec_buyer_notification_email_body', $body, $payment, $args );
 
 			if ( 'html' === $wpec_plugin->get_setting( 'buyer_email_type' ) ) {
@@ -277,10 +277,10 @@ class WPEC_Process_IPN {
 			$notify_email = $wpec_plugin->get_setting( 'notify_email_address' );
 
 			$seller_email_subject = $wpec_plugin->get_setting( 'seller_email_subj' );
-			$seller_email_subject = $this->apply_dynamic_tags( $seller_email_subject, $args );
+			$seller_email_subject = WPEC_Utility_Functions::apply_dynamic_tags( $seller_email_subject, $args );
 
 			$seller_email_body = $wpec_plugin->get_setting( 'seller_email_body' );
-			$seller_email_body = $this->apply_dynamic_tags( $seller_email_body, $args );
+			$seller_email_body = WPEC_Utility_Functions::apply_dynamic_tags( $seller_email_body, $args );
 			$seller_email_body = apply_filters( 'wpec_seller_notification_email_body', $seller_email_body, $payment, $args );
 
 			if ( 'html' === $wpec_plugin->get_setting( 'buyer_email_type' ) ) {
@@ -316,42 +316,6 @@ class WPEC_Process_IPN {
 		echo wp_json_encode( $res );
 
 		exit;
-	}
-
-	/**
-	 * Replaces tags in the text with appropriate values.
-	 *
-	 * @param string $text The text with tags to be replaced.
-	 * @param array  $args The array of the tags values.
-	 *
-	 * @return string
-	 */
-	private function apply_dynamic_tags( $text, $args ) {
-
-		$white_list = array(
-			'first_name',
-			'last_name',
-			'product_details',
-			'payer_email',
-			'transaction_id',
-			'purchase_amt',
-			'purchase_date',
-			'coupon_code',
-			'address',
-			'order_id',
-		);
-
-		$tags = array();
-		$vals = array();
-
-		foreach ( $white_list as $item ) {
-			$tags[] = "{{$item}}";
-			$vals[] = ( isset( $args[ $item ] ) ) ? $args[ $item ] : '';
-		}
-
-		$body = stripslashes( str_replace( $tags, $vals, $text ) );
-
-		return $body;
 	}
 
 }

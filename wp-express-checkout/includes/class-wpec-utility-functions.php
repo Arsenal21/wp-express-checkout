@@ -89,15 +89,19 @@ class WPEC_Utility_Functions {
 		return $price;
 	}
 
-	/*
-	 * Replaced the dynamic tags with order details (given the order_id)
+	/**
+	 * Replaces the dynamic tags with order details (given the order_id).
+	 *
+	 * @param string $text     The text to be processed.
+	 * @param int    $order_id The order ID to retrieve default values.
+	 * @param array  $args     The custom arguments to replace default order data.
+	 *
+	 * @return string
 	 */
-	public static function replace_dynamic_order_tags( $text, $order_id ) {
+	public static function replace_dynamic_order_tags( $text, $order_id, $args = array() ) {
 		$payment_details = get_post_meta( $order_id, 'ppec_payment_details', true );
 		$payer_details   = get_post_meta( $order_id, 'ppec_payer_details', true );
-
-		$formatted_amount = number_format( $payment_details['amount'], 2, '.', '' );
-		$product_details  = $payment_details['item_name'] . ' x ' . $payment_details['quantity'] . ' - ' . self::price_format( $payment_details['amount'], $payment_details['currency'] ) . "\n";
+		$product_details = self::get_product_details( $payment_details ) . "\n";
 
 		$tags_vals = array(
 			'first_name'      => $payer_details['name']['given_name'],
@@ -105,22 +109,103 @@ class WPEC_Utility_Functions {
 			'product_details' => $product_details,
 			'payer_email'     => $payer_details['email_address'],
 			'transaction_id'  => $payment_details['id'],
-			'purchase_amt'    => $formatted_amount,
+			'purchase_amt'    => $payment_details['amount'],
 			'purchase_date'   => date( 'Y-m-d' ),
 			'coupon_code'     => $payment_details['coupon_code'],
 			'address'         => '', // Not implemented yet.
 			'order_id'        => $order_id,
 		);
 
+		$tags_vals = array_merge( $tags_vals, $args );
+
+		$text = self::apply_dynamic_tags( $text, $tags_vals );
+		return $text;
+	}
+
+	/**
+	 * Replaces tags in the text with appropriate values.
+	 *
+	 * @since 2.0
+	 *
+	 * @param string $text The text with tags to be replaced.
+	 * @param array  $args The array of the tags values.
+	 *
+	 * @return string
+	 */
+	public static function apply_dynamic_tags( $text, $args ) {
+
+		$white_list = array(
+			'first_name',
+			'last_name',
+			'product_details',
+			'payer_email',
+			'transaction_id',
+			'purchase_amt',
+			'purchase_date',
+			'coupon_code',
+			'address',
+			'order_id',
+		);
+
 		$tags = array();
 		$vals = array();
-		foreach ( $tags_vals as $key => $value ) {
-			$tags[] = "{{$key}}";
-			$vals[] = ( isset( $tags_vals[ $key ] ) ) ? $tags_vals[ $key ] : '';
+
+		foreach ( $white_list as $item ) {
+			$tags[] = "{{$item}}";
+			$vals[] = ( isset( $args[ $item ] ) ) ? $args[ $item ] : '';
 		}
 
-		$text = stripslashes( str_replace( $tags, $vals, $text ) );
-		return $text;
+		$body = stripslashes( str_replace( $tags, $vals, $text ) );
+
+		return $body;
+	}
+
+	/**
+	 * Generates plain product details for Order summary and emails by given
+	 * order details.
+	 *
+	 * @since 2.0
+	 *
+	 * @param array $payment The order details stored in the
+	 *                       `ppec_payment_details` meta field.
+	 * @return string
+	 */
+	public static function get_product_details( $payment ) {
+		$output   = '';
+
+		/* translators: {Order Summary Item Name}: {Value} */
+		$template = __( '%1$s: %2$s', 'wp-express-checkout' );
+
+		$output .= sprintf( $template, __( 'Product Name', 'wp-express-checkout' ), $payment['item_name'] ) . "\n";
+		$output .= sprintf( $template, __( 'Quantity', 'wp-express-checkout' ), $payment['quantity'] ) . "\n";
+		$output .= sprintf( $template, __( 'Price', 'wp-express-checkout' ), self::price_format( $payment['price'] ) ) . "\n";
+
+		foreach ( $payment['variations'] as $var ) {
+			if ( $var[1] < 0 ) {
+				$amnt_str = '-' . self::price_format( abs( $var[1] ) );
+			} else {
+				$amnt_str = self::price_format( $var[1] );
+			}
+			$output .= sprintf( $template, $var[0], $amnt_str ) . "\n";
+		}
+
+		if ( $payment['discount'] || $payment['tax_total'] || $payment['shipping'] ) {
+			$output .= '--------------------------------' . "\n";
+			$output .= sprintf( $template, __( 'Subtotal', 'wp-express-checkout' ), self::price_format( ( $payment['price'] + $payment['var_amount'] ) * $payment['quantity'] ) ) . "\n";
+			$output .= '--------------------------------' . "\n";
+		}
+
+		if ( $payment['discount'] ) {
+			$output .= ( $payment['coupon_code'] ) ? sprintf( $template, __( 'Coupon Code', 'wp-express-checkout' ), $payment['coupon_code'] ) . "\n" : '';
+			$output .= ( $payment['discount'] ) ? sprintf( $template, __( 'Discount', 'wp-express-checkout' ), self::price_format( $payment['discount'] ) ) . "\n" : '';
+		}
+
+		$output .= ( $payment['tax_total'] ) ? sprintf( $template, __( 'Tax', 'wp-express-checkout' ), self::price_format( $payment['tax_total'] ) ) . "\n" : '';
+		$output .= ( $payment['shipping'] ) ? sprintf( $template, __( 'Shipping', 'wp-express-checkout' ), self::price_format( $payment['shipping'] ) ) . "\n" : '';
+		$output .= '--------------------------------' . "\n";
+		$output .= sprintf( $template, __( 'Total Amount', 'wp-express-checkout' ), self::price_format( $payment['amount'] ) ) . "\n";
+
+		return $output;
 	}
 
 	/*
