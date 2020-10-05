@@ -33,10 +33,7 @@ var ppecHandler = function( data ) {
 		var val = parseInt( val_orig );
 		var error = false;
 		var errMsg = ppecFrontVars.str.enterQuantity;
-		// Preserve original quantity.
-		if ( parent.data.quantity && ! parent.data.orig_quantity ) {
-			parent.data.orig_quantity = parent.data.quantity;
-		}
+
 		if ( isNaN( val ) ) {
 			error = true;
 		} else if ( val_orig % 1 !== 0 ) {
