@@ -43,8 +43,6 @@ var ppecHandler = function( data ) {
 			error = true;
 		} else if ( val <= 0 ) {
 			error = true;
-		} else if ( parent.data.orig_quantity && val > parent.data.orig_quantity ) {
-			error = true;
 		} else {
 			input.removeClass( 'hasError' );
 			errMsgCont.fadeOut( 'fast' );
