@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.5
-Stable tag: 1.9.1
+Stable tag: 1.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,6 +17,9 @@ This plugin provides you a shortcode to generate a customizable PayPal payment b
 The full checkout takes place in a payment popup window and the customer never leaves your site.
 
 This is ideal for selling a product or service via PayPal.
+
+This plugin also works with PayPal's Pay in 4 feature. It lets your customers pay later in 4 installments via PayPal.
+https://www.paypal.com/us/webapps/mpp/pay-in-4
 
 View configuration and usage details on the [WP Express Checkout](https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/) plugin's documentation page
 
@@ -40,6 +43,7 @@ https://www.youtube.com/watch?v=3LsfLd03VnE
 * Use a simple shortcode to add a payment button anywhere on your site.
 * Create a PayPal payment button widget and add it to your sidebar.
 * Ability for a customer to enter an amount and pay what they want for a product.
+* Ability to configure variable products. You can charge different amount for different options of the product.
 * Can be used to accept donation.
 * Option to customize the currency formatting.
 * Option to charge shipping for your items. Ability to set a shipping cost for each item separately.
@@ -108,6 +112,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 1.9.2 =
+* Added a new feature to allow configuration of variable products.
+* Fixed a small bug with the "Allow customers to enter quantity" feature.
 
 = 1.9.1 =
 * Fixed an issue with the single post page not generating the buy now button on some installs.
