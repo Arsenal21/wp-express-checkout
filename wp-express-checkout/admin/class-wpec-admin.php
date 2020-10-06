@@ -93,7 +93,7 @@ class WPEC_Admin {
 	 * @since     1.0.0
 	 */
 	public function enqueue_admin_styles() {
-		wp_enqueue_style( $this->plugin_slug . '-admin-styles', plugins_url( 'assets/css/admin.css', __FILE__ ), array(), WPEC_Main::VERSION );
+		wp_enqueue_style( $this->plugin_slug . '-admin-styles', plugins_url( 'assets/css/admin.css', __FILE__ ), array(), WPEC_PLUGIN_VER );
 	}
 
 	/**
@@ -111,11 +111,11 @@ class WPEC_Admin {
 
 		$screen = get_current_screen();
 		if ( $this->plugin_screen_hook_suffix === $screen->id ) {
-			wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/admin.js', __FILE__ ), array( 'jquery' ), WPEC_Main::VERSION );
+			wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/admin.js', __FILE__ ), array( 'jquery' ), WPEC_PLUGIN_VER );
 		}
 
 		if ( PPECProducts::$products_slug === $screen->id ) {
-			wp_enqueue_script( 'wpec-admin-edit-product-js', plugins_url( 'assets/js/edit-product.js', __FILE__ ), array( 'jquery' ), WPEC_Main::VERSION, true );
+			wp_enqueue_script( 'wpec-admin-edit-product-js', plugins_url( 'assets/js/edit-product.js', __FILE__ ), array( 'jquery' ), WPEC_PLUGIN_VER, true );
 		}
 	}
 

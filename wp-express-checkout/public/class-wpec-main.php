@@ -12,24 +12,12 @@
 class WPEC_Main {
 
 	/**
-	 * Plugin version, used for cache-busting of style and script file references.
-	 *
-	 * @since   1.0.0
-	 *
-	 * @var     string
-	 */
-	const VERSION = '1.0.0';
-
-	/**
 	 *
 	 * Unique identifier for your plugin.
 	 *
 	 * The variable name is used as the text domain when internationalizing strings
 	 * of text. Its value should match the Text Domain file header in the main
 	 * plugin file.
-	 *
-	 * @since    1.0.0
-	 *
 	 * @var      string
 	 */
 	protected $plugin_slug = 'paypal-for-digital-goods';
