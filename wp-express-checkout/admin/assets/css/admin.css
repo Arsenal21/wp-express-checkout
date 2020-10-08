@@ -46,6 +46,18 @@ div.postbox.yellowish {
 	background-color: #ffffc8;
 }
 
+.wpec_product_type_cont {
+	display: none;
+}
+
+.wpec_product_type_active {
+	display: block;
+}
+
+.wpec_product_type_select_cont label {
+	margin-right: 10px;
+}
+
 /*----- Variations ----- */
 
 .wpec-html-tpl {

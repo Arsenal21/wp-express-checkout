@@ -40,19 +40,68 @@ class PPECProductsMetaboxes {
 	}
 
 	function display_price_meta_box( $post ) {
+		$product_types             = array();
+		$product_types['one_time'] = __( 'One-time payment', 'wp-express-checkout' );
+
+		$product_types = apply_filters( 'wpec_product_types', $product_types, $post );
+		$product_type  = get_post_meta( $post->ID, 'wpec_product_type', true );
+		$product_type  = empty( $product_type ) ? 'one_time' : $product_type;
+
 		$current_price       = get_post_meta( $post->ID, 'ppec_product_price', true );
 		$allow_custom_amount = get_post_meta( $post->ID, 'wpec_product_custom_amount', true );
 		$step                = pow( 10, -intval( $this->WPEC_Main->get_setting( 'price_decimals_num' ) ) );
+
+		$cont = '';
+
+		echo '<p class="wpec_product_type_select_cont">';
+
+		foreach ( $product_types as $type => $name ) {
+			if ( 2 > count( $product_types ) ) {
+				?>
+					<input type="hidden" class="wpec_product_type_radio" name="wpec_product_type_radio" value="<?php echo $type; ?>">
+				<?php
+			} else {
+				?>
+				<label>
+					<input type="radio" class="wpec_product_type_radio" name="wpec_product_type_radio" value="<?php echo $type; ?>"<?php echo $type === $product_type ? ' checked' : ''; ?>><?php echo $name; ?>
+				</label>
+				<?php
+			}
+			$cont .= sprintf( '<div class="wpec_product_type_cont%s" data-wpec-product-type="%s">', $type === $product_type ? ' wpec_product_type_active' : '', $type );
+			ob_start();
+			switch ( $type ) {
+				case 'one_time':
+					?>
+					<label><?php esc_html_e( 'Price', 'wp-express-checkout' ); ?></label>
+					<br/>
+					<input type="number" name="ppec_product_price" step="<?php echo esc_attr( $step ); ?>" min="0" value="<?php echo esc_attr( $current_price ); ?>">
+					<p class="description"><?php esc_html_e( 'Item price. Enter numbers only, no need to put currency symbol. Example: 39.95', 'wp-express-checkout' ); ?></p>
+					<label>
+						<input type="checkbox" name="wpec_product_custom_amount" value="1" <?php checked( $allow_custom_amount ); ?>>
+						<?php esc_html_e( 'Allow customers to enter amount', 'wp-express-checkout' ); ?>
+					</label>
+					<p class="description"><?php esc_html_e( 'When checked, customers can change the amount they want to pay. You can set the initial amount using the field above.', 'wp-express-checkout' ); ?></p>
+					<?php
+					break;
+				default:
+					do_action( 'wpec_form_product_type_' . $type, $post );
+					break;
+			}
+			$cont .= ob_get_clean();
+			$cont .= '</div>';
+		}
+		echo '</p>';
+		echo $cont;
 		?>
-		<label><?php esc_html_e( 'Price', 'wp-express-checkout' ); ?></label>
-		<br/>
-		<input type="number" name="ppec_product_price" step="<?php echo esc_attr( $step ); ?>" min="0" value="<?php echo esc_attr( $current_price ); ?>">
-		<p class="description"><?php esc_html_e( 'Item price. Enter numbers only, no need to put currency symbol. Example: 39.95', 'wp-express-checkout' ); ?></p>
-		<label>
-			<input type="checkbox" name="wpec_product_custom_amount" value="1" <?php checked( $allow_custom_amount ); ?>>
-			<?php esc_html_e( 'Allow customers to enter amount', 'wp-express-checkout' ); ?>
-		</label>
-		<p class="description"><?php esc_html_e( 'When checked, customers can change the amount they want to pay. You can set the initial amount using the field above.', 'wp-express-checkout' ); ?></p>
+			<script>
+				( function ( $ ) {
+					$('.wpec_product_type_radio').change(function(e) {
+						$('.wpec_product_type_cont').removeClass('wpec_product_type_active');
+						$('.wpec_product_type_cont[data-wpec-product-type="'+$(this).val()+'"]').addClass('wpec_product_type_active');
+					});
+					$('.wpec_product_type_radio:checked').trigger('change');
+				}( jQuery ) );
+			</script>
 		<?php
 	}
 
@@ -438,6 +487,10 @@ jQuery(document).ready(function($) {
 		} else {
 			update_post_meta( $post_id, 'ppec_product_upload', esc_url( $product_url, array( 'http', 'https', 'dropbox' ) ) );
 		}
+
+		// product type.
+		$product_type = filter_input( INPUT_POST, 'wpec_product_type_radio', FILTER_SANITIZE_STRING );
+		update_post_meta( $post_id, 'wpec_product_type', $product_type );
 
 		// product thumbnail.
 		$thumb_url_raw = filter_input( INPUT_POST, 'wpec_product_thumbnail', FILTER_SANITIZE_URL );
