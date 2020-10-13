@@ -119,6 +119,14 @@ class WPEC_Main {
 				$args['disable-card'] = $arg;
 			}
 		}
+
+		/**
+		 * Filters arguments to be passed to PayPal SDK.
+		 *
+		 * @param array $args The PayPal SDK arguments.
+		 */
+		$args = apply_filters( 'wpec_paypal_sdk_args', $args );
+
 		$script_url = add_query_arg( $args, 'https://www.paypal.com/sdk/js' );
 		printf( '<script src="%s" data-partner-attribution-id="TipsandTricks_SP"></script>', $script_url );
 		?>

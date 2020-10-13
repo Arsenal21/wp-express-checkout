@@ -321,7 +321,7 @@ class WPECShortcode {
 
 		$output .= '</div>';
 
-		$data = array(
+		$data = apply_filters( 'wpec_button_js_data', array(
 			'id'              => $button_id,
 			'env'             => $env,
 			'client_id'       => $client_id,
@@ -348,7 +348,7 @@ class WPECShortcode {
 				'color'  => $btn_color,
 				'layout' => $btn_layout,
 			),
-		);
+		) );
 
 		$output .= '<script>jQuery(document).ready(function() {new ppecHandler(' . json_encode( $data ) . ')});</script>';
 

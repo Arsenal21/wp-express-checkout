@@ -83,7 +83,7 @@ var ppecHandler = function( data ) {
 
 	this.scCont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' );
 
-	paypal.Buttons( {
+	this.buttonArgs = {
 		env: parent.data.env,
 		client: parent.clientVars,
 		style: parent.data.btnStyle,
@@ -271,7 +271,11 @@ var ppecHandler = function( data ) {
 		onError: function( err ) {
 			alert( err );
 		}
-	} ).render( '#' + parent.data.id );
+	};
+
+	jQuery( document ).trigger( 'wpec_before_render_button', [this] );
+
+	paypal.Buttons( this.buttonArgs ).render( '#' + parent.data.id );
 
 	this.formatMoney = function (n) {
 		var c = isNaN(c = Math.abs(parent.data.dec_num)) ? 2 : parent.data.dec_num,
