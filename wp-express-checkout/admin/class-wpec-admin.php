@@ -216,11 +216,27 @@ class WPEC_Admin {
 				'size'  => 100,
 			)
 		);
+		add_settings_field( 'live_secret_key', __( 'Live Secret key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section',
+			array(
+				'field' => 'live_secret_key',
+				'type'  => 'text',
+				'desc'  => __( 'Enter your PayPal Secret Key for live mode.', 'wp-express-checkout' ),
+				'size'  => 100,
+			)
+		);
 		add_settings_field( 'sandbox_client_id', __( 'Sandbox Client ID', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section',
 			array(
 				'field' => 'sandbox_client_id',
 				'type'  => 'text',
 				'desc'  => __( 'Enter your PayPal Client ID for sandbox mode.', 'wp-express-checkout' ),
+				'size'  => 100,
+			)
+		);
+		add_settings_field( 'sandbox_secret_key', __( 'Sandbox Secret key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section',
+			array(
+				'field' => 'sandbox_secret_key',
+				'type'  => 'text',
+				'desc'  => __( 'Enter your PayPal Secret Key for sandbox mode.', 'wp-express-checkout' ),
 				'size'  => 100,
 			)
 		);

@@ -296,6 +296,8 @@ class WPEC_Main {
 			'is_live'              => 0,
 			'live_client_id'       => '',
 			'sandbox_client_id'    => '',
+			'live_secret_key'      => '',
+			'sandbox_secret_key'   => '',
 			'currency_code'        => 'USD',
 			'currency_symbol'      => '$',
 			'price_currency_pos'   => 'left',
