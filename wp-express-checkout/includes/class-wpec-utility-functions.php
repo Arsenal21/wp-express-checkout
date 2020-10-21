@@ -487,4 +487,13 @@ class WPEC_Utility_Functions {
 		return $countries;
 	}
 
+	/**
+	 * Registers vendor auto loader and own PayPal client classes.
+	 */
+	public static function load_paypal_lib() {
+		require WPEC_PLUGIN_PATH . '/vendor/autoload.php';
+		require_once WPEC_PLUGIN_PATH . '/includes/paypal-client/class-client.php';
+		require_once WPEC_PLUGIN_PATH . '/includes/paypal-client/class-request.php';
+	}
+
 }
