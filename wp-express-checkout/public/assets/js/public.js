@@ -89,7 +89,7 @@ var ppecHandler = function( data ) {
 		style: parent.data.btnStyle,
 		commit: true,
 		onInit: function( data, actions ) {
-			var enable_actions = true;
+			var enable_actions = ! parent.data.errors;
 			if ( parent.data.custom_quantity === "1" ) {
 				jQuery( 'input#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
 					if ( ! parent.isValidCustomQuantity() ) {
@@ -202,6 +202,11 @@ var ppecHandler = function( data ) {
 				actions.enable();
 			} else {
 				actions.disable();
+				if ( parent.data.errors ) {
+					var errorEl = jQuery( '<div class="wp-ppec-form-error-msg">' + parent.data.errors + '</div>' );
+					parent.scCont.append( errorEl );
+					errorEl.show();
+				}
 			}
 
 			jQuery( '.wpec-button-placeholder' ).remove();
