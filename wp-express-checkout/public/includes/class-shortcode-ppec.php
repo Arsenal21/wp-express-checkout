@@ -402,7 +402,7 @@ class WPECShortcode {
 
 		$output .= $under_price_line;
 
-		return $output;
+		return apply_filters( 'wpec_price_tag', $output, $args );
 	}
 
 	/**
