@@ -278,10 +278,6 @@ var ppecHandler = function( data ) {
 		}
 	};
 
-	jQuery( document ).trigger( 'wpec_before_render_button', [this] );
-
-	paypal.Buttons( this.buttonArgs ).render( '#' + parent.data.id );
-
 	this.formatMoney = function (n) {
 		var c = isNaN(c = Math.abs(parent.data.dec_num)) ? 2 : parent.data.dec_num,
 			d = d == undefined ? "." : parent.data.dec_sep,
@@ -335,6 +331,8 @@ var ppecHandler = function( data ) {
 				tax_val.html( parent.formatMoney( parent.data.tax_amount * parent.data.quantity ) );
 			}
 		}
+
+		jQuery( document ).trigger( 'wpec_after_update_all_amounts', [parent] );
 	};
 
 	this.calcTotal = function() {
@@ -386,4 +384,8 @@ var ppecHandler = function( data ) {
 		}
 		return amount;
 	};
+
+	jQuery( document ).trigger( 'wpec_before_render_button', [this] );
+
+	paypal.Buttons( this.buttonArgs ).render( '#' + parent.data.id );
 };
