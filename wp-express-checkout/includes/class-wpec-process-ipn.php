@@ -108,7 +108,7 @@ class WPEC_Process_IPN {
 				// there are variations configured for the product.
 				$posted_v = $data['variations']['applied'];
 				foreach ( $posted_v as $grp_id => $var_id ) {
-					$var = $v->get_variation( $grp_id, $var_id[0] );
+					$var = $v->get_variation( $grp_id, $var_id );
 					if ( ! empty( $var ) ) {
 						$var_amount    = $var_amount + $var['price'];
 						$variations[]  = array( $var['group_name'] . ' - ' . $var['name'], $var['price'] );
