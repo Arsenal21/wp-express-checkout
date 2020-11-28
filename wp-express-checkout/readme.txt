@@ -3,8 +3,8 @@ Contributors: Tips and Tricks HQ, dikiy_forester
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
-Tested up to: 5.5
-Stable tag: 1.9.2
+Tested up to: 5.6
+Stable tag: 1.9.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -112,6 +112,9 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 1.9.3 =
+* Fixed an issue with the variation feature.
 
 = 1.9.2 =
 * Added a new feature to allow configuration of variable products.
