@@ -4,26 +4,28 @@ var ppecHandler = function( data ) {
 
 	this.processPayment = function( payment ) {
 		jQuery.post( ppecFrontVars.ajaxUrl, { action: "wpec_process_payment", wp_ppdg_payment: payment, data: parent.data } )
-				.done( function( data ) {
-					var ret = true;
-					var dlgTitle = ppecFrontVars.str.paymentCompleted;
-					var dlgMsg = ppecFrontVars.str.redirectMsg;
-					try {
-						var res = JSON.parse( data );
-						var redirect_url = res.redirect_url;
-					} catch ( e ) {
-						dlgTitle = ppecFrontVars.str.errorOccurred;
-						dlgMsg = data;
-						ret = false;
-					}
-					jQuery( 'div#wp-ppdg-dialog-message' ).attr( 'title', dlgTitle );
-					jQuery( 'p#wp-ppdg-dialog-msg' ).html( dlgMsg );
-					jQuery( 'div.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).hide();
-					if ( redirect_url ) {
-						location.href = redirect_url;
-					}
-					return ret;
-				} );
+			.done( parent.completePayment( data ) );
+	};
+
+	this.completePayment = function( data ) {
+		var ret = true;
+		var dlgTitle = ppecFrontVars.str.paymentCompleted;
+		var dlgMsg = ppecFrontVars.str.redirectMsg;
+		try {
+			var res = JSON.parse( data );
+			var redirect_url = res.redirect_url;
+		} catch ( e ) {
+			dlgTitle = ppecFrontVars.str.errorOccurred;
+			dlgMsg = data;
+			ret = false;
+		}
+		jQuery( 'div#wp-ppdg-dialog-message' ).attr( 'title', dlgTitle );
+		jQuery( 'p#wp-ppdg-dialog-msg' ).html( dlgMsg );
+		jQuery( 'div.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).hide();
+		if ( redirect_url ) {
+			location.href = redirect_url;
+		}
+		return ret;
 	};
 
 	this.isValidCustomQuantity = function() {

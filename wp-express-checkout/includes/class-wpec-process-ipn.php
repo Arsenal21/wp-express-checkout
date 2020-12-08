@@ -56,21 +56,16 @@ class WPEC_Process_IPN {
 		$payment = stripslashes_deep( $_POST['wp_ppdg_payment'] );
 		$data    = stripslashes_deep( $_POST['data'] );
 
-		if ( strtoupper( $payment['status'] ) !== 'COMPLETED' ) {
-			// payment is unsuccessful.
-			WPEC_Debug_Logger::log( 'Payment is not approved. Payment status: ' . $payment['status'], false );
-			printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $payment['status'] );
-			exit;
-		}
+		$this->check_status( $payment );
 
 		// Log debug (if enabled).
 		WPEC_Debug_Logger::log( 'Received IPN. Processing payment ...' );
 
 		// get item name.
-		$item_name = $payment['purchase_units'][0]['description'];
-		// let's check if the payment matches transient data.
-		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $item_name );
+		$item_name  = $this->get_item_name( $payment );
+		$trans_name = $this->get_transition_name( $payment );
 		$trans      = get_transient( $trans_name );
+		// let's check if the payment matches transient data.
 		if ( ! $trans ) {
 			// no price set.
 			WPEC_Debug_Logger::log( 'Error! No transaction info found in transient.', false );
@@ -86,7 +81,6 @@ class WPEC_Process_IPN {
 		$item_id  = $trans['product_id'];
 
 		$discount   = 0;
-		$tax_total  = 0;
 		$var_amount = 0;
 
 		$coupon      = null;
@@ -95,7 +89,7 @@ class WPEC_Process_IPN {
 
 		if ( $trans['custom_quantity'] ) {
 			// custom quantity enabled. let's take quantity from PayPal results.
-			$quantity = $payment['purchase_units'][0]['items'][0]['quantity'];
+			$quantity = $this->get_quantity( $payment );
 		}
 
 		// check if we have variatons selected for the product.
@@ -122,12 +116,10 @@ class WPEC_Process_IPN {
 			// custom amount enabled. let's take amount from PayPal results.
 			// The custom amount is already have variation applied as it
 			// retrieved from the PayPal payment object.
-			$price = $payment['purchase_units'][0]['items'][0]['unit_amount']['value'] - $var_amount;
+			$price = $this->get_price( $payment ) - $var_amount;
 		}
 
-		if ( ! empty( $payment['purchase_units'][0]['items'][0]['tax']['value'] ) ) {
-			$tax_total = $payment['purchase_units'][0]['amount']['breakdown']['tax_total']['value'];
-		}
+		$tax_total = get_tax_total( $payment );
 
 		// For some reason PayPal is missing 'discount' items from breakdown...
 		// So code below does not work.
@@ -149,7 +141,7 @@ class WPEC_Process_IPN {
 			}
 		}
 
-		$amount = WPEC_Utility_Functions::round_price( floatval( $payment['purchase_units'][0]['amount']['value'] ) );
+		$amount = WPEC_Utility_Functions::round_price( floatval( $this->get_total( $payment ) ) );
 
 		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
 		$discounted_amount  = WPEC_Utility_Functions::round_price( ( $price + $var_amount ) * $quantity - $discount );
@@ -164,7 +156,7 @@ class WPEC_Process_IPN {
 		}
 
 		// check if payment currency matches.
-		if ( $payment['purchase_units'][0]['amount']['currency_code'] !== $currency ) {
+		if ( $this->get_currency( $payment ) !== $currency ) {
 			// payment currency mismatch.
 			WPEC_Debug_Logger::log( 'Error! Payment currency mismatch.', false );
 			_e( 'Payment currency mismatch.', 'wp-express-checkout' );
@@ -316,6 +308,98 @@ class WPEC_Process_IPN {
 		echo wp_json_encode( $res );
 
 		exit;
+	}
+
+	/**
+	 * Checks the payment status before processing.
+	 *
+	 * @param array $payment
+	 */
+	protected function check_status( $payment ) {
+		if ( strtoupper( $payment['status'] ) !== 'COMPLETED' ) {
+			// payment is unsuccessful.
+			WPEC_Debug_Logger::log( 'Payment is not approved. Payment status: ' . $payment['status'], false );
+			printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $payment['status'] );
+			exit;
+		}
+	}
+
+	/**
+	 * Retrieves the item name from transaction data.
+	 *
+	 * @param array $payment
+	 * @return string
+	 */
+	protected function get_item_name( $payment ) {
+		return $payment['purchase_units'][0]['description'];
+	}
+
+	/**
+	 * Retrieves transition name.
+	 *
+	 * @param array $payment
+	 * @return string
+	 */
+	protected function get_transition_name( $payment ) {
+		$item_name  = $this->get_item_name( $payment );
+		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $item_name );
+
+		return $trans_name;
+	}
+
+	/**
+	 * Retrieves peoduct queantity from transaction data.
+	 *
+	 * @param array $payment
+	 * @return int
+	 */
+	protected function get_quantity( $payment ) {
+		return $payment['purchase_units'][0]['items'][0]['quantity'];
+	}
+
+	/**
+	 * Retrieves item price from transaction data.
+	 *
+	 * @param array $payment
+	 * @return string
+	 */
+	protected function get_price( $payment ) {
+		return $payment['purchase_units'][0]['items'][0]['unit_amount']['value'];
+	}
+
+	/**
+	 * Retrieves order total from transaction data.
+	 *
+	 * @param array $payment
+	 * @return string
+	 */
+	protected function get_total( $payment ) {
+		return $payment['purchase_units'][0]['amount']['value'];
+	}
+
+	/**
+	 * Retrieves tax total from transaction data.
+	 *
+	 * @param array $payment
+	 * @return mixed
+	 */
+	protected function get_tax_total( $payment ) {
+		$tax_total = 0;
+		if ( ! empty( $payment['purchase_units'][0]['items'][0]['tax']['value'] ) ) {
+			$tax_total = $payment['purchase_units'][0]['amount']['breakdown']['tax_total']['value'];
+		}
+
+		return $tax_total;
+	}
+
+	/**
+	 * Retrieves currency from transaction data.
+	 *
+	 * @param array $payment
+	 * @return string
+	 */
+	protected function get_currency( $payment ) {
+		return $payment['purchase_units'][0]['amount']['currency_code'];
 	}
 
 }
