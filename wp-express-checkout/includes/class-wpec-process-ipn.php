@@ -6,6 +6,9 @@
  * Sends notification emails.
  * Triggers after payment processed hook: wpec_payment_completed
  * Sends to Thank You page.
+ *
+ * Trial Price = (Trial subscription price * Quantity) + Tax + Shipping
+ * Regular Price = ( ( Regular subscription price |  Custom Price ) + Variations amount ) * Quantity - Discount + Tax + Shipping
  */
 
 /**
@@ -119,7 +122,7 @@ class WPEC_Process_IPN {
 			$price = $this->get_price( $payment ) - $var_amount;
 		}
 
-		$tax_total = get_tax_total( $payment );
+		$tax_total = $this->get_tax_total( $payment );
 
 		// For some reason PayPal is missing 'discount' items from breakdown...
 		// So code below does not work.
