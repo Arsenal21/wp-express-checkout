@@ -323,6 +323,7 @@ class WPECShortcode {
 
 		$data = apply_filters( 'wpec_button_js_data', array(
 			'id'              => $button_id,
+			'nonce'           => wp_create_nonce( $button_id . $product_id ),
 			'env'             => $env,
 			'client_id'       => $client_id,
 			'price'           => $price,

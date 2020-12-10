@@ -14,7 +14,7 @@ class WPEC_View_Download {
 	/**
 	 * The class instance.
 	 *
-	 * @var WPEC_Process_IPN
+	 * @var WPEC_View_Download
 	 */
 	protected static $instance = null;
 

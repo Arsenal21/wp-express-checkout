@@ -3,8 +3,8 @@ var ppecHandler = function( data ) {
 	var parent = this;
 
 	this.processPayment = function( payment ) {
-		jQuery.post( ppecFrontVars.ajaxUrl, { action: "wpec_process_payment", wp_ppdg_payment: payment, data: parent.data } )
-			.done( parent.completePayment( data ) );
+		jQuery.post( ppecFrontVars.ajaxUrl, { action: "wpec_process_payment", wp_ppdg_payment: payment, data: parent.data, nonce: parent.data.nonce } )
+			.done( function( data ) { parent.completePayment( data ) } );
 	};
 
 	this.completePayment = function( data ) {

@@ -59,6 +59,8 @@ class WPEC_Process_IPN {
 		$payment = stripslashes_deep( $_POST['wp_ppdg_payment'] );
 		$data    = stripslashes_deep( $_POST['data'] );
 
+		check_ajax_referer( $data['id'] . $data['product_id'], 'nonce' );
+
 		$this->check_status( $payment );
 
 		// Log debug (if enabled).
