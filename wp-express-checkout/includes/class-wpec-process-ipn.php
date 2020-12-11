@@ -6,9 +6,6 @@
  * Sends notification emails.
  * Triggers after payment processed hook: wpec_payment_completed
  * Sends to Thank You page.
- *
- * Trial Price = (Trial subscription price * Quantity) + Tax + Shipping
- * Regular Price = ( ( Regular subscription price |  Custom Price ) + Variations amount ) * Quantity - Discount + Tax + Shipping
  */
 
 /**
@@ -47,8 +44,6 @@ class WPEC_Process_IPN {
 	 * Processes the payment on AJAX call.
 	 */
 	public function wpec_process_payment() {
-
-		// TODO: AJAX Nonce verification.
 
 		if ( ! isset( $_POST['wp_ppdg_payment'] ) ) {
 			// no payment data provided.
@@ -124,8 +119,6 @@ class WPEC_Process_IPN {
 			$price = $this->get_price( $payment ) - $var_amount;
 		}
 
-		$tax_total = $this->get_tax_total( $payment );
-
 		// For some reason PayPal is missing 'discount' items from breakdown...
 		// So code below does not work.
 		//if ( isset( $payment['purchase_units'][0]['amount']['breakdown']['discount']['value'] ) ) {
@@ -185,7 +178,7 @@ class WPEC_Process_IPN {
 			'price'       => $price,
 			'quantity'    => $quantity,
 			'tax'         => $tax,
-			'tax_total'   => $tax_total,
+			'tax_total'   => $this->get_tax_total( $payment ),
 			'shipping'    => $shipping,
 			'amount'      => $amount,
 			'discount'    => $discount,
@@ -213,10 +206,7 @@ class WPEC_Process_IPN {
 			}
 		}
 
-		$address = '';
-		if ( ! empty( $payment['purchase_units'][0]['shipping']['address'] ) ) {
-			$address = implode( ', ', (array) $payment['purchase_units'][0]['shipping']['address'] );
-		}
+		$address = $this->get_address( $payment );
 
 		$args = array(
 			'first_name'      => $payment['payer']['name']['given_name'],
@@ -405,6 +395,20 @@ class WPEC_Process_IPN {
 	 */
 	protected function get_currency( $payment ) {
 		return $payment['purchase_units'][0]['amount']['currency_code'];
+	}
+
+	/**
+	 * Retrieves payer address from transaction data.
+	 *
+	 * @param array $payment
+	 * @return string
+	 */
+	protected function get_address( $payment ) {
+		$address = '';
+		if ( ! empty( $payment['purchase_units'][0]['shipping']['address'] ) ) {
+			$address = implode( ', ', (array) $payment['purchase_units'][0]['shipping']['address'] );
+		}
+		return $address;
 	}
 
 }
