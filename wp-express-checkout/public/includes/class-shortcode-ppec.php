@@ -314,6 +314,10 @@ class WPECShortcode {
 			. '</div>';
 		}
 
+		$output .= '<div id="wp-ppdg-dialog-message" title="">';
+		$output .= '<p id="wp-ppdg-dialog-msg"></p>';
+		$output .= '</div>';
+
 		$output .= '<div class = "wp-ppec-button-container">';
 
 		$output .= sprintf( '<div id="%s" style="max-width:%s"></div>', $button_id, $btn_width ? $btn_width . 'px;' : '' );

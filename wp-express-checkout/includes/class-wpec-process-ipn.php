@@ -73,7 +73,7 @@ class WPEC_Process_IPN {
 			_e( 'No transaction info found in transient.', 'wp-express-checkout' );
 			exit;
 		}
-		$price    = $trans['price'];
+		$price    = $this->get_price( $payment, $trans );
 		$quantity = $trans['quantity'];
 		$tax      = $trans['tax'];
 		$shipping = $trans['shipping'];
@@ -112,11 +112,11 @@ class WPEC_Process_IPN {
 			}
 		}
 
-		if ( $trans['custom_amount'] ) {
+		if ( $this->is_custom_amount( $trans['custom_amount'] ) ) {
 			// custom amount enabled. let's take amount from PayPal results.
 			// The custom amount is already have variation applied as it
 			// retrieved from the PayPal payment object.
-			$price = $this->get_price( $payment ) - $var_amount;
+			$price = $price - $var_amount;
 		}
 
 		// For some reason PayPal is missing 'discount' items from breakdown...
@@ -143,7 +143,7 @@ class WPEC_Process_IPN {
 
 		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
 		$discounted_amount  = WPEC_Utility_Functions::round_price( ( $price + $var_amount ) * $quantity - $discount );
-		$item_tax_amount    = WPEC_Utility_Functions::round_price( WPEC_Utility_Functions::get_tax_amount( $discounted_amount / $quantity, $tax ) );
+		$item_tax_amount    = $this->get_item_tax_amount( $discounted_amount, $quantity, $tax );
 		$original_price_amt = WPEC_Utility_Functions::round_price( $discounted_amount + $item_tax_amount * $quantity + $shipping );
 
 		if ( $amount < $original_price_amt ) {
@@ -184,9 +184,9 @@ class WPEC_Process_IPN {
 			'discount'    => $discount,
 			'coupon_code' => $coupon_code,
 			'currency'    => $currency,
-			'state'       => $payment['status'],
-			'id'          => $payment['id'],
-			'create_time' => $payment['create_time'],
+			'state'       => $this->get_transaction_status( $payment ),
+			'id'          => $this->get_transaction_id( $payment ),
+			'create_time' => $this->get_transaction_create_time( $payment ),
 			'variations'  => $variations,
 			'var_applied' => $var_applied,
 			'var_amount'  => $var_amount,
@@ -213,7 +213,7 @@ class WPEC_Process_IPN {
 			'last_name'       => $payment['payer']['name']['surname'],
 			'product_details' => $product_details,
 			'payer_email'     => $payment['payer']['email_address'],
-			'transaction_id'  => $payment['id'],
+			'transaction_id'  => $this->get_transaction_id( $payment ),
 			'purchase_amt'    => $amount,
 			'purchase_date'   => date( 'Y-m-d' ),
 			'coupon_code'     => $coupon_code,
@@ -306,15 +306,26 @@ class WPEC_Process_IPN {
 	}
 
 	/**
+	 * Filters the custom amount option.
+	 *
+	 * @param type $true
+	 * @return bool
+	 */
+	public function is_custom_amount( $true ) {
+		return !! $true;
+	}
+
+	/**
 	 * Checks the payment status before processing.
 	 *
 	 * @param array $payment
 	 */
 	protected function check_status( $payment ) {
-		if ( strtoupper( $payment['status'] ) !== 'COMPLETED' ) {
+		$status = $this->get_transaction_status( $payment );
+		if ( strtoupper( $status ) !== 'COMPLETED' ) {
 			// payment is unsuccessful.
-			WPEC_Debug_Logger::log( 'Payment is not approved. Payment status: ' . $payment['status'], false );
-			printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $payment['status'] );
+			WPEC_Debug_Logger::log( 'Payment is not approved. Payment status: ' . $status, false );
+			printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $status );
 			exit;
 		}
 	}
@@ -356,10 +367,19 @@ class WPEC_Process_IPN {
 	 * Retrieves item price from transaction data.
 	 *
 	 * @param array $payment
+	 * @param array $trans
+	 *
 	 * @return string
 	 */
-	protected function get_price( $payment ) {
-		return $payment['purchase_units'][0]['items'][0]['unit_amount']['value'];
+	protected function get_price( $payment, $trans ) {
+		$price = $trans['price'];
+		if ( $this->is_custom_amount( $trans['custom_amount'] ) ) {
+			// custom amount enabled. let's take amount from PayPal results.
+			// The custom amount is already have variation applied as it
+			// retrieved from the PayPal payment object.
+			$price = $payment['purchase_units'][0]['items'][0]['unit_amount']['value'];
+		}
+		return $price;
 	}
 
 	/**
@@ -410,5 +430,54 @@ class WPEC_Process_IPN {
 		}
 		return $address;
 	}
+
+	/**
+	 * Retrieves transaction id.
+	 *
+	 * @param array $payment
+	 * @return string
+	 */
+	protected function get_transaction_id( $payment ) {
+		return $payment['id'];
+	}
+
+	/**
+	 * Retrieves transaction status.
+	 *
+	 * @param array $payment
+	 * @return string
+	 */
+	protected function get_transaction_status( $payment ) {
+		return $payment['status'];
+	}
+
+	/**
+	 * Retrieves transaction data.
+	 *
+	 * @param array $payment
+	 * @return string
+	 */
+	protected function get_transaction_create_time( $payment ) {
+		return $payment['create_time'];
+	}
+
+	/**
+	 * Retrieves the tax amount depending on the way the PayPal calcualtes it.
+	 *
+	 * For regular instant payments PayPal calculates it from the one item and
+	 * then rounds, for subscriptions it calculates for a quantity and then rounds.
+	 *
+	 * This difference in approach creates a lot of difficulties in the total
+	 * amount validation. This method allows override it.
+	 *
+	 * @param type $price
+	 * @param type $quantity
+	 * @param type $tax
+	 * @return type
+	 */
+	protected function get_item_tax_amount( $price, $quantity, $tax ) {
+		return WPEC_Utility_Functions::round_price( WPEC_Utility_Functions::get_tax_amount( $price / $quantity, $tax ) );
+	}
+
 
 }

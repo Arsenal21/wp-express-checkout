@@ -129,11 +129,6 @@ class WPEC_Main {
 
 		$script_url = add_query_arg( $args, 'https://www.paypal.com/sdk/js' );
 		printf( '<script src="%s" data-partner-attribution-id="TipsandTricks_SP"></script>', $script_url );
-		?>
-		<div id="wp-ppdg-dialog-message" title="">
-			<p id="wp-ppdg-dialog-msg"></p>
-		</div>
-		<?php
 	}
 
 	/**
