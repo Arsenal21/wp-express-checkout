@@ -168,9 +168,21 @@ class WPEC_Process_IPN {
 			update_post_meta( $coupon['id'], 'wpec_coupon_red_count', $curr_redeem_cnt );
 		}
 
-		// If code execution got this far, it means everything is ok with payment
-		// let's insert order.
-		$order = OrdersWPEC::get_instance();
+		$order = OrdersWPEC::create();
+
+		/* translators: Order title: {Quantity} {Item name} - {Status} */
+		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $this->get_transaction_status( $payment ) ) );
+		$order->set_currency( $currency );
+		$order->add_item( PPECProducts::$products_slug, $item_name, $price, $quantity, true );
+		$order->add_item( 'tax', __( 'Tax', 'wp-express-checkout' ), $this->get_tax_total( $payment ) );
+		$order->add_item( 'shipping', __( 'Shipping', 'wp-express-checkout' ), $shipping );
+		$order->add_item( 'coupon', sprintf( __( 'Coupon Code: %s', 'wp-express-checkout' ), $coupon_code ), abs( $discount ) * -1 );
+
+		foreach ( $variations as $var ) {
+			$order->add_item( 'variation', $var[0], $var[1], $quantity );
+		}
+
+		//$order->add_data( $var, $variations );
 
 		$payment_details = array(
 			'item_id'     => $item_id,
@@ -192,11 +204,18 @@ class WPEC_Process_IPN {
 			'var_amount'  => $var_amount,
 		);
 
-		$order_id = $order->insert( $payment_details, $payment['payer'] );
+		// save payment details in post meta for future use.
+		update_post_meta( $order->get_id(), 'ppec_payment_details', $payment_details );
+		update_post_meta( $order->get_id(), 'ppec_payer_details', $payment['payer'] );
+
+		// If code execution got this far, it means everything is ok with payment
+		// let's insert order.
+		OrdersWPEC::get_instance()->insert( $order, $payment_details, $payment['payer'] );
+		$order_id = $order->get_id();
 
 		$downloads = WPEC_View_Download::get_order_downloads_list( $order_id );
 
-		$product_details = WPEC_Utility_Functions::get_product_details( $payment_details );
+		$product_details = WPEC_Utility_Functions::get_product_details( $order );
 		if ( ! empty( $downloads ) ) {
 			$product_details .= "\n\n";
 			// Include the download links in the product details.

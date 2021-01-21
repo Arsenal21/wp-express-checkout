@@ -101,7 +101,8 @@ class WPEC_Utility_Functions {
 	public static function replace_dynamic_order_tags( $text, $order_id, $args = array() ) {
 		$payment_details = get_post_meta( $order_id, 'ppec_payment_details', true );
 		$payer_details   = get_post_meta( $order_id, 'ppec_payer_details', true );
-		$product_details = self::get_product_details( $payment_details ) . "\n";
+		$order           = OrdersWPEC::retrieve( $order_id );
+		$product_details = self::get_product_details( $order ) . "\n";
 
 		$tags_vals = array(
 			'first_name'      => $payer_details['name']['given_name'],
@@ -166,44 +167,51 @@ class WPEC_Utility_Functions {
 	 *
 	 * @since 2.0
 	 *
-	 * @param array $payment The order details stored in the
-	 *                       `ppec_payment_details` meta field.
+	 * @param array      $payment The order details stored in the
+	 *                            `ppec_payment_details` meta field.
+	 * @param WPEC_Order $order The order details stored in the
+	 *
 	 * @return string
 	 */
-	public static function get_product_details( $payment ) {
+	public static function get_product_details( $order ) {
 		$output   = '';
 
 		/* translators: {Order Summary Item Name}: {Value} */
 		$template = __( '%1$s: %2$s', 'wp-express-checkout' );
 
-		$output .= sprintf( $template, __( 'Product Name', 'wp-express-checkout' ), $payment['item_name'] ) . "\n";
-		$output .= sprintf( $template, __( 'Quantity', 'wp-express-checkout' ), $payment['quantity'] ) . "\n";
-		$output .= sprintf( $template, __( 'Price', 'wp-express-checkout' ), self::price_format( $payment['price'] ) ) . "\n";
+		$product_item = $order->get_item( PPECProducts::$products_slug );
 
-		foreach ( $payment['variations'] as $var ) {
-			if ( $var[1] < 0 ) {
-				$amnt_str = '-' . self::price_format( abs( $var[1] ) );
-			} else {
-				$amnt_str = self::price_format( $var[1] );
-			}
-			$output .= sprintf( $template, $var[0], $amnt_str ) . "\n";
+		$output .= sprintf( $template, __( 'Product Name', 'wp-express-checkout' ), $product_item['name'] ) . "\n";
+		$output .= sprintf( $template, __( 'Quantity', 'wp-express-checkout' ), $product_item['quantity'] ) . "\n";
+		$output .= sprintf( $template, __( 'Price', 'wp-express-checkout' ), self::price_format( $product_item['price'] ) ) . "\n";
+
+		$variations = $order->get_items( 'variation' );
+		$var_amount = 0;
+		foreach ( $variations as $var ) {
+			$var_amount += $var['price'];
+			$amnt_str = self::price_format( $var['price'] );
+			$output .= sprintf( $template, $var['name'], $amnt_str ) . "\n";
 		}
 
-		if ( $payment['discount'] || $payment['tax_total'] || $payment['shipping'] ) {
+		$discount = $order->get_item( 'coupon' );
+		$tax      = $order->get_item( 'tax' );
+		$shipping = $order->get_item( 'shipping' );
+
+		if ( $discount || $tax || $shipping ) {
 			$output .= '--------------------------------' . "\n";
-			$output .= sprintf( $template, __( 'Subtotal', 'wp-express-checkout' ), self::price_format( ( $payment['price'] + $payment['var_amount'] ) * $payment['quantity'] ) ) . "\n";
+			$output .= sprintf( $template, __( 'Subtotal', 'wp-express-checkout' ), self::price_format( ( $product_item['price'] + $var_amount ) * $product_item['quantity'] ) ) . "\n";
 			$output .= '--------------------------------' . "\n";
 		}
 
-		if ( $payment['discount'] ) {
-			$output .= ( $payment['coupon_code'] ) ? sprintf( $template, __( 'Coupon Code', 'wp-express-checkout' ), $payment['coupon_code'] ) . "\n" : '';
-			$output .= ( $payment['discount'] ) ? sprintf( $template, __( 'Discount', 'wp-express-checkout' ), self::price_format( $payment['discount'] ) ) . "\n" : '';
+		if ( ! empty( $discount ) ) {
+			$output .= $discount['name'] . "\n";
+			$output .= sprintf( $template, __( 'Discount', 'wp-express-checkout' ), self::price_format( $discount['price'] ) ) . "\n";
 		}
 
-		$output .= ( $payment['tax_total'] ) ? sprintf( $template, __( 'Tax', 'wp-express-checkout' ), self::price_format( $payment['tax_total'] ) ) . "\n" : '';
-		$output .= ( $payment['shipping'] ) ? sprintf( $template, __( 'Shipping', 'wp-express-checkout' ), self::price_format( $payment['shipping'] ) ) . "\n" : '';
+		$output .= ( $tax ) ? sprintf( $template, __( 'Tax', 'wp-express-checkout' ), self::price_format( $tax['price'] ) ) . "\n" : '';
+		$output .= ( $shipping ) ? sprintf( $template, __( 'Shipping', 'wp-express-checkout' ), self::price_format( $shipping['price'] ) ) . "\n" : '';
 		$output .= '--------------------------------' . "\n";
-		$output .= sprintf( $template, __( 'Total Amount', 'wp-express-checkout' ), self::price_format( $payment['amount'] ) ) . "\n";
+		$output .= sprintf( $template, __( 'Total Amount', 'wp-express-checkout' ), self::price_format( $order->get_total() ) ) . "\n";
 
 		return $output;
 	}

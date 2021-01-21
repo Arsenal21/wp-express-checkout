@@ -90,27 +90,25 @@ class OrdersWPEC {
 	 *
 	 * @since     1.0.0
 	 *
+	 * @param WPEC_Order $order The order object.
+	 * @param array      $payer The payer data.
+	 *
 	 * @return    Numeric    Post or Order ID.
 	 */
-	public function insert( $payment, $payer ) {
+	public function insert( $order, $payment, $payer ) {
 		$post = array();
 
-		/* translators: Order title: {Quantity} {Item name} - {Status} */
-		$title_template = __( '%1$d %2$s - %3$s', 'wp-express-checkout' );
 		/* translators: Order Summary Item Name: Value */
 		$template = __( '%1$s: %2$s', 'wp-express-checkout' );
-
-		$post['post_title'] = sprintf( $title_template, $payment['quantity'], $payment['item_name'], $payment['state'] );
-		$post['post_status'] = 'publish';
 
 		$output = '';
 
 		$output .= __( '<h2>Order Details</h2>' ) . "\n";
-		$output .= sprintf( $template, __( 'Order Time' ), date( 'F j, Y, g:i a', strtotime( $payment['create_time'] ) ) ) . "\n";
-		$output .= sprintf( $template, __( 'Transaction ID' ), $payment['id'] ) . "\n";
+		$output .= sprintf( $template, __( 'Order Time' ), date( 'F j, Y, g:i a', get_post_datetime() ) ) . "\n";
+		$output .= sprintf( $template, __( 'Transaction ID' ), $order->get_id() ) . "\n";
 		$output .= '--------------------------------' . "\n";
 
-		$output .= WPEC_Utility_Functions::get_product_details( $payment );
+		$output .= WPEC_Utility_Functions::get_product_details( $order );
 		$output .= "\n\n";
 
 		$output .= __( '<h2>Customer Details</h2>' ) . "\n";
@@ -119,16 +117,10 @@ class OrdersWPEC {
 		$output .= sprintf( $template, __( 'E-Mail Address' ), $payer['email_address'] ) . "\n";
 		$output .= sprintf( $template, __( 'Country Code' ), $payer['address']['country_code'] ) . "\n";
 
+		$post['ID'] = $order->get_id();
 		$post['post_content'] = $output;
-		$post['post_type'] = self::PTYPE;
 
-		$post_id = wp_insert_post( $post );
-
-		// save payment details in post meta for future use.
-		update_post_meta( $post_id, 'ppec_payment_details', $payment );
-		update_post_meta( $post_id, 'ppec_payer_details', $payer );
-
-		return $post_id;
+		wp_update_post( $post );
 	}
 
 	/**
@@ -136,7 +128,7 @@ class OrdersWPEC {
 	 *
 	 * @param string $description (optional)
 	 *
-	 * @return object|bool WPEC_Order New Order object. Boolean False on failure.
+	 * @return bool|WPEC_Order New Order object. Boolean False on failure.
 	 */
 	static public function create( $description = '' ) {
 		if ( empty( $description ) ) {
@@ -148,7 +140,7 @@ class OrdersWPEC {
 				'post_title' => $description,
 				'post_content' => __( 'Transaction Data', 'wp-express-checkout' ),
 				'post_type' => self::PTYPE,
-				'post_status' => 'pending',
+				'post_status' => 'publish',
 			)
 		);
 

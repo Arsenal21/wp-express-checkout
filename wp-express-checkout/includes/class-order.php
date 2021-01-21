@@ -72,8 +72,8 @@ class WPEC_Order {
 		$this->creator['ip_address'] = $this->get_meta_field( 'ip_address', 0, $meta_fields );
 		$this->payment['currency']   = $this->get_meta_field( 'currency', 'USD', $meta_fields );
 
-		$this->items = $this->get_meta_field( 'wpec_order_items', array(), $meta_fields );
-		$this->data  = $this->get_meta_field( 'wpec_order_data', array(), $meta_fields );
+		$this->items = get_post_meta( $this->id, 'wpec_order_items', true );
+		$this->data = get_post_meta( $this->id, 'wpec_order_data', true );
 
 		$this->refresh_total();
 
@@ -133,24 +133,14 @@ class WPEC_Order {
 	 * @param string $name     A string representing the name of item being added
 	 * @param float  $price    The price of the item
 	 * @param int    $quantity The quantity of the item
-	 * @param int    $post_id  (optional) The post that this item affects
 	 * @param bool   $unique   (optional) Is the item unique per order
 	 *
 	 * @return bool True if the item has been added, False otherwise
 	 */
-	public function add_item( $type, $name, $price, $quantity = 1, $post_id = 0, $unique = false ) {
-
-		if ( empty( $post_id ) ) {
-			$post_id = $this->get_id();
-		}
+	public function add_item( $type, $name, $price, $quantity = 1, $unique = false ) {
 
 		if ( ! is_numeric( $quantity ) ) {
 			trigger_error( 'Quantity must be an integer', E_USER_WARNING );
-			return false;
-		}
-
-		if ( ! is_numeric( $post_id ) ) {
-			trigger_error( 'Post ID must be an integer', E_USER_WARNING );
 			return false;
 		}
 
@@ -187,16 +177,10 @@ class WPEC_Order {
 	 *
 	 * @param string $type (optional) A string representing the type of item to remove
 	 * @param int $price (optional)   The price of the item being removed
-	 * @param int $post_id (optional) The post that this item affects
 	 *
 	 * @return int|bool Quantity of items removed. Boolean False on failure
 	 */
-	public function remove_item( $type = '', $price = 0, $post_id = 0 ) {
-
-		if ( ! empty( $post_id ) && ! is_numeric( $post_id ) ) {
-			trigger_error( 'Post ID must be an integer', E_USER_WARNING );
-			return false;
-		}
+	public function remove_item( $type = '', $price = 0 ) {
 
 		if ( ! empty( $price ) && ! is_numeric( $price ) ) {
 			trigger_error( 'Price must be numeric', E_USER_WARNING );
@@ -216,10 +200,6 @@ class WPEC_Order {
 			}
 
 			if ( ! empty( $price ) && $item['price'] != $price ) {
-				continue;
-			}
-
-			if ( ! empty( $post_id ) && $item['post_id'] != $post_id ) {
 				continue;
 			}
 
@@ -258,8 +238,9 @@ class WPEC_Order {
 	/**
 	 * Returns an array of all the items in an order that match a given
 	 * type, or all items in the order.
-	 * @param  string $item_type (optional) Item Type to filter by
-	 * @return array            An array of items matching the criteria
+	 *
+	 * @param  string $type (optional) Item Type to filter by
+	 * @return array        An array of items matching the criteria
 	 */
 	public function get_items( $type = '' ) {
 
