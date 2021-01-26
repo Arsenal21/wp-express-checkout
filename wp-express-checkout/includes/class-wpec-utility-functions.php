@@ -99,20 +99,20 @@ class WPEC_Utility_Functions {
 	 * @return string
 	 */
 	public static function replace_dynamic_order_tags( $text, $order_id, $args = array() ) {
-		$payment_details = get_post_meta( $order_id, 'ppec_payment_details', true );
 		$payer_details   = get_post_meta( $order_id, 'ppec_payer_details', true );
 		$order           = OrdersWPEC::retrieve( $order_id );
 		$product_details = self::get_product_details( $order ) . "\n";
+		$coupon_item     = $order->get_item( 'coupon' );
 
 		$tags_vals = array(
 			'first_name'      => $payer_details['name']['given_name'],
 			'last_name'       => $payer_details['name']['surname'],
 			'product_details' => $product_details,
 			'payer_email'     => $payer_details['email_address'],
-			'transaction_id'  => $payment_details['id'],
-			'purchase_amt'    => $payment_details['amount'],
+			'transaction_id'  => $order->get_data( 'transaction_id' ),
+			'purchase_amt'    => $order->get_total(),
 			'purchase_date'   => date( 'Y-m-d' ),
-			'coupon_code'     => $payment_details['coupon_code'],
+			'coupon_code'     => ! empty( $coupon_item['mata']['code'] ) ? $coupon_item['mata']['code'] : 0,
 			'address'         => '', // Not implemented yet.
 			'order_id'        => $order_id,
 		);
@@ -167,8 +167,6 @@ class WPEC_Utility_Functions {
 	 *
 	 * @since 2.0
 	 *
-	 * @param array      $payment The order details stored in the
-	 *                            `ppec_payment_details` meta field.
 	 * @param WPEC_Order $order The order details stored in the
 	 *
 	 * @return string

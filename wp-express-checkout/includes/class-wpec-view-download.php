@@ -49,17 +49,18 @@ class WPEC_View_Download {
 	public static function get_download_url( $order_id, $grp_id = '', $var_id = '' ) {
 		$download_url = '';
 
-		$order = get_post_meta( $order_id, 'ppec_payment_details', true );
+		$order = OrdersWPEC::retrieve( $order_id );
 
-		if ( $order && ! empty( $order['item_id'] ) ) {
+		if ( ! $order ) {
+			return $download_url;
+		}
+
+		$product_item = $order->get_item( PPECProducts::$products_slug );
+		$product      = get_post( $product_item['post_id'] );
+
+		if ( ! empty( $product ) || ( ! $product->ppec_product_upload && '' === $grp_id ) ) {
 			$order_timestamp = get_the_time( 'U', $order_id );
-
-			$product_id = (int) $order['item_id'];
-			$product    = get_post( $product_id );
-
-			if ( empty( $product ) || PPECProducts::$products_slug !== $product->post_type || ( ! $product->ppec_product_upload && '' === $grp_id ) ) {
-				return $download_url;
-			}
+			$product_id      = $product->ID;
 
 			$var_args = array();
 			$var_key  = '';
@@ -98,29 +99,29 @@ class WPEC_View_Download {
 	 */
 	public static function get_order_downloads_list( $order_id ) {
 		$downloads = array();
-		$order     = get_post_meta( $order_id, 'ppec_payment_details', true );
+		$order     = OrdersWPEC::retrieve( $order_id );
 
-		if ( ! $order || empty( $order['item_id'] ) ) {
+		if ( ! $order ) {
 			return $downloads;
 		}
 
-		$product_id = (int) $order['item_id'];
-		$product    = get_post( $product_id );
+		$product_item = $order->get_item( PPECProducts::$products_slug );
+		$product      = get_post( $product_item['post_id'] );
 
 		if ( empty( $product ) ) {
 			return $downloads;
 		}
 
 		if ( ! empty( $product->ppec_product_upload ) ) {
-			$downloads[ $order['item_name'] ] = self::get_download_url( $order_id );
+			$downloads[ $product_item['name'] ] = self::get_download_url( $order_id );
 		}
 
-		$var_applied = $order['var_applied'];
+		$var_applied = $order->get_items( 'variation' );
 
 		if ( ! empty( $var_applied ) ) {
 			foreach ( $var_applied as $var ) {
-				if ( ! empty( $var['url'] ) ) {
-					$downloads[ $var['group_name'] . ' - ' . $var['name'] ] = self::get_download_url( $order_id, (int) $var['grp_id'], (int) $var['id'] );
+				if ( ! empty( $var['meta']['url'] ) ) {
+					$downloads[ $var['name'] ] = self::get_download_url( $order_id, (int) $var['meta']['grp_id'], (int) $var['meta']['id'] );
 				}
 			}
 		}
@@ -140,15 +141,16 @@ class WPEC_View_Download {
 		}
 
 		$order_id = absint( $_GET['order_id'] );
-		$order    = get_post_meta( $order_id, 'ppec_payment_details', true );
+		$order    = OrdersWPEC::retrieve( $order_id );
 
 		if ( empty( $order ) ) {
 			wp_die( esc_html__( 'Invalid Order ID!', 'wp-express-checkout' ) );
 		}
 
 		$product = get_post( absint( $_GET['wpec_download_file'] ) );
+		$item    = $order->get_item( PPECProducts::$products_slug );
 
-		if ( empty( $product ) || PPECProducts::$products_slug !== $product->post_type || $order['item_id'] !== $product->ID ) {
+		if ( empty( $product ) || (int) $item['post_id'] !== $product->ID ) {
 			wp_die( esc_html__( 'Invalid product ID!', 'wp-express-checkout' ) );
 		}
 
@@ -188,14 +190,15 @@ class WPEC_View_Download {
 		// Get the product custom post type object.
 		$product  = get_post( absint( $_GET['wpec_download_file'] ) );
 		$order_id = absint( $_GET['order_id'] );
-		$order    = get_post_meta( $order_id, 'ppec_payment_details', true );
+		$order    = OrdersWPEC::retrieve( $order_id );
 		$file_url = '';
 
 		// Trigger the action hook (product object is also passed). It can be usewd to override the download handling via an addon.
 		do_action( 'wpec_process_download_request', $product, $order_id );
 
 		if ( isset( $_GET['var_id'] ) && isset( $_GET['grp_id'] ) ) {
-			$var_applied = $order['var_applied'];
+			$var_applied = $order->get_items( 'variation' );
+			$var_applied = wp_list_pluck( $var_applied, 'meta' );
 			$variation   = wp_list_filter( $var_applied, array( 'grp_id' => $_GET['grp_id'], 'id' => $_GET['var_id'] ) );
 
 			if ( ! empty( $variation ) ) {

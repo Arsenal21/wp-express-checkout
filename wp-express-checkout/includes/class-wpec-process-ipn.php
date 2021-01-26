@@ -173,16 +173,30 @@ class WPEC_Process_IPN {
 		/* translators: Order title: {Quantity} {Item name} - {Status} */
 		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $this->get_transaction_status( $payment ) ) );
 		$order->set_currency( $currency );
-		$order->add_item( PPECProducts::$products_slug, $item_name, $price, $quantity, true );
-		$order->add_item( 'tax', __( 'Tax', 'wp-express-checkout' ), $this->get_tax_total( $payment ) );
-		$order->add_item( 'shipping', __( 'Shipping', 'wp-express-checkout' ), $shipping );
-		$order->add_item( 'coupon', sprintf( __( 'Coupon Code: %s', 'wp-express-checkout' ), $coupon_code ), abs( $discount ) * -1 );
+		$order->add_item( PPECProducts::$products_slug, $item_name, $price, $quantity, $item_id, true );
+		$order->add_data( 'transaction_id', $this->get_transaction_id( $payment ) );
+		$order->add_data( 'state', $this->get_transaction_status( $payment ) );
 
-		foreach ( $variations as $var ) {
-			$order->add_item( 'variation', $var[0], $var[1], $quantity );
+		/**
+		 * Runs after draft order created, but before adding items.
+		 *
+		 * @param WPEC_Order $order   The order object.
+		 * @param array      $payment The raw order data retrieved via API.
+		 * @param array      $data    The purchase data generated on a client side.
+		 */
+		do_action( 'wpec_create_order', $order, $payment, $data );
+
+		$tax_total = $this->get_tax_total( $payment );
+
+		if ( $tax_total ) {
+			$order->add_item( 'tax', __( 'Tax', 'wp-express-checkout' ), $this->get_tax_total( $payment ) );
 		}
-
-		//$order->add_data( $var, $variations );
+		if ( $shipping ) {
+			$order->add_item( 'shipping', __( 'Shipping', 'wp-express-checkout' ), $shipping );
+		}
+		if ( $coupon_code ) {
+			$order->add_item( 'coupon', sprintf( __( 'Coupon Code: %s', 'wp-express-checkout' ), $coupon_code ), abs( $discount ) * -1, 1, false, array( 'code' => $coupon_code ) );
+		}
 
 		$payment_details = array(
 			'item_id'     => $item_id,

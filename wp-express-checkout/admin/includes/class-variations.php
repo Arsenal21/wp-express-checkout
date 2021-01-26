@@ -52,4 +52,52 @@ class WPEC_Variations {
 		return $var;
 	}
 
+	/**
+	 * Adds callback to create a new order event.
+	 */
+	public static function init() {
+		add_action( 'wpec_create_order', array( __CLASS__, 'add_variations_to_order' ), 20, 3 );
+	}
+
+	/**
+	 * Adds purchased variation to the order.
+	 *
+	 * @param WPEC_Order $order   The order object.
+	 * @param array      $payment The raw order data retrieved via API.
+	 * @param array      $data    The purchase data generated on a client side.
+	 */
+	public static function add_variations_to_order( $order, $payment, $data ) {
+		if ( empty( $data['variations']['applied'] ) ) {
+			return;
+		}
+
+		// Variations depended on the product.
+		$product_item = $order->get_item( PPECProducts::$products_slug );
+
+		// we got variations posted. Let's get variations from product.
+		$v = new self( $product_item['post_id'] );
+		if ( ! empty( $v->variations ) && $product_item ) {
+			// there are variations configured for the product.
+			$posted_v = $data['variations']['applied'];
+			foreach ( $posted_v as $grp_id => $var_id ) {
+				$var = $v->get_variation( $grp_id, $var_id );
+				if ( ! empty( $var ) ) {
+					$order->add_item(
+						'variation',
+						$var['group_name'] . ' - ' . $var['name'],
+						$var['price'],
+						$product_item['quantity'],
+						$product_item['post_id'],
+						false,
+						array(
+							'id'     => $var['id'],
+							'grp_id' => $var['grp_id'],
+							'url'    => $var['url'],
+						)
+					);
+				}
+			}
+		}
+	}
+
 }

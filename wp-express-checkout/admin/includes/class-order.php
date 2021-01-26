@@ -105,7 +105,7 @@ class OrdersWPEC {
 
 		$output .= __( '<h2>Order Details</h2>' ) . "\n";
 		$output .= sprintf( $template, __( 'Order Time' ), date( 'F j, Y, g:i a', get_post_datetime() ) ) . "\n";
-		$output .= sprintf( $template, __( 'Transaction ID' ), $order->get_id() ) . "\n";
+		$output .= sprintf( $template, __( 'Transaction ID' ), $order->get_data( 'transaction_id' ) ) . "\n";
 		$output .= '--------------------------------' . "\n";
 
 		$output .= WPEC_Utility_Functions::get_product_details( $order );
@@ -159,7 +159,7 @@ class OrdersWPEC {
 
 		$order = self::retrieve( $id );
 
-		do_action( 'wpec_create_order', $order );
+		do_action( 'wpec_create_order_draft', $order );
 
 		return $order;
 	}

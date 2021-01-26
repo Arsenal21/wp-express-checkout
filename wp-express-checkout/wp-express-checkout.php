@@ -71,6 +71,7 @@ add_action( 'plugins_loaded', array( 'WPEC_Main', 'get_instance' ) );
 add_action( 'plugins_loaded', array( 'WPECShortcode', 'get_instance' ) );
 add_action( 'plugins_loaded', array( 'WPEC_View_Download', 'get_instance' ) );
 add_action( 'plugins_loaded', array( 'WPEC_Post_Type_Content_Handler', 'get_instance' ) );
+add_action( 'plugins_loaded', array( 'WPEC_Variations', 'init' ) );
 
 /*
  * Do init time tasks
