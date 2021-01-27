@@ -4,7 +4,7 @@ var ppecHandler = function( data ) {
 
 	this.processPayment = function( payment ) {
 		jQuery.post( ppecFrontVars.ajaxUrl, { action: "wpec_process_payment", wp_ppdg_payment: payment, data: parent.data, nonce: parent.data.nonce } )
-			.done( function( data ) { parent.completePayment( data ) } );
+			.done( function( data ) { parent.completePayment( data ); } );
 	};
 
 	this.completePayment = function( data ) {
@@ -65,7 +65,8 @@ var ppecHandler = function( data ) {
 		if ( ! isNaN( val ) && 0 < val ) {
 			input.removeClass( 'hasError' );
 			errMsgCont.fadeOut( 'fast' );
-			parent.data.price = val;
+			parent.data.orig_price = val;
+			parent.data.price = parent.applyVariations( val );
 		} else {
 			input.addClass( 'hasError' );
 			errMsgCont.html( errMsg );
