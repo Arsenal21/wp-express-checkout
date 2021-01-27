@@ -93,8 +93,6 @@ class WPEC_Process_IPN {
 		}
 
 		// check if we have variatons selected for the product.
-		$variations  = array();
-		$var_applied = array();
 		if ( ! empty( $data['variations']['applied'] ) ) {
 			// we got variations posted. Let's get variations from product.
 			$v = new WPEC_Variations( $item_id );
@@ -105,8 +103,6 @@ class WPEC_Process_IPN {
 					$var = $v->get_variation( $grp_id, $var_id );
 					if ( ! empty( $var ) ) {
 						$var_amount    = $var_amount + $var['price'];
-						$variations[]  = array( $var['group_name'] . ' - ' . $var['name'], $var['price'] );
-						$var_applied[] = $var;
 					}
 				}
 			}
@@ -176,6 +172,7 @@ class WPEC_Process_IPN {
 		$order->add_item( PPECProducts::$products_slug, $item_name, $price, $quantity, $item_id, true );
 		$order->add_data( 'transaction_id', $this->get_transaction_id( $payment ) );
 		$order->add_data( 'state', $this->get_transaction_status( $payment ) );
+		$order->add_data( 'payer', $payment['payer'] );
 
 		/**
 		 * Runs after draft order created, but before adding items.
@@ -187,9 +184,8 @@ class WPEC_Process_IPN {
 		do_action( 'wpec_create_order', $order, $payment, $data );
 
 		$tax_total = $this->get_tax_total( $payment );
-
 		if ( $tax_total ) {
-			$order->add_item( 'tax', __( 'Tax', 'wp-express-checkout' ), $this->get_tax_total( $payment ) );
+			$order->add_item( 'tax', __( 'Tax', 'wp-express-checkout' ), $tax_total );
 		}
 		if ( $shipping ) {
 			$order->add_item( 'shipping', __( 'Shipping', 'wp-express-checkout' ), $shipping );
@@ -198,33 +194,11 @@ class WPEC_Process_IPN {
 			$order->add_item( 'coupon', sprintf( __( 'Coupon Code: %s', 'wp-express-checkout' ), $coupon_code ), abs( $discount ) * -1, 1, false, array( 'code' => $coupon_code ) );
 		}
 
-		$payment_details = array(
-			'item_id'     => $item_id,
-			'item_name'   => $item_name,
-			'price'       => $price,
-			'quantity'    => $quantity,
-			'tax'         => $tax,
-			'tax_total'   => $this->get_tax_total( $payment ),
-			'shipping'    => $shipping,
-			'amount'      => $amount,
-			'discount'    => $discount,
-			'coupon_code' => $coupon_code,
-			'currency'    => $currency,
-			'state'       => $this->get_transaction_status( $payment ),
-			'id'          => $this->get_transaction_id( $payment ),
-			'create_time' => $this->get_transaction_create_time( $payment ),
-			'variations'  => $variations,
-			'var_applied' => $var_applied,
-			'var_amount'  => $var_amount,
-		);
-
-		// save payment details in post meta for future use.
-		update_post_meta( $order->get_id(), 'ppec_payment_details', $payment_details );
-		update_post_meta( $order->get_id(), 'ppec_payer_details', $payment['payer'] );
+		// TODO: Add all order items using 'wpec_create_order' hook.
 
 		// If code execution got this far, it means everything is ok with payment
 		// let's insert order.
-		OrdersWPEC::get_instance()->insert( $order, $payment_details, $payment['payer'] );
+		OrdersWPEC::get_instance()->insert( $order );
 		$order_id = $order->get_id();
 
 		$downloads = WPEC_View_Download::get_order_downloads_list( $order_id );
@@ -482,16 +456,6 @@ class WPEC_Process_IPN {
 	 */
 	protected function get_transaction_status( $payment ) {
 		return $payment['status'];
-	}
-
-	/**
-	 * Retrieves transaction data.
-	 *
-	 * @param array $payment
-	 * @return string
-	 */
-	protected function get_transaction_create_time( $payment ) {
-		return $payment['create_time'];
 	}
 
 	/**

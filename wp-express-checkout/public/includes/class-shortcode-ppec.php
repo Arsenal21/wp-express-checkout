@@ -510,7 +510,7 @@ class WPECShortcode {
 		foreach ( $variations as $var ) {
 			$var_amount += $var['price'];
 			$amnt_str = WPEC_Utility_Functions::price_format( $var['price'] );
-			$output .= sprintf( $template, $var['name'], $amnt_str ) . "\n";
+			$output .= sprintf( $template, $var['name'], $amnt_str );
 		}
 
 		$discount = $order->get_item( 'coupon' );

@@ -91,12 +91,12 @@ class OrdersWPEC {
 	 * @since     1.0.0
 	 *
 	 * @param WPEC_Order $order The order object.
-	 * @param array      $payer The payer data.
 	 *
 	 * @return    Numeric    Post or Order ID.
 	 */
-	public function insert( $order, $payment, $payer ) {
-		$post = array();
+	public function insert( $order ) {
+		$post  = array();
+		$payer = $order->get_data( 'payer' );
 
 		/* translators: Order Summary Item Name: Value */
 		$template = __( '%1$s: %2$s', 'wp-express-checkout' );
@@ -184,6 +184,91 @@ class OrdersWPEC {
 		}
 
 		$order = new WPEC_Order( $order_data );
+
+		// Maybe upgrade the order to version 2.0.0
+		if ( ! is_numeric( $order_data->post_name ) ) {
+			self::upgrade_legacy( $order );
+		}
+
+		return $order;
+	}
+
+	/**
+	 * Upgrades legacy order.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param WPEC_Order $order
+	 * @return type
+	 */
+	private static function upgrade_legacy( $order ) {
+
+		$data = get_post_meta( $order->get_id(), 'ppec_payment_details', true );
+		$user = get_post_meta( $order->get_id(), 'ppec_payer_details', true );
+
+		if ( empty( $data ) ) {
+			return $order;
+		}
+
+		$defaults = array(
+			'item_id'     => 0,
+			'item_name'   => '',
+			'price'       => 0,
+			'quantity'    => 1,
+			'tax'         => 0,
+			'tax_total'   => 0,
+			'shipping'    => 0,
+			'amount'      => 0,
+			'discount'    => 0,
+			'coupon_code' => '',
+			'currency'    => 'USD',
+			'state'       => '',
+			'id'          => '',
+			'variations'  => array(),
+			'var_applied' => array(),
+			'var_amount'  => 0,
+		);
+
+		$data = array_merge( $defaults, $data );
+
+		$order->set_currency( $data['currency'] );
+		$order->add_item( PPECProducts::$products_slug, $data['item_name'], $data['price'], $data['quantity'], $data['item_id'], true );
+		$order->add_data( 'transaction_id', $data['id'] );
+		$order->add_data( 'state', $data['state'] );
+		$order->add_data( 'payer', $user );
+
+		foreach ( $data['var_applied'] as $var ) {
+			if ( ! empty( $var ) ) {
+				$order->add_item(
+					'variation',
+					$var['group_name'] . ' - ' . $var['name'],
+					$var['price'],
+					$data['quantity'],
+					$data['item_id'],
+					false,
+					array(
+						'id'     => $var['id'],
+						'grp_id' => $var['grp_id'],
+						'url'    => $var['url'],
+					)
+				);
+			}
+		}
+		if ( $data['tax_total'] ) {
+			$order->add_item( 'tax', __( 'Tax', 'wp-express-checkout' ), $data['tax_total'] );
+		}
+		if ( $data['shipping'] ) {
+			$order->add_item( 'shipping', __( 'Shipping', 'wp-express-checkout' ), $data['shipping'] );
+		}
+		if ( $data['coupon_code'] ) {
+			$order->add_item( 'coupon', sprintf( __( 'Coupon Code: %s', 'wp-express-checkout' ), $data['coupon_code'] ), abs( $data['discount'] ) * -1, 1, false, array( 'code' => $data['coupon_code'] ) );
+		}
+
+		wp_update_post( array(
+			'ID' => $order->get_id(),
+			'post_name' => $order->get_id(),
+		) );
+
 		return $order;
 	}
 

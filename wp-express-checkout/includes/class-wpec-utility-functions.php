@@ -99,9 +99,9 @@ class WPEC_Utility_Functions {
 	 * @return string
 	 */
 	public static function replace_dynamic_order_tags( $text, $order_id, $args = array() ) {
-		$payer_details   = get_post_meta( $order_id, 'ppec_payer_details', true );
 		$order           = OrdersWPEC::retrieve( $order_id );
 		$product_details = self::get_product_details( $order ) . "\n";
+		$payer_details   = $order->get_data( 'payer' );
 		$coupon_item     = $order->get_item( 'coupon' );
 
 		$tags_vals = array(
