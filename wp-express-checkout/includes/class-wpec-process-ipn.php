@@ -73,95 +73,18 @@ class WPEC_Process_IPN {
 			_e( 'No transaction info found in transient.', 'wp-express-checkout' );
 			exit;
 		}
-		$price    = $this->get_price( $payment, $trans );
+		$price    = $this->get_price( $payment, $trans, $data );
 		$quantity = $trans['quantity'];
 		$tax      = $trans['tax'];
 		$shipping = $trans['shipping'];
 		$currency = $trans['currency'];
 		$item_id  = $trans['product_id'];
 
-		$discount   = 0;
-		$var_amount = 0;
-
-		$coupon      = null;
-		$coupon_code = '';
 		$wpec_plugin = WPEC_Main::get_instance();
 
 		if ( $trans['custom_quantity'] ) {
 			// custom quantity enabled. let's take quantity from PayPal results.
 			$quantity = $this->get_quantity( $payment );
-		}
-
-		// check if we have variatons selected for the product.
-		if ( ! empty( $data['variations']['applied'] ) ) {
-			// we got variations posted. Let's get variations from product.
-			$v = new WPEC_Variations( $item_id );
-			if ( ! empty( $v->variations ) ) {
-				// there are variations configured for the product.
-				$posted_v = $data['variations']['applied'];
-				foreach ( $posted_v as $grp_id => $var_id ) {
-					$var = $v->get_variation( $grp_id, $var_id );
-					if ( ! empty( $var ) ) {
-						$var_amount    = $var_amount + $var['price'];
-					}
-				}
-			}
-		}
-
-		if ( $this->is_custom_amount( $trans['custom_amount'] ) ) {
-			// custom amount enabled. let's take amount from PayPal results.
-			// The custom amount is already have variation applied as it
-			// retrieved from the PayPal payment object.
-			$price = $price - $var_amount;
-		}
-
-		// For some reason PayPal is missing 'discount' items from breakdown...
-		// So code below does not work.
-		//if ( isset( $payment['purchase_units'][0]['amount']['breakdown']['discount']['value'] ) ) {
-			//$discount = $payment['purchase_units'][0]['amount']['breakdown']['discount']['value'];
-		//}
-		// Use JS data array instead.
-		if ( ! empty( $data['couponCode'] ) ) {
-			// Check the coupon code.
-			$coupon = WPEC_Coupons_Admin::get_coupon( $data['couponCode'] );
-			if ( true === $coupon['valid'] && WPEC_Coupons_Admin::is_coupon_allowed_for_product( $coupon['id'], $item_id ) ) {
-				// Get the discount amount.
-				if ( $coupon['discountType'] === 'perc' ) {
-					$discount = WPEC_Utility_Functions::round_price( ( $price + $var_amount ) * $quantity * ( $coupon['discount'] / 100 ) );
-				} else {
-					$discount = $coupon['discount'];
-				}
-				$coupon_code = $data['couponCode'];
-			}
-		}
-
-		$amount = WPEC_Utility_Functions::round_price( floatval( $this->get_total( $payment ) ) );
-
-		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
-		$discounted_amount  = WPEC_Utility_Functions::round_price( ( $price + $var_amount ) * $quantity - $discount );
-		$item_tax_amount    = $this->get_item_tax_amount( $discounted_amount, $quantity, $tax );
-		$original_price_amt = WPEC_Utility_Functions::round_price( $discounted_amount + $item_tax_amount * $quantity + $shipping );
-
-		if ( $amount < $original_price_amt ) {
-			// payment amount mismatch. Amount paid is less.
-			WPEC_Debug_Logger::log('Error! Payment amount mismatch. Original: ' . $original_price_amt . ', Received: ' . $amount, false);
-			_e( 'Payment amount mismatch with the original price.', 'wp-express-checkout' );
-			exit;
-		}
-
-		// check if payment currency matches.
-		if ( $this->get_currency( $payment ) !== $currency ) {
-			// payment currency mismatch.
-			WPEC_Debug_Logger::log( 'Error! Payment currency mismatch.', false );
-			_e( 'Payment currency mismatch.', 'wp-express-checkout' );
-			exit;
-		}
-
-		// Redeem coupon count if needed.
-		if ( $coupon && $coupon['valid'] ) {
-			$curr_redeem_cnt = get_post_meta( $coupon['id'], 'wpec_coupon_red_count', true );
-			$curr_redeem_cnt++;
-			update_post_meta( $coupon['id'], 'wpec_coupon_red_count', $curr_redeem_cnt );
 		}
 
 		$order = OrdersWPEC::create();
@@ -183,18 +106,30 @@ class WPEC_Process_IPN {
 		 */
 		do_action( 'wpec_create_order', $order, $payment, $data );
 
-		$tax_total = $this->get_tax_total( $payment );
-		if ( $tax_total ) {
-			$order->add_item( 'tax', __( 'Tax', 'wp-express-checkout' ), $tax_total );
+		if ( $tax ) {
+			$item_tax_amount = $this->get_item_tax_amount( $order->get_total(), $quantity, $tax );
+			$order->add_item( 'tax', __( 'Tax', 'wp-express-checkout' ), $item_tax_amount * $quantity );
 		}
 		if ( $shipping ) {
 			$order->add_item( 'shipping', __( 'Shipping', 'wp-express-checkout' ), $shipping );
 		}
-		if ( $coupon_code ) {
-			$order->add_item( 'coupon', sprintf( __( 'Coupon Code: %s', 'wp-express-checkout' ), $coupon_code ), abs( $discount ) * -1, 1, false, array( 'code' => $coupon_code ) );
+
+		$amount = WPEC_Utility_Functions::round_price( floatval( $this->get_total( $payment ) ) );
+		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
+		if ( $amount < $order->get_total() ) {
+			// payment amount mismatch. Amount paid is less.
+			WPEC_Debug_Logger::log( 'Error! Payment amount mismatch. Original: ' . $order->get_total() . ', Received: ' . $amount, false );
+			_e( 'Payment amount mismatch with the original price.', 'wp-express-checkout' );
+			exit;
 		}
 
-		// TODO: Add all order items using 'wpec_create_order' hook.
+		// check if payment currency matches.
+		if ( $this->get_currency( $payment ) !== $currency ) {
+			// payment currency mismatch.
+			WPEC_Debug_Logger::log( 'Error! Payment currency mismatch.', false );
+			_e( 'Payment currency mismatch.', 'wp-express-checkout' );
+			exit;
+		}
 
 		// If code execution got this far, it means everything is ok with payment
 		// let's insert order.
@@ -214,6 +149,9 @@ class WPEC_Process_IPN {
 		}
 
 		$address = $this->get_address( $payment );
+
+		$coupon_item = $order->get_item( 'coupon' );
+		$coupon_code = $coupon_item ? $coupon_item['meta']['code'] :'';
 
 		$args = array(
 			'first_name'      => $payment['payer']['name']['given_name'],
@@ -378,13 +316,11 @@ class WPEC_Process_IPN {
 	 *
 	 * @return string
 	 */
-	protected function get_price( $payment, $trans ) {
+	protected function get_price( $payment, $trans, $data = array() ) {
 		$price = $trans['price'];
 		if ( $this->is_custom_amount( $trans['custom_amount'] ) ) {
-			// custom amount enabled. let's take amount from PayPal results.
-			// The custom amount is already have variation applied as it
-			// retrieved from the PayPal payment object.
-			$price = $payment['purchase_units'][0]['items'][0]['unit_amount']['value'];
+			// custom amount enabled. let's take amount from JS data.
+			$price = $data['orig_price'];
 		}
 		return $price;
 	}
@@ -397,21 +333,6 @@ class WPEC_Process_IPN {
 	 */
 	protected function get_total( $payment ) {
 		return $payment['purchase_units'][0]['amount']['value'];
-	}
-
-	/**
-	 * Retrieves tax total from transaction data.
-	 *
-	 * @param array $payment
-	 * @return mixed
-	 */
-	protected function get_tax_total( $payment ) {
-		$tax_total = 0;
-		if ( ! empty( $payment['purchase_units'][0]['items'][0]['tax']['value'] ) ) {
-			$tax_total = $payment['purchase_units'][0]['amount']['breakdown']['tax_total']['value'];
-		}
-
-		return $tax_total;
 	}
 
 	/**

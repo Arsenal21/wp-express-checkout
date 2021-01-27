@@ -6,6 +6,8 @@ class WPEC_Coupons_Admin {
 
 	function __construct() {
 		add_action( 'init', array( $this, 'init_handler' ) );
+		add_action( 'wpec_create_order', array( $this, 'add_discount_to_order' ), 30, 3 );
+		add_action( 'wpec_payment_completed', array( $this, 'redeem_coupon' ) );
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'add_menu' ) );
 			if ( wp_doing_ajax() ) {
@@ -485,6 +487,60 @@ class WPEC_Coupons_Admin {
 
 		wp_safe_redirect( 'edit.php?post_type=' . PPECProducts::$products_slug . '&page=wpec-coupons' );
 		exit;
+	}
+
+	/**
+	 * Adds coupon discount to the order.
+	 *
+	 * @param WPEC_Order $order   The order object.
+	 * @param array      $payment The raw order data retrieved via API.
+	 * @param array      $data    The purchase data generated on a client side.
+	 */
+	public function add_discount_to_order( $order, $payment, $data ) {
+		// For some reason PayPal is missing 'discount' items from breakdown...
+		// So code below does not work.
+		//if ( isset( $payment['purchase_units'][0]['amount']['breakdown']['discount']['value'] ) ) {
+			//$discount = $payment['purchase_units'][0]['amount']['breakdown']['discount']['value'];
+		//}
+		// Use JS data array instead.
+		if ( empty( $data['couponCode'] ) ) {
+			return;
+		}
+		$product_item = $order->get_item( PPECProducts::$products_slug );
+		$item_id      = $product_item['post_id'];
+		// Check the coupon code.
+		$coupon = self::get_coupon( $data['couponCode'] );
+		if ( true === $coupon['valid'] && self::is_coupon_allowed_for_product( $coupon['id'], $item_id ) ) {
+			// Get the discount amount.
+			if ( $coupon['discountType'] === 'perc' ) {
+				$discount = WPEC_Utility_Functions::round_price( $order->get_total() * ( $coupon['discount'] / 100 ) );
+			} else {
+				$discount = $coupon['discount'];
+			}
+			$coupon_code = $data['couponCode'];
+			$order->add_item( 'coupon', sprintf( __( 'Coupon Code: %s', 'wp-express-checkout' ), $coupon_code ), abs( $discount ) * -1, 1, false, array( 'code' => $coupon_code ) );
+		}
+	}
+
+	/**
+	 * Redeems coupon added to the order.
+	 *
+	 * @param array $payment  The raw payment data.
+	 * @param int   $order_id The order ID.
+	 */
+	public function redeem_coupon( $payment, $order_id ) {
+		$order       = OrdersWPEC::retrieve( $order_id );
+		$coupon_item = $order->get_item( 'coupon' );
+		if ( $coupon_item ) {
+			// Check the coupon code.
+			$coupon = self::get_coupon( $coupon_item['meta']['coupon_code'] );
+			// Redeem coupon count if needed.
+			if ( $coupon && $coupon['valid'] ) {
+				$curr_redeem_cnt = get_post_meta( $coupon['id'], 'wpec_coupon_red_count', true );
+				$curr_redeem_cnt++;
+				update_post_meta( $coupon['id'], 'wpec_coupon_red_count', $curr_redeem_cnt );
+			}
+		}
 	}
 
 }
