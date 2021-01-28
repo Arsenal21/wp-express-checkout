@@ -131,5 +131,3 @@ class WPEC_Blocks {
 	}
 
 }
-
-new WPEC_Blocks();

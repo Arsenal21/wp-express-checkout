@@ -3,11 +3,6 @@
 class WPEC_Integrations {
 
 	public function __construct() {
-		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ), 0 );
-	}
-
-	public function plugins_loaded() {
-		// WP eMember integration.
 		if ( function_exists( 'wp_emember_install' ) ) {
 			add_action( 'wpec_payment_completed', array( $this, 'handle_emember_signup' ), 10, 3 );
 		}
@@ -71,5 +66,3 @@ class WPEC_Integrations {
 	}
 
 }
-
-new WPEC_Integrations();

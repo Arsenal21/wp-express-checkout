@@ -544,5 +544,3 @@ class WPEC_Coupons_Admin {
 	}
 
 }
-
-new WPEC_Coupons_Admin();

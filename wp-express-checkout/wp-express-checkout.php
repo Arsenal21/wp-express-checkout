@@ -26,30 +26,31 @@ define( 'WPEC_LOG_FILE', WPEC_PLUGIN_PATH . 'wpec-debug-log.txt' );
 /* ----------------------------------------------------------------------------*
  * Includes
  * ---------------------------------------------------------------------------- */
-include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-utility-functions.php');
-include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-debug-logger.php');
-include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-init-time-tasks.php');
-include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-process-ipn.php');
-include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-view-download.php');
-include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-integrations.php');
-include_once( WPEC_PLUGIN_PATH . 'includes/class-wpec-post-type-content-handler.php');
-include_once( WPEC_PLUGIN_PATH . 'includes/class-order.php');
+// Generate autoload:
+// 1. Add class name/path to composer.json
+// 2. Run in console: composer dump-autoload
+require WPEC_PLUGIN_PATH . '/vendor/autoload.php';
 
-require_once( WPEC_PLUGIN_PATH . 'public/class-wpec-main.php' );
-require_once( WPEC_PLUGIN_PATH . 'public/includes/class-shortcode-ppec.php' );
+// Load classes.
+function wpec_load_classes() {
+	WPEC_Main::get_instance();
+	WPECShortcode::get_instance();
+	WPEC_View_Download::get_instance();
+	WPEC_Post_Type_Content_Handler::get_instance();
+	WPEC_Process_IPN::get_instance();
+	WPEC_Variations::init();
 
-require_once( WPEC_PLUGIN_PATH . 'admin/views/blocks.php' );
-require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-products.php' );
-require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-order.php' );
-require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-coupons.php' );
-require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-variations.php' );
+	new WPEC_Blocks();
+	new WPEC_Init_Time_Tasks();
+	new WPEC_Integrations();
 
-//Load admin side class
-if ( is_admin() ) {
-    require_once( WPEC_PLUGIN_PATH . 'admin/class-wpec-admin.php' );
-    require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-order-list.php' );
-    add_action( 'plugins_loaded', array( 'WPEC_Admin', 'get_instance' ) );
+	// Load admin side class
+	if ( is_admin() ) {
+		WPEC_Admin::get_instance();
+		new WPEC_Coupons_Admin();
+	}
 }
+add_action( 'plugins_loaded', 'wpec_load_classes' );
 
 /*
  * Register hooks that are fired when the plugin is activated or deactivated.
@@ -66,20 +67,3 @@ function wpec_add_settings_link($links, $file) {
     return $links;
 }
 add_filter('plugin_action_links', 'wpec_add_settings_link', 10, 2);
-
-//Plugins loaded hook
-add_action( 'plugins_loaded', array( 'WPEC_Main', 'get_instance' ) );
-add_action( 'plugins_loaded', array( 'WPECShortcode', 'get_instance' ) );
-add_action( 'plugins_loaded', array( 'WPEC_View_Download', 'get_instance' ) );
-add_action( 'plugins_loaded', array( 'WPEC_Post_Type_Content_Handler', 'get_instance' ) );
-add_action( 'plugins_loaded', array( 'WPEC_Variations', 'init' ) );
-
-/*
- * Do init time tasks
- */
-$init_time_tasks = new WPEC_Init_Time_Tasks();
-
-/*
- * Listen and handle payment processing. IPN handling.
- */
-WPEC_Process_IPN::get_instance();

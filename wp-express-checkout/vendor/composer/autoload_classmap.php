@@ -6,4 +6,24 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'OrdersWPEC' => $baseDir . '/admin/includes/class-order.php',
+    'PPECProducts' => $baseDir . '/admin/includes/class-products.php',
+    'WPECShortcode' => $baseDir . '/public/includes/class-shortcode-ppec.php',
+    'WPEC\\PayPal\\Client' => $baseDir . '/includes/paypal-client/class-client.php',
+    'WPEC\\PayPal\\Request' => $baseDir . '/includes/paypal-client/class-request.php',
+    'WPEC_Admin' => $baseDir . '/admin/class-wpec-admin.php',
+    'WPEC_Blocks' => $baseDir . '/admin/views/blocks.php',
+    'WPEC_Coupons_Admin' => $baseDir . '/admin/includes/class-coupons.php',
+    'WPEC_Debug_Logger' => $baseDir . '/includes/class-wpec-debug-logger.php',
+    'WPEC_Init_Time_Tasks' => $baseDir . '/includes/class-wpec-init-time-tasks.php',
+    'WPEC_Integrations' => $baseDir . '/includes/class-wpec-integrations.php',
+    'WPEC_Main' => $baseDir . '/public/class-wpec-main.php',
+    'WPEC_Order' => $baseDir . '/includes/class-order.php',
+    'WPEC_Order_List' => $baseDir . '/admin/includes/class-order-list.php',
+    'WPEC_Post_Type_Content_Handler' => $baseDir . '/includes/class-wpec-post-type-content-handler.php',
+    'WPEC_Process_IPN' => $baseDir . '/includes/class-wpec-process-ipn.php',
+    'WPEC_Utility_Functions' => $baseDir . '/includes/class-wpec-utility-functions.php',
+    'WPEC_Variations' => $baseDir . '/admin/includes/class-variations.php',
+    'WPEC_View_Download' => $baseDir . '/includes/class-wpec-view-download.php',
 );

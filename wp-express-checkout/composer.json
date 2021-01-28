@@ -1,5 +1,28 @@
 {
-    "require": {
-        "paypal/paypal-checkout-sdk": "1.0.1"
-    }
+	"require": {
+		"paypal/paypal-checkout-sdk": "1.0.1"
+	},
+	"autoload": {
+		"classmap": [
+			"includes/class-wpec-utility-functions.php",
+			"includes/class-wpec-debug-logger.php",
+			"includes/class-wpec-init-time-tasks.php",
+			"includes/class-wpec-process-ipn.php",
+			"includes/class-wpec-view-download.php",
+			"includes/class-wpec-integrations.php",
+			"includes/class-wpec-post-type-content-handler.php",
+			"includes/class-order.php",
+			"includes/paypal-client/class-client.php",
+			"includes/paypal-client/class-request.php",
+			"public/class-wpec-main.php",
+			"public/includes/class-shortcode-ppec.php",
+			"admin/class-wpec-admin.php",
+			"admin/views/blocks.php",
+			"admin/includes/class-products.php",
+			"admin/includes/class-order.php",
+			"admin/includes/class-coupons.php",
+			"admin/includes/class-variations.php",
+			"admin/includes/class-order-list.php"
+		]
+	}
 }

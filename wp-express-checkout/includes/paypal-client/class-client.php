@@ -2,8 +2,6 @@
 /**
  * The PayPal SDK client.
  *
- * Use WPEC_Utility_Functions::load_paypal_lib() for including classes.
- *
  * @package WPEC
  * @since 1.9.3
  */
