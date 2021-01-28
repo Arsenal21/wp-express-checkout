@@ -44,7 +44,7 @@ class OrdersWPEC {
 			'label' => __( 'orders', 'wp-express-checkout' ),
 			'description' => __( 'WPEC Orders', 'wp-express-checkout' ),
 			'labels' => $labels,
-			'supports' => array( 'title', 'editor', 'excerpt', 'revisions', 'custom-fields', ),
+			'supports' => array( 'title', 'editor', 'custom-fields', 'author' ),
 			'hierarchical' => false,
 			'public' => false,
 			'show_ui' => true,
@@ -149,7 +149,7 @@ class OrdersWPEC {
 		}
 
 		if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
-			add_post_meta( $id, 'ip_address', $_SERVER['REMOTE_ADDR'], true );
+			add_post_meta( $id, 'wpec_ip_address', $_SERVER['REMOTE_ADDR'], true );
 		}
 
 		wp_update_post( array(
@@ -232,6 +232,7 @@ class OrdersWPEC {
 		$data = array_merge( $defaults, $data );
 
 		$order->set_currency( $data['currency'] );
+		$order->set_status( 'paid' );
 		$order->add_item( PPECProducts::$products_slug, $data['item_name'], $data['price'], $data['quantity'], $data['item_id'], true );
 		$order->add_data( 'transaction_id', $data['id'] );
 		$order->add_data( 'state', $data['state'] );

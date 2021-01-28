@@ -133,6 +133,7 @@ class WPEC_Process_IPN {
 
 		// If code execution got this far, it means everything is ok with payment
 		// let's insert order.
+		$order->set_status( 'paid' );
 		OrdersWPEC::get_instance()->insert( $order );
 		$order_id = $order->get_id();
 

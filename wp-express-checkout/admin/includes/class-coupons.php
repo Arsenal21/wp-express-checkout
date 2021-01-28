@@ -7,7 +7,7 @@ class WPEC_Coupons_Admin {
 	function __construct() {
 		add_action( 'init', array( $this, 'init_handler' ) );
 		add_action( 'wpec_create_order', array( $this, 'add_discount_to_order' ), 30, 3 );
-		add_action( 'wpec_payment_completed', array( $this, 'redeem_coupon' ) );
+		add_action( 'wpec_payment_completed', array( $this, 'redeem_coupon' ), 10, 2 );
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'add_menu' ) );
 			if ( wp_doing_ajax() ) {

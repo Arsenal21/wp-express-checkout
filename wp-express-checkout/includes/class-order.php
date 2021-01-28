@@ -44,6 +44,12 @@ class WPEC_Order {
 	);
 
 	/**
+	 * State of the order.
+	 * @var string
+	 */
+	protected $state = 'incomplete';
+
+	/**
 	 * List of items in the current order
 	 * @var array
 	 */
@@ -69,8 +75,10 @@ class WPEC_Order {
 		$meta_fields = get_post_custom( $post->ID );
 
 		$this->creator['user_id']    = $post->post_author;
-		$this->creator['ip_address'] = $this->get_meta_field( 'ip_address', 0, $meta_fields );
-		$this->payment['currency']   = $this->get_meta_field( 'currency', 'USD', $meta_fields );
+		$this->creator['ip_address'] = $this->get_meta_field( 'wpec_ip_address', 0, $meta_fields );
+		$this->payment['currency']   = $this->get_meta_field( 'wpec_currency', 'USD', $meta_fields );
+
+		$this->state = $this->get_meta_field( 'wpec_order_state', 'incomplete', $meta_fields );
 
 		$this->items = array_filter( (array) get_post_meta( $this->id, 'wpec_order_items', true ) );
 		$this->data  = array_filter( (array) get_post_meta( $this->id, 'wpec_order_data', true ) );
@@ -82,9 +90,10 @@ class WPEC_Order {
 	public function get_info( $part = '' ){
 
 		$basic = array(
-			'id' => $this->id,
-			'parent' => $this->parent,
+			'id'          => $this->id,
+			'parent'      => $this->parent,
 			'description' => $this->description,
+			'state'       => $this->state
 		);
 
 		$fields = array_merge( $basic, $this->creator, $this->payment );
@@ -183,8 +192,7 @@ class WPEC_Order {
 			'meta'     => $meta,
 		);
 
-		update_post_meta( $this->get_id(), 'wpec_order_items', $this->items );
-
+		$this->update_meta( 'wpec_order_items', $this->items );
 		$this->refresh_total();
 
 		return true;
@@ -235,8 +243,7 @@ class WPEC_Order {
 			$removed++;
 		}
 
-		update_post_meta( $this->get_id(), 'wpec_order_items', $this->items );
-
+		$this->update_meta( 'wpec_order_items', $this->items );
 		$this->refresh_total();
 
 		return $removed;
@@ -306,10 +313,10 @@ class WPEC_Order {
 			$this->payment['total'] = 0;
 		}
 
-		$total = get_post_meta( $this->id, 'total_price', true );
+		$total = get_post_meta( $this->id, 'wpec_total_price', true );
 
 		if ( $total != $this->payment['total'] ) {
-			$this->update_meta( 'total_price', $this->payment['total'] );
+			$this->update_meta( 'wpec_total_price', $this->payment['total'] );
 		}
 	}
 
@@ -336,7 +343,7 @@ class WPEC_Order {
 		}
 
 		$this->payment['currency'] = $currency_code;
-		$this->update_meta( 'currency', $this->payment['currency'] );
+		$this->update_meta( 'wpec_currency', $this->payment['currency'] );
 		return true;
 	}
 
@@ -346,6 +353,47 @@ class WPEC_Order {
 	 */
 	public function get_currency() {
 		return $this->payment['currency'];
+	}
+
+	/**
+	 * Returns the current state of the order
+	 *
+	 * @return string State of the order.
+	 */
+	public function get_status() {
+		return $this->state;
+	}
+
+	/**
+	 * Returns a version of the current state for display.
+	 *
+	 * @return string Current state, localized for display
+	 */
+	public function get_display_status() {
+		$statuses = array(
+			'incomplete' => __( 'Incomplete', 'wp-express-checkout' ),
+			'paid'       => __( 'Paid', 'wp-express-checkout' ),
+		);
+		$status = $this->get_status();
+		return $statuses[ $status ];
+	}
+
+	/**
+	 * Sets the order statues and sends out correct action hooks.
+	 * New order status must be different than old status
+	 *
+	 * @param string $status Valid status for order.
+	 */
+	public function set_status( $status ) {
+
+		if ( $this->state === $status ) {
+			return;
+		}
+
+		$this->state = $status;
+		$this->update_meta( 'wpec_order_state', $status );
+
+		do_action( 'wpec_transaction_' . $status, $this );
 	}
 
 	public function set_author( $author_id ){
@@ -409,10 +457,8 @@ class WPEC_Order {
 	 * @param string $value The value.
 	 */
 	public function add_data( $key, $value ){
-
 		$this->data[ $key ] = $value;
-
-		update_post_meta( $this->id, 'wpec_order_data', $this->data );
+		$this->update_meta( 'wpec_order_data', $this->data );
 	}
 
 	/**
