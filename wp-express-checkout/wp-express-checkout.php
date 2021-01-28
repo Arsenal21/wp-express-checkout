@@ -47,6 +47,7 @@ require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-variations.php' );
 //Load admin side class
 if ( is_admin() ) {
     require_once( WPEC_PLUGIN_PATH . 'admin/class-wpec-admin.php' );
+    require_once( WPEC_PLUGIN_PATH . 'admin/includes/class-order-list.php' );
     add_action( 'plugins_loaded', array( 'WPEC_Admin', 'get_instance' ) );
 }
 

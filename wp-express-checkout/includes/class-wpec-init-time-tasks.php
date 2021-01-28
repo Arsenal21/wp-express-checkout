@@ -15,7 +15,7 @@ class WPEC_Init_Time_Tasks {
         /*
          * General init time tasks
          */
-        
+
         //Register the post types
         $PPECProducts = PPECProducts::get_instance();
         $PPECProducts->register_post_type();
@@ -23,24 +23,24 @@ class WPEC_Init_Time_Tasks {
         $OrdersWPEC = OrdersWPEC::get_instance();
         $OrdersWPEC->register_post_type();
 
-        
+
         add_action('wp_ajax_wpec_reset_log', array($this, 'wpec_handle_reset_log'));
 
         if ( is_admin() ) {
             /*
              * Do admin side only tasks
              */
-            
+
             $this->handle_view_log_action();
-            
+            WPEC_Order_List::init();
         } else {
             /*
              * Front-end only tasks
              */
-            
+
             //NOP
         }
-        
+
     }
 
     public function wpec_handle_reset_log() {
@@ -50,7 +50,7 @@ class WPEC_Init_Time_Tasks {
     }
 
     public function handle_view_log_action() {
-        
+
 	if ( user_can( wp_get_current_user(), 'administrator' ) ) {
 	    // user is an admin
 	    if ( isset( $_GET[ 'wpec-debug-action' ] ) ) {
@@ -61,7 +61,7 @@ class WPEC_Init_Time_Tasks {
 		    die;
 		}
 	    }
-	}        
+	}
     }
 
 }
