@@ -23,6 +23,7 @@ return array(
     'WPEC_Main' => $baseDir . '/public/class-wpec-main.php',
     'WPEC_Order' => $baseDir . '/includes/class-order.php',
     'WPEC_Order_List' => $baseDir . '/admin/includes/class-order-list.php',
+    'WPEC_Orders_Metaboxes' => $baseDir . '/admin/includes/class-orders-meta-boxes.php',
     'WPEC_Post_Type_Content_Handler' => $baseDir . '/includes/class-wpec-post-type-content-handler.php',
     'WPEC_Process_IPN' => $baseDir . '/includes/class-wpec-process-ipn.php',
     'WPEC_Utility_Functions' => $baseDir . '/includes/class-wpec-utility-functions.php',

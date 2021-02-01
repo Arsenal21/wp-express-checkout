@@ -48,6 +48,7 @@ function wpec_load_classes() {
 	if ( is_admin() ) {
 		WPEC_Admin::get_instance();
 		new WPEC_Coupons_Admin();
+		new WPEC_Orders_Metaboxes();
 	}
 }
 add_action( 'plugins_loaded', 'wpec_load_classes' );

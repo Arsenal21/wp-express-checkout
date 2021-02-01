@@ -51,6 +51,7 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WPEC_Main' => __DIR__ . '/../..' . '/public/class-wpec-main.php',
         'WPEC_Order' => __DIR__ . '/../..' . '/includes/class-order.php',
         'WPEC_Order_List' => __DIR__ . '/../..' . '/admin/includes/class-order-list.php',
+        'WPEC_Orders_Metaboxes' => __DIR__ . '/../..' . '/admin/includes/class-orders-meta-boxes.php',
         'WPEC_Post_Type_Content_Handler' => __DIR__ . '/../..' . '/includes/class-wpec-post-type-content-handler.php',
         'WPEC_Process_IPN' => __DIR__ . '/../..' . '/includes/class-wpec-process-ipn.php',
         'WPEC_Utility_Functions' => __DIR__ . '/../..' . '/includes/class-wpec-utility-functions.php',

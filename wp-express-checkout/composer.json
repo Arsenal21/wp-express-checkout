@@ -23,6 +23,7 @@
 			"admin/includes/class-coupons.php",
 			"admin/includes/class-variations.php",
 			"admin/includes/class-order-list.php",
+			"admin/includes/class-orders-meta-boxes.php",
 			"admin/includes/class-products-meta-boxes.php",
 			"admin/includes/class-coupons-list-table.php"
 		]
