@@ -209,8 +209,6 @@ class WPEC_Coupons_Admin {
 			require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 		}
 
-		require_once WPEC_PLUGIN_PATH . 'admin/includes/class-coupons-list-table.php';
-
 		$coupons_tbl = new WPEC_Coupons_Table();
 		$coupons_tbl->prepare_items();
 		?>

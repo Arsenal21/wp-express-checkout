@@ -540,5 +540,3 @@ jQuery(document).ready(function($) {
 	}
 
 }
-
-new PPECProductsMetaboxes();

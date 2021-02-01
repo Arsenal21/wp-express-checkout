@@ -9,7 +9,7 @@ class PPECProducts {
 	function __construct() {
 		if ( is_admin() ) {
 			// products meta boxes handler.
-			require_once WPEC_PLUGIN_PATH . 'admin/includes/class-products-meta-boxes.php';
+			new PPECProductsMetaboxes();
 		}
 	}
 
