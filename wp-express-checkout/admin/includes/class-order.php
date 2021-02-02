@@ -44,7 +44,7 @@ class OrdersWPEC {
 			'label' => __( 'orders', 'wp-express-checkout' ),
 			'description' => __( 'WPEC Orders', 'wp-express-checkout' ),
 			'labels' => $labels,
-			'supports' => array( 'title', 'editor', 'custom-fields', 'author' ),
+			'supports' => array( 'custom-fields' ),
 			'hierarchical' => false,
 			'public' => false,
 			'show_ui' => true,

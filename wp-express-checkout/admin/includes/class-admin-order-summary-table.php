@@ -10,7 +10,7 @@ class WPEC_Admin_Order_Summary_Table extends WPEC_Order_Summary_Table {
 	protected function header( $data ){
 
 		$cells = array(
-			__( 'Order Summary', 'wp-express-checkout' ),
+			__( 'Item', 'wp-express-checkout' ),
 			__( 'Price', 'wp-express-checkout' ),
 			__( 'Affects', 'wp-express-checkout' ),
 		);
