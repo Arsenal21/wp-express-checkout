@@ -12,6 +12,7 @@
 			"includes/class-wpec-integrations.php",
 			"includes/class-wpec-post-type-content-handler.php",
 			"includes/class-order.php",
+			"includes/class-order-summary-table.php",
 			"includes/paypal-client/class-client.php",
 			"includes/paypal-client/class-request.php",
 			"public/class-wpec-main.php",
@@ -25,7 +26,8 @@
 			"admin/includes/class-order-list.php",
 			"admin/includes/class-orders-meta-boxes.php",
 			"admin/includes/class-products-meta-boxes.php",
-			"admin/includes/class-coupons-list-table.php"
+			"admin/includes/class-coupons-list-table.php",
+			"admin/includes/class-admin-order-summary-table.php"
 		]
 	}
 }
