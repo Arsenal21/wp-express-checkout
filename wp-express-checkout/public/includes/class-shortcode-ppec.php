@@ -496,40 +496,52 @@ class WPECShortcode {
 	public static function generate_product_details_tag( $order ) {
 		$output   = '';
 
-		$product = $order->get_item( PPECProducts::$products_slug );
 
 		/* translators: {Order Summary Item Name}: {Value} */
 		$template = '<div class="wpec-thank-you-page-product-details">' .  __( '%1$s: %2$s', 'wp-express-checkout' ) . '</div>';
+
+		$items = $order->get_items();
+
+		$product_items = array();
+		$other_items   = array();
+
+		foreach ( $items as $item ) {
+			if ( $item['type'] === PPECProducts::$products_slug ) {
+				$product = $item;
+				continue;
+			}
+			$ptype_obj = get_post_type_object( get_post_type( $item['post_id'] ) );
+			if ( $ptype_obj->public ) {
+				$product_items[] = $item;
+			} else {
+				$other_items[] = $item;
+			}
+		}
 
 		$output .= sprintf( $template, __( 'Product Name', 'wp-express-checkout' ), $product['name'] );
 		$output .= sprintf( $template, __( 'Quantity', 'wp-express-checkout' ), $product['quantity'] );
 		$output .= sprintf( $template, __( 'Price', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $product['price'] ) );
 
-		$variations = $order->get_items( 'variation' );
-		$var_amount = 0;
-		foreach ( $variations as $var ) {
-			$var_amount += $var['price'];
-			$amnt_str = WPEC_Utility_Functions::price_format( $var['price'] );
-			$output .= sprintf( $template, $var['name'], $amnt_str );
+		$subtotal = $product['price'] * $product['quantity'];
+
+		foreach ( $product_items as $item ) {
+			$amnt_str  = WPEC_Utility_Functions::price_format( $item['price'] );
+			$subtotal += $item['price'] * $item['quantity'];
+			$output   .= sprintf( $template, $item['name'], $amnt_str );
 		}
 
-		$discount = $order->get_item( 'coupon' );
-		$tax      = $order->get_item( 'tax' );
-		$shipping = $order->get_item( 'shipping' );
-
-		if ( $discount || $tax || $shipping ) {
+		if ( $subtotal !== $product['price'] ) {
 			$output .= '<hr />';
-			$output .= sprintf( $template, __( 'Subtotal', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( ( $product['price'] + $var_amount ) * $product['quantity'] ) );
+			$output .= sprintf( $template, __( 'Subtotal', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $subtotal ) );
 			$output .= '<hr />';
 		}
 
-		if ( $discount ) {
-			$output .= $discount['name'];
-			$output .= sprintf( $template, __( 'Discount', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $discount['price'] ) );
+		foreach ( $other_items as $item ) {
+			$amnt_str  = WPEC_Utility_Functions::price_format( $item['price'] );
+			$subtotal += $item['price'] * $item['quantity'];
+			$output   .= sprintf( $template, $item['name'], $amnt_str );
 		}
 
-		$output .= ( $tax ) ? sprintf( $template, __( 'Tax', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $tax['price'] ) ) : '';
-		$output .= ( $shipping ) ? sprintf( $template, __( 'Shipping', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $shipping['price'] ) ) : '';
 		$output .= '<hr />';
 		$output .= sprintf( $template, __( 'Total Amount', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $order->get_total() ) );
 

@@ -177,37 +177,48 @@ class WPEC_Utility_Functions {
 		/* translators: {Order Summary Item Name}: {Value} */
 		$template = __( '%1$s: %2$s', 'wp-express-checkout' );
 
-		$product_item = $order->get_item( PPECProducts::$products_slug );
+		$items = $order->get_items();
+
+		$product_items = array();
+		$other_items   = array();
+
+		foreach ( $items as $item ) {
+			if ( $item['type'] === PPECProducts::$products_slug ) {
+				$product_item = $item;
+				continue;
+			}
+			$ptype_obj = get_post_type_object( get_post_type( $item['post_id'] ) );
+			if ( $ptype_obj->public ) {
+				$product_items[] = $item;
+			} else {
+				$other_items[] = $item;
+			}
+		}
 
 		$output .= sprintf( $template, __( 'Product Name', 'wp-express-checkout' ), $product_item['name'] ) . "\n";
 		$output .= sprintf( $template, __( 'Quantity', 'wp-express-checkout' ), $product_item['quantity'] ) . "\n";
 		$output .= sprintf( $template, __( 'Price', 'wp-express-checkout' ), self::price_format( $product_item['price'] ) ) . "\n";
 
-		$variations = $order->get_items( 'variation' );
-		$var_amount = 0;
-		foreach ( $variations as $var ) {
-			$var_amount += $var['price'];
-			$amnt_str = self::price_format( $var['price'] );
-			$output .= sprintf( $template, $var['name'], $amnt_str ) . "\n";
+		$subtotal = $product_item['price'] * $product_item['quantity'];
+
+		foreach ( $product_items as $item ) {
+			$amnt_str  = self::price_format( $item['price'] );
+			$subtotal += $item['price'] * $item['quantity'];
+			$output   .= sprintf( $template, $item['name'], $amnt_str ) . "\n";
 		}
 
-		$discount = $order->get_item( 'coupon' );
-		$tax      = $order->get_item( 'tax' );
-		$shipping = $order->get_item( 'shipping' );
-
-		if ( $discount || $tax || $shipping ) {
+		if ( $subtotal !== $product_item['price'] ) {
 			$output .= '--------------------------------' . "\n";
-			$output .= sprintf( $template, __( 'Subtotal', 'wp-express-checkout' ), self::price_format( ( $product_item['price'] + $var_amount ) * $product_item['quantity'] ) ) . "\n";
+			$output .= sprintf( $template, __( 'Subtotal', 'wp-express-checkout' ), self::price_format( $subtotal ) ) . "\n";
 			$output .= '--------------------------------' . "\n";
 		}
 
-		if ( ! empty( $discount ) ) {
-			$output .= $discount['name'] . "\n";
-			$output .= sprintf( $template, __( 'Discount', 'wp-express-checkout' ), self::price_format( $discount['price'] ) ) . "\n";
+		foreach ( $other_items as $item ) {
+			$amnt_str  = self::price_format( $item['price'] );
+			$subtotal += $item['price'] * $item['quantity'];
+			$output   .= sprintf( $template, $item['name'], $amnt_str ) . "\n";
 		}
 
-		$output .= ( $tax ) ? sprintf( $template, __( 'Tax', 'wp-express-checkout' ), self::price_format( $tax['price'] ) ) . "\n" : '';
-		$output .= ( $shipping ) ? sprintf( $template, __( 'Shipping', 'wp-express-checkout' ), self::price_format( $shipping['price'] ) ) . "\n" : '';
 		$output .= '--------------------------------' . "\n";
 		$output .= sprintf( $template, __( 'Total Amount', 'wp-express-checkout' ), self::price_format( $order->get_total() ) ) . "\n";
 

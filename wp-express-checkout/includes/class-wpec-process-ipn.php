@@ -134,9 +134,8 @@ class WPEC_Process_IPN {
 		// If code execution got this far, it means everything is ok with payment
 		// let's insert order.
 		$order->set_status( 'paid' );
-		OrdersWPEC::get_instance()->insert( $order );
-		$order_id = $order->get_id();
 
+		$order_id  = $order->get_id();
 		$downloads = WPEC_View_Download::get_order_downloads_list( $order_id );
 
 		$product_details = WPEC_Utility_Functions::get_product_details( $order );

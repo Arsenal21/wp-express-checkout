@@ -85,45 +85,6 @@ class OrdersWPEC {
 	}
 
 	/**
-	 * Receive Response of GetExpressCheckout and ConfirmPayment function returned data.
-	 * Returns the order ID.
-	 *
-	 * @since     1.0.0
-	 *
-	 * @param WPEC_Order $order The order object.
-	 *
-	 * @return    Numeric    Post or Order ID.
-	 */
-	public function insert( $order ) {
-		$post  = array();
-		$payer = $order->get_data( 'payer' );
-
-		/* translators: Order Summary Item Name: Value */
-		$template = __( '%1$s: %2$s', 'wp-express-checkout' );
-
-		$output = '';
-
-		$output .= __( '<h2>Order Details</h2>' ) . "\n";
-		$output .= sprintf( $template, __( 'Order Time' ), date( 'F j, Y, g:i a', get_post_datetime() ) ) . "\n";
-		$output .= sprintf( $template, __( 'Transaction ID' ), $order->get_data( 'transaction_id' ) ) . "\n";
-		$output .= '--------------------------------' . "\n";
-
-		$output .= WPEC_Utility_Functions::get_product_details( $order );
-		$output .= "\n\n";
-
-		$output .= __( '<h2>Customer Details</h2>' ) . "\n";
-		$output .= sprintf( $template, __( 'Name' ), $payer['name']['given_name'] . ' ' . $payer['name']['surname'] ) . "\n";
-		$output .= sprintf( $template, __( 'Payer ID' ), $payer['payer_id'] ) . "\n";
-		$output .= sprintf( $template, __( 'E-Mail Address' ), $payer['email_address'] ) . "\n";
-		$output .= sprintf( $template, __( 'Country Code' ), $payer['address']['country_code'] ) . "\n";
-
-		$post['ID'] = $order->get_id();
-		$post['post_content'] = $output;
-
-		wp_update_post( $post );
-	}
-
-	/**
 	 * Creates and returns a new Order.
 	 *
 	 * @param string $description (optional)
