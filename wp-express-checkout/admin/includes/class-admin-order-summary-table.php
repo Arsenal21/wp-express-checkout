@@ -22,8 +22,8 @@ class WPEC_Admin_Order_Summary_Table extends WPEC_Order_Summary_Table {
 	protected function footer( $data ){
 
 		$cells = array(
-			__( 'Total', 'wp-express-checkout' ),
-			WPEC_Utility_Functions::price_format( $this->order->get_total(), $this->currency ),
+			$this->html( 'strong', __( 'Total', 'wp-express-checkout' ) ),
+			$this->html( 'strong', WPEC_Utility_Functions::price_format( $this->order->get_total(), $this->currency ) ),
 			''
 		);
 
@@ -51,6 +51,21 @@ class WPEC_Admin_Order_Summary_Table extends WPEC_Order_Summary_Table {
 		);
 
 		return $this->html( 'tr', array(), $this->cells( $cells ) );
+	}
+
+	protected function subtotal( $items ) {
+		$subtotal = 0;
+		foreach ( $items as $item ) {
+			$subtotal += $item['price'] * $item['quantity'];
+		}
+
+		$cells = array(
+			$this->html( 'strong', __( 'Subtotal', 'wp-express-checkout' ) ),
+			$this->html( 'strong', WPEC_Utility_Functions::price_format( $subtotal, $this->currency ) ),
+			''
+		);
+
+		return $this->html( $this->args['row_html'], array(), $this->cells( $cells, $this->args['cell_html'] ) );
 	}
 
 }

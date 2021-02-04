@@ -494,56 +494,10 @@ class WPECShortcode {
 	 * @return string
 	 */
 	public static function generate_product_details_tag( $order ) {
-		$output   = '';
-
-
-		/* translators: {Order Summary Item Name}: {Value} */
-		$template = '<div class="wpec-thank-you-page-product-details">' .  __( '%1$s: %2$s', 'wp-express-checkout' ) . '</div>';
-
-		$items = $order->get_items();
-
-		$product_items = array();
-		$other_items   = array();
-
-		foreach ( $items as $item ) {
-			if ( $item['type'] === PPECProducts::$products_slug ) {
-				$product = $item;
-				continue;
-			}
-			$ptype_obj = get_post_type_object( get_post_type( $item['post_id'] ) );
-			if ( $ptype_obj->public ) {
-				$product_items[] = $item;
-			} else {
-				$other_items[] = $item;
-			}
-		}
-
-		$output .= sprintf( $template, __( 'Product Name', 'wp-express-checkout' ), $product['name'] );
-		$output .= sprintf( $template, __( 'Quantity', 'wp-express-checkout' ), $product['quantity'] );
-		$output .= sprintf( $template, __( 'Price', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $product['price'] ) );
-
-		$subtotal = $product['price'] * $product['quantity'];
-
-		foreach ( $product_items as $item ) {
-			$amnt_str  = WPEC_Utility_Functions::price_format( $item['price'] );
-			$subtotal += $item['price'] * $item['quantity'];
-			$output   .= sprintf( $template, $item['name'], $amnt_str );
-		}
-
-		if ( $subtotal !== $product['price'] ) {
-			$output .= '<hr />';
-			$output .= sprintf( $template, __( 'Subtotal', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $subtotal ) );
-			$output .= '<hr />';
-		}
-
-		foreach ( $other_items as $item ) {
-			$amnt_str  = WPEC_Utility_Functions::price_format( $item['price'] );
-			$subtotal += $item['price'] * $item['quantity'];
-			$output   .= sprintf( $template, $item['name'], $amnt_str );
-		}
-
-		$output .= '<hr />';
-		$output .= sprintf( $template, __( 'Total Amount', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $order->get_total() ) );
+		$table = new WPEC_Order_Summary_Table( $order );
+		ob_start();
+		$table->show();
+		$output = ob_get_clean();
 
 		return $output;
 	}

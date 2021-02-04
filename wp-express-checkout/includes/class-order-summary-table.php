@@ -59,7 +59,17 @@ class WPEC_Order_Summary_Table {
 
 	}
 
-	protected function header( $data ) {}
+	protected function header( $data ){
+
+		$cells = array(
+			__( 'Product', 'wp-express-checkout' ),
+			__( 'Subtotal', 'wp-express-checkout' ),
+		);
+
+		return $this->html( 'tr', array(), $this->cells( $cells, 'th' ) );
+
+	}
+
 
 	protected function rows( array $items ) {
 
@@ -94,9 +104,8 @@ class WPEC_Order_Summary_Table {
 		}
 
 		$cells = array(
-			__( 'Subtotal', 'wp-express-checkout' ),
-			WPEC_Utility_Functions::price_format( $subtotal, $this->currency ),
-			''
+			$this->html( 'strong', __( 'Subtotal', 'wp-express-checkout' ) ),
+			$this->html( 'strong', WPEC_Utility_Functions::price_format( $subtotal, $this->currency ) ),
 		);
 
 		return $this->html( $this->args['row_html'], array(), $this->cells( $cells, $this->args['cell_html'] ) );
@@ -105,8 +114,8 @@ class WPEC_Order_Summary_Table {
 	protected function footer( $items ) {
 
 		$cells = array(
-			__( 'Total', 'wp-express-checkout' ),
-			WPEC_Utility_Functions::price_format( $this->order->get_total(), $this->currency ),
+			$this->html( 'strong', __( 'Total', 'wp-express-checkout' ) ),
+			$this->html( 'strong', WPEC_Utility_Functions::price_format( $this->order->get_total(), $this->currency ) ),
 		);
 
 		return $this->html( $this->args['row_html'], array(), $this->cells( $cells, $this->args['cell_html'] ) );
