@@ -90,6 +90,27 @@ var ppecHandler = function( data ) {
 		commit: true,
 		onInit: function( data, actions ) {
 			var enable_actions = ! parent.data.errors;
+			if ( parent.data.tos_enabled === 1 ) {
+				enable_actions = false;
+				var tos_input = jQuery( 'input#wpec-tos-' + parent.data.id );
+				var errMsgCont = jQuery( '.wpec_product_tos_input_container' ).find( '.wp-ppec-form-error-msg' );
+				var errMsg = ppecFrontVars.str.acceptTos;
+				tos_input.addClass( 'hasError' );
+				tos_input.change( function() {
+					if ( tos_input.prop( 'checked' ) ) {
+						enable_actions = true;
+						actions.enable();
+						tos_input.removeClass( 'hasError' );
+						errMsgCont.fadeOut( 'fast' );
+					} else {
+						enable_actions = false;
+						actions.disable();
+						tos_input.addClass( 'hasError' );
+						errMsgCont.html( errMsg );
+						errMsgCont.fadeIn( 'slow' );
+					}
+				} );
+			}
 			if ( parent.data.custom_quantity === "1" ) {
 				jQuery( 'input#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
 					if ( ! parent.isValidCustomQuantity() ) {
