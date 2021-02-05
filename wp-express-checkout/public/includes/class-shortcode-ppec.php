@@ -100,6 +100,30 @@ class WPECShortcode {
 			'coupons_enabled' => $coupons_enabled,
 		);
 
+		$args = shortcode_atts(
+			array(
+				'name'            => 'Item Name',
+				'price'           => 0,
+				'shipping'        => 0,
+				'tax'             => 0,
+				'quantity'        => 1,
+				'url'             => '',
+				'product_id'      => '',
+				'thumbnail_url'   => '',
+				'custom_amount'   => 0,
+				'custom_quantity' => 0,
+				'currency'        => $this->ppdg->get_setting( 'currency_code' ), // Maybe useless option, the shortcode doesn't send this parameter.
+				'btn_shape'       => $this->ppdg->get_setting( 'btn_shape' ) !== false ? $this->ppdg->get_setting( 'btn_shape' ) : 'pill',
+				'btn_type'        => $this->ppdg->get_setting( 'btn_type' ) !== false ? $this->ppdg->get_setting( 'btn_type' ) : 'checkout',
+				'btn_height'      => $this->ppdg->get_setting( 'btn_height' ) !== false ? $this->ppdg->get_setting( 'btn_height' ) : 'small',
+				'btn_width'       => $this->ppdg->get_setting( 'btn_width' ) !== false ? $this->ppdg->get_setting( 'btn_width' ) : 0,
+				'btn_layout'      => $this->ppdg->get_setting( 'btn_layout' ) !== false ? $this->ppdg->get_setting( 'btn_layout' ) : 'horizontal',
+				'btn_color'       => $this->ppdg->get_setting( 'btn_color' ) !== false ? $this->ppdg->get_setting( 'btn_color' ) : 'gold',
+				'coupons_enabled' => $this->ppdg->get_setting( 'coupons_enabled' ),
+			),
+			$args
+		);
+
 		$template = empty( $atts['template'] ) ? 0 : intval( $atts['template'] );
 		$name     = "content-product-{$template}.php";
 		$default  = WPEC_PLUGIN_PATH . '/public/views/templates/' . $name;
@@ -133,30 +157,7 @@ class WPECShortcode {
 
 	function generate_pp_express_checkout_button( $args ) {
 
-		extract(
-			shortcode_atts(
-				array(
-					'name'            => 'Item Name',
-					'price'           => 0,
-					'shipping'        => 0,
-					'tax'             => 0,
-					'quantity'        => 1,
-					'url'             => '',
-					'product_id'      => '',
-					'custom_amount'   => 0,
-					'custom_quantity' => 0,
-					'currency'        => $this->ppdg->get_setting( 'currency_code' ), // Maybe useless option, the shortcode doesn't send this parameter.
-					'btn_shape'       => $this->ppdg->get_setting( 'btn_shape' ) !== false ? $this->ppdg->get_setting( 'btn_shape' ) : 'pill',
-					'btn_type'        => $this->ppdg->get_setting( 'btn_type' ) !== false ? $this->ppdg->get_setting( 'btn_type' ) : 'checkout',
-					'btn_height'      => $this->ppdg->get_setting( 'btn_height' ) !== false ? $this->ppdg->get_setting( 'btn_height' ) : 'small',
-					'btn_width'       => $this->ppdg->get_setting( 'btn_width' ) !== false ? $this->ppdg->get_setting( 'btn_width' ) : 0,
-					'btn_layout'      => $this->ppdg->get_setting( 'btn_layout' ) !== false ? $this->ppdg->get_setting( 'btn_layout' ) : 'horizontal',
-					'btn_color'       => $this->ppdg->get_setting( 'btn_color' ) !== false ? $this->ppdg->get_setting( 'btn_color' ) : 'gold',
-					'coupons_enabled' => $this->ppdg->get_setting( 'coupons_enabled' ),
-				),
-				$args
-			)
-		);
+		extract( $args );
 
 		$product_btn_type = get_post_meta( $product_id, 'wpec_product_button_type', true );
 
@@ -233,107 +234,25 @@ class WPECShortcode {
 			$btn_height = 25;
 		}
 
-		$output = '';
+		$output   = '';
+		$name     = "payment-form.php";
+		$default  = WPEC_PLUGIN_PATH . '/public/views/templates/payment-form.php';
+		$located  = locate_template( 'wpec/payment-form.php' );
 
-		$output .= '<div style="position: relative;" class="wp-ppec-shortcode-container" data-ppec-button-id="' . $button_id . '">'
-				. '<div class="wp-ppec-overlay" data-ppec-button-id="' . $button_id . '">'
-				. '<div class="wp-ppec-spinner">'
-				. '<div></div>'
-				. '<div></div>'
-				. '<div></div>'
-				. '<div></div>'
-				. '</div>'
-				. '</div>';
+		// Try to locate template in the theme or child theme:
+		// yourtheme/wpec/payment-form.php,
+		// otherwise try to locate default template in the plugin directory:
+		// wp-express-checkout/public/views/templates/payment-form.php
 
-		// custom quantity.
-		if ( $custom_quantity ) {
-			$output .= '<div>';
-			$output .= '<label>' . esc_html__( 'Quantity:', 'wp-express-checkout' ) . '</label>';
-			$output .= '<input id="wp-ppec-custom-quantity" data-ppec-button-id="' . $button_id . '" type="number" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-quantity" min="1" value="' . $quantity . '">';
-			$output .= '<div class="wp-ppec-form-error-msg"></div>';
-			$output .= '</div>';
+		if ( ! $located && file_exists( $default ) ) {
+			$located = $default;
 		}
 
-		if ( $custom_amount ) {
-			$step    = pow( 10, -intval( $this->ppdg->get_setting( 'price_decimals_num' ) ) );
-			$output .= '<div class="wpec-custom-amount-section">';
-			$output .= '<span class="wpec-custom-amount-label-field"><label>' . sprintf( __( 'Enter Amount (%s): ', 'wp-express-checkout' ), $currency ) . '</label></span>';
-			$output .= '<span class="wpec-custom-amount-input-field">';
-			$output .= '<input id="wp-ppec-custom-amount" data-ppec-button-id="' . $button_id . '" type="number" step="' . $step . '" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-amount" min="0" value="' . $price . '">';
-			$output .= '</span>';
-			$output .= '<div class="wp-ppec-form-error-msg"></div>';
-			$output .= '</div>';
+		if ( $located ) {
+			ob_start();
+			require $located;
+			$output .= ob_get_clean();
 		}
-
-		// Variations.
-		if ( ! empty( $variations ) ) {
-			// we got variations for this product.
-			$variations_str = '';
-			foreach ( $variations['groups'] as $grp_id => $group ) {
-				if ( ! empty( $variations['names'] ) ) {
-					$variations_str .= '<div class="wpec-product-variations-cont">';
-					$variations_str .= '<label class="wpec-product-variations-label">' . $group . '</label>';
-					if ( isset( $variations['opts'][ $grp_id ] ) && $variations['opts'][ $grp_id ] === '1' ) {
-						// radio buttons output.
-					} else {
-						$variations_str .= sprintf( '<select class="wpec-product-variations-select" data-wpec-variations-group-id="%1$d" name="wpecVariations[%1$d][]">', $grp_id );
-					}
-					foreach ( $variations['names'][ $grp_id ] as $var_id => $var_name ) {
-						if ( isset( $variations['opts'][ $grp_id ] ) && $variations['opts'][ $grp_id ] === '1' ) {
-							$tpl = '<label class="wpec-product-variations-select-radio-label"><input class="wpec-product-variations-select-radio" data-wpec-variations-group-id="' . $grp_id . '" name="wpecVariations[' . $grp_id . '][]" type="radio" name="123" value="%d"' . ( $var_id === 0 ? 'checked' : '' ) . '>%s %s</label>';
-						} else {
-							$tpl = '<option value="%d">%s %s</option>';
-						}
-						$price_mod = $variations['prices'][ $grp_id ][ $var_id ];
-						if ( ! empty( $price_mod ) ) {
-							$fmt_price = WPEC_Utility_Functions::price_format( abs( $price_mod ), $currency );
-							$price_mod = $price_mod < 0 ? ' - ' . $fmt_price : ' + ' . $fmt_price;
-							$price_mod = '(' . $price_mod . ')';
-						} else {
-							$price_mod = '';
-						}
-						$variations_str .= sprintf( $tpl, $var_id, $var_name, $price_mod );
-					}
-					if ( isset( $variations['opts'][ $grp_id ] ) && $variations['opts'][ $grp_id ] === '1' ) {
-						// radio buttons output.
-					} else {
-						$variations_str .= '</select>';
-					}
-					$variations_str .= '</div>';
-				}
-			}
-			$output .= $variations_str;
-		}
-
-		// Coupons
-		if ( $coupons_enabled ) {
-			$str_coupon_label = __( 'Coupon Code:', 'wp-express-checkout' );
-			$output          .= '<div class="wpec_product_coupon_input_container"><label class="wpec_product_coupon_field_label">' . $str_coupon_label . ' ' . '</label><input id="wpec-coupon-field-' . $button_id . '" class="wpec_product_coupon_field_input" type="text" name="wpec_coupon">'
-			. '<input type="button" id="wpec-redeem-coupon-btn-' . $button_id . '" type="button" class="wpec_coupon_apply_btn" value="' . __( 'Apply', 'wp-express-checkout' ) . '">'
-			. '<div id="wpec-coupon-info-' . $button_id . '" class="wpec_product_coupon_info"></div>'
-			. '</div>';
-		}
-
-		$output .= '<div id="wp-ppdg-dialog-message" title="">';
-		$output .= '<p id="wp-ppdg-dialog-msg"></p>';
-		$output .= '</div>';
-
-		$output .= '<div class = "wp-ppec-button-container">';
-
-		if ( $this->ppdg->get_setting( 'tos_enabled' ) ) {
-			$tpl_tos  = '';
-			$tpl_tos .= '<div class="wpec_product_tos_input_container">';
-			$tpl_tos .= '<label class="wpec_product_tos_label"><input id="wpec-tos-' . $button_id . '" class="wpec_product_tos_input" type="checkbox" required> ' . html_entity_decode( $this->ppdg->get_setting( 'tos_text' ) ) . '</label>';
-			$tpl_tos .= '<div class="wp-ppec-form-error-msg"></div>';
-			$tpl_tos .= '</div>';
-			$output .= $tpl_tos;
-		}
-
-
-		$output .= sprintf( '<div id="%s" style="max-width:%s"></div>', $button_id, $btn_width ? $btn_width . 'px;' : '' );
-		$output .= '<div class="wpec-button-placeholder" style="border: 1px solid #E7E9EB; padding:1rem;"><i>' . __( 'This is where the Express Checkout Button will show. View it on the front-end to see how it will look to your visitors', 'wp-express-checkout' ) . '</i></div>';
-
-		$output .= '</div>';
 
 		$data = apply_filters( 'wpec_button_js_data', array(
 			'id'              => $button_id,
@@ -366,9 +285,8 @@ class WPECShortcode {
 			),
 		) );
 
-		$output .= '<script>jQuery(document).ready(function() {new ppecHandler(' . json_encode( $data ) . ')});</script>';
 
-		$output .= '</div>';
+		$output .= '<script>jQuery(document).ready(function() {new ppecHandler(' . json_encode( $data ) . ')});</script>';
 
 		add_action( 'wp_footer', array( $this->ppdg, 'load_paypal_sdk' ) );
 

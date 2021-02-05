@@ -46,6 +46,23 @@ class WPEC_Utility_Functions {
 		return str_replace( $search, $replace, $formats[ $position ] );
 	}
 
+	/**
+	 * Generates price modifier string.
+	 *
+	 * @param string $price_mod
+	 * @param string $currency
+	 * @return string
+	 */
+	public static function price_modifier( $price_mod, $currency ) {
+		if ( ! empty( $price_mod ) ) {
+			$fmt_price = self::price_format( abs( $price_mod ), $currency );
+			$price_mod = '(' . ( $price_mod < 0 ? ' - ' . $fmt_price : ' + ' . $fmt_price ) . ')';
+		} else {
+			$price_mod = '';
+		}
+		return $price_mod;
+	}
+
 	public static function get_tax_amount( $price, $tax ) {
 		$ppdg = WPEC_Main::get_instance();
 
