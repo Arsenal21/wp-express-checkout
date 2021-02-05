@@ -79,6 +79,7 @@ class WPEC_Main {
 				'paymentFor'       => __( 'Payment for', 'wp-express-checkout' ),
 				'enterQuantity'    => __( 'Please enter valid quantity', 'wp-express-checkout' ),
 				'enterAmount'      => __( 'Please enter valid amount', 'wp-express-checkout' ),
+				'acceptTos'        => __( 'Please accept Terms and Conditions', 'wp-express-checkout' ),
 				'paymentCompleted' => __( 'Payment Completed', 'wp-express-checkout' ),
 				'redirectMsg'      => __( 'You are now being redirected to the order summary page.', 'wp-express-checkout' ),
 				'strRemoveCoupon'  => __( 'Remove coupon', 'wp-express-checkout' ),
@@ -329,6 +330,8 @@ class WPEC_Main {
 									. "\n\nThe sale was made to {first_name} {last_name} ({payer_email})"
 									. "\n\nThanks",
 			'coupons_enabled'      => 0,
+			'tos_enabled'          => 0,
+			'tos_text'             => __( 'I accept the <a href="https://example.com/terms-and-conditions/" target="_blank">Terms and Conditions</a>', 'wp-express-checkout' ),
 		);
 
 		return $defaults;

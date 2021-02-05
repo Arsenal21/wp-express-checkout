@@ -320,6 +320,16 @@ class WPECShortcode {
 
 		$output .= '<div class = "wp-ppec-button-container">';
 
+		if ( $this->ppdg->get_setting( 'tos_enabled' ) ) {
+			$tpl_tos  = '';
+			$tpl_tos .= '<div class="wpec_product_tos_input_container">';
+			$tpl_tos .= '<label class="wpec_product_tos_label"><input id="wpec-tos-' . $button_id . '" class="wpec_product_tos_input" type="checkbox" required> ' . html_entity_decode( $this->ppdg->get_setting( 'tos_text' ) ) . '</label>';
+			$tpl_tos .= '<div class="wp-ppec-form-error-msg"></div>';
+			$tpl_tos .= '</div>';
+			$output .= $tpl_tos;
+		}
+
+
 		$output .= sprintf( '<div id="%s" style="max-width:%s"></div>', $button_id, $btn_width ? $btn_width . 'px;' : '' );
 		$output .= '<div class="wpec-button-placeholder" style="border: 1px solid #E7E9EB; padding:1rem;"><i>' . __( 'This is where the Express Checkout Button will show. View it on the front-end to see how it will look to your visitors', 'wp-express-checkout' ) . '</i></div>';
 
@@ -338,6 +348,7 @@ class WPECShortcode {
 			'thousand_sep'    => $this->ppdg->get_setting( 'price_thousand_sep' ),
 			'dec_sep'         => $this->ppdg->get_setting( 'price_decimal_sep' ),
 			'curr_pos'        => $this->ppdg->get_setting( 'price_currency_pos' ),
+			'tos_enabled'     => $this->ppdg->get_setting( 'tos_enabled' ),
 			'custom_quantity' => $custom_quantity,
 			'custom_amount'   => $custom_amount,
 			'currency'        => $currency,

@@ -173,7 +173,7 @@ class WPEC_Admin {
 		add_settings_section( 'ppdg-emails-section', __( 'Purchase Confirmation Email Settings', 'wp-express-checkout' ), array( $this, 'emails_note' ), $this->plugin_slug . '-emails' );
 
 		add_settings_section( 'ppdg-price-display-section', __( 'Price Display Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
-
+		add_settings_section( 'ppdg-tos-section', __( 'Terms and Conditions', 'wp-express-checkout' ), array( $this, 'tos_description' ), $this->plugin_slug . '-advanced' );
 		/* Add the settings fields */
 
 		// Global settings fields.
@@ -385,6 +385,32 @@ class WPEC_Admin {
 				'desc'  => __( 'This sets the number of decimal points shown in the displayed price.', 'wp-express-checkout' ),
 			)
 		);
+
+		// Terms and Conditions
+		add_settings_field(
+			'tos_enabled',
+			__( 'Enable Terms and Conditions', 'wp-express-checkout' ),
+			array( &$this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'ppdg-tos-section',
+			array(
+				'field' => 'tos_enabled',
+				'type'  => 'checkbox',
+				'desc'  => __( 'Enable Terms and Conditions checkbox.', 'wp-express-checkout' ),
+			)
+		);
+		add_settings_field(
+			'tos_text',
+			__( 'Checkbox Text', 'wp-express-checkout' ),
+			array( &$this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'ppdg-tos-section',
+			array(
+				'field' => 'tos_text',
+				'type'  => 'textarea',
+				'desc'  => __( 'Text to be displayed on checkbox. It accepts HTML code so you can put a link to your terms and conditions page.', 'wp-express-checkout' ),
+			)
+		);
 	}
 
 	/**
@@ -413,6 +439,13 @@ class WPEC_Admin {
 		echo '<p><i>';
 		_e( 'Debug logging can be useful to troubleshoot transaction processing related issues on your site.', 'wp-express-checkout' );
 		echo '</p></i>';
+	}
+
+	/**
+	 * The section `ppdg-tos-section` callback.
+	 */
+	public function tos_description() {
+		echo '<p>' . __( 'This section allows you to configure Terms and Conditions or Privacy Policy that customer must accept before making payment. This, for example, can be used to comply with EU GDPR.', 'wp-express-checkout' ) . '</p>';
 	}
 
 	/**
