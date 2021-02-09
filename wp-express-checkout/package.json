@@ -1,0 +1,40 @@
+{
+  "name": "wp-express-checkout",
+  "title": "WP Express Checkout",
+  "version": "2.0.0",
+  "description": "This plugin allows you to generate a customizable PayPal payment button that lets the customers pay quickly in a popup via PayPal.",
+  "homepage": "https://wp-express-checkout.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Arsenal21/wp-express-checkout.git"
+  },
+  "author": {
+    "name": "Tips and Tricks HQ",
+    "url": "https://www.tipsandtricks-hq.com/"
+  },
+  "main": "Gruntfile.js",
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.2.1",
+    "autoprefixer": "^9.8.6",
+    "grunt": "^1.0.3",
+    "grunt-checktextdomain": "^1.0.0",
+    "grunt-contrib-csslint": "^2.0.0",
+    "grunt-contrib-imagemin": "^2.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-csscomb": "^3.1.1",
+    "grunt-fixindent": "^0.1.3",
+    "grunt-jsbeautifier": "^0.2.10",
+    "grunt-postcss": "^0.9.0",
+    "grunt-rtlcss": "^2.0.1",
+    "grunt-wp-i18n": "^0.4.5",
+    "node-bourbon": "^4.2.3",
+    "tailwindcss": "^2.0.3"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "> 10%"
+  ]
+}

@@ -43,7 +43,7 @@ class PPECProducts {
 		);
 
 		// Using custom dashicon font icon.
-		$menu_icon = 'dashicons-wpec-dashicon-1'; // WPEC_PLUGIN_URL . '/admin/assets/img/wpec-dashicon.png';
+		$menu_icon = 'dashicons-wpec-dashicon-1';
 
 		$slug = untrailingslashit( self::$products_slug );
 		$args = array(
@@ -119,7 +119,7 @@ class PPECProducts {
 			case 'thumbnail':
 				$thumb_url = get_post_meta( $post_id, 'wpec_product_thumbnail', true );
 				if ( ! $thumb_url ) {
-					$thumb_url = WPEC_PLUGIN_URL . '/assets/product-thumb-placeholder.png';
+					$thumb_url = WPEC_PLUGIN_URL . '/assets/img/product-thumb-placeholder.png';
 				}
 				$edit_link = get_edit_post_link( $post_id );
 				$title     = __( 'Edit Product', 'wp-express-checkout' );

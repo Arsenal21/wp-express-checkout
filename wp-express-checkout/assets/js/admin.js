@@ -1,10 +1,10 @@
-(function ( $ ) {
+( function( $ ) {
 	"use strict";
 
-	$(function () {
+	$( function() {
 
 		// Place your administration-specific JavaScript here
 
-	});
+	} );
 
-}(jQuery));
+}( jQuery ) );

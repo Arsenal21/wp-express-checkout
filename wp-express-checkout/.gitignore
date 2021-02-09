@@ -23,10 +23,6 @@ Thumbs.db
 #########
 /bower_components/
 
-# Composer #
-############
-/vendor/
-
 # Grunt #
 #########
 /node_modules/

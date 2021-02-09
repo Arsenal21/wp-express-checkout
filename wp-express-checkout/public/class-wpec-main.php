@@ -65,14 +65,14 @@ class WPEC_Main {
 	 * @since     1.0.0
 	 */
 	public function enqueue_styles() {
-		wp_register_script( 'wp-ppec-frontend-script', WPEC_PLUGIN_URL . '/public/assets/js/public.js', array( 'jquery' ), WPEC_PLUGIN_VER, true );
+		// Minimize prod or show expanded in dev.
+		$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-		wp_register_style( 'wp-ppec-frontend-style', WPEC_PLUGIN_URL . '/public/assets/css/public.css', array(), WPEC_PLUGIN_VER );
+		wp_enqueue_script( 'wp-ppec-frontend-script', WPEC_PLUGIN_URL . "/assets/js/public{$min}.js", array( 'jquery' ), WPEC_PLUGIN_VER, true );
 
-		wp_enqueue_script( 'wp-ppec-frontend-script' );
-
-		wp_enqueue_style( 'wp-ppec-frontend-style' );
-
+		wp_enqueue_style( 'wp-ppec-frontend-style', WPEC_PLUGIN_URL . "/assets/css/public{$min}.css", array(), WPEC_PLUGIN_VER );
+		wp_style_add_data( 'wp-ppec-frontend-style', 'rtl', 'replace' );
+		wp_style_add_data( 'wp-ppec-frontend-style', 'suffix', $min );
 		wp_localize_script( 'wp-ppec-frontend-script', 'ppecFrontVars', array(
 			'str' => array(
 				'errorOccurred'    => __( 'Error occurred', 'wp-express-checkout' ),

@@ -20,7 +20,7 @@ class WPEC_Blocks {
 			return;
 		}
 
-		wp_register_script( 'wpec-product-block', WPEC_PLUGIN_URL . '/admin/assets/js/blocks/product-block.js', array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ), WPEC_PLUGIN_VER );
+		wp_register_script( 'wpec-product-block', WPEC_PLUGIN_URL . '/assets/js/blocks/product-block.js', array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ), WPEC_PLUGIN_VER );
 
 		wp_localize_script( 'wpec-product-block', 'wpec_prod_opts', $this->get_products_array() );
 		wp_localize_script( 'wpec-product-block', 'wpec_prod_template_opts', $this->get_product_templates_array() );
