@@ -120,24 +120,13 @@ class WPECShortcode {
 				'btn_layout'      => $this->ppdg->get_setting( 'btn_layout' ) !== false ? $this->ppdg->get_setting( 'btn_layout' ) : 'horizontal',
 				'btn_color'       => $this->ppdg->get_setting( 'btn_color' ) !== false ? $this->ppdg->get_setting( 'btn_color' ) : 'gold',
 				'coupons_enabled' => $this->ppdg->get_setting( 'coupons_enabled' ),
+				'use_modal'       => ! isset( $atts['modal'] ) ? 1 : $atts['modal'],
 			),
 			$args
 		);
 
 		$template = empty( $atts['template'] ) ? 0 : intval( $atts['template'] );
-		$name     = "content-product-{$template}.php";
-		$default  = WPEC_PLUGIN_PATH . '/public/views/templates/' . $name;
-		$located  = locate_template( 'wpec/' . $name );
-
-		// Try to locate template in the theme or child theme:
-		// yourtheme/wpec/content-product-{$template}.php,
-		// otherwise try to locate default template in the plugin directory:
-		// wp-express-checkout/public/views/templates/content-product-{$template}.php
-		// If no template found - render only the button.
-
-		if ( ! $located && file_exists( $default ) ) {
-			$located = $default;
-		}
+		$located  = self::locate_template( "content-product-{$template}.php" );
 
 		if ( $located ) {
 			ob_start();
@@ -234,24 +223,21 @@ class WPECShortcode {
 			$btn_height = 25;
 		}
 
-		$output   = '';
-		$name     = "payment-form.php";
-		$default  = WPEC_PLUGIN_PATH . '/public/views/templates/payment-form.php';
-		$located  = locate_template( 'wpec/payment-form.php' );
-
-		// Try to locate template in the theme or child theme:
-		// yourtheme/wpec/payment-form.php,
-		// otherwise try to locate default template in the plugin directory:
-		// wp-express-checkout/public/views/templates/payment-form.php
-
-		if ( ! $located && file_exists( $default ) ) {
-			$located = $default;
-		}
+		$output  = '';
+		$located = self::locate_template( 'payment-form.php' );
 
 		if ( $located ) {
 			ob_start();
 			require $located;
-			$output .= ob_get_clean();
+			$output = ob_get_clean();
+		}
+
+		$modal = self::locate_template( 'modal.php' );
+
+		if ( $modal && $use_modal ) {
+			ob_start();
+			require $modal;
+			$output = ob_get_clean();
 		}
 
 		$data = apply_filters( 'wpec_button_js_data', array(
@@ -429,6 +415,28 @@ class WPECShortcode {
 		$output = ob_get_clean();
 
 		return $output;
+	}
+
+	/**
+	 * Locate template including plugin folder.
+	 *
+	 * Try to locate template in the theme or child theme:
+	 * `yourtheme/wpec/$template_name`,
+	 * otherwise try to locate default template in the plugin directory:
+	 * `wp-express-checkout/public/views/templates/$template_name`
+	 *
+	 * @param string $template_name Template file to search for.
+	 * @return string
+	 */
+	public static function locate_template( $template_name ) {
+		$default  = WPEC_PLUGIN_PATH . "/public/views/templates/$template_name";
+		$located  = locate_template( "wpec/$template_name" );
+
+		if ( ! $located && file_exists( $default ) ) {
+			$located = $default;
+		}
+
+		return $located;
 	}
 
 }

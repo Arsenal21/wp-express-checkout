@@ -86,7 +86,7 @@ module.exports = function(grunt) {
 
 	// custom task when you run 'grunt misc'
 	grunt.registerTask( 'misc', [
-		//'makepot',
+		'makepot',
 		'imagemin'
 	]);
 

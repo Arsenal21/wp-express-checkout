@@ -179,7 +179,7 @@ var ppecHandler = function( data ) {
 						parent.data.discountType = response.discountType;
 						parent.data.couponCode = response.code;
 
-						jQuery( 'div#wpec-coupon-info-' + parent.data.id ).html( response.discountStr + ' <input type="button" class="wpec_btn_normalize wpec_coupon_apply_btn" id="wpec-remove-coupon-' + parent.data.id + '" title="' + ppecFrontVars.str.strRemoveCoupon + '" value="' + ppecFrontVars.str.strRemove + '">' );
+						jQuery( 'div#wpec-coupon-info-' + parent.data.id ).html( '<span class="wpec_coupon_code">' + response.discountStr + '</span> <input type="button" class="wpec_coupon_apply_btn" id="wpec-remove-coupon-' + parent.data.id + '" title="' + ppecFrontVars.str.strRemoveCoupon + '" value="' + ppecFrontVars.str.strRemove + '">' );
 						jQuery( 'input#wpec-redeem-coupon-btn-' + parent.data.id ).hide();
 						jQuery( 'input#wpec-coupon-field-' + parent.data.id ).hide();
 						var totalCont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' ).closest( '.wpec-product-item, .wpec-post-item' ).find( '.wpec-price-container' );
@@ -420,3 +420,33 @@ var ppecHandler = function( data ) {
 
 	paypal.Buttons( this.buttonArgs ).render( '#' + parent.data.id );
 };
+
+jQuery( function( $ ) {
+	var openModalId = false;
+
+	$( '.wpec-modal-open, .wpec-modal-overlay, .wpec-modal-close' ).on( 'click', function() {
+		event.preventDefault();
+		toggleModal( $( this ).data( 'wpec-modal' ) );
+	} );
+
+	document.onkeydown = function( evt ) {
+		evt = evt || window.event;
+		var isEscape = false;
+		if ( "key" in evt ) {
+			isEscape = ( evt.key === "Escape" || evt.key === "Esc" );
+		} else {
+			isEscape = ( evt.keyCode === 27 );
+		}
+		if ( isEscape && openModalId ) {
+			toggleModal();
+		}
+	};
+
+	function toggleModal( modalId ) {
+		modalId = modalId ? modalId : openModalId;
+		openModalId = modalId;
+		const modal = document.getElementById( modalId );
+		modal.classList.toggle( 'wpec-opacity-0' );
+		modal.classList.toggle( 'wpec-pointer-events-none' );
+	}
+} );

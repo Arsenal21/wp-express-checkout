@@ -12,21 +12,29 @@ module.exports = function(grunt) {
 						require( '@tailwindcss/forms' )
 					]
 				} ),
+				require( 'postcss-nested' ),
+				require( 'postcss-css-variables' )( {
+					preserve: false,
+					preserveAtRulesOrder: true,
+					preserveInjectedVariables: false
+				} ),
 				require( 'autoprefixer' )( {
 					cascade: false,
 					overrideBrowserslist: [
-						'last 2 versions',
-						'> 10%'
+						'> 0.5%',
+						'last 2 versions'
 					]
+				} ),
+				require( 'postcss-rem-to-pixel' )( {
+					rootValue: 16,
+					propList: ['*']
 				} )
 			]
 		},
 
 		dist: {
 			src: [
-				'<%= globals.css %>/*.css',
-				'<%= globals.css %>/public-rtl.css',
-				'<%= globals.css %>/admin.css'
+				'<%= globals.css %>/*.css'
 			]
 		}
 

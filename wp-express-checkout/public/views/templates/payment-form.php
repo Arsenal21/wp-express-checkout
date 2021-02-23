@@ -41,6 +41,9 @@
 	<?php
 	// Variations.
 	if ( ! empty( $variations['names'] ) ) {
+		?>
+		<div class="wpec-product-variations-wrapper">
+		<?php
 		// we got variations for this product.
 		foreach ( $variations['groups'] as $grp_id => $group ) {
 			?>
@@ -77,14 +80,19 @@
 			</div>
 			<?php
 		}
+		?>
+		</div>
+		<?php
 	}
 	?>
 
 	<?php if ( $coupons_enabled ) { ?>
 		<div class="wpec_product_coupon_input_container">
 			<label class="wpec_product_coupon_field_label"><?php esc_html_e( 'Coupon Code:', 'wp-express-checkout' ); ?> </label>
-			<input id="wpec-coupon-field-<?php echo esc_attr( $button_id ); ?>" class="wpec_product_coupon_field_input" type="text" name="wpec_coupon">
-			<input type="button" id="wpec-redeem-coupon-btn-<?php echo esc_attr( $button_id ); ?>" type="button" class="wpec_coupon_apply_btn" value="<?php esc_attr_e( 'Apply', 'wp-express-checkout' ); ?>">
+			<div class="wpec_product_coupon_input_wrap">
+				<input id="wpec-coupon-field-<?php echo esc_attr( $button_id ); ?>" class="wpec_product_coupon_field_input" type="text" name="wpec_coupon">
+				<input type="button" id="wpec-redeem-coupon-btn-<?php echo esc_attr( $button_id ); ?>" type="button" class="wpec_coupon_apply_btn" value="<?php esc_attr_e( 'Apply', 'wp-express-checkout' ); ?>">
+			</div>
 			<div id="wpec-coupon-info-<?php echo esc_attr( $button_id ); ?>" class="wpec_product_coupon_info"></div>
 		</div>
 	<?php } ?>
@@ -104,9 +112,15 @@
 			</div>
 		<?php } ?>
 
+		<?php if ( $use_modal ) { ?>
+			<div class="wpec-price-container">
+				<?php echo WPECShortcode::get_instance()->generate_price_tag( $args ); ?>
+			</div>
+		<?php } ?>
+
 		<div id="<?php echo esc_attr( $button_id ); ?>" style="max-width:<?php echo esc_attr( $btn_width ? $btn_width . 'px;' : '' ); ?>"></div>
 
-		<div class="wpec-button-placeholder" style="border: 1px solid #E7E9EB; padding:1rem;">
+		<div class="wpec-button-placeholder" style="display: none; border: 1px solid #E7E9EB; padding:1rem;">
 			<i><?php esc_html_e( 'This is where the Express Checkout Button will show. View it on the front-end to see how it will look to your visitors', 'wp-express-checkout' ); ?></i>
 		</div>
 

@@ -32,6 +32,7 @@ module.exports = function(grunt) {
 			files: {
 				'<%= globals.css %>/public.css': '<%= globals.scss %>/public.scss',
 				'<%= globals.css %>/admin.css': '<%= globals.scss %>/admin.scss',
+				'<%= globals.css %>/blocks.css': '<%= globals.scss %>/blocks.scss',
 				'<%= globals.css %>/public-rtl.css': '<%= globals.scss %>/public-rtl.scss'
 			}
 		}

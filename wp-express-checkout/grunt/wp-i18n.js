@@ -3,26 +3,22 @@
 // run `grunt makepot` or `grunt build` to trigger this task
 module.exports = function(grunt) {
 
-	grunt.config('makepot2', {
+	grunt.config('makepot', {
 
 		dist: {
 			options: {
 				type: '<%= globals.type %>',
-				potFilename: '<%= pkg.name %>.pot',
-				domainPath: '<%= globals.languages %>',
+				potFilename: '<%= globals.textdomain %>.pot',
+				domainPath: '/<%= globals.languages %>',
 				potHeaders: {
 					poedit: true,
 					'Report-Msgid-Bugs-To': '',
 					'Language-Team': '<%= pkg.author.name %>',
-					'Last-Translator': '<%= pkg.author.name %>',
+					'Last-Translator': '<%= pkg.author.name %>'
 				},
 				exclude: [
-					'apigen/.*',
-					'bower_components/.*',
-					'docs/.*',
-					'.*examples/.*',
 					'tests/.*',
-					'vendor/.*',
+					'vendor/.*'
 				]
 			}
 		},

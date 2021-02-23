@@ -79,13 +79,6 @@
     margin-bottom: 20px;
 }
 
-
-@media (max-width: 500px) {
-    .wpec-price-container {
-		text-align: center;
-    }
-}
-
 .wpec-error-message{
 	color: red;
 	font-weight: bold;
@@ -144,7 +137,7 @@
 }
 
 .wp-ppec-button-container {
-    margin: 10px 0;
+    @apply grid grid-cols-1 gap-6;
 }
 
 .wp-ppec-form-error-msg {
@@ -152,26 +145,18 @@
     color: red;
 }
 
-.wpec-button-placeholder {
-	display: none;
+.wpec_product_coupon_info,
+.wpec_product_coupon_input_wrap {
+	@apply flex space-x-4;
 }
 
-.wpec-product-variations-label,
-.wpec_product_coupon_field_label {
-    margin-right: 10px;
+input[type="button"].wpec_coupon_apply_btn {
+	--tw-bg-opacity: 50;
+	@apply flex-none py-2 px-4 border-blue-600 border-2 border-solid bg-transparent text-blue-600 rounded-md cursor-pointer hover:bg-blue-600 font-semibold hover:text-white hover:border-transparent;
 }
 
-.wpec_product_coupon_input_container input {
-	display: inline-block;
-    line-height: 1 !important;
-    height: auto;
-}
-
-.wpec_product_coupon_input_container input.wpec_product_coupon_field_input {
-    width: auto;
-    max-width: 200px;
-    margin-right: 10px;
-	display: inline-block;
+.wpec_coupon_code {
+	@apply flex-grow px-4 py-2 rounded bg-yellow-100 border-dashed border-yellow-300;
 }
 
 .wpec_line_through {
@@ -180,4 +165,55 @@
 
 .wpec-modal-open {
 	@apply px-4 py-2 bg-blue-600 text-white rounded;
+}
+
+.wpec-modal {
+	@apply fixed w-full max-w-none h-full top-0 left-0 flex items-center justify-center font-sans;
+	z-index: 999999;
+}
+
+.wpec-modal-overlay {
+	@apply absolute w-full h-full bg-gray-900 opacity-50;
+}
+
+.wpec-modal-container {
+	@apply bg-white w-11/12 md:max-w-2xl mx-auto max-h-full rounded shadow-lg z-50 overflow-y-auto;
+}
+
+.wpec-modal-content {
+	@apply py-4 text-left px-6;
+
+	.wpec-modal-content-title {
+		@apply flex justify-between items-center pb-3;
+		p {
+			@apply text-2xl font-bold;
+		}
+		.wpec-modal-close {
+			@apply cursor-pointer z-50;
+			svg {
+				@apply fill-current text-black;
+			}
+		}
+	}
+}
+
+.wpec-opacity-0 {
+	@apply opacity-0;
+}
+
+.wpec-pointer-events-none {
+	@apply pointer-events-none;
+}
+
+.wpec-product-variations-wrapper {
+	@apply grid grid-cols-1 sm:grid-cols-2 gap-6;
+
+	.wpec-product-variations-cont:last-child:nth-child(odd) {
+		@apply sm:col-span-2;
+	}
+}
+
+.wp-ppec-shortcode-container {
+	@apply grid grid-cols-1 gap-6 text-base;
+	@import 'forms';
 }

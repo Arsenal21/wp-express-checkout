@@ -20,6 +20,7 @@ class WPEC_Blocks {
 			return;
 		}
 
+		wp_register_style( 'wpec-block-editor', WPEC_PLUGIN_URL . '/assets/css/blocks.css', array(), WPEC_PLUGIN_VER );
 		wp_register_script( 'wpec-product-block', WPEC_PLUGIN_URL . '/assets/js/blocks/product-block.js', array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ), WPEC_PLUGIN_VER );
 
 		wp_localize_script( 'wpec-product-block', 'wpec_prod_opts', $this->get_products_array() );
@@ -28,6 +29,8 @@ class WPEC_Blocks {
 			'title'    => 'WP Express Checkout Product',
 			'product'  => __( 'Product', 'wp-express-checkout' ),
 			'template' => __( 'Template', 'wp-express-checkout' ),
+			'modal'    => __( 'Show in Modal', 'wp-express-checkout' ),
+			'panel'    => __( 'Layout Options', 'wp-express-checkout' ),
 		) );
 
 		register_block_type(
@@ -42,8 +45,13 @@ class WPEC_Blocks {
 						'type'    => 'string',
 						'default' => 1,
 					),
+					'modal' => array(
+						'type'    => 'boolean',
+						'default' => true,
+					),
 				),
 				'editor_script'   => 'wpec-product-block',
+				'editor_style'    => 'wpec-block-editor',
 				'render_callback' => array( $this, 'render_product_block' ),
 			)
 		);
@@ -69,6 +77,10 @@ class WPEC_Blocks {
 
 		if ( ! empty( $atts['template'] ) ) {
 			$sc_str .= ' template="' . intval( $atts['template'] ) . '"';
+		}
+
+		if ( empty( $atts['modal'] ) ) {
+			$sc_str .= ' modal="0"';
 		}
 
 		return do_shortcode( '[' . $sc_str . ']' );

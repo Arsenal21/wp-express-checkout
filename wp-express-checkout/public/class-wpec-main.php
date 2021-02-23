@@ -52,9 +52,7 @@ class WPEC_Main {
 		add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
 
 		// Load public-facing style sheet and JavaScript.
-		if ( ! is_admin() ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
-		}
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 99 );
 		// add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'after_switch_theme', array( __CLASS__, 'rewrite_flush' ) );
 	}
