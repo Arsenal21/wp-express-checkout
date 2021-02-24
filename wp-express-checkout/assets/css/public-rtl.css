@@ -263,7 +263,23 @@
 
 .wpec-modal-open {
 	background-color: rgba(37, 99, 235, 1);
+}
+
+.wpec-modal-open:hover {
+	background-color: rgba(37, 99, 235, 1);
+}
+
+.wpec-modal-open:hover {
+	background-color: rgba(29, 78, 216, 1);
+}
+
+.wpec-modal-open:hover:hover {
+	background-color: rgba(29, 78, 216, 1);
+}
+
+.wpec-modal-open {
 	border-radius: 4px;
+	font-weight: 700;
 	padding-top: 8px;
 	padding-bottom: 8px;
 	padding-right: 16px;
