@@ -1,38 +1,5 @@
 /* This stylesheet is used to style the public-facing components of the plugin. */
 
-/* Small Spinner */
-
-.wpec-spinner {
-	text-indent: -9999px;
-	vertical-align: middle;
-	margin-right: 5px;
-	display: inline-block;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-	position: relative;
-	width: 20px;
-	height: 20px;
-	border-radius: 50%;
-	border: 2px solid #ccc;
-	border-top-color: #333;
-	-webkit-animation: asp-spinner .6s linear infinite;
-	animation: asp-spinner .6s linear infinite;
-}
-
-@-webkit-keyframes wpec-spinner {
-	to {
-		-webkit-transform: rotate(-360deg);
-		transform: rotate(-360deg);
-	}
-}
-
-@keyframes wpec-spinner {
-	to {
-		-webkit-transform: rotate(-360deg);
-		transform: rotate(-360deg);
-	}
-}
-
 .wpec-product-item {
 	display: block;
 	border: 1px solid #E7E9EB;
@@ -207,34 +174,37 @@
 	display: flex;
 }
 
-input[type="button"].wpec_coupon_apply_btn {
+.wpec_coupon_apply_btn {
 	background-color: transparent;
 }
 
-input[type="button"].wpec_coupon_apply_btn:hover {
+.wpec_coupon_apply_btn:hover {
 	background-color: rgba(37, 99, 235, 50);
 }
 
-input[type="button"].wpec_coupon_apply_btn:hover:hover {
+.wpec_coupon_apply_btn:hover:hover {
 	background-color: rgba(37, 99, 235, 1);
 }
 
-input[type="button"].wpec_coupon_apply_btn {
+.wpec_coupon_apply_btn {
 	border-color: rgba(37, 99, 235, 1);
 }
 
-input[type="button"].wpec_coupon_apply_btn:hover {
+.wpec_coupon_apply_btn:hover {
 	border-color: transparent;
 }
 
-input[type="button"].wpec_coupon_apply_btn {
+.wpec_coupon_apply_btn {
 	border-radius: 6px;
 	border-style: solid;
 	border-width: 2px;
 	cursor: pointer;
-	-webkit-box-flex: 0;
-	-ms-flex: none;
-	flex: none;
+	display: -webkit-inline-box;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
 	font-weight: 600;
 	padding-top: 8px;
 	padding-bottom: 8px;
@@ -243,16 +213,34 @@ input[type="button"].wpec_coupon_apply_btn {
 	color: rgba(37, 99, 235, 1);
 }
 
-input[type="button"].wpec_coupon_apply_btn:hover {
+.wpec_coupon_apply_btn:hover {
 	color: rgba(37, 99, 235, 1);
 }
 
-input[type="button"].wpec_coupon_apply_btn:hover {
+.wpec_coupon_apply_btn:hover {
 	color: rgba(255, 255, 255, 1);
 }
 
-input[type="button"].wpec_coupon_apply_btn:hover:hover {
+.wpec_coupon_apply_btn:hover:hover {
 	color: rgba(255, 255, 255, 1);
+}
+
+.wpec_coupon_apply_btn svg {
+	display: none;
+	-webkit-animation: wpec-spinner 1s linear infinite;
+	animation: wpec-spinner 1s linear infinite;
+	height: 20px;
+	margin-left: 12px;
+	margin-right: -4px;
+	width: 20px;
+}
+
+.wpec_coupon_apply_btn svg circle {
+	opacity: 0.25;
+}
+
+.wpec_coupon_apply_btn svg path {
+	opacity: 0.75;
 }
 
 .wpec_coupon_code {
@@ -599,4 +587,20 @@ input[type="button"].wpec_coupon_apply_btn:hover:hover {
 
 .wp-ppec-shortcode-container input[type='checkbox'] {
 	border-radius: 4px;
+}
+
+/* Small Spinner */
+
+@-webkit-keyframes wpec-spinner {
+	to {
+		-webkit-transform: rotate(-360deg);
+		transform: rotate(-360deg);
+	}
+}
+
+@keyframes wpec-spinner {
+	to {
+		-webkit-transform: rotate(-360deg);
+		transform: rotate(-360deg);
+	}
 }

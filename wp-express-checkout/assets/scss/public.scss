@@ -1,28 +1,5 @@
 /* This stylesheet is used to style the public-facing components of the plugin. */
 
-/* Small Spinner */
-
-.wpec-spinner {
-    text-indent: -9999px;
-    vertical-align: middle;
-    margin-left: 5px;
-    display: inline-block;
-    box-sizing: border-box;
-    position: relative;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid #ccc;
-    border-top-color: #333;
-    animation: asp-spinner .6s linear infinite;
-}
-
-@keyframes wpec-spinner {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 .wpec-product-item {
     display: block;
     border: 1px solid #E7E9EB;
@@ -150,9 +127,21 @@
 	@apply flex space-x-4;
 }
 
-input[type="button"].wpec_coupon_apply_btn {
+.wpec_coupon_apply_btn {
 	--tw-bg-opacity: 50;
-	@apply flex-none py-2 px-4 border-blue-600 border-2 border-solid bg-transparent text-blue-600 rounded-md cursor-pointer hover:bg-blue-600 font-semibold hover:text-white hover:border-transparent;
+	@apply inline-flex items-center py-2 px-4 border-blue-600 border-2 border-solid bg-transparent text-blue-600 rounded-md cursor-pointer hover:bg-blue-600 font-semibold hover:text-white hover:border-transparent;
+
+	svg {
+		display: none;
+		animation: wpec-spinner 1s linear infinite;
+		@apply -ml-1 mr-3 h-5 w-5;
+		circle {
+			@apply opacity-25;
+		}
+		path {
+			@apply opacity-75;
+		}
+	}
 }
 
 .wpec_coupon_code {
@@ -216,4 +205,11 @@ input[type="button"].wpec_coupon_apply_btn {
 .wp-ppec-shortcode-container {
 	@apply grid grid-cols-1 gap-6 text-base;
 	@import 'forms';
+}
+
+/* Small Spinner */
+@keyframes wpec-spinner {
+    to {
+        transform: rotate(360deg);
+    }
 }

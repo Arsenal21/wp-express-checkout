@@ -26,9 +26,9 @@ var ppecHandler = function( data ) {
 			dlgMsg = data;
 			ret = false;
 		}
-		jQuery( 'div#wp-ppdg-dialog-message' ).attr( 'title', dlgTitle );
-		jQuery( 'p#wp-ppdg-dialog-msg' ).html( dlgMsg );
-		jQuery( 'div.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).hide();
+		jQuery( '#wp-ppdg-dialog-message' ).attr( 'title', dlgTitle );
+		jQuery( '#wp-ppdg-dialog-msg' ).html( dlgMsg );
+		jQuery( '.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).hide();
 		if ( redirect_url ) {
 			location.href = redirect_url;
 		}
@@ -36,7 +36,7 @@ var ppecHandler = function( data ) {
 	};
 
 	this.isValidCustomQuantity = function() {
-		var input = jQuery( 'input#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' );
+		var input = jQuery( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' );
 		var errMsgCont = input.siblings( '.wp-ppec-form-error-msg' );
 		var val_orig = input.val();
 		var val = parseInt( val_orig );
@@ -63,7 +63,7 @@ var ppecHandler = function( data ) {
 	};
 
 	this.isValidCustomAmount = function() {
-		var input = jQuery( 'input#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' );
+		var input = jQuery( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' );
 		var errMsgCont = input.siblings( '.wp-ppec-form-error-msg' );
 		var val_orig = input.val();
 		var val = parseFloat( val_orig );
@@ -102,7 +102,7 @@ var ppecHandler = function( data ) {
 			var enable_actions = !parent.data.errors;
 			if ( parent.data.tos_enabled === 1 ) {
 				enable_actions = false;
-				var tos_input = jQuery( 'input#wpec-tos-' + parent.data.id );
+				var tos_input = jQuery( '#wpec-tos-' + parent.data.id );
 				var errMsgCont = jQuery( '.wpec_product_tos_input_container' ).find( '.wp-ppec-form-error-msg' );
 				var errMsg = ppecFrontVars.str.acceptTos;
 				tos_input.addClass( 'hasError' );
@@ -122,7 +122,7 @@ var ppecHandler = function( data ) {
 				} );
 			}
 			if ( parent.data.custom_quantity === "1" ) {
-				jQuery( 'input#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
+				jQuery( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
 					if ( !parent.isValidCustomQuantity() ) {
 						enable_actions = false;
 					} else {
@@ -131,7 +131,7 @@ var ppecHandler = function( data ) {
 				} );
 			}
 			if ( parent.data.custom_amount === "1" ) {
-				jQuery( 'input#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
+				jQuery( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
 					if ( !parent.isValidCustomAmount() ) {
 						enable_actions = false;
 					} else {
@@ -154,16 +154,16 @@ var ppecHandler = function( data ) {
 			} );
 			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio:checked' ).change();
 
-			jQuery( 'input#wpec-redeem-coupon-btn-' + parent.data.id ).click( function( e ) {
+			jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).click( function( e ) {
 				e.preventDefault();
-				var couponCode = jQuery( this ).siblings( 'input#wpec-coupon-field-' + parent.data.id ).val();
+				var couponCode = jQuery( this ).siblings( '#wpec-coupon-field-' + parent.data.id ).val();
 				if ( couponCode === '' ) {
 					return false;
 				}
 				var wpecCouponBtn = jQuery( this );
-				var wpecCouponSpinner = jQuery( jQuery.parseHTML( '<div class="wpec-spinner">Loading...</div>' ) );
+				var wpecCouponSpinner = wpecCouponBtn.find( 'svg' );
 				wpecCouponBtn.prop( 'disabled', true );
-				wpecCouponBtn.after( wpecCouponSpinner );
+				wpecCouponSpinner.show();
 				var ajaxData = {
 					'action': 'wpec_check_coupon',
 					'product_id': parent.data.product_id,
@@ -179,9 +179,9 @@ var ppecHandler = function( data ) {
 						parent.data.discountType = response.discountType;
 						parent.data.couponCode = response.code;
 
-						jQuery( 'div#wpec-coupon-info-' + parent.data.id ).html( '<span class="wpec_coupon_code">' + response.discountStr + '</span> <input type="button" class="wpec_coupon_apply_btn" id="wpec-remove-coupon-' + parent.data.id + '" title="' + ppecFrontVars.str.strRemoveCoupon + '" value="' + ppecFrontVars.str.strRemove + '">' );
-						jQuery( 'input#wpec-redeem-coupon-btn-' + parent.data.id ).hide();
-						jQuery( 'input#wpec-coupon-field-' + parent.data.id ).hide();
+						jQuery( '#wpec-coupon-info-' + parent.data.id ).html( '<span class="wpec_coupon_code">' + response.discountStr + '</span> <input type="button" class="wpec_coupon_apply_btn" id="wpec-remove-coupon-' + parent.data.id + '" title="' + ppecFrontVars.str.strRemoveCoupon + '" value="' + ppecFrontVars.str.strRemove + '">' );
+						jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).hide();
+						jQuery( '#wpec-coupon-field-' + parent.data.id ).hide();
 						var totalCont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' ).closest( '.wpec-product-item, .wpec-post-item' ).find( '.wpec-price-container' );
 						var totCurr;
 						var totNew;
@@ -199,10 +199,10 @@ var ppecHandler = function( data ) {
 						parent.updateAllAmounts();
 						jQuery( '#wpec-remove-coupon-' + parent.data.id ).on( 'click', function( e ) {
 							e.preventDefault();
-							jQuery( 'div#wpec-coupon-info-' + parent.data.id ).html( '' );
-							jQuery( 'input#wpec-coupon-field-' + parent.data.id ).val( '' );
-							jQuery( 'input#wpec-coupon-field-' + parent.data.id ).show();
-							jQuery( 'input#wpec-redeem-coupon-btn-' + parent.data.id ).show();
+							jQuery( '#wpec-coupon-info-' + parent.data.id ).html( '' );
+							jQuery( '#wpec-coupon-field-' + parent.data.id ).val( '' );
+							jQuery( '#wpec-coupon-field-' + parent.data.id ).show();
+							jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).show();
 							totCurr.removeClass( 'wpec_line_through' );
 							priceCurr.removeClass( 'wpec_line_through' );
 							totNew.html( '' );
@@ -215,17 +215,17 @@ var ppecHandler = function( data ) {
 							parent.updateAllAmounts();
 						} );
 					} else {
-						jQuery( 'div#wpec-coupon-info-' + parent.data.id ).html( response.msg );
+						jQuery( '#wpec-coupon-info-' + parent.data.id ).html( response.msg );
 					}
-					wpecCouponSpinner.remove();
+					wpecCouponSpinner.hide();
 					wpecCouponBtn.prop( 'disabled', false );
 				} );
 			} );
 
-			jQuery( 'input#wpec-coupon-field-' + parent.data.id ).keydown( function( e ) {
+			jQuery( '#wpec-coupon-field-' + parent.data.id ).keydown( function( e ) {
 				if ( e.keyCode === 13 ) {
 					e.preventDefault();
-					jQuery( 'input#wpec-redeem-coupon-btn-' + parent.data.id ).click();
+					jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).click();
 					return false;
 				}
 			} );

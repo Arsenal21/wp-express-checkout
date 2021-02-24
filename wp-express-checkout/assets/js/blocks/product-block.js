@@ -54,11 +54,7 @@ registerBlockType( 'wp-express-checkout/product-block', {
 					} )
 
 				)
-			),
-			/*el( InspectorControls, {},
-			),
-			el( InspectorControls, {},
-			)*/
+			)
 		];
 	},
 

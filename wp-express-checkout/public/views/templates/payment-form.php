@@ -91,7 +91,13 @@
 			<label class="wpec_product_coupon_field_label"><?php esc_html_e( 'Coupon Code:', 'wp-express-checkout' ); ?> </label>
 			<div class="wpec_product_coupon_input_wrap">
 				<input id="wpec-coupon-field-<?php echo esc_attr( $button_id ); ?>" class="wpec_product_coupon_field_input" type="text" name="wpec_coupon">
-				<input type="button" id="wpec-redeem-coupon-btn-<?php echo esc_attr( $button_id ); ?>" type="button" class="wpec_coupon_apply_btn" value="<?php esc_attr_e( 'Apply', 'wp-express-checkout' ); ?>">
+				<button id="wpec-redeem-coupon-btn-<?php echo esc_attr( $button_id ); ?>" type="button" class="wpec_coupon_apply_btn">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+						<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+						<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+					</svg>
+					<?php esc_html_e( 'Apply', 'wp-express-checkout' ); ?>
+				</button>
 			</div>
 			<div id="wpec-coupon-info-<?php echo esc_attr( $button_id ); ?>" class="wpec_product_coupon_info"></div>
 		</div>
