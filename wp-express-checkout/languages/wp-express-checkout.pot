@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Express Checkout 1.9.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-23 11:22:46+00:00\n"
+"POT-Creation-Date: 2021-02-25 11:45:51+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "WP Express Checkout Settings"
 msgstr ""
 
-#: admin/class-wpec-admin.php:147 admin/class-wpec-admin.php:630
+#: admin/class-wpec-admin.php:147 admin/class-wpec-admin.php:648
 msgid "Settings"
 msgstr ""
 
@@ -41,623 +41,641 @@ msgid "PayPal Credentials"
 msgstr ""
 
 #: admin/class-wpec-admin.php:168
-msgid "Button Style"
+msgid "Checkout Form"
 msgstr ""
 
 #: admin/class-wpec-admin.php:169
+msgid "PayPal Button Style"
+msgstr ""
+
+#: admin/class-wpec-admin.php:170
 msgid "Disable Funding"
 msgstr ""
 
-#: admin/class-wpec-admin.php:171
+#: admin/class-wpec-admin.php:172
 #: admin/includes/class-products-meta-boxes.php:22
 msgid "Shipping & Tax"
 msgstr ""
 
-#: admin/class-wpec-admin.php:172
+#: admin/class-wpec-admin.php:173
 msgid "Debug Logging"
 msgstr ""
 
-#: admin/class-wpec-admin.php:174
+#: admin/class-wpec-admin.php:175
 msgid "Purchase Confirmation Email Settings"
 msgstr ""
 
-#: admin/class-wpec-admin.php:176
+#: admin/class-wpec-admin.php:177
 msgid "Price Display Settings"
 msgstr ""
 
-#: admin/class-wpec-admin.php:177
+#: admin/class-wpec-admin.php:178
 msgid "Terms and Conditions"
 msgstr ""
 
-#: admin/class-wpec-admin.php:181
+#: admin/class-wpec-admin.php:182
 msgid "Currency Code"
 msgstr ""
 
-#: admin/class-wpec-admin.php:181
+#: admin/class-wpec-admin.php:182
 msgid "Example: USD, CAD, GBP etc"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "US Dollars (USD)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "Euros (EUR)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "Pounds Sterling (GBP)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "Australian Dollars (AUD)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "Brazilian Real (BRL)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "Canadian Dollars (CAD)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "Chinese Yuan (CNY)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "Czech Koruna (CZK)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "Danish Krone (DKK)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "Hong Kong Dollar (HKD)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "Hungarian Forint (HUF)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "Indian Rupee (INR)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:183
+#: admin/class-wpec-admin.php:184
 msgid "Indonesia Rupiah (IDR)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "Israeli Shekel (ILS)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "Japanese Yen (JPY)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "Malaysian Ringgits (MYR)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "Mexican Peso (MXN)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "New Zealand Dollar (NZD)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "Norwegian Krone (NOK)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "Philippine Pesos (PHP)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "Polish Zloty (PLN)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "Singapore Dollar (SGD)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "South African Rand (ZAR)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "South Korean Won (KRW)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "Swedish Krona (SEK)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:184
+#: admin/class-wpec-admin.php:185
 msgid "Swiss Franc (CHF)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:185
+#: admin/class-wpec-admin.php:186
 msgid "Taiwan New Dollars (TWD)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:185
+#: admin/class-wpec-admin.php:186
 msgid "Thai Baht (THB)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:185
+#: admin/class-wpec-admin.php:186
 msgid "Turkish Lira (TRY)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:185
+#: admin/class-wpec-admin.php:186
 msgid "Vietnamese Dong (VND)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:185
+#: admin/class-wpec-admin.php:186
 msgid "Russian Ruble (RUB)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:190
+#: admin/class-wpec-admin.php:191
 msgid "Currency Symbol"
 msgstr ""
 
-#: admin/class-wpec-admin.php:201
+#: admin/class-wpec-admin.php:202
 msgid "Thank You Page URL"
 msgstr ""
 
-#: admin/class-wpec-admin.php:205
+#: admin/class-wpec-admin.php:206
 msgid ""
 "This is the thank you page. This page is automatically created for you when "
 "you install the plugin. Do not delete this page from the pages menu of your "
 "site. The plugin will send the customers to this page after the payment."
 msgstr ""
 
-#: admin/class-wpec-admin.php:211
+#: admin/class-wpec-admin.php:212
 msgid "Live Mode"
 msgstr ""
 
-#: admin/class-wpec-admin.php:211
+#: admin/class-wpec-admin.php:212
 msgid ""
 "Check this to run the transaction in live mode. When unchecked it will run "
 "in sandbox mode."
 msgstr ""
 
-#: admin/class-wpec-admin.php:212
+#: admin/class-wpec-admin.php:213
 msgid "Live Client ID"
 msgstr ""
 
-#: admin/class-wpec-admin.php:216
+#: admin/class-wpec-admin.php:217
 msgid ""
 "Enter your PayPal Client ID for live mode. <a href=\"%s\" "
 "target=\"_blank\">Read this documentation</a> to learn how to locate your "
 "Client ID."
 msgstr ""
 
-#: admin/class-wpec-admin.php:220
+#: admin/class-wpec-admin.php:221
 msgid "Live Secret key"
 msgstr ""
 
-#: admin/class-wpec-admin.php:224
+#: admin/class-wpec-admin.php:225
 msgid "Enter your PayPal Secret Key for live mode."
 msgstr ""
 
-#: admin/class-wpec-admin.php:228
+#: admin/class-wpec-admin.php:229
 msgid "Sandbox Client ID"
 msgstr ""
 
-#: admin/class-wpec-admin.php:232
+#: admin/class-wpec-admin.php:233
 msgid "Enter your PayPal Client ID for sandbox mode."
 msgstr ""
 
-#: admin/class-wpec-admin.php:236
+#: admin/class-wpec-admin.php:237
 msgid "Sandbox Secret key"
 msgstr ""
 
-#: admin/class-wpec-admin.php:240
+#: admin/class-wpec-admin.php:241
 msgid "Enter your PayPal Secret Key for sandbox mode."
 msgstr ""
 
-#: admin/class-wpec-admin.php:246
+#: admin/class-wpec-admin.php:247 admin/views/blocks.php:32
+msgid "Show in Modal"
+msgstr ""
+
+#: admin/class-wpec-admin.php:251
+msgid ""
+"Whether to display checkout form in a product details or in a dedicated "
+"modal window."
+msgstr ""
+
+#: admin/class-wpec-admin.php:255
+msgid "Open Modal Button text"
+msgstr ""
+
+#: admin/class-wpec-admin.php:264
 #: admin/includes/class-products-meta-boxes.php:376
 msgid "Button Type"
 msgstr ""
 
-#: admin/class-wpec-admin.php:246
+#: admin/class-wpec-admin.php:264
 #: admin/includes/class-products-meta-boxes.php:382
 msgid "Checkout"
 msgstr ""
 
-#: admin/class-wpec-admin.php:246
+#: admin/class-wpec-admin.php:264
 #: admin/includes/class-products-meta-boxes.php:383
 msgid "Pay"
 msgstr ""
 
-#: admin/class-wpec-admin.php:246
+#: admin/class-wpec-admin.php:264
 #: admin/includes/class-products-meta-boxes.php:384
 msgid "PayPal"
 msgstr ""
 
-#: admin/class-wpec-admin.php:246
+#: admin/class-wpec-admin.php:264
 #: admin/includes/class-products-meta-boxes.php:385
-#: public/views/templates/modal.php:31
+#: public/class-wpec-main.php:304
 msgid "Buy Now"
 msgstr ""
 
-#: admin/class-wpec-admin.php:247
+#: admin/class-wpec-admin.php:265
 msgid "Button Shape"
 msgstr ""
 
-#: admin/class-wpec-admin.php:247
+#: admin/class-wpec-admin.php:265
 msgid "Pill"
 msgstr ""
 
-#: admin/class-wpec-admin.php:247
+#: admin/class-wpec-admin.php:265
 msgid "Rectangle"
 msgstr ""
 
-#: admin/class-wpec-admin.php:248
+#: admin/class-wpec-admin.php:266
 msgid "Button Layout"
 msgstr ""
 
-#: admin/class-wpec-admin.php:248
+#: admin/class-wpec-admin.php:266
 msgid "Vertical"
 msgstr ""
 
-#: admin/class-wpec-admin.php:248
+#: admin/class-wpec-admin.php:266
 msgid "Horizontal"
 msgstr ""
 
-#: admin/class-wpec-admin.php:249
+#: admin/class-wpec-admin.php:267
 msgid "Button Height"
 msgstr ""
 
-#: admin/class-wpec-admin.php:249
+#: admin/class-wpec-admin.php:267
 msgid "Small"
 msgstr ""
 
-#: admin/class-wpec-admin.php:249
+#: admin/class-wpec-admin.php:267
 msgid "Medium"
 msgstr ""
 
-#: admin/class-wpec-admin.php:249
+#: admin/class-wpec-admin.php:267
 msgid "Large"
 msgstr ""
 
-#: admin/class-wpec-admin.php:249
+#: admin/class-wpec-admin.php:267
 msgid "Extra Large"
 msgstr ""
 
-#: admin/class-wpec-admin.php:250
+#: admin/class-wpec-admin.php:268
 msgid "Button Width"
 msgstr ""
 
-#: admin/class-wpec-admin.php:250
+#: admin/class-wpec-admin.php:268
 msgid "Auto"
 msgstr ""
 
-#: admin/class-wpec-admin.php:250
+#: admin/class-wpec-admin.php:268
 msgid ""
 "Button width in pixels. Minimum width is 150px. Leave it blank for auto "
 "width."
 msgstr ""
 
-#: admin/class-wpec-admin.php:251
+#: admin/class-wpec-admin.php:269
 msgid "Button Color"
 msgstr ""
 
-#: admin/class-wpec-admin.php:251
+#: admin/class-wpec-admin.php:269
 msgid "Button preview:"
 msgstr ""
 
-#: admin/class-wpec-admin.php:251
+#: admin/class-wpec-admin.php:269
 msgid "Gold"
 msgstr ""
 
-#: admin/class-wpec-admin.php:251
+#: admin/class-wpec-admin.php:269
 msgid "Blue"
 msgstr ""
 
-#: admin/class-wpec-admin.php:251
+#: admin/class-wpec-admin.php:269
 msgid "Silver"
 msgstr ""
 
-#: admin/class-wpec-admin.php:251
+#: admin/class-wpec-admin.php:269
 msgid "White"
 msgstr ""
 
-#: admin/class-wpec-admin.php:251
+#: admin/class-wpec-admin.php:269
 msgid "Black"
 msgstr ""
 
-#: admin/class-wpec-admin.php:254
+#: admin/class-wpec-admin.php:272
 msgid "Disabled Funding Options"
 msgstr ""
 
-#: admin/class-wpec-admin.php:254
+#: admin/class-wpec-admin.php:272
 msgid "Credit or debit cards"
 msgstr ""
 
-#: admin/class-wpec-admin.php:254
+#: admin/class-wpec-admin.php:272
 msgid "PayPal Credit"
 msgstr ""
 
-#: admin/class-wpec-admin.php:258
+#: admin/class-wpec-admin.php:276
 #: admin/includes/class-products-meta-boxes.php:234
 msgid "Shipping Cost"
 msgstr ""
 
-#: admin/class-wpec-admin.php:258
+#: admin/class-wpec-admin.php:276
 #: admin/includes/class-products-meta-boxes.php:239
 msgid "Enter numbers only. Example: 5.50"
 msgstr ""
 
-#: admin/class-wpec-admin.php:258
+#: admin/class-wpec-admin.php:276
 msgid ""
 "Leave it empty if you are not charging shipping cost. You can also set "
 "shipping cost on a per product basis."
 msgstr ""
 
-#: admin/class-wpec-admin.php:259
+#: admin/class-wpec-admin.php:277
 #: admin/includes/class-products-meta-boxes.php:245
 msgid "Tax (%)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:259
+#: admin/class-wpec-admin.php:277
 #: admin/includes/class-products-meta-boxes.php:250
 msgid "Enter tax (in percent) which will be added to the product price."
 msgstr ""
 
-#: admin/class-wpec-admin.php:259
+#: admin/class-wpec-admin.php:277
 #: admin/includes/class-products-meta-boxes.php:252
 msgid "Leave it empty if you don't want to apply tax."
 msgstr ""
 
-#: admin/class-wpec-admin.php:262
+#: admin/class-wpec-admin.php:280
 msgid "Enable Debug Logging"
 msgstr ""
 
-#: admin/class-wpec-admin.php:266
+#: admin/class-wpec-admin.php:284
 msgid "Check this option to enable debug logging."
 msgstr ""
 
-#: admin/class-wpec-admin.php:268 admin/class-wpec-admin.php:270
+#: admin/class-wpec-admin.php:286 admin/class-wpec-admin.php:288
 msgid "Click here"
 msgstr ""
 
-#: admin/class-wpec-admin.php:269
+#: admin/class-wpec-admin.php:287
 msgid " to view log file."
 msgstr ""
 
-#: admin/class-wpec-admin.php:271
+#: admin/class-wpec-admin.php:289
 msgid " to reset log file."
 msgstr ""
 
-#: admin/class-wpec-admin.php:280
+#: admin/class-wpec-admin.php:298
 msgid "Send Emails to Buyer After Purchase"
 msgstr ""
 
-#: admin/class-wpec-admin.php:280
+#: admin/class-wpec-admin.php:298
 msgid ""
 "If checked the plugin will send an email to the buyer with the sale "
 "details. If digital goods are purchased then the email will contain the "
 "download links for the purchased products."
 msgstr ""
 
-#: admin/class-wpec-admin.php:283
+#: admin/class-wpec-admin.php:301
 msgid "Email Content Type"
 msgstr ""
 
-#: admin/class-wpec-admin.php:290
+#: admin/class-wpec-admin.php:308
 msgid "Choose which format of email to send."
 msgstr ""
 
-#: admin/class-wpec-admin.php:293
+#: admin/class-wpec-admin.php:311
 msgid "Plain Text"
 msgstr ""
 
-#: admin/class-wpec-admin.php:294
+#: admin/class-wpec-admin.php:312
 msgid "HTML"
 msgstr ""
 
-#: admin/class-wpec-admin.php:298
+#: admin/class-wpec-admin.php:316
 msgid "From Email Address"
 msgstr ""
 
-#: admin/class-wpec-admin.php:298
+#: admin/class-wpec-admin.php:316
 msgid ""
 "Example: Your Name &lt;sales@your-domain.com&gt; This is the email address "
 "that will be used to send the email to the buyer. This name and email "
 "address will appear in the from field of the email."
 msgstr ""
 
-#: admin/class-wpec-admin.php:299
+#: admin/class-wpec-admin.php:317
 msgid "Buyer Email Subject"
 msgstr ""
 
-#: admin/class-wpec-admin.php:299
+#: admin/class-wpec-admin.php:317
 msgid "This is the subject of the email that will be sent to the buyer."
 msgstr ""
 
-#: admin/class-wpec-admin.php:300
+#: admin/class-wpec-admin.php:318
 msgid "Buyer Email Body"
 msgstr ""
 
-#: admin/class-wpec-admin.php:302 admin/class-wpec-admin.php:318
+#: admin/class-wpec-admin.php:320 admin/class-wpec-admin.php:336
 msgid "First name of the buyer"
 msgstr ""
 
-#: admin/class-wpec-admin.php:303 admin/class-wpec-admin.php:319
+#: admin/class-wpec-admin.php:321 admin/class-wpec-admin.php:337
 msgid "Last name of the buyer"
 msgstr ""
 
-#: admin/class-wpec-admin.php:304 admin/class-wpec-admin.php:320
+#: admin/class-wpec-admin.php:322 admin/class-wpec-admin.php:338
 msgid "Email Address of the buyer"
 msgstr ""
 
-#: admin/class-wpec-admin.php:305 admin/class-wpec-admin.php:321
+#: admin/class-wpec-admin.php:323 admin/class-wpec-admin.php:339
 msgid "Address of the buyer"
 msgstr ""
 
-#: admin/class-wpec-admin.php:306 admin/class-wpec-admin.php:322
+#: admin/class-wpec-admin.php:324 admin/class-wpec-admin.php:340
 msgid ""
 "The item details of the purchased product (this will include the download "
 "link for digital items)."
 msgstr ""
 
-#: admin/class-wpec-admin.php:307 admin/class-wpec-admin.php:323
+#: admin/class-wpec-admin.php:325 admin/class-wpec-admin.php:341
 msgid "The unique transaction ID of the purchase"
 msgstr ""
 
-#: admin/class-wpec-admin.php:308 admin/class-wpec-admin.php:324
+#: admin/class-wpec-admin.php:326 admin/class-wpec-admin.php:342
 msgid "The order ID reference of this transaction in the cart orders menu"
 msgstr ""
 
-#: admin/class-wpec-admin.php:309 admin/class-wpec-admin.php:325
+#: admin/class-wpec-admin.php:327 admin/class-wpec-admin.php:343
 msgid "The amount paid for the current transaction"
 msgstr ""
 
-#: admin/class-wpec-admin.php:310 admin/class-wpec-admin.php:326
+#: admin/class-wpec-admin.php:328 admin/class-wpec-admin.php:344
 msgid "The date of the purchase"
 msgstr ""
 
-#: admin/class-wpec-admin.php:311 admin/class-wpec-admin.php:327
+#: admin/class-wpec-admin.php:329 admin/class-wpec-admin.php:345
 msgid "Coupon code applied to the purchase"
 msgstr ""
 
-#: admin/class-wpec-admin.php:313
+#: admin/class-wpec-admin.php:331
 msgid "Send Emails to Seller After Purchase"
 msgstr ""
 
-#: admin/class-wpec-admin.php:313
+#: admin/class-wpec-admin.php:331
 msgid "If checked the plugin will send an email to the seller with the sale details"
 msgstr ""
 
-#: admin/class-wpec-admin.php:314
+#: admin/class-wpec-admin.php:332
 msgid "Notification Email Address*"
 msgstr ""
 
-#: admin/class-wpec-admin.php:314
+#: admin/class-wpec-admin.php:332
 msgid ""
 "This is the email address where the seller will be notified of product "
 "sales. You can put multiple email addresses separated by comma (,) in the "
 "above field to send the notification to multiple email addresses."
 msgstr ""
 
-#: admin/class-wpec-admin.php:315
+#: admin/class-wpec-admin.php:333
 msgid "Seller Email Subject*"
 msgstr ""
 
-#: admin/class-wpec-admin.php:315
+#: admin/class-wpec-admin.php:333
 msgid "This is the subject of the email that will be sent to the seller for record."
 msgstr ""
 
-#: admin/class-wpec-admin.php:316
+#: admin/class-wpec-admin.php:334
 msgid "Seller Email Body*"
 msgstr ""
 
-#: admin/class-wpec-admin.php:337
+#: admin/class-wpec-admin.php:355
 msgid "Currency Position"
 msgstr ""
 
-#: admin/class-wpec-admin.php:344
+#: admin/class-wpec-admin.php:362
 msgid "This controls the position of the currency symbol."
 msgstr ""
 
-#: admin/class-wpec-admin.php:347
+#: admin/class-wpec-admin.php:365
 msgid "Left (%s1.00)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:348
+#: admin/class-wpec-admin.php:366
 msgid "Left with space (%s 1.00)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:349
+#: admin/class-wpec-admin.php:367
 msgid "Right (1.00%s)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:350
+#: admin/class-wpec-admin.php:368
 msgid "Right with space (1.00 %s)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:355
+#: admin/class-wpec-admin.php:373
 msgid "Decimal Separator"
 msgstr ""
 
-#: admin/class-wpec-admin.php:362
+#: admin/class-wpec-admin.php:380
 msgid "This sets the decimal separator of the displayed price."
 msgstr ""
 
-#: admin/class-wpec-admin.php:367
+#: admin/class-wpec-admin.php:385
 msgid "Thousand Separator"
 msgstr ""
 
-#: admin/class-wpec-admin.php:374
+#: admin/class-wpec-admin.php:392
 msgid "This sets the thousand separator of the displayed price."
 msgstr ""
 
-#: admin/class-wpec-admin.php:379
+#: admin/class-wpec-admin.php:397
 msgid "Number of Decimals"
 msgstr ""
 
-#: admin/class-wpec-admin.php:386
+#: admin/class-wpec-admin.php:404
 msgid "This sets the number of decimal points shown in the displayed price."
 msgstr ""
 
-#: admin/class-wpec-admin.php:393
+#: admin/class-wpec-admin.php:411
 msgid "Enable Terms and Conditions"
 msgstr ""
 
-#: admin/class-wpec-admin.php:400
+#: admin/class-wpec-admin.php:418
 msgid "Enable Terms and Conditions checkbox."
 msgstr ""
 
-#: admin/class-wpec-admin.php:405
+#: admin/class-wpec-admin.php:423
 msgid "Checkbox Text"
 msgstr ""
 
-#: admin/class-wpec-admin.php:412
+#: admin/class-wpec-admin.php:430
 msgid ""
 "Text to be displayed on checkbox. It accepts HTML code so you can put a "
 "link to your terms and conditions page."
 msgstr ""
 
-#: admin/class-wpec-admin.php:421
+#: admin/class-wpec-admin.php:439
 msgid ""
 "The following options affect the emails that gets sent to your buyers after "
 "a purchase."
 msgstr ""
 
-#: admin/class-wpec-admin.php:429
+#: admin/class-wpec-admin.php:447
 msgid ""
 "By default, funding source eligibility is smartly decided based on a "
 "variety of factors. You can force disable funding options by selecting them "
 "below."
 msgstr ""
 
-#: admin/class-wpec-admin.php:432
+#: admin/class-wpec-admin.php:450
 msgid ""
 "Note: disabled options will disappear from button preview once you save "
 "changes."
 msgstr ""
 
-#: admin/class-wpec-admin.php:441
+#: admin/class-wpec-admin.php:459
 msgid ""
 "Debug logging can be useful to troubleshoot transaction processing related "
 "issues on your site."
 msgstr ""
 
-#: admin/class-wpec-admin.php:449
+#: admin/class-wpec-admin.php:467
 msgid ""
 "This section allows you to configure Terms and Conditions or Privacy Policy "
 "that customer must accept before making payment. This, for example, can be "
 "used to comply with EU GDPR."
 msgstr ""
 
-#: admin/class-wpec-admin.php:564
+#: admin/class-wpec-admin.php:582
 #. translators: "%s" - field title
 msgid "You must specify \"%s\"."
 msgstr ""
@@ -686,7 +704,7 @@ msgstr ""
 
 #: admin/includes/class-admin-order-summary-table.php:44
 #: includes/class-order-summary-table.php:127
-#: public/includes/class-shortcode-ppec.php:286
+#: public/includes/class-shortcode-ppec.php:287
 #. translators: quantity
 msgid "x %s"
 msgstr ""
@@ -1496,10 +1514,6 @@ msgstr ""
 msgid "Template"
 msgstr ""
 
-#: admin/views/blocks.php:32
-msgid "Show in Modal"
-msgstr ""
-
 #: admin/views/blocks.php:33
 msgid "Layout Options"
 msgstr ""
@@ -1563,7 +1577,7 @@ msgid "Error! Thank you page URL configuration is wrong in the plugin settings."
 msgstr ""
 
 #: includes/class-wpec-process-ipn.php:273
-#: public/includes/class-shortcode-ppec.php:360
+#: public/includes/class-shortcode-ppec.php:361
 msgid "Payment is not approved. Status: %s"
 msgstr ""
 
@@ -1638,7 +1652,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: public/class-wpec-main.php:332
+#: public/class-wpec-main.php:334
 msgid ""
 "I accept the <a href=\"https://example.com/terms-and-conditions/\" "
 "target=\"_blank\">Terms and Conditions</a>"
@@ -1652,79 +1666,79 @@ msgstr ""
 msgid "Can't find product with ID %s"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:213
+#: public/includes/class-shortcode-ppec.php:214
 msgid "Please enter %s Client ID in the settings."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:299
+#: public/includes/class-shortcode-ppec.php:300
 #. translators: tax amount
 msgid "%s (tax)"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:302
+#: public/includes/class-shortcode-ppec.php:303
 #. translators: tax percent
 msgid "%s%% tax"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:310
+#: public/includes/class-shortcode-ppec.php:311
 #. translators: tax + shipping amount
 msgid "+ %s (shipping)"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:313
+#: public/includes/class-shortcode-ppec.php:314
 #. translators: shipping amount
 msgid "%s (shipping)"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:319
+#: public/includes/class-shortcode-ppec.php:320
 msgid "Total:"
-msgstr ""
-
-#: public/includes/class-shortcode-ppec.php:338
-#: public/includes/class-shortcode-ppec.php:345
-msgid ""
-"This page is used to show the transaction result after a customer makes a "
-"payment."
 msgstr ""
 
 #: public/includes/class-shortcode-ppec.php:339
 #: public/includes/class-shortcode-ppec.php:346
 msgid ""
+"This page is used to show the transaction result after a customer makes a "
+"payment."
+msgstr ""
+
+#: public/includes/class-shortcode-ppec.php:340
+#: public/includes/class-shortcode-ppec.php:347
+msgid ""
 "It will dynamically show the order details to the customers when they are "
 "redirected here after a payment. Do not access this page directly."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:340
+#: public/includes/class-shortcode-ppec.php:341
 msgid "Error! Order ID value is missing in the URL."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:347
+#: public/includes/class-shortcode-ppec.php:348
 msgid "Error! Nonce value is missing in the URL or Nonce verification failed."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:356
+#: public/includes/class-shortcode-ppec.php:357
 msgid "Error! Incorrect order ID. Could not find that order in the orders table."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:365
+#: public/includes/class-shortcode-ppec.php:366
 msgid "Thank you for your purchase."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:367
+#: public/includes/class-shortcode-ppec.php:368
 msgid "Your purchase details are below:"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:369
+#: public/includes/class-shortcode-ppec.php:370
 msgid "Transaction ID: "
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:376
+#: public/includes/class-shortcode-ppec.php:377
 msgid "Download link"
 msgid_plural "Download links"
 msgstr[0] ""
 msgstr[1] ""
 
-#: public/includes/class-shortcode-ppec.php:377
+#: public/includes/class-shortcode-ppec.php:378
 msgid "Click here to download"
 msgstr ""
 
@@ -1740,11 +1754,11 @@ msgstr ""
 msgid "Coupon Code:"
 msgstr ""
 
-#: public/views/templates/payment-form.php:94
+#: public/views/templates/payment-form.php:99
 msgid "Apply"
 msgstr ""
 
-#: public/views/templates/payment-form.php:124
+#: public/views/templates/payment-form.php:126
 msgid ""
 "This is where the Express Checkout Button will show. View it on the "
 "front-end to see how it will look to your visitors"

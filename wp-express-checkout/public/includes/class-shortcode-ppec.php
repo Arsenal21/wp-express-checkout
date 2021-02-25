@@ -120,7 +120,8 @@ class WPECShortcode {
 				'btn_layout'      => $this->ppdg->get_setting( 'btn_layout' ) !== false ? $this->ppdg->get_setting( 'btn_layout' ) : 'horizontal',
 				'btn_color'       => $this->ppdg->get_setting( 'btn_color' ) !== false ? $this->ppdg->get_setting( 'btn_color' ) : 'gold',
 				'coupons_enabled' => $this->ppdg->get_setting( 'coupons_enabled' ),
-				'use_modal'       => ! isset( $atts['modal'] ) ? 1 : $atts['modal'],
+				'button_text'     => $this->ppdg->get_setting( 'button_text' ),
+				'use_modal'       => ! isset( $atts['modal'] ) ? $this->ppdg->get_setting( 'use_modal' ) : $atts['modal'],
 			),
 			$args
 		);

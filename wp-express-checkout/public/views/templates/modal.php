@@ -28,5 +28,5 @@
 </div>
 
 <button data-wpec-modal="wpec-modal-<?php echo esc_attr( $button_id ); ?>" class="wpec-modal-open">
-	<?php esc_html_e( 'Buy Now', 'wp-express-checkout' ); ?>
+	<?php echo esc_html( $button_text ); ?>
 </button>

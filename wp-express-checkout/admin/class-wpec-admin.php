@@ -165,7 +165,8 @@ class WPEC_Admin {
 		/* Add the sections */
 		add_settings_section( 'ppdg-global-section', __( 'Global Settings', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-credentials-section', __( 'PayPal Credentials', 'wp-express-checkout' ), null, $this->plugin_slug );
-		add_settings_section( 'ppdg-button-style-section', __( 'Button Style', 'wp-express-checkout' ), null, $this->plugin_slug );
+		add_settings_section( 'ppdg-form-section', __( 'Checkout Form', 'wp-express-checkout' ), null, $this->plugin_slug );
+		add_settings_section( 'ppdg-button-style-section', __( 'PayPal Button Style', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-disable-funding-section', __( 'Disable Funding', 'wp-express-checkout' ), array( $this, 'disable_funding_note' ), $this->plugin_slug );
 
 		add_settings_section( 'ppdg-shipping-tax-section', __( 'Shipping & Tax', 'wp-express-checkout' ), null, $this->plugin_slug );
@@ -239,6 +240,23 @@ class WPEC_Admin {
 				'type'  => 'text',
 				'desc'  => __( 'Enter your PayPal Secret Key for sandbox mode.', 'wp-express-checkout' ),
 				'size'  => 100,
+			)
+		);
+
+		// checkout form section
+		add_settings_field( 'use_modal', __( 'Show in Modal', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-form-section',
+			array(
+				'field' => 'use_modal',
+				'type'  => 'checkbox',
+				'desc'  => __( 'Whether to display checkout form in a product details or in a dedicated modal window.', 'wp-express-checkout' ),
+			)
+		);
+
+		add_settings_field( 'button_text', __( 'Open Modal Button Text', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-form-section',
+			array(
+				'field' => 'button_text',
+				'type'  => 'text',
+				'size'  => 10,
 			)
 		);
 
