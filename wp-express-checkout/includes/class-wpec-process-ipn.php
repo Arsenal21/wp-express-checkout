@@ -199,7 +199,7 @@ class WPEC_Process_IPN {
 
 			WPEC_Debug_Logger::log( 'Buyer email notification sent to: ' . $buyer_email . '. From email address value used: ' . $from_email );
 
-			update_post_meta( $order_id, 'wpsc_buyer_email_sent', 'Email sent to: ' . $buyer_email );
+			update_post_meta( $order_id, 'wpec_buyer_email_sent', 'Email sent to: ' . $buyer_email );
 		}
 
 		// Send email to seller if needs.
