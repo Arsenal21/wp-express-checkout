@@ -26,9 +26,9 @@ var ppecHandler = function( data ) {
 			dlgMsg = data;
 			ret = false;
 		}
-		jQuery( '#wp-ppdg-dialog-message' ).attr( 'title', dlgTitle );
-		jQuery( '#wp-ppdg-dialog-msg' ).html( dlgMsg );
 		jQuery( '.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).hide();
+		var dialog = jQuery( '<div id="wp-ppdg-dialog-message" title="' + dlgTitle + '"><p id="wp-ppdg-dialog-msg">' + dlgMsg + '</p></div>' );
+		jQuery( '#' + parent.data.id ).before( dialog ).fadeIn();
 		if ( redirect_url ) {
 			location.href = redirect_url;
 		}

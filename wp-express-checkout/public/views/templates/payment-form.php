@@ -103,10 +103,6 @@
 		</div>
 	<?php } ?>
 
-	<div id="wp-ppdg-dialog-message" title="">
-		<p id="wp-ppdg-dialog-msg"></p>
-	</div>
-
 	<div class = "wp-ppec-button-container">
 
 		<?php if ( $this->ppdg->get_setting( 'tos_enabled' ) ) { ?>
