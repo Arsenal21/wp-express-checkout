@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.6
-Stable tag: 1.9.3
+Stable tag: 1.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,7 @@ https://www.youtube.com/watch?v=3LsfLd03VnE
 * Option to charge shipping for your items. Ability to set a shipping cost for each item separately.
 * Option to charge tax for your items.
 * Option to configure discount coupon codes.
+* Option to configure terms and conditions before checkout.
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
 
@@ -112,6 +113,9 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 1.9.4 =
+* Added a feature to enable Terms and Conditions. When enabled, customers have to accepts terms before they can make a payment.
 
 = 1.9.3 =
 * Fixed an issue with the variation feature.
