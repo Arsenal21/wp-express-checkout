@@ -172,17 +172,29 @@
 .wpec-modal-content {
 	@apply py-4 text-left px-6;
 
-	.wpec-modal-content-title {
-		@apply flex justify-between items-center pb-3;
-		p {
-			@apply text-2xl font-bold;
-		}
-		.wpec-modal-close {
-			@apply cursor-pointer z-50;
-			svg {
-				@apply fill-current text-black;
-			}
-		}
+}
+
+.wpec-modal-content-title {
+	@apply flex justify-between items-center pb-3;
+	p {
+		@apply text-2xl font-bold;
+	}
+}
+
+.wpec-modal-close {
+	@apply cursor-pointer z-50;
+	svg {
+		@apply fill-current text-black;
+	}
+}
+
+.wpec-modal-item-info-wrap {
+	@apply text-base pb-3;
+}
+
+.wpec-modal-item-thumbnail {
+	img {
+		@apply rounded-md;
 	}
 }
 

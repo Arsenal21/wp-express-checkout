@@ -22,6 +22,13 @@
 					</svg>
 				</div>
 			</div>
+			<?php if ( ! empty( $thumbnail_url ) ) { ?>
+				<div class="wpec-modal-item-info-wrap">
+					<div class="wpec-modal-item-thumbnail">
+						<img width="150" height="150" src="<?php echo esc_url( $thumbnail_url ); ?>" class="attachment-thumbnail size-thumbnail wp-post-image" alt="">
+					</div>
+				</div>
+			<?php } ?>
 			<?php echo $output; ?>
 		</div>
 	</div>

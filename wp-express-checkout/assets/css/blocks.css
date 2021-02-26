@@ -343,7 +343,7 @@
 	text-align: left;
 }
 
-.editor-styles-wrapper .wpec-modal-content .wpec-modal-content-title {
+.editor-styles-wrapper .wpec-modal-content-title {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -356,20 +356,30 @@
 	padding-bottom: 12px;
 }
 
-.editor-styles-wrapper .wpec-modal-content .wpec-modal-content-title p {
+.editor-styles-wrapper .wpec-modal-content-title p {
 	font-weight: 700;
 	font-size: 24px;
 	line-height: 32px;
 }
 
-.editor-styles-wrapper .wpec-modal-content .wpec-modal-content-title .wpec-modal-close {
+.editor-styles-wrapper .wpec-modal-close {
 	cursor: pointer;
 	z-index: 50;
 }
 
-.editor-styles-wrapper .wpec-modal-content .wpec-modal-content-title .wpec-modal-close svg {
+.editor-styles-wrapper .wpec-modal-close svg {
 	fill: currentColor;
 	color: rgba(0, 0, 0, 1);
+}
+
+.editor-styles-wrapper .wpec-modal-item-info-wrap {
+	font-size: 16px;
+	line-height: 24px;
+	padding-bottom: 12px;
+}
+
+.editor-styles-wrapper .wpec-modal-item-thumbnail img {
+	border-radius: 6px;
 }
 
 .editor-styles-wrapper .wpec-opacity-0 {
