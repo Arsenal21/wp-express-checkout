@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Express Checkout 1.9.3\n"
+"Project-Id-Version: WP Express Checkout 1.9.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-26 04:55:19+00:00\n"
+"POT-Creation-Date: 2021-02-26 05:08:06+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -639,8 +639,8 @@ msgstr ""
 
 #: admin/class-wpec-admin.php:430
 msgid ""
-"Text to be displayed on checkbox. It accepts HTML code so you can put a "
-"link to your terms and conditions page."
+"Text to be displayed for the checkbox. It accepts HTML code so you can put "
+"a link to your terms and conditions page."
 msgstr ""
 
 #: admin/class-wpec-admin.php:439
@@ -671,8 +671,7 @@ msgstr ""
 #: admin/class-wpec-admin.php:467
 msgid ""
 "This section allows you to configure Terms and Conditions or Privacy Policy "
-"that customer must accept before making payment. This, for example, can be "
-"used to comply with EU GDPR."
+"that customers must accept before making a payment."
 msgstr ""
 
 #: admin/class-wpec-admin.php:582
