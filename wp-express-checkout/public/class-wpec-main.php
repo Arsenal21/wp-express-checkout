@@ -138,7 +138,8 @@ class WPEC_Main {
 	 * @return mixed
 	 */
 	public function get_setting( $field ) {
-		$settings = (array) get_option( 'ppdg-settings' );
+		$settings = (array) get_option( 'ppdg-settings', self::get_defaults() );
+		$settings = array_merge( self::get_defaults(), $settings );
 
 		if ( isset( $settings[ $field ] ) ) {
 			return $settings[ $field ];
