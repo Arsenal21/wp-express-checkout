@@ -17,22 +17,6 @@
 		</div>
 	</div>
 
-	<?php if ( $custom_quantity ) { ?>
-		<div class="wpec-custom-number-input-wrapper">
-			<label><?php esc_html_e( 'Quantity:', 'wp-express-checkout' ); ?></label>
-			<div class="wpec-custom-number-input">
-				<button data-action="decrement">
-					<span>&minus;</span>
-				</button>
-				<input id="wp-ppec-custom-quantity" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" type="number" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-quantity" min="1" value="<?php echo esc_attr( $quantity ); ?>">
-				<button data-action="increment">
-					<span>+</span>
-				</button>
-			</div>
-			<div class="wp-ppec-form-error-msg"></div>
-		</div>
-	<?php } ?>
-
 	<?php if ( $custom_amount ) { ?>
 		<?php $step = pow( 10, -intval( $this->ppdg->get_setting( 'price_decimals_num' ) ) ); ?>
 		<div class="wpec-custom-amount-section wpec-custom-number-input-wrapper">
@@ -49,6 +33,22 @@
 				</button>
 				<div class="wp-ppec-form-error-msg"></div>
 			</div>
+		</div>
+	<?php } ?>
+
+	<?php if ( $custom_quantity ) { ?>
+		<div class="wpec-custom-number-input-wrapper">
+			<label><?php esc_html_e( 'Quantity:', 'wp-express-checkout' ); ?></label>
+			<div class="wpec-custom-number-input">
+				<button data-action="decrement">
+					<span>&minus;</span>
+				</button>
+				<input id="wp-ppec-custom-quantity" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" type="number" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-quantity" min="1" value="<?php echo esc_attr( $quantity ); ?>">
+				<button data-action="increment">
+					<span>+</span>
+				</button>
+			</div>
+			<div class="wp-ppec-form-error-msg"></div>
 		</div>
 	<?php } ?>
 
