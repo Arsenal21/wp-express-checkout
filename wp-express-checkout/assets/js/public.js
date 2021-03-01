@@ -179,7 +179,7 @@ var ppecHandler = function( data ) {
 						parent.data.discountType = response.discountType;
 						parent.data.couponCode = response.code;
 
-						jQuery( '#wpec-coupon-info-' + parent.data.id ).html( '<span class="wpec_coupon_code">' + response.discountStr + '</span> <input type="button" class="wpec_coupon_apply_btn" id="wpec-remove-coupon-' + parent.data.id + '" title="' + ppecFrontVars.str.strRemoveCoupon + '" value="' + ppecFrontVars.str.strRemove + '">' );
+						jQuery( '#wpec-coupon-info-' + parent.data.id ).html( '<span class="wpec_coupon_code">' + response.discountStr + '</span> <button class="wpec_coupon_apply_btn" id="wpec-remove-coupon-' + parent.data.id + '" title="' + ppecFrontVars.str.strRemoveCoupon + '">' + ppecFrontVars.str.strRemove + '</button>' );
 						jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).hide();
 						jQuery( '#wpec-coupon-field-' + parent.data.id ).hide();
 						var totalCont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' ).closest( '.wpec-product-item, .wpec-post-item' ).find( '.wpec-price-container' );

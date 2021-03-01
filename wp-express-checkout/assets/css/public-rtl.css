@@ -176,25 +176,7 @@
 
 .wpec_coupon_apply_btn {
 	background-color: transparent;
-}
-
-.wpec_coupon_apply_btn:hover {
-	background-color: rgba(37, 99, 235, 50);
-}
-
-.wpec_coupon_apply_btn:hover:hover {
-	background-color: rgba(37, 99, 235, 1);
-}
-
-.wpec_coupon_apply_btn {
 	border-color: rgba(37, 99, 235, 1);
-}
-
-.wpec_coupon_apply_btn:hover {
-	border-color: transparent;
-}
-
-.wpec_coupon_apply_btn {
 	border-radius: 6px;
 	border-style: solid;
 	border-width: 2px;
@@ -211,6 +193,7 @@
 	padding-right: 16px;
 	padding-left: 16px;
 	color: rgba(37, 99, 235, 1);
+	white-space: nowrap;
 }
 
 .wpec_coupon_apply_btn:hover {
@@ -218,11 +201,18 @@
 }
 
 .wpec_coupon_apply_btn:hover {
+	background-color: rgba(37, 99, 235, 50);
+	background-image: none;
+	border-color: transparent;
 	color: rgba(255, 255, 255, 1);
 }
 
 .wpec_coupon_apply_btn:hover:hover {
 	color: rgba(255, 255, 255, 1);
+}
+
+.wpec_coupon_apply_btn:hover:hover {
+	background-color: rgba(37, 99, 235, 1);
 }
 
 .wpec_coupon_apply_btn svg {
@@ -263,6 +253,17 @@
 
 .wpec-modal-open {
 	background-color: rgba(37, 99, 235, 1);
+	border-radius: 4px;
+	font-weight: 700;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-right: 16px;
+	padding-left: 16px;
+	color: rgba(255, 255, 255, 1);
+}
+
+.wpec-modal-open:hover {
+	color: rgba(255, 255, 255, 1);
 }
 
 .wpec-modal-open:hover {
@@ -271,20 +272,16 @@
 
 .wpec-modal-open:hover {
 	background-color: rgba(29, 78, 216, 1);
+	background-image: none;
+	color: rgba(255, 255, 255, 1);
+}
+
+.wpec-modal-open:hover:hover {
+	color: rgba(255, 255, 255, 1);
 }
 
 .wpec-modal-open:hover:hover {
 	background-color: rgba(29, 78, 216, 1);
-}
-
-.wpec-modal-open {
-	border-radius: 4px;
-	font-weight: 700;
-	padding-top: 8px;
-	padding-bottom: 8px;
-	padding-right: 16px;
-	padding-left: 16px;
-	color: rgba(255, 255, 255, 1);
 }
 
 .wpec-modal {
@@ -436,6 +433,8 @@
 	padding-right: 12px;
 	font-size: 16px;
 	line-height: 24px;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .wp-ppec-shortcode-container input::-moz-placeholder, .wp-ppec-shortcode-container textarea::-moz-placeholder {

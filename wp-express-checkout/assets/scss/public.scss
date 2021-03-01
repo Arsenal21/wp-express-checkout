@@ -129,7 +129,11 @@
 
 .wpec_coupon_apply_btn {
 	--tw-bg-opacity: 50;
-	@apply inline-flex items-center py-2 px-4 border-blue-600 border-2 border-solid bg-transparent text-blue-600 rounded-md cursor-pointer font-semibold hover:bg-blue-600 hover:text-white hover:border-transparent;
+	@apply inline-flex items-center py-2 px-4 border-blue-600 border-2 border-solid bg-transparent text-blue-600 rounded-md cursor-pointer font-semibold whitespace-nowrap;
+
+	&:hover {
+		@apply bg-none bg-blue-600 text-white border-transparent;
+	}
 
 	svg {
 		display: none;
@@ -153,7 +157,10 @@
 }
 
 .wpec-modal-open {
-	@apply bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+	@apply bg-blue-600 text-white font-bold py-2 px-4 rounded;
+	&:hover {
+		@apply bg-none bg-blue-700 text-white;
+	}
 }
 
 .wpec-modal {

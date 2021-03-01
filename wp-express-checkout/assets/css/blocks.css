@@ -177,25 +177,7 @@
 
 .editor-styles-wrapper .wpec_coupon_apply_btn {
 	background-color: transparent;
-}
-
-.editor-styles-wrapper .wpec_coupon_apply_btn:hover {
-	background-color: rgba(37, 99, 235, 50);
-}
-
-.editor-styles-wrapper .wpec_coupon_apply_btn:hover:hover {
-	background-color: rgba(37, 99, 235, 1);
-}
-
-.editor-styles-wrapper .wpec_coupon_apply_btn {
 	border-color: rgba(37, 99, 235, 1);
-}
-
-.editor-styles-wrapper .wpec_coupon_apply_btn:hover {
-	border-color: transparent;
-}
-
-.editor-styles-wrapper .wpec_coupon_apply_btn {
 	border-radius: 6px;
 	border-style: solid;
 	border-width: 2px;
@@ -212,6 +194,7 @@
 	padding-left: 16px;
 	padding-right: 16px;
 	color: rgba(37, 99, 235, 1);
+	white-space: nowrap;
 }
 
 .editor-styles-wrapper .wpec_coupon_apply_btn:hover {
@@ -219,11 +202,18 @@
 }
 
 .editor-styles-wrapper .wpec_coupon_apply_btn:hover {
+	background-color: rgba(37, 99, 235, 50);
+	background-image: none;
+	border-color: transparent;
 	color: rgba(255, 255, 255, 1);
 }
 
 .editor-styles-wrapper .wpec_coupon_apply_btn:hover:hover {
 	color: rgba(255, 255, 255, 1);
+}
+
+.editor-styles-wrapper .wpec_coupon_apply_btn:hover:hover {
+	background-color: rgba(37, 99, 235, 1);
 }
 
 .editor-styles-wrapper .wpec_coupon_apply_btn svg {
@@ -264,6 +254,17 @@
 
 .editor-styles-wrapper .wpec-modal-open {
 	background-color: rgba(37, 99, 235, 1);
+	border-radius: 4px;
+	font-weight: 700;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-left: 16px;
+	padding-right: 16px;
+	color: rgba(255, 255, 255, 1);
+}
+
+.editor-styles-wrapper .wpec-modal-open:hover {
+	color: rgba(255, 255, 255, 1);
 }
 
 .editor-styles-wrapper .wpec-modal-open:hover {
@@ -272,20 +273,16 @@
 
 .editor-styles-wrapper .wpec-modal-open:hover {
 	background-color: rgba(29, 78, 216, 1);
+	background-image: none;
+	color: rgba(255, 255, 255, 1);
+}
+
+.editor-styles-wrapper .wpec-modal-open:hover:hover {
+	color: rgba(255, 255, 255, 1);
 }
 
 .editor-styles-wrapper .wpec-modal-open:hover:hover {
 	background-color: rgba(29, 78, 216, 1);
-}
-
-.editor-styles-wrapper .wpec-modal-open {
-	border-radius: 4px;
-	font-weight: 700;
-	padding-top: 8px;
-	padding-bottom: 8px;
-	padding-left: 16px;
-	padding-right: 16px;
-	color: rgba(255, 255, 255, 1);
 }
 
 .editor-styles-wrapper .wpec-modal {
@@ -437,6 +434,8 @@
 	padding-left: 12px;
 	font-size: 16px;
 	line-height: 24px;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .editor-styles-wrapper .wp-ppec-shortcode-container input::-moz-placeholder, .editor-styles-wrapper .wp-ppec-shortcode-container textarea::-moz-placeholder {
