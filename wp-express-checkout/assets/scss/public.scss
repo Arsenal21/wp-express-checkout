@@ -232,3 +232,40 @@
         transform: rotate(360deg);
     }
 }
+
+.wpec-custom-number-input {
+	@apply flex flex-row h-10 w-32 rounded-lg relative bg-transparent mt-1;
+
+	button {
+		@apply bg-white border border-gray-500 border-solid h-full w-20 rounded-r-none cursor-pointer outline-none;
+		&:hover {
+			@apply bg-none bg-white;
+		}
+		&:first-of-type {
+			@apply rounded-md rounded-r-none border-r-0;
+		}
+		&:last-of-type {
+			@apply rounded-md rounded-l-none border-l-0;
+		}
+
+		&:focus {
+		  outline: none !important;
+		}
+
+		span {
+			@apply m-auto text-2xl leading-6 font-thin;
+		}
+	}
+
+	input[type='number'] {
+		@apply m-0 outline-none focus:outline-none text-center w-full flex items-center outline-none rounded-none;
+		&::-webkit-inner-spin-button,
+		&::-webkit-outer-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+		&:focus {
+			outline: none !important;
+		}
+	}
+}

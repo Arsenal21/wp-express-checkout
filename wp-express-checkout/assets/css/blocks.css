@@ -629,6 +629,109 @@
 	}
 }
 
+.editor-styles-wrapper .wpec-custom-number-input {
+	background-color: transparent;
+	border-radius: 8px;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: row;
+	flex-direction: row;
+	height: 40px;
+	margin-top: 4px;
+	position: relative;
+	width: 128px;
+}
+
+.editor-styles-wrapper .wpec-custom-number-input button {
+	background-color: rgba(255, 255, 255, 1);
+	border-color: rgba(107, 114, 128, 1);
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	border-style: solid;
+	border-width: 1px;
+	cursor: pointer;
+	height: 100%;
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+	width: 80px;
+}
+
+.editor-styles-wrapper .wpec-custom-number-input button:hover {
+	background-color: rgba(255, 255, 255, 1);
+}
+
+.editor-styles-wrapper .wpec-custom-number-input button:hover {
+	background-color: rgba(255, 255, 255, 1);
+	background-image: none;
+}
+
+.editor-styles-wrapper .wpec-custom-number-input button:hover:hover {
+	background-color: rgba(255, 255, 255, 1);
+}
+
+.editor-styles-wrapper .wpec-custom-number-input button:first-of-type {
+	border-radius: 6px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	border-right-width: 0px;
+}
+
+.editor-styles-wrapper .wpec-custom-number-input button:last-of-type {
+	border-radius: 6px;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	border-left-width: 0px;
+}
+
+.editor-styles-wrapper .wpec-custom-number-input button:focus {
+	outline: none !important;
+}
+
+.editor-styles-wrapper .wpec-custom-number-input button span {
+	font-weight: 100;
+	font-size: 24px;
+	line-height: 32px;
+	line-height: 24px;
+	margin: auto;
+}
+
+.editor-styles-wrapper .wpec-custom-number-input input[type='number'] {
+	border-radius: 0px;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	margin: 0px;
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+}
+
+.editor-styles-wrapper .wpec-custom-number-input input[type='number']:focus {
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+}
+
+.editor-styles-wrapper .wpec-custom-number-input input[type='number'] {
+	text-align: center;
+	width: 100%;
+}
+
+.editor-styles-wrapper .wpec-custom-number-input input[type='number']::-webkit-inner-spin-button, .editor-styles-wrapper .wpec-custom-number-input input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.editor-styles-wrapper .wpec-custom-number-input input[type='number']:focus {
+	outline: none !important;
+}
+
 .wpec-button-placeholder {
 	display: block !important;
 }

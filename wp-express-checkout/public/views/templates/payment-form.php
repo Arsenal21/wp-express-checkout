@@ -18,23 +18,37 @@
 	</div>
 
 	<?php if ( $custom_quantity ) { ?>
-		<div>
+		<div class="wpec-custom-number-input-wrapper">
 			<label><?php esc_html_e( 'Quantity:', 'wp-express-checkout' ); ?></label>
-			<input id="wp-ppec-custom-quantity" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" type="number" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-quantity" min="1" value="<?php echo esc_attr( $quantity ); ?>">
+			<div class="wpec-custom-number-input">
+				<button data-action="decrement">
+					<span>&minus;</span>
+				</button>
+				<input id="wp-ppec-custom-quantity" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" type="number" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-quantity" min="1" value="<?php echo esc_attr( $quantity ); ?>">
+				<button data-action="increment">
+					<span>+</span>
+				</button>
+			</div>
 			<div class="wp-ppec-form-error-msg"></div>
 		</div>
 	<?php } ?>
 
 	<?php if ( $custom_amount ) { ?>
 		<?php $step = pow( 10, -intval( $this->ppdg->get_setting( 'price_decimals_num' ) ) ); ?>
-		<div class="wpec-custom-amount-section">
+		<div class="wpec-custom-amount-section wpec-custom-number-input-wrapper">
 			<span class="wpec-custom-amount-label-field">
 				<label><?php echo esc_html(  sprintf( __( 'Enter Amount (%s): ', 'wp-express-checkout' ), $currency ) ); ?></label>
 			</span>
-			<span class="wpec-custom-amount-input-field">
+			<div class="wpec-custom-amount-input-field wpec-custom-number-input">
+				<button data-action="decrement">
+					<span>&minus;</span>
+				</button>
 				<input id="wp-ppec-custom-amount" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" type="number" step="<?php echo esc_attr( $step ); ?>" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-amount" min="0" value="<?php echo esc_attr( $price ); ?>">
-			</span>
-			<div class="wp-ppec-form-error-msg"></div>
+				<button data-action="increment">
+					<span>+</span>
+				</button>
+				<div class="wp-ppec-form-error-msg"></div>
+			</div>
 		</div>
 	<?php } ?>
 

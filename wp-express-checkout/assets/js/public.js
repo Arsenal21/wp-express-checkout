@@ -449,4 +449,11 @@ jQuery( function( $ ) {
 		modal.classList.toggle( 'wpec-opacity-0' );
 		modal.classList.toggle( 'wpec-pointer-events-none' );
 	}
+
+	$( '.wpec-custom-number-input button' ).on( 'click', function() {
+		var increment = $( this ).data( 'action' ) === 'increment' ? 1 : -1;
+		var input = $( this ).parent().find( 'input' );
+		var step = input.attr( 'step' ) ? Number( input.attr( 'step' ) ) : 1;
+		input.val( Number( input.val() ) + increment * step ).change();
+	} );
 } );
