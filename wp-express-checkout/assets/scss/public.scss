@@ -234,10 +234,10 @@
 }
 
 .wpec-custom-number-input {
-	@apply flex flex-row h-10 w-32 rounded-lg relative bg-transparent mt-1;
+	@apply flex flex-row h-10 w-36 rounded-lg relative bg-transparent mt-1;
 
 	button {
-		@apply bg-white border border-gray-500 border-solid h-full w-20 rounded-r-none cursor-pointer outline-none;
+		@apply bg-white border border-gray-500 border-solid h-full rounded-r-none cursor-pointer outline-none;
 		&:hover {
 			@apply bg-none bg-white;
 		}
@@ -259,6 +259,7 @@
 
 	input[type='number'] {
 		@apply m-0 outline-none focus:outline-none text-center w-full flex items-center outline-none rounded-none;
+		-moz-appearance:textfield;
 		&::-webkit-inner-spin-button,
 		&::-webkit-outer-spin-button {
 			-webkit-appearance: none;
@@ -267,5 +268,9 @@
 		&:focus {
 			outline: none !important;
 		}
+	}
+
+	.wp-ppec-form-error-msg {
+		@apply flex-none;
 	}
 }

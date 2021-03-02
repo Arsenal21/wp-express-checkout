@@ -642,7 +642,7 @@
 	height: 40px;
 	margin-top: 4px;
 	position: relative;
-	width: 128px;
+	width: 144px;
 }
 
 .editor-styles-wrapper .wpec-custom-number-input button {
@@ -656,7 +656,6 @@
 	height: 100%;
 	outline: 2px solid transparent;
 	outline-offset: 2px;
-	width: 80px;
 }
 
 .editor-styles-wrapper .wpec-custom-number-input button:hover {
@@ -721,6 +720,7 @@
 .editor-styles-wrapper .wpec-custom-number-input input[type='number'] {
 	text-align: center;
 	width: 100%;
+	-moz-appearance: textfield;
 }
 
 .editor-styles-wrapper .wpec-custom-number-input input[type='number']::-webkit-inner-spin-button, .editor-styles-wrapper .wpec-custom-number-input input[type='number']::-webkit-outer-spin-button {
@@ -730,6 +730,12 @@
 
 .editor-styles-wrapper .wpec-custom-number-input input[type='number']:focus {
 	outline: none !important;
+}
+
+.editor-styles-wrapper .wpec-custom-number-input .wp-ppec-form-error-msg {
+	-webkit-box-flex: 0;
+	-ms-flex: none;
+	flex: none;
 }
 
 .wpec-button-placeholder {
