@@ -19,20 +19,14 @@
 
 	<?php if ( $custom_amount ) { ?>
 		<?php $step = pow( 10, -intval( $this->ppdg->get_setting( 'price_decimals_num' ) ) ); ?>
-		<div class="wpec-custom-amount-section wpec-custom-number-input-wrapper">
+		<div class="wpec-custom-amount-section">
 			<span class="wpec-custom-amount-label-field">
 				<label><?php echo esc_html(  sprintf( __( 'Enter Amount (%s): ', 'wp-express-checkout' ), $currency ) ); ?></label>
 			</span>
-			<div class="wpec-custom-amount-input-field wpec-custom-number-input">
-				<button data-action="decrement">
-					<span>&minus;</span>
-				</button>
+			<span class="wpec-custom-amount-input-field">
 				<input id="wp-ppec-custom-amount" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" type="number" step="<?php echo esc_attr( $step ); ?>" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-amount" min="0" value="<?php echo esc_attr( $price ); ?>">
-				<button data-action="increment">
-					<span>+</span>
-				</button>
 				<div class="wp-ppec-form-error-msg"></div>
-			</div>
+			</span>
 		</div>
 	<?php } ?>
 
