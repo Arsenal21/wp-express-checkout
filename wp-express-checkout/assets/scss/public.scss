@@ -196,13 +196,18 @@
 }
 
 .wpec-modal-item-info-wrap {
-	@apply text-base pb-3;
+	@apply text-base pb-3 flex space-x-4;
 }
 
 .wpec-modal-item-thumbnail {
+	@apply flex-none;
 	img {
 		@apply rounded-md;
 	}
+}
+
+.wpec-modal-item-excerpt {
+	@apply hidden md:block;
 }
 
 .wpec-opacity-0 {

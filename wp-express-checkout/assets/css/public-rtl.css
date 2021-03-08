@@ -368,14 +368,38 @@
 	color: rgba(0, 0, 0, 1);
 }
 
+.wpec-modal-item-info-wrap > :not([hidden]) ~ :not([hidden]) {
+	margin-left: calc(16px * 0);
+	margin-right: calc(16px * calc(1 - 0));
+}
+
 .wpec-modal-item-info-wrap {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
 	font-size: 16px;
 	line-height: 24px;
 	padding-bottom: 12px;
 }
 
+.wpec-modal-item-thumbnail {
+	-webkit-box-flex: 0;
+	-ms-flex: none;
+	flex: none;
+}
+
 .wpec-modal-item-thumbnail img {
 	border-radius: 6px;
+}
+
+.wpec-modal-item-excerpt {
+	display: none;
+}
+
+@media (min-width: 768px) {
+	.wpec-modal-item-excerpt {
+		display: block;
+	}
 }
 
 .wpec-opacity-0 {
