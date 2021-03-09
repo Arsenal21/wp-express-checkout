@@ -16,13 +16,23 @@ bower.json export-ignore
 codeception.dist.yml export-ignore
 composer.json export-ignore
 composer.lock export-ignore
+composer.phar export-ignore
 Gruntfile.js export-ignore
 package.json export-ignore
 package-lock.json export-ignore
 phpcs.xml export-ignore
 phpunit.xml export-ignore
+Rakefile export-ignore
 
 apigen/ export-ignore
 docs/ export-ignore
 grunt/ export-ignore
 tests/ export-ignore
+
+#paypal sdk
+samples/ export-ignore
+vendor/**/gen.yml export-ignore
+vendor/**/homepage.jpg export-ignore
+vendor/**/README.md export-ignore
+vendor/**/CHANGELOG.md export-ignore
+vendor/**/CONTRIBUTING.md export-ignore
