@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.6
-Stable tag: 1.9.4
+Stable tag: 1.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,6 +113,13 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 1.9.5 =
+* There is a new checkout form option to show the PayPal buy now button to be on a modal window. If you don't like this new option, you can turn off the "Show in a Modal Window" checkbox in the settings menu of the plugin.
+* Added a new parameter modal="0" to the shortcode. It can be used to disable the use of modal/popup window.
+* Use SVG spinner on Coupon redemption.
+* Minor CSS changes for Buy Now button.
+* Updated the POT file.
 
 = 1.9.4 =
 * Added a feature to enable Terms and Conditions. When enabled, customers have to accepts terms before they can make a payment.

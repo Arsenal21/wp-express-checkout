@@ -244,11 +244,11 @@ class WPEC_Admin {
 		);
 
 		// checkout form section
-		add_settings_field( 'use_modal', __( 'Show in Modal', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-form-section',
+		add_settings_field( 'use_modal', __( 'Show in a Modal Window', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-form-section',
 			array(
 				'field' => 'use_modal',
 				'type'  => 'checkbox',
-				'desc'  => __( 'Whether to display checkout form in a product details or in a dedicated modal window.', 'wp-express-checkout' ),
+				'desc'  => __( 'Whether to display the checkout form in a dedicated modal window or on the page.', 'wp-express-checkout' ),
 			)
 		);
 
@@ -256,7 +256,8 @@ class WPEC_Admin {
 			array(
 				'field' => 'button_text',
 				'type'  => 'text',
-				'size'  => 10,
+				'size'  => 20,
+				'desc'  => __( 'The button text for the button that will trigger the modal/popup window.', 'wp-express-checkout' ),
 			)
 		);
 
