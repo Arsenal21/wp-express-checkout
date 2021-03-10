@@ -9,22 +9,22 @@ class PPECProductsMetaboxes {
 		$this->WPECAdmin = WPEC_Admin::get_instance();
 		$this->WPEC_Main = WPEC_Main::get_instance();
 		remove_post_type_support( PPECProducts::$products_slug, 'editor' );
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 9 );
 		// products post save action.
 		add_action( 'save_post_' . PPECProducts::$products_slug, array( $this, 'save_product_handler' ), 10, 3 );
 	}
 
 	function add_meta_boxes() {
-		add_meta_box( 'wsp_content', __( 'Description', 'wp-express-checkout' ), array( $this, 'display_description_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
-		add_meta_box( 'ppec_price_meta_box', __( 'Price', 'wp-express-checkout' ), array( $this, 'display_price_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
-		add_meta_box( 'wpec_variations_meta_box', __( 'Variations', 'wp-express-checkout' ), array( $this, 'display_variations_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
-		add_meta_box( 'ppec_quantity_meta_box', __( 'Quantity', 'wp-express-checkout' ), array( $this, 'display_quantity_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
-		add_meta_box( 'wpec_shipping_tax_meta_box', __( 'Shipping & Tax', 'wp-express-checkout' ), array( $this, 'display_shipping_tax_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
-		add_meta_box( 'ppec_upload_meta_box', __( 'Download URL', 'wp-express-checkout' ), array( $this, 'display_upload_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
-		add_meta_box( 'wpec_thumbnail_meta_box', __( 'Product Thumbnail', 'wp-express-checkout' ), array( $this, 'display_thumbnail_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
-		add_meta_box( 'ppec_shortcode_meta_box', __( 'Shortcode', 'wp-express-checkout' ), array( $this, 'display_shortcode_meta_box' ), PPECProducts::$products_slug, 'side', 'default' );
-		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance Related', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
-		add_meta_box( 'wpec_coupons_meta_box', __( 'Coupons Settings', 'wp-express-checkout' ), array( $this, 'display_coupons_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
+		add_meta_box( 'wsp_content', __( 'Description', 'wp-express-checkout' ), array( $this, 'display_description_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
+		add_meta_box( 'ppec_price_meta_box', __( 'Price', 'wp-express-checkout' ), array( $this, 'display_price_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_variations_meta_box', __( 'Variations', 'wp-express-checkout' ), array( $this, 'display_variations_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
+		add_meta_box( 'ppec_quantity_meta_box', __( 'Quantity', 'wp-express-checkout' ), array( $this, 'display_quantity_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_shipping_tax_meta_box', __( 'Shipping & Tax', 'wp-express-checkout' ), array( $this, 'display_shipping_tax_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
+		add_meta_box( 'ppec_upload_meta_box', __( 'Download URL', 'wp-express-checkout' ), array( $this, 'display_upload_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_thumbnail_meta_box', __( 'Product Thumbnail', 'wp-express-checkout' ), array( $this, 'display_thumbnail_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
+		add_meta_box( 'ppec_shortcode_meta_box', __( 'Shortcode', 'wp-express-checkout' ), array( $this, 'display_shortcode_meta_box' ), PPECProducts::$products_slug, 'side', 'high' );
+		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance Related', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_coupons_meta_box', __( 'Coupons Settings', 'wp-express-checkout' ), array( $this, 'display_coupons_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
 
 		// check if eMember installed
 		if ( function_exists( 'wp_eMember_install' ) ) {
