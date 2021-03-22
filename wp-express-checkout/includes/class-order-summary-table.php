@@ -2,7 +2,7 @@
 /**
  * Used to construct and display an order summary table for an order
  *
- * @since 2.0.0
+ * @since 1.9.5
  */
 class WPEC_Order_Summary_Table {
 

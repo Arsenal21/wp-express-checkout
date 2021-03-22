@@ -2,7 +2,7 @@
 /**
  * Order page metaboxes
  *
- * @since 2.0.0
+ * @since 1.9.5
  */
 class WPEC_Orders_Metaboxes {
 

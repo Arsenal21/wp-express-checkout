@@ -3,7 +3,7 @@
  * Used to construct and display an order summary table for an order on the
  * admin page.
  *
- * @since 2.0.0
+ * @since 1.9.5
  */
 class WPEC_Admin_Order_Summary_Table extends WPEC_Order_Summary_Table {
 

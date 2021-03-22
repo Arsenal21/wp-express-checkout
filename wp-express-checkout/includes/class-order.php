@@ -2,7 +2,7 @@
 /**
  * Represents a purchase order made up of items.
  *
- * @since 2.0.0
+ * @since 1.9.5
  */
 class WPEC_Order {
 

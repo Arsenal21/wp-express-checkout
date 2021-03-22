@@ -8,7 +8,7 @@ class OrdersWPEC {
 	/**
 	 * Order post type
 	 *
-	 * @since 2.0.0
+	 * @since 1.9.5
 	 */
 	const PTYPE = 'ppdgorder';
 
@@ -146,7 +146,7 @@ class OrdersWPEC {
 
 		$order = new WPEC_Order( $order_data );
 
-		// Maybe upgrade the order to version 2.0.0
+		// Maybe upgrade the order to version 1.9.5
 		if ( ! is_numeric( $order_data->post_name ) ) {
 			self::upgrade_legacy( $order );
 		}
@@ -157,7 +157,7 @@ class OrdersWPEC {
 	/**
 	 * Upgrades legacy order.
 	 *
-	 * @since 2.0.0
+	 * @since 1.9.5
 	 *
 	 * @param WPEC_Order $order
 	 * @return type
