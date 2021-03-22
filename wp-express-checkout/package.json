@@ -18,6 +18,8 @@
     "@tailwindcss/postcss7-compat": "^2.0.3",
     "autoprefixer": "^9.8.6",
     "grunt": "^1.0.3",
+    "grunt-banner": "^0.6.0",
+    "grunt-changelog": "^0.3.2",
     "grunt-checktextdomain": "^1.0.0",
     "grunt-contrib-csslint": "^2.0.0",
     "grunt-contrib-imagemin": "^4.0.0",

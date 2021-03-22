@@ -90,6 +90,12 @@ module.exports = function(grunt) {
 		'imagemin'
 	]);
 
+	// custom task when you run 'grunt wip'
+	grunt.registerTask( 'wip', [
+		'changelog',
+		'usebanner'
+	]);
+
 	// custom task when you run 'grunt build'
 	grunt.registerTask( 'build', [
 		'dist',

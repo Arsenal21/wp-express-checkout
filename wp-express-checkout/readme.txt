@@ -114,6 +114,13 @@ None
 
 == Changelog ==
 
+= WIP since 1.9.5 to 2021-03-22 =
+* Change @since tags from 2.0.0 to actual 1.9.5
+* Display product metaboxes above the Yoast SEO metabox
+* updated readme to set wp compatible to wp5.7
+
+= END WIP =
+
 = 1.9.5 =
 * There is a new checkout form option to show the PayPal buy now button to be on a modal window. If you don't like this new option, you can turn off the "Show in a Modal Window" checkbox in the settings menu of the plugin.
 * Added a new parameter modal="0" to the shortcode. It can be used to disable the use of modal/popup window.
@@ -133,7 +140,7 @@ None
 
 = 1.9.1 =
 * Fixed an issue with the single post page not generating the buy now button on some installs.
-* Added integration for WP eMember plugin: 
+* Added integration for WP eMember plugin:
 https://www.tipsandtricks-hq.com/wordpress-membership/membership-payments-using-the-wp-express-checkout-plugin-1987
 
 = 1.9 =
