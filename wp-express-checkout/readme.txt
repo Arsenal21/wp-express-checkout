@@ -114,7 +114,9 @@ None
 
 == Changelog ==
 
-= WIP since 1.9.5 to 2021-03-22 =
+= WIP since 1.9.5 to 2021-03-25 =
+* Added product id reference to all top level elements in templates. Closes #23
+* Added Grunt task to generate WIP log from the latest commits log
 * Change @since tags from 2.0.0 to actual 1.9.5
 * Display product metaboxes above the Yoast SEO metabox
 * updated readme to set wp compatible to wp5.7

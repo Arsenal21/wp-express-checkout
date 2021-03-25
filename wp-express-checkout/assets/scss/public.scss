@@ -242,7 +242,7 @@
 	@apply flex flex-row h-10 w-36 rounded-lg relative bg-transparent mt-1;
 
 	button {
-		@apply bg-white border border-gray-500 border-solid h-full rounded-r-none cursor-pointer outline-none;
+		@apply bg-white border border-gray-500 border-solid h-full rounded-r-none cursor-pointer outline-none p-2;
 		&:hover {
 			@apply bg-none bg-white;
 		}

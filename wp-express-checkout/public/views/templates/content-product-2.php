@@ -8,7 +8,7 @@
 $wpec_shortcode = WPECShortcode::get_instance();
 ?>
 
-<div class = "wpec-post-item">
+<div class = "wpec-post-item wpec-post-item-<?php echo esc_attr( $wpec_button_args['product_id'] ); ?>">
 	<div class = "wpec-post-item-top">
 		<div class = "wpec-post-thumbnail">
 			<?php if ( ! empty( $wpec_button_args['thumbnail_url'] ) ) { ?>

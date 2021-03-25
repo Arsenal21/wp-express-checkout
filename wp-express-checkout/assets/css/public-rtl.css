@@ -681,6 +681,7 @@
 	height: 100%;
 	outline: 2px solid transparent;
 	outline-offset: 2px;
+	padding: 8px;
 }
 
 .wpec-custom-number-input button:hover {

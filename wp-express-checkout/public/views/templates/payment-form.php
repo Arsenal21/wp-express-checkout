@@ -6,7 +6,7 @@
  */
 ?>
 
-<div style="position: relative;" class="wp-ppec-shortcode-container" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>">
+<div style="position: relative;" class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $product_id ); ?>" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>">
 
 	<div class="wp-ppec-overlay" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>">
 		<div class="wp-ppec-spinner">
