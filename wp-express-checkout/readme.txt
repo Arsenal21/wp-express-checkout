@@ -114,7 +114,9 @@ None
 
 == Changelog ==
 
-= WIP since 1.9.5 to 2021-03-25 =
+= WIP since 1.9.5 to 2021-03-31 =
+* Added User Billing Address and Product Shipping Address (if used) on the Order page
+* Added Product option 'This is a Physical Product' to enable shipping address collection at the time of checkout
 * Added product id reference to all top level elements in templates. Closes #23
 * Added Grunt task to generate WIP log from the latest commits log
 * Change @since tags from 2.0.0 to actual 1.9.5
