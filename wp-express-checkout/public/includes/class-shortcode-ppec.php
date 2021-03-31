@@ -71,6 +71,7 @@ class WPECShortcode {
 		$url             = get_post_meta( $post_id, 'ppec_product_upload', true );
 		$thumb_url       = get_post_meta( $post_id, 'wpec_product_thumbnail', true );
 		$shipping        = get_post_meta( $post_id, 'wpec_product_shipping', true );
+		$shipping_enable = get_post_meta( $post_id, 'wpec_product_shipping_enable', true );
 		$tax             = get_post_meta( $post_id, 'wpec_product_tax', true );
 
 		$coupons_enabled = get_post_meta( $post_id, 'wpec_product_coupons_setting', true );
@@ -90,6 +91,7 @@ class WPECShortcode {
 			'name'            => $title,
 			'price'           => $price,
 			'shipping'        => $shipping,
+			'shipping_enable' => $shipping_enable,
 			'tax'             => $tax,
 			'custom_amount'   => $custom_amount,
 			'quantity'        => $quantity,
@@ -105,6 +107,7 @@ class WPECShortcode {
 				'name'            => 'Item Name',
 				'price'           => 0,
 				'shipping'        => 0,
+				'shipping_enable' => 0,
 				'tax'             => 0,
 				'quantity'        => 1,
 				'url'             => '',
@@ -250,6 +253,7 @@ class WPECShortcode {
 			'quantity'        => $quantity,
 			'tax'             => $tax,
 			'shipping'        => $shipping,
+			'shipping_enable' => $shipping_enable,
 			'dec_num'         => intval( $this->ppdg->get_setting( 'price_decimals_num' ) ),
 			'thousand_sep'    => $this->ppdg->get_setting( 'price_thousand_sep' ),
 			'dec_sep'         => $this->ppdg->get_setting( 'price_decimal_sep' ),

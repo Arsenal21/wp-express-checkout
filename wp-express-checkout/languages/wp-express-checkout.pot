@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Express Checkout 1.9.4\n"
+"Project-Id-Version: WP Express Checkout 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-01 07:47:20+00:00\n"
+"POT-Creation-Date: 2021-03-31 08:11:45+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "WP Express Checkout Settings"
 msgstr ""
 
-#: admin/class-wpec-admin.php:147 admin/class-wpec-admin.php:648
+#: admin/class-wpec-admin.php:147 admin/class-wpec-admin.php:649
 msgid "Settings"
 msgstr ""
 
@@ -265,416 +265,420 @@ msgstr ""
 msgid "Enter your PayPal Secret Key for sandbox mode."
 msgstr ""
 
-#: admin/class-wpec-admin.php:247 admin/views/blocks.php:32
-msgid "Show in Modal"
+#: admin/class-wpec-admin.php:247
+msgid "Show in a Modal Window"
 msgstr ""
 
 #: admin/class-wpec-admin.php:251
 msgid ""
-"Whether to display checkout form in a product details or in a dedicated "
-"modal window."
+"Whether to display the checkout form in a dedicated modal window or on the "
+"page."
 msgstr ""
 
 #: admin/class-wpec-admin.php:255
 msgid "Open Modal Button Text"
 msgstr ""
 
-#: admin/class-wpec-admin.php:264
-#: admin/includes/class-products-meta-boxes.php:376
+#: admin/class-wpec-admin.php:260
+msgid "The button text for the button that will trigger the modal/popup window."
+msgstr ""
+
+#: admin/class-wpec-admin.php:265
+#: admin/includes/class-products-meta-boxes.php:382
 msgid "Button Type"
 msgstr ""
 
-#: admin/class-wpec-admin.php:264
-#: admin/includes/class-products-meta-boxes.php:382
+#: admin/class-wpec-admin.php:265
+#: admin/includes/class-products-meta-boxes.php:388
 msgid "Checkout"
 msgstr ""
 
-#: admin/class-wpec-admin.php:264
-#: admin/includes/class-products-meta-boxes.php:383
+#: admin/class-wpec-admin.php:265
+#: admin/includes/class-products-meta-boxes.php:389
 msgid "Pay"
 msgstr ""
 
-#: admin/class-wpec-admin.php:264
-#: admin/includes/class-products-meta-boxes.php:384
+#: admin/class-wpec-admin.php:265
+#: admin/includes/class-products-meta-boxes.php:390
 msgid "PayPal"
 msgstr ""
 
-#: admin/class-wpec-admin.php:264
-#: admin/includes/class-products-meta-boxes.php:385
+#: admin/class-wpec-admin.php:265
+#: admin/includes/class-products-meta-boxes.php:391
 #: public/class-wpec-main.php:305
 msgid "Buy Now"
 msgstr ""
 
-#: admin/class-wpec-admin.php:265
+#: admin/class-wpec-admin.php:266
 msgid "Button Shape"
 msgstr ""
 
-#: admin/class-wpec-admin.php:265
+#: admin/class-wpec-admin.php:266
 msgid "Pill"
 msgstr ""
 
-#: admin/class-wpec-admin.php:265
+#: admin/class-wpec-admin.php:266
 msgid "Rectangle"
 msgstr ""
 
-#: admin/class-wpec-admin.php:266
+#: admin/class-wpec-admin.php:267
 msgid "Button Layout"
 msgstr ""
 
-#: admin/class-wpec-admin.php:266
+#: admin/class-wpec-admin.php:267
 msgid "Vertical"
 msgstr ""
 
-#: admin/class-wpec-admin.php:266
+#: admin/class-wpec-admin.php:267
 msgid "Horizontal"
 msgstr ""
 
-#: admin/class-wpec-admin.php:267
+#: admin/class-wpec-admin.php:268
 msgid "Button Height"
 msgstr ""
 
-#: admin/class-wpec-admin.php:267
+#: admin/class-wpec-admin.php:268
 msgid "Small"
 msgstr ""
 
-#: admin/class-wpec-admin.php:267
+#: admin/class-wpec-admin.php:268
 msgid "Medium"
 msgstr ""
 
-#: admin/class-wpec-admin.php:267
+#: admin/class-wpec-admin.php:268
 msgid "Large"
 msgstr ""
 
-#: admin/class-wpec-admin.php:267
+#: admin/class-wpec-admin.php:268
 msgid "Extra Large"
 msgstr ""
 
-#: admin/class-wpec-admin.php:268
+#: admin/class-wpec-admin.php:269
 msgid "Button Width"
 msgstr ""
 
-#: admin/class-wpec-admin.php:268
+#: admin/class-wpec-admin.php:269
 msgid "Auto"
 msgstr ""
 
-#: admin/class-wpec-admin.php:268
+#: admin/class-wpec-admin.php:269
 msgid ""
 "Button width in pixels. Minimum width is 150px. Leave it blank for auto "
 "width."
 msgstr ""
 
-#: admin/class-wpec-admin.php:269
+#: admin/class-wpec-admin.php:270
 msgid "Button Color"
 msgstr ""
 
-#: admin/class-wpec-admin.php:269
+#: admin/class-wpec-admin.php:270
 msgid "Button preview:"
 msgstr ""
 
-#: admin/class-wpec-admin.php:269
+#: admin/class-wpec-admin.php:270
 msgid "Gold"
 msgstr ""
 
-#: admin/class-wpec-admin.php:269
+#: admin/class-wpec-admin.php:270
 msgid "Blue"
 msgstr ""
 
-#: admin/class-wpec-admin.php:269
+#: admin/class-wpec-admin.php:270
 msgid "Silver"
 msgstr ""
 
-#: admin/class-wpec-admin.php:269
+#: admin/class-wpec-admin.php:270
 msgid "White"
 msgstr ""
 
-#: admin/class-wpec-admin.php:269
+#: admin/class-wpec-admin.php:270
 msgid "Black"
 msgstr ""
 
-#: admin/class-wpec-admin.php:272
+#: admin/class-wpec-admin.php:273
 msgid "Disabled Funding Options"
 msgstr ""
 
-#: admin/class-wpec-admin.php:272
+#: admin/class-wpec-admin.php:273
 msgid "Credit or debit cards"
 msgstr ""
 
-#: admin/class-wpec-admin.php:272
+#: admin/class-wpec-admin.php:273
 msgid "PayPal Credit"
 msgstr ""
 
-#: admin/class-wpec-admin.php:276
-#: admin/includes/class-products-meta-boxes.php:234
+#: admin/class-wpec-admin.php:277
+#: admin/includes/class-products-meta-boxes.php:235
 msgid "Shipping Cost"
 msgstr ""
 
-#: admin/class-wpec-admin.php:276
-#: admin/includes/class-products-meta-boxes.php:239
+#: admin/class-wpec-admin.php:277
+#: admin/includes/class-products-meta-boxes.php:240
 msgid "Enter numbers only. Example: 5.50"
 msgstr ""
 
-#: admin/class-wpec-admin.php:276
+#: admin/class-wpec-admin.php:277
 msgid ""
 "Leave it empty if you are not charging shipping cost. You can also set "
 "shipping cost on a per product basis."
 msgstr ""
 
-#: admin/class-wpec-admin.php:277
-#: admin/includes/class-products-meta-boxes.php:245
+#: admin/class-wpec-admin.php:278
+#: admin/includes/class-products-meta-boxes.php:246
 msgid "Tax (%)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:277
-#: admin/includes/class-products-meta-boxes.php:250
+#: admin/class-wpec-admin.php:278
+#: admin/includes/class-products-meta-boxes.php:251
 msgid "Enter tax (in percent) which will be added to the product price."
 msgstr ""
 
-#: admin/class-wpec-admin.php:277
-#: admin/includes/class-products-meta-boxes.php:252
+#: admin/class-wpec-admin.php:278
+#: admin/includes/class-products-meta-boxes.php:253
 msgid "Leave it empty if you don't want to apply tax."
 msgstr ""
 
-#: admin/class-wpec-admin.php:280
+#: admin/class-wpec-admin.php:281
 msgid "Enable Debug Logging"
 msgstr ""
 
-#: admin/class-wpec-admin.php:284
+#: admin/class-wpec-admin.php:285
 msgid "Check this option to enable debug logging."
 msgstr ""
 
-#: admin/class-wpec-admin.php:286 admin/class-wpec-admin.php:288
+#: admin/class-wpec-admin.php:287 admin/class-wpec-admin.php:289
 msgid "Click here"
 msgstr ""
 
-#: admin/class-wpec-admin.php:287
+#: admin/class-wpec-admin.php:288
 msgid " to view log file."
 msgstr ""
 
-#: admin/class-wpec-admin.php:289
+#: admin/class-wpec-admin.php:290
 msgid " to reset log file."
 msgstr ""
 
-#: admin/class-wpec-admin.php:298
+#: admin/class-wpec-admin.php:299
 msgid "Send Emails to Buyer After Purchase"
 msgstr ""
 
-#: admin/class-wpec-admin.php:298
+#: admin/class-wpec-admin.php:299
 msgid ""
 "If checked the plugin will send an email to the buyer with the sale "
 "details. If digital goods are purchased then the email will contain the "
 "download links for the purchased products."
 msgstr ""
 
-#: admin/class-wpec-admin.php:301
+#: admin/class-wpec-admin.php:302
 msgid "Email Content Type"
 msgstr ""
 
-#: admin/class-wpec-admin.php:308
+#: admin/class-wpec-admin.php:309
 msgid "Choose which format of email to send."
 msgstr ""
 
-#: admin/class-wpec-admin.php:311
+#: admin/class-wpec-admin.php:312
 msgid "Plain Text"
 msgstr ""
 
-#: admin/class-wpec-admin.php:312
+#: admin/class-wpec-admin.php:313
 msgid "HTML"
 msgstr ""
 
-#: admin/class-wpec-admin.php:316
+#: admin/class-wpec-admin.php:317
 msgid "From Email Address"
 msgstr ""
 
-#: admin/class-wpec-admin.php:316
+#: admin/class-wpec-admin.php:317
 msgid ""
 "Example: Your Name &lt;sales@your-domain.com&gt; This is the email address "
 "that will be used to send the email to the buyer. This name and email "
 "address will appear in the from field of the email."
 msgstr ""
 
-#: admin/class-wpec-admin.php:317
+#: admin/class-wpec-admin.php:318
 msgid "Buyer Email Subject"
 msgstr ""
 
-#: admin/class-wpec-admin.php:317
+#: admin/class-wpec-admin.php:318
 msgid "This is the subject of the email that will be sent to the buyer."
 msgstr ""
 
-#: admin/class-wpec-admin.php:318
+#: admin/class-wpec-admin.php:319
 msgid "Buyer Email Body"
 msgstr ""
 
-#: admin/class-wpec-admin.php:320 admin/class-wpec-admin.php:336
+#: admin/class-wpec-admin.php:321 admin/class-wpec-admin.php:337
 msgid "First name of the buyer"
 msgstr ""
 
-#: admin/class-wpec-admin.php:321 admin/class-wpec-admin.php:337
+#: admin/class-wpec-admin.php:322 admin/class-wpec-admin.php:338
 msgid "Last name of the buyer"
 msgstr ""
 
-#: admin/class-wpec-admin.php:322 admin/class-wpec-admin.php:338
+#: admin/class-wpec-admin.php:323 admin/class-wpec-admin.php:339
 msgid "Email Address of the buyer"
 msgstr ""
 
-#: admin/class-wpec-admin.php:323 admin/class-wpec-admin.php:339
+#: admin/class-wpec-admin.php:324 admin/class-wpec-admin.php:340
 msgid "Address of the buyer"
 msgstr ""
 
-#: admin/class-wpec-admin.php:324 admin/class-wpec-admin.php:340
+#: admin/class-wpec-admin.php:325 admin/class-wpec-admin.php:341
 msgid ""
 "The item details of the purchased product (this will include the download "
 "link for digital items)."
 msgstr ""
 
-#: admin/class-wpec-admin.php:325 admin/class-wpec-admin.php:341
+#: admin/class-wpec-admin.php:326 admin/class-wpec-admin.php:342
 msgid "The unique transaction ID of the purchase"
 msgstr ""
 
-#: admin/class-wpec-admin.php:326 admin/class-wpec-admin.php:342
+#: admin/class-wpec-admin.php:327 admin/class-wpec-admin.php:343
 msgid "The order ID reference of this transaction in the cart orders menu"
 msgstr ""
 
-#: admin/class-wpec-admin.php:327 admin/class-wpec-admin.php:343
+#: admin/class-wpec-admin.php:328 admin/class-wpec-admin.php:344
 msgid "The amount paid for the current transaction"
 msgstr ""
 
-#: admin/class-wpec-admin.php:328 admin/class-wpec-admin.php:344
+#: admin/class-wpec-admin.php:329 admin/class-wpec-admin.php:345
 msgid "The date of the purchase"
 msgstr ""
 
-#: admin/class-wpec-admin.php:329 admin/class-wpec-admin.php:345
+#: admin/class-wpec-admin.php:330 admin/class-wpec-admin.php:346
 msgid "Coupon code applied to the purchase"
 msgstr ""
 
-#: admin/class-wpec-admin.php:331
+#: admin/class-wpec-admin.php:332
 msgid "Send Emails to Seller After Purchase"
 msgstr ""
 
-#: admin/class-wpec-admin.php:331
+#: admin/class-wpec-admin.php:332
 msgid "If checked the plugin will send an email to the seller with the sale details"
 msgstr ""
 
-#: admin/class-wpec-admin.php:332
+#: admin/class-wpec-admin.php:333
 msgid "Notification Email Address*"
 msgstr ""
 
-#: admin/class-wpec-admin.php:332
+#: admin/class-wpec-admin.php:333
 msgid ""
 "This is the email address where the seller will be notified of product "
 "sales. You can put multiple email addresses separated by comma (,) in the "
 "above field to send the notification to multiple email addresses."
 msgstr ""
 
-#: admin/class-wpec-admin.php:333
+#: admin/class-wpec-admin.php:334
 msgid "Seller Email Subject*"
 msgstr ""
 
-#: admin/class-wpec-admin.php:333
+#: admin/class-wpec-admin.php:334
 msgid "This is the subject of the email that will be sent to the seller for record."
 msgstr ""
 
-#: admin/class-wpec-admin.php:334
+#: admin/class-wpec-admin.php:335
 msgid "Seller Email Body*"
 msgstr ""
 
-#: admin/class-wpec-admin.php:355
+#: admin/class-wpec-admin.php:356
 msgid "Currency Position"
 msgstr ""
 
-#: admin/class-wpec-admin.php:362
+#: admin/class-wpec-admin.php:363
 msgid "This controls the position of the currency symbol."
 msgstr ""
 
-#: admin/class-wpec-admin.php:365
+#: admin/class-wpec-admin.php:366
 msgid "Left (%s1.00)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:366
+#: admin/class-wpec-admin.php:367
 msgid "Left with space (%s 1.00)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:367
+#: admin/class-wpec-admin.php:368
 msgid "Right (1.00%s)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:368
+#: admin/class-wpec-admin.php:369
 msgid "Right with space (1.00 %s)"
 msgstr ""
 
-#: admin/class-wpec-admin.php:373
+#: admin/class-wpec-admin.php:374
 msgid "Decimal Separator"
 msgstr ""
 
-#: admin/class-wpec-admin.php:380
+#: admin/class-wpec-admin.php:381
 msgid "This sets the decimal separator of the displayed price."
 msgstr ""
 
-#: admin/class-wpec-admin.php:385
+#: admin/class-wpec-admin.php:386
 msgid "Thousand Separator"
 msgstr ""
 
-#: admin/class-wpec-admin.php:392
+#: admin/class-wpec-admin.php:393
 msgid "This sets the thousand separator of the displayed price."
 msgstr ""
 
-#: admin/class-wpec-admin.php:397
+#: admin/class-wpec-admin.php:398
 msgid "Number of Decimals"
 msgstr ""
 
-#: admin/class-wpec-admin.php:404
+#: admin/class-wpec-admin.php:405
 msgid "This sets the number of decimal points shown in the displayed price."
 msgstr ""
 
-#: admin/class-wpec-admin.php:411
+#: admin/class-wpec-admin.php:412
 msgid "Enable Terms and Conditions"
 msgstr ""
 
-#: admin/class-wpec-admin.php:418
+#: admin/class-wpec-admin.php:419
 msgid "Enable Terms and Conditions checkbox."
 msgstr ""
 
-#: admin/class-wpec-admin.php:423
+#: admin/class-wpec-admin.php:424
 msgid "Checkbox Text"
 msgstr ""
 
-#: admin/class-wpec-admin.php:430
+#: admin/class-wpec-admin.php:431
 msgid ""
 "Text to be displayed for the checkbox. It accepts HTML code so you can put "
 "a link to your terms and conditions page."
 msgstr ""
 
-#: admin/class-wpec-admin.php:439
+#: admin/class-wpec-admin.php:440
 msgid ""
 "The following options affect the emails that gets sent to your buyers after "
 "a purchase."
 msgstr ""
 
-#: admin/class-wpec-admin.php:447
+#: admin/class-wpec-admin.php:448
 msgid ""
 "By default, funding source eligibility is smartly decided based on a "
 "variety of factors. You can force disable funding options by selecting them "
 "below."
 msgstr ""
 
-#: admin/class-wpec-admin.php:450
+#: admin/class-wpec-admin.php:451
 msgid ""
 "Note: disabled options will disappear from button preview once you save "
 "changes."
 msgstr ""
 
-#: admin/class-wpec-admin.php:459
+#: admin/class-wpec-admin.php:460
 msgid ""
 "Debug logging can be useful to troubleshoot transaction processing related "
 "issues on your site."
 msgstr ""
 
-#: admin/class-wpec-admin.php:467
+#: admin/class-wpec-admin.php:468
 msgid ""
 "This section allows you to configure Terms and Conditions or Privacy Policy "
 "that customers must accept before making a payment."
 msgstr ""
 
-#: admin/class-wpec-admin.php:582
+#: admin/class-wpec-admin.php:583
 #. translators: "%s" - field title
 msgid "You must specify \"%s\"."
 msgstr ""
@@ -703,7 +707,7 @@ msgstr ""
 
 #: admin/includes/class-admin-order-summary-table.php:44
 #: includes/class-order-summary-table.php:127
-#: public/includes/class-shortcode-ppec.php:287
+#: public/includes/class-shortcode-ppec.php:291
 #. translators: quantity
 msgid "x %s"
 msgstr ""
@@ -1062,11 +1066,11 @@ msgstr ""
 msgid "Transaction Data"
 msgstr ""
 
-#: admin/includes/class-order.php:220 includes/class-wpec-process-ipn.php:111
+#: admin/includes/class-order.php:220 includes/class-wpec-process-ipn.php:112
 msgid "Tax"
 msgstr ""
 
-#: admin/includes/class-order.php:223 includes/class-wpec-process-ipn.php:114
+#: admin/includes/class-order.php:223 includes/class-wpec-process-ipn.php:115
 msgid "Shipping"
 msgstr ""
 
@@ -1097,6 +1101,14 @@ msgstr ""
 
 #: admin/includes/class-orders-meta-boxes.php:95
 msgid "Transaction ID"
+msgstr ""
+
+#: admin/includes/class-orders-meta-boxes.php:157
+msgid "Billing Address:"
+msgstr ""
+
+#: admin/includes/class-orders-meta-boxes.php:165
+msgid "Shipping Address:"
 msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:20
@@ -1260,112 +1272,120 @@ msgid ""
 "initial quantity using field above."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:241
+#: admin/includes/class-products-meta-boxes.php:242
 msgid "Leave it empty if you are not charging shipping cost."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:261
-msgid "URL of your product."
+#: admin/includes/class-products-meta-boxes.php:258
+msgid "This is a Physical Product"
+msgstr ""
+
+#: admin/includes/class-products-meta-boxes.php:260
+msgid "When checked, shipping address will be collected at the time of checkout."
 msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:267
+msgid "URL of your product."
+msgstr ""
+
+#: admin/includes/class-products-meta-boxes.php:273
 msgid ""
 "Manually enter a valid URL of the file in the text box below, or click "
 "\"Select File\" button to upload (or choose) the downloadable file."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:271
-#: admin/includes/class-products-meta-boxes.php:289
+#: admin/includes/class-products-meta-boxes.php:277
+#: admin/includes/class-products-meta-boxes.php:295
 msgid "Select File"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:275
+#: admin/includes/class-products-meta-boxes.php:281
 msgid "Steps to upload a file or choose one from your media library:"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:277
+#: admin/includes/class-products-meta-boxes.php:283
 msgid "Hit the \"Select File\" button."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:278
+#: admin/includes/class-products-meta-boxes.php:284
 msgid "Upload a new file or choose an existing one from your media library."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:279
+#: admin/includes/class-products-meta-boxes.php:285
 msgid ""
 "Click the \"Insert\" button, this will populate the uploaded file's URL in "
 "the above text field."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:291
-#: admin/includes/class-products-meta-boxes.php:337
+#: admin/includes/class-products-meta-boxes.php:297
+#: admin/includes/class-products-meta-boxes.php:343
 msgid "Insert"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:315
+#: admin/includes/class-products-meta-boxes.php:321
 msgid ""
 "Manually enter a valid URL, or click \"Select Image\" to upload (or choose) "
 "the file thumbnail image."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:319
-#: admin/includes/class-products-meta-boxes.php:335
+#: admin/includes/class-products-meta-boxes.php:325
+#: admin/includes/class-products-meta-boxes.php:341
 msgid "Select Image"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:320
+#: admin/includes/class-products-meta-boxes.php:326
 msgid "Remove Image"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:367
+#: admin/includes/class-products-meta-boxes.php:373
 msgid "Use this shortcode to display button for your product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:375
+#: admin/includes/class-products-meta-boxes.php:381
 msgid "Button Options"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:379
+#: admin/includes/class-products-meta-boxes.php:385
 msgid "-- Default --"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:393
+#: admin/includes/class-products-meta-boxes.php:399
 msgid ""
 "Select a button type for this product. By default, it will use the type "
 "specified in the General settings of this plugin."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:401
+#: admin/includes/class-products-meta-boxes.php:407
 msgid "Select how Coupons should be handled for this product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:402
+#: admin/includes/class-products-meta-boxes.php:408
 msgid "Use Global Setting"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:403
+#: admin/includes/class-products-meta-boxes.php:409
 msgid "Enabled"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:404
+#: admin/includes/class-products-meta-boxes.php:410
 msgid "Disabled"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:412
+#: admin/includes/class-products-meta-boxes.php:418
 msgid "None"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:418
+#: admin/includes/class-products-meta-boxes.php:424
 msgid ""
 "If you want this product to be connected to a membership level then select "
 "the membership Level here."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:452
+#: admin/includes/class-products-meta-boxes.php:458
 msgid "Please specify product name."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:508
+#: admin/includes/class-products-meta-boxes.php:514
 msgid "Invalid product price."
 msgstr ""
 
@@ -1513,6 +1533,10 @@ msgstr ""
 msgid "Template"
 msgstr ""
 
+#: admin/views/blocks.php:32
+msgid "Show in Modal"
+msgstr ""
+
 #: admin/views/blocks.php:33
 msgid "Layout Options"
 msgstr ""
@@ -1558,25 +1582,25 @@ msgstr ""
 msgid "%1$d %2$s - %3$s"
 msgstr ""
 
-#: includes/class-wpec-process-ipn.php:122
+#: includes/class-wpec-process-ipn.php:123
 msgid "Payment amount mismatch with the original price."
 msgstr ""
 
-#: includes/class-wpec-process-ipn.php:130
+#: includes/class-wpec-process-ipn.php:131
 msgid "Payment currency mismatch."
 msgstr ""
 
-#: includes/class-wpec-process-ipn.php:147
+#: includes/class-wpec-process-ipn.php:148
 #. Translators:  %1$s - download item name; %2$s - download URL
 msgid "%1$s - download link: %2$s"
 msgstr ""
 
-#: includes/class-wpec-process-ipn.php:244
+#: includes/class-wpec-process-ipn.php:245
 msgid "Error! Thank you page URL configuration is wrong in the plugin settings."
 msgstr ""
 
-#: includes/class-wpec-process-ipn.php:273
-#: public/includes/class-shortcode-ppec.php:361
+#: includes/class-wpec-process-ipn.php:274
+#: public/includes/class-shortcode-ppec.php:365
 msgid "Payment is not approved. Status: %s"
 msgstr ""
 
@@ -1665,99 +1689,99 @@ msgstr ""
 msgid "Can't find product with ID %s"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:214
+#: public/includes/class-shortcode-ppec.php:217
 msgid "Please enter %s Client ID in the settings."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:300
+#: public/includes/class-shortcode-ppec.php:304
 #. translators: tax amount
 msgid "%s (tax)"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:303
+#: public/includes/class-shortcode-ppec.php:307
 #. translators: tax percent
 msgid "%s%% tax"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:311
+#: public/includes/class-shortcode-ppec.php:315
 #. translators: tax + shipping amount
 msgid "+ %s (shipping)"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:314
+#: public/includes/class-shortcode-ppec.php:318
 #. translators: shipping amount
 msgid "%s (shipping)"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:320
+#: public/includes/class-shortcode-ppec.php:324
 msgid "Total:"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:339
-#: public/includes/class-shortcode-ppec.php:346
+#: public/includes/class-shortcode-ppec.php:343
+#: public/includes/class-shortcode-ppec.php:350
 msgid ""
 "This page is used to show the transaction result after a customer makes a "
 "payment."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:340
-#: public/includes/class-shortcode-ppec.php:347
+#: public/includes/class-shortcode-ppec.php:344
+#: public/includes/class-shortcode-ppec.php:351
 msgid ""
 "It will dynamically show the order details to the customers when they are "
 "redirected here after a payment. Do not access this page directly."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:341
+#: public/includes/class-shortcode-ppec.php:345
 msgid "Error! Order ID value is missing in the URL."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:348
+#: public/includes/class-shortcode-ppec.php:352
 msgid "Error! Nonce value is missing in the URL or Nonce verification failed."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:357
+#: public/includes/class-shortcode-ppec.php:361
 msgid "Error! Incorrect order ID. Could not find that order in the orders table."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:366
+#: public/includes/class-shortcode-ppec.php:370
 msgid "Thank you for your purchase."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:368
+#: public/includes/class-shortcode-ppec.php:372
 msgid "Your purchase details are below:"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:370
+#: public/includes/class-shortcode-ppec.php:374
 msgid "Transaction ID: "
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:377
+#: public/includes/class-shortcode-ppec.php:381
 msgid "Download link"
 msgid_plural "Download links"
 msgstr[0] ""
 msgstr[1] ""
 
-#: public/includes/class-shortcode-ppec.php:378
+#: public/includes/class-shortcode-ppec.php:382
 msgid "Click here to download"
 msgstr ""
 
-#: public/views/templates/payment-form.php:22
-msgid "Quantity:"
-msgstr ""
-
-#: public/views/templates/payment-form.php:40
+#: public/views/templates/payment-form.php:24
 msgid "Enter Amount (%s): "
 msgstr ""
 
-#: public/views/templates/payment-form.php:105
+#: public/views/templates/payment-form.php:35
+msgid "Quantity:"
+msgstr ""
+
+#: public/views/templates/payment-form.php:99
 msgid "Coupon Code:"
 msgstr ""
 
-#: public/views/templates/payment-form.php:113
+#: public/views/templates/payment-form.php:107
 msgid "Apply"
 msgstr ""
 
-#: public/views/templates/payment-form.php:140
+#: public/views/templates/payment-form.php:134
 msgid ""
 "This is where the Express Checkout Button will show. View it on the "
 "front-end to see how it will look to your visitors"

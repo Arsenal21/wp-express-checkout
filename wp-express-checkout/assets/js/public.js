@@ -252,6 +252,9 @@ var ppecHandler = function( data ) {
 		createOrder: function( data, actions ) {
 			parent.calcTotal();
 			var order_data = {
+				application_context: {
+					shipping_preference: parent.data.shipping_enable ? 'GET_FROM_FILE' : 'NO_SHIPPING'
+				},
 				purchase_units: [ {
 					amount: {
 						value: parent.data.total,
@@ -266,6 +269,7 @@ var ppecHandler = function( data ) {
 					items: [ {
 						name: parent.data.name,
 						quantity: parent.data.quantity,
+						category: parent.data.shipping_enable ? 'PHYSICAL_GOODS' : 'DIGITAL_GOODS',
 						unit_amount: {
 							value: parent.data.price,
 							currency_code: parent.data.currency

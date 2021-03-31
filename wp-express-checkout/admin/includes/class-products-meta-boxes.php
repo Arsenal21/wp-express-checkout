@@ -229,6 +229,7 @@ class PPECProductsMetaboxes {
 		$current_shipping = get_post_meta( $post->ID, 'wpec_product_shipping', true );
 		$current_tax      = get_post_meta( $post->ID, 'wpec_product_tax', true );
 		$step             = pow( 10, -intval( $this->WPEC_Main->get_setting( 'price_decimals_num' ) ) );
+		$enable_shipping  = get_post_meta( $post->ID, 'wpec_product_shipping_enable', true );
 		?>
 		<div id="wpec_shipping_cost_container">
 			<label><?php esc_html_e( 'Shipping Cost', 'wp-express-checkout' ); ?></label>
@@ -252,6 +253,11 @@ class PPECProductsMetaboxes {
 		esc_html_e( 'Leave it empty if you don\'t want to apply tax.', 'wp-express-checkout' );
 		?>
 		</p>
+		<label>
+			<input type="checkbox" name="wpec_product_shipping_enable" value="1" <?php checked( $enable_shipping ); ?>>
+			<?php esc_html_e( 'This is a Physical Product', 'wp-express-checkout' ); ?>
+		</label>
+		<p class="description"><?php esc_html_e( 'When checked, shipping address will be collected at the time of checkout.', 'wp-express-checkout' ); ?></p>
 		<?php
 	}
 
@@ -526,6 +532,9 @@ jQuery(document).ready(function($) {
 		$shipping = filter_input( INPUT_POST, 'wpec_product_shipping', FILTER_SANITIZE_STRING );
 		$shipping = ! empty( $shipping ) ? floatval( $shipping ) : $shipping;
 		update_post_meta( $post_id, 'wpec_product_shipping', $shipping );
+		// allow custom quantity.
+		$enable_shipping = filter_input( INPUT_POST, 'wpec_product_shipping_enable', FILTER_SANITIZE_NUMBER_INT );
+		update_post_meta( $post_id, 'wpec_product_shipping_enable', $enable_shipping );
 
 		$tax = filter_input( INPUT_POST, 'wpec_product_tax', FILTER_SANITIZE_STRING );
 		$tax = floatval( $tax );
