@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Express Checkout 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-31 08:11:45+00:00\n"
+"POT-Creation-Date: 2021-03-31 08:30:55+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -707,7 +707,7 @@ msgstr ""
 
 #: admin/includes/class-admin-order-summary-table.php:44
 #: includes/class-order-summary-table.php:127
-#: public/includes/class-shortcode-ppec.php:291
+#: public/includes/class-shortcode-ppec.php:292
 #. translators: quantity
 msgid "x %s"
 msgstr ""
@@ -1066,11 +1066,11 @@ msgstr ""
 msgid "Transaction Data"
 msgstr ""
 
-#: admin/includes/class-order.php:220 includes/class-wpec-process-ipn.php:112
+#: admin/includes/class-order.php:220 includes/class-wpec-process-ipn.php:115
 msgid "Tax"
 msgstr ""
 
-#: admin/includes/class-order.php:223 includes/class-wpec-process-ipn.php:115
+#: admin/includes/class-order.php:223 includes/class-wpec-process-ipn.php:118
 msgid "Shipping"
 msgstr ""
 
@@ -1103,11 +1103,15 @@ msgstr ""
 msgid "Transaction ID"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:157
+#: admin/includes/class-orders-meta-boxes.php:127
+msgid "N/A"
+msgstr ""
+
+#: admin/includes/class-orders-meta-boxes.php:151
 msgid "Billing Address:"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:165
+#: admin/includes/class-orders-meta-boxes.php:159
 msgid "Shipping Address:"
 msgstr ""
 
@@ -1582,25 +1586,25 @@ msgstr ""
 msgid "%1$d %2$s - %3$s"
 msgstr ""
 
-#: includes/class-wpec-process-ipn.php:123
+#: includes/class-wpec-process-ipn.php:126
 msgid "Payment amount mismatch with the original price."
 msgstr ""
 
-#: includes/class-wpec-process-ipn.php:131
+#: includes/class-wpec-process-ipn.php:134
 msgid "Payment currency mismatch."
 msgstr ""
 
-#: includes/class-wpec-process-ipn.php:148
+#: includes/class-wpec-process-ipn.php:151
 #. Translators:  %1$s - download item name; %2$s - download URL
 msgid "%1$s - download link: %2$s"
 msgstr ""
 
-#: includes/class-wpec-process-ipn.php:245
+#: includes/class-wpec-process-ipn.php:248
 msgid "Error! Thank you page URL configuration is wrong in the plugin settings."
 msgstr ""
 
-#: includes/class-wpec-process-ipn.php:274
-#: public/includes/class-shortcode-ppec.php:365
+#: includes/class-wpec-process-ipn.php:277
+#: public/includes/class-shortcode-ppec.php:366
 msgid "Payment is not approved. Status: %s"
 msgstr ""
 
@@ -1689,79 +1693,79 @@ msgstr ""
 msgid "Can't find product with ID %s"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:217
+#: public/includes/class-shortcode-ppec.php:218
 msgid "Please enter %s Client ID in the settings."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:304
+#: public/includes/class-shortcode-ppec.php:305
 #. translators: tax amount
 msgid "%s (tax)"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:307
+#: public/includes/class-shortcode-ppec.php:308
 #. translators: tax percent
 msgid "%s%% tax"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:315
+#: public/includes/class-shortcode-ppec.php:316
 #. translators: tax + shipping amount
 msgid "+ %s (shipping)"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:318
+#: public/includes/class-shortcode-ppec.php:319
 #. translators: shipping amount
 msgid "%s (shipping)"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:324
+#: public/includes/class-shortcode-ppec.php:325
 msgid "Total:"
-msgstr ""
-
-#: public/includes/class-shortcode-ppec.php:343
-#: public/includes/class-shortcode-ppec.php:350
-msgid ""
-"This page is used to show the transaction result after a customer makes a "
-"payment."
 msgstr ""
 
 #: public/includes/class-shortcode-ppec.php:344
 #: public/includes/class-shortcode-ppec.php:351
 msgid ""
+"This page is used to show the transaction result after a customer makes a "
+"payment."
+msgstr ""
+
+#: public/includes/class-shortcode-ppec.php:345
+#: public/includes/class-shortcode-ppec.php:352
+msgid ""
 "It will dynamically show the order details to the customers when they are "
 "redirected here after a payment. Do not access this page directly."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:345
+#: public/includes/class-shortcode-ppec.php:346
 msgid "Error! Order ID value is missing in the URL."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:352
+#: public/includes/class-shortcode-ppec.php:353
 msgid "Error! Nonce value is missing in the URL or Nonce verification failed."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:361
+#: public/includes/class-shortcode-ppec.php:362
 msgid "Error! Incorrect order ID. Could not find that order in the orders table."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:370
+#: public/includes/class-shortcode-ppec.php:371
 msgid "Thank you for your purchase."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:372
+#: public/includes/class-shortcode-ppec.php:373
 msgid "Your purchase details are below:"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:374
+#: public/includes/class-shortcode-ppec.php:375
 msgid "Transaction ID: "
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:381
+#: public/includes/class-shortcode-ppec.php:382
 msgid "Download link"
 msgid_plural "Download links"
 msgstr[0] ""
 msgstr[1] ""
 
-#: public/includes/class-shortcode-ppec.php:382
+#: public/includes/class-shortcode-ppec.php:383
 msgid "Click here to download"
 msgstr ""
 

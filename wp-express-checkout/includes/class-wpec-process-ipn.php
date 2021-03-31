@@ -97,6 +97,10 @@ class WPEC_Process_IPN {
 		$order->add_data( 'state', $this->get_transaction_status( $payment ) );
 		$order->add_data( 'payer', $payment['payer'] );
 
+		if ( $trans['shipping_enable'] ) {
+			$order->add_data( 'shipping_address', $this->get_address( $payment ) );
+		}
+
 		/**
 		 * Runs after draft order created, but before adding items.
 		 *

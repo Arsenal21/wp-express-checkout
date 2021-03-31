@@ -194,6 +194,7 @@ class WPECShortcode {
 			'quantity'        => $quantity,
 			'tax'             => $tax,
 			'shipping'        => $shipping,
+			'shipping_enable' => $shipping_enable,
 			'url'             => $url,
 			'custom_quantity' => $custom_quantity,
 			'custom_amount'   => $custom_amount,

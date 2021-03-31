@@ -120,18 +120,18 @@ class WPEC_Orders_Metaboxes {
 			}
 		</style>
 		<?php
-		$user = get_userdata( $order->get_author() );
+		$user      = get_userdata( $order->get_author() );
+		$payer     = $order->get_data( 'payer' );
 		$username  = '';
 		$useremail = '';
+		$billing   = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : __( 'N/A', 'wp-express-checkout' );
+		$shipping  = $order->get_data( 'shipping_address' );
 		if ( $user ) {
 			$username  = $user->user_login !== $user->display_name ? $user->display_name . ' (' . $user->user_login . ') ' : $user->user_login;
 			$useremail = $user->user_email;
-		} else {
-			$payer = $order->get_data( 'payer' );
-			if ( $payer ) {
-				$username = implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
-				$useremail = $payer['email_address'];
-			}
+		} else if ( $payer ) {
+			$username = implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
+			$useremail = $payer['email_address'];
 		}
 		?>
 		<?php echo get_avatar( $useremail, 72 ); ?>
@@ -146,6 +146,22 @@ class WPEC_Orders_Metaboxes {
 				<tr>
 					<td><?php echo $order->get_ip_address(); ?></td>
 				</tr>
+				<?php if ( $billing ) { ?>
+					<tr>
+						<td><strong><?php esc_html_e( 'Billing Address:', 'wp-express-checkout' ); ?></strong></td>
+					</tr>
+					<tr>
+						<td><?php echo $billing; ?></td>
+					</tr>
+				<?php } ?>
+				<?php if ( $shipping ) { ?>
+				<tr>
+					<td><strong><?php esc_html_e( 'Shipping Address:', 'wp-express-checkout' ); ?></strong></td>
+				</tr>
+				<tr>
+					<td><?php echo $shipping; ?></td>
+				</tr>
+				<?php } ?>
 			</tbody>
 		</table>
 		<div class="clear"></div>
