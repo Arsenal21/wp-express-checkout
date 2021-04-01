@@ -132,18 +132,18 @@ class WPECShortcode {
 		$template = empty( $atts['template'] ) ? 0 : intval( $atts['template'] );
 		$located  = self::locate_template( "content-product-{$template}.php" );
 
+		$GLOBALS['post'] = $post;
+		setup_postdata( $post );
+		$post->post_content = strip_shortcodes( $post->post_content );
+		$wp_query->set( 'wpec_button_args', $args );
 		if ( $located ) {
 			ob_start();
-			$post->post_content = strip_shortcodes( $post->post_content );
-			$GLOBALS['post'] = $post;
-			setup_postdata( $post );
-			$wp_query->set( 'wpec_button_args', $args );
 			load_template( $located, false );
-			wp_reset_postdata();
 			$output .= ob_get_clean();
 		} else {
 			$output .= $this->generate_pp_express_checkout_button( $args );
 		}
+		wp_reset_postdata();
 
 		return $output;
 	}

@@ -24,7 +24,7 @@
 				<label><?php echo esc_html(  sprintf( __( 'Enter Amount (%s): ', 'wp-express-checkout' ), $currency ) ); ?></label>
 			</span>
 			<span class="wpec-custom-amount-input-field">
-				<input id="wp-ppec-custom-amount" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" type="number" step="<?php echo esc_attr( $step ); ?>" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-amount" min="0" value="<?php echo esc_attr( $price ); ?>">
+				<input id="wp-ppec-custom-amount" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" type="number" step="<?php echo esc_attr( $step ); ?>" name="custom-amount" class="wp-ppec-input wp-ppec-custom-amount" min="0" value="<?php echo esc_attr( $price ); ?>">
 				<div class="wp-ppec-form-error-msg"></div>
 			</span>
 		</div>
@@ -63,7 +63,7 @@
 					foreach ( $variations['names'][ $grp_id ] as $var_id => $var_name ) {
 						?>
 						<label class="wpec-product-variations-select-radio-label">
-							<input class="wpec-product-variations-select-radio" data-wpec-variations-group-id="<?php echo esc_attr( $grp_id ); ?>" name="wpecVariations[<?php echo esc_attr( $grp_id ); ?>][]" type="radio" name="123" value="<?php echo esc_attr( $var_id ); ?>" <?php checked( $var_id === 0 ); ?>>
+							<input class="wpec-product-variations-select-radio" data-wpec-variations-group-id="<?php echo esc_attr( $grp_id ); ?>" name="wpecVariations[<?php echo esc_attr( $button_id ); ?>][<?php echo esc_attr( $grp_id ); ?>][]" type="radio" value="<?php echo esc_attr( $var_id ); ?>" <?php checked( $var_id === 0 ); ?>>
 							<?php echo esc_html( $var_name ); ?>
 							<?php echo esc_html( WPEC_Utility_Functions::price_modifier( $variations['prices'][ $grp_id ][ $var_id ], $currency ) ); ?>
 						</label>
@@ -73,7 +73,7 @@
 				} else {
 					// drop-down output.
 					?>
-					<select class="wpec-product-variations-select" data-wpec-variations-group-id="<?php echo esc_attr( $grp_id ); ?>" name="wpecVariations[<?php echo esc_attr( $grp_id ); ?>][]">
+					<select class="wpec-product-variations-select" data-wpec-variations-group-id="<?php echo esc_attr( $grp_id ); ?>" name="wpecVariations[<?php echo esc_attr( $button_id ); ?>][<?php echo esc_attr( $grp_id ); ?>][]">
 					<?php
 					foreach ( $variations['names'][ $grp_id ] as $var_id => $var_name ) {
 						?>

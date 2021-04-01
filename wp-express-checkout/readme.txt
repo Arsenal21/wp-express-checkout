@@ -114,7 +114,9 @@ None
 
 == Changelog ==
 
-= WIP since 1.9.5 to 2021-03-31 =
+= WIP since 1.9.5 to 2021-04-01 =
+* Fixed issue with the global post variable when no template used in shortcode.
+* Fixed issue with Variation radio options names.
 * Added User Billing Address and Product Shipping Address (if used) on the Order page
 * Added Product option 'This is a Physical Product' to enable shipping address collection at the time of checkout
 * Added product id reference to all top level elements in templates. Closes #23
