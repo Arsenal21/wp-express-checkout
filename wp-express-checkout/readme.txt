@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.7
-Stable tag: 1.9.5
+Stable tag: 1.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -114,18 +114,15 @@ None
 
 == Changelog ==
 
-= WIP since 1.9.5 to 2021-04-01 =
-* Fixed issue with the global post variable when no template used in shortcode.
-* Fixed issue with Variation radio options names.
-* Added User Billing Address and Product Shipping Address (if used) on the Order page
+= 1.9.6 =
+* The billing address and shipping address is shown (if available) on the order page or an order.
 * Added Product option 'This is a Physical Product' to enable shipping address collection at the time of checkout
 * Added product id reference to all top level elements in templates. Closes #23
+* Fixed an issue with the global post variable when no template is used in the shortcode.
+* Fixed an issue with variation radio options names.
 * Added Grunt task to generate WIP log from the latest commits log
-* Change @since tags from 2.0.0 to actual 1.9.5
 * Display product metaboxes above the Yoast SEO metabox
 * updated readme to set wp compatible to wp5.7
-
-= END WIP =
 
 = 1.9.5 =
 * There is a new checkout form option to show the PayPal buy now button to be on a modal window. If you don't like this new option, you can turn off the "Show in a Modal Window" checkbox in the settings menu of the plugin.
