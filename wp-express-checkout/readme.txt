@@ -25,7 +25,7 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 
 = Checkout Demonstration =
 
-https://www.youtube.com/watch?v=jdeZcs-90DY
+https://www.youtube.com/watch?v=KF32ZOgsb2U
 
 = Basic Setup and Usage Video =
 
