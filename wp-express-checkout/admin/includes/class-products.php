@@ -101,6 +101,7 @@ class PPECProducts {
 	function manage_columns( $columns ) {
 		unset( $columns );
 		$columns = array(
+			'cb'        => '<input type="checkbox">',
 			'thumbnail' => __( 'Thumbnail', 'wp-express-checkout' ),
 			'title'     => __( 'Product Name', 'wp-express-checkout' ),
 			'id'        => __( 'ID', 'wp-express-checkout' ),
