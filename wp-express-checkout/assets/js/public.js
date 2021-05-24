@@ -1,10 +1,12 @@
 var ppecHandler = function( data ) {
 	this.data = data;
+	this.actions = {};
+
 	var parent = this;
 
-	this.processPayment = function( payment ) {
+	this.processPayment = function( payment, action ) {
 		jQuery.post( ppecFrontVars.ajaxUrl, {
-				action: "wpec_process_payment",
+				'action': action,
 				wp_ppdg_payment: payment,
 				data: parent.data,
 				nonce: parent.data.nonce
@@ -35,9 +37,33 @@ var ppecHandler = function( data ) {
 		return ret;
 	};
 
+	this.isValidTos = function() {
+		var enable_actions = false;
+		var tos_input = jQuery( '#wpec-tos-' + parent.data.id );
+		var errMsgCont = jQuery( '.wpec_product_tos_input_container' ).find( '.wp-ppec-form-error-msg' );
+		var errMsg = ppecFrontVars.str.acceptTos;
+		tos_input.addClass( 'hasError' );
+		if ( tos_input.prop( 'checked' ) ) {
+			enable_actions = true;
+			tos_input.removeClass( 'hasError' );
+			errMsgCont.fadeOut( 'fast' );
+		} else {
+			tos_input.addClass( 'hasError' );
+			errMsgCont.html( errMsg );
+			errMsgCont.fadeIn( 'slow' );
+		}
+
+		return enable_actions;
+	};
+
+	this.isValidTotal = function() {
+		parent.calcTotal();
+		return !! parent.data.total;
+	};
+
 	this.isValidCustomQuantity = function() {
 		var input = jQuery( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' );
-		var errMsgCont = input.siblings( '.wp-ppec-form-error-msg' );
+		var errMsgCont = input.parent().siblings( '.wp-ppec-form-error-msg' );
 		var val_orig = input.val();
 		var val = parseInt( val_orig );
 		var error = false;
@@ -91,6 +117,28 @@ var ppecHandler = function( data ) {
 
 	this.clientVars[ this.data.env ] = this.data.client_id;
 
+	this.validateOrder = function() {
+		var enable_actions = true;
+
+		if (
+			( parent.data.custom_quantity === "1" && ! parent.isValidCustomQuantity() ) ||
+			( parent.data.custom_amount === "1" && ! parent.isValidCustomAmount() ) ||
+			( parent.data.tos_enabled === 1 && ! parent.isValidTos() ) ||
+			! parent.isValidTotal()
+		) {
+			enable_actions = false;
+		}
+
+		if ( enable_actions ) {
+			parent.actions.enable();
+		} else {
+			parent.actions.disable();
+		}
+
+		parent.updateAllAmounts();
+		jQuery( document ).trigger( 'wpec_validate_order', [ parent ] );
+	}
+
 	this.scCont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' );
 
 	this.buttonArgs = {
@@ -99,45 +147,15 @@ var ppecHandler = function( data ) {
 		style: parent.data.btnStyle,
 		commit: true,
 		onInit: function( data, actions ) {
-			var enable_actions = !parent.data.errors;
+			parent.actions = actions;
 			if ( parent.data.tos_enabled === 1 ) {
-				enable_actions = false;
-				var tos_input = jQuery( '#wpec-tos-' + parent.data.id );
-				var errMsgCont = jQuery( '.wpec_product_tos_input_container' ).find( '.wp-ppec-form-error-msg' );
-				var errMsg = ppecFrontVars.str.acceptTos;
-				tos_input.addClass( 'hasError' );
-				tos_input.change( function() {
-					if ( tos_input.prop( 'checked' ) ) {
-						enable_actions = true;
-						actions.enable();
-						tos_input.removeClass( 'hasError' );
-						errMsgCont.fadeOut( 'fast' );
-					} else {
-						enable_actions = false;
-						actions.disable();
-						tos_input.addClass( 'hasError' );
-						errMsgCont.html( errMsg );
-						errMsgCont.fadeIn( 'slow' );
-					}
-				} );
+				jQuery( '#wpec-tos-' + parent.data.id ).change( parent.validateOrder );
 			}
 			if ( parent.data.custom_quantity === "1" ) {
-				jQuery( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
-					if ( !parent.isValidCustomQuantity() ) {
-						enable_actions = false;
-					} else {
-						parent.updateAllAmounts();
-					}
-				} );
+				jQuery( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ).change( parent.validateOrder );
 			}
 			if ( parent.data.custom_amount === "1" ) {
-				jQuery( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ).change( function() {
-					if ( !parent.isValidCustomAmount() ) {
-						enable_actions = false;
-					} else {
-						parent.updateAllAmounts();
-					}
-				} );
+				jQuery( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ).change( parent.validateOrder);
 			}
 			parent.data.orig_price = parseFloat( parent.data.price );
 			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio' ).change( function() {
@@ -149,7 +167,7 @@ var ppecHandler = function( data ) {
 					}
 					parent.data.variations.applied[ grpId ] = varId;
 					parent.data.price = parent.applyVariations( parent.data.orig_price );
-					parent.updateAllAmounts();
+					parent.validateOrder();
 				}
 			} );
 			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio:checked' ).change();
@@ -196,7 +214,7 @@ var ppecHandler = function( data ) {
 						}
 						priceCurr = totalCont.find( 'span.wpec-price-amount' ).addClass( 'wpec_line_through' );
 						priceNew = totalCont.find( 'span.wpec-new-price-amount' );
-						parent.updateAllAmounts();
+						parent.validateOrder();
 						jQuery( '#wpec-remove-coupon-' + parent.data.id ).on( 'click', function( e ) {
 							e.preventDefault();
 							jQuery( '#wpec-coupon-info-' + parent.data.id ).html( '' );
@@ -212,7 +230,7 @@ var ppecHandler = function( data ) {
 							delete parent.data.couponCode;
 							delete parent.data.discountAmount;
 							delete parent.data.newPrice;
-							parent.updateAllAmounts();
+							parent.validateOrder();
 						} );
 					} else {
 						jQuery( '#wpec-coupon-info-' + parent.data.id ).html( response.msg );
@@ -229,15 +247,13 @@ var ppecHandler = function( data ) {
 					return false;
 				}
 			} );
-			if ( enable_actions ) {
-				actions.enable();
-			} else {
-				actions.disable();
-				if ( parent.data.errors ) {
-					var errorEl = jQuery( '<div class="wp-ppec-form-error-msg">' + parent.data.errors + '</div>' );
-					parent.scCont.append( errorEl );
-					errorEl.show();
-				}
+
+			parent.validateOrder();
+
+			if ( parent.data.errors ) {
+				var errorEl = jQuery( '<div class="wp-ppec-form-error-msg">' + parent.data.errors + '</div>' );
+				parent.scCont.append( errorEl );
+				errorEl.show();
 			}
 
 			jQuery( '.wpec-button-placeholder' ).remove();
@@ -247,6 +263,10 @@ var ppecHandler = function( data ) {
 			if ( errInput ) {
 				errInput.focus();
 				errInput.trigger( 'change' );
+			}
+
+			if ( ! parent.data.total ) {
+				parent.processPayment( {}, 'wpec_process_empty_payment' );
 			}
 		},
 		createOrder: function( data, actions ) {
@@ -305,7 +325,7 @@ var ppecHandler = function( data ) {
 		onApprove: function( data, actions ) {
 			jQuery( 'div.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).css( 'display', 'flex' );
 			return actions.order.capture().then( function( details ) {
-				parent.processPayment( details );
+				parent.processPayment( details, "wpec_process_payment" );
 			} );
 		},
 		onError: function( err ) {

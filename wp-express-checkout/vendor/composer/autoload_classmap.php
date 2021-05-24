@@ -28,6 +28,7 @@ return array(
     'WPEC_Orders_Metaboxes' => $baseDir . '/admin/includes/class-orders-meta-boxes.php',
     'WPEC_Post_Type_Content_Handler' => $baseDir . '/includes/class-wpec-post-type-content-handler.php',
     'WPEC_Process_IPN' => $baseDir . '/includes/class-wpec-process-ipn.php',
+    'WPEC_Process_IPN_Free' => $baseDir . '/includes/class-wpec-process-ipn-free.php',
     'WPEC_Utility_Functions' => $baseDir . '/includes/class-wpec-utility-functions.php',
     'WPEC_Variations' => $baseDir . '/admin/includes/class-variations.php',
     'WPEC_View_Download' => $baseDir . '/includes/class-wpec-view-download.php',

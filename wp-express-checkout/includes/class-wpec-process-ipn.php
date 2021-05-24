@@ -45,14 +45,14 @@ class WPEC_Process_IPN {
 	 */
 	public function wpec_process_payment() {
 
-		if ( ! isset( $_POST['wp_ppdg_payment'] ) ) {
+		$payment = $this->get_payment_data();
+		$data    = $this->get_order_data();
+
+		if ( empty( $payment ) ) {
 			// no payment data provided.
 			_e( 'No payment data received.', 'wp-express-checkout' );
 			exit;
 		}
-
-		$payment = stripslashes_deep( $_POST['wp_ppdg_payment'] );
-		$data    = stripslashes_deep( $_POST['data'] );
 
 		check_ajax_referer( $data['id'] . $data['product_id'], 'nonce' );
 
@@ -252,6 +252,26 @@ class WPEC_Process_IPN {
 		echo wp_json_encode( $res );
 
 		exit;
+	}
+
+	/**
+	 * Retrieves the payment data from AJAX POST request
+	 *
+	 * @return array
+	 */
+	protected function get_payment_data() {
+		$payment = isset( $_POST['wp_ppdg_payment'] ) ? stripslashes_deep( $_POST['wp_ppdg_payment'] ) : array();
+		return $payment;
+	}
+
+	/**
+	 * Retrieves the order data from AJAX POST request
+	 *
+	 * @return array
+	 */
+	protected function get_order_data() {
+		$data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : array();
+		return $data;
 	}
 
 	/**

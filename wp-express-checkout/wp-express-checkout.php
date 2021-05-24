@@ -40,6 +40,7 @@ function wpec_load_classes() {
 	WPEC_Process_IPN::get_instance();
 	WPEC_Variations::init();
 
+	new WPEC_Process_IPN_Free();
 	new WPEC_Blocks();
 	new WPEC_Init_Time_Tasks();
 	new WPEC_Integrations();

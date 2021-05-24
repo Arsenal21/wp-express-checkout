@@ -8,6 +8,7 @@
 			"includes/class-wpec-debug-logger.php",
 			"includes/class-wpec-init-time-tasks.php",
 			"includes/class-wpec-process-ipn.php",
+			"includes/class-wpec-process-ipn-free.php",
 			"includes/class-wpec-view-download.php",
 			"includes/class-wpec-integrations.php",
 			"includes/class-wpec-post-type-content-handler.php",
