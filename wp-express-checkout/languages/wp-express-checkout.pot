@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Express Checkout 1.9.5\n"
+"Project-Id-Version: WP Express Checkout 1.9.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-01 05:52:26+00:00\n"
+"POT-Creation-Date: 2021-05-24 07:59:38+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -690,7 +690,7 @@ msgstr ""
 #: admin/includes/class-admin-order-summary-table.php:14
 #: admin/includes/class-products-meta-boxes.php:19
 #: admin/includes/class-products-meta-boxes.php:75
-#: admin/includes/class-products.php:107
+#: admin/includes/class-products.php:108
 #: includes/class-wpec-utility-functions.php:217
 msgid "Price"
 msgstr ""
@@ -989,7 +989,7 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: admin/includes/class-order-list.php:28 admin/includes/class-products.php:109
+#: admin/includes/class-order-list.php:28 admin/includes/class-products.php:110
 msgid "Date"
 msgstr ""
 
@@ -1087,7 +1087,7 @@ msgid "Order Author"
 msgstr ""
 
 #: admin/includes/class-orders-meta-boxes.php:79
-#: admin/includes/class-products.php:106
+#: admin/includes/class-products.php:107
 msgid "ID"
 msgstr ""
 
@@ -1134,7 +1134,7 @@ msgid "Product Thumbnail"
 msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:25
-#: admin/includes/class-products.php:108
+#: admin/includes/class-products.php:109
 msgid "Shortcode"
 msgstr ""
 
@@ -1409,7 +1409,7 @@ msgstr ""
 msgid "Add New Product"
 msgstr ""
 
-#: admin/includes/class-products.php:38 admin/includes/class-products.php:125
+#: admin/includes/class-products.php:38 admin/includes/class-products.php:126
 msgid "Edit Product"
 msgstr ""
 
@@ -1449,16 +1449,16 @@ msgstr ""
 msgid "Product draft updated."
 msgstr ""
 
-#: admin/includes/class-products.php:104
+#: admin/includes/class-products.php:105
 msgid "Thumbnail"
 msgstr ""
 
-#: admin/includes/class-products.php:105
+#: admin/includes/class-products.php:106
 #: includes/class-wpec-utility-functions.php:215
 msgid "Product Name"
 msgstr ""
 
-#: admin/includes/class-products.php:139
+#: admin/includes/class-products.php:140
 msgid "Invalid"
 msgstr ""
 

@@ -114,6 +114,14 @@ None
 
 == Changelog ==
 
+= WIP since v1.9.6 to 2021-05-24 =
+* Process orders with 0 total.
+* Added checkbox to the Products list
+* new usage video updated in the readme file
+* readme file updated with new checkout demonstration video
+
+= END WIP =
+
 = 1.9.6 =
 * The billing address and shipping address is shown (if available) on the order page or an order.
 * Added Product option 'This is a Physical Product' to enable shipping address collection at the time of checkout
