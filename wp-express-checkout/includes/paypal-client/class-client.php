@@ -22,20 +22,24 @@ class Client {
 	 * credentials context. This can be used invoke PayPal API's provided the
 	 * credentials have the access to do so.
 	 *
+	 * @param string $mode The PayPal environment mode (`live` or `test`).
+	 *
 	 * @return PayPalHttpClient
 	 */
-	public static function client() {
-		return new PayPalHttpClient( self::environment() );
+	public static function client( $mode = '' ) {
+		return new PayPalHttpClient( self::environment( $mode ) );
 	}
 
 	/**
 	 * Setting up and Returns PayPal SDK environment with PayPal Access credentials.
 	 *
+	 * @param string $mode The PayPal environment mode (`live` or `test`).
+	 *
 	 * @return SandboxEnvironment|ProductionEnvironment
 	 */
-	public static function environment() {
+	public static function environment( $mode = '' ) {
 		$wpec    = \WPEC_Main::get_instance();
-		$is_live = $wpec->get_setting( 'is_live' );
+		$is_live = $mode ? 'live' === $mode : $wpec->get_setting( 'is_live' );
 
 		if ( $is_live ) {
 			$client_id     = $wpec->get_setting( 'live_client_id' );
