@@ -278,7 +278,7 @@ class WPECShortcode {
 		) );
 
 
-		$output .= '<script>jQuery(document).ready(function() {new ppecHandler(' . json_encode( $data ) . ')});</script>';
+		$output .= '<script type="text/javascript">jQuery( function( $ ) {$( document ).on( "wpec_paypal_sdk_loaded", function() { new ppecHandler(' . json_encode( $data ) . ') } );} );</script>';
 
 		add_action( 'wp_footer', array( $this->ppdg, 'load_paypal_sdk' ) );
 

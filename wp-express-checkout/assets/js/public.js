@@ -137,7 +137,7 @@ var ppecHandler = function( data ) {
 
 		parent.updateAllAmounts();
 		jQuery( document ).trigger( 'wpec_validate_order', [ parent ] );
-	}
+	};
 
 	this.scCont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' );
 

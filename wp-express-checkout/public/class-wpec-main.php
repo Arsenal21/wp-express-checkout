@@ -127,7 +127,19 @@ class WPEC_Main {
 		$args = apply_filters( 'wpec_paypal_sdk_args', $args );
 
 		$script_url = add_query_arg( $args, 'https://www.paypal.com/sdk/js' );
-		printf( '<script src="%s" data-partner-attribution-id="TipsandTricks_SP"></script>', $script_url );
+		?>
+		<script type="text/javascript">
+			var script = document.createElement( 'script' );
+			script.type = 'text/javascript';
+			script.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP' );
+			script.async = true;
+			script.src = '<?php echo esc_url_raw( $script_url ); ?>';
+			script.onload = function() {
+				jQuery( document ).trigger( 'wpec_paypal_sdk_loaded' );
+			};
+			document.getElementsByTagName( 'head' )[0].appendChild( script );
+		</script>
+		<?php
 	}
 
 	/**
