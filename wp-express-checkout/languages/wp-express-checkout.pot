@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Express Checkout 1.9.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-24 07:59:38+00:00\n"
+"POT-Creation-Date: 2021-06-07 06:31:02+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -305,7 +305,7 @@ msgstr ""
 
 #: admin/class-wpec-admin.php:265
 #: admin/includes/class-products-meta-boxes.php:391
-#: public/class-wpec-main.php:305
+#: public/class-wpec-main.php:317
 msgid "Buy Now"
 msgstr ""
 
@@ -1573,7 +1573,11 @@ msgstr ""
 msgid "Paid"
 msgstr ""
 
-#: includes/class-wpec-process-ipn.php:50
+#: includes/class-wpec-process-ipn-free.php:41
+msgid "Anonymous"
+msgstr ""
+
+#: includes/class-wpec-process-ipn.php:53
 msgid "No payment data received."
 msgstr ""
 
@@ -1603,7 +1607,7 @@ msgstr ""
 msgid "Error! Thank you page URL configuration is wrong in the plugin settings."
 msgstr ""
 
-#: includes/class-wpec-process-ipn.php:277
+#: includes/class-wpec-process-ipn.php:297
 #: public/includes/class-shortcode-ppec.php:366
 msgid "Payment is not approved. Status: %s"
 msgstr ""
@@ -1679,7 +1683,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: public/class-wpec-main.php:335
+#: public/class-wpec-main.php:347
 msgid ""
 "I accept the <a href=\"https://example.com/terms-and-conditions/\" "
 "target=\"_blank\">Terms and Conditions</a>"

@@ -58,7 +58,7 @@ var ppecHandler = function( data ) {
 
 	this.isValidTotal = function() {
 		parent.calcTotal();
-		return !! parent.data.total;
+		return !!parent.data.total;
 	};
 
 	this.isValidCustomQuantity = function() {
@@ -121,10 +121,10 @@ var ppecHandler = function( data ) {
 		var enable_actions = true;
 
 		if (
-			( parent.data.custom_quantity === "1" && ! parent.isValidCustomQuantity() ) ||
-			( parent.data.custom_amount === "1" && ! parent.isValidCustomAmount() ) ||
-			( parent.data.tos_enabled === 1 && ! parent.isValidTos() ) ||
-			! parent.isValidTotal()
+			( parent.data.custom_quantity === "1" && !parent.isValidCustomQuantity() ) ||
+			( parent.data.custom_amount === "1" && !parent.isValidCustomAmount() ) ||
+			( parent.data.tos_enabled === 1 && !parent.isValidTos() ) ||
+			!parent.isValidTotal()
 		) {
 			enable_actions = false;
 		}
@@ -155,7 +155,7 @@ var ppecHandler = function( data ) {
 				jQuery( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ).change( parent.validateOrder );
 			}
 			if ( parent.data.custom_amount === "1" ) {
-				jQuery( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ).change( parent.validateOrder);
+				jQuery( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ).change( parent.validateOrder );
 			}
 			parent.data.orig_price = parseFloat( parent.data.price );
 			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio' ).change( function() {
@@ -265,7 +265,7 @@ var ppecHandler = function( data ) {
 				errInput.trigger( 'change' );
 			}
 
-			if ( ! parent.data.total ) {
+			if ( !parent.data.total ) {
 				parent.processPayment( {}, 'wpec_process_empty_payment' );
 			}
 		},

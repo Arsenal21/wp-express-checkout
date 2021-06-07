@@ -114,7 +114,9 @@ None
 
 == Changelog ==
 
-= WIP since v1.9.6 to 2021-05-24 =
+= WIP since v1.9.6 to 2021-06-07 =
+* load PayPal script asynchronously with a trigger for loading buttons.
+* Added parameter $mode to WPEC\PayPal\Client methods
 * Process orders with 0 total.
 * Added checkbox to the Products list
 * new usage video updated in the readme file
