@@ -114,7 +114,8 @@ None
 
 == Changelog ==
 
-= WIP since v1.9.6 to 2021-06-07 =
+= WIP since v1.9.6 to 2021-06-08 =
+* Added hooks 'wpec_settings_tabs' and wpec_settings_tab_{$action}" for using in addons.
 * load PayPal script asynchronously with a trigger for loading buttons.
 * Added parameter $mode to WPEC\PayPal\Client methods
 * Process orders with 0 total.
