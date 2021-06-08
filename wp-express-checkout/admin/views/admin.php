@@ -37,11 +37,16 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	<?php
 	$wpec_admin = WPEC_Admin::get_instance();
 
-	$wpec_plugin_tabs = array(
+	/**
+	 * Filters the plugin settings tabs
+	 *
+	 * @param array $tabs An array of settings tabs titles keyed with the tab slug.
+	 */
+	$wpec_plugin_tabs = apply_filters( 'wpec_settings_tabs', array(
 		'ppec-settings-page'                          => __( 'General Settings', 'wp-express-checkout' ),
 		'ppec-settings-page&action=email-settings'    => __( 'Email Settings', 'wp-express-checkout' ),
 		'ppec-settings-page&action=advanced-settings' => __( 'Advanced Settings', 'wp-express-checkout' ),
-	);
+	) );
 
 	$current = "";
 	if ( isset( $_GET['page'] ) ) {
@@ -130,7 +135,8 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
 				<?php
 				if ( isset( $_GET['action'] ) ) {
-					switch ( $_GET['action'] ) {
+					$action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : '';
+					switch ( $action ) {
 						case 'email-settings':
 							$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-emails' );
 							echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-emails' ) . "' />";
@@ -138,6 +144,13 @@ if ( ! current_user_can( 'manage_options' ) ) {
 						case 'advanced-settings':
 							$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-advanced' );
 							echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-advanced' ) . "' />";
+							break;
+						default:
+							/**
+							 * Fires on the custom settings tab.
+							 * Dynamic portion of the hook name refers to current tab slug (action).
+							 */
+							do_action( "wpec_settings_tab_{$action}" );
 							break;
 					}
 				} else {
