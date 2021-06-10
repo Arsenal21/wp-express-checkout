@@ -114,7 +114,11 @@ None
 
 == Changelog ==
 
-= WIP since v1.9.6 to 2021-06-08 =
+= WIP since v1.9.6 to 2021-06-10 =
+* Do not show TOS error on page load
+* Save and validate product price only for One Time payment type.
+* Changed default value for Button Text optoion from "Buy Now" to "Pay"
+* Triggering wpec_paypal_sdk_loaded event not early than jQuery ready. Fixes issue when event triggered before callback registered and buttons don't appear.
 * Added hooks 'wpec_settings_tabs' and wpec_settings_tab_{$action}" for using in addons.
 * load PayPal script asynchronously with a trigger for loading buttons.
 * Added parameter $mode to WPEC\PayPal\Client methods
