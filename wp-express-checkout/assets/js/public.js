@@ -37,7 +37,7 @@ var ppecHandler = function( data ) {
 		return ret;
 	};
 
-	this.isValidTos = function() {
+	this.isValidTos = function( hide_errors ) {
 		var enable_actions = false;
 		var tos_input = jQuery( '#wpec-tos-' + parent.data.id );
 		var errMsgCont = jQuery( '.wpec_product_tos_input_container' ).find( '.wp-ppec-form-error-msg' );
@@ -47,7 +47,7 @@ var ppecHandler = function( data ) {
 			enable_actions = true;
 			tos_input.removeClass( 'hasError' );
 			errMsgCont.fadeOut( 'fast' );
-		} else {
+		} else if ( !hide_errors ) {
 			tos_input.addClass( 'hasError' );
 			errMsgCont.html( errMsg );
 			errMsgCont.fadeIn( 'slow' );
@@ -117,13 +117,13 @@ var ppecHandler = function( data ) {
 
 	this.clientVars[ this.data.env ] = this.data.client_id;
 
-	this.validateOrder = function() {
+	this.validateOrder = function( e, hide_errors ) {
 		var enable_actions = true;
-
+		hide_errors = ( typeof hide_errors !== 'undefined' ) ? hide_errors : false;
 		if (
 			( parent.data.custom_quantity === "1" && !parent.isValidCustomQuantity() ) ||
 			( parent.data.custom_amount === "1" && !parent.isValidCustomAmount() ) ||
-			( parent.data.tos_enabled === 1 && !parent.isValidTos() ) ||
+			( parent.data.tos_enabled === 1 && !parent.isValidTos( hide_errors ) ) ||
 			!parent.isValidTotal()
 		) {
 			enable_actions = false;
@@ -248,7 +248,7 @@ var ppecHandler = function( data ) {
 				}
 			} );
 
-			parent.validateOrder();
+			parent.validateOrder( null, true );
 
 			if ( parent.data.errors ) {
 				var errorEl = jQuery( '<div class="wp-ppec-form-error-msg">' + parent.data.errors + '</div>' );
@@ -469,7 +469,7 @@ jQuery( function( $ ) {
 	function toggleModal( modalId ) {
 		modalId = modalId ? modalId : openModalId;
 		openModalId = modalId;
-		const modal = document.getElementById( modalId );
+		var modal = document.getElementById( modalId );
 		modal.classList.toggle( 'wpec-opacity-0' );
 		modal.classList.toggle( 'wpec-pointer-events-none' );
 	}

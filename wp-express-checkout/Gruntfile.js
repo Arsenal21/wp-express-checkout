@@ -70,8 +70,7 @@ module.exports = function(grunt) {
 
 	// js task to run 'grunt js'
 	grunt.registerTask( 'js', [
-		'uglify:public',
-		'uglify:admin',
+		'uglify',
 		'jsbeautifier'
 	]);
 
