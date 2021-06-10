@@ -167,7 +167,7 @@ var ppecHandler = function( data ) {
 					}
 					parent.data.variations.applied[ grpId ] = varId;
 					parent.data.price = parent.applyVariations( parent.data.orig_price );
-					parent.validateOrder();
+					parent.validateOrder( null, true );
 				}
 			} );
 			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio:checked' ).change();
