@@ -135,7 +135,7 @@ class WPEC_Main {
 			script.async = true;
 			script.src = '<?php echo esc_url_raw( $script_url ); ?>';
 			script.onload = function() {
-				jQuery( document ).trigger( 'wpec_paypal_sdk_loaded' );
+				jQuery( function( $ ) { $( document ).trigger( 'wpec_paypal_sdk_loaded' ) } );
 			};
 			document.getElementsByTagName( 'head' )[0].appendChild( script );
 		</script>
