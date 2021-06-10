@@ -314,7 +314,7 @@ class WPEC_Main {
 			'thank_you_url'        => '',
 			'shipping'             => '',
 			'tax'                  => '',
-			'button_text'          => __( 'Buy Now', 'wp-express-checkout' ),
+			'button_text'          => __( 'Pay', 'wp-express-checkout' ),
 			'use_modal'            => 1,
 			'btn_shape'            => 'pill',
 			'btn_color'            => 'gold',
