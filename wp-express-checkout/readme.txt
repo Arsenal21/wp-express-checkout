@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.7
-Stable tag: 1.9.6
+Stable tag: 1.9.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -114,20 +114,18 @@ None
 
 == Changelog ==
 
-= WIP since v1.9.6 to 2021-06-10 =
-* Do not show TOS error on page load
-* Save and validate product price only for One Time payment type.
-* Changed default value for Button Text optoion from "Buy Now" to "Pay"
+= 1.9.7 =
 * Triggering wpec_paypal_sdk_loaded event not early than jQuery ready. Fixes issue when event triggered before callback registered and buttons don't appear.
 * Added hooks 'wpec_settings_tabs' and wpec_settings_tab_{$action}" for using in addons.
 * load PayPal script asynchronously with a trigger for loading buttons.
 * Added parameter $mode to WPEC\PayPal\Client methods
+* Do not show TOS error on page load
+* Save and validate product price only for One Time payment type.
+* Changed default value for Button Text optoion from "Buy Now" to "Pay"
 * Process orders with 0 total.
 * Added checkbox to the Products list
-* new usage video updated in the readme file
+* New usage video updated in the readme file
 * readme file updated with new checkout demonstration video
-
-= END WIP =
 
 = 1.9.6 =
 * The billing address and shipping address is shown (if available) on the order page or an order.
