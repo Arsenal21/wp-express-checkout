@@ -1,5 +1,5 @@
 === WP Express Checkout ===
-Contributors: Tips and Tricks HQ, dikiy_forester, alexanderfoxc, mbrsolution, Chanel Stone, Korin Iverson
+Contributors: Tips and Tricks HQ, dikiy_forester, alexanderfoxc, mbrsolution
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
