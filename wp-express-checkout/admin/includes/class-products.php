@@ -113,6 +113,7 @@ class PPECProducts {
 	}
 
 	function manage_custom_columns( $column, $post_id ) {
+		$main = WPEC_Main::get_instance();
 		switch ( $column ) {
 			case 'id':
 				echo $post_id;
@@ -133,13 +134,25 @@ class PPECProducts {
 				<?php
 				break;
 			case 'price':
-				$price = get_post_meta( $post_id, 'ppec_product_price', true );
-				if ( $price ) {
-					$output = $price;
-				} else {
-					$output = __( 'Invalid', 'wp-express-checkout' );
-				}
-				$output = apply_filters( 'ppec_products_table_price_column', $output, $price, $post_id );
+				$price_args = array_merge(
+					array(
+						'price'           => 0,
+						'shipping'        => 0,
+						'tax'             => 0,
+						'quantity'        => 1,
+					),
+					array(
+						'name'            => get_the_title( $post_id ),
+						'price'           => get_post_meta( $post_id, 'ppec_product_price', true ),
+						'shipping'        => ( '' === get_post_meta( $post_id, 'wpec_product_shipping', true ) ) ? $main->get_setting( 'shipping' ) : get_post_meta( $post_id, 'wpec_product_shipping', true ),
+						'tax'             => ( '' === get_post_meta( $post_id, 'wpec_product_tax', true ) ) ? $main->get_setting( 'tax' ) : get_post_meta( $post_id, 'wpec_product_tax', true ),
+						'quantity'        => get_post_meta( $post_id, 'ppec_product_quantity', true ),
+						'product_id'      => $post_id,
+					)
+				);
+				$wpec_shortcode = WPECShortcode::get_instance();
+				$output = $wpec_shortcode->generate_price_tag( $price_args );
+				$output = apply_filters( 'ppec_products_table_price_column', $output, $price_args, $post_id );
 				echo $output;
 				break;
 			case 'shortcode':

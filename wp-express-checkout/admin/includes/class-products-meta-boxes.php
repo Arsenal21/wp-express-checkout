@@ -504,18 +504,10 @@ jQuery(document).ready(function($) {
 		update_post_meta( $post_id, 'wpec_product_thumbnail', $thumb_url );
 
 		// price.
-		if ( 'one_time' === $product_type ) {
-			$price = filter_input( INPUT_POST, 'ppec_product_price', FILTER_SANITIZE_STRING );
-			$price = floatval( $price );
-			if ( ! empty( $price ) || $hide_amount_input ) {
-				// price seems to be valid, let's save it.
-				update_post_meta( $post_id, 'ppec_product_price', $price );
-			} else {
-				// invalid price.
-				$text = __( 'Invalid product price.', 'wp-express-checkout' );
-				$this->WPECAdmin->add_admin_notice( $text, 'error' );
-			}
-		}
+		$price = filter_input( INPUT_POST, 'ppec_product_price', FILTER_SANITIZE_STRING );
+		$price = ! empty( $price ) ? floatval( $price ) : 0;
+
+		update_post_meta( $post_id, 'ppec_product_price', $price );
 
 		// allow custom amount.
 		$custom_amount = filter_input( INPUT_POST, 'wpec_product_custom_amount', FILTER_SANITIZE_NUMBER_INT );
