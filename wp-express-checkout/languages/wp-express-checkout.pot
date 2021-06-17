@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Express Checkout 1.9.6\n"
+"Project-Id-Version: WP Express Checkout 1.9.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-10 08:39:48+00:00\n"
+"POT-Creation-Date: 2021-06-17 09:30:43+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -284,28 +284,28 @@ msgid "The button text for the button that will trigger the modal/popup window."
 msgstr ""
 
 #: admin/class-wpec-admin.php:265
-#: admin/includes/class-products-meta-boxes.php:382
+#: admin/includes/class-products-meta-boxes.php:388
 msgid "Button Type"
 msgstr ""
 
 #: admin/class-wpec-admin.php:265
-#: admin/includes/class-products-meta-boxes.php:388
+#: admin/includes/class-products-meta-boxes.php:394
 msgid "Checkout"
 msgstr ""
 
 #: admin/class-wpec-admin.php:265
-#: admin/includes/class-products-meta-boxes.php:389
+#: admin/includes/class-products-meta-boxes.php:395
 #: public/class-wpec-main.php:317
 msgid "Pay"
 msgstr ""
 
 #: admin/class-wpec-admin.php:265
-#: admin/includes/class-products-meta-boxes.php:390
+#: admin/includes/class-products-meta-boxes.php:396
 msgid "PayPal"
 msgstr ""
 
 #: admin/class-wpec-admin.php:265
-#: admin/includes/class-products-meta-boxes.php:391
+#: admin/includes/class-products-meta-boxes.php:397
 msgid "Buy Now"
 msgstr ""
 
@@ -707,7 +707,7 @@ msgstr ""
 
 #: admin/includes/class-admin-order-summary-table.php:44
 #: includes/class-order-summary-table.php:127
-#: public/includes/class-shortcode-ppec.php:292
+#: public/includes/class-shortcode-ppec.php:293
 #. translators: quantity
 msgid "x %s"
 msgstr ""
@@ -1345,52 +1345,58 @@ msgstr ""
 msgid "Use this shortcode to display button for your product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:381
-msgid "Button Options"
+#: admin/includes/class-products-meta-boxes.php:382
+msgid "Button Text"
 msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:385
+msgid ""
+"Specify text to be displayed on the button. Leave it blank to use button "
+"text specified on settings page."
+msgstr ""
+
+#: admin/includes/class-products-meta-boxes.php:387
+msgid "Button Options"
+msgstr ""
+
+#: admin/includes/class-products-meta-boxes.php:391
 msgid "-- Default --"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:399
+#: admin/includes/class-products-meta-boxes.php:405
 msgid ""
 "Select a button type for this product. By default, it will use the type "
 "specified in the General settings of this plugin."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:407
+#: admin/includes/class-products-meta-boxes.php:413
 msgid "Select how Coupons should be handled for this product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:408
+#: admin/includes/class-products-meta-boxes.php:414
 msgid "Use Global Setting"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:409
+#: admin/includes/class-products-meta-boxes.php:415
 msgid "Enabled"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:410
+#: admin/includes/class-products-meta-boxes.php:416
 msgid "Disabled"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:418
+#: admin/includes/class-products-meta-boxes.php:424
 msgid "None"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:424
+#: admin/includes/class-products-meta-boxes.php:430
 msgid ""
 "If you want this product to be connected to a membership level then select "
 "the membership Level here."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:458
+#: admin/includes/class-products-meta-boxes.php:464
 msgid "Please specify product name."
-msgstr ""
-
-#: admin/includes/class-products-meta-boxes.php:515
-msgid "Invalid product price."
 msgstr ""
 
 #. Plugin Name of the plugin/theme
@@ -1409,7 +1415,7 @@ msgstr ""
 msgid "Add New Product"
 msgstr ""
 
-#: admin/includes/class-products.php:38 admin/includes/class-products.php:126
+#: admin/includes/class-products.php:38 admin/includes/class-products.php:127
 msgid "Edit Product"
 msgstr ""
 
@@ -1456,10 +1462,6 @@ msgstr ""
 #: admin/includes/class-products.php:106
 #: includes/class-wpec-utility-functions.php:215
 msgid "Product Name"
-msgstr ""
-
-#: admin/includes/class-products.php:140
-msgid "Invalid"
 msgstr ""
 
 #: admin/views/admin.php:46
@@ -1608,7 +1610,7 @@ msgid "Error! Thank you page URL configuration is wrong in the plugin settings."
 msgstr ""
 
 #: includes/class-wpec-process-ipn.php:297
-#: public/includes/class-shortcode-ppec.php:366
+#: public/includes/class-shortcode-ppec.php:367
 msgid "Payment is not approved. Status: %s"
 msgstr ""
 
@@ -1697,79 +1699,79 @@ msgstr ""
 msgid "Can't find product with ID %s"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:218
+#: public/includes/class-shortcode-ppec.php:219
 msgid "Please enter %s Client ID in the settings."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:305
+#: public/includes/class-shortcode-ppec.php:306
 #. translators: tax amount
 msgid "%s (tax)"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:308
+#: public/includes/class-shortcode-ppec.php:309
 #. translators: tax percent
 msgid "%s%% tax"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:316
+#: public/includes/class-shortcode-ppec.php:317
 #. translators: tax + shipping amount
 msgid "+ %s (shipping)"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:319
+#: public/includes/class-shortcode-ppec.php:320
 #. translators: shipping amount
 msgid "%s (shipping)"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:325
+#: public/includes/class-shortcode-ppec.php:326
 msgid "Total:"
-msgstr ""
-
-#: public/includes/class-shortcode-ppec.php:344
-#: public/includes/class-shortcode-ppec.php:351
-msgid ""
-"This page is used to show the transaction result after a customer makes a "
-"payment."
 msgstr ""
 
 #: public/includes/class-shortcode-ppec.php:345
 #: public/includes/class-shortcode-ppec.php:352
 msgid ""
+"This page is used to show the transaction result after a customer makes a "
+"payment."
+msgstr ""
+
+#: public/includes/class-shortcode-ppec.php:346
+#: public/includes/class-shortcode-ppec.php:353
+msgid ""
 "It will dynamically show the order details to the customers when they are "
 "redirected here after a payment. Do not access this page directly."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:346
+#: public/includes/class-shortcode-ppec.php:347
 msgid "Error! Order ID value is missing in the URL."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:353
+#: public/includes/class-shortcode-ppec.php:354
 msgid "Error! Nonce value is missing in the URL or Nonce verification failed."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:362
+#: public/includes/class-shortcode-ppec.php:363
 msgid "Error! Incorrect order ID. Could not find that order in the orders table."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:371
+#: public/includes/class-shortcode-ppec.php:372
 msgid "Thank you for your purchase."
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:373
+#: public/includes/class-shortcode-ppec.php:374
 msgid "Your purchase details are below:"
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:375
+#: public/includes/class-shortcode-ppec.php:376
 msgid "Transaction ID: "
 msgstr ""
 
-#: public/includes/class-shortcode-ppec.php:382
+#: public/includes/class-shortcode-ppec.php:383
 msgid "Download link"
 msgid_plural "Download links"
 msgstr[0] ""
 msgstr[1] ""
 
-#: public/includes/class-shortcode-ppec.php:383
+#: public/includes/class-shortcode-ppec.php:384
 msgid "Click here to download"
 msgstr ""
 

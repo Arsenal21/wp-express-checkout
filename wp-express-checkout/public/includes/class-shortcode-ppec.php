@@ -73,6 +73,7 @@ class WPECShortcode {
 		$shipping        = get_post_meta( $post_id, 'wpec_product_shipping', true );
 		$shipping_enable = get_post_meta( $post_id, 'wpec_product_shipping_enable', true );
 		$tax             = get_post_meta( $post_id, 'wpec_product_tax', true );
+		$button_text     = get_post_meta( $post_id, 'wpec_product_button_text', true );
 
 		$coupons_enabled = get_post_meta( $post_id, 'wpec_product_coupons_setting', true );
 
@@ -123,7 +124,7 @@ class WPECShortcode {
 				'btn_layout'      => $this->ppdg->get_setting( 'btn_layout' ) !== false ? $this->ppdg->get_setting( 'btn_layout' ) : 'horizontal',
 				'btn_color'       => $this->ppdg->get_setting( 'btn_color' ) !== false ? $this->ppdg->get_setting( 'btn_color' ) : 'gold',
 				'coupons_enabled' => $this->ppdg->get_setting( 'coupons_enabled' ),
-				'button_text'     => $this->ppdg->get_setting( 'button_text' ),
+				'button_text'     => $button_text ? $button_text : $this->ppdg->get_setting( 'button_text' ),
 				'use_modal'       => ! isset( $atts['modal'] ) ? $this->ppdg->get_setting( 'use_modal' ) : $atts['modal'],
 			),
 			$args

@@ -376,8 +376,14 @@ jQuery(document).ready(function($) {
 
 	public function display_appearance_meta_box( $post ) {
 		$button_type = get_post_meta( $post->ID, 'wpec_product_button_type', true );
+		$button_txt = get_post_meta( $post->ID, 'wpec_product_button_text', true );
 		?>
 		<fieldset>
+			<label><?php _e( 'Button Text',  'wp-express-checkout' ); ?></label>
+			<br />
+			<input type="text" name="wpec_product_button_text" size="50" value="<?php echo esc_attr( $button_txt ); ?>">
+			<p class="description"><?php _e( 'Specify text to be displayed on the button. Leave it blank to use button text specified on settings page.',  'wp-express-checkout' ); ?></p>
+
 			<legend><?php esc_html_e( 'Button Options', 'wp-express-checkout' ); ?></legend>
 			<label><?php _e( 'Button Type', 'wp-express-checkout' ); ?></label>
 			<br />
@@ -534,6 +540,9 @@ jQuery(document).ready(function($) {
 		$tax = floatval( $tax );
 		$tax = empty( $tax ) ? '' : $tax;
 		update_post_meta( $post_id, 'wpec_product_tax', $tax );
+
+		$button_text = filter_input( INPUT_POST, 'wpec_product_button_text', FILTER_SANITIZE_STRING );
+		update_post_meta( $post_id, 'wpec_product_button_text', sanitize_text_field( $button_text ) );
 
 		$button_type = filter_input( INPUT_POST, 'wpec_product_button_type', FILTER_SANITIZE_STRING );
 		update_post_meta( $post_id, 'wpec_product_button_type', sanitize_text_field( $button_type ) );
