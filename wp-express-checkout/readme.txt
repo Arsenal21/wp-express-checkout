@@ -114,6 +114,17 @@ None
 
 == Changelog ==
 
+= WIP since 1.9.7A to 2021-06-17 =
+* Added Procuct option "Button Text"
+* updating readme
+* Save empty Price as 0. Generate Price tag on the Products list in admin dashboard
+* updating readme file 4
+* updating readme file 3
+* updating readme file 2
+* updating readme file
+
+= END WIP =
+
 = 1.9.7 =
 * Triggering wpec_paypal_sdk_loaded event not early than jQuery ready. Fixes issue when event triggered before callback registered and buttons don't appear.
 * Added hooks 'wpec_settings_tabs' and wpec_settings_tab_{$action}" for using in addons.
