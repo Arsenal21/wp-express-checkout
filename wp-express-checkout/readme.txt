@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.7
-Stable tag: 1.9.7
+Stable tag: 1.9.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -114,14 +114,11 @@ None
 
 == Changelog ==
 
-= WIP since 1.9.7A to 2021-06-17 =
-* Added Procuct option "Button Text"
-* updating readme
-* Save empty Price as 0. Generate Price tag on the Products list in admin dashboard
-* updating readme file 4
-* updating readme file 3
-* updating readme file 2
-* updating readme file
+= 1.9.8 =
+* Added Product option "Open Modal Button Text".
+* The open modal button text can be used to customize the button text that triggers the modal/popup window.
+* Save empty Price as 0. Generate Price tag on the Products list in admin dashboard.
+* updated the help text of the "Open Modal Button Text" field.
 
 = END WIP =
 

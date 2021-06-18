@@ -379,10 +379,10 @@ jQuery(document).ready(function($) {
 		$button_txt = get_post_meta( $post->ID, 'wpec_product_button_text', true );
 		?>
 		<fieldset>
-			<label><?php _e( 'Button Text',  'wp-express-checkout' ); ?></label>
+			<label><?php _e( 'Open Modal Button Text',  'wp-express-checkout' ); ?></label>
 			<br />
 			<input type="text" name="wpec_product_button_text" size="50" value="<?php echo esc_attr( $button_txt ); ?>">
-			<p class="description"><?php _e( 'Specify text to be displayed on the button. Leave it blank to use button text specified on settings page.',  'wp-express-checkout' ); ?></p>
+			<p class="description"><?php _e( 'Specify the text to be displayed on the button that triggers the payment popup/modal window. Leave it blank to use the text specified in General Settings page.',  'wp-express-checkout' ); ?></p>
 
 			<legend><?php esc_html_e( 'Button Options', 'wp-express-checkout' ); ?></legend>
 			<label><?php _e( 'Button Type', 'wp-express-checkout' ); ?></label>
@@ -402,7 +402,7 @@ jQuery(document).ready(function($) {
 				}
 				?>
 			</select>
-			<p class="description"><?php esc_html_e( 'Select a button type for this product. By default, it will use the type specified in the General settings of this plugin.', 'wp-express-checkout' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Select a button type/style for the paypal payment button for this product. By default, it will use the type specified in the General settings of this plugin.', 'wp-express-checkout' ); ?></p>
 		</fieldset>
 		<?php
 	}
