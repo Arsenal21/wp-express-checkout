@@ -120,8 +120,6 @@ None
 * Save empty Price as 0. Generate Price tag on the Products list in admin dashboard.
 * updated the help text of the "Open Modal Button Text" field.
 
-= END WIP =
-
 = 1.9.7 =
 * Triggering wpec_paypal_sdk_loaded event not early than jQuery ready. Fixes issue when event triggered before callback registered and buttons don't appear.
 * Added hooks 'wpec_settings_tabs' and wpec_settings_tab_{$action}" for using in addons.
