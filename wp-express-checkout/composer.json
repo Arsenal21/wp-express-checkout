@@ -4,31 +4,9 @@
 	},
 	"autoload": {
 		"classmap": [
-			"includes/class-wpec-utility-functions.php",
-			"includes/class-wpec-debug-logger.php",
-			"includes/class-wpec-init-time-tasks.php",
-			"includes/class-wpec-process-ipn.php",
-			"includes/class-wpec-process-ipn-free.php",
-			"includes/class-wpec-view-download.php",
-			"includes/class-wpec-integrations.php",
-			"includes/class-wpec-post-type-content-handler.php",
-			"includes/class-order.php",
-			"includes/class-order-summary-table.php",
-			"includes/paypal-client/class-client.php",
-			"includes/paypal-client/class-request.php",
-			"public/class-wpec-main.php",
-			"public/includes/class-shortcode-ppec.php",
-			"admin/class-wpec-admin.php",
-			"admin/views/blocks.php",
-			"admin/includes/class-products.php",
-			"admin/includes/class-order.php",
-			"admin/includes/class-coupons.php",
-			"admin/includes/class-variations.php",
-			"admin/includes/class-order-list.php",
-			"admin/includes/class-orders-meta-boxes.php",
-			"admin/includes/class-products-meta-boxes.php",
-			"admin/includes/class-coupons-list-table.php",
-			"admin/includes/class-admin-order-summary-table.php"
+			"includes**",
+			"public**",
+			"admin**"
 		]
 	}
 }

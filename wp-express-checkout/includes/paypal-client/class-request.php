@@ -6,7 +6,7 @@
  * @since 1.9.3
  */
 
-namespace WPEC\PayPal;
+namespace WP_Express_Checkout\PayPal;
 
 use PayPalHttp\HttpRequest;
 
