@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.7
-Stable tag: 1.9.8
+Stable tag: 1.9.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,6 +113,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 1.9.9 =
+* Renamed the "Show in a Modal Window" field to "Show in a Popup/Modal Window" to make it easier to understand.
+* Renamed the "Open Modal Button Text" field to "Popup/Modal Trigger Button Text" make it easier to understand.
 
 = 1.9.8 =
 * Added Product option "Open Modal Button Text".
