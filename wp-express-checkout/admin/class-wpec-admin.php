@@ -203,7 +203,7 @@ class WPEC_Admin {
 			array(
 				'field' => 'thank_you_url',
 				'type'  => 'text',
-				'desc'  => sprintf( __( 'This is the thank you page. This page is automatically created for you when you install the plugin. Do not delete this page from the pages menu of your site. The plugin will send the customers to this page after the payment.', 'wp-express-checkout' ) ),
+				'desc'  => sprintf( __( 'This is the thank you page. This page is automatically created for you when you install the plugin. Do not delete this page from the pages menu of your site. The plugin will send the customers to this page after the payment. If you have accidentally deleted this page, then re-create it using <a href="https://wp-express-checkout.com/recreating-the-required-express-checkout-plugin-pages/" target="_blank">this documentation</a>.', 'wp-express-checkout' ) ),
 				'size'  => 100,
 			)
 		);
