@@ -39,8 +39,6 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'PPECProducts' => __DIR__ . '/../..' . '/admin/includes/class-products.php',
         'PPECProductsMetaboxes' => __DIR__ . '/../..' . '/admin/includes/class-products-meta-boxes.php',
         'WPECShortcode' => __DIR__ . '/../..' . '/public/includes/class-shortcode-ppec.php',
-        'WPEC\\PayPal\\Client' => __DIR__ . '/../..' . '/includes/paypal-client/class-client.php',
-        'WPEC\\PayPal\\Request' => __DIR__ . '/../..' . '/includes/paypal-client/class-request.php',
         'WPEC_Admin' => __DIR__ . '/../..' . '/admin/class-wpec-admin.php',
         'WPEC_Admin_Order_Summary_Table' => __DIR__ . '/../..' . '/admin/includes/class-admin-order-summary-table.php',
         'WPEC_Blocks' => __DIR__ . '/../..' . '/admin/views/blocks.php',
@@ -60,6 +58,8 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WPEC_Utility_Functions' => __DIR__ . '/../..' . '/includes/class-wpec-utility-functions.php',
         'WPEC_Variations' => __DIR__ . '/../..' . '/admin/includes/class-variations.php',
         'WPEC_View_Download' => __DIR__ . '/../..' . '/includes/class-wpec-view-download.php',
+        'WP_Express_Checkout\\PayPal\\Client' => __DIR__ . '/../..' . '/includes/paypal-client/class-client.php',
+        'WP_Express_Checkout\\PayPal\\Request' => __DIR__ . '/../..' . '/includes/paypal-client/class-request.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

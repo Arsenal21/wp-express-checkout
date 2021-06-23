@@ -11,8 +11,6 @@ return array(
     'PPECProducts' => $baseDir . '/admin/includes/class-products.php',
     'PPECProductsMetaboxes' => $baseDir . '/admin/includes/class-products-meta-boxes.php',
     'WPECShortcode' => $baseDir . '/public/includes/class-shortcode-ppec.php',
-    'WPEC\\PayPal\\Client' => $baseDir . '/includes/paypal-client/class-client.php',
-    'WPEC\\PayPal\\Request' => $baseDir . '/includes/paypal-client/class-request.php',
     'WPEC_Admin' => $baseDir . '/admin/class-wpec-admin.php',
     'WPEC_Admin_Order_Summary_Table' => $baseDir . '/admin/includes/class-admin-order-summary-table.php',
     'WPEC_Blocks' => $baseDir . '/admin/views/blocks.php',
@@ -32,4 +30,6 @@ return array(
     'WPEC_Utility_Functions' => $baseDir . '/includes/class-wpec-utility-functions.php',
     'WPEC_Variations' => $baseDir . '/admin/includes/class-variations.php',
     'WPEC_View_Download' => $baseDir . '/includes/class-wpec-view-download.php',
+    'WP_Express_Checkout\\PayPal\\Client' => $baseDir . '/includes/paypal-client/class-client.php',
+    'WP_Express_Checkout\\PayPal\\Request' => $baseDir . '/includes/paypal-client/class-request.php',
 );
