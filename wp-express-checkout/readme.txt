@@ -115,6 +115,9 @@ None
 == Changelog ==
 
 = WIP since 1.9.9 to 2021-06-23 =
+* Added column 'PayPal Transaction ID' to the Orders list. Added ability to search by PayPal Transaction ID. Added order meta field wpec_order_resource_id to use instead transaction_id item of wpec_order_data meta field. #26
+* Added 'Thank You Page URL' Product option and shortcode attribute 'thank_you_url' to override global setting. Closes #25
+* Updated readme and POT file
 * Updated autoloader
 * improved the help text with a link to documentation explaining what to do if the thank you page has been deleted accidentally
 * Replace namespace WPEC with WP_Express_Checkout for better stability
