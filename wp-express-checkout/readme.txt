@@ -114,6 +114,13 @@ None
 
 == Changelog ==
 
+= WIP since 1.9.9 to 2021-06-23 =
+* Updated autoloader
+* improved the help text with a link to documentation explaining what to do if the thank you page has been deleted accidentally
+* Replace namespace WPEC with WP_Express_Checkout for better stability
+
+= END WIP =
+
 = 1.9.9 =
 * Renamed the "Show in a Modal Window" field to "Show in a Popup/Modal Window" to make it easier to understand.
 * Renamed the "Open Modal Button Text" field to "Popup/Modal Trigger Button Text" make it easier to understand.
