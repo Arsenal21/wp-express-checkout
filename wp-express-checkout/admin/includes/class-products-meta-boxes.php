@@ -379,7 +379,7 @@ jQuery(document).ready(function($) {
 		$button_txt = get_post_meta( $post->ID, 'wpec_product_button_text', true );
 		?>
 		<fieldset>
-			<label><?php _e( 'Open Modal Button Text',  'wp-express-checkout' ); ?></label>
+			<label><?php _e( 'Popup/Modal Trigger Button Text',  'wp-express-checkout' ); ?></label>
 			<br />
 			<input type="text" name="wpec_product_button_text" size="50" value="<?php echo esc_attr( $button_txt ); ?>">
 			<p class="description"><?php _e( 'Specify the text to be displayed on the button that triggers the payment popup/modal window. Leave it blank to use the text specified in General Settings page.',  'wp-express-checkout' ); ?></p>

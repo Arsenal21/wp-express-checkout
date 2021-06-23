@@ -203,7 +203,7 @@ class WPEC_Admin {
 			array(
 				'field' => 'thank_you_url',
 				'type'  => 'text',
-				'desc'  => sprintf( __( 'This is the thank you page. This page is automatically created for you when you install the plugin. Do not delete this page from the pages menu of your site. The plugin will send the customers to this page after the payment.', 'wp-express-checkout' ) ),
+				'desc'  => sprintf( __( 'This is the thank you page. This page is automatically created for you when you install the plugin. Do not delete this page from the pages menu of your site. The plugin will send the customers to this page after the payment. If you have accidentally deleted this page, then re-create it using <a href="https://wp-express-checkout.com/recreating-the-required-express-checkout-plugin-pages/" target="_blank">this documentation</a>.', 'wp-express-checkout' ) ),
 				'size'  => 100,
 			)
 		);
@@ -244,20 +244,20 @@ class WPEC_Admin {
 		);
 
 		// checkout form section
-		add_settings_field( 'use_modal', __( 'Show in a Modal Window', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-form-section',
+		add_settings_field( 'use_modal', __( 'Show in a Popup/Modal Window', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-form-section',
 			array(
 				'field' => 'use_modal',
 				'type'  => 'checkbox',
-				'desc'  => __( 'Whether to display the checkout form in a dedicated modal window or on the page.', 'wp-express-checkout' ),
+				'desc'  => __( 'Enable it to display the checkout form in a dedicated popup/modal window (instead of on the page).', 'wp-express-checkout' ),
 			)
 		);
 
-		add_settings_field( 'button_text', __( 'Open Modal Button Text', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-form-section',
+		add_settings_field( 'button_text', __( 'Popup/Modal Trigger Button Text', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-form-section',
 			array(
 				'field' => 'button_text',
 				'type'  => 'text',
 				'size'  => 20,
-				'desc'  => __( 'The button text for the button that will trigger the modal/popup window.', 'wp-express-checkout' ),
+				'desc'  => __( 'The button text for the button that will trigger the popup/modal window.', 'wp-express-checkout' ),
 			)
 		);
 

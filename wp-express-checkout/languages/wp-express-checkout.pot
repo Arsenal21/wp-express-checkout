@@ -266,7 +266,7 @@ msgid "Enter your PayPal Secret Key for sandbox mode."
 msgstr ""
 
 #: admin/class-wpec-admin.php:247
-msgid "Show in a Modal Window"
+msgid "Show in a Popup/Modal Window"
 msgstr ""
 
 #: admin/class-wpec-admin.php:251
@@ -276,7 +276,7 @@ msgid ""
 msgstr ""
 
 #: admin/class-wpec-admin.php:255
-msgid "Open Modal Button Text"
+msgid "Popup/Modal Trigger Button Text"
 msgstr ""
 
 #: admin/class-wpec-admin.php:260
