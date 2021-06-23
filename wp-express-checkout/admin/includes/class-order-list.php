@@ -4,10 +4,15 @@
  */
 class WPEC_Order_List {
 
+	private static $search_term = false;
+
 	public static function init() {
 		add_filter( 'manage_' . OrdersWPEC::PTYPE . '_posts_columns', array( __CLASS__, 'order_manage_columns' ) );
 		add_filter( 'manage_edit-' . OrdersWPEC::PTYPE . '_sortable_columns', array( __CLASS__, 'order_manage_sortable_columns' ) );
 		add_action( 'manage_' . OrdersWPEC::PTYPE . '_posts_custom_column', array( __CLASS__, 'order_add_column_data' ), 10, 2 );
+		// handle columns sorting and searching
+		add_action( 'pre_get_posts', array( __CLASS__, 'manage_search_sort_queries' ) );
+		add_action( 'posts_results', array( __CLASS__, 'set_search_term' ), 10, 2 );
 	}
 
 	/**
@@ -22,6 +27,7 @@ class WPEC_Order_List {
 		unset( $columns['title'] );
 
 		$columns['order']        = __( 'Order', 'wp-express-checkout' );
+		$columns['trans_id']     = __( 'PayPal Transaction ID', 'wp-express-checkout' );
 		$columns['title']        = __( 'Description', 'wp-express-checkout' );
 		$columns['order_author'] = __( 'Author', 'wp-express-checkout' );
 		$columns['total']        = __( 'Total', 'wp-express-checkout' );
@@ -64,11 +70,15 @@ class WPEC_Order_List {
 		switch( $column_index ){
 
 			case 'order' :
-				if ( current_user_can( 'edit_post', $order->get_ID() ) ) {
-					echo '<a href="' . get_edit_post_link( $post_id ) . '">' . $order->get_ID() . '</a>';
+				if ( current_user_can( 'edit_post', $order->get_id() ) ) {
+					echo '<a href="' . get_edit_post_link( $post_id ) . '">' . $order->get_id() . '</a>';
 				} else {
-					echo $order->get_ID();
+					echo $order->get_id();
 				}
+				break;
+
+			case 'trans_id' :
+				echo $order->get_resource_id();
 				break;
 
 			case 'order_author':
@@ -99,7 +109,7 @@ class WPEC_Order_List {
 				break;
 
 			case 'order_date':
-				$order_post = get_post( $order->get_ID() );
+				$order_post = get_post( $order->get_id() );
 				if ( '0000-00-00 00:00:00' == $order_post->post_date ) {
 					$t_time = $h_time = __( 'Unpublished', 'wp-express-checkout' );
 					$time_diff = 0;
@@ -120,6 +130,59 @@ class WPEC_Order_List {
 				break;
 		}
 
+	}
+
+	public static function set_search_term( $posts, $query ) {
+
+		if ( ! is_admin() || ( empty( $query->query['post_type'] ) || $query->query['post_type'] !== OrdersWPEC::PTYPE ) ) {
+			return $posts;
+		}
+
+		if ( ! empty( self::$search_term ) ) {
+			$query->set( 's', self::$search_term );
+			self::$search_term = false;
+		}
+		return $posts;
+	}
+
+	public static function manage_search_sort_queries( $query ) {
+
+		if ( ! is_admin() || ( empty( $query->query['post_type'] ) || $query->query['post_type'] !== OrdersWPEC::PTYPE ) ) {
+			return;
+		}
+
+		$search_term = $query->query_vars['s'];
+		if ( ! empty( $search_term ) ) {
+			$query->set( 's', '' );
+			self::$search_term = $search_term;
+			$custom_fields     = array(
+				'wpec_order_customer_email',
+				'wpec_order_resource_id',
+			);
+			$meta_query        = array( 'relation' => 'OR' );
+
+			foreach ( $custom_fields as $custom_field ) {
+				array_push(
+					$meta_query,
+					array(
+						'key'     => $custom_field,
+						'value'   => $search_term,
+						'compare' => 'LIKE',
+					)
+				);
+			}
+
+			$query->set( 'meta_query', $meta_query );
+		}
+
+		$orderby = $query->get( 'orderby' );
+		switch ( $orderby ) {
+			case 'customer':
+				$query->set( 'meta_key', 'wpec_order_customer_email' );
+				$query->set( 'orderby', 'meta_value' );
+				break;
+			// to be continue...
+		}
 	}
 
 }

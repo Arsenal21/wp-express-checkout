@@ -150,6 +150,10 @@ class OrdersWPEC {
 		if ( ! is_numeric( $order_data->post_name ) ) {
 			self::upgrade_legacy( $order );
 		}
+		// Maybe upgrade the order to version 2.0.0
+		if ( ! $order->get_resource_id() ) {
+			self::upgrade_legacy2( $order );
+		}
 
 		return $order;
 	}
@@ -194,8 +198,8 @@ class OrdersWPEC {
 
 		$order->set_currency( $data['currency'] );
 		$order->set_status( 'paid' );
+		$order->set_resource_id( $data['id'] );
 		$order->add_item( PPECProducts::$products_slug, $data['item_name'], $data['price'], $data['quantity'], $data['item_id'], true );
-		$order->add_data( 'transaction_id', $data['id'] );
 		$order->add_data( 'state', $data['state'] );
 		$order->add_data( 'payer', $user );
 
@@ -231,6 +235,19 @@ class OrdersWPEC {
 			'post_name' => $order->get_id(),
 		) );
 
+		return $order;
+	}
+
+	/**
+	 * Upgrades legacy order.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param WPEC_Order $order
+	 * @return type
+	 */
+	private static function upgrade_legacy2( $order ) {
+		$order->set_resource_id( $order->get_data( 'transaction_id' ) );
 		return $order;
 	}
 

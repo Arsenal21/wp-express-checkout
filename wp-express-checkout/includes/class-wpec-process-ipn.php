@@ -92,8 +92,8 @@ class WPEC_Process_IPN {
 		/* translators: Order title: {Quantity} {Item name} - {Status} */
 		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $this->get_transaction_status( $payment ) ) );
 		$order->set_currency( $currency );
+		$order->set_resource_id( $this->get_transaction_id( $payment ) );
 		$order->add_item( PPECProducts::$products_slug, $item_name, $price, $quantity, $item_id, true );
-		$order->add_data( 'transaction_id', $this->get_transaction_id( $payment ) );
 		$order->add_data( 'state', $this->get_transaction_status( $payment ) );
 		$order->add_data( 'payer', $payment['payer'] );
 

@@ -14,6 +14,12 @@ class WPEC_Order {
 	protected $id = 0;
 
 	/**
+	 * Order ID, defined by PayPal when Order has been created
+	 * @var string
+	 */
+	protected $resource_id = '0';
+
+	/**
 	 * Parent order id for child order
 	 * @var int
 	 */
@@ -82,6 +88,8 @@ class WPEC_Order {
 
 		$this->items = array_filter( (array) get_post_meta( $this->id, 'wpec_order_items', true ) );
 		$this->data  = array_filter( (array) get_post_meta( $this->id, 'wpec_order_data', true ) );
+
+		$this->resource_id = $this->get_meta_field( 'wpec_order_resource_id', '', $meta_fields );
 
 		$this->refresh_total();
 
@@ -448,6 +456,36 @@ class WPEC_Order {
 	 */
 	public function get_parent(){
 		return $this->parent;
+	}
+
+	/**
+	 * Retrieves the PayPal order resource ID.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return string
+	 */
+	public function get_resource_id() {
+		return $this->resource_id;
+	}
+
+	/**
+	 * Sets the PayPal order resource ID.
+	 *
+	 * @since 2.0.0
+
+	 * @param string $resource_id Resource ID used to identify the currency.
+	 * @return boolean True if resource ID was changed
+	 */
+	public function set_resource_id( $resource_id ) {
+
+		if( ! is_string( $resource_id ) ) {
+			trigger_error( 'Resource ID must be string', E_USER_WARNING );
+		}
+
+		$this->resource_id = $resource_id;
+		$this->update_meta( 'wpec_order_resource_id', $this->resource_id );
+		return true;
 	}
 
 	/**

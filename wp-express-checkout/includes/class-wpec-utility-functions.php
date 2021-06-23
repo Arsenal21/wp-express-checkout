@@ -126,7 +126,7 @@ class WPEC_Utility_Functions {
 			'last_name'       => $payer_details['name']['surname'],
 			'product_details' => $product_details,
 			'payer_email'     => $payer_details['email_address'],
-			'transaction_id'  => $order->get_data( 'transaction_id' ),
+			'transaction_id'  => $order->get_resource_id(),
 			'purchase_amt'    => $order->get_total(),
 			'purchase_date'   => date( 'Y-m-d' ),
 			'coupon_code'     => ! empty( $coupon_item['mata']['code'] ) ? $coupon_item['mata']['code'] : 0,

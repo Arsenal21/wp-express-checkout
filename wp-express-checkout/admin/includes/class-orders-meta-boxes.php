@@ -93,7 +93,7 @@ class WPEC_Orders_Metaboxes {
 				</tr>
 				<tr>
 					<th><?php _e( 'Transaction ID', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo $order->get_data( 'transaction_id' ); ?></td>
+					<td><?php echo $order->get_resource_id(); ?></td>
 				</tr>
 			</tbody>
 		</table>
