@@ -235,13 +235,15 @@ class WPEC_Process_IPN {
 
 		$res = array();
 
-		if ( wp_http_validate_url( $wpec_plugin->get_setting( 'thank_you_url' ) ) ) {
+		$thank_you_url = $trans['thank_you_url'];
+
+		if ( wp_http_validate_url( $thank_you_url ) ) {
 			$redirect_url = add_query_arg(
 				array(
 					'order_id' => $order_id,
 					'_wpnonce' => wp_create_nonce( 'thank_you_url' . $order_id ),
 				),
-				$wpec_plugin->get_setting( 'thank_you_url' )
+				$thank_you_url
 			);
 			$res['redirect_url'] = esc_url_raw( $redirect_url );
 		} else {

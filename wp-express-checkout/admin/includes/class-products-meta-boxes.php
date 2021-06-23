@@ -22,6 +22,7 @@ class PPECProductsMetaboxes {
 		add_meta_box( 'wpec_shipping_tax_meta_box', __( 'Shipping & Tax', 'wp-express-checkout' ), array( $this, 'display_shipping_tax_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
 		add_meta_box( 'ppec_upload_meta_box', __( 'Download URL', 'wp-express-checkout' ), array( $this, 'display_upload_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
 		add_meta_box( 'wpec_thumbnail_meta_box', __( 'Product Thumbnail', 'wp-express-checkout' ), array( $this, 'display_thumbnail_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_thankyou_page_meta_box', __( 'Thank You Page URL', 'wp-express-checkout' ), array( $this, 'display_thankyou_page_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
 		add_meta_box( 'ppec_shortcode_meta_box', __( 'Shortcode', 'wp-express-checkout' ), array( $this, 'display_shortcode_meta_box' ), PPECProducts::$products_slug, 'side', 'high' );
 		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance Related', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
 		add_meta_box( 'wpec_coupons_meta_box', __( 'Coupons Settings', 'wp-express-checkout' ), array( $this, 'display_coupons_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
@@ -366,6 +367,16 @@ jQuery(document).ready(function($) {
 		<?php
 	}
 
+	public function display_thankyou_page_meta_box( $post ) {
+		$current_val = get_post_meta( $post->ID, 'wpec_product_thankyou_page', true );
+		?>
+<input type="text" name="wpec_product_thankyou_page" style="width: 100%;" value="<?php echo esc_attr( $current_val ); ?>" placeholder="https://..." />
+<p class="description"><?php _e( 'Enter Thank You page URL. Leave it blank if you want ot use default Thank You page.', 'wp-express-checkout' ); ?>
+	<br />
+		<?php _e( 'You can read how to customize messages on Thank You page <a href="#" target="_blank">in the documentation</a>.', 'wp-express-checkout' ); ?>
+</p>
+		<?php
+	}
 
 	function display_shortcode_meta_box( $post ) {
 		?>
@@ -508,6 +519,11 @@ jQuery(document).ready(function($) {
 		$thumb_url_raw = filter_input( INPUT_POST, 'wpec_product_thumbnail', FILTER_SANITIZE_URL );
 		$thumb_url     = esc_url( $thumb_url_raw, array( 'http', 'https' ) );
 		update_post_meta( $post_id, 'wpec_product_thumbnail', $thumb_url );
+
+		// Thank you page
+		$thank_url_raw = filter_input( INPUT_POST, 'wpec_product_thankyou_page', FILTER_SANITIZE_URL );
+		$thank_url     = esc_url( $thank_url_raw, array( 'http', 'https' ) );
+		update_post_meta( $post_id, 'wpec_product_thankyou_page', $thank_url );
 
 		// price.
 		$price = filter_input( INPUT_POST, 'ppec_product_price', FILTER_SANITIZE_STRING );

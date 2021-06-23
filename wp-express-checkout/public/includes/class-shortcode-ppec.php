@@ -74,6 +74,7 @@ class WPECShortcode {
 		$shipping_enable = get_post_meta( $post_id, 'wpec_product_shipping_enable', true );
 		$tax             = get_post_meta( $post_id, 'wpec_product_tax', true );
 		$button_text     = get_post_meta( $post_id, 'wpec_product_button_text', true );
+		$thank_you_url   = ! empty( $atts['thank_you_url'] ) ? $atts['thank_you_url'] : get_post_meta( $post_id, 'wpec_product_thankyou_page', true );
 
 		$coupons_enabled = get_post_meta( $post_id, 'wpec_product_coupons_setting', true );
 
@@ -126,6 +127,7 @@ class WPECShortcode {
 				'coupons_enabled' => $this->ppdg->get_setting( 'coupons_enabled' ),
 				'button_text'     => $button_text ? $button_text : $this->ppdg->get_setting( 'button_text' ),
 				'use_modal'       => ! isset( $atts['modal'] ) ? $this->ppdg->get_setting( 'use_modal' ) : $atts['modal'],
+				'thank_you_url'   => $thank_you_url ? $thank_you_url : $this->ppdg->get_setting( 'thank_you_url' ),
 			),
 			$args
 		);
@@ -201,6 +203,7 @@ class WPECShortcode {
 			'custom_amount'   => $custom_amount,
 			'product_id'      => $product_id,
 			'coupons_enabled' => $coupons_enabled,
+			'thank_you_url'   => $thank_you_url,
 		);
 
 		set_transient( $trans_name, $trans_data, 2 * 3600 );
