@@ -2,7 +2,7 @@
 
 namespace WP_Express_Checkout;
 
-use WP_Express_Checkout\Admin\Products_Metaboxes;
+use WP_Express_Checkout\Admin\Products_Meta_Boxes;
 
 class Products {
 
@@ -13,7 +13,7 @@ class Products {
 	function __construct() {
 		if ( is_admin() ) {
 			// products meta boxes handler.
-			new Products_Metaboxes();
+			new Products_Meta_Boxes();
 		}
 	}
 

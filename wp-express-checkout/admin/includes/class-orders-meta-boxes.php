@@ -11,7 +11,7 @@ use WP_Post;
  *
  * @since 1.9.5
  */
-class Orders_Metaboxes {
+class Orders_Meta_Boxes {
 
 	var $WPECAdmin;
 	var $WPEC_Main;

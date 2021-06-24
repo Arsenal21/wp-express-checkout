@@ -74,7 +74,7 @@ Autoload_Deprecated::add_class_map( array(
     'WPEC_Order' => __DIR__ . '/deprecated.php',
     'WPEC_Order_List' => __DIR__ . '/deprecated.php',
     'WPEC_Order_Summary_Table' => __DIR__ . '/deprecated.php',
-    'WPEC_Orders_Metaboxes' => __DIR__ . '/deprecated.php',
+    'WPEC_Orders_Meta_Boxes' => __DIR__ . '/deprecated.php',
     'WPEC_Post_Type_Content_Handler' => __DIR__ . '/deprecated.php',
     'WPEC_Process_IPN' => __DIR__ . '/deprecated.php',
     'WPEC_Process_IPN_Free' => __DIR__ . '/deprecated.php',

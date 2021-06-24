@@ -12,7 +12,7 @@ namespace WP_Express_Checkout;
 /**
  * Process Free payment class
  */
-class Free_Payment_Processor extends Payment_Processor {
+class Payment_Processor_Free extends Payment_Processor {
 
 	private $order_data;
 

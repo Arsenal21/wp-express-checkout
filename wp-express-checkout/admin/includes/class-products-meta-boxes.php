@@ -5,7 +5,7 @@ namespace WP_Express_Checkout\Admin;
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Products;
 
-class Products_Metaboxes {
+class Products_Meta_Boxes {
 
 	var $WPECAdmin;
 	var $WPEC_Main;

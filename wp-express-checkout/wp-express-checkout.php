@@ -43,7 +43,7 @@ function wpec_load_classes() {
 	WP_Express_Checkout\Payment_Processor::get_instance();
 	WP_Express_Checkout\Variations::init();
 
-	new WP_Express_Checkout\Free_Payment_Processor();
+	new WP_Express_Checkout\Payment_Processor_Free();
 	new WP_Express_Checkout\Blocks();
 	new WP_Express_Checkout\Init();
 	new WP_Express_Checkout\Integrations();
@@ -52,7 +52,7 @@ function wpec_load_classes() {
 	if ( is_admin() ) {
 		WP_Express_Checkout\Admin\Admin::get_instance();
 		new WP_Express_Checkout\Coupons();
-		new WP_Express_Checkout\Admin\Orders_Metaboxes();
+		new WP_Express_Checkout\Admin\Orders_Meta_Boxes();
 	}
 }
 add_action( 'plugins_loaded', 'wpec_load_classes' );
