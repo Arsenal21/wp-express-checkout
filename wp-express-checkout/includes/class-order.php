@@ -82,6 +82,7 @@ class WPEC_Order {
 
 		$this->creator['user_id']    = $post->post_author;
 		$this->creator['ip_address'] = $this->get_meta_field( 'wpec_ip_address', 0, $meta_fields );
+		$this->creator['email']      = $this->get_meta_field( 'wpec_order_customer_email', '', $meta_fields );
 		$this->payment['currency']   = $this->get_meta_field( 'wpec_currency', 'USD', $meta_fields );
 
 		$this->state = $this->get_meta_field( 'wpec_order_state', 'incomplete', $meta_fields );
@@ -404,10 +405,15 @@ class WPEC_Order {
 		do_action( 'wpec_transaction_' . $status, $this );
 	}
 
+	/**
+	 * Adds an order author by ID.
+	 *
+	 * @param int $author_id
+	 */
 	public function set_author( $author_id ){
 
 		$author_id = intval( $author_id );
-		if( ! is_numeric( $author_id ) ){
+		if ( ! is_numeric( $author_id ) ) {
 			trigger_error( 'Author ID must be an integer', E_USER_WARNING );
 		}
 
@@ -416,6 +422,20 @@ class WPEC_Order {
 			'post_author' => $author_id,
 		) );
 
+	}
+
+	/**
+	 * Adds an order author email address
+	 *
+	 * @param string $email
+	 */
+	public function set_author_email( $email ){
+		if ( ! is_email( $email ) ) {
+			trigger_error( 'Author Email must be a valid email address', E_USER_WARNING );
+		}
+
+		$this->creator['email'] = $email;
+		$this->update_meta( 'wpec_order_customer_email', $email );
 	}
 
 	/**

@@ -248,6 +248,8 @@ class OrdersWPEC {
 	 */
 	private static function upgrade_legacy2( $order ) {
 		$order->set_resource_id( $order->get_data( 'transaction_id' ) );
+		$payer = $order->get_data( 'payer' );
+		$order->set_author_email( $payer['email_address'] );
 		return $order;
 	}
 
