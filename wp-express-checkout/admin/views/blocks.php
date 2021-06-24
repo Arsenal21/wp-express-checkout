@@ -1,8 +1,11 @@
 <?php
+
+namespace WP_Express_Checkout;
+
 /**
  * The plugin Gutenberg Blocks registry
  */
-class WPEC_Blocks {
+class Blocks {
 
 	/**
 	 * Constructor.
@@ -94,7 +97,7 @@ class WPEC_Blocks {
 	private function get_products_array() {
 		$query = get_posts(
 			array(
-				'post_type'      => PPECProducts::$products_slug,
+				'post_type'      => Products::$products_slug,
 				'post_status'    => 'publish',
 				'posts_per_page' => -1,
 				'orderby'        => 'title',

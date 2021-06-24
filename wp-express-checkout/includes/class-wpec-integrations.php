@@ -1,6 +1,10 @@
 <?php
 
-class WPEC_Integrations {
+namespace WP_Express_Checkout;
+
+use Debug\Logger;
+
+class Integrations {
 
 	public function __construct() {
 		if ( function_exists( 'wp_emember_install' ) ) {
@@ -31,7 +35,7 @@ class WPEC_Integrations {
 
 		if ( ! empty( $addr_country ) ) {
 			// convert country code to country name.
-			$countries = WPEC_Utility_Functions::get_countries_untranslated();
+			$countries = Utils::get_countries_untranslated();
 			if ( isset( $countries[ $addr_country ] ) ) {
 				$addr_country = $countries[ $addr_country ];
 			}
@@ -49,7 +53,7 @@ class WPEC_Integrations {
 			'address_country' => $addr_country,
 		);
 
-		WPEC_Debug_Logger::log( 'Calling eMember_handle_subsc_signup_stand_alone' );
+		Logger::log( 'Calling eMember_handle_subsc_signup_stand_alone' );
 
 		$emember_id = '';
 		if ( class_exists( 'Emember_Auth' ) ) {

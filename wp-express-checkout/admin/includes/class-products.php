@@ -1,6 +1,10 @@
 <?php
 
-class PPECProducts {
+namespace WP_Express_Checkout;
+
+use WP_Express_Checkout\Admin\Products_Metaboxes;
+
+class Products {
 
 	static $products_slug = "ppec-products";
 
@@ -9,7 +13,7 @@ class PPECProducts {
 	function __construct() {
 		if ( is_admin() ) {
 			// products meta boxes handler.
-			new PPECProductsMetaboxes();
+			new Products_Metaboxes();
 		}
 	}
 
@@ -113,7 +117,7 @@ class PPECProducts {
 	}
 
 	function manage_custom_columns( $column, $post_id ) {
-		$main = WPEC_Main::get_instance();
+		$main = Main::get_instance();
 		switch ( $column ) {
 			case 'id':
 				echo $post_id;
@@ -150,7 +154,7 @@ class PPECProducts {
 						'product_id'      => $post_id,
 					)
 				);
-				$wpec_shortcode = WPECShortcode::get_instance();
+				$wpec_shortcode = Shortcodes::get_instance();
 				$output = $wpec_shortcode->generate_price_tag( $price_args );
 				$output = apply_filters( 'ppec_products_table_price_column', $output, $price_args, $post_id );
 				echo $output;

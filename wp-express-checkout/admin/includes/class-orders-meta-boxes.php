@@ -1,37 +1,44 @@
 <?php
+
+namespace WP_Express_Checkout\Admin;
+
+use WP_Express_Checkout\Main;
+use WP_Express_Checkout\Orders;
+use WP_Post;
+
 /**
  * Order page metaboxes
  *
  * @since 1.9.5
  */
-class WPEC_Orders_Metaboxes {
+class Orders_Metaboxes {
 
 	var $WPECAdmin;
 	var $WPEC_Main;
 
 	public function __construct() {
-		$this->WPECAdmin = WPEC_Admin::get_instance();
-		$this->WPEC_Main = WPEC_Main::get_instance();
+		$this->WPECAdmin = Admin::get_instance();
+		$this->WPEC_Main = Main::get_instance();
 
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_action( 'admin_menu', array( $this, 'remove_meta_boxes' ) );
-		add_action( 'save_post_' . OrdersWPEC::PTYPE, array( $this, 'save' ), 10, 3 );
+		add_action( 'save_post_' . Orders::PTYPE, array( $this, 'save' ), 10, 3 );
 	}
 
 	public function add_meta_boxes() {
-		add_meta_box( 'wpec_order_items', __( 'Order Summary', 'wp-express-checkout' ), array( $this, 'display_summary_meta_box' ), OrdersWPEC::PTYPE, 'normal', 'high' );
-		add_meta_box( 'wpec_order_status', __( 'Order Status', 'wp-express-checkout' ), array( $this, 'display_status_meta_box' ), OrdersWPEC::PTYPE, 'side', 'high' );
-		add_meta_box( 'wpec_order_author', __( 'Order Author', 'wp-express-checkout' ), array( $this, 'display_author_meta_box' ), OrdersWPEC::PTYPE, 'side', 'low' );
+		add_meta_box( 'wpec_order_items', __( 'Order Summary', 'wp-express-checkout' ), array( $this, 'display_summary_meta_box' ), Orders::PTYPE, 'normal', 'high' );
+		add_meta_box( 'wpec_order_status', __( 'Order Status', 'wp-express-checkout' ), array( $this, 'display_status_meta_box' ), Orders::PTYPE, 'side', 'high' );
+		add_meta_box( 'wpec_order_author', __( 'Order Author', 'wp-express-checkout' ), array( $this, 'display_author_meta_box' ), Orders::PTYPE, 'side', 'low' );
 	}
 
 	public function display_summary_meta_box( $post ) {
 		global $post;
 
-		if ( OrdersWPEC::PTYPE != $post->post_type ) {
+		if ( Orders::PTYPE != $post->post_type ) {
 			return;
 		}
 
-		$order = OrdersWPEC::retrieve( $_GET['post'] );
+		$order = Orders::retrieve( $_GET['post'] );
 
 		?>
 		<style type="text/css">
@@ -48,7 +55,7 @@ class WPEC_Orders_Metaboxes {
 		</style>
 		<?php
 
-		$table = new WPEC_Admin_Order_Summary_Table( $order );
+		$table = new Admin_Order_Summary_Table( $order );
 		$table->show( array(
 			'class' => 'widefat',
 			'id' => 'admin-order-summary'
@@ -64,7 +71,7 @@ class WPEC_Orders_Metaboxes {
 	 */
 	public function display_status_meta_box( $post ){
 
-		$order = OrdersWPEC::retrieve( $post->ID );
+		$order = Orders::retrieve( $post->ID );
 		?>
 		<style type="text/css">
 			#admin-order-status th{
@@ -108,7 +115,7 @@ class WPEC_Orders_Metaboxes {
 	 */
 	function display_author_meta_box ( $post ){
 
-		$order = OrdersWPEC::retrieve( $post->ID );
+		$order = Orders::retrieve( $post->ID );
 		?>
 		<style type="text/css">
 			#admin-order-author{
@@ -185,9 +192,9 @@ class WPEC_Orders_Metaboxes {
 	}
 
 	public function remove_meta_boxes() {
-		remove_meta_box( 'submitdiv', OrdersWPEC::PTYPE, 'side' );
-		remove_meta_box( 'slugdiv', OrdersWPEC::PTYPE, 'normal' );
-		remove_meta_box( 'authordiv', OrdersWPEC::PTYPE, 'normal');
+		remove_meta_box( 'submitdiv', Orders::PTYPE, 'side' );
+		remove_meta_box( 'slugdiv', Orders::PTYPE, 'normal' );
+		remove_meta_box( 'authordiv', Orders::PTYPE, 'normal');
 	}
 
 }

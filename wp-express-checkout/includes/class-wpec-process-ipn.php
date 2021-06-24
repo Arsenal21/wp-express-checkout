@@ -8,15 +8,19 @@
  * Sends to Thank You page.
  */
 
+namespace WP_Express_Checkout;
+
+use Debug\Logger;
+
 /**
  * Process IPN class
  */
-class WPEC_Process_IPN {
+class Payment_Processor {
 
 	/**
 	 * The class instance.
 	 *
-	 * @var WPEC_Process_IPN
+	 * @var Payment_Processor
 	 */
 	protected static $instance = null;
 
@@ -31,7 +35,7 @@ class WPEC_Process_IPN {
 	/**
 	 * Retrieves the instance.
 	 *
-	 * @return WPEC_Process_IPN
+	 * @return Payment_Processor
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -59,7 +63,7 @@ class WPEC_Process_IPN {
 		$this->check_status( $payment );
 
 		// Log debug (if enabled).
-		WPEC_Debug_Logger::log( 'Received IPN. Processing payment ...' );
+		Logger::log( 'Received IPN. Processing payment ...' );
 
 		// get item name.
 		$item_name  = $this->get_item_name( $payment );
@@ -68,7 +72,7 @@ class WPEC_Process_IPN {
 		// let's check if the payment matches transient data.
 		if ( ! $trans ) {
 			// no price set.
-			WPEC_Debug_Logger::log( 'Error! No transaction info found in transient.', false );
+			Logger::log( 'Error! No transaction info found in transient.', false );
 
 			_e( 'No transaction info found in transient.', 'wp-express-checkout' );
 			exit;
@@ -80,21 +84,21 @@ class WPEC_Process_IPN {
 		$currency = $trans['currency'];
 		$item_id  = $trans['product_id'];
 
-		$wpec_plugin = WPEC_Main::get_instance();
+		$wpec_plugin = Main::get_instance();
 
 		if ( $trans['custom_quantity'] ) {
 			// custom quantity enabled. let's take quantity from PayPal results.
 			$quantity = $this->get_quantity( $payment );
 		}
 
-		$order = OrdersWPEC::create();
+		$order = Orders::create();
 
 		/* translators: Order title: {Quantity} {Item name} - {Status} */
 		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $this->get_transaction_status( $payment ) ) );
 		$order->set_currency( $currency );
 		$order->set_resource_id( $this->get_transaction_id( $payment ) );
 		$order->set_author_email( $payment['payer']['email_address'] );
-		$order->add_item( PPECProducts::$products_slug, $item_name, $price, $quantity, $item_id, true );
+		$order->add_item( Products::$products_slug, $item_name, $price, $quantity, $item_id, true );
 		$order->add_data( 'state', $this->get_transaction_status( $payment ) );
 		$order->add_data( 'payer', $payment['payer'] );
 
@@ -105,7 +109,7 @@ class WPEC_Process_IPN {
 		/**
 		 * Runs after draft order created, but before adding items.
 		 *
-		 * @param WPEC_Order $order   The order object.
+		 * @param Order $order   The order object.
 		 * @param array      $payment The raw order data retrieved via API.
 		 * @param array      $data    The purchase data generated on a client side.
 		 */
@@ -119,11 +123,11 @@ class WPEC_Process_IPN {
 			$order->add_item( 'shipping', __( 'Shipping', 'wp-express-checkout' ), $shipping );
 		}
 
-		$amount = WPEC_Utility_Functions::round_price( floatval( $this->get_total( $payment ) ) );
+		$amount = Utils::round_price( floatval( $this->get_total( $payment ) ) );
 		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
 		if ( $amount < $order->get_total() ) {
 			// payment amount mismatch. Amount paid is less.
-			WPEC_Debug_Logger::log( 'Error! Payment amount mismatch. Original: ' . $order->get_total() . ', Received: ' . $amount, false );
+			Logger::log( 'Error! Payment amount mismatch. Original: ' . $order->get_total() . ', Received: ' . $amount, false );
 			_e( 'Payment amount mismatch with the original price.', 'wp-express-checkout' );
 			exit;
 		}
@@ -131,7 +135,7 @@ class WPEC_Process_IPN {
 		// check if payment currency matches.
 		if ( $this->get_currency( $payment ) !== $currency ) {
 			// payment currency mismatch.
-			WPEC_Debug_Logger::log( 'Error! Payment currency mismatch.', false );
+			Logger::log( 'Error! Payment currency mismatch.', false );
 			_e( 'Payment currency mismatch.', 'wp-express-checkout' );
 			exit;
 		}
@@ -141,9 +145,9 @@ class WPEC_Process_IPN {
 		$order->set_status( 'paid' );
 
 		$order_id  = $order->get_id();
-		$downloads = WPEC_View_Download::get_order_downloads_list( $order_id );
+		$downloads = View_Downloads::get_order_downloads_list( $order_id );
 
-		$product_details = WPEC_Utility_Functions::get_product_details( $order );
+		$product_details = Utils::get_product_details( $order );
 		if ( ! empty( $downloads ) ) {
 			$product_details .= "\n\n";
 			// Include the download links in the product details.
@@ -180,16 +184,16 @@ class WPEC_Process_IPN {
 		if ( $wpec_plugin->get_setting( 'send_buyer_email' ) ) {
 
 			$buyer_email = $payment['payer']['email_address'];
-			WPEC_Debug_Logger::log( 'Sending buyer notification email.' );
+			Logger::log( 'Sending buyer notification email.' );
 
 			$from_email = $wpec_plugin->get_setting( 'buyer_from_email' );
 			$subject    = $wpec_plugin->get_setting( 'buyer_email_subj' );
-			$subject    = WPEC_Utility_Functions::apply_dynamic_tags( $subject, $args );
+			$subject    = Utils::apply_dynamic_tags( $subject, $args );
 			$body       = $wpec_plugin->get_setting( 'buyer_email_body' );
 
 			$args['email_body'] = $body;
 
-			$body = WPEC_Utility_Functions::apply_dynamic_tags( $body, $args );
+			$body = Utils::apply_dynamic_tags( $body, $args );
 			$body = apply_filters( 'wpec_buyer_notification_email_body', $body, $payment, $args );
 
 			if ( 'html' === $wpec_plugin->get_setting( 'buyer_email_type' ) ) {
@@ -202,22 +206,22 @@ class WPEC_Process_IPN {
 
 			wp_mail( $buyer_email, wp_specialchars_decode( $subject, ENT_QUOTES ), $body, $headers );
 
-			WPEC_Debug_Logger::log( 'Buyer email notification sent to: ' . $buyer_email . '. From email address value used: ' . $from_email );
+			Logger::log( 'Buyer email notification sent to: ' . $buyer_email . '. From email address value used: ' . $from_email );
 
 			update_post_meta( $order_id, 'wpec_buyer_email_sent', 'Email sent to: ' . $buyer_email );
 		}
 
 		// Send email to seller if needs.
 		if ( $wpec_plugin->get_setting( 'send_seller_email' ) && ! empty( $wpec_plugin->get_setting( 'notify_email_address' ) ) ) {
-			WPEC_Debug_Logger::log( 'Sending seller notification email.' );
+			Logger::log( 'Sending seller notification email.' );
 
 			$notify_email = $wpec_plugin->get_setting( 'notify_email_address' );
 
 			$seller_email_subject = $wpec_plugin->get_setting( 'seller_email_subj' );
-			$seller_email_subject = WPEC_Utility_Functions::apply_dynamic_tags( $seller_email_subject, $args );
+			$seller_email_subject = Utils::apply_dynamic_tags( $seller_email_subject, $args );
 
 			$seller_email_body = $wpec_plugin->get_setting( 'seller_email_body' );
-			$seller_email_body = WPEC_Utility_Functions::apply_dynamic_tags( $seller_email_body, $args );
+			$seller_email_body = Utils::apply_dynamic_tags( $seller_email_body, $args );
 			$seller_email_body = apply_filters( 'wpec_seller_notification_email_body', $seller_email_body, $payment, $args );
 
 			if ( 'html' === $wpec_plugin->get_setting( 'buyer_email_type' ) ) {
@@ -227,12 +231,12 @@ class WPEC_Process_IPN {
 			}
 
 			wp_mail( $notify_email, wp_specialchars_decode( $seller_email_subject, ENT_QUOTES ), $seller_email_body, $headers );
-			WPEC_Debug_Logger::log( 'Seller email notification sent to: ' . $notify_email );
+			Logger::log( 'Seller email notification sent to: ' . $notify_email );
 		}
 
 		// Trigger the action hook.
 		do_action( 'wpec_payment_completed', $payment, $order_id, $item_id );
-		WPEC_Debug_Logger::log( 'Payment processing completed' );
+		Logger::log( 'Payment processing completed' );
 
 		$res = array();
 
@@ -296,7 +300,7 @@ class WPEC_Process_IPN {
 		$status = $this->get_transaction_status( $payment );
 		if ( strtoupper( $status ) !== 'COMPLETED' ) {
 			// payment is unsuccessful.
-			WPEC_Debug_Logger::log( 'Payment is not approved. Payment status: ' . $status, false );
+			Logger::log( 'Payment is not approved. Payment status: ' . $status, false );
 			printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $status );
 			exit;
 		}
@@ -421,7 +425,7 @@ class WPEC_Process_IPN {
 	 * @return type
 	 */
 	protected function get_item_tax_amount( $price, $quantity, $tax ) {
-		return WPEC_Utility_Functions::round_price( WPEC_Utility_Functions::get_tax_amount( $price / $quantity, $tax ) );
+		return Utils::round_price( Utils::get_tax_amount( $price / $quantity, $tax ) );
 	}
 
 

@@ -65,7 +65,7 @@
 						<label class="wpec-product-variations-select-radio-label">
 							<input class="wpec-product-variations-select-radio" data-wpec-variations-group-id="<?php echo esc_attr( $grp_id ); ?>" name="wpecVariations[<?php echo esc_attr( $button_id ); ?>][<?php echo esc_attr( $grp_id ); ?>][]" type="radio" value="<?php echo esc_attr( $var_id ); ?>" <?php checked( $var_id === 0 ); ?>>
 							<?php echo esc_html( $var_name ); ?>
-							<?php echo esc_html( WPEC_Utility_Functions::price_modifier( $variations['prices'][ $grp_id ][ $var_id ], $currency ) ); ?>
+							<?php echo esc_html( WP_Express_Checkout\Utils::price_modifier( $variations['prices'][ $grp_id ][ $var_id ], $currency ) ); ?>
 						</label>
 					<?php
 					}
@@ -77,7 +77,7 @@
 					<?php
 					foreach ( $variations['names'][ $grp_id ] as $var_id => $var_name ) {
 						?>
-						<option value="<?php echo esc_attr( $var_id ); ?>"><?php echo esc_html( $var_name ); ?> <?php echo esc_html( WPEC_Utility_Functions::price_modifier( $variations['prices'][ $grp_id ][ $var_id ], $currency ) ); ?></option>
+						<option value="<?php echo esc_attr( $var_id ); ?>"><?php echo esc_html( $var_name ); ?> <?php echo esc_html( WP_Express_Checkout\Utils::price_modifier( $variations['prices'][ $grp_id ][ $var_id ], $currency ) ); ?></option>
 						<?php
 					}
 					?>
@@ -124,7 +124,7 @@
 
 		<?php if ( $use_modal ) { ?>
 			<div class="wpec-price-container">
-				<?php echo WPECShortcode::get_instance()->generate_price_tag( $args ); ?>
+				<?php echo WP_Express_Checkout\Shortcodes::get_instance()->generate_price_tag( $args ); ?>
 			</div>
 		<?php } ?>
 

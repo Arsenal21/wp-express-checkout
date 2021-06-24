@@ -31,25 +31,28 @@ define( 'WPEC_LOG_FILE', WPEC_PLUGIN_PATH . 'wpec-debug-log.txt' );
 // 2. Run in console: composer dump-autoload
 require WPEC_PLUGIN_PATH . '/vendor/autoload.php';
 
+// Create aliases for old class names and autoload them on a request
+require WPEC_PLUGIN_PATH . '/vendor/autoload-deprecated.php';
+
 // Load classes.
 function wpec_load_classes() {
-	WPEC_Main::get_instance();
-	WPECShortcode::get_instance();
-	WPEC_View_Download::get_instance();
-	WPEC_Post_Type_Content_Handler::get_instance();
-	WPEC_Process_IPN::get_instance();
-	WPEC_Variations::init();
+	WP_Express_Checkout\Main::get_instance();
+	WP_Express_Checkout\Shortcodes::get_instance();
+	WP_Express_Checkout\View_Downloads::get_instance();
+	WP_Express_Checkout\Post_Type_Content_Handler::get_instance();
+	WP_Express_Checkout\Payment_Processor::get_instance();
+	WP_Express_Checkout\Variations::init();
 
-	new WPEC_Process_IPN_Free();
-	new WPEC_Blocks();
-	new WPEC_Init_Time_Tasks();
-	new WPEC_Integrations();
+	new WP_Express_Checkout\Free_Payment_Processor();
+	new WP_Express_Checkout\Blocks();
+	new WP_Express_Checkout\Init();
+	new WP_Express_Checkout\Integrations();
 
 	// Load admin side class
 	if ( is_admin() ) {
-		WPEC_Admin::get_instance();
-		new WPEC_Coupons_Admin();
-		new WPEC_Orders_Metaboxes();
+		WP_Express_Checkout\Admin\Admin::get_instance();
+		new WP_Express_Checkout\Coupons();
+		new WP_Express_Checkout\Admin\Orders_Metaboxes();
 	}
 }
 add_action( 'plugins_loaded', 'wpec_load_classes' );
@@ -57,8 +60,8 @@ add_action( 'plugins_loaded', 'wpec_load_classes' );
 /*
  * Register hooks that are fired when the plugin is activated or deactivated.
  */
-register_activation_hook( __FILE__, array( 'WPEC_Main', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'WPEC_Main', 'deactivate' ) );
+register_activation_hook( __FILE__, array( 'WP_Express_Checkout\Main', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'WP_Express_Checkout\Main', 'deactivate' ) );
 
 //Add settings link in plugins listing page
 function wpec_add_settings_link($links, $file) {

@@ -1,6 +1,11 @@
 <?php
 
-class WPEC_Admin {
+namespace WP_Express_Checkout\Admin;
+
+use WP_Express_Checkout\Main;
+use WP_Express_Checkout\Products;
+
+class Admin {
 
 	/**
 	 * Instance of this class.
@@ -31,7 +36,7 @@ class WPEC_Admin {
 		/**
 		 * Call $plugin_slug from public plugin class.
 		 */
-		$plugin = WPEC_Main::get_instance();
+		$plugin = Main::get_instance();
 		$this->plugin_slug = $plugin->get_plugin_slug();
 
 		// Load admin style sheet and JavaScript.
@@ -115,7 +120,7 @@ class WPEC_Admin {
 			wp_enqueue_script( $this->plugin_slug . '-admin-script', WPEC_PLUGIN_URL . '/assets/js/admin.js', array( 'jquery' ), WPEC_PLUGIN_VER );
 		}
 
-		if ( PPECProducts::$products_slug === $screen->id ) {
+		if ( Products::$products_slug === $screen->id ) {
 			wp_enqueue_script( 'wpec-admin-edit-product-js',  WPEC_PLUGIN_URL . '/assets/js/edit-product.js', array( 'jquery' ), WPEC_PLUGIN_VER, true );
 		}
 	}
@@ -142,7 +147,7 @@ class WPEC_Admin {
 		 *   For reference: http://codex.wordpress.org/Roles_and_Capabilities
 		 */
 		$this->plugin_screen_hook_suffix = add_submenu_page(
-			'edit.php?post_type=' . PPECProducts::$products_slug,
+			'edit.php?post_type=' . Products::$products_slug,
 			__( 'WP Express Checkout Settings', 'wp-express-checkout' ),
 			__( 'Settings', 'wp-express-checkout' ),
 			'manage_options',
@@ -157,7 +162,7 @@ class WPEC_Admin {
 	 */
 	public function register_settings() {
 
-		$wpec = WPEC_Main::get_instance();
+		$wpec = Main::get_instance();
 
 		/* Register the settings */
 		register_setting( 'ppdg-settings-group', 'ppdg-settings', array( $this, 'settings_sanitize_field_callback' ) );
@@ -474,7 +479,7 @@ class WPEC_Admin {
 	 * @param array $args Field arguments passed into the add_settings_field().
 	 */
 	public function settings_field_callback( $args ) {
-		$settings = (array) get_option( 'ppdg-settings', WPEC_Main::get_defaults() );
+		$settings = (array) get_option( 'ppdg-settings', Main::get_defaults() );
 		$defaults = array(
 			'type'        => 'text',
 			'field'       => '',
@@ -487,7 +492,7 @@ class WPEC_Admin {
 			'min'         => 0,
 		);
 
-		$settings = array_merge( WPEC_Main::get_defaults(), $settings );
+		$settings = array_merge( Main::get_defaults(), $settings );
 		$args     = wp_parse_args( $args, $defaults );
 
 		extract( $args );
@@ -559,7 +564,7 @@ class WPEC_Admin {
 
 		$action_type = 'updated';
 
-		$defaults = WPEC_Main::get_defaults();
+		$defaults = Main::get_defaults();
 		$output   = array_merge( $defaults, get_option( 'ppdg-settings' ) );
 
 		// We can't validate fields if we don't know the current page tab.
@@ -646,7 +651,7 @@ class WPEC_Admin {
 	public function add_action_links( $links ) {
 
 		return array_merge(
-			array( 'settings' => '<a href="' . admin_url( 'edit.php?post_type=' . PPECProducts::$products_slug . '&page=ppec-settings-page' ) . '">' . __( 'Settings', 'wp-express-checkout' ) . '</a>' ),
+			array( 'settings' => '<a href="' . admin_url( 'edit.php?post_type=' . Products::$products_slug . '&page=ppec-settings-page' ) . '">' . __( 'Settings', 'wp-express-checkout' ) . '</a>' ),
 			$links
 		);
 	}

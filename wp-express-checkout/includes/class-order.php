@@ -1,10 +1,13 @@
 <?php
+
+namespace WP_Express_Checkout;
+
 /**
  * Represents a purchase order made up of items.
  *
  * @since 1.9.5
  */
-class WPEC_Order {
+class Order {
 
 	/**
 	 * Order ID, defined by WordPress when
@@ -334,7 +337,7 @@ class WPEC_Order {
 	 * @return int Total price of the order
 	 */
 	public function get_total() {
-		$ppdg = WPEC_Main::get_instance();
+		$ppdg = Main::get_instance();
 		$prec = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : $ppdg->get_setting( 'price_decimals_num' );
 		return number_format( (float) $this->payment['total'], $prec, '.', '' );
 	}

@@ -1,9 +1,11 @@
 <?php
 
+namespace WP_Express_Checkout;
+
 /**
  * Orders post type register and factory.
  */
-class OrdersWPEC {
+class Orders {
 
 	/**
 	 * Order post type
@@ -48,7 +50,7 @@ class OrdersWPEC {
 			'hierarchical' => false,
 			'public' => false,
 			'show_ui' => true,
-			'show_in_menu' => 'edit.php?post_type=' . PPECProducts::$products_slug,
+			'show_in_menu' => 'edit.php?post_type=' . Products::$products_slug,
 			'show_in_nav_menus' => true,
 			'show_in_admin_bar' => true,
 			'menu_position' => 80,
@@ -89,7 +91,7 @@ class OrdersWPEC {
 	 *
 	 * @param string $description (optional)
 	 *
-	 * @return bool|WPEC_Order New Order object. Boolean False on failure.
+	 * @return bool|Order New Order object. Boolean False on failure.
 	 */
 	static public function create( $description = '' ) {
 		if ( empty( $description ) ) {
@@ -130,7 +132,7 @@ class OrdersWPEC {
 	 *
 	 * @param int $order_id Order ID
 	 *
-	 * @return object|bool WPEC_Order Object representing the order. Boolean False on failure.
+	 * @return object|bool Order Object representing the order. Boolean False on failure.
 	 */
 	static public function retrieve( $order_id ) {
 
@@ -144,7 +146,7 @@ class OrdersWPEC {
 			return false;
 		}
 
-		$order = new WPEC_Order( $order_data );
+		$order = new Order( $order_data );
 
 		// Maybe upgrade the order to version 1.9.5
 		if ( ! is_numeric( $order_data->post_name ) ) {
@@ -163,7 +165,7 @@ class OrdersWPEC {
 	 *
 	 * @since 1.9.5
 	 *
-	 * @param WPEC_Order $order
+	 * @param Order $order
 	 * @return type
 	 */
 	private static function upgrade_legacy( $order ) {
@@ -199,7 +201,7 @@ class OrdersWPEC {
 		$order->set_currency( $data['currency'] );
 		$order->set_status( 'paid' );
 		$order->set_resource_id( $data['id'] );
-		$order->add_item( PPECProducts::$products_slug, $data['item_name'], $data['price'], $data['quantity'], $data['item_id'], true );
+		$order->add_item( Products::$products_slug, $data['item_name'], $data['price'], $data['quantity'], $data['item_id'], true );
 		$order->add_data( 'state', $data['state'] );
 		$order->add_data( 'payer', $user );
 
@@ -243,7 +245,7 @@ class OrdersWPEC {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param WPEC_Order $order
+	 * @param Order $order
 	 * @return type
 	 */
 	private static function upgrade_legacy2( $order ) {

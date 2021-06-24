@@ -1,15 +1,21 @@
 <?php
+
+namespace WP_Express_Checkout\Admin;
+
+use WP_Express_Checkout\Orders;
+use WP_Express_Checkout\Utils;
+
 /**
  * Order list class
  */
-class WPEC_Order_List {
+class Orders_List {
 
 	private static $search_term = false;
 
 	public static function init() {
-		add_filter( 'manage_' . OrdersWPEC::PTYPE . '_posts_columns', array( __CLASS__, 'order_manage_columns' ) );
-		add_filter( 'manage_edit-' . OrdersWPEC::PTYPE . '_sortable_columns', array( __CLASS__, 'order_manage_sortable_columns' ) );
-		add_action( 'manage_' . OrdersWPEC::PTYPE . '_posts_custom_column', array( __CLASS__, 'order_add_column_data' ), 10, 2 );
+		add_filter( 'manage_' . Orders::PTYPE . '_posts_columns', array( __CLASS__, 'order_manage_columns' ) );
+		add_filter( 'manage_edit-' . Orders::PTYPE . '_sortable_columns', array( __CLASS__, 'order_manage_sortable_columns' ) );
+		add_action( 'manage_' . Orders::PTYPE . '_posts_custom_column', array( __CLASS__, 'order_add_column_data' ), 10, 2 );
 		// handle columns sorting and searching
 		add_action( 'pre_get_posts', array( __CLASS__, 'manage_search_sort_queries' ) );
 		add_action( 'posts_results', array( __CLASS__, 'set_search_term' ), 10, 2 );
@@ -63,7 +69,7 @@ class WPEC_Order_List {
 		if ( isset( $order_hash[ $post_id ] ) ) {
 			$order = $order_hash[ $post_id ];
 		} else {
-			$order = OrdersWPEC::retrieve( $post_id );
+			$order = Orders::retrieve( $post_id );
 			$order_hash[ $post_id ] = $order;
 		}
 
@@ -98,9 +104,9 @@ class WPEC_Order_List {
 			case 'total':
 				$currency = $order->get_currency();
 				if ( ! empty( $currency ) ) {
-					echo WPEC_Utility_Functions::price_format( $order->get_total(), $order->get_currency() );
+					echo Utils::price_format( $order->get_total(), $order->get_currency() );
 				} else {
-					echo WPEC_Utility_Functions::price_format( $order->get_total() );
+					echo Utils::price_format( $order->get_total() );
 				}
 				break;
 
@@ -134,7 +140,7 @@ class WPEC_Order_List {
 
 	public static function set_search_term( $posts, $query ) {
 
-		if ( ! is_admin() || ( empty( $query->query['post_type'] ) || $query->query['post_type'] !== OrdersWPEC::PTYPE ) ) {
+		if ( ! is_admin() || ( empty( $query->query['post_type'] ) || $query->query['post_type'] !== Orders::PTYPE ) ) {
 			return $posts;
 		}
 
@@ -147,7 +153,7 @@ class WPEC_Order_List {
 
 	public static function manage_search_sort_queries( $query ) {
 
-		if ( ! is_admin() || ( empty( $query->query['post_type'] ) || $query->query['post_type'] !== OrdersWPEC::PTYPE ) ) {
+		if ( ! is_admin() || ( empty( $query->query['post_type'] ) || $query->query['post_type'] !== Orders::PTYPE ) ) {
 			return;
 		}
 

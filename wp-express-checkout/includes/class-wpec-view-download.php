@@ -6,15 +6,17 @@
  * triggers the product download process.
  */
 
+namespace WP_Express_Checkout;
+
 /**
  * Download request class.
  */
-class WPEC_View_Download {
+class View_Downloads {
 
 	/**
 	 * The class instance.
 	 *
-	 * @var WPEC_View_Download
+	 * @var View_Downloads
 	 */
 	protected static $instance = null;
 
@@ -30,7 +32,7 @@ class WPEC_View_Download {
 	/**
 	 * Retrieves the instance.
 	 *
-	 * @return WPEC_View_Download
+	 * @return View_Downloads
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -49,13 +51,13 @@ class WPEC_View_Download {
 	public static function get_download_url( $order_id, $grp_id = '', $var_id = '' ) {
 		$download_url = '';
 
-		$order = OrdersWPEC::retrieve( $order_id );
+		$order = Orders::retrieve( $order_id );
 
 		if ( ! $order ) {
 			return $download_url;
 		}
 
-		$product_item = $order->get_item( PPECProducts::$products_slug );
+		$product_item = $order->get_item( Products::$products_slug );
 		$product      = get_post( $product_item['post_id'] );
 
 		if ( ! empty( $product ) || ( ! $product->ppec_product_upload && '' === $grp_id ) ) {
@@ -99,13 +101,13 @@ class WPEC_View_Download {
 	 */
 	public static function get_order_downloads_list( $order_id ) {
 		$downloads = array();
-		$order     = OrdersWPEC::retrieve( $order_id );
+		$order     = Orders::retrieve( $order_id );
 
 		if ( ! $order ) {
 			return $downloads;
 		}
 
-		$product_item = $order->get_item( PPECProducts::$products_slug );
+		$product_item = $order->get_item( Products::$products_slug );
 		$product      = get_post( $product_item['post_id'] );
 
 		if ( empty( $product ) ) {
@@ -141,14 +143,14 @@ class WPEC_View_Download {
 		}
 
 		$order_id = absint( $_GET['order_id'] );
-		$order    = OrdersWPEC::retrieve( $order_id );
+		$order    = Orders::retrieve( $order_id );
 
 		if ( empty( $order ) ) {
 			wp_die( esc_html__( 'Invalid Order ID!', 'wp-express-checkout' ) );
 		}
 
 		$product = get_post( absint( $_GET['wpec_download_file'] ) );
-		$item    = $order->get_item( PPECProducts::$products_slug );
+		$item    = $order->get_item( Products::$products_slug );
 
 		if ( empty( $product ) || (int) $item['post_id'] !== $product->ID ) {
 			wp_die( esc_html__( 'Invalid product ID!', 'wp-express-checkout' ) );
@@ -190,7 +192,7 @@ class WPEC_View_Download {
 		// Get the product custom post type object.
 		$product  = get_post( absint( $_GET['wpec_download_file'] ) );
 		$order_id = absint( $_GET['order_id'] );
-		$order    = OrdersWPEC::retrieve( $order_id );
+		$order    = Orders::retrieve( $order_id );
 		$file_url = '';
 
 		// Trigger the action hook (product object is also passed). It can be usewd to override the download handling via an addon.
@@ -214,7 +216,7 @@ class WPEC_View_Download {
 		// Clean the file URL.
 		$file_url = stripslashes( trim( $file_url ) );
 
-		WPEC_Utility_Functions::redirect_to_url( $file_url );
+		Utils::redirect_to_url( $file_url );
 
 	}
 

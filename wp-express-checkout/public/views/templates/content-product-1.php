@@ -5,7 +5,7 @@
  * @package wp-express-checkout
  */
 
-$wpec_shortcode = WPECShortcode::get_instance();
+$wpec_shortcode = WP_Express_Checkout\Shortcodes::get_instance();
 ?>
 
 <div class="wpec-product-item wpec-product-item-<?php echo esc_attr( $wpec_button_args['product_id'] ); ?>">

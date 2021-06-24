@@ -1,36 +1,41 @@
 <?php
 
-class PPECProductsMetaboxes {
+namespace WP_Express_Checkout\Admin;
+
+use WP_Express_Checkout\Main;
+use WP_Express_Checkout\Products;
+
+class Products_Metaboxes {
 
 	var $WPECAdmin;
 	var $WPEC_Main;
 
 	public function __construct() {
-		$this->WPECAdmin = WPEC_Admin::get_instance();
-		$this->WPEC_Main = WPEC_Main::get_instance();
-		remove_post_type_support( PPECProducts::$products_slug, 'editor' );
+		$this->WPECAdmin = Admin::get_instance();
+		$this->WPEC_Main = Main::get_instance();
+		remove_post_type_support( Products::$products_slug, 'editor' );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 9 );
 		// products post save action.
-		add_action( 'save_post_' . PPECProducts::$products_slug, array( $this, 'save_product_handler' ), 10, 3 );
+		add_action( 'save_post_' . Products::$products_slug, array( $this, 'save_product_handler' ), 10, 3 );
 	}
 
 	function add_meta_boxes() {
-		add_meta_box( 'wsp_content', __( 'Description', 'wp-express-checkout' ), array( $this, 'display_description_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
-		add_meta_box( 'ppec_price_meta_box', __( 'Price', 'wp-express-checkout' ), array( $this, 'display_price_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
-		add_meta_box( 'wpec_variations_meta_box', __( 'Variations', 'wp-express-checkout' ), array( $this, 'display_variations_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
-		add_meta_box( 'ppec_quantity_meta_box', __( 'Quantity', 'wp-express-checkout' ), array( $this, 'display_quantity_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
-		add_meta_box( 'wpec_shipping_tax_meta_box', __( 'Shipping & Tax', 'wp-express-checkout' ), array( $this, 'display_shipping_tax_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
-		add_meta_box( 'ppec_upload_meta_box', __( 'Download URL', 'wp-express-checkout' ), array( $this, 'display_upload_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
-		add_meta_box( 'wpec_thumbnail_meta_box', __( 'Product Thumbnail', 'wp-express-checkout' ), array( $this, 'display_thumbnail_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
-		add_meta_box( 'wpec_thankyou_page_meta_box', __( 'Thank You Page URL', 'wp-express-checkout' ), array( $this, 'display_thankyou_page_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
-		add_meta_box( 'ppec_shortcode_meta_box', __( 'Shortcode', 'wp-express-checkout' ), array( $this, 'display_shortcode_meta_box' ), PPECProducts::$products_slug, 'side', 'high' );
-		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance Related', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
-		add_meta_box( 'wpec_coupons_meta_box', __( 'Coupons Settings', 'wp-express-checkout' ), array( $this, 'display_coupons_meta_box' ), PPECProducts::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wsp_content', __( 'Description', 'wp-express-checkout' ), array( $this, 'display_description_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'ppec_price_meta_box', __( 'Price', 'wp-express-checkout' ), array( $this, 'display_price_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_variations_meta_box', __( 'Variations', 'wp-express-checkout' ), array( $this, 'display_variations_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'ppec_quantity_meta_box', __( 'Quantity', 'wp-express-checkout' ), array( $this, 'display_quantity_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_shipping_tax_meta_box', __( 'Shipping & Tax', 'wp-express-checkout' ), array( $this, 'display_shipping_tax_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'ppec_upload_meta_box', __( 'Download URL', 'wp-express-checkout' ), array( $this, 'display_upload_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_thumbnail_meta_box', __( 'Product Thumbnail', 'wp-express-checkout' ), array( $this, 'display_thumbnail_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_thankyou_page_meta_box', __( 'Thank You Page URL', 'wp-express-checkout' ), array( $this, 'display_thankyou_page_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'ppec_shortcode_meta_box', __( 'Shortcode', 'wp-express-checkout' ), array( $this, 'display_shortcode_meta_box' ), Products::$products_slug, 'side', 'high' );
+		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance Related', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_coupons_meta_box', __( 'Coupons Settings', 'wp-express-checkout' ), array( $this, 'display_coupons_meta_box' ), Products::$products_slug, 'normal', 'high' );
 
 		// check if eMember installed
 		if ( function_exists( 'wp_eMember_install' ) ) {
 			//if it is, let's add metabox where admin can select membership level
-			add_meta_box( 'wpec_emember_meta_box', __( 'WP eMember Membership Level', 'wp-express-checkout' ), array( $this, 'display_emember_meta_box' ), PPECProducts::$products_slug, 'normal', 'default' );
+			add_meta_box( 'wpec_emember_meta_box', __( 'WP eMember Membership Level', 'wp-express-checkout' ), array( $this, 'display_emember_meta_box' ), Products::$products_slug, 'normal', 'default' );
 		}
 	}
 
@@ -165,7 +170,7 @@ class PPECProductsMetaboxes {
 		<table class="widefat fixed wpec-variations-tbl">
 			<tr>
 				<th width="40%"><?php echo esc_html( _x( 'Name', 'Variation name', 'wp-express-checkout' ) ); ?></th>
-				<th width="20%"><?php esc_html_e( 'Price Mod', 'wp-express-checkout' ); ?> <?php echo WPEC_Admin::gen_help_popup( $price_mod_help ); ?></th>
+				<th width="20%"><?php esc_html_e( 'Price Mod', 'wp-express-checkout' ); ?> <?php echo Admin::gen_help_popup( $price_mod_help ); ?></th>
 				<th width="30%"><?php esc_html_e( 'Product URL', 'wp-express-checkout' ); ?></th>
 			</tr>
 		</table>

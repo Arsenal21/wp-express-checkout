@@ -7,10 +7,12 @@
  * Sends to Thank You page.
  */
 
+namespace WP_Express_Checkout;
+
 /**
- * Process IPN class
+ * Process Free payment class
  */
-class WPEC_Process_IPN_Free extends WPEC_Process_IPN {
+class Free_Payment_Processor extends Payment_Processor {
 
 	private $order_data;
 

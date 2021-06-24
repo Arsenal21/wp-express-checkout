@@ -1,4 +1,9 @@
 <?php
+
+use WP_Express_Checkout\Admin\Admin;
+use WP_Express_Checkout\Main;
+use WP_Express_Checkout\Products;
+
 /**
  * Represents the view for the administration dashboard.
  *
@@ -35,7 +40,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	<?php settings_errors(); ?>
 
 	<?php
-	$wpec_admin = WPEC_Admin::get_instance();
+	$wpec_admin = Admin::get_instance();
 
 	/**
 	 * Filters the plugin settings tabs
@@ -62,7 +67,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 		foreach ( $wpec_plugin_tabs as $location => $tabname ) {
 			$class = ( $current == $location ) ? ' nav-tab-active' : '';
 			?>
-			<a class="nav-tab<?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( 'edit.php?post_type=' . PPECProducts::$products_slug . '&page=' . $location ); ?>"><?php echo esc_html( $tabname ); ?></a>
+			<a class="nav-tab<?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( 'edit.php?post_type=' . Products::$products_slug . '&page=' . $location ); ?>"><?php echo esc_html( $tabname ); ?></a>
 			<?php
 		}
 		?>
@@ -157,7 +162,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 					$wpec_admin->do_settings_sections( 'paypal-for-digital-goods' );
 					echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods' ) . "' />";
 
-				$ppdg			 = WPEC_Main::get_instance();
+				$ppdg			 = Main::get_instance();
 				$args			 = array();
 				$disabled_funding	 = $ppdg->get_setting( 'disabled_funding' );
 				if ( ! empty( $disabled_funding ) ) {

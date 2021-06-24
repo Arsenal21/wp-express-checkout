@@ -9,8 +9,9 @@
 namespace WP_Express_Checkout\PayPal;
 
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
-use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
+use PayPalCheckoutSdk\Core\SandboxEnvironment;
+use WP_Express_Checkout\Main;
 
 /**
  * The plugin's implementation of the PayPal SDK client.
@@ -38,7 +39,7 @@ class Client {
 	 * @return SandboxEnvironment|ProductionEnvironment
 	 */
 	public static function environment( $mode = '' ) {
-		$wpec    = \WPEC_Main::get_instance();
+		$wpec    = Main::get_instance();
 		$is_live = $mode ? 'live' === $mode : $wpec->get_setting( 'is_live' );
 
 		if ( $is_live ) {

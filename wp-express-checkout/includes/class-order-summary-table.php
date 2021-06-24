@@ -1,10 +1,13 @@
 <?php
+
+namespace WP_Express_Checkout;
+
 /**
  * Used to construct and display an order summary table for an order
  *
  * @since 1.9.5
  */
-class WPEC_Order_Summary_Table {
+class Order_Summary_Table {
 
 	protected $order, $currency;
 
@@ -105,7 +108,7 @@ class WPEC_Order_Summary_Table {
 
 		$cells = array(
 			$this->html( 'strong', __( 'Subtotal', 'wp-express-checkout' ) ),
-			$this->html( 'strong', WPEC_Utility_Functions::price_format( $subtotal, $this->currency ) ),
+			$this->html( 'strong', Utils::price_format( $subtotal, $this->currency ) ),
 		);
 
 		return $this->html( $this->args['row_html'], array(), $this->cells( $cells, $this->args['cell_html'] ) );
@@ -115,7 +118,7 @@ class WPEC_Order_Summary_Table {
 
 		$cells = array(
 			$this->html( 'strong', __( 'Total', 'wp-express-checkout' ) ),
-			$this->html( 'strong', WPEC_Utility_Functions::price_format( $this->order->get_total(), $this->currency ) ),
+			$this->html( 'strong', Utils::price_format( $this->order->get_total(), $this->currency ) ),
 		);
 
 		return $this->html( $this->args['row_html'], array(), $this->cells( $cells, $this->args['cell_html'] ) );
@@ -129,7 +132,7 @@ class WPEC_Order_Summary_Table {
 
 		$cells = array(
 			$item['name'] . '&nbsp;' . $quantity,
-			WPEC_Utility_Functions::price_format( $item['price'] * $item['quantity'], $this->currency ),
+			Utils::price_format( $item['price'] * $item['quantity'], $this->currency ),
 		);
 
 		return $this->html( $this->args['row_html'], array(), $this->cells( $cells ) );

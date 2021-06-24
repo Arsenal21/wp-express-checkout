@@ -1,6 +1,8 @@
 <?php
 
-class WPEC_Variations {
+namespace WP_Express_Checkout;
+
+class Variations {
 
 	public $groups     = array();
 	public $variations = array();
@@ -62,7 +64,7 @@ class WPEC_Variations {
 	/**
 	 * Adds purchased variation to the order.
 	 *
-	 * @param WPEC_Order $order   The order object.
+	 * @param Order $order   The order object.
 	 * @param array      $payment The raw order data retrieved via API.
 	 * @param array      $data    The purchase data generated on a client side.
 	 */
@@ -72,7 +74,7 @@ class WPEC_Variations {
 		}
 
 		// Variations depended on the product.
-		$product_item = $order->get_item( PPECProducts::$products_slug );
+		$product_item = $order->get_item( Products::$products_slug );
 
 		// we got variations posted. Let's get variations from product.
 		$v = new self( $product_item['post_id'] );

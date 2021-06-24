@@ -1,6 +1,10 @@
 <?php
 
-class WPEC_Coupons_Admin {
+namespace WP_Express_Checkout;
+
+use Admin\Coupons_List;
+
+class Coupons {
 
 	var $POST_SLUG = 'wpec_coupons';
 
@@ -124,7 +128,7 @@ class WPEC_Coupons_Admin {
 		$out['code']         = $coupon_code;
 		$out['discount']     = $discount;
 		$out['discountType'] = $discount_type;
-		$out['discountStr']  = $coupon_code . ': - ' . ( $discount_type === 'perc' ? $discount . '%' : WPEC_Utility_Functions::price_format( $discount, $curr ) );
+		$out['discountStr']  = $coupon_code . ': - ' . ( $discount_type === 'perc' ? $discount . '%' : Utils::price_format( $discount, $curr ) );
 		wp_send_json( $out );
 	}
 
@@ -148,7 +152,7 @@ class WPEC_Coupons_Admin {
 	}
 
 	function add_menu() {
-		add_submenu_page( 'edit.php?post_type=' . PPECProducts::$products_slug, __( 'Coupons', 'wp-express-checkout' ), __( 'Coupons', 'wp-express-checkout' ), 'manage_options', 'wpec-coupons', array( $this, 'display_coupons_menu_page' ) );
+		add_submenu_page( 'edit.php?post_type=' . Products::$products_slug, __( 'Coupons', 'wp-express-checkout' ), __( 'Coupons', 'wp-express-checkout' ), 'manage_options', 'wpec-coupons', array( $this, 'display_coupons_menu_page' ) );
 	}
 
 	function save_settings() {
@@ -202,14 +206,14 @@ class WPEC_Coupons_Admin {
 			<?php
 		}
 
-		$wpec_main       = WPEC_Main::get_instance();
+		$wpec_main       = Main::get_instance();
 		$coupons_enabled = $wpec_main->get_setting( 'coupons_enabled' );
 
 		if ( ! class_exists( 'WP_List_Table' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 		}
 
-		$coupons_tbl = new WPEC_Coupons_Table();
+		$coupons_tbl = new Coupons_List();
 		$coupons_tbl->prepare_items();
 		?>
 	<style>
@@ -242,7 +246,7 @@ class WPEC_Coupons_Admin {
 			</div>
 			</div>
 		</div></div>
-		<h2><?php _e( 'Coupons', 'wp-express-checkout' ); ?> <a class="page-title-action" href="?post_type=<?php echo esc_attr( PPECProducts::$products_slug ); ?>&page=wpec-coupons&action=wpec_add_edit_coupon"><?php _e( 'Add a Coupon', 'wp-express-checkout' ); ?></a></h2>
+		<h2><?php _e( 'Coupons', 'wp-express-checkout' ); ?> <a class="page-title-action" href="?post_type=<?php echo esc_attr( Products::$products_slug ); ?>&page=wpec-coupons&action=wpec_add_edit_coupon"><?php _e( 'Add a Coupon', 'wp-express-checkout' ); ?></a></h2>
 		<?php $coupons_tbl->display(); ?>
 	</div>
 		<?php
@@ -278,7 +282,7 @@ class WPEC_Coupons_Admin {
 		//generate array with all products
 		$posts = get_posts(
 			array(
-				'post_type'   => untrailingslashit( PPECProducts::$products_slug ),
+				'post_type'   => untrailingslashit( Products::$products_slug ),
 				'post_status' => 'publish',
 				'numberposts' => -1,
 			// 'order'    => 'ASC'
@@ -483,14 +487,14 @@ class WPEC_Coupons_Admin {
 		// translators: %s is coupon code
 		set_transient( 'wpec_coupons_admin_notice', sprintf( $is_edit ? __( 'Coupon "%s" has been updated.', 'wp-express-checkout' ) : __( 'Coupon "%s" has been created.', 'wp-express-checkout' ), $coupon['code'] ), 60 * 60 );
 
-		wp_safe_redirect( 'edit.php?post_type=' . PPECProducts::$products_slug . '&page=wpec-coupons' );
+		wp_safe_redirect( 'edit.php?post_type=' . Products::$products_slug . '&page=wpec-coupons' );
 		exit;
 	}
 
 	/**
 	 * Adds coupon discount to the order.
 	 *
-	 * @param WPEC_Order $order   The order object.
+	 * @param Order $order   The order object.
 	 * @param array      $payment The raw order data retrieved via API.
 	 * @param array      $data    The purchase data generated on a client side.
 	 */
@@ -504,14 +508,14 @@ class WPEC_Coupons_Admin {
 		if ( empty( $data['couponCode'] ) ) {
 			return;
 		}
-		$product_item = $order->get_item( PPECProducts::$products_slug );
+		$product_item = $order->get_item( Products::$products_slug );
 		$item_id      = $product_item['post_id'];
 		// Check the coupon code.
 		$coupon = self::get_coupon( $data['couponCode'] );
 		if ( true === $coupon['valid'] && self::is_coupon_allowed_for_product( $coupon['id'], $item_id ) ) {
 			// Get the discount amount.
 			if ( $coupon['discountType'] === 'perc' ) {
-				$discount = WPEC_Utility_Functions::round_price( $order->get_total() * ( $coupon['discount'] / 100 ) );
+				$discount = Utils::round_price( $order->get_total() * ( $coupon['discount'] / 100 ) );
 			} else {
 				$discount = $coupon['discount'];
 			}
@@ -527,7 +531,7 @@ class WPEC_Coupons_Admin {
 	 * @param int   $order_id The order ID.
 	 */
 	public function redeem_coupon( $payment, $order_id ) {
-		$order       = OrdersWPEC::retrieve( $order_id );
+		$order       = Orders::retrieve( $order_id );
 		$coupon_item = $order->get_item( 'coupon' );
 		if ( $coupon_item ) {
 			// Check the coupon code.

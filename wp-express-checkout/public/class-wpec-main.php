@@ -1,5 +1,7 @@
 <?php
 
+namespace WP_Express_Checkout;
+
 /**
  * Plugin class. This class should ideally be used to work with the
  * public-facing side of the WordPress site.
@@ -9,7 +11,7 @@
  *
  *
  */
-class WPEC_Main {
+class Main {
 
 	/**
 	 *
@@ -367,10 +369,10 @@ class WPEC_Main {
 		self::check_and_create_thank_you_page(); // Create the thank you page.
 
 		// Explicitly register post types and flush rewrite rules.
-		$PPECProducts = PPECProducts::get_instance();
-		$PPECProducts->register_post_type();
-		$OrdersWPEC = OrdersWPEC::get_instance();
-		$OrdersWPEC->register_post_type();
+		$products = Products::get_instance();
+		$products->register_post_type();
+		$orders = Orders::get_instance();
+		$orders->register_post_type();
 		self::rewrite_flush();
 	}
 

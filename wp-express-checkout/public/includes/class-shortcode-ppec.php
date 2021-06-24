@@ -1,6 +1,8 @@
 <?php
 
-class WPECShortcode {
+namespace WP_Express_Checkout;
+
+class Shortcodes {
 
 	public $ppdg     = null;
 	public $paypaldg = null;
@@ -16,7 +18,7 @@ class WPECShortcode {
 	protected static $payment_buttons = array();
 
 	function __construct() {
-		$this->ppdg = WPEC_Main::get_instance();
+		$this->ppdg = Main::get_instance();
 
 		add_shortcode( 'wp_express_checkout', array( $this, 'shortcode_wp_express_checkout' ) );
 		add_shortcode( 'wpec_thank_you', array( $this, 'shortcode_wpec_thank_you' ) );
@@ -57,7 +59,7 @@ class WPECShortcode {
 		}
 		$post_id = intval( $atts['product_id'] );
 		$post    = get_post( $post_id );
-		if ( ! $post || get_post_type( $post_id ) !== PPECProducts::$products_slug ) {
+		if ( ! $post || get_post_type( $post_id ) !== Products::$products_slug ) {
 			$error_msg = sprintf( __( "Can't find product with ID %s", 'wp-express-checkout' ), $post_id );
 			$err       = $this->show_err_msg( $error_msg );
 			return $err;
@@ -175,7 +177,7 @@ class WPECShortcode {
 
 		// Variations.
 		$variations = array();
-		$v          = new WPEC_Variations( $product_id );
+		$v          = new Variations( $product_id );
 		if ( ! empty( $v->groups ) ) {
 			$variations['groups']   = $v->groups;
 			$variations_names       = get_post_meta( $product_id, 'wpec_variations_names', true );
@@ -290,7 +292,7 @@ class WPECShortcode {
 	}
 
 	public function generate_price_tag( $args ) {
-		$output = '<span class="wpec-price-amount">' . esc_html( WPEC_Utility_Functions::price_format( $args['price'] ) ) . '</span>';
+		$output = '<span class="wpec-price-amount">' . esc_html( Utils::price_format( $args['price'] ) ) . '</span>';
 		$output .= ' <span class="wpec-new-price-amount"></span>';
 		/* translators: quantity */
 		$output .= 1 < $args['quantity'] ? ' <span class="wpec-quantity">' . sprintf( __( 'x %s', 'wp-express-checkout' ), '<span class="wpec-quantity-val">' . $args['quantity'] . '</span>' ) . '</span>' : '';
@@ -302,11 +304,11 @@ class WPECShortcode {
 		$tot_price        = ! empty( $args['quantity'] ) ? $args['price'] * $args['quantity'] : $args['price'];
 
 		if ( ! empty( $args['tax'] ) ) {
-			$tax_amount = WPEC_Utility_Functions::get_tax_amount( $args['price'], $args['tax'] ) * $args['quantity'];
+			$tax_amount = Utils::get_tax_amount( $args['price'], $args['tax'] ) * $args['quantity'];
 			$tot_price += $tax_amount;
 			if ( ! empty( $args['price'] ) ) {
 				/* translators: tax amount */
-				$tax_tag = sprintf( __( '%s (tax)', 'wp-express-checkout' ), '<span class="wpec-tax-val">' . WPEC_Utility_Functions::price_format( $tax_amount ) . '</span>' );
+				$tax_tag = sprintf( __( '%s (tax)', 'wp-express-checkout' ), '<span class="wpec-tax-val">' . Utils::price_format( $tax_amount ) . '</span>' );
 			} else {
 				/* translators: tax percent */
 				$tax_tag = sprintf( __( '%s%% tax', 'wp-express-checkout' ), '<span class="wpec-tax-val">' . $args['tax'] . '</span>' );
@@ -317,16 +319,16 @@ class WPECShortcode {
 			$tot_price += $args['shipping'];
 			if ( ! empty( $args['tax'] ) ) {
 				/* translators: tax + shipping amount */
-				$shipping_tag = sprintf( __( '+ %s (shipping)', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $args['shipping'] ) );
+				$shipping_tag = sprintf( __( '+ %s (shipping)', 'wp-express-checkout' ), Utils::price_format( $args['shipping'] ) );
 			} else {
 				/* translators: shipping amount */
-				$shipping_tag = sprintf( __( '%s (shipping)', 'wp-express-checkout' ), WPEC_Utility_Functions::price_format( $args['shipping'] ) );
+				$shipping_tag = sprintf( __( '%s (shipping)', 'wp-express-checkout' ), Utils::price_format( $args['shipping'] ) );
 			}
 			$shipping_line = '<span class="wpec_price_shipping_section">' . $shipping_tag . '</span>';
 		}
 
 		if ( floatval( $tot_price ) !== floatval( $args['price'] ) ) {
-			$total_line       = '<div class="wpec_price_full_total">' . esc_html__( 'Total:', 'wp-express-checkout' ) . ' <span class="wpec_tot_current_price">' . esc_html( WPEC_Utility_Functions::price_format( $tot_price ) ) . '</span> <span class="wpec_tot_new_price"></span></div>';
+			$total_line       = '<div class="wpec_price_full_total">' . esc_html__( 'Total:', 'wp-express-checkout' ) . ' <span class="wpec_tot_current_price">' . esc_html( Utils::price_format( $tot_price ) ) . '</span> <span class="wpec_tot_new_price"></span></div>';
 			$under_price_line = '<div class="wpec_under_price_line">' . $tax_line . $shipping_line . $total_line . '</div>';
 		}
 
@@ -360,7 +362,7 @@ class WPECShortcode {
 
 		// Retrieve the order data.
 		$order_id = (int) $_GET['order_id'];
-		$order    = OrdersWPEC::retrieve( $order_id );
+		$order    = Orders::retrieve( $order_id );
 
 		if ( empty( $order ) ) {
 			return __( 'Error! Incorrect order ID. Could not find that order in the orders table.', 'wp-express-checkout' );
@@ -378,7 +380,7 @@ class WPECShortcode {
 		$thank_you_msg .= '<p>{product_details}</p>';
 		$thank_you_msg .= '<p>' . __( 'Transaction ID: ', 'wp-express-checkout' ) . '{transaction_id}</p>';
 
-		$downloads = WPEC_View_Download::get_order_downloads_list( $order_id );
+		$downloads = View_Downloads::get_order_downloads_list( $order_id );
 
 		if ( ! empty( $downloads ) ) {
 			$download_var_str  = '';
@@ -401,7 +403,7 @@ class WPECShortcode {
 		);
 
 		// Apply the dynamic tags.
-		$thank_you_msg = nl2br( WPEC_Utility_Functions::replace_dynamic_order_tags( $thank_you_msg, $order_id, $args ) );
+		$thank_you_msg = nl2br( Utils::replace_dynamic_order_tags( $thank_you_msg, $order_id, $args ) );
 
 		// Trigger the filter.
 		$thank_you_msg = apply_filters( 'wpec_thank_you_message', $thank_you_msg );
@@ -414,12 +416,12 @@ class WPECShortcode {
 	 *
 	 * @since 2.0
 	 *
-	 * @param WPEC_Order $order The order object.
+	 * @param Order $order The order object.
 	 *
 	 * @return string
 	 */
 	public static function generate_product_details_tag( $order ) {
-		$table = new WPEC_Order_Summary_Table( $order );
+		$table = new Order_Summary_Table( $order );
 		ob_start();
 		$table->show();
 		$output = ob_get_clean();

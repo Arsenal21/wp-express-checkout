@@ -1,10 +1,8 @@
 <?php
 
-class WPEC_Utility_Functions {
+namespace WP_Express_Checkout;
 
-	public function __construct() {
-
-	}
+class Utils {
 
 	/**
 	 * Returns the price given the arguments in settings
@@ -15,7 +13,7 @@ class WPEC_Utility_Functions {
 	 * @return string                    The formatted price.
 	 */
 	public static function price_format( $price, $override_currency = '', $override_position = '' ) {
-		$ppdg = WPEC_Main::get_instance();
+		$ppdg = Main::get_instance();
 
 		$decimals        = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : $ppdg->get_setting( 'price_decimals_num' );
 		$formatted_price = number_format( $price, $decimals, $ppdg->get_setting( 'price_decimal_sep' ), $ppdg->get_setting( 'price_thousand_sep' ) );
@@ -64,7 +62,7 @@ class WPEC_Utility_Functions {
 	}
 
 	public static function get_tax_amount( $price, $tax ) {
-		$ppdg = WPEC_Main::get_instance();
+		$ppdg = Main::get_instance();
 
 		if ( ! empty( $tax ) ) {
 			$prec       = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : $ppdg->get_setting( 'price_decimals_num' );
@@ -76,7 +74,7 @@ class WPEC_Utility_Functions {
 	}
 
 	public static function round_price( $price ) {
-		$ppdg = WPEC_Main::get_instance();
+		$ppdg = Main::get_instance();
 
 		$prec  = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : $ppdg->get_setting( 'price_decimals_num' );
 		$price = round( $price, $prec );
@@ -85,7 +83,7 @@ class WPEC_Utility_Functions {
 	}
 
 	public static function apply_tax( $price, $tax ) {
-		$ppdg = WPEC_Main::get_instance();
+		$ppdg = Main::get_instance();
 
 		if ( ! empty( $tax ) ) {
 			$prec       = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : $ppdg->get_setting( 'price_decimals_num' );
@@ -96,7 +94,7 @@ class WPEC_Utility_Functions {
 	}
 
 	public static function apply_shipping( $price, $shipping ) {
-		$ppdg = WPEC_Main::get_instance();
+		$ppdg = Main::get_instance();
 
 		if ( ! empty( $shipping ) ) {
 			$prec   = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : $ppdg->get_setting( 'price_decimals_num' );
@@ -116,7 +114,7 @@ class WPEC_Utility_Functions {
 	 * @return string
 	 */
 	public static function replace_dynamic_order_tags( $text, $order_id, $args = array() ) {
-		$order           = OrdersWPEC::retrieve( $order_id );
+		$order           = Orders::retrieve( $order_id );
 		$product_details = self::get_product_details( $order ) . "\n";
 		$payer_details   = $order->get_data( 'payer' );
 		$coupon_item     = $order->get_item( 'coupon' );
@@ -184,7 +182,7 @@ class WPEC_Utility_Functions {
 	 *
 	 * @since 2.0
 	 *
-	 * @param WPEC_Order $order The order details stored in the
+	 * @param Order $order The order details stored in the
 	 *
 	 * @return string
 	 */
@@ -200,7 +198,7 @@ class WPEC_Utility_Functions {
 		$other_items   = array();
 
 		foreach ( $items as $item ) {
-			if ( $item['type'] === PPECProducts::$products_slug ) {
+			if ( $item['type'] === Products::$products_slug ) {
 				$product_item = $item;
 				continue;
 			}
