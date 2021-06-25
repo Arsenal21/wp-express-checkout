@@ -114,7 +114,11 @@ None
 
 == Changelog ==
 
-= WIP since 1.9.9 to 2021-06-23 =
+= WIP since 1.9.9 to 2021-06-25 =
+* Rename files according to WP standards and new classes names
+* Use namespace WP_Express_Checkout for all classes.
+* Save payer PayPal email in the order meta field. Ensures order search by customer email. Closes #26
+* Updated readme and POT files
 * Added column 'PayPal Transaction ID' to the Orders list. Added ability to search by PayPal Transaction ID. Added order meta field wpec_order_resource_id to use instead transaction_id item of wpec_order_data meta field. #26
 * Added 'Thank You Page URL' Product option and shortcode attribute 'thank_you_url' to override global setting. Closes #25
 * Updated readme and POT file
