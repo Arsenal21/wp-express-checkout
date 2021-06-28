@@ -2,7 +2,7 @@
 
 namespace WP_Express_Checkout;
 
-use Debug\Logger;
+use WP_Express_Checkout\Debug\Logger;
 
 class Integrations {
 

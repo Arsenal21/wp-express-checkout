@@ -2,7 +2,7 @@
 
 namespace WP_Express_Checkout;
 
-use Admin\Coupons_List;
+use WP_Express_Checkout\Admin\Coupons_List;
 
 class Coupons {
 
