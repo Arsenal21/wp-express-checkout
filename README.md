@@ -1,4 +1,7 @@
 # WP Express Checkout
+
+[![Build Status](https://travis-ci.com/Arsenal21/wp-express-checkout.svg)](https://travis-ci.com/Arsenal21/wp-express-checkout)
+
 <strong>WP Express Checkout Plugin</strong>
 
 https://wordpress.org/plugins/wp-express-checkout/
