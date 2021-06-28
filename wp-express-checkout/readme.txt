@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
 Tested up to: 5.7
-Stable tag: 1.9.9
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -114,19 +114,18 @@ None
 
 == Changelog ==
 
-= WIP since 1.9.9 to 2021-06-25 =
-* Rename files according to WP standards and new classes names
+= 2.0.0 =
+* Save payer's PayPal email address in the order meta field. Ensures order search by customer email.
+* Added a new column 'PayPal Transaction ID' to the Orders list. 
+* Added the ability to search an order using the PayPal Transaction ID. 
+* Added order meta field wpec_order_resource_id to use instead of transaction_id item of wpec_order_data meta field.
+* Added 'Thank You Page URL' on a per-product basis. 
+* Added shortcode attribute 'thank_you_url' to override global setting via the shortcode.
+* Improved the help text with a link to the documentation page explaining what to do if the thank you page has been deleted accidentally
+* Replaced namespace WPEC with WP_Express_Checkout for better stability
+* Refactored files according to WP standards and new classes names
 * Use namespace WP_Express_Checkout for all classes.
-* Save payer PayPal email in the order meta field. Ensures order search by customer email. Closes #26
-* Updated readme and POT files
-* Added column 'PayPal Transaction ID' to the Orders list. Added ability to search by PayPal Transaction ID. Added order meta field wpec_order_resource_id to use instead transaction_id item of wpec_order_data meta field. #26
-* Added 'Thank You Page URL' Product option and shortcode attribute 'thank_you_url' to override global setting. Closes #25
-* Updated readme and POT file
-* Updated autoloader
-* improved the help text with a link to documentation explaining what to do if the thank you page has been deleted accidentally
-* Replace namespace WPEC with WP_Express_Checkout for better stability
-
-= END WIP =
+* Updated the POT files
 
 = 1.9.9 =
 * Renamed the "Show in a Modal Window" field to "Show in a Popup/Modal Window" to make it easier to understand.
