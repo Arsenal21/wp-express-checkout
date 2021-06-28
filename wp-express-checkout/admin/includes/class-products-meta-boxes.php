@@ -435,7 +435,12 @@ jQuery(document).ready(function($) {
 	public function display_emember_meta_box( $post ) {
 		$current_val = get_post_meta( $post->ID, 'wpec_product_emember_level', true );
 
-		$all_levels = \dbAccess::findAll( WP_EMEMBER_MEMBERSHIP_LEVEL_TABLE, ' id != 1 ', ' id DESC ' );
+		if ( !function_exists( 'emember_get_all_membership_levels_list' )){
+			_e( 'Notice: You need to update your copy of the WP eMember plugin before this feature can be used.', 'wp-express-checkout' );
+			return;
+		}
+
+		$all_levels = emember_get_all_membership_levels_list();
 		$levels_str = '<option value="">(' . __( 'None', 'wp-express-checkout' ) . ')</option>' . "\r\n";
 
 		foreach ( $all_levels as $level ) {
