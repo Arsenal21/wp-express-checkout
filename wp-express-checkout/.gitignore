@@ -34,6 +34,7 @@ Thumbs.db
 
 # Unit tests #
 ##############
+/bin
 /tmp
 /tests/bin/tmp
 tests/_output/*
@@ -42,6 +43,7 @@ tests/acceptance.suite.yml
 tests/functional.suite.yml
 tests/integration.suite.yml
 tests/unit.suite.yml
+tests/wp-tests-config.php
 
 # Netbeans #
 ##############
