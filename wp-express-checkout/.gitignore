@@ -34,7 +34,6 @@ Thumbs.db
 
 # Unit tests #
 ##############
-/bin
 /tmp
 /tests/bin/tmp
 tests/_output/*
