@@ -25,6 +25,7 @@ phpcs.xml export-ignore
 phpunit.xml export-ignore
 phpunit.xml.dist export-ignore
 Rakefile export-ignore
+README.md export-ignore
 
 apigen/ export-ignore
 docs/ export-ignore
