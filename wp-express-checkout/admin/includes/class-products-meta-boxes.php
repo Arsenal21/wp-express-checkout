@@ -376,9 +376,8 @@ jQuery(document).ready(function($) {
 		$current_val = get_post_meta( $post->ID, 'wpec_product_thankyou_page', true );
 		?>
 <input type="text" name="wpec_product_thankyou_page" style="width: 100%;" value="<?php echo esc_attr( $current_val ); ?>" placeholder="https://..." />
-<p class="description"><?php _e( 'Enter Thank You page URL. Leave it blank if you want ot use default Thank You page.', 'wp-express-checkout' ); ?>
-	<br />
-		<?php _e( 'You can read how to customize messages on Thank You page <a href="#" target="_blank">in the documentation</a>.', 'wp-express-checkout' ); ?>
+<p class="description">
+	<?php _e( 'Enter the Thank You page URL for this product. Leave it blank if you want to use the default Thank You page created by the plugin.', 'wp-express-checkout' ); ?>
 </p>
 		<?php
 	}
