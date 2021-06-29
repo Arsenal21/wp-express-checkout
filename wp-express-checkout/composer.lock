@@ -53,6 +53,10 @@
                 "rest",
                 "sdk"
             ],
+            "support": {
+                "issues": "https://github.com/paypal/Checkout-PHP-SDK/issues",
+                "source": "https://github.com/paypal/Checkout-PHP-SDK/tree/1.0.1"
+            },
             "time": "2019-11-07T23:16:44+00:00"
         },
         {
@@ -92,6 +96,10 @@
                     "homepage": "https://github.com/paypal/paypalhttp_php/contributors"
                 }
             ],
+            "support": {
+                "issues": "https://github.com/paypal/paypalhttp_php/issues",
+                "source": "https://github.com/paypal/paypalhttp_php/tree/1.0.0"
+            },
             "abandoned": true,
             "time": "2019-11-06T21:27:12+00:00"
         }
@@ -104,5 +112,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.1.0"
 }

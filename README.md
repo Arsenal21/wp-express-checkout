@@ -1,6 +1,6 @@
 # WP Express Checkout
 
-[![Build Status](https://travis-ci.com/Arsenal21/wp-express-checkout.svg)](https://travis-ci.com/Arsenal21/wp-express-checkout)
+[![PHPUnit Tests](https://github.com/Arsenal21/wp-express-checkout/actions/workflows/phpunit-tests.yml/badge.svg)](https://github.com/Arsenal21/wp-express-checkout/actions/workflows/phpunit-tests.yml)
 
 <strong>WP Express Checkout Plugin</strong>
 
