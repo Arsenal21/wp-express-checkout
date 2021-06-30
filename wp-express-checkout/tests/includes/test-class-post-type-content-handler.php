@@ -21,22 +21,10 @@ class Post_Type_Content_HandlerTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	public function tearDown() {
-
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Post_Type_Content_Handler::get_instance
-	 * @todo   Implement testGet_instance().
 	 */
 	public function testGet_instance() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+		$this->assertInstanceOf( 'WP_Express_Checkout\Post_Type_Content_Handler', Post_Type_Content_Handler::get_instance() );
 	}
 
 	/**

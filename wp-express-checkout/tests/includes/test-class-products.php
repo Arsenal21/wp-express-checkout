@@ -21,33 +21,20 @@ class ProductsTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	public function tearDown() {
-
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Products::get_instance
-	 * @todo   Implement testGet_instance().
 	 */
 	public function testGet_instance() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+		$this->assertInstanceOf( 'WP_Express_Checkout\Products', Products::get_instance() );
 	}
 
 	/**
 	 * @covers WP_Express_Checkout\Products::register_post_type
-	 * @todo   Implement testRegister_post_type().
 	 */
 	public function testRegister_post_type() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+		unregister_post_type( Products::$products_slug );
+		$this->assertNull( get_post_type_object( Products::$products_slug ) );
+		$this->object->register_post_type();
+		$this->assertInstanceOf( 'WP_Post_Type', get_post_type_object( Products::$products_slug ) );
 	}
 
 	/**

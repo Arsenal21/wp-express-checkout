@@ -21,14 +21,6 @@ class LoggerTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	public function tearDown() {
-
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Debug\Logger::log
 	 * @todo   Implement testLog().
 	 */

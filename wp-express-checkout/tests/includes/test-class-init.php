@@ -21,14 +21,6 @@ class InitTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	public function tearDown() {
-
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Init::do_init_time_tasks
 	 * @todo   Implement testDo_init_time_tasks().
 	 */

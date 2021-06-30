@@ -21,14 +21,6 @@ class Payment_Processor_FreeTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	public function tearDown() {
-
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Payment_Processor_Free::wpec_process_payment
 	 * @todo   Implement testWpec_process_payment().
 	 */

@@ -21,22 +21,10 @@ class Payment_ProcessorTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	public function tearDown() {
-
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Payment_Processor::get_instance
-	 * @todo   Implement testGet_instance().
 	 */
 	public function testGet_instance() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+		$this->assertInstanceOf( 'WP_Express_Checkout\Payment_Processor', Payment_Processor::get_instance() );
 	}
 
 	/**
@@ -52,13 +40,10 @@ class Payment_ProcessorTest extends \WP_UnitTestCase {
 
 	/**
 	 * @covers WP_Express_Checkout\Payment_Processor::is_custom_amount
-	 * @todo   Implement testIs_custom_amount().
 	 */
 	public function testIs_custom_amount() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+		$this->assertTrue( $this->object->is_custom_amount( 1 ) );
+		$this->assertFalse( $this->object->is_custom_amount( 0 ) );
 	}
 
 }

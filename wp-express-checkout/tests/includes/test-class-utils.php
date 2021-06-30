@@ -21,14 +21,6 @@ class UtilsTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	public function tearDown() {
-
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Utils::price_format
 	 * @todo   Implement testPrice_format().
 	 */

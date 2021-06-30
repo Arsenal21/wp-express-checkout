@@ -21,14 +21,6 @@ class Products_Meta_BoxesTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	public function tearDown() {
-
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Admin\Products_Meta_Boxes::add_meta_boxes
 	 * @todo   Implement testAdd_meta_boxes().
 	 */

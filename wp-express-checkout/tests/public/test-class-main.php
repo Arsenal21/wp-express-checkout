@@ -21,14 +21,6 @@ class MainTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	public function tearDown() {
-
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Main::enqueue_styles
 	 * @todo   Implement testEnqueue_styles().
 	 */
@@ -52,13 +44,19 @@ class MainTest extends \WP_UnitTestCase {
 
 	/**
 	 * @covers WP_Express_Checkout\Main::get_setting
-	 * @todo   Implement testGet_setting().
 	 */
 	public function testGet_setting() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+		$dummy = $this->object->get_setting( 'dummy' );
+		$this->assertFalse( $dummy );
+
+		$is_live = $this->object->get_setting( 'is_live' );
+		$this->assertEquals( 0, $is_live );
+
+		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'is_live' => 42 ] ) );
+
+		$is_live = $this->object->get_setting( 'is_live' );
+		$this->assertEquals( 42, $is_live );
+		update_option( 'ppdg-settings', Main::get_defaults() );
 	}
 
 	/**
@@ -74,13 +72,9 @@ class MainTest extends \WP_UnitTestCase {
 
 	/**
 	 * @covers WP_Express_Checkout\Main::get_instance
-	 * @todo   Implement testGet_instance().
 	 */
 	public function testGet_instance() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+		$this->assertInstanceOf( 'WP_Express_Checkout\Main', Main::get_instance() );
 	}
 
 	/**
@@ -118,13 +112,10 @@ class MainTest extends \WP_UnitTestCase {
 
 	/**
 	 * @covers WP_Express_Checkout\Main::get_defaults
-	 * @todo   Implement testGet_defaults().
 	 */
 	public function testGet_defaults() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+		$defaults = Main::get_defaults();
+		$this->assertTrue( is_array( $defaults ) );
 	}
 
 	/**

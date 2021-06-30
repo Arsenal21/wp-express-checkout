@@ -21,33 +21,20 @@ class OrdersTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	public function tearDown() {
-
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Orders::register_post_type
-	 * @todo   Implement testRegister_post_type().
 	 */
 	public function testRegister_post_type() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+		unregister_post_type( Orders::PTYPE );
+		$this->assertNull( get_post_type_object( Orders::PTYPE ) );
+		$this->object->register_post_type();
+		$this->assertInstanceOf( 'WP_Post_Type', get_post_type_object( Orders::PTYPE ) );
 	}
 
 	/**
 	 * @covers WP_Express_Checkout\Orders::get_instance
-	 * @todo   Implement testGet_instance().
 	 */
 	public function testGet_instance() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+		$this->assertInstanceOf( 'WP_Express_Checkout\Orders', Orders::get_instance() );
 	}
 
 	/**

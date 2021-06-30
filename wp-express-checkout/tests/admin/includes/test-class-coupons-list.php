@@ -21,14 +21,6 @@ class Coupons_ListTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	public function tearDown() {
-
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Admin\Coupons_List::prepare_items
 	 * @todo   Implement testPrepare_items().
 	 */

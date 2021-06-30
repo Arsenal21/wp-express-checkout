@@ -153,7 +153,7 @@ class Orders {
 			self::upgrade_legacy( $order );
 		}
 		// Maybe upgrade the order to version 2.0.0
-		if ( ! $order->get_resource_id() ) {
+		if ( ! $order->get_resource_id() && $order->get_data( 'transaction_id' ) ) {
 			self::upgrade_legacy2( $order );
 		}
 
