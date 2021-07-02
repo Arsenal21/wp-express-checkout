@@ -15,18 +15,9 @@ class Orders {
 	const PTYPE = 'ppdgorder';
 
 	/**
-	 * Instance of this class.
-	 *
-	 * @since    1.0.0
-	 *
-	 * @var      object
-	 */
-	protected static $instance = null;
-
-	/**
 	 * Registers order post type.
 	 */
-	public function register_post_type() {
+	public static function register_post_type() {
 		$labels = array(
 			'name' => _x( 'Orders', 'Post Type General Name', 'wp-express-checkout' ),
 			'singular_name' => _x( 'Order', 'Post Type Singular Name', 'wp-express-checkout' ),
@@ -67,23 +58,6 @@ class Orders {
 		);
 
 		register_post_type( self::PTYPE, $args );
-	}
-
-	/**
-	 * Return an instance of this class.
-	 *
-	 * @since     1.0.0
-	 *
-	 * @return    object    A single instance of this class.
-	 */
-	public static function get_instance() {
-
-		// If the single instance hasn't been set, set it now.
-		if ( null == self::$instance ) {
-			self::$instance = new self;
-		}
-
-		return self::$instance;
 	}
 
 	/**

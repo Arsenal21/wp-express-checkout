@@ -369,10 +369,8 @@ class Main {
 		self::check_and_create_thank_you_page(); // Create the thank you page.
 
 		// Explicitly register post types and flush rewrite rules.
-		$products = Products::get_instance();
-		$products->register_post_type();
-		$orders = Orders::get_instance();
-		$orders->register_post_type();
+		Products::register_post_type();
+		Orders::register_post_type();
 		self::rewrite_flush();
 	}
 

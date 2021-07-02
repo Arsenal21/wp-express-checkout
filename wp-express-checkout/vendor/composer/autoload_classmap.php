@@ -12,6 +12,7 @@ return array(
     'WP_Express_Checkout\\Admin\\Coupons_List' => $baseDir . '/admin/includes/class-coupons-list.php',
     'WP_Express_Checkout\\Admin\\Orders_List' => $baseDir . '/admin/includes/class-orders-list.php',
     'WP_Express_Checkout\\Admin\\Orders_Meta_Boxes' => $baseDir . '/admin/includes/class-orders-meta-boxes.php',
+    'WP_Express_Checkout\\Admin\\Products_List' => $baseDir . '/admin/includes/class-products-list.php',
     'WP_Express_Checkout\\Admin\\Products_Meta_Boxes' => $baseDir . '/admin/includes/class-products-meta-boxes.php',
     'WP_Express_Checkout\\Blocks' => $baseDir . '/includes/class-blocks.php',
     'WP_Express_Checkout\\Coupons' => $baseDir . '/includes/class-coupons.php',

@@ -174,4 +174,15 @@ class Products_Meta_BoxesTest extends \WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * @covers WP_Express_Checkout\Products::post_updated_messages
+	 * @todo   Implement testPost_updated_messages().
+	 */
+	public function testPost_updated_messages() {
+		// Remove the following lines when you implement this test.
+		$this->markTestIncomplete(
+				'This test has not been implemented yet.'
+		);
+	}
+
 }

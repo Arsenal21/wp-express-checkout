@@ -21,64 +21,13 @@ class ProductsTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Products::get_instance
-	 */
-	public function testGet_instance() {
-		$this->assertInstanceOf( 'WP_Express_Checkout\Products', Products::get_instance() );
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Products::register_post_type
 	 */
 	public function testRegister_post_type() {
 		unregister_post_type( Products::$products_slug );
 		$this->assertNull( get_post_type_object( Products::$products_slug ) );
-		$this->object->register_post_type();
+		Products::register_post_type();
 		$this->assertInstanceOf( 'WP_Post_Type', get_post_type_object( Products::$products_slug ) );
-	}
-
-	/**
-	 * @covers WP_Express_Checkout\Products::post_updated_messages
-	 * @todo   Implement testPost_updated_messages().
-	 */
-	public function testPost_updated_messages() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
-	}
-
-	/**
-	 * @covers WP_Express_Checkout\Products::manage_columns
-	 * @todo   Implement testManage_columns().
-	 */
-	public function testManage_columns() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
-	}
-
-	/**
-	 * @covers WP_Express_Checkout\Products::manage_custom_columns
-	 * @todo   Implement testManage_custom_columns().
-	 */
-	public function testManage_custom_columns() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
-	}
-
-	/**
-	 * @covers WP_Express_Checkout\Products::manage_sortable_columns
-	 * @todo   Implement testManage_sortable_columns().
-	 */
-	public function testManage_sortable_columns() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
 	}
 
 }
