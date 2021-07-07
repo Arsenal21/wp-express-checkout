@@ -54,6 +54,13 @@ class Products_Meta_Boxes {
 		$product_types = apply_filters( 'wpec_product_types', $product_types, $post );
 		$product_type  = get_post_meta( $post->ID, 'wpec_product_type', true );
 		$product_type  = empty( $product_type ) ? 'one_time' : $product_type;
+		$default_content = '';
+
+		// Unknown type.
+		if ( ! isset( $product_types[ $product_type ] ) ) {
+			$product_types[ $product_type ] = $product_type;
+			$default_content = sprintf( '<strong>' . __( 'A product type "%s" is not registered. Please activate appropriate addon or change the product type.', 'wp-express-checkout' )  . '</strong>', $product_type );
+		}
 
 		$current_price       = get_post_meta( $post->ID, 'ppec_product_price', true );
 		$allow_custom_amount = get_post_meta( $post->ID, 'wpec_product_custom_amount', true );
@@ -92,6 +99,8 @@ class Products_Meta_Boxes {
 					<?php
 					break;
 				default:
+					echo $default_content;
+
 					do_action( 'wpec_form_product_type_' . $type, $post );
 					break;
 			}
