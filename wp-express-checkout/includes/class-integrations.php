@@ -58,7 +58,7 @@ class Integrations {
 		$emember_id = '';
 		if ( class_exists( 'Emember_Auth' ) ) {
 			// Check if the user is logged in as a member.
-			$emember_auth = Emember_Auth::getInstance();
+			$emember_auth = \Emember_Auth::getInstance();
 			$emember_id   = $emember_auth->getUserInfo( 'member_id' );
 		}
 
