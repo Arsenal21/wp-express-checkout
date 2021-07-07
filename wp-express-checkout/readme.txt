@@ -114,12 +114,21 @@ None
 
 == Changelog ==
 
+= WIP since 2.0.0 to 2021-07-07 =
+* Added fallback to a Product Price metabox for disabled addons.
+* Move back-end methods from Products class to appropriate classes in admin section
+* Added the first portion of PHPUnit tests (64/176)
+* Added tests for mock objects used in Addons tests
+* Add GitHub workflow for PHPUnit tests
+
+= END WIP =
+
 = 2.0.0 =
 * Save payer's PayPal email address in the order meta field. Ensures order search by customer email.
-* Added a new column 'PayPal Transaction ID' to the Orders list. 
-* Added the ability to search an order using the PayPal Transaction ID. 
+* Added a new column 'PayPal Transaction ID' to the Orders list.
+* Added the ability to search an order using the PayPal Transaction ID.
 * Added order meta field wpec_order_resource_id to use instead of transaction_id item of wpec_order_data meta field.
-* Added 'Thank You Page URL' on a per-product basis. 
+* Added 'Thank You Page URL' on a per-product basis.
 * Added shortcode attribute 'thank_you_url' to override global setting via the shortcode.
 * Improved the help text with a link to the documentation page explaining what to do if the thank you page has been deleted accidentally
 * Replaced namespace WPEC with WP_Express_Checkout for better stability
