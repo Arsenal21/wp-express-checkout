@@ -8,6 +8,8 @@
 
 namespace WP_Express_Checkout;
 
+use Exception;
+
 /**
  * Download request class.
  */
@@ -51,9 +53,9 @@ class View_Downloads {
 	public static function get_download_url( $order_id, $grp_id = '', $var_id = '' ) {
 		$download_url = '';
 
-		$order = Orders::retrieve( $order_id );
-
-		if ( ! $order ) {
+		try {
+			$order = Orders::retrieve( $order_id );
+		} catch ( Exception $exc ) {
 			return $download_url;
 		}
 
@@ -101,9 +103,9 @@ class View_Downloads {
 	 */
 	public static function get_order_downloads_list( $order_id ) {
 		$downloads = array();
-		$order     = Orders::retrieve( $order_id );
-
-		if ( ! $order ) {
+		try {
+			$order = Orders::retrieve( $order_id );
+		} catch ( Exception $exc ) {
 			return $downloads;
 		}
 
@@ -143,10 +145,10 @@ class View_Downloads {
 		}
 
 		$order_id = absint( $_GET['order_id'] );
-		$order    = Orders::retrieve( $order_id );
-
-		if ( empty( $order ) ) {
-			wp_die( esc_html__( 'Invalid Order ID!', 'wp-express-checkout' ) );
+		try {
+			$order = Orders::retrieve( $order_id );
+		} catch ( Exception $exc ) {
+			wp_die( $exc->getMessage() );
 		}
 
 		$product = get_post( absint( $_GET['wpec_download_file'] ) );
@@ -191,9 +193,13 @@ class View_Downloads {
 
 		// Get the product custom post type object.
 		$product  = get_post( absint( $_GET['wpec_download_file'] ) );
-		$order_id = absint( $_GET['order_id'] );
-		$order    = Orders::retrieve( $order_id );
 		$file_url = '';
+		$order_id = absint( $_GET['order_id'] );
+		try {
+			$order = Orders::retrieve( $order_id );
+		} catch ( Exception $exc ) {
+			return;
+		}
 
 		// Trigger the action hook (product object is also passed). It can be usewd to override the download handling via an addon.
 		do_action( 'wpec_process_download_request', $product, $order_id );

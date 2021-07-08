@@ -2,6 +2,8 @@
 
 namespace WP_Express_Checkout;
 
+use Exception;
+
 class Utils {
 
 	/**
@@ -114,7 +116,12 @@ class Utils {
 	 * @return string
 	 */
 	public static function replace_dynamic_order_tags( $text, $order_id, $args = array() ) {
-		$order           = Orders::retrieve( $order_id );
+		try {
+			$order = Orders::retrieve( $order_id );
+		} catch ( Exception $exc ) {
+			return $exc->getMessage();
+		}
+
 		$product_details = self::get_product_details( $order ) . "\n";
 		$payer_details   = $order->get_data( 'payer' );
 		$coupon_item     = $order->get_item( 'coupon' );

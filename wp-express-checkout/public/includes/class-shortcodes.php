@@ -2,6 +2,8 @@
 
 namespace WP_Express_Checkout;
 
+use Exception;
+
 class Shortcodes {
 
 	public $ppdg     = null;
@@ -362,10 +364,10 @@ class Shortcodes {
 
 		// Retrieve the order data.
 		$order_id = (int) $_GET['order_id'];
-		$order    = Orders::retrieve( $order_id );
-
-		if ( empty( $order ) ) {
-			return __( 'Error! Incorrect order ID. Could not find that order in the orders table.', 'wp-express-checkout' );
+		try {
+			$order = Orders::retrieve( $order_id );
+		} catch ( Exception $exc ) {
+			return $exc->getMessage();
 		}
 
 		if ( 'COMPLETED' !== $order->get_data( 'state' ) ) {

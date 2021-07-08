@@ -2,6 +2,8 @@
 
 namespace WP_Express_Checkout;
 
+use Exception;
+
 /**
  * Orders post type register and factory.
  */
@@ -78,11 +80,12 @@ class Orders {
 				'post_content' => __( 'Transaction Data', 'wp-express-checkout' ),
 				'post_type' => self::PTYPE,
 				'post_status' => 'publish',
-			)
+			),
+			true
 		);
 
-		if ( ! $id ) {
-			return false;
+		if ( is_wp_error( $id ) ) {
+			throw new Exception( $id->get_error_message(), 2001 );
 		}
 
 		if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
@@ -106,18 +109,18 @@ class Orders {
 	 *
 	 * @param int $order_id Order ID
 	 *
-	 * @return object|bool Order Object representing the order. Boolean False on failure.
+	 * @return Order Object representing the order. Boolean False on failure.
+	 * @throws Exception
 	 */
 	static public function retrieve( $order_id ) {
 
 		if ( ! is_numeric( $order_id ) ) {
-			trigger_error( 'Invalid order id given. Must be an integer', E_USER_WARNING );
-			return false;
+			throw new Exception( __( 'Invalid order id given. Must be an integer', 'wp-express-checkout' ), 2002 );
 		}
 
 		$order_data = get_post( $order_id );
 		if ( ! $order_data || $order_data->post_type !== self::PTYPE ) {
-			return false;
+			throw new Exception( sprintf( __( "Can't find order with ID %s", 'wp-express-checkout' ), $order_id ), 2003 );
 		}
 
 		$order = new Order( $order_data );
