@@ -10,6 +10,10 @@ class Integrations {
 		if ( function_exists( 'wp_emember_install' ) ) {
 			add_action( 'wpec_payment_completed', array( $this, 'handle_emember_signup' ), 10, 3 );
 		}
+
+		if ( defined( 'WPEC_SUB_PLUGIN_VER' ) ) {
+			add_filter( 'wpec_product_type_subscription', array( $this, 'fallback_subscription_type' ), 999999 );
+		}
 	}
 
 	public function handle_emember_signup( $payment, $order_id = null, $product_id = null ) {
@@ -67,6 +71,24 @@ class Integrations {
 			eMember_handle_subsc_signup_stand_alone( $ipn_data, $level_id, $payment['id'], $emember_id );
 		}
 
+	}
+
+	/**
+	 * Adds a fallback for a subscription product type object when Subscriptions
+	 * addon is presented, but not updated to correct version.
+	 *
+	 * @since 2.0.1
+	 *
+	 * @param WP_Post|Product $product The product object.
+	 *
+	 * @return Products\Product
+	 */
+	public function fallback_subscription_type( $product ) {
+		if ( $product instanceof \WP_Post ) {
+			$product = new Products\One_Time_Product( $product );
+		}
+
+		return $product;
 	}
 
 }

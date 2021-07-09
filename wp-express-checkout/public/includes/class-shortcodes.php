@@ -52,18 +52,21 @@ class Shortcodes {
 	function shortcode_wp_express_checkout( $atts ) {
 		global $wp_query;
 
-		if ( empty( $atts['product_id'] ) ) {
-			$error_msg = __( 'Error: product ID is invalid.', 'wp-express-checkout' );
-			$err       = $this->show_err_msg( $error_msg );
-			return $err;
+		$atts = wp_parse_args(
+			$atts,
+			array(
+				'product_id' => 0,
+			)
+		);
+
+		try {
+			$product = Products::retrieve( intval( $atts['product_id'] ) );
+		} catch ( Exception $exc ) {
+			return $this->show_err_msg( $exc->getMessage() );
 		}
+
 		$post_id = intval( $atts['product_id'] );
 		$post    = get_post( $post_id );
-		if ( ! $post || get_post_type( $post_id ) !== Products::$products_slug ) {
-			$error_msg = sprintf( __( "Can't find product with ID %s", 'wp-express-checkout' ), $post_id );
-			$err       = $this->show_err_msg( $error_msg );
-			return $err;
-		}
 
 		$title           = get_the_title( $post_id );
 		$price           = get_post_meta( $post_id, 'ppec_product_price', true );
