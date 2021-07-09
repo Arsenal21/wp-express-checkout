@@ -62,7 +62,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		$atts = [];
 		$output = $this->object->shortcode_wp_express_checkout( $atts );
 
-		$this->assertContains( 'wpec-error-message', $output );
+		$this->assertStringContainsString( 'wpec-error-message', $output );
 	}
 
 	/**
@@ -120,7 +120,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 	 */
 	public function testGenerate_pp_express_checkout_button__no_client_id( $args, $settings ) {
 		$output = $this->object->generate_pp_express_checkout_button( $args );
-		$this->assertContains( 'wpec-error-message-client-id', $output );
+		$this->assertStringContainsString( 'wpec-error-message-client-id', $output );
 	}
 
 	/**
@@ -133,8 +133,8 @@ class ShortcodesTest extends \WP_UnitTestCase {
 
 		$output = $this->object->generate_pp_express_checkout_button( $args );
 		$this->assertNotContains( 'wpec-error-message-client-id', $output );
-		$this->assertContains( 'wpec-modal', $output );
-		$this->assertContains( 'wp-ppec-button-container', $output );
+		$this->assertStringContainsString( 'wpec-modal', $output );
+		$this->assertStringContainsString( 'wp-ppec-button-container', $output );
 
 		update_option( 'ppdg-settings', Main::get_defaults() );
 	}
@@ -152,11 +152,11 @@ class ShortcodesTest extends \WP_UnitTestCase {
 			]
 		);
 
-		$this->assertContains( 'wpec-price-amount', $output );
-		$this->assertContains( 'wpec-quantity', $output );
-		$this->assertContains( 'wpec_price_tax_section', $output );
-		$this->assertContains( 'wpec_price_shipping_section', $output );
-		$this->assertContains( '97.40', $output );
+		$this->assertStringContainsString( 'wpec-price-amount', $output );
+		$this->assertStringContainsString( 'wpec-quantity', $output );
+		$this->assertStringContainsString( 'wpec_price_tax_section', $output );
+		$this->assertStringContainsString( 'wpec_price_shipping_section', $output );
+		$this->assertStringContainsString( '97.40', $output );
 	}
 
 	/**
@@ -172,7 +172,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		);
 
 		$this->assertNotContains( 'wpec_price_tax_section', $output );
-		$this->assertContains( '89.00', $output );
+		$this->assertStringContainsString( '89.00', $output );
 	}
 
 	/**
@@ -188,7 +188,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 			]
 		);
 
-		$this->assertContains( 'wpec_price_tax_section', $output );
+		$this->assertStringContainsString( 'wpec_price_tax_section', $output );
 	}
 
 	/**
@@ -196,7 +196,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 	 */
 	public function testShortcode_wpec_thank_you__no_order_id() {
 		$output = $this->object->shortcode_wpec_thank_you();
-		$this->assertContains( 'wpec-error-message-missing-order-id', $output );
+		$this->assertStringContainsString( 'wpec-error-message-missing-order-id', $output );
 	}
 
 	/**
@@ -206,7 +206,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		$_GET['order_id'] = 'dummy';
 
 		$output = $this->object->shortcode_wpec_thank_you();
-		$this->assertContains( 'wpec-error-message-nonce-verification', $output );
+		$this->assertStringContainsString( 'wpec-error-message-nonce-verification', $output );
 	}
 
 	/**
@@ -217,7 +217,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		$_GET['_wpnonce'] = wp_create_nonce( 'thank_you_url' . $_GET['order_id'] );
 
 		$output = $this->object->shortcode_wpec_thank_you();
-		$this->assertContains( 'wpec-error-message-2003', $output );
+		$this->assertStringContainsString( 'wpec-error-message-2003', $output );
 	}
 
 	/**
@@ -230,7 +230,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		$_GET['_wpnonce'] = wp_create_nonce( 'thank_you_url' . $_GET['order_id'] );
 
 		$output = $this->object->shortcode_wpec_thank_you();
-		$this->assertContains( 'wpec-error-message-order-state', $output );
+		$this->assertStringContainsString( 'wpec-error-message-order-state', $output );
 	}
 
 	/**
@@ -263,8 +263,8 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		$_GET['_wpnonce'] = wp_create_nonce( 'thank_you_url' . $_GET['order_id'] );
 
 		$output = $this->object->shortcode_wpec_thank_you();
-		$this->assertContains( 'wpec_thank_you_message', $output );
-		$this->assertContains( 'wpec-thank-you-page-download-link', $output );
+		$this->assertStringContainsString( 'wpec_thank_you_message', $output );
+		$this->assertStringContainsString( 'wpec-thank-you-page-download-link', $output );
 	}
 
 	/**
@@ -274,8 +274,8 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		$order = Orders::create();
 		$order->add_item( 'dummy', 'Dummy stuff', 42 );
 		$output = $this->object->generate_product_details_tag( $order );
-		$this->assertContains( 'Dummy stuff', $output );
-		$this->assertContains( '42', $output );
+		$this->assertStringContainsString( 'Dummy stuff', $output );
+		$this->assertStringContainsString( '42', $output );
 	}
 
 	/**

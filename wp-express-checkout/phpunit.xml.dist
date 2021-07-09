@@ -12,4 +12,18 @@
 			<directory prefix="test-" suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>
+	<filter>
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./</directory>
+			<exclude>
+				<directory prefix="test">./</directory>
+				<directory prefix="index">./</directory>
+				<directory>./admin/views</directory>
+				<directory>./public/views</directory>
+				<directory>./node_modules</directory>
+				<directory>./tests</directory>
+				<directory>./vendor</directory>
+			</exclude>
+		</whitelist>
+	</filter>
 </phpunit>

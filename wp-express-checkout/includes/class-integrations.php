@@ -7,23 +7,17 @@ use WP_Express_Checkout\Debug\Logger;
 class Integrations {
 
 	public function __construct() {
+		// Simple Membership integration
+		if ( defined( 'SIMPLE_WP_MEMBERSHIP_VER' ) ) {
+			add_action( 'wpec_payment_completed', array( $this, 'handle_swpm_signup' ), 10, 3 );
+		}
+		// WP eMember integration
 		if ( function_exists( 'wp_emember_install' ) ) {
 			add_action( 'wpec_payment_completed', array( $this, 'handle_emember_signup' ), 10, 3 );
 		}
 	}
 
-	public function handle_emember_signup( $payment, $order_id = null, $product_id = null ) {
-
-		if ( empty( $order_id ) || empty( $product_id ) ) {
-			return;
-		}
-
-		// let's check if Membership Level is set for this product.
-		$level_id = get_post_meta( $product_id, 'wpec_product_emember_level', true );
-		if ( empty( $level_id ) ) {
-			return;
-		}
-
+	public function get_member_info_from_api( $payment ) {
 		// let's form data required for eMember_handle_subsc_signup_stand_alone function and call it.
 		$first_name   = ! empty( $payment['payer']['name']['given_name'] ) ? $payment['payer']['name']['given_name'] : '';
 		$last_name    = ! empty( $payment['payer']['name']['surname'] ) ? $payment['payer']['name']['surname'] : '';
@@ -52,6 +46,43 @@ class Integrations {
 			'address_zip'     => $addr_zip,
 			'address_country' => $addr_country,
 		);
+
+		return $ipn_data;
+	}
+
+	public function handle_swpm_signup( $payment, $order_id, $product_id ) {
+
+		// let's check if Membership Level is set for this product
+		$level_id = get_post_meta( $product_id, 'wpec_product_swpm_level', true );
+		if ( empty( $level_id ) ) {
+			return;
+		}
+
+		$ipn_data = $this->get_member_info_from_api( $payment );
+
+		Logger::log( 'Calling swpm_handle_subsc_signup_stand_alone' );
+
+		$swpm_id = '';
+		if ( \SwpmMemberUtils::is_member_logged_in() ) {
+			$swpm_id = \SwpmMemberUtils::get_logged_in_members_id();
+		}
+
+		if ( defined( 'SIMPLE_WP_MEMBERSHIP_PATH' ) ) {
+			require SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php';
+			swpm_handle_subsc_signup_stand_alone( $ipn_data, $level_id, $payment['id'], $swpm_id );
+		}
+
+	}
+
+	public function handle_emember_signup( $payment, $order_id, $product_id ) {
+
+		// let's check if Membership Level is set for this product.
+		$level_id = get_post_meta( $product_id, 'wpec_product_emember_level', true );
+		if ( empty( $level_id ) ) {
+			return;
+		}
+
+		$ipn_data = $this->get_member_info_from_api( $payment );
 
 		Logger::log( 'Calling eMember_handle_subsc_signup_stand_alone' );
 
