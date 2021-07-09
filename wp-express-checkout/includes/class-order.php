@@ -167,28 +167,23 @@ class Order {
 		}
 
 		if ( ! is_numeric( $post_id ) ) {
-			trigger_error( 'Post ID must be an integer', E_USER_WARNING );
-			return false;
+			return ! trigger_error( 'Post ID must be an integer', E_USER_WARNING );
 		}
 
 		if ( ! is_numeric( $quantity ) ) {
-			trigger_error( 'Quantity must be an integer', E_USER_WARNING );
-			return false;
+			return ! trigger_error( 'Quantity must be an integer', E_USER_WARNING );
 		}
 
 		if ( ! is_numeric( $price ) ) {
-			trigger_error( 'Price must be numeric', E_USER_WARNING );
-			return false;
+			return ! trigger_error( 'Price must be numeric', E_USER_WARNING );
 		}
 
 		if ( ! is_string( $type ) && ! is_int( $type ) ) {
-			trigger_error( 'Item Type must be a string or integer', E_USER_WARNING );
-			return false;
+			return ! trigger_error( 'Item Type must be a string or integer', E_USER_WARNING );
 		}
 
 		if ( ! is_array( $meta ) ) {
-			trigger_error( 'Item Meta must be an array', E_USER_WARNING );
-			return false;
+			return ! trigger_error( 'Item Meta must be an array', E_USER_WARNING );
 		}
 
 		if ( $unique ) {
@@ -222,18 +217,15 @@ class Order {
 	public function remove_item( $type = '', $price = 0, $post_id = 0 ) {
 
 		if ( ! empty( $post_id ) && ! is_numeric( $post_id ) ) {
-			trigger_error( 'Post ID must be an integer', E_USER_WARNING );
-			return false;
+			return ! trigger_error( 'Post ID must be an integer', E_USER_WARNING );
 		}
 
 		if ( ! empty( $price ) && ! is_numeric( $price ) ) {
-			trigger_error( 'Price must be numeric', E_USER_WARNING );
-			return false;
+			return ! trigger_error( 'Price must be numeric', E_USER_WARNING );
 		}
 
 		if ( ! empty( $type ) && ! is_string( $type ) && ! is_int( $type ) ) {
-			trigger_error( 'Item Type must be a string or integer', E_USER_WARNING );
-			return false;
+			return ! trigger_error( 'Item Type must be a string or integer', E_USER_WARNING );
 		}
 
 		$removed = 0;
@@ -416,9 +408,6 @@ class Order {
 	public function set_author( $author_id ){
 
 		$author_id = intval( $author_id );
-		if ( ! is_numeric( $author_id ) ) {
-			trigger_error( 'Author ID must be an integer', E_USER_WARNING );
-		}
 
 		$this->creator['user_id'] = $author_id;
 		$this->update_post( array(
@@ -554,21 +543,12 @@ class Order {
 
 	/**
 	 * Updates the meta fields for the post
-	 * @param $meta_key    string|array Can either be the meta field to be updated, or an associative array
-	 * 					of meta keys and values to be updated
+	 * @param $meta_key    string       Meta field to be updated
 	 * @param $meta_value  string	    Value to set the meta value to. Ignored if meta_key is an array
 	 * @param $reset_cache boolean      Whether or not to update the cache after updating. Used to limit
 	 * 					larges amounts of updates
 	 */
 	protected function update_meta( $meta_key, $meta_value = ''){
-
-		if( is_array( $meta_key ) ){
-			foreach( $meta_key as $key => $value ){
-				$this->update_meta( $key, $value, false );
-			}
-			return;
-		}
-
 		update_post_meta( $this->id, $meta_key, $meta_value );
 	}
 

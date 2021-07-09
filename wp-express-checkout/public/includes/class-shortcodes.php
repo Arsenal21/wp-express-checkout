@@ -47,8 +47,8 @@ class Shortcodes {
 		return self::$instance;
 	}
 
-	private function show_err_msg( $msg ) {
-		return sprintf( '<div class="wp-ppec-error-msg" style="color: red;">%s</div>', $msg );
+	private function show_err_msg( $msg, $code = 0 ) {
+		return sprintf( '<div class="wpec-error-message wpec-error-message-' . esc_attr( $code ) . '">%s</div>', $msg );
 	}
 
 	function shortcode_wp_express_checkout( $atts ) {
@@ -79,6 +79,9 @@ class Shortcodes {
 		$tax             = get_post_meta( $post_id, 'wpec_product_tax', true );
 		$button_text     = get_post_meta( $post_id, 'wpec_product_button_text', true );
 		$thank_you_url   = ! empty( $atts['thank_you_url'] ) ? $atts['thank_you_url'] : get_post_meta( $post_id, 'wpec_product_thankyou_page', true );
+		$btn_type        = get_post_meta( $post_id, 'wpec_product_button_type', true );
+		$btn_sizes       = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
+		$btn_height      = $this->ppdg->get_setting( 'btn_height' );
 
 		$coupons_enabled = get_post_meta( $post_id, 'wpec_product_coupons_setting', true );
 
@@ -91,6 +94,11 @@ class Shortcodes {
 		$shipping = ( '' === $shipping ) ? $this->ppdg->get_setting( 'shipping' ) : $shipping;
 		$tax      = ( '' === $tax ) ? $this->ppdg->get_setting( 'tax' ) : $tax;
 
+		// Variations.
+		$v          = new Variations( $post_id );
+		$variations = $v->variations;
+		$variations['groups'] = $v->groups;
+
 		$output = '';
 
 		$args = array(
@@ -100,12 +108,13 @@ class Shortcodes {
 			'shipping_enable' => $shipping_enable,
 			'tax'             => $tax,
 			'custom_amount'   => $custom_amount,
-			'quantity'        => $quantity,
+			'quantity'        => max( intval( $quantity ), 1 ),
 			'custom_quantity' => $custom_quantity,
-			'url'             => $url,
+			'url'             => base64_encode( $url ),
 			'product_id'      => $post_id,
 			'thumbnail_url'   => $thumb_url,
 			'coupons_enabled' => $coupons_enabled,
+			'variations'      => $variations
 		);
 
 		$args = shortcode_atts(
@@ -122,16 +131,17 @@ class Shortcodes {
 				'custom_amount'   => 0,
 				'custom_quantity' => 0,
 				'currency'        => $this->ppdg->get_setting( 'currency_code' ), // Maybe useless option, the shortcode doesn't send this parameter.
-				'btn_shape'       => $this->ppdg->get_setting( 'btn_shape' ) !== false ? $this->ppdg->get_setting( 'btn_shape' ) : 'pill',
-				'btn_type'        => $this->ppdg->get_setting( 'btn_type' ) !== false ? $this->ppdg->get_setting( 'btn_type' ) : 'checkout',
-				'btn_height'      => $this->ppdg->get_setting( 'btn_height' ) !== false ? $this->ppdg->get_setting( 'btn_height' ) : 'small',
+				'btn_shape'       => $this->ppdg->get_setting( 'btn_shape' ),
+				'btn_type'        => $btn_type ? $btn_type : $this->ppdg->get_setting( 'btn_type' ),
+				'btn_height'      => ! empty( $btn_sizes[ $btn_height ] ) ? $btn_sizes[ $btn_height ] : 25,
 				'btn_width'       => $this->ppdg->get_setting( 'btn_width' ) !== false ? $this->ppdg->get_setting( 'btn_width' ) : 0,
-				'btn_layout'      => $this->ppdg->get_setting( 'btn_layout' ) !== false ? $this->ppdg->get_setting( 'btn_layout' ) : 'horizontal',
-				'btn_color'       => $this->ppdg->get_setting( 'btn_color' ) !== false ? $this->ppdg->get_setting( 'btn_color' ) : 'gold',
+				'btn_layout'      => $this->ppdg->get_setting( 'btn_layout' ),
+				'btn_color'       => $this->ppdg->get_setting( 'btn_color' ),
 				'coupons_enabled' => $this->ppdg->get_setting( 'coupons_enabled' ),
 				'button_text'     => $button_text ? $button_text : $this->ppdg->get_setting( 'button_text' ),
 				'use_modal'       => ! isset( $atts['modal'] ) ? $this->ppdg->get_setting( 'use_modal' ) : $atts['modal'],
 				'thank_you_url'   => $thank_you_url ? $thank_you_url : $this->ppdg->get_setting( 'thank_you_url' ),
+				'variations'      => array(),
 			),
 			$args
 		);
@@ -159,39 +169,10 @@ class Shortcodes {
 
 		extract( $args );
 
-		$product_btn_type = get_post_meta( $product_id, 'wpec_product_button_type', true );
-
-		if ( ! empty( $product_btn_type ) ) {
-			$btn_type = $product_btn_type;
-		}
-
-		// Lets check the digital item URL.
-		if ( ! empty( $url ) ) {
-			$url = base64_encode( $url );
-		}
-
 		// The button ID.
 		$button_id = 'paypal_button_' . count( self::$payment_buttons );
 
 		self::$payment_buttons[] = $button_id;
-
-		$quantity = empty( $quantity ) ? 1 : $quantity;
-
-		// Variations.
-		$variations = array();
-		$v          = new Variations( $product_id );
-		if ( ! empty( $v->groups ) ) {
-			$variations['groups']   = $v->groups;
-			$variations_names       = get_post_meta( $product_id, 'wpec_variations_names', true );
-			$variations_prices_orig = get_post_meta( $product_id, 'wpec_variations_prices', true );
-			$variations_prices      = apply_filters( 'wpec_variations_prices_filter', $variations_prices_orig, $product_id );
-			$variations_urls        = get_post_meta( $product_id, 'wpec_variations_urls', true );
-			$variations_opts        = get_post_meta( $product_id, 'wpec_variations_opts', true );
-			$variations['names']    = $variations_names;
-			$variations['prices']   = $variations_prices;
-			$variations['urls']     = $variations_urls;
-			$variations['opts']     = $variations_opts;
-		}
 
 		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $name ); // Create key using the item name.
 
@@ -224,16 +205,8 @@ class Shortcodes {
 
 		if ( empty( $client_id ) ) {
 			$err_msg = sprintf( __( "Please enter %s Client ID in the settings.", 'wp-express-checkout' ), $env );
-			$err     = $this->show_err_msg( $err_msg );
+			$err     = $this->show_err_msg( $err_msg, 'client-id' );
 			return $err;
-		}
-
-		$btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
-
-		if ( isset( $btn_sizes[ $btn_height ] ) ) {
-			$btn_height = $btn_sizes[ $btn_height ];
-		} else {
-			$btn_height = 25;
 		}
 
 		$output  = '';
@@ -351,14 +324,14 @@ class Shortcodes {
 		if ( ! isset( $_GET['order_id'] ) ) {
 			$error_message .= '<p>' . __( 'This page is used to show the transaction result after a customer makes a payment.', 'wp-express-checkout' ) . '</p>';
 			$error_message .= '<p>' . __( 'It will dynamically show the order details to the customers when they are redirected here after a payment. Do not access this page directly.', 'wp-express-checkout' ) . '</p>';
-			$error_message .= '<p class="wpec-error-message">' . __( 'Error! Order ID value is missing in the URL.', 'wp-express-checkout' ) . '</p>';
+			$error_message .= $this->show_err_msg( __( 'Error! Order ID value is missing in the URL.', 'wp-express-checkout' ), 'missing-order-id' );
 			return $error_message;
 		}
 
 		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'thank_you_url' . $_GET['order_id'] ) ) {
 			$error_message .= '<p>' . __( 'This page is used to show the transaction result after a customer makes a payment.', 'wp-express-checkout' ) . '</p>';
 			$error_message .= '<p>' . __( 'It will dynamically show the order details to the customers when they are redirected here after a payment. Do not access this page directly.', 'wp-express-checkout' ) . '</p>';
-			$error_message .= '<p class="wpec-error-message">' . __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'wp-express-checkout' ) . '</p>';
+			$error_message .= $this->show_err_msg( __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'wp-express-checkout' ), 'nonce-verification' );
 			return $error_message;
 		}
 
@@ -367,11 +340,11 @@ class Shortcodes {
 		try {
 			$order = Orders::retrieve( $order_id );
 		} catch ( Exception $exc ) {
-			return $exc->getMessage();
+			return $this->show_err_msg( $exc->getMessage(), $exc->getCode() );
 		}
 
 		if ( 'COMPLETED' !== $order->get_data( 'state' ) ) {
-			return printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $order->get_data( 'state' ) );
+			return $this->show_err_msg( sprintf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $order->get_data( 'state' ) ), 'order-state' );
 		}
 
 		$thank_you_msg  = '';
@@ -450,7 +423,7 @@ class Shortcodes {
 			$located = $default;
 		}
 
-		return $located;
+		return apply_filters( 'wpec_product_template', $located, $template_name );
 	}
 
 }
