@@ -17,6 +17,8 @@ class Products_Meta_Boxes {
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 9 );
 		// products post save action.
 		add_action( 'save_post_' . Products::$products_slug, array( $this, 'save_product_handler' ), 10, 3 );
+		// set custom messages on post save\update etc.
+		add_filter( 'post_updated_messages', array( $this, 'post_updated_messages' ) );
 	}
 
 	function add_meta_boxes() {
@@ -52,6 +54,13 @@ class Products_Meta_Boxes {
 		$product_types = apply_filters( 'wpec_product_types', $product_types, $post );
 		$product_type  = get_post_meta( $post->ID, 'wpec_product_type', true );
 		$product_type  = empty( $product_type ) ? 'one_time' : $product_type;
+		$default_content = '';
+
+		// Unknown type.
+		if ( ! isset( $product_types[ $product_type ] ) ) {
+			$product_types[ $product_type ] = $product_type;
+			$default_content = sprintf( '<strong>' . __( 'A product type "%s" is not registered. Please activate appropriate addon or change the product type.', 'wp-express-checkout' )  . '</strong>', $product_type );
+		}
 
 		$current_price       = get_post_meta( $post->ID, 'ppec_product_price', true );
 		$allow_custom_amount = get_post_meta( $post->ID, 'wpec_product_custom_amount', true );
@@ -90,6 +99,8 @@ class Products_Meta_Boxes {
 					<?php
 					break;
 				default:
+					echo $default_content;
+
 					do_action( 'wpec_form_product_type_' . $type, $post );
 					break;
 			}
@@ -574,6 +585,29 @@ jQuery(document).ready(function($) {
 
 		update_post_meta( $post_id, 'wpec_product_coupons_setting', isset( $_POST['wpec_product_coupons_setting'] ) ? sanitize_text_field( $_POST['wpec_product_coupons_setting'] ) : '0' );
 		update_post_meta( $post_id, 'wpec_product_emember_level', ! empty( $_POST['wpec_product_emember_level'] ) ? intval( $_POST['wpec_product_emember_level'] ) : '' );
+	}
+
+	public function post_updated_messages( $messages ) {
+		$post      = get_post();
+		$post_type = get_post_type( $post );
+		$slug      = Products::$products_slug;
+
+		if ( $post_type === Products::$products_slug ) {
+			$permalink = get_permalink( $post->ID );
+			$view_link = sprintf( ' <a href="%s">%s</a>', esc_url( $permalink ), __( 'View product', 'wp-express-checkout' ) );
+
+			$preview_permalink = add_query_arg( 'preview', 'true', $permalink );
+			$preview_link      = sprintf( ' <a target="_blank" href="%s">%s</a>', esc_url( $preview_permalink ), __( 'Preview product', 'wp-express-checkout' ) );
+
+			$messages[ $slug ]     = $messages['post'];
+			$messages[ $slug ][1]  = __( 'Product updated.', 'wp-express-checkout' ) . $view_link;
+			$messages[ $slug ][4]  = __( 'Product updated.', 'wp-express-checkout' );
+			$messages[ $slug ][6]  = __( 'Product published.', 'wp-express-checkout' ) . $view_link;
+			$messages[ $slug ][7]  = __( 'Product saved.', 'wp-express-checkout' );
+			$messages[ $slug ][8]  = __( 'Product submitted.', 'wp-express-checkout' ) . $preview_link;
+			$messages[ $slug ][10] = __( 'Product draft updated.', 'wp-express-checkout' ) . $preview_link;
+		}
+		return $messages;
 	}
 
 }

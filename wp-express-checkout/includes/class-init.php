@@ -3,6 +3,8 @@
 namespace WP_Express_Checkout;
 
 use WP_Express_Checkout\Admin\Orders_List;
+use WP_Express_Checkout\Admin\Products_List;
+use WP_Express_Checkout\Admin\Products_Meta_Boxes;
 use WP_Express_Checkout\Debug\Logger;
 
 /*
@@ -22,11 +24,8 @@ class Init {
 		 */
 
 		//Register the post types
-		$products = Products::get_instance();
-		$products->register_post_type();
-
-		$orders = Orders::get_instance();
-		$orders->register_post_type();
+		Orders::register_post_type();
+		Products::register_post_type();
 
 		add_action( 'wp_ajax_wpec_reset_log', array( $this, 'wpec_handle_reset_log' ) );
 
@@ -37,6 +36,8 @@ class Init {
 
 			$this->handle_view_log_action();
 			Orders_List::init();
+			Products_List::init();
+			new Products_Meta_Boxes();
 		} else {
 			/*
 			 * Front-end only tasks

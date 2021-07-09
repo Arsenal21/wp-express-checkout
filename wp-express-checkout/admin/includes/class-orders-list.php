@@ -2,6 +2,7 @@
 
 namespace WP_Express_Checkout\Admin;
 
+use Exception;
 use WP_Express_Checkout\Orders;
 use WP_Express_Checkout\Utils;
 
@@ -69,7 +70,12 @@ class Orders_List {
 		if ( isset( $order_hash[ $post_id ] ) ) {
 			$order = $order_hash[ $post_id ];
 		} else {
-			$order = Orders::retrieve( $post_id );
+			try {
+				$order = Orders::retrieve( $post_id );
+			} catch ( Exception $exc ) {
+				return;
+			}
+
 			$order_hash[ $post_id ] = $order;
 		}
 

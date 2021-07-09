@@ -2,6 +2,7 @@
 
 namespace WP_Express_Checkout\Admin;
 
+use Exception;
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Orders;
 use WP_Post;
@@ -34,11 +35,11 @@ class Orders_Meta_Boxes {
 	public function display_summary_meta_box( $post ) {
 		global $post;
 
-		if ( Orders::PTYPE != $post->post_type ) {
+		try {
+			$order = Orders::retrieve( $post->ID );
+		} catch ( Exception $exc ) {
 			return;
 		}
-
-		$order = Orders::retrieve( $_GET['post'] );
 
 		?>
 		<style type="text/css">
@@ -71,7 +72,11 @@ class Orders_Meta_Boxes {
 	 */
 	public function display_status_meta_box( $post ){
 
-		$order = Orders::retrieve( $post->ID );
+		try {
+			$order = Orders::retrieve( $post->ID );
+		} catch ( Exception $exc ) {
+			return;
+		}
 		?>
 		<style type="text/css">
 			#admin-order-status th{
@@ -115,7 +120,11 @@ class Orders_Meta_Boxes {
 	 */
 	function display_author_meta_box ( $post ){
 
-		$order = Orders::retrieve( $post->ID );
+		try {
+			$order = Orders::retrieve( $post->ID );
+		} catch ( Exception $exc ) {
+			return;
+		}
 		?>
 		<style type="text/css">
 			#admin-order-author{

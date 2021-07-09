@@ -2,6 +2,7 @@
 
 namespace WP_Express_Checkout;
 
+use Exception;
 use WP_Express_Checkout\Admin\Coupons_List;
 
 class Coupons {
@@ -531,7 +532,11 @@ class Coupons {
 	 * @param int   $order_id The order ID.
 	 */
 	public function redeem_coupon( $payment, $order_id ) {
-		$order       = Orders::retrieve( $order_id );
+		try {
+			$order = Orders::retrieve( $order_id );
+		} catch ( Exception $exc ) {
+			return;
+		}
 		$coupon_item = $order->get_item( 'coupon' );
 		if ( $coupon_item ) {
 			// Check the coupon code.

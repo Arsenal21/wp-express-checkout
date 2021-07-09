@@ -10,6 +10,7 @@
 
 namespace WP_Express_Checkout;
 
+use Exception;
 use WP_Express_Checkout\Debug\Logger;
 
 /**
@@ -91,7 +92,13 @@ class Payment_Processor {
 			$quantity = $this->get_quantity( $payment );
 		}
 
-		$order = Orders::create();
+		try {
+			$order = Orders::create();
+		} catch ( Exception $exc ) {
+			Logger::log( $exc->getMessage(), false );
+			echo $exc->getMessage();
+			exit;
+		}
 
 		/* translators: Order title: {Quantity} {Item name} - {Status} */
 		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $this->get_transaction_status( $payment ) ) );
