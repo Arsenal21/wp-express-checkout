@@ -12,6 +12,6 @@ https://wp-express-checkout.com/
 
 https://www.youtube.com/watch?v=jdeZcs-90DY
 
-Configuration and Usage Video Tutorials
+<strong>Configuration and Usage Video Tutorials</strong>
 
 https://wp-express-checkout.com/wp-express-checkout-video-tutorials/
