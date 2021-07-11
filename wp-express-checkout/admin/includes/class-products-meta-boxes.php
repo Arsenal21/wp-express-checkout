@@ -39,6 +39,12 @@ class Products_Meta_Boxes {
 			//if it is, let's add metabox where admin can select membership level
 			add_meta_box( 'wpec_emember_meta_box', __( 'WP eMember Membership Level', 'wp-express-checkout' ), array( $this, 'display_emember_meta_box' ), Products::$products_slug, 'normal', 'default' );
 		}
+
+		// check if Simple Membership installed
+		if ( defined( 'SIMPLE_WP_MEMBERSHIP_VER' ) ) {
+			//if it is, let's add metabox where admin can select membership level
+			add_meta_box( 'wpec_swpm_meta_box', __( 'Simple Membership Level', 'wp-express-checkout' ), array( $this, 'display_swpm_meta_box' ), Products::$products_slug, 'normal', 'default' );
+		}
 	}
 
 	function display_description_meta_box( $post ) {
@@ -475,6 +481,18 @@ jQuery(document).ready(function($) {
 		<?php
 	}
 
+	public function display_swpm_meta_box( $post ) {
+		$current_val = get_post_meta( $post->ID, 'wpec_product_swpm_level', true );
+		?>
+<p><?php esc_html_e( 'If you want this product to be connected to a membership level then select the membership Level here.', 'wp-express-checkout' ); ?></p>
+<select name="wpec_product_swpm_level">
+<option value=""><?php esc_html_e( 'None', 'wp-express-checkout' ); ?></option>
+		<?php
+		echo \SwpmUtils::membership_level_dropdown( $current_val );
+		?>
+</select>
+		<?php
+	}
 
 	function save_product_handler( $post_id, $post, $update ) {
 		if ( ! isset( $_POST['action'] ) ) {
@@ -585,6 +603,7 @@ jQuery(document).ready(function($) {
 
 		update_post_meta( $post_id, 'wpec_product_coupons_setting', isset( $_POST['wpec_product_coupons_setting'] ) ? sanitize_text_field( $_POST['wpec_product_coupons_setting'] ) : '0' );
 		update_post_meta( $post_id, 'wpec_product_emember_level', ! empty( $_POST['wpec_product_emember_level'] ) ? intval( $_POST['wpec_product_emember_level'] ) : '' );
+		update_post_meta( $post_id, 'wpec_product_swpm_level', ! empty( $_POST['wpec_product_swpm_level'] ) ? intval( $_POST['wpec_product_swpm_level'] ) : '' );
 	}
 
 	public function post_updated_messages( $messages ) {

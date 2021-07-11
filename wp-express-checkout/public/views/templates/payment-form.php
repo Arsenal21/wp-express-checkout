@@ -48,7 +48,7 @@
 
 	<?php
 	// Variations.
-	if ( ! empty( $variations['names'] ) ) {
+	if ( ! empty( $variations['groups'] ) ) {
 		?>
 		<div class="wpec-product-variations-wrapper">
 		<?php
@@ -58,14 +58,14 @@
 			<div class="wpec-product-variations-cont">
 				<label class="wpec-product-variations-label"><?php echo esc_attr( $group ); ?></label>
 				<?php
-				if ( ! empty( $variations['opts'][ $grp_id ] ) ) {
+				if ( ! empty( $variations[ $grp_id ]['opts'] ) ) {
 					// radio buttons output.
-					foreach ( $variations['names'][ $grp_id ] as $var_id => $var_name ) {
+					foreach ( $variations[ $grp_id ]['names'] as $var_id => $var_name ) {
 						?>
 						<label class="wpec-product-variations-select-radio-label">
 							<input class="wpec-product-variations-select-radio" data-wpec-variations-group-id="<?php echo esc_attr( $grp_id ); ?>" name="wpecVariations[<?php echo esc_attr( $button_id ); ?>][<?php echo esc_attr( $grp_id ); ?>][]" type="radio" value="<?php echo esc_attr( $var_id ); ?>" <?php checked( $var_id === 0 ); ?>>
 							<?php echo esc_html( $var_name ); ?>
-							<?php echo esc_html( WP_Express_Checkout\Utils::price_modifier( $variations['prices'][ $grp_id ][ $var_id ], $currency ) ); ?>
+							<?php echo esc_html( WP_Express_Checkout\Utils::price_modifier( $variations[ $grp_id ]['prices'][ $var_id ], $currency ) ); ?>
 						</label>
 					<?php
 					}
@@ -75,9 +75,9 @@
 					?>
 					<select class="wpec-product-variations-select" data-wpec-variations-group-id="<?php echo esc_attr( $grp_id ); ?>" name="wpecVariations[<?php echo esc_attr( $button_id ); ?>][<?php echo esc_attr( $grp_id ); ?>][]">
 					<?php
-					foreach ( $variations['names'][ $grp_id ] as $var_id => $var_name ) {
+					foreach ( $variations[ $grp_id ]['names'] as $var_id => $var_name ) {
 						?>
-						<option value="<?php echo esc_attr( $var_id ); ?>"><?php echo esc_html( $var_name ); ?> <?php echo esc_html( WP_Express_Checkout\Utils::price_modifier( $variations['prices'][ $grp_id ][ $var_id ], $currency ) ); ?></option>
+						<option value="<?php echo esc_attr( $var_id ); ?>"><?php echo esc_html( $var_name ); ?> <?php echo esc_html( WP_Express_Checkout\Utils::price_modifier( $variations[ $grp_id ]['prices'][ $var_id ], $currency ) ); ?></option>
 						<?php
 					}
 					?>

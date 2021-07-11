@@ -114,7 +114,14 @@ None
 
 == Changelog ==
 
-= WIP since 2.0.0 to 2021-07-07 =
+= WIP since 2.0.0 to 2021-07-09 =
+* Added Integration with Simple Membership Plugin (with tests). Closes #29
+* Added filter 'wpec_product_template' - to allow plugins override templates
+* Moved arguments parsing logic from Shortcodes::generate_pp_express_checkout_button() to Shortcodes::shortcode_wp_express_checkout()
+* Use original Variations array structure in payment-form.php
+* Added next portion of tests - code coverage: 23.88% (600/2513)
+* Handle Order create/retrieve errors using exceptions.
+* Fixed eMember integration
 * Added fallback to a Product Price metabox for disabled addons.
 * Move back-end methods from Products class to appropriate classes in admin section
 * Added the first portion of PHPUnit tests (64/176)

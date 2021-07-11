@@ -5,6 +5,8 @@
  * @package Wp_Express_Checkout
  */
 
+define( 'WPEC_TESTS_DIR', __DIR__ );
+
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 
 if ( ! $_tests_dir ) {
@@ -29,3 +31,5 @@ tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
 // Start up the WP testing environment.
 require $_tests_dir . '/includes/bootstrap.php';
+
+require_once __DIR__ . '/mocks/mock-shortcodes.php';
