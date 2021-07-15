@@ -1,28 +1,35 @@
 <?php
+/**
+ * Product block.
+ *
+ * @package WPEC
+ */
 
-namespace WP_Express_Checkout;
+namespace WP_Express_Checkout\Blocks;
+
+use WP_Express_Checkout\Products;
 
 /**
- * The plugin Gutenberg Blocks registry
+ * Product block.
  */
-class Blocks {
+class Product_Block extends Dynamic_Block {
 
 	/**
-	 * Constructor.
+	 * Block type name including namespace.
+	 * @var string
 	 */
-	public function __construct() {
-		add_action( 'init', array( $this, 'register_block' ) );
-	}
+	protected $name = 'wp-express-checkout/product-block';
 
 	/**
-	 * Register plugin blocks.
+	 * Registers the block.
+	 *
+	 * @uses register_block_type() For WP support 5.0+
+	 * @todo use register_block_type_from_metadata() for WP support 5.5+
+	 *
+	 * @see https://developer.wordpress.org/block-editor/tutorials/block-tutorial/writing-your-first-block-type/
+	 * @see https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/creating-dynamic-blocks/
 	 */
-	public function register_block() {
-		if ( ! function_exists( 'register_block_type' ) ) {
-			// Gutenberg is not active.
-			return;
-		}
-
+	public function __construct(  ) {
 		wp_register_style( 'wpec-block-editor', WPEC_PLUGIN_URL . '/assets/css/blocks.css', array(), WPEC_PLUGIN_VER );
 		wp_register_script( 'wpec-product-block', WPEC_PLUGIN_URL . '/assets/js/blocks/product-block.js', array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ), WPEC_PLUGIN_VER );
 
@@ -36,43 +43,41 @@ class Blocks {
 			'panel'    => __( 'Layout Options', 'wp-express-checkout' ),
 		) );
 
-		register_block_type(
-			'wp-express-checkout/product-block',
-			array(
-				'attributes' => array(
-					'prod_id'  => array(
-						'type'    => 'string',
-						'default' => 0,
-					),
-					'template' => array(
-						'type'    => 'string',
-						'default' => 1,
-					),
-					'modal' => array(
-						'type'    => 'boolean',
-						'default' => true,
-					),
+		$args = array(
+			'attributes' => array(
+				'prod_id'  => array(
+					'type'    => 'string',
+					'default' => 0,
 				),
-				'editor_script'   => 'wpec-product-block',
-				'editor_style'    => 'wpec-block-editor',
-				'render_callback' => array( $this, 'render_product_block' ),
-			)
+				'template' => array(
+					'type'    => 'string',
+					'default' => 1,
+				),
+				'modal' => array(
+					'type'    => 'boolean',
+					'default' => true,
+				),
+			),
+			'editor_script'   => 'wpec-product-block',
+			'editor_style'    => 'wpec-block-editor',
 		);
+
+		parent::__construct( $args );
 	}
 
 	/**
-	 * Renders a product block.
+	 * Reneders the block content dynamically.
 	 *
-	 * @param array $atts Block parameters.
+	 * @param array  $atts    The block attributes.
+	 * @param string $content Generated block HTML.
 	 *
 	 * @return string
 	 */
-	public function render_product_block( $atts ) {
-
+	public function render_callback( $atts, $content ) {
 		$prod_id = ! empty( $atts['prod_id'] ) ? intval( $atts['prod_id'] ) : 0;
 
 		if ( empty( $prod_id ) ) {
-			return '<p>' . __( 'Select product to view', 'wp-express-checkout' ) . '</p>';
+			return '<p class="wpec-no-product-placeholder">' . __( 'Select product to view', 'wp-express-checkout' ) . '</p>';
 		}
 
 		$sc_str = 'wp_express_checkout product_id="%d"';
@@ -144,5 +149,4 @@ class Blocks {
 		);
 		return $templates;
 	}
-
 }

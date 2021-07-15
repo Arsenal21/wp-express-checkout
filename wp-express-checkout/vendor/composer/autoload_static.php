@@ -43,6 +43,8 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WP_Express_Checkout\\Admin\\Products_List' => __DIR__ . '/../..' . '/admin/includes/class-products-list.php',
         'WP_Express_Checkout\\Admin\\Products_Meta_Boxes' => __DIR__ . '/../..' . '/admin/includes/class-products-meta-boxes.php',
         'WP_Express_Checkout\\Blocks' => __DIR__ . '/../..' . '/includes/class-blocks.php',
+        'WP_Express_Checkout\\Blocks\\Dynamic_Block' => __DIR__ . '/../..' . '/includes/blocks/class-dynamic-block.php',
+        'WP_Express_Checkout\\Blocks\\Product_Block' => __DIR__ . '/../..' . '/includes/blocks/product-block/class-product-block.php',
         'WP_Express_Checkout\\Coupons' => __DIR__ . '/../..' . '/includes/class-coupons.php',
         'WP_Express_Checkout\\Debug\\Logger' => __DIR__ . '/../..' . '/includes/class-logger.php',
         'WP_Express_Checkout\\Init' => __DIR__ . '/../..' . '/includes/class-init.php',
