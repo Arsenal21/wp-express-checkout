@@ -40,7 +40,7 @@ class Payment_Processor_Free extends Payment_Processor {
 			'status' => $this->get_transaction_status( array() ),
 			'payer'  => array(
 				'name' => array(
-					'given_name' => $current_user->display_name ? $current_user->display_name : __ ( 'Anonymous', 'wp-express-checkout' ),
+					'given_name' => $current_user->display_name ? $current_user->display_name : __( 'Anonymous', 'wp-express-checkout' ),
 					'surname' => ''
 				),
 				'email_address' => $current_user->user_email ? $current_user->user_email : '',

@@ -1,5 +1,6 @@
 {
   "id": "5O190127TN364715T",
+  "intent": "CAPTURE",
   "status": "COMPLETED",
   "payer": {
     "address": {
@@ -19,7 +20,39 @@
   },
   "purchase_units": [
     {
-      "reference_id": "d9f80740-38f0-11e8-b467-0ed5f89f718b",
+      "reference_id": "default",
+      "description": "test payment",
+      "amount": {
+        "currency_code": "USD",
+        "value": "34.00",
+        "breakdown": {
+          "item_total": {
+            "currency_code": "USD",
+            "value": "20.00"
+          },
+          "shipping": {
+            "currency_code": "USD",
+            "value": "10.00"
+          },
+          "handling": {
+            "currency_code": "USD",
+            "value": "0.00"
+          },
+          "tax_total": {
+            "currency_code": "USD",
+            "value": "4.00"
+          },
+          "insurance": {
+            "currency_code": "USD",
+            "value": "0.00"
+          },
+          "shipping_discount": {
+            "currency_code": "USD",
+            "value": "0.00"
+          }
+        }
+      },
+
       "shipping": {
         "address": {
           "address_line_1": "2211 N First Street",
@@ -30,6 +63,24 @@
           "country_code": "US"
         }
       },
+      "payee": {
+        "email_address": "merchant@example.com",
+        "merchant_id": "TESTMERCHANTID"
+      },
+      "items": [
+        {
+          "name": "test payment",
+          "unit_amount": {
+            "currency_code": "USD",
+            "value": "20.00"
+          },
+          "tax": {
+            "currency_code": "USD",
+            "value": "4.00"
+          },
+          "quantity": "1"
+        }
+      ],
       "payments": {
         "captures": [
           {
@@ -37,8 +88,9 @@
             "status": "COMPLETED",
             "amount": {
               "currency_code": "USD",
-              "value": "100.00"
+              "value": "34.00"
             },
+            "final_capture": "true",
             "seller_protection": {
               "status": "ELIGIBLE",
               "dispute_categories": [
@@ -46,41 +98,15 @@
                 "UNAUTHORIZED_TRANSACTION"
               ]
             },
-            "final_capture": true,
-            "disbursement_mode": "INSTANT",
-            "seller_receivable_breakdown": {
-              "gross_amount": {
-                "currency_code": "USD",
-                "value": "100.00"
-              },
-              "paypal_fee": {
-                "currency_code": "USD",
-                "value": "3.00"
-              },
-              "net_amount": {
-                "currency_code": "USD",
-                "value": "97.00"
-              }
-            },
-            "create_time": "2018-04-01T21:20:49Z",
-            "update_time": "2018-04-01T21:20:49Z",
-            "links": [
-              {
-                "href": "https://api-m.paypal.com/v2/payments/captures/3C679366HH908993F",
-                "rel": "self",
-                "method": "GET"
-              },
-              {
-                "href": "https://api-m.paypal.com/v2/payments/captures/3C679366HH908993F/refund",
-                "rel": "refund",
-                "method": "POST"
-              }
-            ]
+            "create_time": "2021-07-15T11:47:52Z",
+            "update_time": "2021-07-15T11:47:52Z"
           }
         ]
       }
     }
   ],
+  "create_time": "2021-07-15T11:47:42Z",
+  "update_time": "2021-07-15T11:47:52Z",
   "links": [
     {
       "href": "https://api-m.paypal.com/v2/checkout/orders/5O190127TN364715T",

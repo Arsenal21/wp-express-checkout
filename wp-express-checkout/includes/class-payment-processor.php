@@ -55,11 +55,17 @@ class Payment_Processor {
 
 		if ( empty( $payment ) ) {
 			// no payment data provided.
-			_e( 'No payment data received.', 'wp-express-checkout' );
-			exit;
+			$this->send_error( __( 'No payment data received.', 'wp-express-checkout' ), 3001 );
 		}
 
-		check_ajax_referer( $data['id'] . $data['product_id'], 'nonce' );
+		if ( empty( $data ) ) {
+			// no order data provided.
+			$this->send_error( __( 'No order data received.', 'wp-express-checkout' ), 3002 );
+		}
+
+		if ( ! check_ajax_referer( $data['id'] . $data['product_id'], 'nonce', false ) ) {
+			$this->send_error( __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'wp-express-checkout' ), 3003 );
+		}
 
 		$this->check_status( $payment );
 
@@ -68,15 +74,11 @@ class Payment_Processor {
 
 		// get item name.
 		$item_name  = $this->get_item_name( $payment );
-		$trans_name = $this->get_transition_name( $payment );
-		$trans      = get_transient( $trans_name );
+		$trans      = $this->get_transient_data( $payment );
 		// let's check if the payment matches transient data.
 		if ( ! $trans ) {
 			// no price set.
-			Logger::log( 'Error! No transaction info found in transient.', false );
-
-			_e( 'No transaction info found in transient.', 'wp-express-checkout' );
-			exit;
+			$this->send_error( __( 'No transaction info found in transient.', 'wp-express-checkout' ), 3004 );
 		}
 		$price    = $this->get_price( $payment, $trans, $data );
 		$quantity = $trans['quantity'];
@@ -95,9 +97,7 @@ class Payment_Processor {
 		try {
 			$order = Orders::create();
 		} catch ( Exception $exc ) {
-			Logger::log( $exc->getMessage(), false );
-			echo $exc->getMessage();
-			exit;
+			$this->send_error( $exc->getMessage(), $exc->getCode() );
 		}
 
 		/* translators: Order title: {Quantity} {Item name} - {Status} */
@@ -135,16 +135,13 @@ class Payment_Processor {
 		if ( $amount < $order->get_total() ) {
 			// payment amount mismatch. Amount paid is less.
 			Logger::log( 'Error! Payment amount mismatch. Original: ' . $order->get_total() . ', Received: ' . $amount, false );
-			_e( 'Payment amount mismatch with the original price.', 'wp-express-checkout' );
-			exit;
+			$this->send_error( __( 'Payment amount mismatch with the original price.', 'wp-express-checkout' ), 3005 );
 		}
 
 		// check if payment currency matches.
 		if ( $this->get_currency( $payment ) !== $currency ) {
 			// payment currency mismatch.
-			Logger::log( 'Error! Payment currency mismatch.', false );
-			_e( 'Payment currency mismatch.', 'wp-express-checkout' );
-			exit;
+			$this->send_error( __( 'Payment currency mismatch.', 'wp-express-checkout' ), 3006 );
 		}
 
 		// If code execution got this far, it means everything is ok with payment
@@ -259,13 +256,31 @@ class Payment_Processor {
 			);
 			$res['redirect_url'] = esc_url_raw( $redirect_url );
 		} else {
-			_e( 'Error! Thank you page URL configuration is wrong in the plugin settings.', 'wp-express-checkout' );
-			exit;
+			$this->send_error( __( 'Error! Thank you page URL configuration is wrong in the plugin settings.', 'wp-express-checkout' ), 3007 );
 		}
 
-		echo wp_json_encode( $res );
+		$this->send_response( $res );
+	}
 
-		exit;
+	/**
+	 * Logs error message and sends it as a JSON response back to an Ajax request.
+	 *
+	 * @param string $msg  Message to encode as JSON, then print and die.
+	 * @param string $code Error code for recognizing an error.
+	 */
+	protected function send_error( $msg, $code ) {
+		Logger::log( "Code $code - $msg", false );
+		$this->send_response( $msg );
+	}
+
+	/**
+	 * Logs error message and sends it as a JSON response back to an Ajax request.
+	 *
+	 * @param mixed $data Variable (usually an array or object) to encode as
+	 *                    JSON, then print and die.
+	 */
+	protected function send_response( $data ) {
+		wp_send_json( $data );
 	}
 
 	/**
@@ -307,9 +322,7 @@ class Payment_Processor {
 		$status = $this->get_transaction_status( $payment );
 		if ( strtoupper( $status ) !== 'COMPLETED' ) {
 			// payment is unsuccessful.
-			Logger::log( 'Payment is not approved. Payment status: ' . $status, false );
-			printf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $status );
-			exit;
+			$this->send_error( sprintf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $status ), 3008 );
 		}
 	}
 
@@ -334,6 +347,16 @@ class Payment_Processor {
 		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $item_name );
 
 		return $trans_name;
+	}
+
+	/**
+	 * Retrieves transition data.
+	 *
+	 * @param array $payment
+	 * @return array
+	 */
+	protected function get_transient_data( $payment ) {
+		return get_transient( $this->get_transition_name( $payment ) );
 	}
 
 	/**
