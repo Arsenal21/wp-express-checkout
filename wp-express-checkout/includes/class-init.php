@@ -27,6 +27,11 @@ class Init {
 		Orders::register_post_type();
 		Products::register_post_type();
 
+		if ( function_exists( 'register_block_type' ) ) {
+			// Gutenberg is active.
+			new Blocks\Product_Block();
+		}
+
 		add_action( 'wp_ajax_wpec_reset_log', array( $this, 'wpec_handle_reset_log' ) );
 
 		if ( is_admin() ) {
