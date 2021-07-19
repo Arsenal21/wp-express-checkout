@@ -260,7 +260,7 @@ class Payment_Processor {
 		}
 
 		$this->send_response( $res );
-	}
+	} // @codeCoverageIgnore
 
 	/**
 	 * Logs error message and sends it as a JSON response back to an Ajax request.
@@ -271,7 +271,7 @@ class Payment_Processor {
 	protected function send_error( $msg, $code ) {
 		Logger::log( "Code $code - $msg", false );
 		$this->send_response( $msg );
-	}
+	} // @codeCoverageIgnore
 
 	/**
 	 * Logs error message and sends it as a JSON response back to an Ajax request.
@@ -281,7 +281,7 @@ class Payment_Processor {
 	 */
 	protected function send_response( $data ) {
 		wp_send_json( $data );
-	}
+	} // @codeCoverageIgnore
 
 	/**
 	 * Retrieves the payment data from AJAX POST request

@@ -7,8 +7,9 @@ namespace WP_Express_Checkout;
  *
  * @covers WP_Express_Checkout\Payment_Processor_Free
  * @group payments
+ * @group ajax
  */
-class Payment_Processor_FreeTest extends \WP_UnitTestCase {
+class Payment_Processor_FreeTest extends \WP_Ajax_UnitTestCase {
 
 	/**
 	 * @var Payment_Processor_Free
@@ -21,9 +22,9 @@ class Payment_Processor_FreeTest extends \WP_UnitTestCase {
 	 */
 	public function setUp() {
 		parent::setUp();
+		remove_all_actions( 'wp_ajax_wpec_process_empty_payment' );
+		remove_all_actions( 'wp_ajax_nopriv_wpec_process_empty_payment' );
 		$this->object = new Payment_Processor_Free;
-		add_filter( 'wp_doing_ajax', '__return_true' );
-		add_filter( 'wp_die_ajax_handler', [ $this, 'get_wp_die_handler' ] );
 	}
 
 	/**
@@ -55,15 +56,17 @@ class Payment_Processor_FreeTest extends \WP_UnitTestCase {
 
 		set_transient( 'wp-ppdg-test-free-payment', $_POST['data'] );
 
-		$_REQUEST['nonce'] = wp_create_nonce( $_POST['data']['id'] . $product_id );
+		$_POST['nonce'] = wp_create_nonce( $_POST['data']['id'] . $product_id );
 
-		$this->expectOutputRegex( '(redirect_url)' );
-		//$this->expectException('WPDieException');
-		$this->object->wpec_process_payment();
-	}
+		try {
+			$this->_handleAjax( 'wpec_process_empty_payment' );
+		} catch ( \WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
 
-	function get_wp_die_handler( $handler ) {
-		return '__return_null';
+		$this->assertTrue( isset( $e ) );
+		$response = json_decode( $this->_last_response );
+		$this->assertNotEmpty( $response->redirect_url );
 	}
 
 }

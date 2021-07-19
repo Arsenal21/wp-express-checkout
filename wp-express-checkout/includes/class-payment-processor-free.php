@@ -30,7 +30,7 @@ class Payment_Processor_Free extends Payment_Processor {
 	public function wpec_process_payment() {
 		$this->order_data = $this->get_order_data();
 		parent::wpec_process_payment();
-	}
+	} // @codeCoverageIgnore
 
 	protected function get_payment_data() {
 		$current_user = wp_get_current_user();

@@ -9,7 +9,7 @@ namespace WP_Express_Checkout;
  *
  * @covers WP_Express_Checkout\Payment_Processor
  */
-class Payment_ProcessorTest extends \WP_UnitTestCase {
+class Payment_ProcessorTest extends \WP_Ajax_UnitTestCase {
 
 	/**
 	 * @var Payment_Processor|Mock_Payment_Processor
@@ -33,6 +33,9 @@ class Payment_ProcessorTest extends \WP_UnitTestCase {
 			'post_type' => Products::$products_slug,
 		] );
 
+		remove_all_actions( 'wp_ajax_wpec_process_payment' );
+		remove_all_actions( 'wp_ajax_nopriv_wpec_process_payment' );
+
 		$this->object = new Mock_Payment_Processor;
 		$this->object->_payment_data = json_decode( file_get_contents( WPEC_TESTS_DIR . '/data/payment-data.json' ), true );
 		$this->object->_transient['product_id']  = $product_id;
@@ -40,13 +43,11 @@ class Payment_ProcessorTest extends \WP_UnitTestCase {
 
 		$data = $this->object->_order_data;
 		$_REQUEST['nonce'] = wp_create_nonce( $data['id'] . $data['product_id'] );
+		$_POST['nonce'] = $_REQUEST['nonce'];
 
 		reset_phpmailer_instance();
 
 		$this->mailer = $GLOBALS['phpmailer'];
-
-		add_filter( 'wp_doing_ajax', '__return_true' );
-		add_filter( 'wp_die_ajax_handler', [ $this, 'get_wp_die_handler' ] );
 	}
 
 	/**
@@ -154,7 +155,12 @@ class Payment_ProcessorTest extends \WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Payment_Processor::wpec_process_payment
 	 */
 	public function testWpec_process_payment__no_downloads() {
-		$this->object->wpec_process_payment();
+		try {
+			$this->_handleAjax( 'wpec_process_payment' );
+		} catch ( \WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+		$this->assertTrue( isset( $e ) );
 		$this->assertNotContains( 'download link', $this->mailer->get_sent()->body );
 	}
 
@@ -163,7 +169,13 @@ class Payment_ProcessorTest extends \WP_UnitTestCase {
 	 */
 	public function testWpec_process_payment__downloads() {
 		update_post_meta( $this->object->_transient['product_id'], 'ppec_product_upload', 'http://example.com/' );
-		$this->object->wpec_process_payment();
+		try {
+			$this->_handleAjax( 'wpec_process_payment' );
+		} catch ( \WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		$this->assertTrue( isset( $e ) );
 		$this->assertContains( 'download link', $this->mailer->get_sent()->body );
 	}
 
@@ -173,7 +185,13 @@ class Payment_ProcessorTest extends \WP_UnitTestCase {
 	public function testWpec_process_payment__emails() {
 		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_seller_email' => 1 ] ) );
 
-		$this->object->wpec_process_payment();
+		try {
+			$this->_handleAjax( 'wpec_process_payment' );
+		} catch ( \WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		$this->assertTrue( isset( $e ) );
 
 		$this->assertEquals( 2, count( $this->mailer->mock_sent ) );
 	}
@@ -184,7 +202,13 @@ class Payment_ProcessorTest extends \WP_UnitTestCase {
 	public function testWpec_process_payment__html_emails() {
 		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_seller_email' => 1, 'buyer_email_type' => 'html' ] ) );
 
-		$this->object->wpec_process_payment();
+		try {
+			$this->_handleAjax( 'wpec_process_payment' );
+		} catch ( \WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		$this->assertTrue( isset( $e ) );
 		$this->assertContains( 'text/html', $this->mailer->get_sent()->header );
 	}
 
@@ -194,8 +218,13 @@ class Payment_ProcessorTest extends \WP_UnitTestCase {
 	public function testWpec_process_payment__no_emails() {
 		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_buyer_email' => 0 ] ) );
 
-		$this->object->wpec_process_payment();
+		try {
+			$this->_handleAjax( 'wpec_process_payment' );
+		} catch ( \WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
 
+		$this->assertTrue( isset( $e ) );
 		$this->assertEquals( 0, count( $this->mailer->mock_sent ) );
 	}
 
@@ -212,7 +241,13 @@ class Payment_ProcessorTest extends \WP_UnitTestCase {
 		$this->object->_transient['tax'] = $tax;
 		$this->object->_transient['shipping'] = $shipping;
 
-		$this->object->wpec_process_payment();
+		try {
+			$this->_handleAjax( 'wpec_process_payment' );
+		} catch ( \WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		$this->assertTrue( isset( $e ) );
 
 		$this->assertEquals( 1, did_action( 'wpec_create_order' ) );
 
@@ -233,11 +268,12 @@ class Payment_ProcessorTest extends \WP_UnitTestCase {
 	public function testWpec_process_payment__check_mocked_methods() {
 		$_POST['wp_ppdg_payment'] = $this->object->_payment_data;
 		$_POST['data'] = $this->object->_order_data;
-		$this->expectException( 'WPDieException' );
-		$this->expectOutputRegex( '(.*)' );
+		remove_all_actions( 'wp_ajax_wpec_process_payment' );
+		remove_all_actions( 'wp_ajax_nopriv_wpec_process_payment' );
 		$object = new Payment_Processor();
 
-		$object->wpec_process_payment();
+		$this->expectException( 'WPAjaxDieContinueException' );
+		$this->_handleAjax( 'wpec_process_payment' );
 	}
 
 	/**
