@@ -434,7 +434,8 @@ var ppecHandler = function( data ) {
 		var grpId;
 		if ( parent.data.variations.applied ) {
 			for ( grpId = 0; grpId < parent.data.variations.applied.length; ++grpId ) {
-				amount = amount + parseFloat( parent.data.variations.prices[ grpId ][ parent.data.variations.applied[ grpId ] ] );
+				var variation = parent.data.variations[ grpId ];
+				amount = amount + parseFloat( variation.prices[ parent.data.variations.applied[ grpId ] ] );
 			}
 		}
 		return amount;
