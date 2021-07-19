@@ -127,6 +127,7 @@ None
 * Added the first portion of PHPUnit tests (64/176)
 * Added tests for mock objects used in Addons tests
 * Add GitHub workflow for PHPUnit tests
+* Changed to using "require_once" instead of "require" for the inclusion of the "swpm_handle_subsc_ipn.php" file to prevent fatal error.
 
 = END WIP =
 
