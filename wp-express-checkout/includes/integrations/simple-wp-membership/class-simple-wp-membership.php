@@ -25,7 +25,7 @@ class Simple_WP_Membership extends Emember {
 		}
 
 		if ( defined( 'SIMPLE_WP_MEMBERSHIP_PATH' ) ) {
-			require SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php';
+			require_once SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php';
 			swpm_handle_subsc_signup_stand_alone( $ipn_data, $level_id, $payment['id'], $swpm_id );
 		}
 
