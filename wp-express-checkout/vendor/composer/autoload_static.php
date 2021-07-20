@@ -49,6 +49,7 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WP_Express_Checkout\\Init' => __DIR__ . '/../..' . '/includes/class-init.php',
         'WP_Express_Checkout\\Integrations' => __DIR__ . '/../..' . '/includes/class-integrations.php',
         'WP_Express_Checkout\\Integrations\\Emember' => __DIR__ . '/../..' . '/includes/integrations/emember/class-emember.php',
+        'WP_Express_Checkout\\Integrations\\License_Manager' => __DIR__ . '/../..' . '/includes/integrations/license-manager/class-license-manager.php',
         'WP_Express_Checkout\\Integrations\\Simple_WP_Membership' => __DIR__ . '/../..' . '/includes/integrations/simple-wp-membership/class-simple-wp-membership.php',
         'WP_Express_Checkout\\Main' => __DIR__ . '/../..' . '/public/class-main.php',
         'WP_Express_Checkout\\Order' => __DIR__ . '/../..' . '/includes/class-order.php',

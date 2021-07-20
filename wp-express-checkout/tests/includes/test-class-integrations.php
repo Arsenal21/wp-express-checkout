@@ -21,6 +21,9 @@ class IntegrationsTest extends \WP_UnitTestCase {
 	 * This method is called before a test is executed.
 	 */
 	public function setUp() {
+		if ( ! defined( 'WP_LICENSE_MANAGER_VERSION' ) ) {
+			define( 'WP_LICENSE_MANAGER_VERSION', '1.0-test' );
+		}
 		$this->object = new Integrations;
 	}
 

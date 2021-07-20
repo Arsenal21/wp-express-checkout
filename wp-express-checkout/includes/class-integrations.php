@@ -13,6 +13,10 @@ class Integrations {
 		if ( function_exists( 'wp_emember_install' ) ) {
 			new Integrations\Emember();
 		}
+		// License Manager integration.
+		if ( defined( 'WP_LICENSE_MANAGER_VERSION' ) ) {
+			new Integrations\License_Manager();
+		}
 	}
 
 }

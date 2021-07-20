@@ -21,6 +21,7 @@ return array(
     'WP_Express_Checkout\\Init' => $baseDir . '/includes/class-init.php',
     'WP_Express_Checkout\\Integrations' => $baseDir . '/includes/class-integrations.php',
     'WP_Express_Checkout\\Integrations\\Emember' => $baseDir . '/includes/integrations/emember/class-emember.php',
+    'WP_Express_Checkout\\Integrations\\License_Manager' => $baseDir . '/includes/integrations/license-manager/class-license-manager.php',
     'WP_Express_Checkout\\Integrations\\Simple_WP_Membership' => $baseDir . '/includes/integrations/simple-wp-membership/class-simple-wp-membership.php',
     'WP_Express_Checkout\\Main' => $baseDir . '/public/class-main.php',
     'WP_Express_Checkout\\Order' => $baseDir . '/includes/class-order.php',
