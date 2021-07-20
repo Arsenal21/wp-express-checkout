@@ -1,10 +1,10 @@
 === WP Express Checkout (Accept PayPal Payments) ===
 Contributors: Tips and Tricks HQ, dikiy_forester, alexanderfoxc, mbrsolution, Ivy2120, chanelstone
 Donate link: https://wp-express-checkout.com/
-Tags: paypal, express checkout, payment, instant payment, digital downloads, e-commerce
+Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
 Requires at least: 5.0
-Tested up to: 5.7
-Stable tag: 2.0.0
+Tested up to: 5.8
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -114,22 +114,15 @@ None
 
 == Changelog ==
 
-= WIP since 2.0.0 to 2021-07-09 =
-* Added Integration with Simple Membership Plugin (with tests). Closes #29
-* Added filter 'wpec_product_template' - to allow plugins override templates
+= 2.0.1 =
+* Added filter 'wpec_product_template' - to allow plugins override templates.
 * Moved arguments parsing logic from Shortcodes::generate_pp_express_checkout_button() to Shortcodes::shortcode_wp_express_checkout()
-* Use original Variations array structure in payment-form.php
-* Added next portion of tests - code coverage: 23.88% (600/2513)
-* Handle Order create/retrieve errors using exceptions.
-* Fixed eMember integration
+* Added Integration with Simple Membership Plugin. We will create a usage documentation for it in the upcoming days.
 * Added fallback to a Product Price metabox for disabled addons.
+* Use original Variations array structure in payment-form.php
+* Handle Order create/retrieve errors using exceptions.
+* Fixed WP eMember integration.
 * Move back-end methods from Products class to appropriate classes in admin section
-* Added the first portion of PHPUnit tests (64/176)
-* Added tests for mock objects used in Addons tests
-* Add GitHub workflow for PHPUnit tests
-* Changed to using "require_once" instead of "require" for the inclusion of the "swpm_handle_subsc_ipn.php" file to prevent fatal error.
-
-= END WIP =
 
 = 2.0.0 =
 * Save payer's PayPal email address in the order meta field. Ensures order search by customer email.
