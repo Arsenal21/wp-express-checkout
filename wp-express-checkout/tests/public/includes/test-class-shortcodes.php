@@ -305,6 +305,158 @@ class ShortcodesTest extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_parts
+	 */
+	public function testShortcode_wpec_thank_you_parts__no_part() {
+		$output = $this->object->shortcode_wpec_thank_you_parts( [], '', 'wpec_ty' );
+		$this->assertEmpty( $output );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_parts
+	 */
+	public function testShortcode_wpec_thank_you_parts__reflects_by_shortcode() {
+		$output = $this->object->shortcode_wpec_thank_you_parts( [], '', 'wpec_ty_test' );
+		$this->assertEquals( '{test}', $output );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_parts
+	 */
+	public function testShortcode_wpec_thank_you_parts__reflects_by_atts() {
+		$output = $this->object->shortcode_wpec_thank_you_parts( [ 'field' => 'test2' ], '', 'wpec_ty' );
+		$this->assertEquals( '{test2}', $output );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_downloads
+	 */
+	public function testShortcode_wpec_thank_you_downloads__no_downloads() {
+		$product_id = $this->factory->post->create(
+			[
+				'post_type'  => Products::$products_slug,
+			]
+		);
+		$order = Orders::create();
+		$order->add_item( Products::$products_slug, $product_id, 0, 1, $product_id );
+
+		$_GET['order_id'] = $order->get_id();
+
+		$output = $this->object->shortcode_wpec_thank_you_downloads();
+		$this->assertEmpty( $output );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_downloads
+	 */
+	public function testShortcode_wpec_thank_you_downloads_reflects_template() {
+		$product_id = $this->factory->post->create(
+			[
+				'post_type'  => Products::$products_slug,
+				'meta_input' => [
+					'ppec_product_upload' => 'dummy'
+				]
+			]
+		);
+		$order = Orders::create();
+		$order->add_item( Products::$products_slug, $product_id, 0, 1, $product_id );
+
+		$_GET['order_id'] = $order->get_id();
+
+		$output = $this->object->shortcode_wpec_thank_you_downloads();
+		$this->assertContains( 'wpec-thank-you-page-download-link', $output );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_downloads
+	 */
+	public function testShortcode_wpec_thank_you_downloads_reflects_content() {
+		$product_id = $this->factory->post->create(
+			[
+				'post_type'  => Products::$products_slug,
+				'meta_input' => [
+					'ppec_product_upload' => 'dummy'
+				]
+			]
+		);
+		$order = Orders::create();
+		$order->add_item( Products::$products_slug, $product_id, 0, 1, $product_id );
+
+		$_GET['order_id'] = $order->get_id();
+
+		$output = $this->object->shortcode_wpec_thank_you_downloads( [], '[wpec_ty_download_link anchor_text="test download link"]' );
+		$this->assertContains( 'test download link', $output );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_download_link
+	 */
+	public function testShortcode_wpec_thank_you_download_link() {
+		$product_id = $this->factory->post->create(
+			[
+				'post_type'  => Products::$products_slug,
+			]
+		);
+		$order = Orders::create();
+		$order->add_item( Products::$products_slug, $product_id, 0, 1, $product_id );
+
+		$_GET['order_id'] = $order->get_id();
+
+		$output = $this->object->shortcode_wpec_thank_you_download_link();
+		$this->assertEmpty( $output );
+	}
+
+
+	/**
+	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_download_link
+	 */
+	public function testShortcode_wpec_thank_you_download_link_reflects() {
+		$product_id = $this->factory->post->create(
+			[
+				'post_type'  => Products::$products_slug,
+				'meta_input' => [
+					'ppec_product_upload' => 'dummy'
+				]
+			]
+		);
+		$order = Orders::create();
+		$order->add_item( Products::$products_slug, $product_id, 0, 1, $product_id );
+
+		$_GET['order_id'] = $order->get_id();
+
+		$output = $this->object->shortcode_wpec_thank_you_download_link(
+			[
+				'anchor_text' => "test download link 2",
+				'target'      => "_test_blank",
+			]
+		);
+		$this->assertContains( 'test download link 2', $output );
+		$this->assertContains( '_test_blank', $output );
+	}
+
+	public function test_wpec_ty_aliases() {
+		$tags = [
+			'first_name',
+			'last_name',
+			'product_details',
+			'payer_email',
+			'transaction_id',
+			'purchase_amt',
+			'purchase_date',
+			'coupon_code',
+			'currency_code',
+			'address',
+			'order_id',
+		];
+
+		foreach ( $tags as $tag ) {
+			$output = do_shortcode( "[wpec_ty_{$tag}]" );
+			$this->assertEquals( "{{$tag}}", $output );
+		}
+	}
+
+
+	/**
 	 * @covers WP_Express_Checkout\Shortcodes::generate_product_details_tag
 	 */
 	public function testGenerate_product_details_tag() {

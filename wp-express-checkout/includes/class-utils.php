@@ -134,6 +134,7 @@ class Utils {
 			'transaction_id'  => $order->get_resource_id(),
 			'purchase_amt'    => $order->get_total(),
 			'purchase_date'   => date( 'Y-m-d' ),
+			'currency_code'   => $order->get_currency(),
 			'coupon_code'     => ! empty( $coupon_item['mata']['code'] ) ? $coupon_item['mata']['code'] : 0,
 			'address'         => '', // Not implemented yet.
 			'order_id'        => $order_id,
@@ -166,6 +167,7 @@ class Utils {
 			'purchase_amt',
 			'purchase_date',
 			'coupon_code',
+			'currency_code',
 			'address',
 			'order_id',
 		);
