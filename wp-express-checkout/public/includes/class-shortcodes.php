@@ -315,9 +315,12 @@ class Shortcodes {
 	/**
 	 * Thank You page shortcode.
 	 *
+	 * @param array  $atts    An array of attributes. There are no attributes for now.
+	 * @param string $content The shortcode content or null if not set.
+	 *
 	 * @return string
 	 */
-	public function shortcode_wpec_thank_you() {
+	public function shortcode_wpec_thank_you( $atts = array(), $content = '' ) {
 
 		$error_message = '';
 
@@ -347,43 +350,27 @@ class Shortcodes {
 			return $this->show_err_msg( sprintf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $order->get_data( 'state' ) ), 'order-state' );
 		}
 
-		$thank_you_msg  = '';
-		$thank_you_msg .= '<div class="wpec_thank_you_message">';
-		$thank_you_msg .= '<p>' . __( 'Thank you for your purchase.', 'wp-express-checkout' ) . '</p>';
+		if ( empty( $content ) ) {
+			$located = self::locate_template( 'content-thank-you.php' );
 
-		$thank_you_msg .= '<p>' . __( 'Your purchase details are below:', 'wp-express-checkout' ) . '</p>';
-		$thank_you_msg .= '<p>{product_details}</p>';
-		$thank_you_msg .= '<p>' . __( 'Transaction ID: ', 'wp-express-checkout' ) . '{transaction_id}</p>';
-
-		$downloads = View_Downloads::get_order_downloads_list( $order_id );
-
-		if ( ! empty( $downloads ) ) {
-			$download_var_str  = '';
-			$download_var_str .= "<br /><div class='wpec-thank-you-page-download-link'>";
-			$download_var_str .= '<span>' . _n( 'Download link', 'Download links', count( $downloads ), 'wp-express-checkout' ) . ':</span><br/>';
-			$download_txt      = __( 'Click here to download', 'wp-express-checkout' );
-			$link_tpl          = apply_filters( 'wpec_downloads_list_item_template', '%1$s - <a href="%2$s">%3$s</a><br/>' );
-			foreach ( $downloads as $name => $download_url ) {
-				$download_var_str .= sprintf( $link_tpl, $name, $download_url, $download_txt );
+			if ( $located ) {
+				ob_start();
+				require $located;
+				$content = ob_get_clean();
 			}
-			$download_var_str .= '</div>';
-
-			$thank_you_msg .= $download_var_str;
 		}
-
-		$thank_you_msg .= '</div>'; // end .wpec_thank_you_message.
 
 		$args = array(
 			'product_details' => self::generate_product_details_tag( $order ),
 		);
 
 		// Apply the dynamic tags.
-		$thank_you_msg = nl2br( Utils::replace_dynamic_order_tags( $thank_you_msg, $order_id, $args ) );
+		$content = Utils::replace_dynamic_order_tags( $content, $order_id, $args );
 
 		// Trigger the filter.
-		$thank_you_msg = apply_filters( 'wpec_thank_you_message', $thank_you_msg );
+		$content = apply_filters( 'wpec_thank_you_message', $content );
 
-		return $thank_you_msg;
+		return $content;
 	}
 
 	/**

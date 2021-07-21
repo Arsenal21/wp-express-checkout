@@ -236,7 +236,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 	/**
 	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you
 	 */
-	public function testShortcode_wpec_thank_you__reflects() {
+	public function testShortcode_wpec_thank_you__reflects_template() {
 		$product_id = $this->factory->post->create(
 			[
 				'post_type'  => Products::$products_slug,
@@ -246,6 +246,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 			]
 		);
 		$order = Orders::create();
+		$order->set_resource_id( "test-resource-id-{$product_id}-{$order->get_id()}" );
 		$order->add_data(
 			'payer',
 			[
@@ -263,8 +264,44 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		$_GET['_wpnonce'] = wp_create_nonce( 'thank_you_url' . $_GET['order_id'] );
 
 		$output = $this->object->shortcode_wpec_thank_you();
+		$this->assertContains( "test-resource-id-{$product_id}-{$order->get_id()}", $output );
 		$this->assertContains( 'wpec_thank_you_message', $output );
 		$this->assertContains( 'wpec-thank-you-page-download-link', $output );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you
+	 */
+	public function testShortcode_wpec_thank_you__reflects_content() {
+		$product_id = $this->factory->post->create(
+			[
+				'post_type'  => Products::$products_slug,
+				'meta_input' => [
+					'ppec_product_upload' => 'dummy'
+				]
+			]
+		);
+		$order = Orders::create();
+		$order->set_resource_id( "test-resource-id-{$product_id}-{$order->get_id()}" );
+		$order->add_data(
+			'payer',
+			[
+				'name' => [
+					'given_name' => '',
+					'surname' => '',
+				],
+				'email_address' => ''
+			]
+		);
+		$order->add_data( 'state', 'COMPLETED' );
+		$order->add_item( Products::$products_slug, $product_id, 0, 1, $product_id );
+
+		$_GET['order_id'] = $order->get_id();
+		$_GET['_wpnonce'] = wp_create_nonce( 'thank_you_url' . $_GET['order_id'] );
+
+		$output = $this->object->shortcode_wpec_thank_you( [], 'test transaction id {transaction_id}' );
+
+		$this->assertEquals( "test transaction id test-resource-id-{$product_id}-{$order->get_id()}", $output );
 	}
 
 	/**
