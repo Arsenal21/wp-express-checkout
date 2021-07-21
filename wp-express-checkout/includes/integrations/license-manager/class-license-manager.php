@@ -126,7 +126,7 @@ class License_Manager {
 			<input type="checkbox" name="wpec_slm_license_enabled" value="1" <?php checked( $enabled ); ?>>
 			<?php esc_html_e( 'Create License', 'wp-express-checkout' ); ?>
 		</label><br />
-		<p class="description"><?php esc_html_e( 'If this product is a piece of software that........', 'wp-express-checkout' ); ?></p>
+		<p class="description"><?php esc_html_e( 'If this product is a piece of software that has been integrated with the Software License Manager plugin then checking this box will create a license for the customer who purchase this product.', 'wp-express-checkout' ); ?></p>
 
 		<label><?php esc_html_e( 'Maximum Allowed Domains', 'wp-express-checkout' ); ?></label><br />
 		<input name="wpec_slm_max_allowed_domains" type="text" id="wpec_slm_max_allowed_domains" value="<?php echo esc_attr( $max_allowed ); ?>" size="10" />

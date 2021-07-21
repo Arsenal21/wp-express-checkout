@@ -1687,7 +1687,7 @@ msgid "Create License"
 msgstr ""
 
 #: includes/integrations/license-manager/class-license-manager.php:129
-msgid "If this product is a piece of software that........"
+msgid "If this product is a piece of software that has been integrated with the Software License Manager plugin then checking this box will create a license for the customer who purchase this product."
 msgstr ""
 
 #: includes/integrations/license-manager/class-license-manager.php:131
