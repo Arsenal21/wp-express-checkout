@@ -157,64 +157,6 @@ class Products_Meta_BoxesTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Admin\Products_Meta_Boxes::display_emember_meta_box
-	 */
-	public function testDisplay_emember_meta_box__no_emember() {
-		$product = $this->factory->post->create_and_get(
-			[
-				'post_type' => \WP_Express_Checkout\Products::$products_slug,
-				'meta_input' => [
-					'wpec_product_emember_level' => 42,
-				]
-			]
-		);
-
-		$this->expectOutputRegex( '/^((?!42).)*$/' );
-		$this->object->display_emember_meta_box( $product );
-	}
-
-	/**
-	 * @covers WP_Express_Checkout\Admin\Products_Meta_Boxes::display_emember_meta_box
-	 */
-	public function testDisplay_emember_meta_box__reflects() {
-
-		require_once WPEC_TESTS_DIR . '/mocks/mock-emember-functions.php';
-
-		$product = $this->factory->post->create_and_get(
-			[
-				'post_type' => \WP_Express_Checkout\Products::$products_slug,
-				'meta_input' => [
-					'wpec_product_emember_level' => 42,
-				]
-			]
-		);
-
-		$this->expectOutputRegex( '(answer to life the universe and everything)' );
-		$this->expectOutputRegex( '(selected)' );
-		$this->object->display_emember_meta_box( $product );
-	}
-
-	/**
-	 * @covers WP_Express_Checkout\Admin\Products_Meta_Boxes::display_emember_meta_box
-	 */
-	public function testDisplay_swpm_meta_box() {
-
-		require_once WPEC_TESTS_DIR . '/mocks/mock-swpm-utils.php';
-
-		$product = $this->factory->post->create_and_get(
-			[
-				'post_type' => \WP_Express_Checkout\Products::$products_slug,
-				'meta_input' => [
-					'wpec_product_swpm_level' => 42,
-				]
-			]
-		);
-
-		$this->expectOutputRegex( '(42)' );
-		$this->object->display_swpm_meta_box( $product );
-	}
-
-	/**
 	 * @covers WP_Express_Checkout\Admin\Products_Meta_Boxes::save_product_handler
 	 * @todo   Implement testSave_product_handler().
 	 */

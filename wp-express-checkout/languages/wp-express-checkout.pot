@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Express Checkout 2.0.0\n"
+"Project-Id-Version: WP Express Checkout 2.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-09 08:35:21+00:00\n"
+"POT-Creation-Date: 2021-07-20 12:29:20+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -277,7 +277,7 @@ msgid ""
 "(instead of on the page)."
 msgstr ""
 
-#: admin/class-admin.php:260 admin/includes/class-products-meta-boxes.php:414
+#: admin/class-admin.php:260 admin/includes/class-products-meta-boxes.php:402
 msgid "Popup/Modal Trigger Button Text"
 msgstr ""
 
@@ -285,24 +285,24 @@ msgstr ""
 msgid "The button text for the button that will trigger the popup/modal window."
 msgstr ""
 
-#: admin/class-admin.php:270 admin/includes/class-products-meta-boxes.php:420
+#: admin/class-admin.php:270 admin/includes/class-products-meta-boxes.php:408
 msgid "Button Type"
 msgstr ""
 
-#: admin/class-admin.php:270 admin/includes/class-products-meta-boxes.php:426
+#: admin/class-admin.php:270 admin/includes/class-products-meta-boxes.php:414
 msgid "Checkout"
 msgstr ""
 
-#: admin/class-admin.php:270 admin/includes/class-products-meta-boxes.php:427
+#: admin/class-admin.php:270 admin/includes/class-products-meta-boxes.php:415
 #: public/class-main.php:319
 msgid "Pay"
 msgstr ""
 
-#: admin/class-admin.php:270 admin/includes/class-products-meta-boxes.php:428
+#: admin/class-admin.php:270 admin/includes/class-products-meta-boxes.php:416
 msgid "PayPal"
 msgstr ""
 
-#: admin/class-admin.php:270 admin/includes/class-products-meta-boxes.php:429
+#: admin/class-admin.php:270 admin/includes/class-products-meta-boxes.php:417
 msgid "Buy Now"
 msgstr ""
 
@@ -404,11 +404,11 @@ msgstr ""
 msgid "PayPal Credit"
 msgstr ""
 
-#: admin/class-admin.php:282 admin/includes/class-products-meta-boxes.php:258
+#: admin/class-admin.php:282 admin/includes/class-products-meta-boxes.php:246
 msgid "Shipping Cost"
 msgstr ""
 
-#: admin/class-admin.php:282 admin/includes/class-products-meta-boxes.php:263
+#: admin/class-admin.php:282 admin/includes/class-products-meta-boxes.php:251
 msgid "Enter numbers only. Example: 5.50"
 msgstr ""
 
@@ -418,15 +418,15 @@ msgid ""
 "shipping cost on a per product basis."
 msgstr ""
 
-#: admin/class-admin.php:283 admin/includes/class-products-meta-boxes.php:269
+#: admin/class-admin.php:283 admin/includes/class-products-meta-boxes.php:257
 msgid "Tax (%)"
 msgstr ""
 
-#: admin/class-admin.php:283 admin/includes/class-products-meta-boxes.php:274
+#: admin/class-admin.php:283 admin/includes/class-products-meta-boxes.php:262
 msgid "Enter tax (in percent) which will be added to the product price."
 msgstr ""
 
-#: admin/class-admin.php:283 admin/includes/class-products-meta-boxes.php:276
+#: admin/class-admin.php:283 admin/includes/class-products-meta-boxes.php:264
 msgid "Leave it empty if you don't want to apply tax."
 msgstr ""
 
@@ -682,7 +682,7 @@ msgstr ""
 #: admin/includes/class-admin-order-summary-table.php:20
 #: admin/includes/class-products-list.php:26
 #: admin/includes/class-products-meta-boxes.php:26
-#: admin/includes/class-products-meta-boxes.php:96 includes/class-utils.php:222
+#: admin/includes/class-products-meta-boxes.php:84 includes/class-utils.php:222
 msgid "Price"
 msgstr ""
 
@@ -869,7 +869,7 @@ msgid "Variations"
 msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:28
-#: admin/includes/class-products-meta-boxes.php:239
+#: admin/includes/class-products-meta-boxes.php:227
 #: includes/class-utils.php:221
 msgid "Quantity"
 msgstr ""
@@ -890,307 +890,281 @@ msgstr ""
 msgid "Coupons Settings"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:40
-msgid "WP eMember Membership Level"
-msgstr ""
-
-#: admin/includes/class-products-meta-boxes.php:46
-msgid "Simple Membership Level"
-msgstr ""
-
-#: admin/includes/class-products-meta-boxes.php:51
+#: admin/includes/class-products-meta-boxes.php:39
 msgid "Add a description for your product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:58
+#: admin/includes/class-products-meta-boxes.php:46
 msgid "One-time payment"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:68
+#: admin/includes/class-products-meta-boxes.php:56
 msgid ""
 "A product type \"%s\" is not registered. Please activate appropriate addon "
 "or change the product type."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:99
+#: admin/includes/class-products-meta-boxes.php:87
 msgid ""
 "Item price. Enter numbers only, no need to put currency symbol. Example: "
 "39.95"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:102
+#: admin/includes/class-products-meta-boxes.php:90
 msgid "Allow customers to enter amount"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:104
+#: admin/includes/class-products-meta-boxes.php:92
 msgid ""
 "When checked, customers can change the amount they want to pay. You can set "
 "the initial amount using the field above."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:132
+#: admin/includes/class-products-meta-boxes.php:120
 msgid ""
 "Enter price modification - amount that will be added to product price if "
 "particular variation is selected."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:134
+#: admin/includes/class-products-meta-boxes.php:122
 msgid "Put negative value if you want to substract the amount instead."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:139
+#: admin/includes/class-products-meta-boxes.php:127
 #. translators: %s is a link to documentation page
 msgid ""
 "You can find documentation on variations <a href=\"%s\" "
 "target=\"_blank\">here</a>."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:146
+#: admin/includes/class-products-meta-boxes.php:134
 msgid "Use variations only to construct final product price"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:149
+#: admin/includes/class-products-meta-boxes.php:137
 msgid ""
 "When enabled, the total product price will be calculated by using the "
 "variation prices only. Useful if you do not want to have a base price for "
 "this product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:151
+#: admin/includes/class-products-meta-boxes.php:139
 msgid "Note: To enable this option, you will need to set the product price to 0."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:162
+#: admin/includes/class-products-meta-boxes.php:150
 msgid "No variations configured for this product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:169
+#: admin/includes/class-products-meta-boxes.php:157
 msgid "Create Group"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:174
+#: admin/includes/class-products-meta-boxes.php:162
 msgid "Group Name:"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:177
+#: admin/includes/class-products-meta-boxes.php:165
 msgid "Delete group"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:180
+#: admin/includes/class-products-meta-boxes.php:168
 msgid "Display As:"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:182
+#: admin/includes/class-products-meta-boxes.php:170
 msgid "Dropdown"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:183
+#: admin/includes/class-products-meta-boxes.php:171
 msgid "Radio Buttons"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:190
+#: admin/includes/class-products-meta-boxes.php:178
 msgid "Price Mod"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:191
+#: admin/includes/class-products-meta-boxes.php:179
 msgid "Product URL"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:195
+#: admin/includes/class-products-meta-boxes.php:183
 msgid "Add Variation"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:206
+#: admin/includes/class-products-meta-boxes.php:194
 msgid "Select from Media Library"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:209
+#: admin/includes/class-products-meta-boxes.php:197
 msgid "Delete variation"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:225
+#: admin/includes/class-products-meta-boxes.php:213
 msgid "Are you sure you want to delete this group?"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:226
+#: admin/includes/class-products-meta-boxes.php:214
 msgid "Are you sure you want to delete this variation?"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:242
+#: admin/includes/class-products-meta-boxes.php:230
 msgid "Item quantity."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:245
+#: admin/includes/class-products-meta-boxes.php:233
 msgid "Allow customers to specify quantity"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:247
+#: admin/includes/class-products-meta-boxes.php:235
 msgid ""
 "When checked, customers can enter quantity they want to buy. You can set "
 "initial quantity using field above."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:265
+#: admin/includes/class-products-meta-boxes.php:253
 msgid "Leave it empty if you are not charging shipping cost."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:281
+#: admin/includes/class-products-meta-boxes.php:269
 msgid "This is a Physical Product"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:283
+#: admin/includes/class-products-meta-boxes.php:271
 msgid "When checked, shipping address will be collected at the time of checkout."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:290
+#: admin/includes/class-products-meta-boxes.php:278
 msgid "URL of your product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:296
+#: admin/includes/class-products-meta-boxes.php:284
 msgid ""
 "Manually enter a valid URL of the file in the text box below, or click "
 "\"Select File\" button to upload (or choose) the downloadable file."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:300
-#: admin/includes/class-products-meta-boxes.php:318
+#: admin/includes/class-products-meta-boxes.php:288
+#: admin/includes/class-products-meta-boxes.php:306
 msgid "Select File"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:304
+#: admin/includes/class-products-meta-boxes.php:292
 msgid "Steps to upload a file or choose one from your media library:"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:306
+#: admin/includes/class-products-meta-boxes.php:294
 msgid "Hit the \"Select File\" button."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:307
+#: admin/includes/class-products-meta-boxes.php:295
 msgid "Upload a new file or choose an existing one from your media library."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:308
+#: admin/includes/class-products-meta-boxes.php:296
 msgid ""
 "Click the \"Insert\" button, this will populate the uploaded file's URL in "
 "the above text field."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:320
-#: admin/includes/class-products-meta-boxes.php:366
+#: admin/includes/class-products-meta-boxes.php:308
+#: admin/includes/class-products-meta-boxes.php:354
 msgid "Insert"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:344
+#: admin/includes/class-products-meta-boxes.php:332
 msgid ""
 "Manually enter a valid URL, or click \"Select Image\" to upload (or choose) "
 "the file thumbnail image."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:348
-#: admin/includes/class-products-meta-boxes.php:364
+#: admin/includes/class-products-meta-boxes.php:336
+#: admin/includes/class-products-meta-boxes.php:352
 msgid "Select Image"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:349
+#: admin/includes/class-products-meta-boxes.php:337
 msgid "Remove Image"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:397
+#: admin/includes/class-products-meta-boxes.php:385
 msgid ""
 "Enter the Thank You page URL for this product. Leave it blank if you want "
 "to use the default Thank You page created by the plugin."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:405
+#: admin/includes/class-products-meta-boxes.php:393
 msgid "Use this shortcode to display button for your product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:417
+#: admin/includes/class-products-meta-boxes.php:405
 msgid ""
 "Specify the text to be displayed on the button that triggers the payment "
 "popup/modal window. Leave it blank to use the text specified in General "
 "Settings page."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:419
+#: admin/includes/class-products-meta-boxes.php:407
 msgid "Button Options"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:423
+#: admin/includes/class-products-meta-boxes.php:411
 msgid "-- Default --"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:437
+#: admin/includes/class-products-meta-boxes.php:425
 msgid ""
 "Select a button type/style for the paypal payment button for this product. "
 "By default, it will use the type specified in the General settings of this "
 "plugin."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:445
+#: admin/includes/class-products-meta-boxes.php:433
 msgid "Select how Coupons should be handled for this product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:446
+#: admin/includes/class-products-meta-boxes.php:434
 msgid "Use Global Setting"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:447
+#: admin/includes/class-products-meta-boxes.php:435
 msgid "Enabled"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:448
+#: admin/includes/class-products-meta-boxes.php:436
 msgid "Disabled"
 msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:456
-msgid ""
-"Notice: You need to update your copy of the WP eMember plugin before this "
-"feature can be used."
-msgstr ""
-
-#: admin/includes/class-products-meta-boxes.php:461
-#: admin/includes/class-products-meta-boxes.php:489
-msgid "None"
-msgstr ""
-
-#: admin/includes/class-products-meta-boxes.php:467
-#: admin/includes/class-products-meta-boxes.php:487
-msgid ""
-"If you want this product to be connected to a membership level then select "
-"the membership Level here."
-msgstr ""
-
-#: admin/includes/class-products-meta-boxes.php:513
 msgid "Please specify product name."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:616
+#: admin/includes/class-products-meta-boxes.php:559
 msgid "View product"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:619
+#: admin/includes/class-products-meta-boxes.php:562
 msgid "Preview product"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:622
-#: admin/includes/class-products-meta-boxes.php:623
+#: admin/includes/class-products-meta-boxes.php:565
+#: admin/includes/class-products-meta-boxes.php:566
 msgid "Product updated."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:624
+#: admin/includes/class-products-meta-boxes.php:567
 msgid "Product published."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:625
+#: admin/includes/class-products-meta-boxes.php:568
 msgid "Product saved."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:626
+#: admin/includes/class-products-meta-boxes.php:569
 msgid "Product submitted."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:627
+#: admin/includes/class-products-meta-boxes.php:570
 msgid "Product draft updated."
 msgstr ""
 
@@ -1261,39 +1235,40 @@ msgstr ""
 msgid "<a target=\"_blank\" href=\"%s\">Twitter</a>"
 msgstr ""
 
-#: includes/class-blocks.php:33 includes/class-order-summary-table.php:68
+#: includes/blocks/product-block/class-product-block.php:40
+#: includes/class-order-summary-table.php:68
 msgid "Product"
 msgstr ""
 
-#: includes/class-blocks.php:34
+#: includes/blocks/product-block/class-product-block.php:41
 msgid "Template"
 msgstr ""
 
-#: includes/class-blocks.php:35
+#: includes/blocks/product-block/class-product-block.php:42
 msgid "Show in Modal"
 msgstr ""
 
-#: includes/class-blocks.php:36
+#: includes/blocks/product-block/class-product-block.php:43
 msgid "Layout Options"
 msgstr ""
 
-#: includes/class-blocks.php:75
+#: includes/blocks/product-block/class-product-block.php:80
 msgid "Select product to view"
 msgstr ""
 
-#: includes/class-blocks.php:110
+#: includes/blocks/product-block/class-product-block.php:115
 msgid "(Select product)"
 msgstr ""
 
-#: includes/class-blocks.php:133
+#: includes/blocks/product-block/class-product-block.php:138
 msgid "Show Button Only"
 msgstr ""
 
-#: includes/class-blocks.php:137
+#: includes/blocks/product-block/class-product-block.php:142
 msgid "Compact Product template"
 msgstr ""
 
-#: includes/class-blocks.php:141
+#: includes/blocks/product-block/class-product-block.php:146
 msgid "Full Product template"
 msgstr ""
 
@@ -1578,7 +1553,16 @@ msgstr ""
 msgid "No payment data received."
 msgstr ""
 
-#: includes/class-payment-processor.php:78
+#: includes/class-payment-processor.php:63
+msgid "No order data received."
+msgstr ""
+
+#: includes/class-payment-processor.php:67
+#: public/includes/class-shortcodes.php:334
+msgid "Error! Nonce value is missing in the URL or Nonce verification failed."
+msgstr ""
+
+#: includes/class-payment-processor.php:81
 msgid "No transaction info found in transient."
 msgstr ""
 
@@ -1591,20 +1575,20 @@ msgstr ""
 msgid "Payment amount mismatch with the original price."
 msgstr ""
 
-#: includes/class-payment-processor.php:146
+#: includes/class-payment-processor.php:144
 msgid "Payment currency mismatch."
 msgstr ""
 
-#: includes/class-payment-processor.php:163
+#: includes/class-payment-processor.php:160
 #. Translators:  %1$s - download item name; %2$s - download URL
 msgid "%1$s - download link: %2$s"
 msgstr ""
 
-#: includes/class-payment-processor.php:262
+#: includes/class-payment-processor.php:259
 msgid "Error! Thank you page URL configuration is wrong in the plugin settings."
 msgstr ""
 
-#: includes/class-payment-processor.php:311
+#: includes/class-payment-processor.php:325
 #: public/includes/class-shortcodes.php:347
 msgid "Payment is not approved. Status: %s"
 msgstr ""
@@ -1662,6 +1646,74 @@ msgstr ""
 
 #: includes/class-view-downloads.php:183
 msgid "Invalid product key!"
+msgstr ""
+
+#: includes/integrations/emember/class-emember.php:84
+msgid "WP eMember Membership Level"
+msgstr ""
+
+#: includes/integrations/emember/class-emember.php:91
+msgid ""
+"Notice: You need to update your copy of the WP eMember plugin before this "
+"feature can be used."
+msgstr ""
+
+#: includes/integrations/emember/class-emember.php:96
+#: includes/integrations/simple-wp-membership/class-simple-wp-membership.php:43
+msgid "None"
+msgstr ""
+
+#: includes/integrations/emember/class-emember.php:102
+#: includes/integrations/simple-wp-membership/class-simple-wp-membership.php:41
+msgid ""
+"If you want this product to be connected to a membership level then select "
+"the membership Level here."
+msgstr ""
+
+#: includes/integrations/license-manager/class-license-manager.php:56
+msgid "Item Name: "
+msgstr ""
+
+#: includes/integrations/license-manager/class-license-manager.php:56
+msgid "License Key: "
+msgstr ""
+
+#: includes/integrations/license-manager/class-license-manager.php:117
+msgid "Software License Manager Plugin"
+msgstr ""
+
+#: includes/integrations/license-manager/class-license-manager.php:127
+msgid "Create License"
+msgstr ""
+
+#: includes/integrations/license-manager/class-license-manager.php:129
+msgid "If this product is a piece of software that........"
+msgstr ""
+
+#: includes/integrations/license-manager/class-license-manager.php:131
+msgid "Maximum Allowed Domains"
+msgstr ""
+
+#: includes/integrations/license-manager/class-license-manager.php:133
+msgid ""
+"Number of domains/installs in which this license can be used. Leave blank "
+"if you wish to use the default value set in the license manager plugin "
+"settings."
+msgstr ""
+
+#: includes/integrations/license-manager/class-license-manager.php:135
+msgid "Number of Days before Expiry"
+msgstr ""
+
+#: includes/integrations/license-manager/class-license-manager.php:137
+msgid ""
+"Number of days before expiry. The expiry date of the license will be set "
+"based on this value. For example, if you want the key to expire in 6 months "
+"then enter a value of 180."
+msgstr ""
+
+#: includes/integrations/simple-wp-membership/class-simple-wp-membership.php:35
+msgid "Simple Membership Level"
 msgstr ""
 
 #: public/class-main.php:78
@@ -1760,10 +1812,6 @@ msgstr ""
 msgid "Error! Order ID value is missing in the URL."
 msgstr ""
 
-#: public/includes/class-shortcodes.php:334
-msgid "Error! Nonce value is missing in the URL or Nonce verification failed."
-msgstr ""
-
 #: public/includes/class-shortcodes.php:352
 msgid "Thank you for your purchase."
 msgstr ""
@@ -1836,7 +1884,7 @@ msgctxt "Order Date Format"
 msgid "Y/m/d"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:189
+#: admin/includes/class-products-meta-boxes.php:177
 msgctxt "Variation name"
 msgid "Name"
 msgstr ""

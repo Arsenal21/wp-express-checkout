@@ -30,7 +30,7 @@ class Payment_Processor_Free extends Payment_Processor {
 	public function wpec_process_payment() {
 		$this->order_data = $this->get_order_data();
 		parent::wpec_process_payment();
-	}
+	} // @codeCoverageIgnore
 
 	protected function get_payment_data() {
 		$current_user = wp_get_current_user();
@@ -40,7 +40,7 @@ class Payment_Processor_Free extends Payment_Processor {
 			'status' => $this->get_transaction_status( array() ),
 			'payer'  => array(
 				'name' => array(
-					'given_name' => $current_user->display_name ? $current_user->display_name : __ ( 'Anonymous', 'wp-express-checkout' ),
+					'given_name' => $current_user->display_name ? $current_user->display_name : __( 'Anonymous', 'wp-express-checkout' ),
 					'surname' => ''
 				),
 				'email_address' => $current_user->user_email ? $current_user->user_email : '',

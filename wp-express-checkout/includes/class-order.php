@@ -422,7 +422,7 @@ class Order {
 	 * @param string $email
 	 */
 	public function set_author_email( $email ){
-		if ( ! is_email( $email ) ) {
+		if ( ! is_email( $email ) && ! empty( $email ) ) {
 			trigger_error( 'Author Email must be a valid email address', E_USER_WARNING );
 		}
 

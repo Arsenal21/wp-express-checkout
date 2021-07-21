@@ -114,6 +114,12 @@ None
 
 == Changelog ==
 
+= WIP since 2.0.1 to 2021-07-20 =
+* Changed to using "require_once" instead of "require" for the inclusion of the "swpm_handle_subsc_ipn.php" file to prevent fatal error.
+* Integrated License Manager plugin. 100% Covered by unti tests.
+* Refactor integrations: - Created Integrations namespace - Moved integrations code to separated folders - 100% cover integrations by unit tests
+= END WIP =
+
 = 2.0.1 =
 * Added filter 'wpec_product_template' - to allow plugins override templates.
 * Moved arguments parsing logic from Shortcodes::generate_pp_express_checkout_button() to Shortcodes::shortcode_wp_express_checkout()

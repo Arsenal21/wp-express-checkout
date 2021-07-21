@@ -20,10 +20,9 @@ var ppecHandler = function( data ) {
 		var ret = true;
 		var dlgTitle = ppecFrontVars.str.paymentCompleted;
 		var dlgMsg = ppecFrontVars.str.redirectMsg;
-		try {
-			var res = JSON.parse( data );
-			var redirect_url = res.redirect_url;
-		} catch ( e ) {
+		if ( data.redirect_url ) {
+			var redirect_url = data.redirect_url;
+		} else {
 			dlgTitle = ppecFrontVars.str.errorOccurred;
 			dlgMsg = data;
 			ret = false;
