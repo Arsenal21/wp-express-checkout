@@ -25,6 +25,23 @@ class Shortcodes {
 		add_shortcode( 'wp_express_checkout', array( $this, 'shortcode_wp_express_checkout' ) );
 		add_shortcode( 'wpec_thank_you', array( $this, 'shortcode_wpec_thank_you' ) );
 
+		// The general thank you part shortcode:
+		add_shortcode( 'wpec_ty', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+		// The aliases for 'wpec_ty':
+		add_shortcode( 'wpec_ty_first_name', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+		add_shortcode( 'wpec_ty_last_name', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+		add_shortcode( 'wpec_ty_product_details', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+		add_shortcode( 'wpec_ty_payer_email', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+		add_shortcode( 'wpec_ty_transaction_id', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+		add_shortcode( 'wpec_ty_purchase_amt', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+		add_shortcode( 'wpec_ty_purchase_date', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+		add_shortcode( 'wpec_ty_currency_code', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+		add_shortcode( 'wpec_ty_coupon_code', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+		add_shortcode( 'wpec_ty_address', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+		add_shortcode( 'wpec_ty_order_id', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+		add_shortcode( 'wpec_ty_downloads', array( $this, 'shortcode_wpec_thank_you_downloads' ) );
+		add_shortcode( 'wpec_ty_download_link', array( $this, 'shortcode_wpec_thank_you_download_link' ) );
+
 		if ( ! is_admin() ) {
 			add_filter( 'widget_text', 'do_shortcode' );
 		}
@@ -315,9 +332,12 @@ class Shortcodes {
 	/**
 	 * Thank You page shortcode.
 	 *
+	 * @param array  $atts    An array of attributes. There are no attributes for now.
+	 * @param string $content The shortcode content or null if not set.
+	 *
 	 * @return string
 	 */
-	public function shortcode_wpec_thank_you() {
+	public function shortcode_wpec_thank_you( $atts = array(), $content = '' ) {
 
 		$error_message = '';
 
@@ -347,43 +367,111 @@ class Shortcodes {
 			return $this->show_err_msg( sprintf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $order->get_data( 'state' ) ), 'order-state' );
 		}
 
-		$thank_you_msg  = '';
-		$thank_you_msg .= '<div class="wpec_thank_you_message">';
-		$thank_you_msg .= '<p>' . __( 'Thank you for your purchase.', 'wp-express-checkout' ) . '</p>';
+		if ( empty( $content ) ) {
+			$located = self::locate_template( 'content-thank-you.php' );
 
-		$thank_you_msg .= '<p>' . __( 'Your purchase details are below:', 'wp-express-checkout' ) . '</p>';
-		$thank_you_msg .= '<p>{product_details}</p>';
-		$thank_you_msg .= '<p>' . __( 'Transaction ID: ', 'wp-express-checkout' ) . '{transaction_id}</p>';
-
-		$downloads = View_Downloads::get_order_downloads_list( $order_id );
-
-		if ( ! empty( $downloads ) ) {
-			$download_var_str  = '';
-			$download_var_str .= "<br /><div class='wpec-thank-you-page-download-link'>";
-			$download_var_str .= '<span>' . _n( 'Download link', 'Download links', count( $downloads ), 'wp-express-checkout' ) . ':</span><br/>';
-			$download_txt      = __( 'Click here to download', 'wp-express-checkout' );
-			$link_tpl          = apply_filters( 'wpec_downloads_list_item_template', '%1$s - <a href="%2$s">%3$s</a><br/>' );
-			foreach ( $downloads as $name => $download_url ) {
-				$download_var_str .= sprintf( $link_tpl, $name, $download_url, $download_txt );
+			if ( $located ) {
+				ob_start();
+				require $located;
+				$content = ob_get_clean();
 			}
-			$download_var_str .= '</div>';
-
-			$thank_you_msg .= $download_var_str;
 		}
-
-		$thank_you_msg .= '</div>'; // end .wpec_thank_you_message.
 
 		$args = array(
 			'product_details' => self::generate_product_details_tag( $order ),
 		);
 
+		// Do nested shortcodes.
+		$content = do_shortcode( $content );
+
 		// Apply the dynamic tags.
-		$thank_you_msg = nl2br( Utils::replace_dynamic_order_tags( $thank_you_msg, $order_id, $args ) );
+		$content = Utils::replace_dynamic_order_tags( $content, $order_id, $args );
 
 		// Trigger the filter.
-		$thank_you_msg = apply_filters( 'wpec_thank_you_message', $thank_you_msg );
+		$content = apply_filters( 'wpec_thank_you_message', $content );
 
-		return $thank_you_msg;
+		return $content;
+	}
+
+	/**
+	 * Thank You part shortcode.
+	 *
+	 * The shortcode wrapper for merge tags, like {transaction_id} and other.
+	 *
+	 * @param array  $atts      An array of attributes.
+	 * @param string $content   The shortcode content or null if not set.
+	 * @param string $shortcode The shortcode name.
+	 */
+	public function shortcode_wpec_thank_you_parts( $atts = array(), $content = '', $shortcode = '' ) {
+		$field = str_replace( array( 'wpec_ty_', 'wpec_ty' ), '', $shortcode );
+
+		$atts = shortcode_atts(
+			array( 'field' => $field ),
+		$atts );
+
+		$content = ! empty( $atts['field'] ) ? '{' . $atts['field'] . '}' : '';
+
+		return $content;
+	}
+
+	/**
+	 * Thank You Downloads part shortcode.
+	 *
+	 * @param array  $atts    An array of attributes.
+	 * @param string $content The shortcode content or null if not set.
+	 */
+	public function shortcode_wpec_thank_you_downloads( $atts = array(), $content = '' ) {
+
+		$order_id  = (int) $_GET['order_id'];
+		$downloads = View_Downloads::get_order_downloads_list( $order_id );
+
+		if ( ! $downloads ) {
+			return '';
+		}
+
+		if ( empty( $content ) ) {
+			$located = self::locate_template( 'content-thank-you-downloads.php' );
+
+			if ( $located ) {
+				ob_start();
+				require $located;
+				$content = ob_get_clean();
+			}
+		}
+
+		$content = do_shortcode( $content );
+
+		return $content;
+	}
+
+	/**
+	 * Thank You Download Link part shortcode.
+	 *
+	 * @param array $atts An array of attributes.
+	 */
+	public function shortcode_wpec_thank_you_download_link( $atts = array() ) {
+
+		$order_id  = (int) $_GET['order_id'];
+		$downloads = View_Downloads::get_order_downloads_list( $order_id );
+		$content   = '';
+
+		if ( ! $downloads ) {
+			return $content;
+		}
+
+		$atts = shortcode_atts(
+			array(
+				'anchor_text' => __( 'Click here to download', 'wp-express-checkout' ),
+				'target'      => '_blank',
+			),
+		$atts );
+
+		$link_tpl = apply_filters( 'wpec_downloads_list_item_template', '%1$s - <a href="%2$s" target="%3$s">%4$s</a><br/>' );
+		foreach ( $downloads as $name => $download_url ) {
+			$content .= sprintf( $link_tpl, $name, $download_url, $atts['target'], $atts['anchor_text'] );
+		}
+
+		return $content;
 	}
 
 	/**
