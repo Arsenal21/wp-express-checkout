@@ -192,45 +192,53 @@ class ShortcodesTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you
+	 * @covers WP_Express_Checkout\Shortcodes::get_thank_you_page_order
 	 */
-	public function testShortcode_wpec_thank_you__no_order_id() {
-		$output = $this->object->shortcode_wpec_thank_you();
+	public function testGet_thank_you_page_order__no_order_id() {
+		$output = $this->object->get_thank_you_page_order();
 		$this->assertContains( 'wpec-error-message-missing-order-id', $output );
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you
+	 * @covers WP_Express_Checkout\Shortcodes::get_thank_you_page_order
 	 */
-	public function testShortcode_wpec_thank_you__nonce_verification() {
+	public function testGet_thank_you_page_order__nonce_verification() {
 		$_GET['order_id'] = 'dummy';
 
-		$output = $this->object->shortcode_wpec_thank_you();
+		$output = $this->object->get_thank_you_page_order();
 		$this->assertContains( 'wpec-error-message-nonce-verification', $output );
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you
+	 * @covers WP_Express_Checkout\Shortcodes::get_thank_you_page_order
 	 */
-	public function testShortcode_wpec_thank_you__incorrect_order() {
+	public function testGet_thank_you_page_order__incorrect_order() {
 		$_GET['order_id'] = 'dummy';
 		$_GET['_wpnonce'] = wp_create_nonce( 'thank_you_url' . $_GET['order_id'] );
 
-		$output = $this->object->shortcode_wpec_thank_you();
+		$output = $this->object->get_thank_you_page_order();
 		$this->assertContains( 'wpec-error-message-2003', $output );
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you
+	 * @covers WP_Express_Checkout\Shortcodes::get_thank_you_page_order
 	 */
-	public function testShortcode_wpec_thank_you__incorrect_order_state() {
+	public function testGet_thank_you_page_order__incorrect_order_state() {
 		$order = Orders::create();
 
 		$_GET['order_id'] = $order->get_id();
 		$_GET['_wpnonce'] = wp_create_nonce( 'thank_you_url' . $_GET['order_id'] );
 
-		$output = $this->object->shortcode_wpec_thank_you();
+		$output = $this->object->get_thank_you_page_order();
 		$this->assertContains( 'wpec-error-message-order-state', $output );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Shortcodes::get_thank_you_page_order
+	 */
+	public function testShortcode_wpec_thank_you__no_order_id() {
+		$output = $this->object->shortcode_wpec_thank_you();
+		$this->assertContains( 'wpec-error-message-missing-order-id', $output );
 	}
 
 	/**
@@ -305,6 +313,49 @@ class ShortcodesTest extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_callback
+	 */
+	public function testShortcode_wpec_thank_you_callback__no_order_id() {
+		$output = $this->object->shortcode_wpec_thank_you_callback();
+		$this->assertContains( 'wpec-error-message-missing-order-id', $output );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_callback
+	 */
+	public function testShortcode_wpec_thank_you_callback__reflects() {
+		$product_id = $this->factory->post->create(
+			[
+				'post_type'  => Products::$products_slug,
+				'meta_input' => [
+					'ppec_product_upload' => 'dummy'
+				]
+			]
+		);
+		$order = Orders::create();
+		$order->set_resource_id( "test-resource-id-{$product_id}-{$order->get_id()}" );
+		$order->add_data(
+			'payer',
+			[
+				'name' => [
+					'given_name' => '',
+					'surname' => '',
+				],
+				'email_address' => ''
+			]
+		);
+		$order->add_data( 'state', 'COMPLETED' );
+		$order->add_item( Products::$products_slug, $product_id, 0, 1, $product_id );
+
+		$_GET['order_id'] = $order->get_id();
+		$_GET['_wpnonce'] = wp_create_nonce( 'thank_you_url' . $_GET['order_id'] );
+
+		$output = $this->object->shortcode_wpec_thank_you_callback( [], '', 'wpec_ty_transaction_id' );
+
+		$this->assertEquals( "test-resource-id-{$product_id}-{$order->get_id()}", $output );
+	}
+
+	/**
 	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_parts
 	 */
 	public function testShortcode_wpec_thank_you_parts__no_part() {
@@ -331,6 +382,14 @@ class ShortcodesTest extends \WP_UnitTestCase {
 	/**
 	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_downloads
 	 */
+	public function testShortcode_wpec_thank_you_downloads__no_order_id() {
+		$output = $this->object->shortcode_wpec_thank_you_downloads();
+		$this->assertContains( 'wpec-error-message-missing-order-id', $output );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Shortcodes::shortcode_wpec_thank_you_downloads
+	 */
 	public function testShortcode_wpec_thank_you_downloads__no_downloads() {
 		$product_id = $this->factory->post->create(
 			[
@@ -339,8 +398,10 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		);
 		$order = Orders::create();
 		$order->add_item( Products::$products_slug, $product_id, 0, 1, $product_id );
+		$order->add_data( 'state', 'COMPLETED' );
 
 		$_GET['order_id'] = $order->get_id();
+		$_GET['_wpnonce'] = wp_create_nonce( 'thank_you_url' . $_GET['order_id'] );
 
 		$output = $this->object->shortcode_wpec_thank_you_downloads();
 		$this->assertEmpty( $output );
@@ -360,8 +421,10 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		);
 		$order = Orders::create();
 		$order->add_item( Products::$products_slug, $product_id, 0, 1, $product_id );
+		$order->add_data( 'state', 'COMPLETED' );
 
 		$_GET['order_id'] = $order->get_id();
+		$_GET['_wpnonce'] = wp_create_nonce( 'thank_you_url' . $_GET['order_id'] );
 
 		$output = $this->object->shortcode_wpec_thank_you_downloads();
 		$this->assertContains( 'wpec-thank-you-page-download-link', $output );
@@ -381,8 +444,10 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		);
 		$order = Orders::create();
 		$order->add_item( Products::$products_slug, $product_id, 0, 1, $product_id );
+		$order->add_data( 'state', 'COMPLETED' );
 
 		$_GET['order_id'] = $order->get_id();
+		$_GET['_wpnonce'] = wp_create_nonce( 'thank_you_url' . $_GET['order_id'] );
 
 		$output = $this->object->shortcode_wpec_thank_you_downloads( [], '[wpec_ty_download_link anchor_text="test download link"]' );
 		$this->assertContains( 'test download link', $output );
@@ -450,7 +515,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		];
 
 		foreach ( $tags as $tag ) {
-			$output = do_shortcode( "[wpec_ty_{$tag}]" );
+			$output = $this->object->shortcode_wpec_thank_you_parts( [], '', "wpec_ty_{$tag}" );
 			$this->assertEquals( "{{$tag}}", $output );
 		}
 	}
