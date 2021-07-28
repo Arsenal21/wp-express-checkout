@@ -23,6 +23,7 @@ return array(
     'WP_Express_Checkout\\Integrations\\Emember' => $baseDir . '/includes/integrations/emember/class-emember.php',
     'WP_Express_Checkout\\Integrations\\License_Manager' => $baseDir . '/includes/integrations/license-manager/class-license-manager.php',
     'WP_Express_Checkout\\Integrations\\Simple_WP_Membership' => $baseDir . '/includes/integrations/simple-wp-membership/class-simple-wp-membership.php',
+    'WP_Express_Checkout\\Integrations\\WooCommerce_Gateway' => $baseDir . '/includes/integrations/woocommerce/class-woocommerce-gateway.php',
     'WP_Express_Checkout\\Main' => $baseDir . '/public/class-main.php',
     'WP_Express_Checkout\\Order' => $baseDir . '/includes/class-order.php',
     'WP_Express_Checkout\\Order_Summary_Table' => $baseDir . '/includes/class-order-summary-table.php',

@@ -17,6 +17,10 @@ class Integrations {
 		if ( defined( 'WP_LICENSE_MANAGER_VERSION' ) ) {
 			new Integrations\License_Manager();
 		}
+		// WooCommerce integration.
+		if ( class_exists( 'WC_Payment_Gateway' ) ) {
+			new Integrations\WooCommerce_Gateway();
+		}
 	}
 
 }
