@@ -114,10 +114,15 @@ None
 
 == Changelog ==
 
-= WIP since 2.0.1 to 2021-07-20 =
+= WIP since 2.0.1 to 2021-07-28 =
+* Allow shortcode [wpec_ty] outside [wpec_thank_you]
+* Added Thank You parts shortcodes:
+* Minor text update
+* Allow to use $content parameter in wpec_thank_you shortcode callback:
 * Changed to using "require_once" instead of "require" for the inclusion of the "swpm_handle_subsc_ipn.php" file to prevent fatal error.
 * Integrated License Manager plugin. 100% Covered by unti tests.
 * Refactor integrations: - Created Integrations namespace - Moved integrations code to separated folders - 100% cover integrations by unit tests
+* Improved Payment processors.
 = END WIP =
 
 = 2.0.1 =

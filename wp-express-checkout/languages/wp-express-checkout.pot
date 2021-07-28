@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Express Checkout 2.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-20 12:29:20+00:00\n"
+"POT-Creation-Date: 2021-07-28 07:23:42+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -682,7 +682,7 @@ msgstr ""
 #: admin/includes/class-admin-order-summary-table.php:20
 #: admin/includes/class-products-list.php:26
 #: admin/includes/class-products-meta-boxes.php:26
-#: admin/includes/class-products-meta-boxes.php:84 includes/class-utils.php:222
+#: admin/includes/class-products-meta-boxes.php:84 includes/class-utils.php:224
 msgid "Price"
 msgstr ""
 
@@ -698,14 +698,14 @@ msgstr ""
 
 #: admin/includes/class-admin-order-summary-table.php:50
 #: includes/class-order-summary-table.php:130
-#: public/includes/class-shortcodes.php:273
+#: public/includes/class-shortcodes.php:290
 #. translators: quantity
 msgid "x %s"
 msgstr ""
 
 #: admin/includes/class-admin-order-summary-table.php:69
 #: includes/class-order-summary-table.php:69
-#: includes/class-order-summary-table.php:110 includes/class-utils.php:234
+#: includes/class-order-summary-table.php:110 includes/class-utils.php:236
 msgid "Subtotal"
 msgstr ""
 
@@ -851,7 +851,7 @@ msgstr ""
 msgid "Thumbnail"
 msgstr ""
 
-#: admin/includes/class-products-list.php:24 includes/class-utils.php:220
+#: admin/includes/class-products-list.php:24 includes/class-utils.php:222
 msgid "Product Name"
 msgstr ""
 
@@ -870,7 +870,7 @@ msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:28
 #: admin/includes/class-products-meta-boxes.php:227
-#: includes/class-utils.php:221
+#: includes/class-utils.php:223
 msgid "Quantity"
 msgstr ""
 
@@ -1558,7 +1558,7 @@ msgid "No order data received."
 msgstr ""
 
 #: includes/class-payment-processor.php:67
-#: public/includes/class-shortcodes.php:334
+#: public/includes/class-shortcodes.php:352
 msgid "Error! Nonce value is missing in the URL or Nonce verification failed."
 msgstr ""
 
@@ -1589,7 +1589,7 @@ msgid "Error! Thank you page URL configuration is wrong in the plugin settings."
 msgstr ""
 
 #: includes/class-payment-processor.php:325
-#: public/includes/class-shortcodes.php:347
+#: public/includes/class-shortcodes.php:365
 msgid "Payment is not approved. Status: %s"
 msgstr ""
 
@@ -1617,16 +1617,16 @@ msgstr ""
 msgid "Search Product"
 msgstr ""
 
-#: includes/class-utils.php:200
+#: includes/class-utils.php:202
 #. translators: {Order Summary Item Name}: {Value}
 msgid "%1$s: %2$s"
 msgstr ""
 
-#: includes/class-utils.php:245
+#: includes/class-utils.php:247
 msgid "Total Amount"
 msgstr ""
 
-#: includes/class-utils.php:257
+#: includes/class-utils.php:259
 msgid ""
 "Error! The URL value is empty. Please specify a correct URL value to "
 "redirect to!"
@@ -1687,7 +1687,10 @@ msgid "Create License"
 msgstr ""
 
 #: includes/integrations/license-manager/class-license-manager.php:129
-msgid "If this product is a piece of software that has been integrated with the Software License Manager plugin then checking this box will create a license for the customer who purchase this product."
+msgid ""
+"If this product is a piece of software that has been integrated with the "
+"Software License Manager plugin then checking this box will create a "
+"license for the customer who purchase this product."
 msgstr ""
 
 #: includes/integrations/license-manager/class-license-manager.php:131
@@ -1758,80 +1761,80 @@ msgid ""
 "target=\"_blank\">Terms and Conditions</a>"
 msgstr ""
 
-#: public/includes/class-shortcodes.php:58
+#: public/includes/class-shortcodes.php:75
 msgid "Error: product ID is invalid."
 msgstr ""
 
-#: public/includes/class-shortcodes.php:65
+#: public/includes/class-shortcodes.php:82
 msgid "Can't find product with ID %s"
 msgstr ""
 
-#: public/includes/class-shortcodes.php:207
+#: public/includes/class-shortcodes.php:224
 msgid "Please enter %s Client ID in the settings."
 msgstr ""
 
-#: public/includes/class-shortcodes.php:286
+#: public/includes/class-shortcodes.php:303
 #. translators: tax amount
 msgid "%s (tax)"
 msgstr ""
 
-#: public/includes/class-shortcodes.php:289
+#: public/includes/class-shortcodes.php:306
 #. translators: tax percent
 msgid "%s%% tax"
 msgstr ""
 
-#: public/includes/class-shortcodes.php:297
+#: public/includes/class-shortcodes.php:314
 #. translators: tax + shipping amount
 msgid "+ %s (shipping)"
 msgstr ""
 
-#: public/includes/class-shortcodes.php:300
+#: public/includes/class-shortcodes.php:317
 #. translators: shipping amount
 msgid "%s (shipping)"
 msgstr ""
 
-#: public/includes/class-shortcodes.php:306
+#: public/includes/class-shortcodes.php:323
 msgid "Total:"
 msgstr ""
 
-#: public/includes/class-shortcodes.php:325
-#: public/includes/class-shortcodes.php:332
+#: public/includes/class-shortcodes.php:343
+#: public/includes/class-shortcodes.php:350
 msgid ""
 "This page is used to show the transaction result after a customer makes a "
 "payment."
 msgstr ""
 
-#: public/includes/class-shortcodes.php:326
-#: public/includes/class-shortcodes.php:333
+#: public/includes/class-shortcodes.php:344
+#: public/includes/class-shortcodes.php:351
 msgid ""
 "It will dynamically show the order details to the customers when they are "
 "redirected here after a payment. Do not access this page directly."
 msgstr ""
 
-#: public/includes/class-shortcodes.php:327
+#: public/includes/class-shortcodes.php:345
 msgid "Error! Order ID value is missing in the URL."
 msgstr ""
 
-#: public/includes/class-shortcodes.php:352
-msgid "Thank you for your purchase."
+#: public/includes/class-shortcodes.php:508
+msgid "Click here to download"
 msgstr ""
 
-#: public/includes/class-shortcodes.php:354
-msgid "Your purchase details are below:"
-msgstr ""
-
-#: public/includes/class-shortcodes.php:356
-msgid "Transaction ID: "
-msgstr ""
-
-#: public/includes/class-shortcodes.php:363
+#: public/views/templates/content-thank-you-downloads.php:10
 msgid "Download link"
 msgid_plural "Download links"
 msgstr[0] ""
 msgstr[1] ""
 
-#: public/includes/class-shortcodes.php:364
-msgid "Click here to download"
+#: public/views/templates/content-thank-you.php:10
+msgid "Thank you for your purchase."
+msgstr ""
+
+#: public/views/templates/content-thank-you.php:11
+msgid "Your purchase details are below:"
+msgstr ""
+
+#: public/views/templates/content-thank-you.php:15
+msgid "Transaction ID: "
 msgstr ""
 
 #: public/views/templates/payment-form.php:24
