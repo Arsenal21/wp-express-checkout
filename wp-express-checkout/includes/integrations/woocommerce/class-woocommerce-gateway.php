@@ -3,6 +3,7 @@
 namespace WP_Express_Checkout\Integrations;
 
 use WC_Logger;
+use WC_Order;
 use WC_Payment_Gateway;
 use WP_Express_Checkout\Debug\Logger;
 use WP_Express_Checkout\Main;
@@ -17,13 +18,16 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	/** @var WC_Logger Logger instance */
 	public static $log = false;
 
+	/** @var Main */
+	public $wpec;
+
 	public function __construct() {
 		$this->id                 = 'wp-express-checkout';
 		$this->method_title       = __( 'WP Express Checkout Gateway', 'wp-express-checkout' );
 		$this->method_description = __( 'Use WP Express Checkout plugin to process payments via PayPal Express form', 'wp-express-checkout' );
 		$this->notify_url         = WC()->api_request_url( 'wp_express_checkout' );
 
-		$wpec = Main::get_instance();
+		$this->wpec = Main::get_instance();
 
 		// Load the settings.
 		$this->init_form_fields();
@@ -34,13 +38,13 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 		$this->has_fields  = true;
 		$this->supports    = array( 'products' );
 
-		self::$log_enabled = $wpec->get_setting( 'enable_debug_logging' );
+		self::$log_enabled = $this->wpec->get_setting( 'enable_debug_logging' );
 
 		if ( is_admin() ) {
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		}
 		//add_action( 'woocommerce_api_' . strtolower( __CLASS__ ), array( $this, 'check_response' ) );
-		//add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
+		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
 		add_filter( 'woocommerce_payment_gateways', array( $this, 'add_wc_gateway_class' ) );
 	}
 
@@ -106,5 +110,35 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 			),
 		);
 	}
+
+    public function receipt_page( $order_id ) {
+
+		$order = new WC_Order( $order_id );
+
+		$form_args = array();
+
+		$button_sc = \WP_Express_Checkout\Shortcodes::get_instance();
+
+		$button_sc->generate_pp_express_checkout_button( $form_args );
+
+	}
+
+	/**
+	 * Send payment request to SpankPay gateway
+	 *
+	 * @param int $order_id
+	 *
+	 * @return array
+	 */
+	function process_payment( $order_id ) {
+		$order = new WC_Order( $order_id );
+		$order->update_status( 'pending-payment', __( 'Awaiting payment', 'wp-express-checkout' ) );
+
+		return array(
+			'result'   => 'success',
+			'redirect' => $order->get_checkout_payment_url( true ),
+		);
+	}
+
 
 }
