@@ -114,7 +114,7 @@ class Order_Tags_HtmlTest extends WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Order_Tags_Html::purchase_date
 	 */
 	public function testPurchase_date() {
-		$this->assertEquals( date_format( get_post_datetime( $this->order->get_id() ), 'F j, Y, g:i a' ), $this->object->purchase_date() );
+		$this->assertEquals( get_post_time( 'F j, Y, g:i a', false, $this->order->get_id() ), $this->object->purchase_date() );
 	}
 
 	/**

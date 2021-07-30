@@ -101,7 +101,7 @@ class Orders_Meta_Boxes {
 				</tr>
 				<tr>
 					<th><?php _e( 'Order Time', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo date_format( get_post_datetime( $order->get_id() ), 'F j, Y, g:i a' ); ?></td>
+					<td><?php echo get_post_time( 'F j, Y, g:i a', false, $order->get_id() ); ?></td>
 				</tr>
 				<tr>
 					<th><?php _e( 'Transaction ID', 'wp-express-checkout' ); ?>: </th>

@@ -91,7 +91,7 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function purchase_date() {
-		return date_format( get_post_datetime( $this->order->get_id() ), 'F j, Y, g:i a' );
+		return get_post_time( 'F j, Y, g:i a', false, $this->order->get_id() );
 	}
 
 	/**
