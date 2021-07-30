@@ -45,7 +45,6 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 		}
 		//add_action( 'woocommerce_api_' . strtolower( __CLASS__ ), array( $this, 'check_response' ) );
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
-		add_filter( 'woocommerce_payment_gateways', array( $this, 'add_wc_gateway_class' ) );
 	}
 
 	/**
@@ -55,7 +54,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	 *
 	 * @return array
 	 */
-	function add_wc_gateway_class( $methods ) {
+	public static function add_wc_gateway_class( $methods ) {
 		$methods[] = 'WP_Express_Checkout\Integrations\WooCommerce_Gateway';
 		return $methods;
 	}
@@ -115,12 +114,48 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 
 		$order = new WC_Order( $order_id );
 
-		$form_args = array();
+		$btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
+
+		$form_args = array(
+			'btn_color'  => $this->wpec->get_setting( 'btn_color' ),
+			'btn_height' => ! empty( $btn_sizes[ $this->wpec->get_setting( 'btn_height' ) ] ) ? $btn_sizes[ $this->wpec->get_setting( 'btn_height' ) ] : 25,
+			'btn_layout' => $this->wpec->get_setting( 'btn_layout' ),
+			'btn_shape'  => $this->wpec->get_setting( 'btn_shape' ),
+			'btn_type'   => $this->wpec->get_setting( 'btn_type' ),
+			'coupons_enabled' => false,
+			'curr_pos'        => $this->wpec->get_setting( 'price_currency_pos' ),
+			'currency'        => $order->get_currency(),
+			'custom_amount'   => 0,
+			'custom_quantity' => 0,
+			'dec_num'         => intval( $this->wpec->get_setting( 'price_decimals_num' ) ),
+			'dec_sep'         => $this->wpec->get_setting( 'price_decimal_sep' ),
+			'name'            => 'Test',
+			'price'           => $order->get_total(),
+			'product_id'      => 0,
+			'quantity'        => 1,
+			'shipping'        => 0,
+			'shipping_enable' => 0,
+			'tax'             => 0,
+			'thank_you_url'   => $order->get_checkout_order_received_url(),
+			'thousand_sep'    => $this->wpec->get_setting( 'price_thousand_sep' ),
+			'tos_enabled'     => $this->wpec->get_setting( 'tos_enabled' ),
+			'url'             => '',
+			'use_modal'       => false,
+			'variations'      => array(),
+		);
+
+		$this->wpec_wc_order = $order;
+
+		add_filter( 'wpec_paypal_sdk_args', array( $this, 'paypal_sdk_args' ), 10 );
 
 		$button_sc = \WP_Express_Checkout\Shortcodes::get_instance();
 
-		$button_sc->generate_pp_express_checkout_button( $form_args );
+		echo $button_sc->generate_pp_express_checkout_button( $form_args );
+	}
 
+	public function paypal_sdk_args( $args ) {
+		$args['currency'] = $this->wpec_wc_order->get_currency();
+		return $args;
 	}
 
 	/**
