@@ -521,7 +521,7 @@ class Coupons {
 				$discount = $coupon['discount'];
 			}
 			$coupon_code = $data['couponCode'];
-			$order->add_item( 'coupon', sprintf( __( 'Coupon Code: %s', 'wp-express-checkout' ), $coupon_code ), abs( $discount ) * -1, 1, false, array( 'code' => $coupon_code ) );
+			$order->add_item( 'coupon', sprintf( __( 'Coupon Code: %s', 'wp-express-checkout' ), $coupon_code ), abs( $discount ) * -1, 1, 0, false, array( 'code' => $coupon_code ) );
 		}
 	}
 

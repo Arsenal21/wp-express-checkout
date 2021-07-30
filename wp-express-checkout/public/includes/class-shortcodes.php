@@ -22,25 +22,17 @@ class Shortcodes {
 	function __construct() {
 		$this->ppdg = Main::get_instance();
 
+		// General product/button shortcode
 		add_shortcode( 'wp_express_checkout', array( $this, 'shortcode_wp_express_checkout' ) );
+
+		// Default Thank You page shortcode:
 		add_shortcode( 'wpec_thank_you', array( $this, 'shortcode_wpec_thank_you' ) );
 
 		// The general thank you part shortcode:
-		add_shortcode( 'wpec_ty', array( $this, 'shortcode_wpec_thank_you_callback' ) );
-		// The aliases for 'wpec_ty':
-		add_shortcode( 'wpec_ty_first_name', array( $this, 'shortcode_wpec_thank_you_callback' ) );
-		add_shortcode( 'wpec_ty_last_name', array( $this, 'shortcode_wpec_thank_you_callback' ) );
-		add_shortcode( 'wpec_ty_product_details', array( $this, 'shortcode_wpec_thank_you_callback' ) );
-		add_shortcode( 'wpec_ty_payer_email', array( $this, 'shortcode_wpec_thank_you_callback' ) );
-		add_shortcode( 'wpec_ty_transaction_id', array( $this, 'shortcode_wpec_thank_you_callback' ) );
-		add_shortcode( 'wpec_ty_purchase_amt', array( $this, 'shortcode_wpec_thank_you_callback' ) );
-		add_shortcode( 'wpec_ty_purchase_date', array( $this, 'shortcode_wpec_thank_you_callback' ) );
-		add_shortcode( 'wpec_ty_currency_code', array( $this, 'shortcode_wpec_thank_you_callback' ) );
-		add_shortcode( 'wpec_ty_coupon_code', array( $this, 'shortcode_wpec_thank_you_callback' ) );
-		add_shortcode( 'wpec_ty_address', array( $this, 'shortcode_wpec_thank_you_callback' ) );
-		add_shortcode( 'wpec_ty_order_id', array( $this, 'shortcode_wpec_thank_you_callback' ) );
+		add_shortcode( 'wpec_ty', array( $this, 'shortcode_wpec_thank_you_parts' ) );
+
+		// Downloads wrapper:
 		add_shortcode( 'wpec_ty_downloads', array( $this, 'shortcode_wpec_thank_you_downloads' ) );
-		add_shortcode( 'wpec_ty_download_link', array( $this, 'shortcode_wpec_thank_you_download_link' ) );
 
 		if ( ! is_admin() ) {
 			add_filter( 'widget_text', 'do_shortcode' );
@@ -397,9 +389,6 @@ class Shortcodes {
 		// Do nested shortcodes.
 		$content = do_shortcode( $content );
 
-		// Apply the dynamic tags.
-		$content = Utils::replace_dynamic_order_tags( $content, $order->get_id() );
-
 		// Trigger the filter.
 		$content = apply_filters( 'wpec_thank_you_message', $content );
 
@@ -407,48 +396,37 @@ class Shortcodes {
 	}
 
 	/**
-	 * Thank You part callback.
-	 *
-	 * @param array  $atts      An array of attributes. There are no attributes for now.
-	 * @param string $content   The shortcode content or null if not set.
-	 * @param string $shortcode The shortcode name.
-	 *
-	 * @return string
-	 */
-	public function shortcode_wpec_thank_you_callback( $atts = array(), $content = '', $shortcode = '' ) {
-
-		$order = $this->get_thank_you_page_order();
-
-		if ( ! $order instanceof Order ) {
-			return $order;
-		}
-
-		// Convert shortcode to dynamic tag.
-		$content = $this->shortcode_wpec_thank_you_parts( $atts, $content, $shortcode );
-
-		// Apply the dynamic tags.
-		$content = Utils::replace_dynamic_order_tags( $content, $order->get_id() );
-
-		return $content;
-	}
-
-	/**
 	 * Thank You part shortcode.
 	 *
-	 * The shortcode wrapper for merge tags, like {transaction_id} and other.
+	 * @see Order_Tags_Html for available parts.
 	 *
 	 * @param array  $atts      An array of attributes.
 	 * @param string $content   The shortcode content or null if not set.
 	 * @param string $shortcode The shortcode name.
 	 */
 	public function shortcode_wpec_thank_you_parts( $atts = array(), $content = '', $shortcode = '' ) {
-		$field = str_replace( array( 'wpec_ty_', 'wpec_ty' ), '', $shortcode );
+		$args = shortcode_atts(
+			array(
+				'field' => '',
+			),
+			$atts
+		);
 
-		$atts = shortcode_atts(
-			array( 'field' => $field ),
-		$atts );
+		// Return shorter Thank you page warning.
+		if ( ! isset( $_GET['order_id'] ) ) {
+			return $this->show_err_msg( __( 'Thank you page shortcodes work after a transaction. Do not access this page directly.', 'wp-express-checkout' ), 'missing-order-id' );
+		}
 
-		$content = ! empty( $atts['field'] ) ? '{' . $atts['field'] . '}' : '';
+		$order = $this->get_thank_you_page_order();
+
+		// Show other errors.
+		if ( ! $order instanceof Order ) {
+			return $order;
+		}
+
+		$field = $args['field'];
+		$renderer = new Order_Tags_Html( $order );
+		$content  = $renderer->$field( $atts );
 
 		return $content;
 	}
@@ -486,54 +464,6 @@ class Shortcodes {
 		$content = do_shortcode( $content );
 
 		return $content;
-	}
-
-	/**
-	 * Thank You Download Link part shortcode.
-	 *
-	 * @param array $atts An array of attributes.
-	 */
-	public function shortcode_wpec_thank_you_download_link( $atts = array() ) {
-
-		$order_id  = (int) $_GET['order_id'];
-		$downloads = View_Downloads::get_order_downloads_list( $order_id );
-		$content   = '';
-
-		if ( ! $downloads ) {
-			return $content;
-		}
-
-		$atts = shortcode_atts(
-			array(
-				'anchor_text' => __( 'Click here to download', 'wp-express-checkout' ),
-				'target'      => '_blank',
-			),
-		$atts );
-
-		$link_tpl = apply_filters( 'wpec_downloads_list_item_template', '%1$s - <a href="%2$s" target="%3$s">%4$s</a><br/>' );
-		foreach ( $downloads as $name => $download_url ) {
-			$content .= sprintf( $link_tpl, $name, $download_url, $atts['target'], $atts['anchor_text'] );
-		}
-
-		return $content;
-	}
-
-	/**
-	 * Generates product details HTML for Thank You page by given order details.
-	 *
-	 * @since 2.0
-	 *
-	 * @param Order $order The order object.
-	 *
-	 * @return string
-	 */
-	public static function generate_product_details_tag( $order ) {
-		$table = new Order_Summary_Table( $order );
-		ob_start();
-		$table->show();
-		$output = ob_get_clean();
-
-		return $output;
 	}
 
 	/**
