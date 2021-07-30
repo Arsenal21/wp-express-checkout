@@ -27,6 +27,7 @@ return array(
     'WP_Express_Checkout\\Main' => $baseDir . '/public/class-main.php',
     'WP_Express_Checkout\\Order' => $baseDir . '/includes/class-order.php',
     'WP_Express_Checkout\\Order_Summary_Table' => $baseDir . '/includes/class-order-summary-table.php',
+    'WP_Express_Checkout\\Order_Tags_Html' => $baseDir . '/public/includes/class-order-tags-html.php',
     'WP_Express_Checkout\\Orders' => $baseDir . '/includes/class-orders.php',
     'WP_Express_Checkout\\PayPal\\Client' => $baseDir . '/includes/paypal-client/class-client.php',
     'WP_Express_Checkout\\PayPal\\Request' => $baseDir . '/includes/paypal-client/class-request.php',
