@@ -2,9 +2,9 @@
 Contributors: Tips and Tricks HQ, dikiy_forester, alexanderfoxc, mbrsolution, Ivy2120, chanelstone
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
-Requires at least: 5.0
+Requires at least: 5.6
 Tested up to: 5.8
-Stable tag: 2.0.1
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -114,36 +114,16 @@ None
 
 == Changelog ==
 
-= WIP since 2.0.1 to 2021-07-30 =
-* Missing some translations strings. Fixes #18
-* Fixed WP 5.0 backward incompatibility issue
+= 2.1.0 =
+* Added some missing translations strings.
+* Fixed WP 5.0 backward incompatibility issue.
 * Added `Order_Tags_Html` class to generate order tags with HTML output. Later it will used as the parent class for email tags generator with plain text output.
-* Use `$content` parameter in `[wpec_thank_you shortcode]` callback:
-  - Added template `content-thank-you.php` for default shortcode output
-  - Use `$content` parameter if not empty, otherwise fallback to default template
-* Added Thank You parts shortcodes - `[wpec_ty].
-* Usages:
-  - `[wpec_ty field=first_name]`
-  - `[wpec_ty field=last_name]`
-  - `[wpec_ty field=first_name]`
-  - `[wpec_ty field=product_details]`
-  - `[wpec_ty field=transaction_id]`
-  - `[wpec_ty field=purchase_amt]`
-  - `[wpec_ty field=purchase_date]`
-  - `[wpec_ty field=currency_code]`
-  - `[wpec_ty field=coupon_code]`
-  - `[wpec_ty field=address]`
-  - `[wpec_ty field=order_id]`
-  - `[wpec_ty field=download_link]`.
-* `[wpec_ty_downloads]` - a wrapper for Downloads section.
-* Added template 'content-thank-you-downloads.php' - as default content for `[wpec_ty_downloads]`
-* Minor text update
+* Added Thank You parts shortcodes that will allow the customization of the Thank you page. We will have a documentation for it soon.
 * Allow to use $content parameter in wpec_thank_you shortcode callback:
 * Changed to using "require_once" instead of "require" for the inclusion of the "swpm_handle_subsc_ipn.php" file to prevent fatal error.
-* Integrated License Manager plugin. 100% Covered by unti tests.
+* Integrated License Manager plugin. 100% Covered by unit tests.
 * Refactor integrations: - Created Integrations namespace - Moved integrations code to separated folders - 100% cover integrations by unit tests
 * Improved Payment processors.
-= END WIP =
 
 = 2.0.1 =
 * Added filter 'wpec_product_template' - to allow plugins override templates.
