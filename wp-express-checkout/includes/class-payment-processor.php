@@ -149,35 +149,13 @@ class Payment_Processor {
 		$order->set_status( 'paid' );
 
 		$order_id  = $order->get_id();
-		$downloads = View_Downloads::get_order_downloads_list( $order_id );
 
-		$product_details = Utils::get_product_details( $order );
-		if ( ! empty( $downloads ) ) {
-			$product_details .= "\n\n";
-			// Include the download links in the product details.
-			foreach ( $downloads as $name => $download_url ) {
-				/* Translators:  %1$s - download item name; %2$s - download URL */
-				$product_details .= sprintf( __( '%1$s - download link: %2$s', 'wp-express-checkout' ), $name, $download_url ) . "\n";
-			}
+		$renderer = new Order_Tags_Plain( $order );
+		$tags     = array_keys( Utils::get_dynamic_tags_white_list() );
+
+		foreach ( $tags as $tag ) {
+			$args[ $tag ] = $renderer->$tag();
 		}
-
-		$address = $this->get_address( $payment );
-
-		$coupon_item = $order->get_item( 'coupon' );
-		$coupon_code = $coupon_item ? $coupon_item['meta']['code'] :'';
-
-		$args = array(
-			'first_name'      => $payment['payer']['name']['given_name'],
-			'last_name'       => $payment['payer']['name']['surname'],
-			'product_details' => $product_details,
-			'payer_email'     => $payment['payer']['email_address'],
-			'transaction_id'  => $this->get_transaction_id( $payment ),
-			'purchase_amt'    => $amount,
-			'purchase_date'   => date( 'Y-m-d' ),
-			'coupon_code'     => $coupon_code,
-			'address'         => $address,
-			'order_id'        => $order_id,
-		);
 
 		$headers = array();
 		if ( 'html' === $wpec_plugin->get_setting( 'buyer_email_type' ) ) {
