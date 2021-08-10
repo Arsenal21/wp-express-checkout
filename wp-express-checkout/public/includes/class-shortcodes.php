@@ -278,8 +278,9 @@ class Shortcodes {
 	public function generate_price_tag( $args ) {
 		$output = '<span class="wpec-price-amount">' . esc_html( Utils::price_format( $args['price'] ) ) . '</span>';
 		$output .= ' <span class="wpec-new-price-amount"></span>';
+		$qnt_style = 2 > $args['quantity'] ? ' style="display:none;"' : '';
 		/* translators: quantity */
-		$output .= 1 < $args['quantity'] ? ' <span class="wpec-quantity">' . sprintf( __( 'x %s', 'wp-express-checkout' ), '<span class="wpec-quantity-val">' . $args['quantity'] . '</span>' ) . '</span>' : '';
+		$output .=  ' <span class="wpec-quantity"' . $qnt_style . '>' . sprintf( __( 'x %s', 'wp-express-checkout' ), '<span class="wpec-quantity-val">' . $args['quantity'] . '</span>' ) . '</span>';
 
 		$under_price_line = '';
 		$tax_line         = '';
