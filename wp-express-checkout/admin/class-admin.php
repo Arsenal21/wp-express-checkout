@@ -4,6 +4,7 @@ namespace WP_Express_Checkout\Admin;
 
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Products;
+use WP_Express_Checkout\Utils;
 
 class Admin {
 
@@ -321,34 +322,24 @@ class Admin {
 		);
 		add_settings_field( 'buyer_from_email', __( 'From Email Address', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_from_email', 'type' => 'text', 'desc' => __( 'Example: Your Name &lt;sales@your-domain.com&gt; This is the email address that will be used to send the email to the buyer. This name and email address will appear in the from field of the email.', 'wp-express-checkout' ) ) );
 		add_settings_field( 'buyer_email_subj', __( 'Buyer Email Subject', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_subj', 'type' => 'text', 'desc' => __( 'This is the subject of the email that will be sent to the buyer.', 'wp-express-checkout' ) ) );
+
+		$tags = Utils::get_dynamic_tags_white_list();
+		$tags_desc = '';
+
+		foreach ( $tags as $tag => $desc ) {
+			$tags_desc .= "<br /><code>{{$tag}}</code> - {$desc}";
+		}
+
 		add_settings_field( 'buyer_email_body', __( 'Buyer Email Body', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_body', 'type' => 'html' === $wpec->get_setting( 'buyer_email_type' ) ? 'editor' : 'textarea', 'desc' => ''
 			. __( 'This is the body of the email that will be sent to the buyer. Do not change the text within the braces {}. You can use the following email tags in this email body field:', 'wp-express-checkout' )
-			. '<br />{first_name} – ' . __( 'First name of the buyer', 'wp-express-checkout' )
-			. '<br />{last_name} – ' . __( 'Last name of the buyer', 'wp-express-checkout' )
-			. '<br />{payer_email} – ' . __( 'Email Address of the buyer', 'wp-express-checkout' )
-			. '<br />{address} – ' . __( 'Address of the buyer', 'wp-express-checkout' )
-			. '<br />{product_details} – ' . __( 'The item details of the purchased product (this will include the download link for digital items).', 'wp-express-checkout' )
-			. '<br />{transaction_id} – ' . __( 'The unique transaction ID of the purchase', 'wp-express-checkout' )
-			. '<br />{order_id} – ' . __( 'The order ID reference of this transaction in the cart orders menu', 'wp-express-checkout' )
-			. '<br />{purchase_amt} – ' . __( 'The amount paid for the current transaction', 'wp-express-checkout' )
-			. '<br />{purchase_date} – ' . __( 'The date of the purchase', 'wp-express-checkout' )
-			. '<br />{coupon_code} – ' . __( 'Coupon code applied to the purchase', 'wp-express-checkout' ),
+			. $tags_desc,
 		) );
 		add_settings_field( 'send_seller_email', __( 'Send Emails to Seller After Purchase', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'send_seller_email', 'type' => 'checkbox', 'desc' => __( 'If checked the plugin will send an email to the seller with the sale details', 'wp-express-checkout' ) ) );
 		add_settings_field( 'notify_email_address', __( 'Notification Email Address*', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'notify_email_address', 'type' => 'text', 'desc' => __( 'This is the email address where the seller will be notified of product sales. You can put multiple email addresses separated by comma (,) in the above field to send the notification to multiple email addresses.', 'wp-express-checkout' ), 'required' => true, ) );
 		add_settings_field( 'seller_email_subj', __( 'Seller Email Subject*', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'seller_email_subj', 'type' => 'text', 'desc' => __( 'This is the subject of the email that will be sent to the seller for record.', 'wp-express-checkout' ), 'required' => true, ) );
 		add_settings_field( 'seller_email_body', __( 'Seller Email Body*', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'seller_email_body', 'type' => 'html' === $wpec->get_setting( 'buyer_email_type' ) ? 'editor' : 'textarea', 'required' => true, 'desc' => ''
 			. __( 'This is the body of the email that will be sent to the seller for record. Do not change the text within the braces {}. You can use the following email tags in this email body field:', 'wp-express-checkout' )
-			. '<br />{first_name} – ' . __( 'First name of the buyer', 'wp-express-checkout' )
-			. '<br />{last_name} – ' . __( 'Last name of the buyer', 'wp-express-checkout' )
-			. '<br />{payer_email} – ' . __( 'Email Address of the buyer', 'wp-express-checkout' )
-			. '<br />{address} – ' . __( 'Address of the buyer', 'wp-express-checkout' )
-			. '<br />{product_details} – ' . __( 'The item details of the purchased product (this will include the download link for digital items).', 'wp-express-checkout' )
-			. '<br />{transaction_id} – ' . __( 'The unique transaction ID of the purchase', 'wp-express-checkout' )
-			. '<br />{order_id} – ' . __( 'The order ID reference of this transaction in the cart orders menu', 'wp-express-checkout' )
-			. '<br />{purchase_amt} – ' . __( 'The amount paid for the current transaction', 'wp-express-checkout' )
-			. '<br />{purchase_date} – ' . __( 'The date of the purchase', 'wp-express-checkout' )
-			. '<br />{coupon_code} – ' . __( 'Coupon code applied to the purchase', 'wp-express-checkout' ),
+			. $tags_desc,
 		) );
 
 		/******************************/

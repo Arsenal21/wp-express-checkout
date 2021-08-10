@@ -5,7 +5,7 @@ namespace WP_Express_Checkout;
 /**
  * Order tags generator with HTML output.
  *
- * @since 2.0.2
+ * @since 2.1.0
  */
 class Order_Tags_Html {
 
@@ -119,7 +119,7 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function address() {
-		return ''; // Not implemented yet.
+		return $this->order->get_data( 'shipping_address' );
 	}
 
 	/**
