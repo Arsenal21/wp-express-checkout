@@ -98,6 +98,10 @@ class Shortcodes {
 			$coupons_enabled = $this->ppdg->get_setting( 'coupons_enabled' );
 		}
 
+		if ( $custom_amount ) {
+			$price = max( $price, get_post_meta( $post_id, 'wpec_product_min_amount', true ) );
+		}
+
 		// Use global options only if the product value is explicitly set to ''.
 		// So user can set product value '0' and override non-empty global option.
 		$shipping = ( '' === $shipping ) ? $this->ppdg->get_setting( 'shipping' ) : $shipping;

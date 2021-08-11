@@ -92,9 +92,10 @@ var ppecHandler = function( data ) {
 		var errMsgCont = input.siblings( '.wp-ppec-form-error-msg' );
 		var val_orig = input.val();
 		var val = parseFloat( val_orig );
+		var min_val = input.attr( 'min' );
 		var error = false;
 		var errMsg = ppecFrontVars.str.enterAmount;
-		if ( !isNaN( val ) && 0 < val ) {
+		if ( !isNaN( val ) && min_val <= val ) {
 			input.removeClass( 'hasError' );
 			errMsgCont.fadeOut( 'fast' );
 			parent.data.orig_price = val;

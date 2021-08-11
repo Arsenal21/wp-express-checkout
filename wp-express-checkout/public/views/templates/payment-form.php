@@ -18,13 +18,16 @@
 	</div>
 
 	<?php if ( $custom_amount ) { ?>
-		<?php $step = pow( 10, -intval( $this->ppdg->get_setting( 'price_decimals_num' ) ) ); ?>
+		<?php
+		$step = pow( 10, -intval( $this->ppdg->get_setting( 'price_decimals_num' ) ) );
+		$min  = get_post_meta( $product_id, 'wpec_product_min_amount', true );
+		?>
 		<div class="wpec-custom-amount-section">
 			<span class="wpec-custom-amount-label-field">
 				<label><?php echo esc_html(  sprintf( __( 'Enter Amount (%s): ', 'wp-express-checkout' ), $currency ) ); ?></label>
 			</span>
 			<span class="wpec-custom-amount-input-field">
-				<input id="wp-ppec-custom-amount" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" type="number" step="<?php echo esc_attr( $step ); ?>" name="custom-amount" class="wp-ppec-input wp-ppec-custom-amount" min="0" value="<?php echo esc_attr( $price ); ?>">
+				<input id="wp-ppec-custom-amount" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" type="number" step="<?php echo esc_attr( $step ); ?>" name="custom-amount" class="wp-ppec-input wp-ppec-custom-amount" min="<?php echo esc_attr( $min ); ?>" value="<?php echo esc_attr( max( $price, $min ) ); ?>">
 				<div class="wp-ppec-form-error-msg"></div>
 			</span>
 		</div>
