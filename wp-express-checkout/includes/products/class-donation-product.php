@@ -2,13 +2,13 @@
 
 namespace WP_Express_Checkout\Products;
 
-class One_Time_Product extends Product {
+class Donation_Product extends Product {
 
 	/**
 	 * Product type (one_time, donation, subscription, etc.)
 	 * @var  string
 	 */
-	protected $type = 'one_time';
+	protected $type = 'donation';
 
 	/**
 	 * Retrieves the product price
@@ -16,7 +16,7 @@ class One_Time_Product extends Product {
 	 * @return string
 	 */
 	public function get_price() {
-		return $this->post->ppec_product_price;
+		return max( $this->post->ppec_product_price, $this->post->wpec_product_min_amount );
 	}
 
 }

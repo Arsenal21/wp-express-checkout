@@ -36,6 +36,7 @@ return array(
     'WP_Express_Checkout\\Payment_Processor_Free' => $baseDir . '/includes/class-payment-processor-free.php',
     'WP_Express_Checkout\\Post_Type_Content_Handler' => $baseDir . '/includes/class-post-type-content-handler.php',
     'WP_Express_Checkout\\Products' => $baseDir . '/includes/class-products.php',
+    'WP_Express_Checkout\\Products\\Donation_Product' => $baseDir . '/includes/products/class-donation-product.php',
     'WP_Express_Checkout\\Products\\One_Time_Product' => $baseDir . '/includes/products/class-one-time-product.php',
     'WP_Express_Checkout\\Products\\Product' => $baseDir . '/includes/products/class-product.php',
     'WP_Express_Checkout\\Shortcodes' => $baseDir . '/public/includes/class-shortcodes.php',

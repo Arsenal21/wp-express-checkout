@@ -2,33 +2,28 @@
 
 namespace WP_Express_Checkout\Products;
 
+use WP_Express_Checkout\Variations;
 use WP_Post;
 
 /**
  * Represents an abstract Product.
  *
- * @since 2.0.1
+ * @since 2.1.1
  */
 abstract class Product {
 
 	/**
-	 * Product ID, defined by WordPress when
-	 * creating Product
-	 * @var int
-	 */
-	protected $id = 0;
-
-	/**
-	 * Product ID, defined by PayPal when Product has been created
-	 * @var string
-	 */
-	protected $resource_id = '';
-
-	/**
-	 * Product type (one-time, subscription, etc.)
+	 * Product type (one_time, donation, subscription, etc.)
 	 * @var  string
 	 */
 	protected $type = '';
+
+	/**
+	 * WordPress post object representation.
+	 *
+	 * @var WP_Post
+	 */
+	protected $post;
 
 	/**
 	 * Sets up the product objects
@@ -36,11 +31,20 @@ abstract class Product {
 	 * @param WP_Post $post Post object returned from get_post()
 	 */
 	public function __construct( $post ) {
-		$this->id = $post->ID;
+		$this->post = $post;
 
-		$meta_fields = get_post_custom( $post->ID );
-		$this->resource_id = $this->get_meta_field( 'wpec_product_resource_id', '', $meta_fields );
-		$this->type        = $this->get_meta_field( 'wpec_product_type', '', $meta_fields );
+		if ( empty( $this->type ) ) {
+			$this->type = $this->post->wpec_product_type;
+		}
+	}
+
+	/**
+	 * Retrieves the product type.
+	 *
+	 * @return string
+	 */
+	public function get_type() {
+		return $this->type;
 	}
 
 	/**
@@ -48,25 +52,21 @@ abstract class Product {
 	 * @return int Product ID
 	 */
 	public function get_id() {
-		return $this->id;
+		return (int) $this->post->ID;
 	}
 
 	/**
 	 * Retrieves the PayPal product resource ID.
 	 *
-	 * @since 2.0.0
-	 *
 	 * @return string
 	 */
 	public function get_resource_id() {
-		return $this->resource_id;
+		return $this->post->wpec_product_resource_id;
 	}
 
 	/**
 	 * Sets the PayPal product resource ID.
 	 *
-	 * @since 2.0.0
-
 	 * @param string $resource_id Resource ID used to identify the currency.
 	 * @return boolean True if resource ID was changed
 	 */
@@ -82,57 +82,122 @@ abstract class Product {
 	}
 
 	/**
-	 * Updates the product's post data
-	 * @param $args array Array of values to update. See wp_update_post.
+	 * Retrieves the product price
+	 *
+	 * @return string
 	 */
-	protected function update_post( $args ) {
+	abstract public function get_price();
 
-		$defaults = array(
-			'ID' => $this->get_id()
-		);
-
-		wp_update_post( array_merge( $defaults, $args ) );
+	/**
+	 * Retrieves the default product quantity.
+	 *
+	 * @return int
+	 */
+	public function get_quantity() {
+		return (int) $this->post->ppec_product_quantity;
 	}
 
 	/**
-	 * Updates the meta fields for the post
-	 * @param $meta_key    string|array Can either be the meta field to be updated, or an associative array
-	 * 					of meta keys and values to be updated
-	 * @param $meta_value  string	    Value to set the meta value to. Ignored if meta_key is an array
-	 * @param $reset_cache boolean      Whether or not to update the cache after updating. Used to limit
-	 * 					larges amounts of updates
+	 * Whether customers allowed to specify quantity.
+	 *
+	 * @return bool
 	 */
-	protected function update_meta( $meta_key, $meta_value = '' ) {
-
-		if ( is_array( $meta_key ) ) {
-			foreach ( $meta_key as $key => $value ) {
-				$this->update_meta( $key, $value, false );
-			}
-			return;
-		}
-
-		update_post_meta( $this->id, $meta_key, $meta_value );
+	public function is_custom_quantity() {
+		return (bool) $this->post->ppec_product_custom_quantity;
 	}
 
 	/**
-	 * Returns the URL for an product. Useful for getting the URL
-	 * without building the product.
-	 * @param int $product_id Product ID
-	 * @return string URL for the product
+	 * Retrieves the product download URL
+	 *
+	 * @return string
 	 */
-	static public function get_url( $product_id ) {
-		if ( ! is_numeric( $product_id ) ) {
-			trigger_error( 'Invalid product id given. Must be an integer', E_USER_WARNING );
-		}
-		return apply_filters( 'wpec_product_return_url', get_permalink( $product_id ) );
+	public function get_download_url() {
+		return $this->post->ppec_product_upload;
 	}
 
-	private function get_meta_field( $field, $default, $fields ) {
-		if ( isset( $fields[$field] ) ) {
-			return $fields[$field][0];
-		} else {
-			return $default;
-		}
+	/**
+	 * Retrieves the product thumbnal URL
+	 *
+	 * @return string
+	 */
+	public function get_thumbnail_url() {
+		return $this->post->wpec_product_thumbnail;
+	}
+
+	/**
+	 * Reteives the shipping cost.
+	 *
+	 * @return string
+	 */
+	public function get_shipping() {
+		return $this->post->wpec_product_shipping;
+	}
+
+	/**
+	 * Whether product type is physical.
+	 *
+	 * @return bool
+	 */
+	public function is_physical() {
+		return (bool) $this->post->wpec_product_shipping_enable;
+	}
+
+	/**
+	 * Retrieves the tax percentage.
+	 *
+	 * @return string
+	 */
+	public function get_tax() {
+		return $this->post->wpec_product_tax;
+	}
+
+	/**
+	 * Retrieves the Thank You page URL.
+	 *
+	 * @return string
+	 */
+	public function get_thank_you_url() {
+		return $this->post->wpec_product_thankyou_page;
+	}
+
+	/**
+	 * Retrieves the button text.
+	 *
+	 * @return string
+	 */
+	public function get_button_text() {
+		return $this->post->wpec_product_button_text;
+	}
+
+	/**
+	 * Retrieves the button type.
+	 *
+	 * @return string
+	 */
+	public function get_button_type() {
+		return $this->post->wpec_product_button_type;
+	}
+
+	/**
+	 * Retrieves the coupons apply option.
+	 *
+	 * @return string
+	 */
+	public function get_coupons_setting() {
+		return $this->post->wpec_product_coupons_setting;
+	}
+
+	/**
+	 * Retrieves Product Variations
+	 *
+	 * @return array
+	 */
+	public function get_variations() {
+		$v          = new Variations( $this->get_id() );
+		$variations = $v->variations;
+		$variations['groups'] = $v->groups;
+
+		return $variations;
 	}
 
 }

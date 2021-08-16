@@ -49,6 +49,7 @@ class Products_Meta_Boxes {
 		$product_types = apply_filters( 'wpec_product_types', $product_types, $post );
 		$product_type  = get_post_meta( $post->ID, 'wpec_product_type', true );
 
+		// Legacy option. Added for backward compatibility.
 		$allow_custom_amount = get_post_meta( $post->ID, 'wpec_product_custom_amount', true );
 
 		if ( $allow_custom_amount ) {
@@ -93,15 +94,11 @@ class Products_Meta_Boxes {
 					break;
 				case 'donation':
 					?>
+					<p class="description"><?php esc_html_e( 'Donation type allows customers changing the amount they want to pay. You can set the initial amount using the field below.', 'wp-express-checkout' ); ?></p>
 					<label><?php esc_html_e( 'Minimum Donation Amount', 'wp-express-checkout' ); ?></label>
 					<br/>
 					<input type="number" name="wpec_product_min_amount" step="<?php echo esc_attr( $step ); ?>" min="0" value="<?php echo esc_attr( $min_amount ); ?>">
 					<p class="description"><?php esc_html_e( 'Specify a minimum donation amount. Enter numbers only, no need to put currency symbol. Example: 39.95', 'wp-express-checkout' ); ?></p>
-					<label>
-						<input type="checkbox" name="wpec_product_custom_amount" value="1" <?php checked( $allow_custom_amount ); ?>>
-						<?php esc_html_e( 'Allow customers to enter amount', 'wp-express-checkout' ); ?>
-					</label>
-					<p class="description"><?php esc_html_e( 'When checked, customers can change the amount they want to pay. You can set the initial amount using the field above.', 'wp-express-checkout' ); ?></p>
 					<?php
 					break;
 				default:
@@ -529,10 +526,6 @@ jQuery(document).ready(function($) {
 		$min_amount = ! empty( $min_amount ) ? floatval( $min_amount ) : 0;
 
 		update_post_meta( $post_id, 'wpec_product_min_amount', $min_amount );
-
-		// allow custom amount.
-		$custom_amount = filter_input( INPUT_POST, 'wpec_product_custom_amount', FILTER_SANITIZE_NUMBER_INT );
-		update_post_meta( $post_id, 'wpec_product_custom_amount', $custom_amount );
 
 		// quantity.
 		$quantity = filter_input( INPUT_POST, 'ppec_product_quantity', FILTER_SANITIZE_NUMBER_INT );

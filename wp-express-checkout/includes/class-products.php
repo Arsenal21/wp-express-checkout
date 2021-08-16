@@ -3,6 +3,7 @@
 namespace WP_Express_Checkout;
 
 use Exception;
+use WP_Express_Checkout\Products\Donation_Product;
 use WP_Express_Checkout\Products\One_Time_Product;
 use WP_Express_Checkout\Products\Product;
 use WP_Post;
@@ -75,7 +76,14 @@ class Products {
 			throw new Exception( sprintf( __( "Can't find product with ID %s", 'wp-express-checkout' ), $product_id ), 1002 );
 		}
 
-		$product_type = $product_data->wpec_product_type ? $product_data->wpec_product_type : 'one_time';
+		if ( ! empty( $product_data->wpec_product_type ) ) {
+			$product_type = $product_data->wpec_product_type;
+		} elseif ( ! empty( $product_data->wpec_product_custom_amount ) ) {
+			// Check Custom amount for backward compatibility.
+			$product_type = 'donation';
+		} else {
+			$product_type = 'one_time';
+		}
 
 		/**
 		 * Filter for setting an extended Product type object .
@@ -93,6 +101,9 @@ class Products {
 		switch ( $product_type ) {
 			case 'one_time':
 				$product = new One_Time_Product( $product_data );
+				break;
+			case 'donation':
+				$product = new Donation_Product( $product_data );
 				break;
 			default:
 				throw new Exception( sprintf( __( "Unknown product type '%s'", 'wp-express-checkout' ), $product_data->wpec_product_type ), 1003 );

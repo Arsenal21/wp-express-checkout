@@ -80,16 +80,16 @@ class Shortcodes {
 		$post    = get_post( $post_id );
 
 		$title           = get_the_title( $post_id );
-		$price           = get_post_meta( $post_id, 'ppec_product_price', true );
-		$custom_amount   = get_post_meta( $post_id, 'wpec_product_custom_amount', true );
-		$quantity        = get_post_meta( $post_id, 'ppec_product_quantity', true );
-		$custom_quantity = get_post_meta( $post_id, 'ppec_product_custom_quantity', true );
-		$url             = get_post_meta( $post_id, 'ppec_product_upload', true );
-		$thumb_url       = get_post_meta( $post_id, 'wpec_product_thumbnail', true );
-		$shipping        = get_post_meta( $post_id, 'wpec_product_shipping', true );
-		$shipping_enable = get_post_meta( $post_id, 'wpec_product_shipping_enable', true );
-		$tax             = get_post_meta( $post_id, 'wpec_product_tax', true );
-		$button_text     = get_post_meta( $post_id, 'wpec_product_button_text', true );
+		$price           = $product->get_price();
+		$custom_amount   = 'donation' === $product->get_type(); // Temporary, until we remove custom_amount parameter.
+		$quantity        = $product->get_quantity();
+		$custom_quantity = $product->is_custom_quantity();
+		$url             = $product->get_download_url();
+		$thumb_url       = $product->get_thumbnail_url();
+		$shipping        = $product->get_shipping();
+		$shipping_enable = $product->is_physical();
+		$tax             = $product->get_tax();
+		$button_text     = $product->get_button_text();
 		$thank_you_url   = ! empty( $atts['thank_you_url'] ) ? $atts['thank_you_url'] : get_post_meta( $post_id, 'wpec_product_thankyou_page', true );
 		$btn_type        = get_post_meta( $post_id, 'wpec_product_button_type', true );
 		$btn_sizes       = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
@@ -99,10 +99,6 @@ class Shortcodes {
 
 		if ( ( '' === $coupons_enabled ) || '2' === $coupons_enabled ) {
 			$coupons_enabled = $this->ppdg->get_setting( 'coupons_enabled' );
-		}
-
-		if ( $custom_amount ) {
-			$price = max( $price, get_post_meta( $post_id, 'wpec_product_min_amount', true ) );
 		}
 
 		// Use global options only if the product value is explicitly set to ''.
