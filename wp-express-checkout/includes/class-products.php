@@ -2,6 +2,12 @@
 
 namespace WP_Express_Checkout;
 
+use Exception;
+use WP_Express_Checkout\Products\Donation_Product;
+use WP_Express_Checkout\Products\One_Time_Product;
+use WP_Express_Checkout\Products\Product;
+use WP_Post;
+
 class Products {
 
 	static $products_slug = "ppec-products";
@@ -13,7 +19,7 @@ class Products {
 			'name'               => _x( 'Products', 'Post Type General Name', 'wp-express-checkout' ),
 			'singular_name'      => _x( 'Product', 'Post Type Singular Name', 'wp-express-checkout' ),
 			'menu_name'          => __( 'WP Express Checkout', 'wp-express-checkout' ),
-			//'parent_item_colon'	 => __( 'Parent Order:', 'wp-express-checkout' ),
+			//'parent_item_colon'	 => __( 'Parent Product:', 'wp-express-checkout' ),
 			'all_items'          => __( 'Products', 'wp-express-checkout' ),
 			'view_item'          => __( 'View Product', 'wp-express-checkout' ),
 			'add_new_item'       => __( 'Add New Product', 'wp-express-checkout' ),
@@ -48,6 +54,62 @@ class Products {
 		);
 
 		register_post_type( self::$products_slug, $args );
+	}
+
+	/**
+	 * Retrieves an existing produt by ID.
+	 *
+	 * @param int $product_id Product ID
+	 *
+	 * @return Product Product Object representing the product.
+	 *
+	 * @throws Exception
+	 */
+	static public function retrieve( $product_id ) {
+
+		if ( ! is_numeric( $product_id ) ) {
+			throw new Exception( __( 'Invalid product id given. Must be an integer', 'wp-express-checkout' ), 1001 );
+		}
+
+		$product_data = get_post( $product_id );
+		if ( ! $product_data || $product_data->post_type !== self::$products_slug ) {
+			throw new Exception( sprintf( __( "Can't find product with ID %s", 'wp-express-checkout' ), $product_id ), 1002 );
+		}
+
+		if ( ! empty( $product_data->wpec_product_type ) ) {
+			$product_type = $product_data->wpec_product_type;
+		} elseif ( ! empty( $product_data->wpec_product_custom_amount ) ) {
+			// Check Custom amount for backward compatibility.
+			$product_type = 'donation';
+		} else {
+			$product_type = 'one_time';
+		}
+
+		/**
+		 * Filter for setting an extended Product type object .
+		 *
+		 * Dynamic portion of the name refers to a product type.
+		 *
+		 * @param WP_Post|Product $object The product object. Default WP object.
+		 */
+		$product = apply_filters( "wpec_product_type_{$product_type}", $product_data );
+
+		if ( $product instanceof Product ) {
+			return $product;
+		}
+
+		switch ( $product_type ) {
+			case 'one_time':
+				$product = new One_Time_Product( $product_data );
+				break;
+			case 'donation':
+				$product = new Donation_Product( $product_data );
+				break;
+			default:
+				throw new Exception( sprintf( __( "Unknown product type '%s'", 'wp-express-checkout' ), $product_data->wpec_product_type ), 1003 );
+		}
+
+		return $product;
 	}
 
 }

@@ -358,8 +358,10 @@ class Payment_Processor {
 	protected function get_price( $payment, $trans, $data = array() ) {
 		$price = $trans['price'];
 		if ( $this->is_custom_amount( $trans['custom_amount'] ) ) {
-			// custom amount enabled. let's take amount from JS data.
-			$price = $data['orig_price'];
+			// custom amount enabled. let's take amount from JS data, but not
+			// less then allowed.
+			$product = get_post( $trans['product_id'] );
+			$price   = max( $product->wpec_product_min_amount, $data['orig_price'] );
 		}
 		return $price;
 	}

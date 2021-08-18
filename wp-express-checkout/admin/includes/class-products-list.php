@@ -2,6 +2,7 @@
 
 namespace WP_Express_Checkout\Admin;
 
+use Exception;
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Products;
 use WP_Express_Checkout\Shortcodes;
@@ -32,6 +33,14 @@ class Products_List {
 
 	public static function manage_custom_columns( $column, $post_id ) {
 		$main = Main::get_instance();
+
+		try {
+			$product = Products::retrieve( intval( $post_id ) );
+		} catch ( Exception $exc ) {
+			echo $exc->getMessage();
+			return;
+		}
+
 		switch ( $column ) {
 			case 'id':
 				echo $post_id;
@@ -61,10 +70,10 @@ class Products_List {
 					),
 					array(
 						'name'            => get_the_title( $post_id ),
-						'price'           => (float) get_post_meta( $post_id, 'ppec_product_price', true ),
-						'shipping'        => ( '' === get_post_meta( $post_id, 'wpec_product_shipping', true ) ) ? $main->get_setting( 'shipping' ) : get_post_meta( $post_id, 'wpec_product_shipping', true ),
-						'tax'             => ( '' === get_post_meta( $post_id, 'wpec_product_tax', true ) ) ? $main->get_setting( 'tax' ) : get_post_meta( $post_id, 'wpec_product_tax', true ),
-						'quantity'        => get_post_meta( $post_id, 'ppec_product_quantity', true ),
+						'price'           => (float) $product->get_price(),
+						'shipping'        => $product->get_shipping(),
+						'tax'             => $product->get_tax(),
+						'quantity'        => $product->get_quantity(),
 						'product_id'      => $post_id,
 					)
 				);
