@@ -2,6 +2,7 @@
 
 namespace WP_Express_Checkout\Products;
 
+use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Variations;
 use WP_Post;
 
@@ -26,12 +27,20 @@ abstract class Product {
 	protected $post;
 
 	/**
+	 * Main object instance.
+	 *
+	 * @var Main
+	 */
+	protected $wpec;
+
+	/**
 	 * Sets up the product objects
 	 *
 	 * @param WP_Post $post Post object returned from get_post()
 	 */
 	public function __construct( $post ) {
 		$this->post = $post;
+		$this->wpec = Main::get_instance();
 
 		if ( empty( $this->type ) ) {
 			$this->type = $this->post->wpec_product_type;
@@ -77,7 +86,7 @@ abstract class Product {
 		}
 
 		$this->resource_id = $resource_id;
-		$this->update_meta( 'wpec_product_resource_id', $this->resource_id );
+		update_post_meta( $this->get_id(), 'wpec_product_resource_id', $this->resource_id );
 		return true;
 	}
 
@@ -130,7 +139,11 @@ abstract class Product {
 	 * @return string
 	 */
 	public function get_shipping() {
-		return $this->post->wpec_product_shipping;
+		$shipping = $this->post->wpec_product_shipping;
+		// Use global options only if the product value is explicitly set to ''.
+		// So user can set product value '0' and override non-empty global option.
+		$shipping = ( '' === $shipping ) ? $this->wpec->get_setting( 'shipping' ) : $shipping;
+		return $shipping;
 	}
 
 	/**
@@ -148,7 +161,11 @@ abstract class Product {
 	 * @return string
 	 */
 	public function get_tax() {
-		return $this->post->wpec_product_tax;
+		$tax = $this->post->wpec_product_tax;
+		// Use global options only if the product value is explicitly set to ''.
+		// So user can set product value '0' and override non-empty global option.
+		$tax = ( '' === $tax ) ? $this->wpec->get_setting( 'tax' ) : $tax;
+		return $tax;
 	}
 
 	/**
@@ -184,7 +201,13 @@ abstract class Product {
 	 * @return string
 	 */
 	public function get_coupons_setting() {
-		return $this->post->wpec_product_coupons_setting;
+		$coupons_enabled = $this->post->wpec_product_coupons_setting;
+
+		if ( ( '' === $coupons_enabled ) || '2' === $coupons_enabled ) {
+			$coupons_enabled = $this->wpec->get_setting( 'coupons_enabled' );
+		}
+
+		return $coupons_enabled;
 	}
 
 	/**

@@ -71,9 +71,9 @@ class Products_List {
 					array(
 						'name'            => get_the_title( $post_id ),
 						'price'           => (float) $product->get_price(),
-						'shipping'        => ( '' === get_post_meta( $post_id, 'wpec_product_shipping', true ) ) ? $main->get_setting( 'shipping' ) : get_post_meta( $post_id, 'wpec_product_shipping', true ),
-						'tax'             => ( '' === get_post_meta( $post_id, 'wpec_product_tax', true ) ) ? $main->get_setting( 'tax' ) : get_post_meta( $post_id, 'wpec_product_tax', true ),
-						'quantity'        => get_post_meta( $post_id, 'ppec_product_quantity', true ),
+						'shipping'        => $product->get_shipping(),
+						'tax'             => $product->get_tax(),
+						'quantity'        => $product->get_quantity(),
 						'product_id'      => $post_id,
 					)
 				);

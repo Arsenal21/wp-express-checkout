@@ -79,54 +79,30 @@ class Shortcodes {
 		$post_id = intval( $atts['product_id'] );
 		$post    = get_post( $post_id );
 
-		$title           = get_the_title( $post_id );
-		$price           = $product->get_price();
-		$custom_amount   = 'donation' === $product->get_type(); // Temporary, until we remove custom_amount parameter.
 		$quantity        = $product->get_quantity();
-		$custom_quantity = $product->is_custom_quantity();
 		$url             = $product->get_download_url();
-		$thumb_url       = $product->get_thumbnail_url();
-		$shipping        = $product->get_shipping();
-		$shipping_enable = $product->is_physical();
-		$tax             = $product->get_tax();
 		$button_text     = $product->get_button_text();
-		$thank_you_url   = ! empty( $atts['thank_you_url'] ) ? $atts['thank_you_url'] : get_post_meta( $post_id, 'wpec_product_thankyou_page', true );
-		$btn_type        = get_post_meta( $post_id, 'wpec_product_button_type', true );
+		$thank_you_url   = ! empty( $atts['thank_you_url'] ) ? $atts['thank_you_url'] : $product->get_thank_you_url();
+		$btn_type        = $product->get_button_type();
 		$btn_sizes       = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
 		$btn_height      = $this->ppdg->get_setting( 'btn_height' );
-
-		$coupons_enabled = get_post_meta( $post_id, 'wpec_product_coupons_setting', true );
-
-		if ( ( '' === $coupons_enabled ) || '2' === $coupons_enabled ) {
-			$coupons_enabled = $this->ppdg->get_setting( 'coupons_enabled' );
-		}
-
-		// Use global options only if the product value is explicitly set to ''.
-		// So user can set product value '0' and override non-empty global option.
-		$shipping = ( '' === $shipping ) ? $this->ppdg->get_setting( 'shipping' ) : $shipping;
-		$tax      = ( '' === $tax ) ? $this->ppdg->get_setting( 'tax' ) : $tax;
-
-		// Variations.
-		$v          = new Variations( $post_id );
-		$variations = $v->variations;
-		$variations['groups'] = $v->groups;
 
 		$output = '';
 
 		$args = array(
-			'name'            => $title,
-			'price'           => $price,
-			'shipping'        => $shipping,
-			'shipping_enable' => $shipping_enable,
-			'tax'             => $tax,
-			'custom_amount'   => $custom_amount,
+			'name'            => get_the_title( $post_id ),
+			'price'           => $product->get_price(),
+			'shipping'        => $product->get_shipping(),
+			'shipping_enable' => $product->is_physical(),
+			'tax'             => $product->get_tax(),
+			'custom_amount'   => 'donation' === $product->get_type(), // Temporary, until we remove custom_amount parameter.
 			'quantity'        => max( intval( $quantity ), 1 ),
-			'custom_quantity' => $custom_quantity,
+			'custom_quantity' => $product->is_custom_quantity(),
 			'url'             => base64_encode( $url ),
 			'product_id'      => $post_id,
-			'thumbnail_url'   => $thumb_url,
-			'coupons_enabled' => $coupons_enabled,
-			'variations'      => $variations
+			'thumbnail_url'   => $product->get_thumbnail_url(),
+			'coupons_enabled' => $product->get_coupons_setting(),
+			'variations'      => $product->get_variations()
 		);
 
 		$args = shortcode_atts(
