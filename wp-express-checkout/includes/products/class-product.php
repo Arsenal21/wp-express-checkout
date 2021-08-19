@@ -41,10 +41,6 @@ abstract class Product {
 	public function __construct( $post ) {
 		$this->post = $post;
 		$this->wpec = Main::get_instance();
-
-		if ( empty( $this->type ) ) {
-			$this->type = $this->post->wpec_product_type;
-		}
 	}
 
 	/**
@@ -53,7 +49,7 @@ abstract class Product {
 	 * @return string
 	 */
 	public function get_type() {
-		return $this->type;
+		return $this->post->wpec_product_type ? $this->post->wpec_product_type : $this->type;
 	}
 
 	/**

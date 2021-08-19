@@ -67,6 +67,7 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WP_Express_Checkout\\Products\\Donation_Product' => __DIR__ . '/../..' . '/includes/products/class-donation-product.php',
         'WP_Express_Checkout\\Products\\One_Time_Product' => __DIR__ . '/../..' . '/includes/products/class-one-time-product.php',
         'WP_Express_Checkout\\Products\\Product' => __DIR__ . '/../..' . '/includes/products/class-product.php',
+        'WP_Express_Checkout\\Products\\Stub_Product' => __DIR__ . '/../..' . '/includes/products/class-stub-product.php',
         'WP_Express_Checkout\\Shortcodes' => __DIR__ . '/../..' . '/public/includes/class-shortcodes.php',
         'WP_Express_Checkout\\Utils' => __DIR__ . '/../..' . '/includes/class-utils.php',
         'WP_Express_Checkout\\Variations' => __DIR__ . '/../..' . '/includes/class-variations.php',
