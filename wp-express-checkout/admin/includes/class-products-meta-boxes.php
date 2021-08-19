@@ -63,7 +63,7 @@ class Products_Meta_Boxes {
 		// Unknown type.
 		if ( ! isset( $product_types[ $product_type ] ) ) {
 			$product_types[ $product_type ] = $product_type;
-			$default_content = sprintf( '<strong>' . __( 'A product type "%s" is not registered. Please activate appropriate addon or change the product type.', 'wp-express-checkout' )  . '</strong>', $product_type );
+			$default_content = sprintf( '<strong>' . __( 'A product type "%s" is not registered. Please activate the appropriate addon to use this product.', 'wp-express-checkout' )  . '</strong>', $product_type );
 		}
 
 		$current_price = get_post_meta( $post->ID, 'ppec_product_price', true );
@@ -94,11 +94,11 @@ class Products_Meta_Boxes {
 					break;
 				case 'donation':
 					?>
-					<p class="description"><?php esc_html_e( 'Donation type allows customers changing the amount they want to pay. You can set the initial amount using the field below.', 'wp-express-checkout' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Donation type product allows the customers to change the amount that they want to pay. You can set a minimum donation amount using the field below.', 'wp-express-checkout' ); ?></p>
 					<label><?php esc_html_e( 'Minimum Donation Amount', 'wp-express-checkout' ); ?></label>
 					<br/>
 					<input type="number" name="wpec_product_min_amount" step="<?php echo esc_attr( $step ); ?>" min="0" value="<?php echo esc_attr( $min_amount ); ?>">
-					<p class="description"><?php esc_html_e( 'Specify a minimum donation amount. Enter numbers only, no need to put currency symbol. Example: 39.95', 'wp-express-checkout' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Specify a minimum donation amount. Enter numbers only, no need to put currency symbol. Example: 5.00', 'wp-express-checkout' ); ?></p>
 					<?php
 					break;
 				default:

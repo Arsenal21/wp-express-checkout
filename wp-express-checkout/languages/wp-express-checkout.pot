@@ -878,8 +878,7 @@ msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:66
 msgid ""
-"A product type \"%s\" is not registered. Please activate appropriate addon "
-"or change the product type."
+"A product type \"%s\" is not registered. Please activate the appropriate addon to use this product."
 msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:92
@@ -890,8 +889,8 @@ msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:97
 msgid ""
-"Donation type allows customers changing the amount they want to pay. You "
-"can set the initial amount using the field below."
+"Donation type product allows the customers to change the amount that they want to pay. You "
+"can set a minimum donation amount using the field below."
 msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:98
@@ -1610,7 +1609,7 @@ msgid "Can't find product with ID %s"
 msgstr ""
 
 #: includes/class-products.php:109
-msgid "Unknown product type '%s'"
+msgid "Unknown product type '%s'. Activate the required addon to use this product type."
 msgstr ""
 
 #: includes/class-utils.php:165
@@ -1761,15 +1760,15 @@ msgid "Payment for"
 msgstr ""
 
 #: public/class-main.php:80
-msgid "Please enter valid quantity"
+msgid "Please enter a valid quantity"
 msgstr ""
 
 #: public/class-main.php:81
-msgid "Please enter valid amount"
+msgid "Please enter a valid amount"
 msgstr ""
 
 #: public/class-main.php:82
-msgid "Please accept Terms and Conditions"
+msgid "Please accept the terms and conditions"
 msgstr ""
 
 #: public/class-main.php:83

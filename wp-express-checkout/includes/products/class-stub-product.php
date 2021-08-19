@@ -10,7 +10,7 @@ class Stub_Product extends Product {
 	 * @return string
 	 */
 	public function get_type() {
-		$error_msg = sprintf( '<strong>' . __( 'A product type "%s" is not registered. Please activate appropriate addon or change the product type.', 'wp-express-checkout' )  . '</strong>', $this->post->wpec_product_type );
+		$error_msg = sprintf( '<strong>' . __( 'A product type "%s" is not registered. Please activate the appropriate addon to use this product.', 'wp-express-checkout' )  . '</strong>', $this->post->wpec_product_type );
 		return $error_msg;
 	}
 

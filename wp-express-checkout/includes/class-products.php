@@ -106,7 +106,7 @@ class Products {
 				$product = new Donation_Product( $product_data );
 				break;
 			default:
-				throw new Exception( sprintf( __( "Unknown product type '%s'", 'wp-express-checkout' ), $product_data->wpec_product_type ), 1003 );
+				throw new Exception( sprintf( __( "Unknown product type '%s'. Activate the required addon to use this product type.", 'wp-express-checkout' ), $product_data->wpec_product_type ), 1003 );
 		}
 
 		return $product;

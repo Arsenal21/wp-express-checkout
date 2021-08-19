@@ -34,24 +34,30 @@ https://www.youtube.com/watch?v=RHVgGQWhCT0
 = Features =
 
 * Sell products or services using a quick checkout process.
-* Sell files, digital goods or downloads.
+* Sell downloads, files, or any digital goods.
 * Sell music, video, ebook, PDF or any other digital media files.
-* Allow the customers to automatically download the file once the purchase is complete via PayPal.
+* Accept PayPal donation with minimum donation amount limit.
+* Allow the customers to automatically download the file once the purchase is completed via PayPal.
 * View the transactions from your WordPress admin dashboard.
-* Option to configure a notification email to be sent to the buyer and seller after the purchase.
+* Option to configure a notification email to be sent to the buyer and the seller after the purchase.
 * Ability to set a product thumbnail for a product.
 * Use a simple shortcode to add a payment button anywhere on your site.
 * Create a PayPal payment button widget and add it to your sidebar.
 * Ability for a customer to enter an amount and pay what they want for a product.
 * Ability to configure variable products. You can charge different amount for different options of the product.
 * Can be used to accept donation.
+* Option to configure a minimum donation amount so the customers have to pay a minimum amount for donation.
 * Option to customize the currency formatting.
 * Option to charge shipping for your items. Ability to set a shipping cost for each item separately.
 * Option to charge tax for your items.
 * Option to configure discount coupon codes.
 * Option to configure terms and conditions before checkout.
+* You can see all the orders within your WordPress admin dashboard.
+* Option to customize the Thank You page.
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
+
+You can also accept payment using PayPal's Pay in 4 feature (buy now pay later offering).
 
 = Shortcode Attributes =
 
@@ -114,12 +120,18 @@ None
 
 == Changelog ==
 
+= 2.1.1 =
+* Added new product type called "Donation".
+* The donation type product can be used to specify a minimum donation amount. This forces the customers to enter a minimum donation amount.
+* The documentation for the new Thank You page customization shortcode is now available. [View the documentation here](https://wp-express-checkout.com/thank-you-page-customization/).
+* Fixed and issue with the 'Allow customers to specify quantity' option.
+
 = 2.1.0 =
 * Added some missing translations strings.
 * Fixed WP 5.0 backward incompatibility issue.
 * Added `Order_Tags_Html` class to generate order tags with HTML output. Later it will used as the parent class for email tags generator with plain text output.
-* Added Thank You parts shortcodes that will allow the customization of the Thank you page. We will have a documentation for it soon.
-* Allow to use $content parameter in wpec_thank_you shortcode callback:
+* Added Thank You parts shortcodes that will allow the customization of the Thank you page.
+* Allow the use of $content parameter in wpec_thank_you shortcode callback.
 * Changed to using "require_once" instead of "require" for the inclusion of the "swpm_handle_subsc_ipn.php" file to prevent fatal error.
 * Integrated License Manager plugin. 100% Covered by unit tests.
 * Refactor integrations: - Created Integrations namespace - Moved integrations code to separated folders - 100% cover integrations by unit tests
