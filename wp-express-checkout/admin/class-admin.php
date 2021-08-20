@@ -15,7 +15,7 @@ class Admin {
 	 *
 	 * @var      object
 	 */
-	protected static $instance = null;
+	private static $instance = null;
 
 	/**
 	 * Slug of the plugin screen.
@@ -32,7 +32,7 @@ class Admin {
 	 *
 	 * @since     1.0.0
 	 */
-	private function __construct() {
+	protected function __construct() {
 
 		/**
 		 * Call $plugin_slug from public plugin class.
