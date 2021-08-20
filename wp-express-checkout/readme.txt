@@ -57,7 +57,7 @@ https://www.youtube.com/watch?v=RHVgGQWhCT0
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
 
-You can also accept payment using PayPal's Pay in 4 feature (buy now pay later offering).
+You can also accept payment using [PayPal's Pay in 4](https://www.paypal.com/us/webapps/mpp/pay-in-4) feature (buy now pay later offering).
 
 = Shortcode Attributes =
 
