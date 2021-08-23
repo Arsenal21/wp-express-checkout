@@ -65,7 +65,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
 			<div id="postbox-container-2" class="postbox-container">
 
-				<form method="post" action="options.php">
+				<form method="post" action="">
 
 				<?php settings_fields( 'wpec-tools-group' ); ?>
 
@@ -82,8 +82,6 @@ if ( ! current_user_can( 'manage_options' ) ) {
 					echo "<input type='hidden' name='wpec_tools_page_tab' value='" . esc_attr( 'wpec-tools-page' ) . "' />";
 				}
 				?>
-
-				<?php submit_button(); ?>
 
 				</form>
 
