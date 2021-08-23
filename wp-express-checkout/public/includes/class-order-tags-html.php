@@ -159,7 +159,8 @@ class Order_Tags_Html {
 
 		$link_tpl = apply_filters( 'wpec_downloads_list_item_template', '%1$s - <a href="%2$s" target="%3$s">%4$s</a><br/>' );
 		foreach ( $downloads as $name => $download_url ) {
-			$content .= sprintf( $link_tpl, $name, $download_url, $args['target'], $args['anchor_text'] );
+			$text = ! empty( $args['anchor_text'] ) ? $args['anchor_text'] : $download_url;
+			$content .= sprintf( $link_tpl, $name, $download_url, $args['target'], $text );
 		}
 
 		return $content;

@@ -4,6 +4,7 @@ namespace WP_Express_Checkout\Admin;
 
 use Exception;
 use WP_Express_Checkout\Main;
+use WP_Express_Checkout\Order_Tags_Html;
 use WP_Express_Checkout\Orders;
 use WP_Post;
 
@@ -28,6 +29,7 @@ class Orders_Meta_Boxes {
 
 	public function add_meta_boxes() {
 		add_meta_box( 'wpec_order_items', __( 'Order Summary', 'wp-express-checkout' ), array( $this, 'display_summary_meta_box' ), Orders::PTYPE, 'normal', 'high' );
+		add_meta_box( 'wpec_order_downloads', __( 'Order Downloads', 'wp-express-checkout' ), array( $this, 'display_downloads_meta_box' ), Orders::PTYPE, 'normal', 'default' );
 		add_meta_box( 'wpec_order_status', __( 'Order Status', 'wp-express-checkout' ), array( $this, 'display_status_meta_box' ), Orders::PTYPE, 'side', 'high' );
 		add_meta_box( 'wpec_order_author', __( 'Order Author', 'wp-express-checkout' ), array( $this, 'display_author_meta_box' ), Orders::PTYPE, 'side', 'low' );
 	}
@@ -61,6 +63,29 @@ class Orders_Meta_Boxes {
 			'class' => 'widefat',
 			'id' => 'admin-order-summary'
 		) );
+	}
+
+	public function display_downloads_meta_box( $post ) {
+		global $post;
+
+		$error_msg = __( 'There are no downloads for this order.', 'wp-express-checkout' );
+
+		try {
+			$order = Orders::retrieve( $post->ID );
+		} catch ( Exception $exc ) {
+			echo $error_msg;
+			return;
+		}
+
+		$renderer = new Order_Tags_Html( $order );
+
+		$output = $renderer->download_link( array(
+			'anchor_text' => '',
+		) );
+
+		$output = ! empty( $output ) ? $output : $error_msg;
+
+		echo $output;
 	}
 
 	/**
