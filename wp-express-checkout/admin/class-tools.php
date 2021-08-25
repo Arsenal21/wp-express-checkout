@@ -91,7 +91,113 @@ class Tools extends Admin {
 	public function register_settings() {
 		/* Register the settings */
 		/* Add the sections */
+		add_settings_section( 'wpec-email-tools-section', __( 'Send Email to Customers', 'wp-express-checkout' ), array( $this, 'send_email_section_callback' ), 'wpec-tools-page-emails' );
 		/* Add the settings fields */
+		add_settings_field(
+			'buyer_from_email',
+			__( 'From Email Address', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			'wpec-tools-page-emails',
+			'wpec-email-tools-section',
+			array(
+				'field' => 'buyer_from_email',
+				'type'  => 'text',
+				'desc'  => __( 'This email will appear in the from field of the email.', 'wp-express-checkout' ),
+			)
+		);
+		add_settings_field(
+			'to',
+			__( 'To Email Address', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			'wpec-tools-page-emails',
+			'wpec-email-tools-section',
+			array(
+				'field' => 'to',
+				'type'  => 'text',
+				'desc'  => __( 'This is the email address where the email with be sent to.', 'wp-express-checkout' ),
+			)
+		);
+		add_settings_field(
+			'email_subject',
+			__( 'Email Subject', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			'wpec-tools-page-emails',
+			'wpec-email-tools-section',
+			array(
+				'field' => 'email_subject',
+				'type'  => 'text',
+				'desc'  => __( 'This is the email subject', 'wp-express-checkout' ),
+			)
+		);
+		add_settings_field(
+			'email_body',
+			__( 'Email Body', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			'wpec-tools-page-emails',
+			'wpec-email-tools-section',
+			array(
+				'field' => 'email_body',
+				'type'  => 'textarea',
+				'desc'  => __( 'Type you email and hit the Send Email button.', 'wp-express-checkout' ),
+			)
+		);
+		add_settings_field(
+			'send_email',
+			'',
+			array( $this, 'send_email_button' ),
+			'wpec-tools-page-emails',
+			'wpec-email-tools-section'
+		);
+
+		if ( ! empty( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'wpec-tools-page-emails' ) ) {
+			$post = stripslashes_deep( $_POST );
+			if ( ! empty( $post['ppdg-settings'] ) ) {
+				$post = $post['ppdg-settings'];
+			}
+
+			if ( empty( $post['to'] ) || ! is_email( $post['to'] ) ) {
+				$this->add_admin_notice( __( 'To Email Address is invalid!' ), 'error' );
+				return;
+			}
+
+			$wpec = Main::get_instance();
+
+			$to   = wp_kses_data( $post['to'] );
+			$from = ! empty( $post['buyer_from_email'] ) ? $post['buyer_from_email'] : $wpec->get_setting( 'buyer_from_email' );
+			$subject = ! empty( $post['email_subject'] ) ? wp_kses_data( $post['email_subject'] ) : '';
+			$body = ! empty( $post['email_body'] ) ? wp_kses_post( $post['email_body'] ) : '';
+
+			if ( 'html' === $wpec->get_setting( 'buyer_email_type' ) ) {
+				$headers[] = 'Content-Type: text/html; charset=UTF-8';
+				$body = nl2br( $body );
+			} else {
+				$headers = array();
+				$body = html_entity_decode( $body );
+			}
+
+			$headers[] = 'From: ' . $from . "\r\n";
+
+			$result = wp_mail( $to, wp_specialchars_decode( $subject, ENT_QUOTES ), $body, $headers );
+
+			if ( $result ) {
+				$this->add_admin_notice( __( 'Email successfully sent!' ), 'success' );
+			} else {
+				$this->add_admin_notice( __( 'Something went wrong, email is not sent!' ), 'error' );
+			}
+		}
+
+	}
+
+	public function send_email_section_callback() {
+		?>
+		<p class="description">
+			<?php esc_html_e( 'You can use this section to send a quick email to your customer. If you want to send a download link for an order, then first get links on the user processed order page.', 'wp-express-checkout' ); ?>
+		</p>
+		<?php
+	}
+
+	public function send_email_button() {
+		echo '<button class="button">' . __( 'Send Email >>', 'wp-express-checkout' ) . '</button>';
 	}
 
 	/**
