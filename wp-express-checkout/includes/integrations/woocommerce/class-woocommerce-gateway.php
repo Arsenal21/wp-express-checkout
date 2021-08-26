@@ -129,7 +129,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 			'custom_quantity' => 0,
 			'dec_num'         => intval( $this->wpec->get_setting( 'price_decimals_num' ) ),
 			'dec_sep'         => $this->wpec->get_setting( 'price_decimal_sep' ),
-			'name'            => 'Test',
+			'name'            => '#' . $order->get_id(),
 			'price'           => $order->get_total(),
 			'product_id'      => 0,
 			'quantity'        => 1,
@@ -151,6 +151,26 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 		$button_sc = \WP_Express_Checkout\Shortcodes::get_instance();
 
 		echo $button_sc->generate_pp_express_checkout_button( $form_args );
+
+		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $form_args['name'] );
+		$trans_data = get_transient( $trans_name );
+		$trans_data['wc_id'] = $order->get_id();
+		set_transient( $trans_name, $trans_data, 2 * 3600 );
+
+		?>
+		<script>
+		jQuery( document ).on( 'wpec_before_render_button', function( e, handler ) {
+
+			handler.buttonArgs.onApprove = function( data, actions ) {
+				jQuery( 'div.wp-ppec-overlay[data-ppec-button-id="' + handler.data.id + '"]' ).css( 'display', 'flex' );
+				return actions.order.capture().then( function( details ) {
+					handler.processPayment( details, "wpec_process_wc_payment" );
+				} );
+			};
+
+		} );
+		</script>
+	<?php
 	}
 
 	public function paypal_sdk_args( $args ) {

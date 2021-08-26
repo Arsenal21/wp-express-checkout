@@ -20,6 +20,7 @@ class Integrations {
 
 		// WooCommerce integration.
 		if ( class_exists( 'WC_Payment_Gateway' ) ) {
+			new Integrations\WooCommerce_Payment_Processor();
 			add_filter( 'woocommerce_payment_gateways', array( 'WP_Express_Checkout\Integrations\WooCommerce_Gateway', 'add_wc_gateway_class' ) );
 		}
 
