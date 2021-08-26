@@ -93,16 +93,30 @@ class Tools extends Admin {
 		/* Add the sections */
 		add_settings_section( 'wpec-email-tools-section', __( 'Send Email to Customers', 'wp-express-checkout' ), array( $this, 'send_email_section_callback' ), 'wpec-tools-page-emails' );
 		/* Add the settings fields */
+
+		$post = stripslashes_deep( $_POST );
+		$wpec = Main::get_instance();
+
+		if ( ! empty( $post['ppdg-settings'] ) ) {
+			$post    = $post['ppdg-settings'];
+		}
+
+		$to      = ! empty( $post['to'] ) ? wp_kses_data( $post['to'] ) : '';
+		$from    = ! empty( $post['from'] ) ? $post['from'] : $wpec->get_setting( 'buyer_from_email' );
+		$subject = ! empty( $post['email_subject'] ) ? wp_kses_data( $post['email_subject'] ) : '';
+		$body    = ! empty( $post['email_body'] ) ? wp_kses_post( $post['email_body'] ) : '';
+
 		add_settings_field(
-			'buyer_from_email',
+			'from',
 			__( 'From Email Address', 'wp-express-checkout' ),
 			array( $this, 'settings_field_callback' ),
 			'wpec-tools-page-emails',
 			'wpec-email-tools-section',
 			array(
-				'field' => 'buyer_from_email',
-				'type'  => 'text',
-				'desc'  => __( 'This email will appear in the from field of the email.', 'wp-express-checkout' ),
+				'field'   => 'from',
+				'type'    => 'text',
+				'desc'    => __( 'This email will appear in the from field of the email.', 'wp-express-checkout' ),
+				'default' => $from,
 			)
 		);
 		add_settings_field(
@@ -112,9 +126,10 @@ class Tools extends Admin {
 			'wpec-tools-page-emails',
 			'wpec-email-tools-section',
 			array(
-				'field' => 'to',
-				'type'  => 'text',
-				'desc'  => __( 'This is the email address where the email with be sent to.', 'wp-express-checkout' ),
+				'field'   => 'to',
+				'type'    => 'text',
+				'desc'    => __( 'This is the email address where the email with be sent to.', 'wp-express-checkout' ),
+				'default' => $to,
 			)
 		);
 		add_settings_field(
@@ -124,9 +139,10 @@ class Tools extends Admin {
 			'wpec-tools-page-emails',
 			'wpec-email-tools-section',
 			array(
-				'field' => 'email_subject',
-				'type'  => 'text',
-				'desc'  => __( 'This is the email subject', 'wp-express-checkout' ),
+				'field'   => 'email_subject',
+				'type'    => 'text',
+				'desc'    => __( 'This is the email subject', 'wp-express-checkout' ),
+				'default' => $subject,
 			)
 		);
 		add_settings_field(
@@ -136,9 +152,10 @@ class Tools extends Admin {
 			'wpec-tools-page-emails',
 			'wpec-email-tools-section',
 			array(
-				'field' => 'email_body',
-				'type'  => 'textarea',
-				'desc'  => __( 'Type your email and hit the Send Email button.', 'wp-express-checkout' ),
+				'field'   => 'email_body',
+				'type'    => 'textarea',
+				'desc'    => __( 'Type your email and hit the Send Email button.', 'wp-express-checkout' ),
+				'default' => $body,
 			)
 		);
 		add_settings_field(
@@ -150,22 +167,11 @@ class Tools extends Admin {
 		);
 
 		if ( ! empty( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'wpec-tools-page-emails' ) ) {
-			$post = stripslashes_deep( $_POST );
-			if ( ! empty( $post['ppdg-settings'] ) ) {
-				$post = $post['ppdg-settings'];
-			}
 
 			if ( empty( $post['to'] ) || ! is_email( $post['to'] ) ) {
 				$this->add_admin_notice( __( 'To Email Address is invalid!' ), 'error' );
 				return;
 			}
-
-			$wpec = Main::get_instance();
-
-			$to   = wp_kses_data( $post['to'] );
-			$from = ! empty( $post['buyer_from_email'] ) ? $post['buyer_from_email'] : $wpec->get_setting( 'buyer_from_email' );
-			$subject = ! empty( $post['email_subject'] ) ? wp_kses_data( $post['email_subject'] ) : '';
-			$body = ! empty( $post['email_body'] ) ? wp_kses_post( $post['email_body'] ) : '';
 
 			if ( 'html' === $wpec->get_setting( 'buyer_email_type' ) ) {
 				$headers[] = 'Content-Type: text/html; charset=UTF-8';

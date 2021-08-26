@@ -481,6 +481,7 @@ class Admin {
 			'class'       => '',
 			'step'        => 1,
 			'min'         => 0,
+			'default'     => '',
 		);
 
 		$settings = array_merge( Main::get_defaults(), $settings );
@@ -488,7 +489,7 @@ class Admin {
 
 		extract( $args );
 
-		$field_value  = isset( $settings[ $field ] ) ? $settings[ $field ] : '';
+		$field_value  = isset( $settings[ $field ] ) ? $settings[ $field ] : $default;
 		$_placeholder = $placeholder ? " placeholder='{$placeholder}'" : '';
 		$_class       = $class ? "class='{$class}'" : '';
 
