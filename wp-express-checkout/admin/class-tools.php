@@ -104,7 +104,7 @@ class Tools extends Admin {
 		$to      = ! empty( $post['to'] ) ? wp_kses_data( $post['to'] ) : '';
 		$from    = ! empty( $post['from'] ) ? $post['from'] : $wpec->get_setting( 'buyer_from_email' );
 		$subject = ! empty( $post['email_subject'] ) ? wp_kses_data( $post['email_subject'] ) : '';
-		$body    = ! empty( $post['email_body'] ) ? wp_kses_post( $post['email_body'] ) : '';
+		$body    = ! empty( $post['email_body'] ) ? $post['email_body'] : '';
 
 		add_settings_field(
 			'from',
@@ -172,6 +172,8 @@ class Tools extends Admin {
 				$this->add_admin_notice( __( 'To Email Address is invalid!' ), 'error' );
 				return;
 			}
+
+			$body = wp_kses_post( $body );
 
 			if ( 'html' === $wpec->get_setting( 'buyer_email_type' ) ) {
 				$headers[] = 'Content-Type: text/html; charset=UTF-8';
