@@ -164,7 +164,7 @@ class Order_Summary_Table {
 		}
 
 		if ( in_array( $closing, $SELF_CLOSING_TAGS ) ) {
-			return "<{$tag} />";
+			return "<{$tag} />"; // @codeCoverageIgnore
 		}
 
 		$content = implode( '', $args );

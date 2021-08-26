@@ -29,42 +29,24 @@ jobs:
       fail-fast: false
       matrix:
         php: [ '8.0', 7.4, 7.3, 7.2, 7.1, '7.0', 5.6.20 ]
-        wordpress: ['latest', 'trunk', '5.0']
+        wordpress: ['latest', '5.6']
         phpunit: ['7.5.*', '5.7.*']
         exclude:
           # excludes WP5 from latest PHP setups
-          - wordpress: '5.0'
-            php: '8.0'
-          - wordpress: '5.0'
-            php: 7.4
-          - wordpress: '5.0'
-            phpunit: '7.5.*'
-          - php: '7.0'
-            phpunit: '7.5.*'
-          - php: 5.6.20
-            phpunit: '7.5.*'
           - php: '8.0'
             phpunit: '5.7.*'
           - php: 7.4
             phpunit: '5.7.*'
           - php: 7.3
             phpunit: '5.7.*'
-            wordpress: 'latest'
-          - php: 7.3
-            phpunit: '5.7.*'
-            wordpress: 'trunk'
           - php: 7.2
             phpunit: '5.7.*'
-            wordpress: 'latest'
-          - php: 7.2
-            phpunit: '5.7.*'
-            wordpress: 'trunk'
           - php: 7.1
             phpunit: '5.7.*'
-            wordpress: 'latest'
-          - php: 7.1
-            phpunit: '5.7.*'
-            wordpress: 'trunk'
+          - php: '7.0'
+            phpunit: '7.5.*'
+          - php: 5.6.20
+            phpunit: '7.5.*'
 
     steps:
       - name: Checkout
@@ -83,26 +65,26 @@ jobs:
           MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
         run: bash bin/install-wp-tests.sh wordpress_test root password "127.0.0.1:$MYSQL_PORT" "$WP_VERSION"
 
-      - name: Get Composer cache directory
-        id: composer-cache
-        run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Setup cache
-        uses: pat-s/always-upload-cache@v1.1.4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
+#      - name: Get Composer cache directory
+#        id: composer-cache
+#        run: |
+#          echo "::set-output name=dir::$(composer config cache-files-dir)"
+#
+#      - name: Setup cache
+#        uses: pat-s/always-upload-cache@v1.1.4
+#        with:
+#          path: ${{ steps.composer-cache.outputs.dir }}
+#          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-composer-
 
       - name: Install dependencies
 #       Locking symfony/yaml=4.4.26, version 4.4.27 causes errors with PHP 5.6.20
         run: composer global require "phpunit/phpunit=${{ matrix.phpunit }}" "symfony/yaml=4.4.26" --ignore-platform-reqs
 #        run: composer install --no-progress --prefer-dist --optimize-autoloader
 
-      - name: Setup problem matchers for PHPUnit
-        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+#      - name: Setup problem matchers for PHPUnit
+#        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Run tests
         run: phpunit

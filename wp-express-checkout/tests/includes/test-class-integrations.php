@@ -27,8 +27,29 @@ class IntegrationsTest extends \WP_UnitTestCase {
 		$this->object = new Integrations;
 	}
 
-	public function test_test () {
-		$this->assertTrue( true );
+	public function test_fallback_subscription_type__post_to_product() {
+		$product = $this->factory->post->create_and_get(
+			[
+				'post_type' => \WP_Express_Checkout\Products::$products_slug,
+			]
+		);
+
+		$this->assertInstanceOf( 'WP_Express_Checkout\Products\One_Time_Product', $this->object->fallback_subscription_type( $product ) );
+	}
+
+	public function test_fallback_subscription_type__product_to_product() {
+		$post = $this->factory->post->create_and_get(
+			[
+				'post_type' => \WP_Express_Checkout\Products::$products_slug,
+				'meta_input' => [
+					'wpec_product_type' => 'test'
+				],
+			]
+		);
+
+		$product = new Products\Test_Product( $post );
+
+		$this->assertInstanceOf( 'WP_Express_Checkout\Products\Test_Product', $this->object->fallback_subscription_type( $product ) );
 	}
 
 }

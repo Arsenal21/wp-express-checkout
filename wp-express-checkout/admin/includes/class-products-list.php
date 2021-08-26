@@ -2,6 +2,7 @@
 
 namespace WP_Express_Checkout\Admin;
 
+use Exception;
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Products;
 use WP_Express_Checkout\Shortcodes;
@@ -22,6 +23,7 @@ class Products_List {
 			'cb'        => '<input type="checkbox">',
 			'thumbnail' => __( 'Thumbnail', 'wp-express-checkout' ),
 			'title'     => __( 'Product Name', 'wp-express-checkout' ),
+			'type'      => __( 'Product Type', 'wp-express-checkout' ),
 			'id'        => __( 'ID', 'wp-express-checkout' ),
 			'price'     => __( 'Price', 'wp-express-checkout' ),
 			'shortcode' => __( 'Shortcode', 'wp-express-checkout' ),
@@ -31,7 +33,18 @@ class Products_List {
 	}
 
 	public static function manage_custom_columns( $column, $post_id ) {
-		$main = Main::get_instance();
+
+		try {
+			$product = Products::retrieve( intval( $post_id ) );
+		} catch ( Exception $exc ) {
+			if ( 1003 === $exc->getCode() ) {
+				$product = new Products\Stub_Product( get_post( $post_id ) );
+			} else {
+				echo $exc->getMessage();
+				return;
+			}
+		}
+
 		switch ( $column ) {
 			case 'id':
 				echo $post_id;
@@ -61,10 +74,10 @@ class Products_List {
 					),
 					array(
 						'name'            => get_the_title( $post_id ),
-						'price'           => (float) get_post_meta( $post_id, 'ppec_product_price', true ),
-						'shipping'        => ( '' === get_post_meta( $post_id, 'wpec_product_shipping', true ) ) ? $main->get_setting( 'shipping' ) : get_post_meta( $post_id, 'wpec_product_shipping', true ),
-						'tax'             => ( '' === get_post_meta( $post_id, 'wpec_product_tax', true ) ) ? $main->get_setting( 'tax' ) : get_post_meta( $post_id, 'wpec_product_tax', true ),
-						'quantity'        => get_post_meta( $post_id, 'ppec_product_quantity', true ),
+						'price'           => (float) $product->get_price(),
+						'shipping'        => $product->get_shipping(),
+						'tax'             => $product->get_tax(),
+						'quantity'        => $product->get_quantity(),
 						'product_id'      => $post_id,
 					)
 				);
@@ -77,6 +90,9 @@ class Products_List {
 				?>
 				<input type="text" name="ppec_product_shortcode" class="ppec-select-on-click" readonly value="[wp_express_checkout product_id=&quot;<?php echo $post_id; ?>&quot;]">
 				<?php
+				break;
+			case 'type':
+				echo $product->get_type();
 				break;
 		}
 	}

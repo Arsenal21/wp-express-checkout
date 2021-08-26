@@ -109,36 +109,20 @@ class Utils {
 	/**
 	 * Replaces the dynamic tags with order details (given the order_id).
 	 *
-	 * @param string $text     The text to be processed.
-	 * @param int    $order_id The order ID to retrieve default values.
-	 * @param array  $args     The custom arguments to replace default order data.
+	 * @param string $text  The text to be processed.
+	 * @param int    $order The order object to retrieve default values.
+	 * @param array  $args  The custom arguments to replace default order data.
 	 *
 	 * @return string
 	 */
-	public static function replace_dynamic_order_tags( $text, $order_id, $args = array() ) {
-		try {
-			$order = Orders::retrieve( $order_id );
-		} catch ( Exception $exc ) {
-			return $exc->getMessage();
+	public static function replace_dynamic_order_tags( $text, $order, $args = array() ) {
+
+		$tags   = array_keys( self::get_dynamic_tags_white_list() );
+		$render = new Order_Tags_Plain( $order );
+
+		foreach ( $tags as $tag ) {
+			$tags_vals[ $tag ] = $render->$tag();
 		}
-
-		$product_details = self::get_product_details( $order ) . "\n";
-		$payer_details   = $order->get_data( 'payer' );
-		$coupon_item     = $order->get_item( 'coupon' );
-
-		$tags_vals = array(
-			'first_name'      => $payer_details['name']['given_name'],
-			'last_name'       => $payer_details['name']['surname'],
-			'product_details' => $product_details,
-			'payer_email'     => $payer_details['email_address'],
-			'transaction_id'  => $order->get_resource_id(),
-			'purchase_amt'    => $order->get_total(),
-			'purchase_date'   => date( 'Y-m-d' ),
-			'currency_code'   => $order->get_currency(),
-			'coupon_code'     => ! empty( $coupon_item['mata']['code'] ) ? $coupon_item['mata']['code'] : 0,
-			'address'         => '', // Not implemented yet.
-			'order_id'        => $order_id,
-		);
 
 		$tags_vals = array_merge( $tags_vals, $args );
 
@@ -158,26 +142,12 @@ class Utils {
 	 */
 	public static function apply_dynamic_tags( $text, $args ) {
 
-		$white_list = array(
-			'first_name',
-			'last_name',
-			'product_details',
-			'payer_email',
-			'transaction_id',
-			'purchase_amt',
-			'purchase_date',
-			'coupon_code',
-			'currency_code',
-			'address',
-			'order_id',
-		);
-
 		$tags = array();
 		$vals = array();
 
-		foreach ( $white_list as $item ) {
+		foreach ( $args as $item => $value ) {
 			$tags[] = "{{$item}}";
-			$vals[] = ( isset( $args[ $item ] ) ) ? $args[ $item ] : '';
+			$vals[] = $value;
 		}
 
 		$body = stripslashes( str_replace( $tags, $vals, $text ) );
@@ -186,67 +156,26 @@ class Utils {
 	}
 
 	/**
-	 * Generates plain product details for Order summary and emails by given
-	 * order details.
+	 * Retrieves the list of supported dynamic tags and their descriptions
 	 *
-	 * @since 2.0
-	 *
-	 * @param Order $order The order details stored in the
-	 *
-	 * @return string
+	 * @return array
 	 */
-	public static function get_product_details( $order ) {
-		$output   = '';
+	public static function get_dynamic_tags_white_list() {
+		$tags = apply_filters( 'wpec_dynamic_tags_white_list', array(
+			'first_name' => __( 'First name of the buyer', 'wp-express-checkout' ),
+			'last_name' => __( 'Last name of the buyer', 'wp-express-checkout' ),
+			'payer_email' => __( 'Email Address of the buyer', 'wp-express-checkout' ),
+			'address' => __( 'Address of the buyer', 'wp-express-checkout' ),
+			'product_details' => __( 'The item details of the purchased product (this will include the download link for digital items).', 'wp-express-checkout' ),
+			'transaction_id' => __( 'The unique transaction ID of the purchase', 'wp-express-checkout' ),
+			'order_id' => __( 'The order ID reference of this transaction in the cart orders menu', 'wp-express-checkout' ),
+			'purchase_amt' => __( 'The amount paid for the current transaction', 'wp-express-checkout' ),
+			'purchase_date' => __( 'The date of the purchase', 'wp-express-checkout' ),
+			'coupon_code' => __( 'Coupon code applied to the purchase', 'wp-express-checkout' ),
+			'currency_code' => __( 'Order currency code', 'wp-express-checkout' ),
+		) );
 
-		/* translators: {Order Summary Item Name}: {Value} */
-		$template = __( '%1$s: %2$s', 'wp-express-checkout' );
-
-		$items = $order->get_items();
-
-		$product_items = array();
-		$other_items   = array();
-
-		foreach ( $items as $item ) {
-			if ( $item['type'] === Products::$products_slug ) {
-				$product_item = $item;
-				continue;
-			}
-			$ptype_obj = get_post_type_object( get_post_type( $item['post_id'] ) );
-			if ( $ptype_obj->public ) {
-				$product_items[] = $item;
-			} else {
-				$other_items[] = $item;
-			}
-		}
-
-		$output .= sprintf( $template, __( 'Product Name', 'wp-express-checkout' ), $product_item['name'] ) . "\n";
-		$output .= sprintf( $template, __( 'Quantity', 'wp-express-checkout' ), $product_item['quantity'] ) . "\n";
-		$output .= sprintf( $template, __( 'Price', 'wp-express-checkout' ), self::price_format( $product_item['price'] ) ) . "\n";
-
-		$subtotal = $product_item['price'] * $product_item['quantity'];
-
-		foreach ( $product_items as $item ) {
-			$amnt_str  = self::price_format( $item['price'] );
-			$subtotal += $item['price'] * $item['quantity'];
-			$output   .= sprintf( $template, $item['name'], $amnt_str ) . "\n";
-		}
-
-		if ( $subtotal !== $product_item['price'] ) {
-			$output .= '--------------------------------' . "\n";
-			$output .= sprintf( $template, __( 'Subtotal', 'wp-express-checkout' ), self::price_format( $subtotal ) ) . "\n";
-			$output .= '--------------------------------' . "\n";
-		}
-
-		foreach ( $other_items as $item ) {
-			$amnt_str  = self::price_format( $item['price'] );
-			$subtotal += $item['price'] * $item['quantity'];
-			$output   .= sprintf( $template, $item['name'], $amnt_str ) . "\n";
-		}
-
-		$output .= '--------------------------------' . "\n";
-		$output .= sprintf( $template, __( 'Total Amount', 'wp-express-checkout' ), self::price_format( $order->get_total() ) ) . "\n";
-
-		return $output;
+		return $tags;
 	}
 
 	/*

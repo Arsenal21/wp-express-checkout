@@ -54,6 +54,7 @@ class Order_Tags_HtmlTest extends WP_UnitTestCase {
 			]
 		);
 		$order->add_data( 'state', 'COMPLETED' );
+		$order->add_data( 'shipping_address', 'test shipping address' );
 		$order->add_item( Products::$products_slug, $product_id, $product_id + 42, 1, $product_id );
 		$order->add_item( 'coupon', 'Coupon Code: test', -2, 1, 0, false, [ 'code' => "test_$product_id" ] );
 
@@ -135,7 +136,7 @@ class Order_Tags_HtmlTest extends WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Order_Tags_Html::address
 	 */
 	public function testAddress() {
-		$this->assertEmpty( $this->object->address() );
+		$this->assertEquals( 'test shipping address', $this->object->address() );
 	}
 
 	/**

@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       WP Express Checkout
  * Description:       This plugin allows you to generate a customizable PayPal payment button that lets the customers pay quickly in a popup via PayPal.
- * Version:           2.0.1
+ * Version:           2.1.1
  * Author:            Tips and Tricks HQ
  * Author URI:        https://www.tipsandtricks-hq.com/
  * Plugin URI:        https://wp-express-checkout.com/
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //Define constants
-define( 'WPEC_PLUGIN_VER', '2.0.1' );
+define( 'WPEC_PLUGIN_VER', '2.1.1' );
 define( 'WPEC_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 define( 'WPEC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPEC_PLUGIN_FILE', __FILE__ );
@@ -50,6 +50,7 @@ function wpec_load_classes() {
 	// Load admin side class
 	if ( is_admin() ) {
 		WP_Express_Checkout\Admin\Admin::get_instance();
+		WP_Express_Checkout\Admin\Tools::get_instance();
 		new WP_Express_Checkout\Coupons();
 		new WP_Express_Checkout\Admin\Orders_Meta_Boxes();
 	}

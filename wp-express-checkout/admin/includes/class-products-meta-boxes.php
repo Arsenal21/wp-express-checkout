@@ -44,38 +44,43 @@ class Products_Meta_Boxes {
 	function display_price_meta_box( $post ) {
 		$product_types             = array();
 		$product_types['one_time'] = __( 'One-time payment', 'wp-express-checkout' );
+		$product_types['donation'] = __( 'Donation', 'wp-express-checkout' );
 
 		$product_types = apply_filters( 'wpec_product_types', $product_types, $post );
 		$product_type  = get_post_meta( $post->ID, 'wpec_product_type', true );
-		$product_type  = empty( $product_type ) ? 'one_time' : $product_type;
+
+		// Legacy option. Added for backward compatibility.
+		$allow_custom_amount = get_post_meta( $post->ID, 'wpec_product_custom_amount', true );
+
+		if ( $allow_custom_amount ) {
+			$product_type = 'donation';
+		} elseif ( empty( $product_type ) ) {
+			$product_type = 'one_time';
+		}
+
 		$default_content = '';
 
 		// Unknown type.
 		if ( ! isset( $product_types[ $product_type ] ) ) {
 			$product_types[ $product_type ] = $product_type;
-			$default_content = sprintf( '<strong>' . __( 'A product type "%s" is not registered. Please activate appropriate addon or change the product type.', 'wp-express-checkout' )  . '</strong>', $product_type );
+			$default_content = sprintf( '<strong>' . __( 'A product type "%s" is not registered. Please activate the appropriate addon to use this product.', 'wp-express-checkout' )  . '</strong>', $product_type );
 		}
 
-		$current_price       = get_post_meta( $post->ID, 'ppec_product_price', true );
-		$allow_custom_amount = get_post_meta( $post->ID, 'wpec_product_custom_amount', true );
-		$step                = pow( 10, -intval( $this->WPEC_Main->get_setting( 'price_decimals_num' ) ) );
+		$current_price = get_post_meta( $post->ID, 'ppec_product_price', true );
+		$min_amount    = get_post_meta( $post->ID, 'wpec_product_min_amount', true );
+		$min_amount    = ! $min_amount ? $current_price : $min_amount;
+		$step          = pow( 10, -intval( $this->WPEC_Main->get_setting( 'price_decimals_num' ) ) );
 
 		$cont = '';
 
 		echo '<p class="wpec_product_type_select_cont">';
 
 		foreach ( $product_types as $type => $name ) {
-			if ( 2 > count( $product_types ) ) {
-				?>
-					<input type="hidden" class="wpec_product_type_radio" name="wpec_product_type_radio" value="<?php echo $type; ?>">
-				<?php
-			} else {
-				?>
-				<label>
-					<input type="radio" class="wpec_product_type_radio" name="wpec_product_type_radio" value="<?php echo $type; ?>"<?php echo $type === $product_type ? ' checked' : ''; ?>><?php echo $name; ?>
-				</label>
-				<?php
-			}
+			?>
+			<label>
+				<input type="radio" class="wpec_product_type_radio" name="wpec_product_type_radio" value="<?php echo $type; ?>"<?php echo $type === $product_type ? ' checked' : ''; ?>><?php echo $name; ?>
+			</label>
+			<?php
 			$cont .= sprintf( '<div class="wpec_product_type_cont%s" data-wpec-product-type="%s">', $type === $product_type ? ' wpec_product_type_active' : '', $type );
 			ob_start();
 			switch ( $type ) {
@@ -85,11 +90,15 @@ class Products_Meta_Boxes {
 					<br/>
 					<input type="number" name="ppec_product_price" step="<?php echo esc_attr( $step ); ?>" min="0" value="<?php echo esc_attr( $current_price ); ?>">
 					<p class="description"><?php esc_html_e( 'Item price. Enter numbers only, no need to put currency symbol. Example: 39.95', 'wp-express-checkout' ); ?></p>
-					<label>
-						<input type="checkbox" name="wpec_product_custom_amount" value="1" <?php checked( $allow_custom_amount ); ?>>
-						<?php esc_html_e( 'Allow customers to enter amount', 'wp-express-checkout' ); ?>
-					</label>
-					<p class="description"><?php esc_html_e( 'When checked, customers can change the amount they want to pay. You can set the initial amount using the field above.', 'wp-express-checkout' ); ?></p>
+					<?php
+					break;
+				case 'donation':
+					?>
+					<p class="description"><?php esc_html_e( 'Donation type product allows the customers to change the amount that they want to pay. You can set a minimum donation amount using the field below.', 'wp-express-checkout' ); ?></p>
+					<label><?php esc_html_e( 'Minimum Donation Amount', 'wp-express-checkout' ); ?></label>
+					<br/>
+					<input type="number" name="wpec_product_min_amount" step="<?php echo esc_attr( $step ); ?>" min="0" value="<?php echo esc_attr( $min_amount ); ?>">
+					<p class="description"><?php esc_html_e( 'Specify a minimum donation amount. Enter numbers only, no need to put currency symbol. Example: 5.00', 'wp-express-checkout' ); ?></p>
 					<?php
 					break;
 				default:
@@ -512,9 +521,11 @@ jQuery(document).ready(function($) {
 
 		update_post_meta( $post_id, 'ppec_product_price', $price );
 
-		// allow custom amount.
-		$custom_amount = filter_input( INPUT_POST, 'wpec_product_custom_amount', FILTER_SANITIZE_NUMBER_INT );
-		update_post_meta( $post_id, 'wpec_product_custom_amount', $custom_amount );
+		// min amount.
+		$min_amount = filter_input( INPUT_POST, 'wpec_product_min_amount', FILTER_SANITIZE_STRING );
+		$min_amount = ! empty( $min_amount ) ? floatval( $min_amount ) : 0;
+
+		update_post_meta( $post_id, 'wpec_product_min_amount', $min_amount );
 
 		// quantity.
 		$quantity = filter_input( INPUT_POST, 'ppec_product_quantity', FILTER_SANITIZE_NUMBER_INT );

@@ -104,19 +104,15 @@ class View_Downloads {
 	public static function get_order_downloads_list( $order_id ) {
 		$downloads = array();
 		try {
-			$order = Orders::retrieve( $order_id );
+			$order        = Orders::retrieve( $order_id );
+			$product_item = $order->get_item( Products::$products_slug );
+			$product_id   = ! empty( $product_item['post_id'] ) ? $product_item['post_id'] : 0;
+			$product      = Products::retrieve( $product_id );
 		} catch ( Exception $exc ) {
 			return $downloads;
 		}
 
-		$product_item = $order->get_item( Products::$products_slug );
-		$product      = get_post( $product_item['post_id'] );
-
-		if ( empty( $product ) ) {
-			return $downloads;
-		}
-
-		if ( ! empty( $product->ppec_product_upload ) ) {
+		if ( ! empty( $product->get_download_url() ) ) {
 			$downloads[ $product_item['name'] ] = self::get_download_url( $order_id );
 		}
 

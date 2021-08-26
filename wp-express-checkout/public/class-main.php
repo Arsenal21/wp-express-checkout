@@ -77,9 +77,9 @@ class Main {
 			'str' => array(
 				'errorOccurred'    => __( 'Error occurred', 'wp-express-checkout' ),
 				'paymentFor'       => __( 'Payment for', 'wp-express-checkout' ),
-				'enterQuantity'    => __( 'Please enter valid quantity', 'wp-express-checkout' ),
-				'enterAmount'      => __( 'Please enter valid amount', 'wp-express-checkout' ),
-				'acceptTos'        => __( 'Please accept Terms and Conditions', 'wp-express-checkout' ),
+				'enterQuantity'    => __( 'Please enter a valid quantity', 'wp-express-checkout' ),
+				'enterAmount'      => __( 'Please enter a valid amount', 'wp-express-checkout' ),
+				'acceptTos'        => __( 'Please accept the terms and conditions', 'wp-express-checkout' ),
 				'paymentCompleted' => __( 'Payment Completed', 'wp-express-checkout' ),
 				'redirectMsg'      => __( 'You are now being redirected to the order summary page.', 'wp-express-checkout' ),
 				'strRemoveCoupon'  => __( 'Remove coupon', 'wp-express-checkout' ),

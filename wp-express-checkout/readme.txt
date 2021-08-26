@@ -2,9 +2,9 @@
 Contributors: Tips and Tricks HQ, dikiy_forester, alexanderfoxc, mbrsolution, Ivy2120, chanelstone
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
-Requires at least: 5.0
+Requires at least: 5.6
 Tested up to: 5.8
-Stable tag: 2.0.1
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,24 +34,30 @@ https://www.youtube.com/watch?v=RHVgGQWhCT0
 = Features =
 
 * Sell products or services using a quick checkout process.
-* Sell files, digital goods or downloads.
+* Sell downloads, files, or any digital goods.
 * Sell music, video, ebook, PDF or any other digital media files.
-* Allow the customers to automatically download the file once the purchase is complete via PayPal.
+* Accept PayPal donation with minimum donation amount limit.
+* Allow the customers to automatically download the file once the purchase is completed via PayPal.
 * View the transactions from your WordPress admin dashboard.
-* Option to configure a notification email to be sent to the buyer and seller after the purchase.
+* Option to configure a notification email to be sent to the buyer and the seller after the purchase.
 * Ability to set a product thumbnail for a product.
 * Use a simple shortcode to add a payment button anywhere on your site.
 * Create a PayPal payment button widget and add it to your sidebar.
 * Ability for a customer to enter an amount and pay what they want for a product.
 * Ability to configure variable products. You can charge different amount for different options of the product.
 * Can be used to accept donation.
+* Option to configure a minimum donation amount so the customers have to pay a minimum amount for donation.
 * Option to customize the currency formatting.
 * Option to charge shipping for your items. Ability to set a shipping cost for each item separately.
 * Option to charge tax for your items.
 * Option to configure discount coupon codes.
 * Option to configure terms and conditions before checkout.
+* You can see all the orders within your WordPress admin dashboard.
+* Option to customize the Thank You page.
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
+
+You can also accept payment using [PayPal's Pay in 4](https://www.paypal.com/us/webapps/mpp/pay-in-4) feature (buy now pay later offering).
 
 = Shortcode Attributes =
 
@@ -114,36 +120,27 @@ None
 
 == Changelog ==
 
-= WIP since 2.0.1 to 2021-07-30 =
-* Missing some translations strings. Fixes #18
-* Fixed WP 5.0 backward incompatibility issue
+= WIP since 2.1.1 to 2021-08-25 =
+* Added Tools page and section "Send Email to Customers".
+* Added Order Downloads meta box.
+= END WIP =
+
+= 2.1.1 =
+* Added new product type called "Donation".
+* The donation type product can be used to specify a minimum donation amount. This forces the customers to enter a minimum donation amount.
+* The documentation for the new Thank You page customization shortcode is now available. [View the documentation here](https://wp-express-checkout.com/thank-you-page-customization/).
+* Fixed and issue with the 'Allow customers to specify quantity' option.
+
+= 2.1.0 =
+* Added some missing translations strings.
+* Fixed WP 5.0 backward incompatibility issue.
 * Added `Order_Tags_Html` class to generate order tags with HTML output. Later it will used as the parent class for email tags generator with plain text output.
-* Use `$content` parameter in `[wpec_thank_you shortcode]` callback:
-  - Added template `content-thank-you.php` for default shortcode output
-  - Use `$content` parameter if not empty, otherwise fallback to default template
-* Added Thank You parts shortcodes - `[wpec_ty].
-* Usages:
-  - `[wpec_ty field=first_name]`
-  - `[wpec_ty field=last_name]`
-  - `[wpec_ty field=first_name]`
-  - `[wpec_ty field=product_details]`
-  - `[wpec_ty field=transaction_id]`
-  - `[wpec_ty field=purchase_amt]`
-  - `[wpec_ty field=purchase_date]`
-  - `[wpec_ty field=currency_code]`
-  - `[wpec_ty field=coupon_code]`
-  - `[wpec_ty field=address]`
-  - `[wpec_ty field=order_id]`
-  - `[wpec_ty field=download_link]`.
-* `[wpec_ty_downloads]` - a wrapper for Downloads section.
-* Added template 'content-thank-you-downloads.php' - as default content for `[wpec_ty_downloads]`
-* Minor text update
-* Allow to use $content parameter in wpec_thank_you shortcode callback:
+* Added Thank You parts shortcodes that will allow the customization of the Thank you page.
+* Allow the use of $content parameter in wpec_thank_you shortcode callback.
 * Changed to using "require_once" instead of "require" for the inclusion of the "swpm_handle_subsc_ipn.php" file to prevent fatal error.
-* Integrated License Manager plugin. 100% Covered by unti tests.
+* Integrated License Manager plugin. 100% Covered by unit tests.
 * Refactor integrations: - Created Integrations namespace - Moved integrations code to separated folders - 100% cover integrations by unit tests
 * Improved Payment processors.
-= END WIP =
 
 = 2.0.1 =
 * Added filter 'wpec_product_template' - to allow plugins override templates.
