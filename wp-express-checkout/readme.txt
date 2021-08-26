@@ -120,6 +120,11 @@ None
 
 == Changelog ==
 
+= WIP since 2.1.1 to 2021-08-25 =
+* Added Tools page and section "Send Email to Customers".
+* Added Order Downloads meta box.
+= END WIP =
+
 = 2.1.1 =
 * Added new product type called "Donation".
 * The donation type product can be used to specify a minimum donation amount. This forces the customers to enter a minimum donation amount.

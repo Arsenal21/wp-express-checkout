@@ -14,6 +14,7 @@ return array(
     'WP_Express_Checkout\\Admin\\Orders_Meta_Boxes' => $baseDir . '/admin/includes/class-orders-meta-boxes.php',
     'WP_Express_Checkout\\Admin\\Products_List' => $baseDir . '/admin/includes/class-products-list.php',
     'WP_Express_Checkout\\Admin\\Products_Meta_Boxes' => $baseDir . '/admin/includes/class-products-meta-boxes.php',
+    'WP_Express_Checkout\\Admin\\Tools' => $baseDir . '/admin/class-tools.php',
     'WP_Express_Checkout\\Blocks\\Dynamic_Block' => $baseDir . '/includes/blocks/class-dynamic-block.php',
     'WP_Express_Checkout\\Blocks\\Product_Block' => $baseDir . '/includes/blocks/product-block/class-product-block.php',
     'WP_Express_Checkout\\Coupons' => $baseDir . '/includes/class-coupons.php',

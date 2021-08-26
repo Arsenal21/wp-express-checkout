@@ -50,6 +50,7 @@ function wpec_load_classes() {
 	// Load admin side class
 	if ( is_admin() ) {
 		WP_Express_Checkout\Admin\Admin::get_instance();
+		WP_Express_Checkout\Admin\Tools::get_instance();
 		new WP_Express_Checkout\Coupons();
 		new WP_Express_Checkout\Admin\Orders_Meta_Boxes();
 	}
