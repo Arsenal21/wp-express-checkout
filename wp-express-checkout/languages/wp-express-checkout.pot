@@ -684,7 +684,7 @@ msgid "Email Body"
 msgstr ""
 
 #: admin/class-tools.php:141
-msgid "Type you email and hit the Send Email button."
+msgid "Type your email and hit the Send Email button."
 msgstr ""
 
 #: admin/class-tools.php:159

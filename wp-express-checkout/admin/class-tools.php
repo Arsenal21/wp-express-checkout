@@ -138,7 +138,7 @@ class Tools extends Admin {
 			array(
 				'field' => 'email_body',
 				'type'  => 'textarea',
-				'desc'  => __( 'Type you email and hit the Send Email button.', 'wp-express-checkout' ),
+				'desc'  => __( 'Type your email and hit the Send Email button.', 'wp-express-checkout' ),
 			)
 		);
 		add_settings_field(
@@ -191,7 +191,7 @@ class Tools extends Admin {
 	public function send_email_section_callback() {
 		?>
 		<p class="description">
-			<?php esc_html_e( 'You can use this section to send a quick email to your customer. If you want to send a download link for an order, then first get links on the user processed order page.', 'wp-express-checkout' ); ?>
+			<?php esc_html_e( 'You can use this feature to send a quick email to your customers. If you want to re-send a download link for an order, first get the download link(s) from the Orders menu of the order in question, then email it to them using the following option.', 'wp-express-checkout' ); ?>
 		</p>
 		<?php
 	}
