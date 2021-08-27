@@ -52,6 +52,8 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WP_Express_Checkout\\Integrations\\Emember' => __DIR__ . '/../..' . '/includes/integrations/emember/class-emember.php',
         'WP_Express_Checkout\\Integrations\\License_Manager' => __DIR__ . '/../..' . '/includes/integrations/license-manager/class-license-manager.php',
         'WP_Express_Checkout\\Integrations\\Simple_WP_Membership' => __DIR__ . '/../..' . '/includes/integrations/simple-wp-membership/class-simple-wp-membership.php',
+        'WP_Express_Checkout\\Integrations\\WooCommerce_Gateway' => __DIR__ . '/../..' . '/includes/integrations/woocommerce/class-woocommerce-gateway.php',
+        'WP_Express_Checkout\\Integrations\\WooCommerce_Payment_Processor' => __DIR__ . '/../..' . '/includes/integrations/woocommerce/class-woocommerce-payment-processor.php',
         'WP_Express_Checkout\\Main' => __DIR__ . '/../..' . '/public/class-main.php',
         'WP_Express_Checkout\\Order' => __DIR__ . '/../..' . '/includes/class-order.php',
         'WP_Express_Checkout\\Order_Summary_Plain' => __DIR__ . '/../..' . '/includes/class-order-summary-plain.php',
