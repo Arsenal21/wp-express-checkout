@@ -120,7 +120,7 @@ None
 
 == Changelog ==
 
-= WIP since 2.1.1 to 2021-08-25 =
+= WIP since 2.1.1 to 2021-08-30 =
 * Added Tools page and section "Send Email to Customers".
 * Added Order Downloads meta box.
 * Woocommerce checkout integration.

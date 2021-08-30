@@ -18,6 +18,15 @@ class Tools extends Admin {
 	private static $instance = null;
 
 	/**
+	 * The options name associated with current page.
+	 *
+	 * @since 2.1.2
+	 *
+	 * @var string
+	 */
+	protected $option_name = 'wpec-tools';
+
+	/**
 	 * Return an instance of this class.
 	 *
 	 * @since     2.1.2
@@ -39,10 +48,7 @@ class Tools extends Admin {
 	 *
 	 * @since     2.1.2
 	 */
-	public function enqueue_admin_styles() {
-		//$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		//wp_enqueue_style( $this->plugin_slug . '-admin-styles', WPEC_PLUGIN_URL . "/assets/css/admin{$min}.css", array(), WPEC_PLUGIN_VER );
-	}
+	public function enqueue_admin_styles() {}
 
 	/**
 	 * Register and enqueue admin-specific JavaScript.
@@ -51,17 +57,7 @@ class Tools extends Admin {
 	 *
 	 * @return    null    Return early if no settings page is registered.
 	 */
-	public function enqueue_admin_scripts() {
-
-		/*if ( ! isset( $this->plugin_screen_hook_suffix ) ) {
-			return;
-		}
-
-		$screen = get_current_screen();
-		if ( $this->plugin_screen_hook_suffix === $screen->id ) {
-			wp_enqueue_script( $this->plugin_slug . '-admin-script', WPEC_PLUGIN_URL . '/assets/js/admin.js', array( 'jquery' ), WPEC_PLUGIN_VER );
-		}*/
-	}
+	public function enqueue_admin_scripts() {}
 
 	/**
 	 * Register the administration menu for this plugin into the WordPress Dashboard menu.
@@ -89,73 +85,66 @@ class Tools extends Admin {
 	 * Register Admin page settings
 	 */
 	public function register_settings() {
+		//delete_option('wpec-tools');
 		/* Register the settings */
+		register_setting( 'wpec-tools-group', $this->option_name, array( $this, 'settings_sanitize_field_callback' ) );
 		/* Add the sections */
 		add_settings_section( 'wpec-email-tools-section', __( 'Send Email to Customers', 'wp-express-checkout' ), array( $this, 'send_email_section_callback' ), 'wpec-tools-page-emails' );
 		/* Add the settings fields */
 
-		$post = stripslashes_deep( $_POST );
-		$wpec = Main::get_instance();
-
-		if ( ! empty( $post['ppdg-settings'] ) ) {
-			$post    = $post['ppdg-settings'];
-		}
-
-		$to      = ! empty( $post['to'] ) ? wp_kses_data( $post['to'] ) : '';
-		$from    = ! empty( $post['from'] ) ? $post['from'] : $wpec->get_setting( 'buyer_from_email' );
-		$subject = ! empty( $post['email_subject'] ) ? wp_kses_data( $post['email_subject'] ) : '';
-		$body    = ! empty( $post['email_body'] ) ? $post['email_body'] : '';
+		$defaults = $this->get_defaults();
 
 		add_settings_field(
-			'from',
+			'customer_email_from',
 			__( 'From Email Address', 'wp-express-checkout' ),
 			array( $this, 'settings_field_callback' ),
 			'wpec-tools-page-emails',
 			'wpec-email-tools-section',
 			array(
-				'field'   => 'from',
-				'type'    => 'text',
-				'desc'    => __( 'This email will appear in the from field of the email.', 'wp-express-checkout' ),
-				'default' => $from,
+				'field'    => 'customer_email_from',
+				'type'     => 'text',
+				'desc'     => __( 'This email will appear in the from field of the email.', 'wp-express-checkout' ),
+				'default'  => $defaults['customer_email_from'],
+				'required' => true,
 			)
 		);
 		add_settings_field(
-			'to',
+			'customer_email_to',
 			__( 'To Email Address', 'wp-express-checkout' ),
 			array( $this, 'settings_field_callback' ),
 			'wpec-tools-page-emails',
 			'wpec-email-tools-section',
 			array(
-				'field'   => 'to',
-				'type'    => 'text',
-				'desc'    => __( 'This is the email address where the email with be sent to.', 'wp-express-checkout' ),
-				'default' => $to,
+				'field'    => 'customer_email_to',
+				'type'     => 'email',
+				'desc'     => __( 'This is the email address where the email with be sent to.', 'wp-express-checkout' ),
+				'required' => true,
 			)
 		);
 		add_settings_field(
-			'email_subject',
+			'customer_email_subject',
 			__( 'Email Subject', 'wp-express-checkout' ),
 			array( $this, 'settings_field_callback' ),
 			'wpec-tools-page-emails',
 			'wpec-email-tools-section',
 			array(
-				'field'   => 'email_subject',
-				'type'    => 'text',
-				'desc'    => __( 'This is the email subject', 'wp-express-checkout' ),
-				'default' => $subject,
+				'field'    => 'customer_email_subject',
+				'type'     => 'text',
+				'desc'     => __( 'This is the email subject', 'wp-express-checkout' ),
+				'required' => true,
 			)
 		);
 		add_settings_field(
-			'email_body',
+			'customer_email_body',
 			__( 'Email Body', 'wp-express-checkout' ),
 			array( $this, 'settings_field_callback' ),
 			'wpec-tools-page-emails',
 			'wpec-email-tools-section',
 			array(
-				'field'   => 'email_body',
-				'type'    => 'textarea',
-				'desc'    => __( 'Type your email and hit the Send Email button.', 'wp-express-checkout' ),
-				'default' => $body,
+				'field'    => 'customer_email_body',
+				'type'     => 'textarea',
+				'desc'     => __( 'Type your email and hit the Send Email button.', 'wp-express-checkout' ),
+				'required' => true,
 			)
 		);
 		add_settings_field(
@@ -166,16 +155,38 @@ class Tools extends Admin {
 			'wpec-email-tools-section'
 		);
 
-		if ( ! empty( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'wpec-tools-page-emails' ) ) {
+	}
 
-			if ( empty( $post['to'] ) || ! is_email( $post['to'] ) ) {
-				$this->add_admin_notice( __( 'To Email Address is invalid!' ), 'error' );
-				return;
-			}
+	/**
+	 * Validates the admin data
+	 *
+	 * @param array $input An array of options input.
+	 */
+	public function settings_sanitize_field_callback( $input ) {
+		global $wp_settings_errors;
 
-			$body = wp_kses_post( $body );
+		$output = array(
+			'customer_email_from' => stripslashes( $input['customer_email_from'] ),
+			'customer_email_body' => stripslashes( $input['customer_email_body'] ),
+		);
 
-			if ( 'html' === $wpec->get_setting( 'buyer_email_type' ) ) {
+		$input  = parent::settings_sanitize_field_callback( $input );
+		$output = array_merge( $input, $output );
+
+		if ( ! empty( $_POST['_wpnonce'] )
+			&& wp_verify_nonce( $_POST['_wpnonce'], 'wpec-tools-group-options' )
+			&& ! empty( $_POST['ppdg_page_tab'] )
+			&& 'wpec-tools-page-emails' === $_POST['ppdg_page_tab']
+			&& empty( $wp_settings_errors )
+		) {
+
+			$options = get_option( $this->option_name );
+			$to      = $options['customer_email_to'];
+			$from    = $options['customer_email_from'];
+			$subject = $options['customer_email_subject'];
+			$body    = $options['customer_email_body'];
+
+			if ( 'html' === Main::get_instance()->get_setting( 'buyer_email_type' ) ) {
 				$headers[] = 'Content-Type: text/html; charset=UTF-8';
 				$body = nl2br( $body );
 			} else {
@@ -194,6 +205,7 @@ class Tools extends Admin {
 			}
 		}
 
+		return $output;
 	}
 
 	public function send_email_section_callback() {
@@ -225,5 +237,19 @@ class Tools extends Admin {
 	 * @param string[] $links An array of plugin action links.
 	 */
 	public function add_action_links( $links ) {}
+
+	/**
+	 * Retrieves default settings
+	 *
+	 * @return array
+	 */
+	protected function get_defaults() {
+		return array(
+			'customer_email_to'      => '',
+			'customer_email_from'    => Main::get_instance()->get_setting( 'buyer_from_email' ),
+			'customer_email_subject' => '',
+			'customer_email_body'    => '',
+		);
+	}
 
 }

@@ -27,6 +27,15 @@ class Admin {
 	protected $plugin_screen_hook_suffix = null;
 
 	/**
+	 * The options name associated with current page.
+	 *
+	 * @since 2.1.2
+	 *
+	 * @var string
+	 */
+	protected $option_name = 'ppdg-settings';
+
+	/**
 	 * Initialize the plugin by loading admin scripts & styles and adding a
 	 * settings page and menu.
 	 *
@@ -166,7 +175,7 @@ class Admin {
 		$wpec = Main::get_instance();
 
 		/* Register the settings */
-		register_setting( 'ppdg-settings-group', 'ppdg-settings', array( $this, 'settings_sanitize_field_callback' ) );
+		register_setting( 'ppdg-settings-group', $this->option_name, array( $this, 'settings_sanitize_field_callback' ) );
 
 		/* Add the sections */
 		add_settings_section( 'ppdg-global-section', __( 'Global Settings', 'wp-express-checkout' ), null, $this->plugin_slug );
@@ -465,12 +474,21 @@ class Admin {
 	}
 
 	/**
+	 * Retrieves default settings
+	 *
+	 * @return array
+	 */
+	protected function get_defaults() {
+		return Main::get_defaults();
+	}
+
+		/**
 	 * Settings HTML
 	 *
 	 * @param array $args Field arguments passed into the add_settings_field().
 	 */
 	public function settings_field_callback( $args ) {
-		$settings = (array) get_option( 'ppdg-settings', Main::get_defaults() );
+		$settings = (array) get_option( $this->option_name, $this->get_defaults() );
 		$defaults = array(
 			'type'        => 'text',
 			'field'       => '',
@@ -484,7 +502,7 @@ class Admin {
 			'default'     => '',
 		);
 
-		$settings = array_merge( Main::get_defaults(), $settings );
+		$settings = array_merge( $this->get_defaults(), $settings );
 		$args     = wp_parse_args( $args, $defaults );
 
 		extract( $args );
@@ -495,15 +513,15 @@ class Admin {
 
 		switch ( $type ) {
 			case 'checkbox':
-				echo "<input type='checkbox' id='wp-ppdg-{$field}' name='ppdg-settings[{$field}]' {$_class} value='1' " . ( $field_value ? 'checked=checked' : '' ) . ' />';
+				echo "<input type='checkbox' id='wp-ppdg-{$field}' name='{$this->option_name}[{$field}]' {$_class} value='1' " . ( $field_value ? 'checked=checked' : '' ) . ' />';
 				break;
 			case 'checkboxes':
 				foreach ( $vals as $key => $value ) {
-					echo '<label><input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="ppdg-settings[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>' . $texts[ $key ] . '</label> ';
+					echo '<label><input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>' . $texts[ $key ] . '</label> ';
 				}
 				break;
 			case 'select':
-				echo '<select id="wp-ppdg-' . $field . '" ' . $_class . ' name="ppdg-settings[' . $field . ']">';
+				echo '<select id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . ']">';
 				$opts = '';
 				foreach ( $vals as $key => $value ) {
 					$opts .= '<option value="' . $value . '"' . ( $value === $field_value ? ' selected' : '' ) . '>' . $texts[ $key ] . '</option>';
@@ -513,11 +531,11 @@ class Admin {
 				break;
 			case 'radio':
 				foreach ( $vals as $key => $value ) {
-					echo '<label><input type="radio" id="wp-ppdg-' . $field . '" ' . $_class . ' name="ppdg-settings[' . $field . ']" value="' . $value . '"' . ( $value === $field_value ? ' checked' : ( ( empty( $field_value ) && $value === "vertical" ) ? ' checked' : '' ) ) . '>' . $texts[ $key ] . '</label> ';
+					echo '<label><input type="radio" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . ']" value="' . $value . '"' . ( $value === $field_value ? ' checked' : ( ( empty( $field_value ) && $value === "vertical" ) ? ' checked' : '' ) ) . '>' . $texts[ $key ] . '</label> ';
 				}
 				break;
 			case 'textarea':
-				echo "<textarea name='ppdg-settings[{$field}]' id='wp-ppdg-{$field}' {$_class} style='width:100%;' rows='7'>" . esc_textarea( $field_value ) . '</textarea>';
+				echo "<textarea name='{$this->option_name}[{$field}]' id='wp-ppdg-{$field}' {$_class} style='width:100%;' rows='7'>" . esc_textarea( $field_value ) . '</textarea>';
 				break;
 			case 'editor':
 				add_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
@@ -525,17 +543,17 @@ class Admin {
 					html_entity_decode( $field_value ),
 					$field,
 					array(
-						'textarea_name' => "ppdg-settings[{$field}]",
+						'textarea_name' => "{$this->option_name}[{$field}]",
 						'teeny'         => true,
 					)
 				);
 				remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
 				break;
 			case 'number':
-				echo "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='ppdg-settings[{$field}]' value='{$field_value}' size='{$size}' step='{$step}' min='{$min}' />";
+				echo "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='{$this->option_name}[{$field}]' value='{$field_value}' size='{$size}' step='{$step}' min='{$min}' />";
 				break;
 			default:
-				echo "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='ppdg-settings[{$field}]' value='{$field_value}' size='{$size}' />";
+				echo "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='{$this->option_name}[{$field}]' value='{$field_value}' size='{$size}' />";
 				break;
 		}
 
@@ -556,8 +574,8 @@ class Admin {
 
 		$action_type = 'updated';
 
-		$defaults = Main::get_defaults();
-		$output   = array_merge( $defaults, get_option( 'ppdg-settings' ) );
+		$defaults = $this->get_defaults();
+		$output   = array_merge( $defaults, get_option( $this->option_name, array() ) );
 
 		// We can't validate fields if we don't know the current page tab.
 		if ( ! isset( $_POST['ppdg_page_tab'] ) || ! isset( $wp_settings_fields[ $_POST['ppdg_page_tab'] ] ) ) {
@@ -578,7 +596,7 @@ class Admin {
 				if ( ! empty( $args['args']['required'] ) && empty( $input[ $field ] ) ) {
 					/* translators: "%s" - field title */
 					$message = sprintf( __( 'You must specify "%s".', 'wp-express-checkout' ), $args['title'] );
-					add_settings_error( 'ppdg-settings', 'invalid-' . $field, $message );
+					add_settings_error( $this->option_name, 'invalid-' . $field, $message );
 					$action_type = 'error';
 				}
 
