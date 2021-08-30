@@ -68,19 +68,16 @@ if ( ! current_user_can( 'manage_options' ) ) {
 				<?php
 				if ( isset( $_GET['action'] ) ) {
 					$action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : '';
-					echo '<form method="post" action="">';
-					wp_nonce_field( "wpec-tools-page-{$action}" );
 					/**
 					 * Fires on the custom tols tab.
 					 * Dynamic portion of the hook name refers to current tab slug (action).
 					 */
 					do_action( "wpec_tools_tab_{$action}" );
-					echo '</form>';
 				} else {
-					echo '<form method="post" action="">';
-					wp_nonce_field( 'wpec-tools-page-emails' );
+					echo '<form method="post" action="options.php">';
+					settings_fields( 'wpec-tools-group' );
 					$wpec_admin->do_settings_sections( 'wpec-tools-page-emails' );
-					echo "<input type='hidden' name='wpec_tools_page_tab' value='" . esc_attr( 'wpec-tools-page-emails' ) . "' />";
+					echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'wpec-tools-page-emails' ) . "' />";
 					echo '</form>';
 				}
 				?>
