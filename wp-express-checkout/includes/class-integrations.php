@@ -17,6 +17,13 @@ class Integrations {
 		if ( defined( 'WP_LICENSE_MANAGER_VERSION' ) ) {
 			new Integrations\License_Manager();
 		}
+
+		// WooCommerce integration.
+		if ( class_exists( 'WC_Payment_Gateway' ) ) {
+			new Integrations\WooCommerce_Payment_Processor();
+			add_filter( 'woocommerce_payment_gateways', array( 'WP_Express_Checkout\Integrations\WooCommerce_Gateway', 'add_wc_gateway_class' ) );
+		}
+
 		// Subscriptions addon integration.
 		if ( defined( 'WPEC_SUB_PLUGIN_VER' ) ) {
 			add_filter( 'wpec_product_type_subscription', array( $this, 'fallback_subscription_type' ), 999999 );
