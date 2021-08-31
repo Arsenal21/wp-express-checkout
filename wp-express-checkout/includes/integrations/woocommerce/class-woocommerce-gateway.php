@@ -24,7 +24,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	public function __construct() {
 		$this->id                 = 'wp-express-checkout';
 		$this->method_title       = __( 'WP Express Checkout Gateway', 'wp-express-checkout' );
-		$this->method_description = __( 'Use WP Express Checkout plugin to process payments via PayPal Express form', 'wp-express-checkout' );
+		$this->method_description = __( 'Use the WP Express Checkout plugin to process payments via PayPal Express Checkout API.', 'wp-express-checkout' );
 		$this->notify_url         = WC()->api_request_url( 'wp_express_checkout' );
 
 		$this->wpec = Main::get_instance();
