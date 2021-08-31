@@ -166,8 +166,8 @@ class Tools extends Admin {
 		global $wp_settings_errors;
 
 		$output = array(
-			'customer_email_from' => stripslashes( $input['customer_email_from'] ),
-			'customer_email_body' => stripslashes( $input['customer_email_body'] ),
+			'customer_email_from' => ! empty( $_POST[ $this->option_name ]['customer_email_from'] ) ? stripslashes( $_POST[ $this->option_name ]['customer_email_from'] ) : '',
+			'customer_email_body' => ! empty( $_POST[ $this->option_name ]['customer_email_body'] ) ? stripslashes( $_POST[ $this->option_name ]['customer_email_body'] ) : '',
 		);
 
 		$input  = parent::settings_sanitize_field_callback( $input );
@@ -180,11 +180,10 @@ class Tools extends Admin {
 			&& empty( $wp_settings_errors )
 		) {
 
-			$options = get_option( $this->option_name );
-			$to      = $options['customer_email_to'];
-			$from    = $options['customer_email_from'];
-			$subject = $options['customer_email_subject'];
-			$body    = $options['customer_email_body'];
+			$to      = $output['customer_email_to'];
+			$from    = $output['customer_email_from'];
+			$subject = $output['customer_email_subject'];
+			$body    = $output['customer_email_body'];
 
 			if ( 'html' === Main::get_instance()->get_setting( 'buyer_email_type' ) ) {
 				$headers[] = 'Content-Type: text/html; charset=UTF-8';
@@ -226,6 +225,12 @@ class Tools extends Admin {
 	 * @since    2.1.2
 	 */
 	public function display_plugin_admin_page() {
+		// Asked to remove "Settings saved" message on the Tools page.
+		$settings_errors = get_transient( 'settings_errors' );
+		if ( ! empty( $settings_errors[0]['code'] ) && 'settings_updated' === $settings_errors[0]['code'] ) {
+			unset( $settings_errors[0] );
+			set_transient( 'settings_errors', $settings_errors, 30 );
+		}
 		include_once 'views/tools.php';
 	}
 
