@@ -45,11 +45,4 @@
 			<?php echo sprintf( __( 'Check out <a target="_blank" href="%s">our other plugins</a>', 'wp-express-checkout' ), 'https://www.tipsandtricks-hq.com/development-center' ); ?>
 		</div>
 	</div>
-	<div class="postbox" style="min-width: inherit;">
-		<h3 class="hndle"><label for="title"><?php _e( 'Social', 'wp-express-checkout' ); ?></label></h3>
-		<div class="inside">
-			<?php echo sprintf( __( '<a target="_blank" href="%s">Facebook</a>', 'wp-express-checkout' ), 'https://www.facebook.com/Tips-and-Tricks-HQ-681802408532789/' ); ?> |
-			<?php echo sprintf( __( '<a target="_blank" href="%s">Twitter</a>', 'wp-express-checkout' ), 'https://twitter.com/TipsAndTricksHQ' ); ?>
-		</div>
-	</div>
 </div>

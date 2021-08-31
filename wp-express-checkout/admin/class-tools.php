@@ -5,6 +5,7 @@ namespace WP_Express_Checkout\Admin;
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Products;
 use WP_Express_Checkout\Admin\Admin;
+use WP_Express_Checkout\Debug\Logger;
 
 class Tools extends Admin {
 
@@ -199,6 +200,7 @@ class Tools extends Admin {
 
 			if ( $result ) {
 				$this->add_admin_notice( __( 'Email successfully sent!' ), 'success' );
+				Logger::log( 'Tools menu - Email sent to: ' . $to);
 			} else {
 				$this->add_admin_notice( __( 'Something went wrong, email is not sent!' ), 'error' );
 			}

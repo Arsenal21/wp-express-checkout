@@ -462,7 +462,7 @@ class Admin {
 	 */
 	public function debug_logging_note() {
 		echo '<p><i>';
-		_e( 'Debug logging can be useful to troubleshoot transaction processing related issues on your site.', 'wp-express-checkout' );
+		_e( 'Debug logging can be useful to troubleshoot transaction processing related issues on your site. keep it disabled unless you are troubleshooting.', 'wp-express-checkout' );
 		echo '</p></i>';
 	}
 
@@ -595,7 +595,7 @@ class Admin {
 				// Validate required fields.
 				if ( ! empty( $args['args']['required'] ) && empty( $input[ $field ] ) ) {
 					/* translators: "%s" - field title */
-					$message = sprintf( __( 'You must specify "%s".', 'wp-express-checkout' ), $args['title'] );
+					$message = sprintf( __( 'You must specify a value in the "%s" field.', 'wp-express-checkout' ), $args['title'] );
 					add_settings_error( $this->option_name, 'invalid-' . $field, $message );
 					$action_type = 'error';
 				}
