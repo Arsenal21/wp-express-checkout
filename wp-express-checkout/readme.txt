@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
 Requires at least: 5.6
 Tested up to: 5.8
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,11 +120,10 @@ None
 
 == Changelog ==
 
-= WIP since 2.1.1 to 2021-08-30 =
-* Added Tools page and section "Send Email to Customers".
-* Added Order Downloads meta box.
-* Woocommerce checkout integration.
-= END WIP =
+= 2.1.2 =
+* Added a section in the Orders menu to show the download link for the item that was purchased.
+* Added Tools menu that will allow the site admin to send an email to a customer. Useful for re-sending download links to a customer.
+* Woocommerce checkout integration. We will add usage documentation for it soon.
 
 = 2.1.1 =
 * Added new product type called "Donation".
