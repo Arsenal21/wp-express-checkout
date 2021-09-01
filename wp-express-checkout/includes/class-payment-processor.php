@@ -150,71 +150,11 @@ class Payment_Processor {
 
 		$order_id  = $order->get_id();
 
-		$renderer = new Order_Tags_Plain( $order );
-		$tags     = array_keys( Utils::get_dynamic_tags_white_list() );
-
-		foreach ( $tags as $tag ) {
-			$args[ $tag ] = $renderer->$tag();
-		}
-
-		$headers = array();
-		if ( 'html' === $wpec_plugin->get_setting( 'buyer_email_type' ) ) {
-			$headers[] = 'Content-Type: text/html; charset=UTF-8';
-		}
-
 		// Send email to buyer if enabled.
-		if ( $wpec_plugin->get_setting( 'send_buyer_email' ) ) {
-
-			$buyer_email = $payment['payer']['email_address'];
-			Logger::log( 'Sending buyer notification email.' );
-
-			$from_email = $wpec_plugin->get_setting( 'buyer_from_email' );
-			$subject    = $wpec_plugin->get_setting( 'buyer_email_subj' );
-			$subject    = Utils::apply_dynamic_tags( $subject, $args );
-			$body       = $wpec_plugin->get_setting( 'buyer_email_body' );
-
-			$args['email_body'] = $body;
-
-			$body = Utils::apply_dynamic_tags( $body, $args );
-			$body = apply_filters( 'wpec_buyer_notification_email_body', $body, $payment, $args );
-
-			if ( 'html' === $wpec_plugin->get_setting( 'buyer_email_type' ) ) {
-				$body = nl2br( $body );
-			} else {
-				$body = html_entity_decode( $body );
-			}
-
-			$headers[] = 'From: ' . $from_email . "\r\n";
-
-			wp_mail( $buyer_email, wp_specialchars_decode( $subject, ENT_QUOTES ), $body, $headers );
-
-			Logger::log( 'Buyer email notification sent to: ' . $buyer_email . '. From email address value used: ' . $from_email );
-
-			update_post_meta( $order_id, 'wpec_buyer_email_sent', 'Email sent to: ' . $buyer_email );
-		}
+		Emails::send_buyer_email( $order );
 
 		// Send email to seller if needs.
-		if ( $wpec_plugin->get_setting( 'send_seller_email' ) && ! empty( $wpec_plugin->get_setting( 'notify_email_address' ) ) ) {
-			Logger::log( 'Sending seller notification email.' );
-
-			$notify_email = $wpec_plugin->get_setting( 'notify_email_address' );
-
-			$seller_email_subject = $wpec_plugin->get_setting( 'seller_email_subj' );
-			$seller_email_subject = Utils::apply_dynamic_tags( $seller_email_subject, $args );
-
-			$seller_email_body = $wpec_plugin->get_setting( 'seller_email_body' );
-			$seller_email_body = Utils::apply_dynamic_tags( $seller_email_body, $args );
-			$seller_email_body = apply_filters( 'wpec_seller_notification_email_body', $seller_email_body, $payment, $args );
-
-			if ( 'html' === $wpec_plugin->get_setting( 'buyer_email_type' ) ) {
-				$seller_email_body = nl2br( $seller_email_body );
-			} else {
-				$seller_email_body = html_entity_decode( $seller_email_body );
-			}
-
-			wp_mail( $notify_email, wp_specialchars_decode( $seller_email_subject, ENT_QUOTES ), $seller_email_body, $headers );
-			Logger::log( 'Seller email notification sent to: ' . $notify_email );
-		}
+		Emails::send_seller_email( $order );
 
 		// Trigger the action hook.
 		do_action( 'wpec_payment_completed', $payment, $order_id, $item_id );

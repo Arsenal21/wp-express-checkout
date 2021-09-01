@@ -19,6 +19,7 @@ return array(
     'WP_Express_Checkout\\Blocks\\Product_Block' => $baseDir . '/includes/blocks/product-block/class-product-block.php',
     'WP_Express_Checkout\\Coupons' => $baseDir . '/includes/class-coupons.php',
     'WP_Express_Checkout\\Debug\\Logger' => $baseDir . '/includes/class-logger.php',
+    'WP_Express_Checkout\\Emails' => $baseDir . '/includes/class-emails.php',
     'WP_Express_Checkout\\Init' => $baseDir . '/includes/class-init.php',
     'WP_Express_Checkout\\Integrations' => $baseDir . '/includes/class-integrations.php',
     'WP_Express_Checkout\\Integrations\\Emember' => $baseDir . '/includes/integrations/emember/class-emember.php',
