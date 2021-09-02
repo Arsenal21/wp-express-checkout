@@ -64,9 +64,12 @@ class Init {
 			// user is an admin
 			if ( isset( $_GET['wpec-debug-action'] ) ) {
 				if ( $_GET['wpec-debug-action'] === 'view_log' ) {
-					$logfile = fopen( WPEC_LOG_FILE, 'rb' );
-					header( 'Content-Type: text/plain' );
-					fpassthru( $logfile );
+					$filename = Logger::get_file_name();
+					if ( file_exists( $filename ) ) {
+						$logfile = fopen( Logger::get_file_name(), 'rb' );
+						header( 'Content-Type: text/plain' );
+						fpassthru( $logfile );
+					}
 					die;
 				}
 			}
