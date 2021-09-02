@@ -10,6 +10,8 @@ class Emails {
 	 * Send email notification to buyer if enabled.
 	 *
 	 * @param Order $order Buyer's order object.
+	 *
+	 * @return bool Whether the email was sent successfully.
 	 */
 	public static function send_buyer_email( $order ) {
 		$wpec_plugin = Main::get_instance();
@@ -38,17 +40,25 @@ class Emails {
 		$body = Utils::apply_dynamic_tags( $body, $args );
 		$body = apply_filters( 'wpec_buyer_notification_email_body', $body, $order, $args );
 
-		self::send( $buyer_email, $buyer_email, $subject, $body );
+		$result = self::send( $buyer_email, $buyer_email, $subject, $body );
 
-		Logger::log( 'Buyer email notification sent to: ' . $buyer_email . '. From email address value used: ' . $from_email );
+		if ( $result ) {
+			Logger::log( 'Buyer email notification sent to: ' . $buyer_email . '. From email address value used: ' . $from_email );
 
-		update_post_meta( $order->get_id(), 'wpec_buyer_email_sent', 'Email sent to: ' . $buyer_email );
+			update_post_meta( $order->get_id(), 'wpec_buyer_email_sent', 'Email sent to: ' . $buyer_email );
+		} else {
+			Logger::log( 'Buyer email notification sending failed to: ' . $buyer_email . '. From email address value used: ' . $from_email );
+		}
+
+		return $result;
 	}
 
 	/**
 	 * Send email notification to seller if enabled.
 	 *
 	 * @param Order $order Buyer's order object.
+	 *
+	 * @return bool Whether the email was sent successfully.
 	 */
 	public static function send_seller_email( $order ) {
 		$wpec_plugin = Main::get_instance();
@@ -75,8 +85,15 @@ class Emails {
 		$seller_email_body = Utils::apply_dynamic_tags( $seller_email_body, $args );
 		$seller_email_body = apply_filters( 'wpec_seller_notification_email_body', $seller_email_body, $order, $args );
 
-		self::send( $notify_email, null, $seller_email_subject, $seller_email_body );
-		Logger::log( 'Seller email notification sent to: ' . $notify_email );
+		$result = self::send( $notify_email, null, $seller_email_subject, $seller_email_body );
+
+		if ( $result ) {
+			Logger::log( 'Seller email notification sent to: ' . $notify_email );
+		} else {
+			Logger::log( 'Seller email notification sending failed to: ' . $notify_email );
+		}
+
+		return $result;
 	}
 
 	/**
