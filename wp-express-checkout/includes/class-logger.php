@@ -29,7 +29,7 @@ class Logger {
 			update_option( 'wpec_log_file_name', $log_file );
 		}
 
-		return $log_file;
+		return WPEC_PLUGIN_PATH . $log_file;
 	}
 
 }
