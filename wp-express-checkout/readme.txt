@@ -120,6 +120,12 @@ None
 
 == Changelog ==
 
+= WIP =
+* Added a feature to 'Resend sale notification email' action. You can find it in the "Order Actions" section of the Order in question.
+* Added class Emails to handle all plugin email notifications. Moved all emails related code to new Emails class
+* Changed Filters 'wpec_buyer_notification_email_body' and 'wpec_seller_notification_email_body'. Replaced parameter $payment with $order
+* The debug log file name is auto generated.
+
 = 2.1.2 =
 * Added a section in the Orders menu to show the download link for the item that was purchased.
 * Added Tools menu that will allow the site admin to send an email to a customer. Useful for re-sending download links to a customer.
