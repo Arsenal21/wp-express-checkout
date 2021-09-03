@@ -37,6 +37,24 @@ class ProductsTest extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers WP_Express_Checkout\Products::register_post_type
+	 */
+	public function testRegister_post_type__permissions() {
+		$contributor_id = $this->factory->user->create( [ 'role' => 'contributor' ] );
+		$admin_id       = $this->factory->user->create( [ 'role' => 'administrator' ] );
+
+		$product_id = $this->factory->post->create( [ 'post_type' => Products::$products_slug, 'post_author' => $contributor_id ] );
+
+		$this->assertFalse( user_can( $contributor_id, 'edit_post', $product_id ) );
+		$this->assertTrue( user_can( $admin_id, 'edit_post', $product_id ) );
+
+		$product_id = $this->factory->post->create( [ 'post_type' => Products::$products_slug, 'post_author' => $admin_id ] );
+
+		$this->assertTrue( user_can( $admin_id, 'edit_post', $product_id ) );
+		$this->assertTrue( user_can( $admin_id, 'edit_post', $product_id ) );
+	}
+
+	/**
 	 * @covers WP_Express_Checkout\Products::retrieve
 	 */
 	public function testRetrieve__non_numeric() {

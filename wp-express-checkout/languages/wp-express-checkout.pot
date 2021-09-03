@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Express Checkout 2.1.1\n"
+"Project-Id-Version: WP Express Checkout 2.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-30 07:57:19+00:00\n"
+"POT-Creation-Date: 2021-09-03 06:24:46+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -478,7 +478,7 @@ msgstr ""
 msgid "HTML"
 msgstr ""
 
-#: admin/class-admin.php:332 admin/class-tools.php:99
+#: admin/class-admin.php:332 admin/class-tools.php:101
 msgid "From Email Address"
 msgstr ""
 
@@ -634,7 +634,7 @@ msgstr ""
 #: admin/class-admin.php:465
 msgid ""
 "Debug logging can be useful to troubleshoot transaction processing related "
-"issues on your site."
+"issues on your site. keep it disabled unless you are troubleshooting."
 msgstr ""
 
 #: admin/class-admin.php:473
@@ -645,58 +645,58 @@ msgstr ""
 
 #: admin/class-admin.php:598
 #. translators: "%s" - field title
-msgid "You must specify \"%s\"."
+msgid "You must specify a value in the \"%s\" field."
 msgstr ""
 
-#: admin/class-tools.php:74
+#: admin/class-tools.php:76
 msgid "WP Express Checkout Tools"
 msgstr ""
 
-#: admin/class-tools.php:75
+#: admin/class-tools.php:77
 msgid "Tools"
 msgstr ""
 
-#: admin/class-tools.php:92
+#: admin/class-tools.php:94
 msgid "Send Email to Customers"
 msgstr ""
 
-#: admin/class-tools.php:106
+#: admin/class-tools.php:108
 msgid "This email will appear in the from field of the email."
 msgstr ""
 
-#: admin/class-tools.php:113
+#: admin/class-tools.php:115
 msgid "To Email Address"
 msgstr ""
 
-#: admin/class-tools.php:120
+#: admin/class-tools.php:122
 msgid "This is the email address where the email with be sent to."
 msgstr ""
 
-#: admin/class-tools.php:126
+#: admin/class-tools.php:128
 msgid "Email Subject"
 msgstr ""
 
-#: admin/class-tools.php:133
+#: admin/class-tools.php:135
 msgid "This is the email subject"
 msgstr ""
 
-#: admin/class-tools.php:139
+#: admin/class-tools.php:141
 msgid "Email Body"
 msgstr ""
 
-#: admin/class-tools.php:146
+#: admin/class-tools.php:148
 msgid "Type your email and hit the Send Email button."
 msgstr ""
 
-#: admin/class-tools.php:202
+#: admin/class-tools.php:193 admin/includes/class-orders-meta-boxes.php:289
 msgid "Email successfully sent!"
 msgstr ""
 
-#: admin/class-tools.php:204
+#: admin/class-tools.php:196 admin/includes/class-orders-meta-boxes.php:286
 msgid "Something went wrong, email is not sent!"
 msgstr ""
 
-#: admin/class-tools.php:214
+#: admin/class-tools.php:206
 msgid ""
 "You can use this feature to send a quick email to your customers. If you "
 "want to re-send a download link for an order, first get the download "
@@ -704,7 +704,7 @@ msgid ""
 "them using the following option."
 msgstr ""
 
-#: admin/class-tools.php:220
+#: admin/class-tools.php:212
 msgid "Send Email >>"
 msgstr ""
 
@@ -829,7 +829,7 @@ msgid "Date"
 msgstr ""
 
 #: admin/includes/class-orders-list.php:42
-#: admin/includes/class-orders-meta-boxes.php:120
+#: admin/includes/class-orders-meta-boxes.php:126
 msgid "Status"
 msgstr ""
 
@@ -841,52 +841,60 @@ msgstr ""
 msgid "%s ago"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:31
+#: admin/includes/class-orders-meta-boxes.php:34
 msgid "Order Summary"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:32
+#: admin/includes/class-orders-meta-boxes.php:35
 msgid "Order Downloads"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:33
+#: admin/includes/class-orders-meta-boxes.php:36
+msgid "Order Actions"
+msgstr ""
+
+#: admin/includes/class-orders-meta-boxes.php:37
 msgid "Order Status"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:34
+#: admin/includes/class-orders-meta-boxes.php:38
 msgid "Order Author"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:71
+#: admin/includes/class-orders-meta-boxes.php:77
 msgid "There are no downloads for this order."
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:116
+#: admin/includes/class-orders-meta-boxes.php:122
 #: admin/includes/class-products-list.php:27
 msgid "ID"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:124
+#: admin/includes/class-orders-meta-boxes.php:130
 msgid "Currency"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:128
+#: admin/includes/class-orders-meta-boxes.php:134
 msgid "Order Time"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:132
+#: admin/includes/class-orders-meta-boxes.php:138
 msgid "Transaction ID"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:168
+#: admin/includes/class-orders-meta-boxes.php:169
+msgid "Resend sale notification email"
+msgstr ""
+
+#: admin/includes/class-orders-meta-boxes.php:207
 msgid "N/A"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:192
+#: admin/includes/class-orders-meta-boxes.php:231
 msgid "Billing Address:"
 msgstr ""
 
-#: admin/includes/class-orders-meta-boxes.php:200
+#: admin/includes/class-orders-meta-boxes.php:239
 msgid "Shipping Address:"
 msgstr ""
 
@@ -1282,18 +1290,6 @@ msgstr ""
 msgid "Check out <a target=\"_blank\" href=\"%s\">our other plugins</a>"
 msgstr ""
 
-#: admin/views/sidebar.php:49
-msgid "Social"
-msgstr ""
-
-#: admin/views/sidebar.php:51
-msgid "<a target=\"_blank\" href=\"%s\">Facebook</a>"
-msgstr ""
-
-#: admin/views/sidebar.php:52
-msgid "<a target=\"_blank\" href=\"%s\">Twitter</a>"
-msgstr ""
-
 #: admin/views/tools.php:33
 msgid "General Tools"
 msgstr ""
@@ -1653,12 +1649,12 @@ msgstr ""
 msgid "Payment currency mismatch."
 msgstr ""
 
-#: includes/class-payment-processor.php:237
+#: includes/class-payment-processor.php:177
 #: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:96
 msgid "Error! Thank you page URL configuration is wrong in the plugin settings."
 msgstr ""
 
-#: includes/class-payment-processor.php:303
+#: includes/class-payment-processor.php:243
 #: public/includes/class-shortcodes.php:337
 msgid "Payment is not approved. Status: %s"
 msgstr ""
@@ -1687,15 +1683,15 @@ msgstr ""
 msgid "Search Product"
 msgstr ""
 
-#: includes/class-products.php:71
+#: includes/class-products.php:82
 msgid "Invalid product id given. Must be an integer"
 msgstr ""
 
-#: includes/class-products.php:76
+#: includes/class-products.php:87
 msgid "Can't find product with ID %s"
 msgstr ""
 
-#: includes/class-products.php:109
+#: includes/class-products.php:120
 msgid ""
 "Unknown product type '%s'. Activate the required addon to use this product "
 "type."
@@ -1845,7 +1841,9 @@ msgid "WP Express Checkout Gateway"
 msgstr ""
 
 #: includes/integrations/woocommerce/class-woocommerce-gateway.php:27
-msgid "Use WP Express Checkout plugin to process payments via PayPal Express Checkout API."
+msgid ""
+"Use the WP Express Checkout plugin to process payments via PayPal Express "
+"Checkout API."
 msgstr ""
 
 #: includes/integrations/woocommerce/class-woocommerce-gateway.php:90
