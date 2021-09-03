@@ -31,6 +31,16 @@ class Products {
 			'not_found_in_trash' => __( 'Not found in Trash', 'wp-express-checkout' ),
 		);
 
+		$capabilities = array(
+			'edit_post'          => 'manage_options',
+			'delete_post'        => 'manage_options',
+			'edit_posts'         => 'manage_options',
+			'edit_others_posts'  => 'manage_options',
+			'delete_posts'       => 'manage_options',
+			'publish_posts'      => 'manage_options',
+			'read_private_posts' => 'manage_options',
+		);
+
 		// Using custom dashicon font icon.
 		$menu_icon = 'dashicons-wpec-dashicon-1';
 
@@ -41,6 +51,7 @@ class Products {
 			'public'             => true,
 			'publicly_queryable' => true,
 			'capability_type'    => 'post',
+			'capabilities'       => $capabilities,
 			'query_var'          => true,
 			'has_archive'        => false,
 			'hierarchical'       => false,
