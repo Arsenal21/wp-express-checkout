@@ -3,6 +3,7 @@
 namespace WP_Express_Checkout\Admin;
 
 use Exception;
+use WP_Express_Checkout\Emails;
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Order_Tags_Html;
 use WP_Express_Checkout\Orders;
@@ -25,13 +26,18 @@ class Orders_Meta_Boxes {
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_action( 'admin_menu', array( $this, 'remove_meta_boxes' ) );
 		add_action( 'save_post_' . Orders::PTYPE, array( $this, 'save' ), 10, 3 );
+
+		add_action( 'wp_ajax_wpec_order_action_resend_email', array( $this, 'resend_email_callback' ) );
 	}
 
 	public function add_meta_boxes() {
 		add_meta_box( 'wpec_order_items', __( 'Order Summary', 'wp-express-checkout' ), array( $this, 'display_summary_meta_box' ), Orders::PTYPE, 'normal', 'high' );
 		add_meta_box( 'wpec_order_downloads', __( 'Order Downloads', 'wp-express-checkout' ), array( $this, 'display_downloads_meta_box' ), Orders::PTYPE, 'normal', 'default' );
+		add_meta_box( 'wpec_order_actions', __( 'Order Actions', 'wp-express-checkout' ), array( $this, 'display_actions_meta_box' ), Orders::PTYPE, 'side', 'high' );
 		add_meta_box( 'wpec_order_status', __( 'Order Status', 'wp-express-checkout' ), array( $this, 'display_status_meta_box' ), Orders::PTYPE, 'side', 'high' );
 		add_meta_box( 'wpec_order_author', __( 'Order Author', 'wp-express-checkout' ), array( $this, 'display_author_meta_box' ), Orders::PTYPE, 'side', 'low' );
+
+		wp_enqueue_script( 'wpec-admin-scripts', WPEC_PLUGIN_URL . '/assets/js/admin.js', array(), WPEC_PLUGIN_VER, true );
 	}
 
 	public function display_summary_meta_box( $post ) {
@@ -139,6 +145,39 @@ class Orders_Meta_Boxes {
 	}
 
 	/**
+	 * Displays the order status summary
+	 *
+	 * @param  WP_Post $post Post object
+	 *
+	 * @return void
+	 */
+	public function display_actions_meta_box( $post ){
+
+		try {
+			$order = Orders::retrieve( $post->ID );
+		} catch ( Exception $exc ) {
+			return;
+		}
+		?>
+		<table id="admin-order-status">
+			<tbody>
+				<tr>
+					<td>
+						<a class="button wpec-order-action" data-action="resend_email" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'resend-email' ); ?>" href="#">
+							<span class="dashicons dashicons-email" style="line-height:1.8;font-size:16px;"></span>
+							<span class="wpec-order-action-label">
+								<?php esc_html_e( 'Resend sale notification email', 'wp-express-checkout' ); ?>
+							</span>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<?php
+
+	}
+
+	/**
 	 * Displays the order author box
 	 * @param  object $post Wordpress Post object
 	 * @return void
@@ -229,6 +268,25 @@ class Orders_Meta_Boxes {
 		remove_meta_box( 'submitdiv', Orders::PTYPE, 'side' );
 		remove_meta_box( 'slugdiv', Orders::PTYPE, 'normal' );
 		remove_meta_box( 'authordiv', Orders::PTYPE, 'normal');
+	}
+
+	public function resend_email_callback() {
+
+		check_ajax_referer( 'resend-email', 'nonce' );
+
+		try {
+			$order = Orders::retrieve( $_POST['order'] );
+		} catch ( Exception $exc ) {
+			wp_send_json_error( $exc->getMessage() );
+		}
+
+		$response = Emails::send_buyer_email( $order );
+
+		if ( ! $response ) {
+			wp_send_json_error( __( 'Something went wrong, email is not sent!', 'wp-express-checkout' ) );
+		}
+
+		wp_send_json_success( __( 'Email successfully sent!', 'wp-express-checkout' ) );
 	}
 
 }

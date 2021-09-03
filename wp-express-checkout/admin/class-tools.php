@@ -2,10 +2,11 @@
 
 namespace WP_Express_Checkout\Admin;
 
-use WP_Express_Checkout\Main;
-use WP_Express_Checkout\Products;
 use WP_Express_Checkout\Admin\Admin;
 use WP_Express_Checkout\Debug\Logger;
+use WP_Express_Checkout\Emails;
+use WP_Express_Checkout\Main;
+use WP_Express_Checkout\Products;
 
 class Tools extends Admin {
 
@@ -186,21 +187,11 @@ class Tools extends Admin {
 			$subject = $output['customer_email_subject'];
 			$body    = $output['customer_email_body'];
 
-			if ( 'html' === Main::get_instance()->get_setting( 'buyer_email_type' ) ) {
-				$headers[] = 'Content-Type: text/html; charset=UTF-8';
-				$body = nl2br( $body );
-			} else {
-				$headers = array();
-				$body = html_entity_decode( $body );
-			}
-
-			$headers[] = 'From: ' . $from . "\r\n";
-
-			$result = wp_mail( $to, wp_specialchars_decode( $subject, ENT_QUOTES ), $body, $headers );
+			$result = Emails::send( $to, $from, $subject, $body );
 
 			if ( $result ) {
 				$this->add_admin_notice( __( 'Email successfully sent!' ), 'success' );
-				Logger::log( 'Tools menu - Email sent to: ' . $to);
+				Logger::log( 'Tools menu - Email sent to: ' . $to );
 			} else {
 				$this->add_admin_notice( __( 'Something went wrong, email is not sent!' ), 'error' );
 			}
