@@ -120,6 +120,15 @@ None
 
 == Changelog ==
 
+= WIP since 2.1.2 to 2021-09-03 =
+* Disallow non-admins create and edit Products
+* Added a unique name to the log file
+* Added Order meta box "Order Actions" with 'Resend sale notification email' action.
+* Added class Emails to handle all plugin email notifications.
+* small text change in the woocommerce settings
+
+= END WIP =
+
 = WIP =
 * Added a feature to 'Resend sale notification email' action. You can find it in the "Order Actions" section of the Order in question.
 * Added class Emails to handle all plugin email notifications. Moved all emails related code to new Emails class
