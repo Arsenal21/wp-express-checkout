@@ -7,6 +7,7 @@ use WC_Order;
 use WC_Payment_Gateway;
 use WP_Express_Checkout\Debug\Logger;
 use WP_Express_Checkout\Main;
+use WP_Express_Checkout\Shortcodes;
 
 defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 
@@ -148,7 +149,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 
 		add_filter( 'wpec_paypal_sdk_args', array( $this, 'paypal_sdk_args' ), 10 );
 
-		$button_sc = \WP_Express_Checkout\Shortcodes::get_instance();
+		$button_sc = Shortcodes::get_instance();
 
 		echo $button_sc->generate_pp_express_checkout_button( $form_args );
 
