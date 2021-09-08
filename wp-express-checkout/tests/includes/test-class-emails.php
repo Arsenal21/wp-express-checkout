@@ -43,6 +43,7 @@ class EmailsTest extends \WP_Ajax_UnitTestCase {
 	public function testSend_buyer_email__no_buyer_email() {
 		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_buyer_email' => 1 ] ) );
 		$order = Orders::create();
+		$order->add_data( 'payer', [ 'name' => [ 'given_name' => 'John', 'surname' => 'Connor' ] ] );
 		$result = Emails::send_buyer_email( $order );
 		$this->assertFalse( $result );
 	}
@@ -53,6 +54,7 @@ class EmailsTest extends \WP_Ajax_UnitTestCase {
 	public function testSend_buyer_email__reflects() {
 		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_buyer_email' => 1 ] ) );
 		$order = Orders::create();
+		$order->add_data( 'payer', [ 'name' => [ 'given_name' => 'John', 'surname' => 'Connor' ] ] );
 		$order->set_author_email( 'dummy.buyer@example.com' );
 		$result = Emails::send_buyer_email( $order );
 		$this->assertTrue( $result );
@@ -90,9 +92,10 @@ class EmailsTest extends \WP_Ajax_UnitTestCase {
 	public function testSend_seller_email__not_sent() {
 		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [
 			'send_seller_email' => 1,
-			'notify_email_address' => ['not-an-email']
+			'notify_email_address' => 'not-an-email'
 		] ) );
 		$order = Orders::create();
+		$order->add_data( 'payer', [ 'name' => [ 'given_name' => 'John', 'surname' => 'Connor' ] ] );
 		$result = Emails::send_seller_email( $order );
 		$this->assertFalse( $result );
 	}
@@ -106,6 +109,7 @@ class EmailsTest extends \WP_Ajax_UnitTestCase {
 			'notify_email_address' => 'test@example.com'
 		] ) );
 		$order = Orders::create();
+		$order->add_data( 'payer', [ 'name' => [ 'given_name' => 'John', 'surname' => 'Connor' ] ] );
 		$result = Emails::send_seller_email( $order );
 		$this->assertTrue( $result );
 	}

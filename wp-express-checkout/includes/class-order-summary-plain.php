@@ -13,6 +13,11 @@ class Order_Summary_Plain extends Order_Summary_Table {
 
 		$table_body = '';
 
+		$product_item  = array(
+			'price'    => 0,
+			'quantity' => 0,
+			'name'     => 'n/a',
+		);
 		$product_items = array();
 		$other_items   = array();
 
