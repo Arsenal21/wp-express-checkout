@@ -50,9 +50,9 @@ class Order_Tags_HtmlTest extends WP_UnitTestCase {
 					'given_name' => 'John',
 					'surname' => 'Connor',
 				],
-				'email_address' => 'test@example.com'
 			]
 		);
+		$order->set_author_email( 'johnconnor@sky.net' );
 		$order->add_data( 'state', 'COMPLETED' );
 		$order->add_data( 'shipping_address', 'test shipping address' );
 		$order->add_item( Products::$products_slug, $product_id, $product_id + 42, 1, $product_id );
@@ -94,7 +94,7 @@ class Order_Tags_HtmlTest extends WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Order_Tags_Html::payer_email
 	 */
 	public function testPayer_email() {
-		$this->assertEquals( 'test@example.com', $this->object->payer_email() );
+		$this->assertEquals( 'johnconnor@sky.net', $this->object->payer_email() );
 	}
 
 	/**

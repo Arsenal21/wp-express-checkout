@@ -181,55 +181,6 @@ class Payment_ProcessorTest extends \WP_Ajax_UnitTestCase {
 
 	/**
 	 * @covers WP_Express_Checkout\Payment_Processor::wpec_process_payment
-	 */
-	public function testWpec_process_payment__emails() {
-		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_seller_email' => 1 ] ) );
-
-		try {
-			$this->_handleAjax( 'wpec_process_payment' );
-		} catch ( \WPAjaxDieContinueException $e ) {
-			// We expected this, do nothing.
-		}
-
-		$this->assertTrue( isset( $e ) );
-
-		$this->assertEquals( 2, count( $this->mailer->mock_sent ) );
-	}
-
-	/**
-	 * @covers WP_Express_Checkout\Payment_Processor::wpec_process_payment
-	 */
-	public function testWpec_process_payment__html_emails() {
-		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_seller_email' => 1, 'buyer_email_type' => 'html' ] ) );
-
-		try {
-			$this->_handleAjax( 'wpec_process_payment' );
-		} catch ( \WPAjaxDieContinueException $e ) {
-			// We expected this, do nothing.
-		}
-
-		$this->assertTrue( isset( $e ) );
-		$this->assertContains( 'text/html', $this->mailer->get_sent()->header );
-	}
-
-	/**
-	 * @covers WP_Express_Checkout\Payment_Processor::wpec_process_payment
-	 */
-	public function testWpec_process_payment__no_emails() {
-		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_buyer_email' => 0 ] ) );
-
-		try {
-			$this->_handleAjax( 'wpec_process_payment' );
-		} catch ( \WPAjaxDieContinueException $e ) {
-			// We expected this, do nothing.
-		}
-
-		$this->assertTrue( isset( $e ) );
-		$this->assertEquals( 0, count( $this->mailer->mock_sent ) );
-	}
-
-	/**
-	 * @covers WP_Express_Checkout\Payment_Processor::wpec_process_payment
 	 * @dataProvider payment_args
 	 */
 	public function testWpec_process_payment__reflects( $transaction_id, $quantity, $tax, $shipping, $total, $cust_amount ) {
@@ -240,6 +191,8 @@ class Payment_ProcessorTest extends \WP_Ajax_UnitTestCase {
 		$this->object->_transient['custom_amount'] = $cust_amount;
 		$this->object->_transient['tax'] = $tax;
 		$this->object->_transient['shipping'] = $shipping;
+
+		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_seller_email' => 1 ] ) );
 
 		try {
 			$this->_handleAjax( 'wpec_process_payment' );
@@ -260,6 +213,7 @@ class Payment_ProcessorTest extends \WP_Ajax_UnitTestCase {
 
 		$order = Orders::retrieve( $order_post->post->ID );
 		$this->assertEquals( $transaction_id, $order->get_resource_id() );
+		$this->assertEquals( 2, count( $this->mailer->mock_sent ) );
 	}
 
 	/**
