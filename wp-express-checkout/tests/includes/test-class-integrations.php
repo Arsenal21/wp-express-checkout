@@ -24,6 +24,11 @@ class IntegrationsTest extends \WP_UnitTestCase {
 		if ( ! defined( 'WP_LICENSE_MANAGER_VERSION' ) ) {
 			define( 'WP_LICENSE_MANAGER_VERSION', '1.0-test' );
 		}
+
+		if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
+			require_once WPEC_TESTS_DIR . '/mocks/mock-wc-payment-gateway.php';
+		}
+
 		$this->object = new Integrations;
 	}
 

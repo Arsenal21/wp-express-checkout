@@ -30,31 +30,114 @@ class EmailsTest extends \WP_Ajax_UnitTestCase {
 	/**
 	 * @covers WP_Express_Checkout\Emails::send_buyer_email
 	 */
-	public function testSend_buyer_email() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+	public function testSend_buyer_email__disabled() {
+		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_buyer_email' => 0 ] ) );
+		$order = Orders::create();
+		$result = Emails::send_buyer_email( $order );
+		$this->assertNull( $result );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Emails::send_buyer_email
+	 */
+	public function testSend_buyer_email__no_buyer_email() {
+		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_buyer_email' => 1 ] ) );
+		$order = Orders::create();
+		$order->add_data( 'payer', [ 'name' => [ 'given_name' => 'John', 'surname' => 'Connor' ] ] );
+		$result = Emails::send_buyer_email( $order );
+		$this->assertFalse( $result );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Emails::send_buyer_email
+	 */
+	public function testSend_buyer_email__reflects() {
+		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_buyer_email' => 1 ] ) );
+		$order = Orders::create();
+		$order->add_data( 'payer', [ 'name' => [ 'given_name' => 'John', 'surname' => 'Connor' ] ] );
+		$order->set_author_email( 'dummy.buyer@example.com' );
+		$result = Emails::send_buyer_email( $order );
+		$this->assertTrue( $result );
 	}
 
 	/**
 	 * @covers WP_Express_Checkout\Emails::send_seller_email
 	 */
-	public function testSend_seller_email() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+	public function testSend_seller_email__disabled() {
+		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [
+			'send_seller_email' => 0,
+			'notify_email_address' => 'test@example.com'
+		] ) );
+		$order = Orders::create();
+		$result = Emails::send_seller_email( $order );
+		$this->assertNull( $result );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Emails::send_seller_email
+	 */
+	public function testSend_seller_email__no_seller_address() {
+		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [
+			'send_seller_email' => 1,
+			'notify_email_address' => ''
+		] ) );
+		$order = Orders::create();
+		$result = Emails::send_seller_email( $order );
+		$this->assertNull( $result );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Emails::send_seller_email
+	 */
+	public function testSend_seller_email__not_sent() {
+		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [
+			'send_seller_email' => 1,
+			'notify_email_address' => 'not-an-email'
+		] ) );
+		$order = Orders::create();
+		$order->add_data( 'payer', [ 'name' => [ 'given_name' => 'John', 'surname' => 'Connor' ] ] );
+		$result = Emails::send_seller_email( $order );
+		$this->assertFalse( $result );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Emails::send_seller_email
+	 */
+	public function testSend_seller_email__reflects() {
+		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [
+			'send_seller_email' => 1,
+			'notify_email_address' => 'test@example.com'
+		] ) );
+		$order = Orders::create();
+		$order->add_data( 'payer', [ 'name' => [ 'given_name' => 'John', 'surname' => 'Connor' ] ] );
+		$result = Emails::send_seller_email( $order );
+		$this->assertTrue( $result );
 	}
 
 	/**
 	 * @covers WP_Express_Checkout\Emails::send
 	 */
-	public function testSend() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+	public function testSend__plain() {
+
+		$result = Emails::send( 'to@example.com', 'Dummy sender <from@example.com>', 'test email', "This is a test email \r\n with <strong>HTML</strong>" );
+
+		$this->assertTrue( $result );
+		$this->assertNotContains( 'text/html', $this->mailer->get_sent()->header );
+		$this->assertNotContains( '<br />', $this->mailer->get_sent()->body );
+		$this->assertContains( 'From: Dummy sender <from@example.com>', $this->mailer->get_sent()->header );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Emails::send
+	 */
+	public function testSend__html() {
+		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_seller_email' => 1, 'buyer_email_type' => 'html' ] ) );
+
+		$result = Emails::send( 'to@example.com', 'Dummy sender <from@example.com>', 'test email', "This is a test email \r\n with <strong>HTML</strong>" );
+
+		$this->assertTrue( $result );
+		$this->assertContains( 'text/html', $this->mailer->get_sent()->header );
+		$this->assertContains( '<br />', $this->mailer->get_sent()->body );
 	}
 
 }

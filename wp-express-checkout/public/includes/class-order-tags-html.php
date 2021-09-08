@@ -63,8 +63,7 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function payer_email() {
-		$payer_details = $this->order->get_data( 'payer' );
-		return $payer_details['email_address'];
+		return $this->order->get_info( 'email' );
 	}
 
 	/**

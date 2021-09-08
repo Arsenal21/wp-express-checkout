@@ -40,7 +40,7 @@ class Emails {
 		$body = Utils::apply_dynamic_tags( $body, $args );
 		$body = apply_filters( 'wpec_buyer_notification_email_body', $body, $order, $args );
 
-		$result = self::send( $buyer_email, $buyer_email, $subject, $body );
+		$result = self::send( $buyer_email, $from_email, $subject, $body );
 
 		if ( $result ) {
 			Logger::log( 'Buyer email notification sent to: ' . $buyer_email . '. From email address value used: ' . $from_email );

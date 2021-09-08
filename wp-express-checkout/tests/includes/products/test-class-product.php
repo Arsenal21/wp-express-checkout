@@ -47,6 +47,11 @@ class ProductTest extends WP_UnitTestCase {
 					'wpec_product_button_text' => 'test_button_text',
 					'wpec_product_button_type' => 'test_button_type',
 					'wpec_product_coupons_setting' => '1',
+					'wpec_variations_groups' => [ 'test group' ],
+					'wpec_variations_names' => [ [ 'test group name 1' ] ],
+					'wpec_variations_prices' => [ [ '+1' ] ],
+					'wpec_variations_urls' => [ [ '' ] ],
+					'wpec_variations_opts' => [ [ '0' ]	],
 				],
 			]
 		);
@@ -81,6 +86,14 @@ class ProductTest extends WP_UnitTestCase {
 	public function testSet_resource_id() {
 		$this->object->set_resource_id( 'test_resource_id2' );
 		$this->assertEquals( 'test_resource_id2', $this->object->get_resource_id() );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Products\Product::set_resource_id
+	 */
+	public function testSet_resource_id__not_a_string() {
+		$this->expectException( 'PHPUnit_Framework_Error_Warning' );
+		$this->object->set_resource_id( array( 'not-a-string' ) );
 	}
 
 	/**
@@ -182,10 +195,17 @@ class ProductTest extends WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Products\Product::get_variations
 	 */
 	public function testGet_variations() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
+		$exppected = [
+			[
+				"names"  => [ "test group name 1" ],
+				"prices" => [ "+1" ],
+				"urls"   => [ "" ],
+				"opts"   => [ "0" ],
+			],
+			"groups" => [ "test group" ]
+		];
+
+		$this->assertEquals( $exppected, $this->object->get_variations() );
 	}
 
 }
