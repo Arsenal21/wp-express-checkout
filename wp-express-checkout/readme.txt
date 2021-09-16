@@ -18,8 +18,7 @@ The full checkout takes place in a payment popup window and the customer never l
 
 This is ideal for selling a product or service via PayPal.
 
-This plugin also works with PayPal's Pay in 4 feature. It lets your customers pay later in 4 installments via PayPal.
-https://www.paypal.com/us/webapps/mpp/pay-in-4
+This plugin also works with PayPal's Pay in 4 feature (Buy Now, Pay Later). It lets your customers pay later in 4 installments via PayPal.
 
 View configuration and usage details on the [WP Express Checkout](https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/) plugin's documentation page
 
@@ -57,7 +56,7 @@ https://www.youtube.com/watch?v=RHVgGQWhCT0
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
 
-You can also accept payment using [PayPal's Pay in 4](https://www.paypal.com/us/webapps/mpp/pay-in-4) feature (buy now pay later offering).
+You can also accept payment using [PayPal's Pay in 4](https://www.paypal.com/us/webapps/mpp/pay-in-4) feature (buy now pay later offering). Read the [Buy Now, Pay Later Tutorial](https://wp-express-checkout.com/paypal-pay-in-4-wp-express-checkout-plugin/) to learn more.
 
 = Shortcode Attributes =
 
