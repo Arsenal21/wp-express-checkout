@@ -46,6 +46,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 		}
 		//add_action( 'woocommerce_api_' . strtolower( __CLASS__ ), array( $this, 'check_response' ) );
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
+		add_filter( 'woocommerce_order_button_text', array( $this, 'order_button_text' ) );
 	}
 
 	/**
@@ -180,7 +181,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
-	 * Send payment request to SpankPay gateway
+	 * Send payment request to gateway
 	 *
 	 * @param int $order_id
 	 *
@@ -196,5 +197,8 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 		);
 	}
 
+	public function order_button_text( $text ) {
+		return __( 'Proceed to Make Payment', 'wp-express-checkout' );
+	}
 
 }
