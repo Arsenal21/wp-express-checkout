@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
 Requires at least: 5.6
 Tested up to: 5.8
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,7 @@ https://www.youtube.com/watch?v=RHVgGQWhCT0
 * Option to configure terms and conditions before checkout.
 * You can see all the orders within your WordPress admin dashboard.
 * Option to customize the Thank You page.
+* Can be integrated with WooCommerce to offer product checkout via PayPal's new express checkout system.
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
 
@@ -119,18 +120,13 @@ None
 
 == Changelog ==
 
-= WIP since 2.1.2 to 2021-09-03 =
-* Disallow non-admins create and edit Products
-* Added a unique name to the log file
-* Added Order meta box "Order Actions" with 'Resend sale notification email' action.
-* Added class Emails to handle all plugin email notifications.
-* small text change in the woocommerce settings
-* Added a feature to 'Resend sale notification email' action. You can find it in the "Order Actions" section of the Order in question.
-* Added class Emails to handle all plugin email notifications. Moved all emails related code to new Emails class
-* Changed Filters 'wpec_buyer_notification_email_body' and 'wpec_seller_notification_email_body'. Replaced parameter $payment with $order
-* The debug log file name is auto generated.
-
-= END WIP =
+= 2.1.3 =
+* Added a feature to "Resend sale notification email" action. You can find it in the "Order Actions" section of the Order in question.
+* Added class Emails to handle all plugin email notifications. Moved all emails related code to new Emails class.
+* Only allow admin users to be able to create and edit Products.
+* The debug log file name is auto generated to a unique name.
+* Small text change in the woocommerce integration settings.
+* Changed Filters 'wpec_buyer_notification_email_body' and 'wpec_seller_notification_email_body'. Replaced parameter $payment with $order.
 
 = 2.1.2 =
 * Added a section in the Orders menu to show the download link for the item that was purchased.
