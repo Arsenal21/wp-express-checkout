@@ -90,15 +90,8 @@ var ppecHandler = function( data ) {
 		this.inputs.push( [ input, validator ] );
 
 		input.change( function() {
-			var error = validator( jQuery( this ) );
-			var errMsgCont = input.is( ':checkbox' ) || input.attr( 'type' ) === 'number' ? input.parent().siblings( '.wp-ppec-form-error-msg' ) : input.siblings( '.wp-ppec-form-error-msg' );
-			jQuery( this ).toggleClass( 'hasError', !!error );
-			errMsgCont.html( error );
-			if ( error && errMsgCont.length ) {
-				errMsgCont.fadeIn( 'slow' );
-			} else {
-				errMsgCont.fadeOut( 'fast' );
-			}
+			parent.displayInputError( jQuery( this ), validator );
+			parent.validateOrder();
 		} );
 	};
 
@@ -127,9 +120,21 @@ var ppecHandler = function( data ) {
 		jQuery( document ).trigger( 'wpec_validate_order', [ parent ] );
 	};
 
+	this.displayInputError = function( input, validator ) {
+		var error = validator( input );
+		var errMsgCont = input.is( ':checkbox' ) || input.attr( 'type' ) === 'number' ? input.parent().siblings( '.wp-ppec-form-error-msg' ) : input.siblings( '.wp-ppec-form-error-msg' );
+		input.toggleClass( 'hasError', !!error );
+		errMsgCont.html( error );
+		if ( error && errMsgCont.length ) {
+			errMsgCont.fadeIn( 'slow' );
+		} else {
+			errMsgCont.fadeOut( 'fast' );
+		}
+	};
+
 	this.displayErrors = function() {
 		parent.inputs.forEach( function( input ) {
-			input[ 0 ].change();
+			parent.displayInputError( input[ 0 ], input[ 1 ] );
 		} );
 	};
 
