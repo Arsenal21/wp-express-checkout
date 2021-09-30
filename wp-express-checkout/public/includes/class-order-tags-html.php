@@ -131,6 +131,15 @@ class Order_Tags_Html {
 	}
 
 	/**
+	 * Get Order object
+	 *
+	 * @return Order
+	 */
+	public function get_order() {
+		return $this->order;
+	}
+
+	/**
 	 * Generates download links.
 	 *
 	 * @param array $args {
@@ -171,6 +180,9 @@ class Order_Tags_Html {
 	 * @param string $name      Method to call.
 	 * @param array  $arguments Arguments to pass when calling.
 	 */
-	public function __call( $name, $arguments ) {}
+	public function __call( $name, $arguments ) {
+		$arguments['renderer'] = $this;
+		return apply_filters( 'wpec_render_custom_order_tag', null, $name, $arguments );
+	}
 
 }
