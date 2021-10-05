@@ -446,7 +446,7 @@ var ppecHandler = function( data ) {
 	paypal.Buttons( this.buttonArgs ).render( '#' + parent.data.id );
 };
 
-jQuery( function( $ ) {
+var wpecModal = function( $ ) {
 	var openModalId = false;
 
 	$( '.wpec-modal-open, .wpec-modal-overlay, .wpec-modal-close' ).on( 'click', function() {
@@ -481,4 +481,6 @@ jQuery( function( $ ) {
 		var step = input.attr( 'step' ) ? Number( input.attr( 'step' ) ) : 1;
 		input.val( Number( input.val() ) + increment * step ).change();
 	} );
-} );
+};
+
+jQuery( wpecModal );
