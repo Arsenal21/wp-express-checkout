@@ -209,6 +209,7 @@ class Shortcodes {
 		$modal = self::locate_template( 'modal.php' );
 
 		if ( $modal && $use_modal ) {
+			$modal_title = apply_filters( 'wpec_modal_window_title', get_the_title( $product_id ), $args );
 			ob_start();
 			require $modal;
 			$output = ob_get_clean();
@@ -247,7 +248,7 @@ class Shortcodes {
 		) );
 
 
-		$output .= '<script type="text/javascript">jQuery( function( $ ) {$( document ).on( "wpec_paypal_sdk_loaded", function() { new ppecHandler(' . json_encode( $data ) . ') } );} );</script>';
+		$output .= '<script type="text/javascript">var wpec_' . $button_id . '_data=' . json_encode( $data ) . ';jQuery( function( $ ) {$( document ).on( "wpec_paypal_sdk_loaded", function() { new ppecHandler(wpec_' . $button_id . '_data) } );} );</script>';
 
 		add_action( 'wp_footer', array( $this->ppdg, 'load_paypal_sdk' ) );
 

@@ -19,6 +19,9 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	/** @var WC_Logger Logger instance */
 	public static $log = false;
 
+	/** @var WC_Order */
+	public $wpec_wc_order = false;
+
 	/** @var Main */
 	public $wpec;
 
@@ -46,7 +49,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 		}
 		//add_action( 'woocommerce_api_' . strtolower( __CLASS__ ), array( $this, 'check_response' ) );
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
-		add_filter( 'woocommerce_order_button_text', array( $this, 'order_button_text' ) );
+		add_filter( 'wpec_modal_window_title', array( $this, 'modal_window_title' ), 10, 2 );
 	}
 
 	/**
@@ -109,6 +112,13 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 				'description' => __( 'This controls the description which the user sees during checkout.', 'wp-express-checkout' ),
 				'default'     => __( 'Pay by PayPal Express Form.', 'wp-express-checkout' ),
 			),
+			'popup_title'     => array(
+				'title'       => __( 'Checkout Popup Title', 'wp-express-checkout' ),
+				'type'        => 'text',
+				'desc_tip'    => true,
+				'description' => __( 'This controls the popup window title which the user sees during checkout.', 'wp-express-checkout' ),
+				'default'     => __( 'PayPal Express Checkout', 'wp-express-checkout' ),
+			),
 		);
 	}
 
@@ -142,7 +152,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 			'thousand_sep'    => $this->wpec->get_setting( 'price_thousand_sep' ),
 			'tos_enabled'     => $this->wpec->get_setting( 'tos_enabled' ),
 			'url'             => '',
-			'use_modal'       => false,
+			'use_modal'       => true,
 			'variations'      => array(),
 		);
 
@@ -176,8 +186,75 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	}
 
 	public function paypal_sdk_args( $args ) {
-		$args['currency'] = $this->wpec_wc_order->get_currency();
+		$args['currency'] = $this->wpec_wc_order ? $this->wpec_wc_order->get_currency() : get_woocommerce_currency();
 		return $args;
+	}
+
+	public function payment_fields() {
+		echo $this->get_option( 'description' );
+
+		if ( ! is_ajax() ) {
+			add_filter( 'wpec_paypal_sdk_args', array( $this, 'paypal_sdk_args' ), 10 );
+			$this->wpec->load_paypal_sdk();
+			return;
+		}
+
+		?>
+		<style>
+			.wpec-modal-open {
+				display: none;
+			}
+		</style>
+		<div class="wpec-wc-button-container"></div>
+		<script>
+		jQuery( function( $ ) {
+
+			$( '.checkout.woocommerce-checkout' ).on( 'checkout_place_order_success', function( e, result ) {
+				var get_payment_method = function() {
+					return $( '#payment input[name="payment_method"]:checked' ).val();
+				};
+				if ( 'success' !== result.result || 'wp-express-checkout' !== get_payment_method() ) {
+					return result;
+				}
+
+				var order_id = result.order_id;
+
+				$.ajax( {
+					type: 'POST',
+					url: ppecFrontVars.ajaxUrl,
+					async: false,
+					data: {
+						action: 'wpec_wc_render_button',
+						order_id: order_id,
+						nonce: "<?php echo esc_js( wp_create_nonce( 'wpec-wc-render-button-nonce' ) ); ?>"
+					},
+					dataType: 'json',
+					success: function( data ) {
+						if ( true !== data.success ) {
+							result.result = 'failure';
+							result.messages = '<div class="woocommerce-error">' + data.data + '</div>';
+							return false;
+						}
+						//$( '#place_order' ).before( data.data );
+						$( '.wpec-wc-button-container' ).html( data.data );
+						//$( 'form.processing' ).unblock();
+						new ppecHandler( wpec_paypal_button_0_data );
+						new wpecModal( $ );
+						$( '.wpec-modal-open' ).trigger( 'click' );
+						$( 'form.processing' ).removeClass( 'processing' ).unblock();
+					}
+				} );
+
+				// Do not redirect, just focus on popup window.
+				result.redirect = '#';
+
+				if ( 'failure' === result.result ) {
+					throw 'Result failure';
+				}
+			} );
+		} );
+		</script>
+		<?php
 	}
 
 	/**
@@ -197,8 +274,18 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 		);
 	}
 
-	public function order_button_text( $text ) {
-		return __( 'Proceed to Make Payment', 'wp-express-checkout' );
+	/**
+	 * Changes the WPEC popup window title.
+	 *
+	 * @param string $title
+	 * @param array $args
+	 * @return string
+	 */
+	public function modal_window_title( $title, $args ) {
+		if ( empty( $args['product_id'] ) ) {
+			$title = $this->get_option( 'popup_title' );
+		}
+		return $title;
 	}
 
 }

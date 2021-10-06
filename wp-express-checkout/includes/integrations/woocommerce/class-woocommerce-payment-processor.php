@@ -25,6 +25,8 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 	public function __construct() {
 		add_action( 'wp_ajax_wpec_process_wc_payment', array( $this, 'wpec_process_payment' ) );
 		add_action( 'wp_ajax_nopriv_wpec_process_wc_payment', array( $this, 'wpec_process_payment' ) );
+		add_action( 'wp_ajax_wpec_wc_render_button', array( $this, 'render_button' ) );
+		add_action( 'wp_ajax_nopriv_wpec_wc_render_button', array( $this, 'render_button' ) );
 	}
 
 	/**
@@ -98,5 +100,24 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 
 		$this->send_response( $res );
 	} // @codeCoverageIgnore
+
+
+	public function render_button() {
+		if ( ! check_ajax_referer( 'wpec-wc-render-button-nonce', 'nonce', false ) ) {
+			wp_send_json_error( __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'wp-express-checkout' ) );
+		}
+
+		if ( empty( $_POST['order_id'] ) ) {
+			wp_send_json_error( __( 'No order data received.', 'wp-express-checkout' ) );
+		}
+
+		$gateway = array_shift( wp_list_filter( WC()->payment_gateways()->payment_gateways, array( 'id' => 'wp-express-checkout' ) ) );
+
+		// Get our WC gateway and call receipt_page()
+		ob_start();
+		$gateway->receipt_page( intval( $_POST['order_id'] ) );
+		$output = ob_get_clean();
+		wp_send_json_success( $output );
+	}
 
 }
