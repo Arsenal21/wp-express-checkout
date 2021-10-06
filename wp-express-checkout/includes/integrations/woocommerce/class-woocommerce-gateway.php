@@ -112,6 +112,13 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 				'description' => __( 'This controls the description which the user sees during checkout.', 'wp-express-checkout' ),
 				'default'     => __( 'Pay by PayPal Express Form.', 'wp-express-checkout' ),
 			),
+			'popup_title'     => array(
+				'title'       => __( 'Checkout Popup Title', 'wp-express-checkout' ),
+				'type'        => 'text',
+				'desc_tip'    => true,
+				'description' => __( 'This controls the popup window title which the user sees during checkout.', 'wp-express-checkout' ),
+				'default'     => __( 'PayPal Express Checkout', 'wp-express-checkout' ),
+			),
 		);
 	}
 
@@ -276,7 +283,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	 */
 	public function modal_window_title( $title, $args ) {
 		if ( empty( $args['product_id'] ) ) {
-			$title = __( 'Pay by PayPal', 'wp-express-checkout' );
+			$title = $this->get_option( 'popup_title' );
 		}
 		return $title;
 	}
