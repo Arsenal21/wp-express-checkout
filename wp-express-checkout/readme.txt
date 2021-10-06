@@ -120,6 +120,17 @@ None
 
 == Changelog ==
 
+= WIP since 2.1.3 to 2021-10-06 =
+* Added gateway option 'Checkout Popup Title'
+* Load PayPal popup form on the WooCommerce checkout page
+* Added filter 'wpec_render_custom_order_tag' that allows to render custom fields via Order Tags renderer.
+* Fixed paypal actions on input change
+* Custom Fields Addon integration:
+  - Added action hook 'wpec_payment_form_before_variations' on the product purchase form before variations.
+  - Incapsulated fields validation and errors display. Fields now validated independently and addons can add own fields to the form validation process.
+
+= END WIP =
+
 = 2.1.3 =
 * Added a feature to "Resend sale notification email" action. You can find it in the "Order Actions" section of the Order in question.
 * Added class Emails to handle all plugin email notifications. Moved all emails related code to new Emails class.

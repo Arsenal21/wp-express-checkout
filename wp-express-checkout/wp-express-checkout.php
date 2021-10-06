@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //Define constants
-define( 'WPEC_PLUGIN_VER', '2.1.3' );
+define( 'WPEC_PLUGIN_VER', '2.1.3a' );
 define( 'WPEC_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 define( 'WPEC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPEC_PLUGIN_FILE', __FILE__ );
