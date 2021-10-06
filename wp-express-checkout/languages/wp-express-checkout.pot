@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Express Checkout 2.1.2\n"
+"Project-Id-Version: WP Express Checkout 2.1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-03 06:24:46+00:00\n"
+"POT-Creation-Date: 2021-09-27 07:18:27+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -299,7 +299,7 @@ msgid "Pay"
 msgstr ""
 
 #: admin/class-admin.php:280 admin/includes/class-products-meta-boxes.php:425
-#: includes/integrations/woocommerce/class-woocommerce-gateway.php:100
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:102
 msgid "PayPal"
 msgstr ""
 
@@ -716,7 +716,7 @@ msgstr ""
 #: admin/includes/class-products-list.php:28
 #: admin/includes/class-products-meta-boxes.php:26
 #: admin/includes/class-products-meta-boxes.php:89
-#: includes/class-order-summary-plain.php:36
+#: includes/class-order-summary-plain.php:41
 msgid "Price"
 msgstr ""
 
@@ -815,7 +815,7 @@ msgstr ""
 
 #: admin/includes/class-orders-list.php:38
 #: admin/includes/class-products-meta-boxes.php:25
-#: includes/integrations/woocommerce/class-woocommerce-gateway.php:104
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:106
 msgid "Description"
 msgstr ""
 
@@ -903,7 +903,7 @@ msgid "Thumbnail"
 msgstr ""
 
 #: admin/includes/class-products-list.php:25
-#: includes/class-order-summary-plain.php:34
+#: includes/class-order-summary-plain.php:39
 msgid "Product Name"
 msgstr ""
 
@@ -926,7 +926,7 @@ msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:28
 #: admin/includes/class-products-meta-boxes.php:236
-#: includes/class-order-summary-plain.php:35
+#: includes/class-order-summary-plain.php:40
 msgid "Quantity"
 msgstr ""
 
@@ -1520,7 +1520,7 @@ msgstr ""
 msgid "Coupon Code: %s"
 msgstr ""
 
-#: includes/class-order-summary-plain.php:57
+#: includes/class-order-summary-plain.php:62
 #. translators: {Order Summary Item Name}: {Value}
 msgid "%1$s: %2$s"
 msgstr ""
@@ -1683,15 +1683,15 @@ msgstr ""
 msgid "Search Product"
 msgstr ""
 
-#: includes/class-products.php:82
+#: includes/class-products.php:83
 msgid "Invalid product id given. Must be an integer"
 msgstr ""
 
-#: includes/class-products.php:87
+#: includes/class-products.php:88
 msgid "Can't find product with ID %s"
 msgstr ""
 
-#: includes/class-products.php:120
+#: includes/class-products.php:121
 msgid ""
 "Unknown product type '%s'. Activate the required addon to use this product "
 "type."
@@ -1836,42 +1836,46 @@ msgstr ""
 msgid "Simple Membership Level"
 msgstr ""
 
-#: includes/integrations/woocommerce/class-woocommerce-gateway.php:26
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:27
 msgid "WP Express Checkout Gateway"
 msgstr ""
 
-#: includes/integrations/woocommerce/class-woocommerce-gateway.php:27
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:28
 msgid ""
 "Use the WP Express Checkout plugin to process payments via PayPal Express "
 "Checkout API."
 msgstr ""
 
-#: includes/integrations/woocommerce/class-woocommerce-gateway.php:90
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:92
 msgid "Enable/Disable"
 msgstr ""
 
-#: includes/integrations/woocommerce/class-woocommerce-gateway.php:92
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:94
 msgid "Enable WP Express Checkout gateway"
 msgstr ""
 
-#: includes/integrations/woocommerce/class-woocommerce-gateway.php:97
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:99
 msgid "Title"
 msgstr ""
 
-#: includes/integrations/woocommerce/class-woocommerce-gateway.php:99
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:101
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
-#: includes/integrations/woocommerce/class-woocommerce-gateway.php:107
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:109
 msgid "This controls the description which the user sees during checkout."
 msgstr ""
 
-#: includes/integrations/woocommerce/class-woocommerce-gateway.php:108
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:110
 msgid "Pay by PayPal Express Form."
 msgstr ""
 
-#: includes/integrations/woocommerce/class-woocommerce-gateway.php:190
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:192
 msgid "Awaiting payment"
+msgstr ""
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:201
+msgid "Proceed to Make Payment"
 msgstr ""
 
 #: public/class-main.php:78
@@ -1916,7 +1920,7 @@ msgid ""
 "target=\"_blank\">Terms and Conditions</a>"
 msgstr ""
 
-#: public/includes/class-order-tags-html.php:149
+#: public/includes/class-order-tags-html.php:148
 msgid "Click here to download"
 msgstr ""
 
@@ -2003,15 +2007,15 @@ msgstr ""
 msgid "Quantity:"
 msgstr ""
 
-#: public/views/templates/payment-form.php:102
+#: public/views/templates/payment-form.php:104
 msgid "Coupon Code:"
 msgstr ""
 
-#: public/views/templates/payment-form.php:110
+#: public/views/templates/payment-form.php:112
 msgid "Apply"
 msgstr ""
 
-#: public/views/templates/payment-form.php:137
+#: public/views/templates/payment-form.php:139
 msgid ""
 "This is where the Express Checkout Button will show. View it on the "
 "front-end to see how it will look to your visitors"

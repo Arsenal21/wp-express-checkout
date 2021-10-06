@@ -49,6 +49,8 @@
 		</div>
 	<?php } ?>
 
+	<?php do_action( 'wpec_payment_form_before_variations', $args, $button_id ); ?>
+
 	<?php
 	// Variations.
 	if ( ! empty( $variations['groups'] ) ) {

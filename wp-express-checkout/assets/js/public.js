@@ -36,23 +36,8 @@ var ppecHandler = function( data ) {
 		return ret;
 	};
 
-	this.isValidTos = function( hide_errors ) {
-		var enable_actions = false;
-		var tos_input = jQuery( '#wpec-tos-' + parent.data.id );
-		var errMsgCont = jQuery( '.wpec_product_tos_input_container' ).find( '.wp-ppec-form-error-msg' );
-		var errMsg = ppecFrontVars.str.acceptTos;
-		tos_input.addClass( 'hasError' );
-		if ( tos_input.prop( 'checked' ) ) {
-			enable_actions = true;
-			tos_input.removeClass( 'hasError' );
-			errMsgCont.fadeOut( 'fast' );
-		} else if ( !hide_errors ) {
-			tos_input.addClass( 'hasError' );
-			errMsgCont.html( errMsg );
-			errMsgCont.fadeIn( 'slow' );
-		}
-
-		return enable_actions;
+	this.ValidatorTos = function( input ) {
+		return input.prop( 'checked' ) !== true ? ppecFrontVars.str.acceptTos : null;
 	};
 
 	this.isValidTotal = function() {
@@ -60,53 +45,31 @@ var ppecHandler = function( data ) {
 		return !!parent.data.total;
 	};
 
-	this.isValidCustomQuantity = function() {
-		var input = jQuery( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' );
-		var errMsgCont = input.parent().siblings( '.wp-ppec-form-error-msg' );
+	this.ValidatorQuantity = function( input ) {
 		var val_orig = input.val();
 		var val = parseInt( val_orig );
 		var error = false;
-		var errMsg = ppecFrontVars.str.enterQuantity;
-
-		if ( isNaN( val ) ) {
-			error = true;
-		} else if ( val_orig % 1 !== 0 ) {
-			error = true;
-		} else if ( val <= 0 ) {
-			error = true;
+		if ( isNaN( val ) || ( val_orig % 1 !== 0 ) || val <= 0 ) {
+			error = ppecFrontVars.str.enterQuantity;
 		} else {
-			input.removeClass( 'hasError' );
-			errMsgCont.fadeOut( 'fast' );
 			parent.data.quantity = val;
 		}
-		if ( error ) {
-			input.addClass( 'hasError' );
-			errMsgCont.html( errMsg );
-			errMsgCont.fadeIn( 'slow' );
-		}
-		return !error;
+		return error;
 	};
 
-	this.isValidCustomAmount = function() {
-		var input = jQuery( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' );
-		var errMsgCont = input.siblings( '.wp-ppec-form-error-msg' );
+	this.ValidatorAmount = function( input ) {
 		var val_orig = input.val();
 		var val = parseFloat( val_orig );
 		var min_val = input.attr( 'min' );
 		var error = false;
 		var errMsg = ppecFrontVars.str.enterAmount;
 		if ( !isNaN( val ) && min_val <= val ) {
-			input.removeClass( 'hasError' );
-			errMsgCont.fadeOut( 'fast' );
 			parent.data.orig_price = val;
 			parent.data.price = parent.applyVariations( val );
 		} else {
-			input.addClass( 'hasError' );
-			errMsgCont.html( errMsg );
-			errMsgCont.fadeIn( 'slow' );
-			error = true;
+			error = errMsg;
 		}
-		return !error;
+		return error;
 	};
 
 	if ( this.data.btnStyle.layout === 'horizontal' ) {
@@ -117,15 +80,33 @@ var ppecHandler = function( data ) {
 
 	this.clientVars[ this.data.env ] = this.data.client_id;
 
-	this.validateOrder = function( e, hide_errors ) {
+	this.inputs = [];
+
+	this.validateInput = function( input, validator ) {
+		if ( 1 > input.length ) {
+			return false;
+		}
+
+		this.inputs.push( [ input, validator ] );
+
+		input.change( function() {
+			parent.displayInputError( jQuery( this ), validator );
+			parent.validateOrder();
+		} );
+	};
+
+	this.validateOrder = function() {
 		var enable_actions = true;
-		hide_errors = ( typeof hide_errors !== 'undefined' ) ? hide_errors : false;
-		if (
-			( parent.data.custom_quantity && !parent.isValidCustomQuantity() ) ||
-			( parent.data.custom_amount && !parent.isValidCustomAmount() ) ||
-			( parent.data.tos_enabled === 1 && !parent.isValidTos( hide_errors ) ) ||
-			!parent.isValidTotal()
-		) {
+
+		parent.inputs.forEach( function( inputArr ) {
+			var input = inputArr[ 0 ];
+			var validator = inputArr[ 1 ];
+			if ( validator( input ) ) {
+				enable_actions = false;
+			}
+		} );
+
+		if ( !parent.isValidTotal() ) {
 			enable_actions = false;
 		}
 
@@ -139,6 +120,24 @@ var ppecHandler = function( data ) {
 		jQuery( document ).trigger( 'wpec_validate_order', [ parent ] );
 	};
 
+	this.displayInputError = function( input, validator ) {
+		var error = validator( input );
+		var errMsgCont = input.is( ':checkbox' ) || input.attr( 'type' ) === 'number' ? input.parent().siblings( '.wp-ppec-form-error-msg' ) : input.siblings( '.wp-ppec-form-error-msg' );
+		input.toggleClass( 'hasError', !!error );
+		errMsgCont.html( error );
+		if ( error && errMsgCont.length ) {
+			errMsgCont.fadeIn( 'slow' );
+		} else {
+			errMsgCont.fadeOut( 'fast' );
+		}
+	};
+
+	this.displayErrors = function() {
+		parent.inputs.forEach( function( input ) {
+			parent.displayInputError( input[ 0 ], input[ 1 ] );
+		} );
+	};
+
 	this.scCont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' );
 
 	this.buttonArgs = {
@@ -148,15 +147,9 @@ var ppecHandler = function( data ) {
 		commit: true,
 		onInit: function( data, actions ) {
 			parent.actions = actions;
-			if ( parent.data.tos_enabled === 1 ) {
-				jQuery( '#wpec-tos-' + parent.data.id ).change( parent.validateOrder );
-			}
-			if ( parent.data.custom_quantity ) {
-				jQuery( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ).change( parent.validateOrder );
-			}
-			if ( parent.data.custom_amount ) {
-				jQuery( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ).change( parent.validateOrder );
-			}
+			parent.validateInput( jQuery( '#wpec-tos-' + parent.data.id ), parent.ValidatorTos );
+			parent.validateInput( jQuery( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorQuantity );
+			parent.validateInput( jQuery( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorAmount );
 			parent.data.orig_price = parseFloat( parent.data.price );
 			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio' ).change( function() {
 				var grpId = jQuery( this ).data( 'wpec-variations-group-id' );
@@ -167,7 +160,7 @@ var ppecHandler = function( data ) {
 					}
 					parent.data.variations.applied[ grpId ] = varId;
 					parent.data.price = parent.applyVariations( parent.data.orig_price );
-					parent.validateOrder( null, true );
+					parent.validateOrder();
 				}
 			} );
 			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio:checked' ).change();
@@ -248,7 +241,7 @@ var ppecHandler = function( data ) {
 				}
 			} );
 
-			parent.validateOrder( null, true );
+			parent.validateOrder();
 
 			if ( parent.data.errors ) {
 				var errorEl = jQuery( '<div class="wp-ppec-form-error-msg">' + parent.data.errors + '</div>' );
@@ -259,6 +252,7 @@ var ppecHandler = function( data ) {
 			jQuery( '.wpec-button-placeholder' ).remove();
 		},
 		onClick: function() {
+			parent.displayErrors();
 			var errInput = parent.scCont.find( '.hasError' ).first();
 			if ( errInput ) {
 				errInput.focus();
