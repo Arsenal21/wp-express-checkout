@@ -9,7 +9,7 @@ use WP_Express_Checkout\Debug\Logger;
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Shortcodes;
 
-defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
+defined( 'ABSPATH' ) || die( 'No script kiddies please!' ); // @codeCoverageIgnore
 
 class WooCommerce_Gateway extends WC_Payment_Gateway {
 

@@ -147,6 +147,13 @@ class Order_Tags_HtmlTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers WP_Express_Checkout\Order_Tags_Html::get_order
+	 */
+	public function testOrder() {
+		$this->assertEquals( $this->order, $this->object->get_order() );
+	}
+
+	/**
 	 * @covers WP_Express_Checkout\Order_Tags_Html::download_link
 	 */
 	public function testDownload_link__no_links() {
