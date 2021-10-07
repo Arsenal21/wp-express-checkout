@@ -191,6 +191,9 @@ class Admin {
 
 		add_settings_section( 'ppdg-price-display-section', __( 'Price Display Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
 		add_settings_section( 'ppdg-tos-section', __( 'Terms and Conditions', 'wp-express-checkout' ), array( $this, 'tos_description' ), $this->plugin_slug . '-advanced' );
+
+		add_settings_section( 'ppdg-link-expiry-section', __( 'Download Links', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
+
 		/* Add the settings fields */
 
 		// Global settings fields.
@@ -436,6 +439,34 @@ class Admin {
 				'desc'  => __( 'Text to be displayed for the checkbox. It accepts HTML code so you can put a link to your terms and conditions page.', 'wp-express-checkout' ),
 			)
 		);
+		add_settings_field(
+			'download_duration',
+			__( 'Duration of Download Link', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'ppdg-link-expiry-section',
+			array(
+				'field' => 'download_duration',
+				'type' => 'number',
+				'label' => __( 'Hours', 'wp-express-checkout' ),
+				'label_pos' => 'after',
+				'desc' => __( 'This is the duration of time the encrypted links will remain active. After this amount of time the link will expire. Leave empty or set to 0 to disable link expiry.', 'wp-express-checkout' ),
+			)
+		);
+		add_settings_field(
+			'download_count',
+			__( 'Download Limit Count', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'ppdg-link-expiry-section',
+			array(
+				'field' => 'download_count',
+				'type' => 'number',
+				'label' => __( 'Times', 'wp-express-checkout' ),
+				'label_pos' => 'after',
+				'desc' => __( 'Number of times an item can be downloaded before the link expires. Leave empty or set to 0 if you do not want to limit downloads by download count.', 'wp-express-checkout' ),
+			)
+		);
 	}
 
 	/**
@@ -500,6 +531,8 @@ class Admin {
 			'step'        => 1,
 			'min'         => 0,
 			'default'     => '',
+			'label'       => '',
+			'label_pos'   => 'before',
 		);
 
 		$settings = array_merge( $this->get_defaults(), $settings );
@@ -550,16 +583,26 @@ class Admin {
 				remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
 				break;
 			case 'number':
-				echo "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='{$this->option_name}[{$field}]' value='{$field_value}' size='{$size}' step='{$step}' min='{$min}' />";
+				$input = "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='{$this->option_name}[{$field}]' value='{$field_value}' size='{$size}' step='{$step}' min='{$min}' />";
+				echo $this->wrap_label( $input, $label, $label_pos );
 				break;
 			default:
-				echo "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='{$this->option_name}[{$field}]' value='{$field_value}' size='{$size}' />";
+				$input = "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='{$this->option_name}[{$field}]' value='{$field_value}' size='{$size}' />";
+				echo $this->wrap_label( $input, $label, $label_pos );
 				break;
 		}
 
 		if ( $desc ) {
 			echo "<p class='description'>{$desc}</p>";
 		}
+	}
+
+	protected function wrap_label( $input, $label = '', $label_pos = 'before' ) {
+		$label_wrap = '%s';
+		if ( $label ) {
+			$label_wrap = 'before' === $label_pos ? "<label>$label %s</label>" : "<label>%s $label</label>";
+		}
+		return sprintf( $label_wrap, $input );
 	}
 
 	/**

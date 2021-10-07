@@ -121,6 +121,28 @@ abstract class Product {
 	}
 
 	/**
+	 * Retrieves the product download duration
+	 *
+	 * @return int
+	 */
+	public function get_download_duration() {
+		$duration = $this->post->wpec_download_duration;
+		$duration = ( '' === $duration ) ? $this->wpec->get_setting( 'download_duration' ) : $duration;
+		return (int) $duration;
+	}
+
+	/**
+	 * Retrieves the product download count
+	 *
+	 * @return int
+	 */
+	public function get_download_count() {
+		$count = $this->post->wpec_download_count;
+		$count = ( '' === $count ) ? $this->wpec->get_setting( 'download_count' ) : $count;
+		return (int) $count;
+	}
+
+	/**
 	 * Retrieves the product thumbnal URL
 	 *
 	 * @return string
