@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
 Requires at least: 5.6
 Tested up to: 5.8
-Stable tag: 2.1.3
+Stable tag: 2.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,16 +120,14 @@ None
 
 == Changelog ==
 
-= WIP since 2.1.3 to 2021-10-06 =
-* Added gateway option 'Checkout Popup Title'
-* Load PayPal popup form on the WooCommerce checkout page
+= 2.1.4 =
+* Added gateway option 'Checkout Popup Title' for the WooCommerce integration.
+* Load payment popup form on the WooCommerce checkout page.
+* Fixed paypal actions on input change.
 * Added filter 'wpec_render_custom_order_tag' that allows to render custom fields via Order Tags renderer.
-* Fixed paypal actions on input change
-* Custom Fields Addon integration:
-  - Added action hook 'wpec_payment_form_before_variations' on the product purchase form before variations.
-  - Incapsulated fields validation and errors display. Fields now validated independently and addons can add own fields to the form validation process.
-
-= END WIP =
+* Custom Fields Addon integration related:
+- Added action hook 'wpec_payment_form_before_variations' on the product purchase form before variations.
+- Incapsulated fields validation and errors display. Fields now validated independently and addons can add own fields to the form validation process.
 
 = 2.1.3 =
 * Added a feature to "Resend sale notification email" action. You can find it in the "Order Actions" section of the Order in question.
