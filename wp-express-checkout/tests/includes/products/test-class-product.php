@@ -47,6 +47,8 @@ class ProductTest extends WP_UnitTestCase {
 					'wpec_product_button_text' => 'test_button_text',
 					'wpec_product_button_type' => 'test_button_type',
 					'wpec_product_coupons_setting' => '1',
+					'wpec_download_duration' => '42',
+					'wpec_download_count' => '24',
 					'wpec_variations_groups' => [ 'test group' ],
 					'wpec_variations_names' => [ [ 'test group name 1' ] ],
 					'wpec_variations_prices' => [ [ '+1' ] ],
@@ -115,6 +117,50 @@ class ProductTest extends WP_UnitTestCase {
 	 */
 	public function testGet_download_url() {
 		$this->assertEquals( 'test_download_url', $this->object->get_download_url() );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Products\Product::get_download_duration
+	 */
+	public function testGet_download_duration__empty() {
+		update_post_meta( $this->object->get_id(), 'wpec_download_duration', '' );
+		$this->assertEquals( 0, $this->object->get_download_duration() );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Products\Product::get_download_duration
+	 */
+	public function testGet_download_duration() {
+		$this->assertEquals( 42, $this->object->get_download_duration() );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Products\Product::get_download_duration
+	 */
+	public function testGet_download_duration__fallback_to_options() {
+		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'download_duration' => 4 ] ) );
+		update_post_meta( $this->object->get_id(), 'wpec_download_duration', '0' );
+		$this->assertEquals( 0, $this->object->get_download_duration() );
+		update_post_meta( $this->object->get_id(), 'wpec_download_duration', '' );
+		$this->assertEquals( 4, $this->object->get_download_duration() );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Products\Product::get_download_count
+	 */
+	public function testGet_download_count() {
+		$this->assertEquals( 24, $this->object->get_download_count() );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Products\Product::get_download_count
+	 */
+	public function testGet_download_count__fallback_to_options() {
+		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'download_count' => 2 ] ) );
+		update_post_meta( $this->object->get_id(), 'wpec_download_count', '0' );
+		$this->assertEquals( 0, $this->object->get_download_count() );
+		update_post_meta( $this->object->get_id(), 'wpec_download_count', '' );
+		$this->assertEquals( 2, $this->object->get_download_count() );
 	}
 
 	/**

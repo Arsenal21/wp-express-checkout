@@ -347,6 +347,8 @@ class Main {
 			'coupons_enabled'      => 0,
 			'tos_enabled'          => 0,
 			'tos_text'             => __( 'I accept the <a href="https://example.com/terms-and-conditions/" target="_blank">Terms and Conditions</a>', 'wp-express-checkout' ),
+			'download_duration'    => '',
+			'download_count'       => '',
 		);
 
 		return $defaults;

@@ -27,6 +27,8 @@ class Init {
 		Orders::register_post_type();
 		Products::register_post_type();
 
+		View_Downloads::get_instance();
+
 		if ( function_exists( 'register_block_type' ) ) {
 			// Gutenberg is active.
 			new Blocks\Product_Block();
