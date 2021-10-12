@@ -165,10 +165,13 @@ class Order_Tags_Html {
 			return $content;
 		}
 
-		$link_tpl = apply_filters( 'wpec_downloads_list_item_template', '%1$s - <a href="%2$s" target="%3$s">%4$s</a><br/>' );
+		$limit    = (int) $this->order->get_data( 'download_count' );
+		$counter  = $this->order->get_data( 'downloads_counter' );
+		$link_tpl = apply_filters( 'wpec_downloads_list_item_template', '%1$s (%5$s/%6$s) - <a href="%2$s" target="%3$s">%4$s</a><br/>' );
 		foreach ( $downloads as $name => $download_url ) {
+			$count = ! empty( $counter[ $name ] ) ? $counter[ $name ] : 0;
 			$text = ! empty( $args['anchor_text'] ) ? $args['anchor_text'] : $download_url;
-			$content .= sprintf( $link_tpl, $name, $download_url, $args['target'], $text );
+			$content .= sprintf( $link_tpl, $name, $download_url, $args['target'], $text, $count, $limit ? $limit : '&infin;' );
 		}
 
 		return $content;

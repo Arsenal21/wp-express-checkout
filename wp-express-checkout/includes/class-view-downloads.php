@@ -29,6 +29,8 @@ class View_Downloads {
 		if ( isset( $_GET['wpec_download_file'] ) && $this->verify_request() ) {
 			$this->process_download();
 		}
+
+		add_action( 'wpec_payment_completed', array( $this, 'set_download_limits' ), 10, 3 );
 	}
 
 	/**
@@ -130,6 +132,33 @@ class View_Downloads {
 	}
 
 	/**
+	 * Adds download limits to a given order.
+	 *
+	 * @param array $payment    Payment data.
+	 * @param int   $order_id   Order ID.
+	 * @param int   $product_id Product ID.
+	 */
+	public function set_download_limits( $payment, $order_id, $product_id ) {
+		try {
+			$order   = Orders::retrieve( $order_id );
+			$product = Products::retrieve( $product_id );
+		} catch ( Exception $exc ) {
+			return;
+		}
+
+		$duration = $product->get_download_duration();
+		$count    = $product->get_download_count();
+
+		if ( $duration ) {
+			$order->add_data( 'download_duration', $duration );
+		}
+
+		if ( $count ) {
+			$order->add_data( 'download_count', $count );
+		}
+	}
+
+	/**
 	 * Checks whether a download request is valid.
 	 *
 	 * @return boolean
@@ -162,6 +191,7 @@ class View_Downloads {
 
 		$var_args = array();
 		$var_key  = '';
+		$name     = $item['name'];
 
 		// Add variation parameters to the hash.
 		if ( isset( $_GET['var_id'] ) && isset( $_GET['grp_id'] ) ) {
@@ -169,7 +199,13 @@ class View_Downloads {
 				'grp_id' => (int) $_GET['grp_id'],
 				'var_id' => (int) $_GET['var_id'],
 			);
-			$var_key  = "|{$var_args['grp_id']}|{$var_args['var_id']}";
+			$var_key     = "|{$var_args['grp_id']}|{$var_args['var_id']}";
+			$var_applied = $order->get_items( 'variation' );
+			$var_applied = wp_list_pluck( $var_applied, 'meta', 'name' );
+			$variation   = wp_list_filter( $var_applied, array( 'grp_id' => $_GET['grp_id'], 'id' => $_GET['var_id'] ) );
+			if ( ! empty( $variation ) ) {
+				$name = key( $variation );
+			}
 		}
 
 		$key  = "{$product->ID}|{$order_id}|{$order_timestamp}" . $var_key;
@@ -177,6 +213,21 @@ class View_Downloads {
 
 		if ( $_GET['key'] !== $hash ) {
 			wp_die( esc_html__( 'Invalid product key!', 'wp-express-checkout' ) );
+		}
+
+		$download_duration = $order->get_data( 'download_duration' );
+		if ( ! empty( $download_duration ) ) {
+			if ( get_post_timestamp() < ( time() - ( $download_duration * 60 * 60 ) ) ) {
+				wp_die( esc_html__( 'Download limit time is enabled for this product. This link has expired.', 'wp-express-checkout' ) );
+			}
+		}
+
+		$download_count = (int) $order->get_data( 'download_count' );
+		if ( ! empty( $download_count ) ) {
+			$counter = (array) $order->get_data( 'downloads_counter' );
+			if ( ! empty( $counter[ $name ] ) && $counter[ $name ] >= $download_count ) {
+				wp_die( esc_html__( 'Download limit count is enabled for this product. Download count exceeded allowed.', 'wp-express-checkout' ) );
+			}
 		}
 
 		return apply_filters( 'wpec_verify_download_product_request', true, $order, $product );
@@ -188,32 +239,41 @@ class View_Downloads {
 	private function process_download() {
 
 		// Get the product custom post type object.
-		$product  = get_post( absint( $_GET['wpec_download_file'] ) );
-		$file_url = '';
-		$order_id = absint( $_GET['order_id'] );
+		$product   = get_post( absint( $_GET['wpec_download_file'] ) );
+		$file_url  = '';
+		$file_name = '';
+		$order_id  = absint( $_GET['order_id'] );
 		try {
 			$order = Orders::retrieve( $order_id );
 		} catch ( Exception $exc ) {
 			return;
 		}
 
-		// Trigger the action hook (product object is also passed). It can be usewd to override the download handling via an addon.
+		// Trigger the action hook (product object is also passed).
+		// It can be used to override the download handling via an addon.
 		do_action( 'wpec_process_download_request', $product, $order_id );
 
 		if ( isset( $_GET['var_id'] ) && isset( $_GET['grp_id'] ) ) {
 			$var_applied = $order->get_items( 'variation' );
-			$var_applied = wp_list_pluck( $var_applied, 'meta' );
+			$var_applied = wp_list_pluck( $var_applied, 'meta', 'name' );
 			$variation   = wp_list_filter( $var_applied, array( 'grp_id' => $_GET['grp_id'], 'id' => $_GET['var_id'] ) );
 
 			if ( ! empty( $variation ) ) {
+				$file_name = key( $variation );
 				$variation = array_shift( $variation );
 				if ( ! empty( $variation['url'] ) ) {
 					$file_url = $variation['url'];
 				}
 			}
 		} else {
-			$file_url = $product->ppec_product_upload;
+			$file_url  = $product->ppec_product_upload;
+			$item      = $order->get_item( Products::$products_slug );
+			$file_name = $item['name'];
 		}
+
+		$counter = $order->get_data( 'downloads_counter' );
+		$counter[ $file_name ]++;
+		$order->add_data( 'downloads_counter', $counter );
 
 		// Clean the file URL.
 		$file_url = stripslashes( trim( $file_url ) );

@@ -37,7 +37,6 @@ require WPEC_PLUGIN_PATH . '/vendor/autoload-deprecated.php';
 function wpec_load_classes() {
 	WP_Express_Checkout\Main::get_instance();
 	WP_Express_Checkout\Shortcodes::get_instance();
-	WP_Express_Checkout\View_Downloads::get_instance();
 	WP_Express_Checkout\Post_Type_Content_Handler::get_instance();
 	WP_Express_Checkout\Payment_Processor::get_instance();
 	WP_Express_Checkout\Variations::init();
