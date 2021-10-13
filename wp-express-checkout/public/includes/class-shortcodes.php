@@ -179,7 +179,7 @@ class Shortcodes {
 			'thank_you_url'   => $thank_you_url,
 		);
 
-		set_transient( $trans_name, $trans_data, 2 * 3600 );
+		set_transient( $trans_name, $trans_data, WEEK_IN_SECONDS );
 
 		$is_live = $this->ppdg->get_setting( 'is_live' );
 
