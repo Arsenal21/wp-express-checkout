@@ -15,6 +15,7 @@ class Products_List {
 		add_action( 'manage_' . Products::$products_slug . '_posts_custom_column', array( __CLASS__, 'manage_custom_columns' ), 10, 2 );
 		// set custom columns sortable.
 		add_filter( 'manage_edit-' . Products::$products_slug . '_sortable_columns', array( __CLASS__, 'manage_sortable_columns' ) );
+		add_filter( 'list_table_primary_column',  array( __CLASS__, 'primary_column' ), 10, 2 );
 	}
 
 	public static function manage_columns( $columns ) {
@@ -101,6 +102,16 @@ class Products_List {
 		$columns['id']    = 'id';
 		$columns['price'] = 'price';
 		return $columns;
+	}
+
+	/**
+	 * Set the first column as primary
+	 */
+	public static function primary_column( $default, $screen ) {
+		if ( 'edit-ppec-products' === $screen ) {
+			$default = 'thumbnail';
+		}
+		return $default;
 	}
 
 }

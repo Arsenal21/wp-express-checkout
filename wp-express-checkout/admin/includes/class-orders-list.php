@@ -17,6 +17,7 @@ class Orders_List {
 		add_filter( 'manage_' . Orders::PTYPE . '_posts_columns', array( __CLASS__, 'order_manage_columns' ) );
 		add_filter( 'manage_edit-' . Orders::PTYPE . '_sortable_columns', array( __CLASS__, 'order_manage_sortable_columns' ) );
 		add_action( 'manage_' . Orders::PTYPE . '_posts_custom_column', array( __CLASS__, 'order_add_column_data' ), 10, 2 );
+		add_filter( 'list_table_primary_column',  array( __CLASS__, 'primary_column' ), 10, 2 );
 		// handle columns sorting and searching
 		add_action( 'pre_get_posts', array( __CLASS__, 'manage_search_sort_queries' ) );
 		add_action( 'posts_results', array( __CLASS__, 'set_search_term' ), 10, 2 );
@@ -195,6 +196,16 @@ class Orders_List {
 				break;
 			// to be continue...
 		}
+	}
+
+	/**
+	 * Set the first column as primary
+	 */
+	public static function primary_column( $default, $screen ) {
+		if ( 'edit-ppdgorder' === $screen ) {
+			$default = 'order';
+		}
+		return $default;
 	}
 
 }
