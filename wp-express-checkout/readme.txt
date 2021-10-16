@@ -120,6 +120,9 @@ None
 
 == Changelog ==
 
+= WIP =
+- Added Spanish language translation file.
+
 = 2.1.4 =
 * Added gateway option 'Checkout Popup Title' for the WooCommerce integration.
 * Load payment popup form on the WooCommerce checkout page.

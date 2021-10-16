@@ -1,0 +1,2261 @@
+# Translation of Plugins - WP Express Checkout (Accept PayPal Payments) - Development (trunk) in Spanish (Spain)
+# This file is distributed under the same license as the Plugins - WP Express Checkout (Accept PayPal Payments) - Development (trunk) package.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Express Checkout (Accept PayPal Payments) - 2.1.4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-10-06 05:56:38+00:00\n"
+"PO-Revision-Date: 2021-10-16 08:20+1000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 3.0\n"
+
+#: admin/class-admin.php:161
+msgid "WP Express Checkout Settings"
+msgstr "Ajustes de WP Express Checkout"
+
+#: admin/class-admin.php:162 admin/class-admin.php:664
+msgid "Settings"
+msgstr "Ajustes"
+
+#: admin/class-admin.php:181
+msgid "Global Settings"
+msgstr "Ajustes globales"
+
+#: admin/class-admin.php:182
+msgid "PayPal Credentials"
+msgstr "Credenciales de PayPal"
+
+#: admin/class-admin.php:183
+msgid "Checkout Form"
+msgstr "Formulario de pago"
+
+#: admin/class-admin.php:184
+msgid "PayPal Button Style"
+msgstr "Estilo de botón de PayPal"
+
+#: admin/class-admin.php:185
+msgid "Disable Funding"
+msgstr "Desactivar la financiación"
+
+#: admin/class-admin.php:187 admin/includes/class-products-meta-boxes.php:29
+msgid "Shipping & Tax"
+msgstr "Envíos e impuestos"
+
+#: admin/class-admin.php:188
+msgid "Debug Logging"
+msgstr "Registro de depuración"
+
+#: admin/class-admin.php:190
+msgid "Purchase Confirmation Email Settings"
+msgstr "Ajustes del correo electrónico de confirmación de compra"
+
+#: admin/class-admin.php:192
+msgid "Price Display Settings"
+msgstr "Ajustes de la visualización del precio"
+
+#: admin/class-admin.php:193
+msgid "Terms and Conditions"
+msgstr "Términos y condiciones"
+
+#: admin/class-admin.php:197
+msgid "Currency Code"
+msgstr "Código de la moneda"
+
+#: admin/class-admin.php:197
+msgid "Example: USD, CAD, GBP etc"
+msgstr "Ejemplo: USD, CAD, GBP, etc"
+
+#: admin/class-admin.php:199
+msgid "US Dollars (USD)"
+msgstr "Dólares de EE.UU. (USD)"
+
+#: admin/class-admin.php:199
+msgid "Euros (EUR)"
+msgstr "Euros (EUR)"
+
+#: admin/class-admin.php:199
+msgid "Pounds Sterling (GBP)"
+msgstr "Libras esterlinas (GBP)"
+
+#: admin/class-admin.php:199
+msgid "Australian Dollars (AUD)"
+msgstr "Dólares australianos (AUD)"
+
+#: admin/class-admin.php:199
+msgid "Brazilian Real (BRL)"
+msgstr "Real brasileño (BRL)"
+
+#: admin/class-admin.php:199
+msgid "Canadian Dollars (CAD)"
+msgstr "Dólares canadienses (CAD)"
+
+#: admin/class-admin.php:199
+msgid "Chinese Yuan (CNY)"
+msgstr "Yuan chino (CNY)"
+
+#: admin/class-admin.php:199
+msgid "Czech Koruna (CZK)"
+msgstr "Corona checa (CZK)"
+
+#: admin/class-admin.php:199
+msgid "Danish Krone (DKK)"
+msgstr "Corona danesa (DKK)"
+
+#: admin/class-admin.php:199
+msgid "Hong Kong Dollar (HKD)"
+msgstr "Dólar de hong kong (HKD)"
+
+#: admin/class-admin.php:199
+msgid "Hungarian Forint (HUF)"
+msgstr "Forinto húngaro (HUF)"
+
+#: admin/class-admin.php:199
+msgid "Indian Rupee (INR)"
+msgstr "Rupia de la india (INR)"
+
+#: admin/class-admin.php:199
+msgid "Indonesia Rupiah (IDR)"
+msgstr "Rupia de indonesia (IDR)"
+
+#: admin/class-admin.php:200
+msgid "Israeli Shekel (ILS)"
+msgstr "Shekel israelí (ILS)"
+
+#: admin/class-admin.php:200
+msgid "Japanese Yen (JPY)"
+msgstr "Yen japonés (JPY)"
+
+#: admin/class-admin.php:200
+msgid "Malaysian Ringgits (MYR)"
+msgstr "Ringgits de malasia (MYR)"
+
+#: admin/class-admin.php:200
+msgid "Mexican Peso (MXN)"
+msgstr "Peso mexicano (MXN)"
+
+#: admin/class-admin.php:200
+msgid "New Zealand Dollar (NZD)"
+msgstr "Dólar neozelandés (NZD)"
+
+#: admin/class-admin.php:200
+msgid "Norwegian Krone (NOK)"
+msgstr "Corona noruega (NOK)"
+
+#: admin/class-admin.php:200
+msgid "Philippine Pesos (PHP)"
+msgstr "Pesos filipinos (PHP)"
+
+#: admin/class-admin.php:200
+msgid "Polish Zloty (PLN)"
+msgstr "Zloty polaco (PLN)"
+
+#: admin/class-admin.php:200
+msgid "Singapore Dollar (SGD)"
+msgstr "Dólar de Singapur (SGD)"
+
+#: admin/class-admin.php:200
+msgid "South African Rand (ZAR)"
+msgstr "Rand de Sudáfrica (ZAR)"
+
+#: admin/class-admin.php:200
+msgid "South Korean Won (KRW)"
+msgstr "Won surcoreano (KRW)"
+
+#: admin/class-admin.php:200
+msgid "Swedish Krona (SEK)"
+msgstr "Corona sueca (SEK)"
+
+#: admin/class-admin.php:200
+msgid "Swiss Franc (CHF)"
+msgstr "Franco suizo (CHF)"
+
+#: admin/class-admin.php:201
+msgid "Taiwan New Dollars (TWD)"
+msgstr "Nuevo dólar de Taiwán (TWD)"
+
+#: admin/class-admin.php:201
+msgid "Thai Baht (THB)"
+msgstr "Baht tailandés (THB)"
+
+#: admin/class-admin.php:201
+msgid "Turkish Lira (TRY)"
+msgstr "Lira turca\t(TRY)"
+
+#: admin/class-admin.php:201
+msgid "Vietnamese Dong (VND)"
+msgstr "Dong vietnamita (VND)"
+
+#: admin/class-admin.php:201
+msgid "Russian Ruble (RUB)"
+msgstr "Rublo ruso (RUB)"
+
+#: admin/class-admin.php:206
+msgid "Currency Symbol"
+msgstr "Símbolo de la moneda"
+
+#: admin/class-admin.php:217 admin/includes/class-products-meta-boxes.php:32
+msgid "Thank You Page URL"
+msgstr "URL de la página de agradecimiento"
+
+#: admin/class-admin.php:221
+msgid ""
+"This is the thank you page. This page is automatically created for you when "
+"you install the plugin. Do not delete this page from the pages menu of your "
+"site. The plugin will send the customers to this page after the payment. If "
+"you have accidentally deleted this page, then re-create it using <a href="
+"\"https://wp-express-checkout.com/recreating-the-required-express-checkout-"
+"plugin-pages/\" target=\"_blank\">this documentation</a>."
+msgstr ""
+"Esta es la página de agradecimiento. Esta página se crea automáticamente "
+"para ti cuando instalas el plugin. No borres esta página del menú de páginas "
+"de tu sitio. El plugin enviará a los clientes a esta página después del "
+"pago. Si has borrado accidentalmente esta página, a continuación, vuelve a "
+"crearla usando <a href=\"https://wp-express-checkout.com/recreating-the-"
+"required-express-checkout-plugin-pages/\" target=\"_blank\">esta "
+"documentación</a>."
+
+#: admin/class-admin.php:227
+msgid "Live Mode"
+msgstr "Modo en vivo"
+
+#: admin/class-admin.php:227
+msgid ""
+"Check this to run the transaction in live mode. When unchecked it will run "
+"in sandbox mode."
+msgstr ""
+"Marca esto para ejecutar la transacción en modo en vivo. Cuando se desmarca, "
+"se ejecutará en modo de pruebas."
+
+#: admin/class-admin.php:228
+msgid "Live Client ID"
+msgstr "ID de cliente del modo en vivo"
+
+#: admin/class-admin.php:232
+msgid ""
+"Enter your PayPal Client ID for live mode. <a href=\"%s\" target=\"_blank"
+"\">Read this documentation</a> to learn how to locate your Client ID."
+msgstr ""
+"Introduce tu ID de cliente de PayPal para el modo en vivo. <a href=\"%s\" "
+"target=\"_blank\">Lee esta documentación</a> para aprender cómo localizar tu "
+"ID de cliente."
+
+#: admin/class-admin.php:236
+msgid "Live Secret key"
+msgstr "Clave secreta en vivo"
+
+#: admin/class-admin.php:240
+msgid "Enter your PayPal Secret Key for live mode."
+msgstr "Introduce tu clave secreta de PayPal para el modo en vivo."
+
+#: admin/class-admin.php:244
+msgid "Sandbox Client ID"
+msgstr "ID del cliente de sandbox"
+
+#: admin/class-admin.php:248
+msgid "Enter your PayPal Client ID for sandbox mode."
+msgstr "Introduce tu ID de cliente de PayPal para el modo de pruebas."
+
+#: admin/class-admin.php:252
+msgid "Sandbox Secret key"
+msgstr "Clave secreta del modo de pruebas"
+
+#: admin/class-admin.php:256
+msgid "Enter your PayPal Secret Key for sandbox mode."
+msgstr "Introduce tu clave secreta de PayPal para el modo de pruebas."
+
+#: admin/class-admin.php:262
+msgid "Show in a Popup/Modal Window"
+msgstr "Mostrar en una ventana/mensaje emergente"
+
+#: admin/class-admin.php:266
+msgid ""
+"Enable it to display the checkout form in a dedicated popup/modal window "
+"(instead of on the page)."
+msgstr ""
+"Actívalo para mostrar el formulario de pago en una ventana/mensaje emergente "
+"dedicado (en lugar de en la página)."
+
+#: admin/class-admin.php:270 admin/includes/class-products-meta-boxes.php:411
+msgid "Popup/Modal Trigger Button Text"
+msgstr "Texto del botón activador de la ventana/mensaje emergente"
+
+#: admin/class-admin.php:275
+msgid ""
+"The button text for the button that will trigger the popup/modal window."
+msgstr ""
+"El texto del botón para el botón que activará la ventana/mensaje emergente."
+
+#: admin/class-admin.php:280 admin/includes/class-products-meta-boxes.php:417
+msgid "Button Type"
+msgstr "Tipo de botón"
+
+#: admin/class-admin.php:280 admin/includes/class-products-meta-boxes.php:423
+msgid "Checkout"
+msgstr "Finalizar la compra"
+
+#: admin/class-admin.php:280 admin/includes/class-products-meta-boxes.php:424
+#: public/class-main.php:319
+msgid "Pay"
+msgstr "Pagar"
+
+#: admin/class-admin.php:280 admin/includes/class-products-meta-boxes.php:425
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:105
+msgid "PayPal"
+msgstr "PayPal"
+
+#: admin/class-admin.php:280 admin/includes/class-products-meta-boxes.php:426
+msgid "Buy Now"
+msgstr "Comprar ahora"
+
+#: admin/class-admin.php:281
+msgid "Button Shape"
+msgstr "Forma del botón"
+
+#: admin/class-admin.php:281
+msgid "Pill"
+msgstr "Píldora"
+
+#: admin/class-admin.php:281
+msgid "Rectangle"
+msgstr "Rectangular"
+
+#: admin/class-admin.php:282
+msgid "Button Layout"
+msgstr "Diseño del botón"
+
+#: admin/class-admin.php:282
+msgid "Vertical"
+msgstr "Vertical"
+
+#: admin/class-admin.php:282
+msgid "Horizontal"
+msgstr "Horizontal"
+
+#: admin/class-admin.php:283
+msgid "Button Height"
+msgstr "Altura del botón"
+
+#: admin/class-admin.php:283
+msgid "Small"
+msgstr "Pequeño"
+
+#: admin/class-admin.php:283
+msgid "Medium"
+msgstr "Mediano"
+
+#: admin/class-admin.php:283
+msgid "Large"
+msgstr "Grande"
+
+#: admin/class-admin.php:283
+msgid "Extra Large"
+msgstr "Muy grande"
+
+#: admin/class-admin.php:284
+msgid "Button Width"
+msgstr "Ancho del botón"
+
+#: admin/class-admin.php:284
+msgid "Auto"
+msgstr "Automático"
+
+#: admin/class-admin.php:284
+msgid ""
+"Button width in pixels. Minimum width is 150px. Leave it blank for auto "
+"width."
+msgstr ""
+"La anchura del botón en píxeles. El ancho mínimo es de 150px. Déjalo en "
+"blanco para el ancho automático."
+
+#: admin/class-admin.php:285
+msgid "Button Color"
+msgstr "Color del botón"
+
+#: admin/class-admin.php:285
+msgid "Button preview:"
+msgstr "Vista previa del botón:"
+
+#: admin/class-admin.php:285
+msgid "Gold"
+msgstr "Oro"
+
+#: admin/class-admin.php:285
+msgid "Blue"
+msgstr "Azul"
+
+#: admin/class-admin.php:285
+msgid "Silver"
+msgstr "Plata"
+
+#: admin/class-admin.php:285
+msgid "White"
+msgstr "Blanco"
+
+#: admin/class-admin.php:285
+msgid "Black"
+msgstr "Negro"
+
+#: admin/class-admin.php:288
+msgid "Disabled Funding Options"
+msgstr "Desactivar las opciones de la financiación"
+
+#: admin/class-admin.php:288
+msgid "Credit or debit cards"
+msgstr "Tarjetas de crédito o de débito"
+
+#: admin/class-admin.php:288
+msgid "PayPal Credit"
+msgstr "Crédito de PayPal"
+
+#: admin/class-admin.php:292 admin/includes/class-products-meta-boxes.php:255
+msgid "Shipping Cost"
+msgstr "Coste de envío"
+
+#: admin/class-admin.php:292 admin/includes/class-products-meta-boxes.php:260
+msgid "Enter numbers only. Example: 5.50"
+msgstr "Introduce solo números. Ejemplo: 5.50"
+
+#: admin/class-admin.php:292
+msgid ""
+"Leave it empty if you are not charging shipping cost. You can also set "
+"shipping cost on a per product basis."
+msgstr ""
+"Déjalo en blanco si no estás cobrando el coste de envío. También puedes "
+"establecer el coste de envío por producto."
+
+#: admin/class-admin.php:293 admin/includes/class-products-meta-boxes.php:266
+msgid "Tax (%)"
+msgstr "Impuesto (%)"
+
+#: admin/class-admin.php:293 admin/includes/class-products-meta-boxes.php:271
+msgid "Enter tax (in percent) which will be added to the product price."
+msgstr ""
+"Introduce el impuesto (en porcentaje) que se añadirá al precio del producto."
+
+#: admin/class-admin.php:293 admin/includes/class-products-meta-boxes.php:273
+msgid "Leave it empty if you don't want to apply tax."
+msgstr "Déjalo en blanco si no deseas aplicar los impuestos."
+
+#: admin/class-admin.php:296
+msgid "Enable Debug Logging"
+msgstr "Activar el registro de depuración"
+
+#: admin/class-admin.php:300
+msgid "Check this option to enable debug logging."
+msgstr "Marca esta opción para activar el modo de depuración."
+
+#: admin/class-admin.php:302 admin/class-admin.php:304
+msgid "Click here"
+msgstr "Haz clic aquí"
+
+#: admin/class-admin.php:303
+msgid " to view log file."
+msgstr " para ver el archivo de registro."
+
+#: admin/class-admin.php:305
+msgid " to reset log file."
+msgstr " para restablecer el archivo de registro."
+
+#: admin/class-admin.php:314
+msgid "Send Emails to Buyer After Purchase"
+msgstr "Enviar correos electrónicos al comprador después de la compra"
+
+#: admin/class-admin.php:314
+msgid ""
+"If checked the plugin will send an email to the buyer with the sale details. "
+"If digital goods are purchased then the email will contain the download "
+"links for the purchased products."
+msgstr ""
+"Si está marcado, el plugin enviará un correo electrónico al comprador con "
+"los detalles de la venta. Si se compran productos digitales, el correo "
+"electrónico contendrá los enlaces de descarga para los productos comprados."
+
+#: admin/class-admin.php:317
+msgid "Email Content Type"
+msgstr "Tipo de contenido del correo electrónico"
+
+#: admin/class-admin.php:324
+msgid "Choose which format of email to send."
+msgstr "Elige qué formato de correo electrónico enviar."
+
+#: admin/class-admin.php:327
+msgid "Plain Text"
+msgstr "Texto sin formato"
+
+#: admin/class-admin.php:328
+msgid "HTML"
+msgstr "HTML"
+
+#: admin/class-admin.php:332 admin/class-tools.php:101
+msgid "From Email Address"
+msgstr "Dirección de correo electrónico del remitente"
+
+#: admin/class-admin.php:332
+msgid ""
+"Example: Your Name &lt;sales@your-domain.com&gt; This is the email address "
+"that will be used to send the email to the buyer. This name and email "
+"address will appear in the from field of the email."
+msgstr ""
+"Ejemplo: Tu nombre &lt;ventas@tu-dominio.com&gt;  Esta es la dirección de "
+"correo electrónico que se usará para enviar el correo electrónico al "
+"comprador. Este nombre y dirección de correo electrónico aparecerá en el "
+"campo del remitente del correo electrónico."
+
+#: admin/class-admin.php:333
+msgid "Buyer Email Subject"
+msgstr "Asunto del correo electrónico del comprador"
+
+#: admin/class-admin.php:333
+msgid "This is the subject of the email that will be sent to the buyer."
+msgstr ""
+"Este es el asunto del correo electrónico que será enviado al comprador."
+
+#: admin/class-admin.php:342
+msgid "Buyer Email Body"
+msgstr "Cuerpo del correo electrónico del comprador"
+
+#: admin/class-admin.php:343
+msgid ""
+"This is the body of the email that will be sent to the buyer. Do not change "
+"the text within the braces {}. You can use the following email tags in this "
+"email body field:"
+msgstr ""
+"Este es el cuerpo del correo electrónico que se enviará al comprador. No "
+"cambies el texto entre los corchetes {}. Puedes usar las siguientes "
+"etiquetas de correo electrónico en este campo de cuerpo del correo "
+"electrónico:"
+
+#: admin/class-admin.php:346
+msgid "Send Emails to Seller After Purchase"
+msgstr "Enviar correos electrónicos al vendedor después de la compra"
+
+#: admin/class-admin.php:346
+msgid ""
+"If checked the plugin will send an email to the seller with the sale details"
+msgstr ""
+"Si se marca, el plugin enviará un correo electrónico al vendedor con los "
+"datos de la venta"
+
+#: admin/class-admin.php:347
+msgid "Notification Email Address*"
+msgstr "Dirección del correo electrónico para el aviso*"
+
+#: admin/class-admin.php:347
+msgid ""
+"This is the email address where the seller will be notified of product "
+"sales. You can put multiple email addresses separated by comma (,) in the "
+"above field to send the notification to multiple email addresses."
+msgstr ""
+"Esta es la dirección de correo electrónico donde el vendedor será avisado de "
+"las ventas de productos. Puedes introducir varias direcciones de correo "
+"electrónico separadas por comas (,) en el campo anterior para enviar el "
+"aviso a varias direcciones de correo electrónico."
+
+#: admin/class-admin.php:348
+msgid "Seller Email Subject*"
+msgstr "Asunto del correo electrónico del vendedor*"
+
+#: admin/class-admin.php:348
+msgid ""
+"This is the subject of the email that will be sent to the seller for record."
+msgstr ""
+"Este es el asunto del correo electrónico que será enviado al vendedor para "
+"su registro."
+
+#: admin/class-admin.php:349
+msgid "Seller Email Body*"
+msgstr "Cuerpo del correo electrónico del vendedor*"
+
+#: admin/class-admin.php:350
+msgid ""
+"This is the body of the email that will be sent to the seller for record. Do "
+"not change the text within the braces {}. You can use the following email "
+"tags in this email body field:"
+msgstr ""
+"Este es el cuerpo del correo electrónico que se enviará al vendedor para su "
+"registro. No cambies el texto entre los corchetes {}. Puedes usar las "
+"siguientes etiquetas de correo electrónico en este campo de cuerpo del "
+"correo electrónico:"
+
+#: admin/class-admin.php:361
+msgid "Currency Position"
+msgstr "Posición de la moneda"
+
+#: admin/class-admin.php:368
+msgid "This controls the position of the currency symbol."
+msgstr "Esto controla la posición del símbolo de la moneda."
+
+#: admin/class-admin.php:371
+msgid "Left (%s1.00)"
+msgstr "Izquierda (%s1.00)"
+
+#: admin/class-admin.php:372
+msgid "Left with space (%s 1.00)"
+msgstr "Izquierda con espacio (%s 1.00)"
+
+#: admin/class-admin.php:373
+msgid "Right (1.00%s)"
+msgstr "Derecha (1.00%s)"
+
+#: admin/class-admin.php:374
+msgid "Right with space (1.00 %s)"
+msgstr "Derecha con espacio (1.00 %s)"
+
+#: admin/class-admin.php:379
+msgid "Decimal Separator"
+msgstr "Separador decimal"
+
+#: admin/class-admin.php:386
+msgid "This sets the decimal separator of the displayed price."
+msgstr "Esto establece el separador decimal del precio mostrado."
+
+#: admin/class-admin.php:391
+msgid "Thousand Separator"
+msgstr "Separador de miles"
+
+#: admin/class-admin.php:398
+msgid "This sets the thousand separator of the displayed price."
+msgstr "Esto establece el separador de miles del precio mostrado."
+
+#: admin/class-admin.php:403
+msgid "Number of Decimals"
+msgstr "Número de decimales"
+
+#: admin/class-admin.php:410
+msgid "This sets the number of decimal points shown in the displayed price."
+msgstr ""
+"Esto establece el número de puntos decimales que se muestran en el precio "
+"mostrado."
+
+#: admin/class-admin.php:417
+msgid "Enable Terms and Conditions"
+msgstr "Activar los términos y condiciones"
+
+#: admin/class-admin.php:424
+msgid "Enable Terms and Conditions checkbox."
+msgstr "Activa la casilla de verificación de términos y condiciones."
+
+#: admin/class-admin.php:429
+msgid "Checkbox Text"
+msgstr "Texto de la casilla de verificación"
+
+#: admin/class-admin.php:436
+msgid ""
+"Text to be displayed for the checkbox. It accepts HTML code so you can put a "
+"link to your terms and conditions page."
+msgstr ""
+"Texto que se mostrará en la casilla de verificación. Acepta código HTML para "
+"que puedas poner un enlace a tu página de términos y condiciones."
+
+#: admin/class-admin.php:445
+msgid ""
+"The following options affect the emails that gets sent to your buyers after "
+"a purchase."
+msgstr ""
+"Las siguientes opciones afectan a los correos electrónicos que se envían a "
+"tus compradores después de una compra."
+
+#: admin/class-admin.php:453
+msgid ""
+"By default, funding source eligibility is smartly decided based on a variety "
+"of factors. You can force disable funding options by selecting them below."
+msgstr ""
+"Por defecto, la elegibilidad de la fuente de financiación se decide de "
+"manera inteligente en base a una variedad de factores. Puedes forzar la "
+"desactivación de las opciones de financiación seleccionándolas a "
+"continuación."
+
+#: admin/class-admin.php:456
+msgid ""
+"Note: disabled options will disappear from button preview once you save "
+"changes."
+msgstr ""
+"Nota: las opciones desactivadas desaparecerán de la vista previa del botón "
+"una vez que guardas los cambios."
+
+#: admin/class-admin.php:465
+msgid ""
+"Debug logging can be useful to troubleshoot transaction processing related "
+"issues on your site. keep it disabled unless you are troubleshooting."
+msgstr ""
+"El registro de depuración puede ser útil para diagnosticar los problemas "
+"relacionados con el procesamiento de las transacciones en tu sitio. Mantenlo "
+"desactivado salvo que estés diagnosticando."
+
+#: admin/class-admin.php:473
+msgid ""
+"This section allows you to configure Terms and Conditions or Privacy Policy "
+"that customers must accept before making a payment."
+msgstr ""
+"Esta sección te permite configurar los términos y condiciones o la política "
+"de privacidad que los clientes deben aceptar antes de realizar un pago."
+
+#. translators: "%s" - field title
+#: admin/class-admin.php:598
+msgid "You must specify a value in the \"%s\" field."
+msgstr "Debes especificar un valor en el campo «%s»."
+
+#: admin/class-tools.php:76
+msgid "WP Express Checkout Tools"
+msgstr "Herramientas de WP Express Checkout"
+
+#: admin/class-tools.php:77
+msgid "Tools"
+msgstr "Herramientas"
+
+#: admin/class-tools.php:94
+msgid "Send Email to Customers"
+msgstr "Enviar correo electrónico a los clientes"
+
+#: admin/class-tools.php:108
+msgid "This email will appear in the from field of the email."
+msgstr ""
+"Este correo electrónico aparecerá en el campo del remitente del correo "
+"electrónico."
+
+#: admin/class-tools.php:115
+msgid "To Email Address"
+msgstr "Dirección de correo electrónico del destinatario"
+
+#: admin/class-tools.php:122
+msgid "This is the email address where the email with be sent to."
+msgstr ""
+"Esta es la dirección de correo electrónico donde se enviará el correo "
+"electrónico."
+
+#: admin/class-tools.php:128
+msgid "Email Subject"
+msgstr "Asunto del correo electrónico"
+
+#: admin/class-tools.php:135
+msgid "This is the email subject"
+msgstr "Este es el asunto del correo electrónico"
+
+#: admin/class-tools.php:141
+msgid "Email Body"
+msgstr "Cuerpo del correo electrónico"
+
+#: admin/class-tools.php:148
+msgid "Type your email and hit the Send Email button."
+msgstr ""
+"Escribe tu correo electrónico y presiona el botón para enviar el correo "
+"electrónico."
+
+#: admin/class-tools.php:193 admin/includes/class-orders-meta-boxes.php:289
+msgid "Email successfully sent!"
+msgstr "¡El correo electrónico se ha enviado correctamente!"
+
+#: admin/class-tools.php:196 admin/includes/class-orders-meta-boxes.php:286
+msgid "Something went wrong, email is not sent!"
+msgstr "Algo ha ido mal. ¡No se ha enviado el correo electrónico!"
+
+#: admin/class-tools.php:206
+msgid ""
+"You can use this feature to send a quick email to your customers. If you "
+"want to re-send a download link for an order, first get the download link(s) "
+"from the Orders menu of the order in question, then email it to them using "
+"the following option."
+msgstr ""
+"Puedes usar esta característica para enviar un correo electrónico rápido a "
+"tus clientes. Si quieres volver a enviar un enlace de descarga para un "
+"pedido, obtén primero el/los enlace(s) de descarga desde el menú de pedidos "
+"del pedido en cuestión y luego enviarlo por correo electrónico usando la "
+"siguiente opción."
+
+#: admin/class-tools.php:212
+msgid "Send Email >>"
+msgstr "Enviar el correo electrónico >>"
+
+#: admin/includes/class-admin-order-summary-table.php:19
+msgid "Item"
+msgstr "Artículo"
+
+#: admin/includes/class-admin-order-summary-table.php:20
+#: admin/includes/class-products-list.php:28
+#: admin/includes/class-products-meta-boxes.php:26
+#: admin/includes/class-products-meta-boxes.php:89
+#: includes/class-order-summary-plain.php:41
+msgid "Price"
+msgstr "Precio"
+
+#: admin/includes/class-admin-order-summary-table.php:21
+msgid "Affects"
+msgstr "Afecta"
+
+#: admin/includes/class-admin-order-summary-table.php:31
+#: admin/includes/class-orders-list.php:40
+#: includes/class-order-summary-table.php:120
+msgid "Total"
+msgstr "Total"
+
+#. translators: quantity
+#: admin/includes/class-admin-order-summary-table.php:50
+#: includes/class-order-summary-table.php:130
+#: public/includes/class-shortcodes.php:263
+msgid "x %s"
+msgstr "x %s"
+
+#: admin/includes/class-admin-order-summary-table.php:69
+#: includes/class-order-summary-table.php:69
+#: includes/class-order-summary-table.php:110
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#: admin/includes/class-coupons-list.php:57 includes/class-coupons.php:332
+msgid "Coupon Code"
+msgstr "Código del cupón"
+
+#: admin/includes/class-coupons-list.php:59 includes/class-coupons.php:315
+msgid "Active"
+msgstr "Activo"
+
+#: admin/includes/class-coupons-list.php:60
+msgid "Discount Value"
+msgstr "Valor del descuento"
+
+#: admin/includes/class-coupons-list.php:61 includes/class-coupons.php:357
+msgid "Redemption Count"
+msgstr "Recuento de uso"
+
+#: admin/includes/class-coupons-list.php:62 includes/class-coupons.php:350
+msgid "Redemption Limit"
+msgstr "Límite de uso"
+
+#: admin/includes/class-coupons-list.php:63 includes/class-coupons.php:364
+msgid "Start Date"
+msgstr "Fecha de inicio"
+
+#: admin/includes/class-coupons-list.php:64 includes/class-coupons.php:371
+msgid "Expiry Date"
+msgstr "Fecha de caducidad"
+
+#: admin/includes/class-coupons-list.php:72
+msgid "No expiry"
+msgstr "Sin caducidad"
+
+#: admin/includes/class-coupons-list.php:74
+msgid "No"
+msgstr "No"
+
+#: admin/includes/class-coupons-list.php:74
+msgid "Yes"
+msgstr "Sí"
+
+#. translators: %s is coupon code
+#: admin/includes/class-coupons-list.php:78
+msgid "Are you sure you want to delete \"%s\" coupon? This can't be undone."
+msgstr "¿Seguro que quieres borrar el cupón «%s»? Esto no se puede deshacer."
+
+#: admin/includes/class-coupons-list.php:81
+#: admin/includes/class-coupons-list.php:84
+msgid "Edit coupon"
+msgstr "Editar el cupón"
+
+#: admin/includes/class-coupons-list.php:84
+msgid "Edit"
+msgstr "Editar"
+
+#: admin/includes/class-coupons-list.php:87
+msgid "Delete coupon"
+msgstr "Borrar el cupón"
+
+#: admin/includes/class-coupons-list.php:87
+msgid "Delete"
+msgstr "Borrar"
+
+#: admin/includes/class-orders-list.php:36
+msgid "Order"
+msgstr "Pedido"
+
+#: admin/includes/class-orders-list.php:37
+msgid "PayPal Transaction ID"
+msgstr "ID de la transacción de PayPal"
+
+#: admin/includes/class-orders-list.php:38
+#: admin/includes/class-products-meta-boxes.php:25
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:109
+msgid "Description"
+msgstr "Descripción"
+
+#: admin/includes/class-orders-list.php:39
+msgid "Author"
+msgstr "Autor"
+
+#: admin/includes/class-orders-list.php:41
+#: admin/includes/class-products-list.php:30
+msgid "Date"
+msgstr "Fecha"
+
+#: admin/includes/class-orders-list.php:42
+#: admin/includes/class-orders-meta-boxes.php:126
+msgid "Status"
+msgstr "Estado"
+
+#: admin/includes/class-orders-list.php:126
+msgid "Unpublished"
+msgstr "Sin publicar"
+
+#: admin/includes/class-orders-list.php:136
+msgid "%s ago"
+msgstr "Hace %s"
+
+#: admin/includes/class-orders-meta-boxes.php:34
+msgid "Order Summary"
+msgstr "Resumen del pedido"
+
+#: admin/includes/class-orders-meta-boxes.php:35
+msgid "Order Downloads"
+msgstr "Descargas del pedido"
+
+#: admin/includes/class-orders-meta-boxes.php:36
+msgid "Order Actions"
+msgstr "Acciones del pedido"
+
+#: admin/includes/class-orders-meta-boxes.php:37
+msgid "Order Status"
+msgstr "Estado del pedido"
+
+#: admin/includes/class-orders-meta-boxes.php:38
+msgid "Order Author"
+msgstr "Autor del pedido"
+
+#: admin/includes/class-orders-meta-boxes.php:77
+msgid "There are no downloads for this order."
+msgstr "No hay descargas para este pedido."
+
+#: admin/includes/class-orders-meta-boxes.php:122
+#: admin/includes/class-products-list.php:27
+msgid "ID"
+msgstr "ID"
+
+#: admin/includes/class-orders-meta-boxes.php:130
+msgid "Currency"
+msgstr "Moneda"
+
+#: admin/includes/class-orders-meta-boxes.php:134
+msgid "Order Time"
+msgstr "Hora del pedido"
+
+#: admin/includes/class-orders-meta-boxes.php:138
+msgid "Transaction ID"
+msgstr "ID de la transacción"
+
+#: admin/includes/class-orders-meta-boxes.php:169
+msgid "Resend sale notification email"
+msgstr "Reenviar el correo electrónico de aviso de venta"
+
+#: admin/includes/class-orders-meta-boxes.php:207
+msgid "N/A"
+msgstr "N/D"
+
+#: admin/includes/class-orders-meta-boxes.php:231
+msgid "Billing Address:"
+msgstr "Dirección de facturación:"
+
+#: admin/includes/class-orders-meta-boxes.php:239
+msgid "Shipping Address:"
+msgstr "Dirección de envío:"
+
+#: admin/includes/class-products-list.php:24
+msgid "Thumbnail"
+msgstr "Miniatura"
+
+#: admin/includes/class-products-list.php:25
+#: includes/class-order-summary-plain.php:39
+msgid "Product Name"
+msgstr "Nombre del producto"
+
+#: admin/includes/class-products-list.php:26
+msgid "Product Type"
+msgstr "Tipo de producto"
+
+#: admin/includes/class-products-list.php:29
+#: admin/includes/class-products-meta-boxes.php:33
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: admin/includes/class-products-list.php:58 includes/class-products.php:27
+msgid "Edit Product"
+msgstr "Editar el producto"
+
+#: admin/includes/class-products-meta-boxes.php:27
+msgid "Variations"
+msgstr "Variaciones"
+
+#: admin/includes/class-products-meta-boxes.php:28
+#: admin/includes/class-products-meta-boxes.php:236
+#: includes/class-order-summary-plain.php:40
+msgid "Quantity"
+msgstr "Cantidad"
+
+#: admin/includes/class-products-meta-boxes.php:30
+msgid "Download URL"
+msgstr "URL de descarga"
+
+#: admin/includes/class-products-meta-boxes.php:31
+msgid "Product Thumbnail"
+msgstr "Miniatura del producto"
+
+#: admin/includes/class-products-meta-boxes.php:34
+msgid "Appearance Related"
+msgstr "Relacionado con la apariencia"
+
+#: admin/includes/class-products-meta-boxes.php:35
+msgid "Coupons Settings"
+msgstr "Ajustes de los cupones"
+
+#: admin/includes/class-products-meta-boxes.php:39
+msgid "Add a description for your product."
+msgstr "Añade una descripción para tu producto."
+
+#: admin/includes/class-products-meta-boxes.php:46
+msgid "One-time payment"
+msgstr "Pago único"
+
+#: admin/includes/class-products-meta-boxes.php:47
+msgid "Donation"
+msgstr "Donación"
+
+#: admin/includes/class-products-meta-boxes.php:66
+#: includes/products/class-stub-product.php:13
+msgid ""
+"A product type \"%s\" is not registered. Please activate the appropriate "
+"addon to use this product."
+msgstr ""
+"El tipo de producto «%s» no está registrado. Por favor, activa la extensión "
+"apropiada para usar este producto."
+
+#: admin/includes/class-products-meta-boxes.php:92
+msgid ""
+"Item price. Enter numbers only, no need to put currency symbol. Example: "
+"39.95"
+msgstr ""
+"Precio del articulo. Solo números, no es necesario poner el símbolo de "
+"moneda. Ejemplo: 39.95"
+
+#: admin/includes/class-products-meta-boxes.php:97
+msgid ""
+"Donation type product allows the customers to change the amount that they "
+"want to pay. You can set a minimum donation amount using the field below."
+msgstr ""
+"El producto del tipo de donación permite a los clientes cambiar la cantidad "
+"que quieren pagar. Puedes configurar una cantidad mínima de donación usando "
+"el campo siguiente."
+
+#: admin/includes/class-products-meta-boxes.php:98
+msgid "Minimum Donation Amount"
+msgstr "Cantidad mínima de donación"
+
+#: admin/includes/class-products-meta-boxes.php:101
+msgid ""
+"Specify a minimum donation amount. Enter numbers only, no need to put "
+"currency symbol. Example: 5.00"
+msgstr ""
+"Especifica una cantidad mínima de donación. Introduce solo números, no es "
+"necesario poner. un símbolo de moneda. Ejemplo: 5.00"
+
+#: admin/includes/class-products-meta-boxes.php:129
+msgid ""
+"Enter price modification - amount that will be added to product price if "
+"particular variation is selected."
+msgstr ""
+"Introduce la modificación del precio: cantidad que será añadida al precio "
+"del producto si se selecciona una variación particular."
+
+#: admin/includes/class-products-meta-boxes.php:131
+msgid "Put negative value if you want to substract the amount instead."
+msgstr "Pon un valor negativo si en su lugar quieres restar la cantidad."
+
+#. translators: %s is a link to documentation page
+#: admin/includes/class-products-meta-boxes.php:136
+msgid ""
+"You can find documentation on variations <a href=\"%s\" target=\"_blank"
+"\">here</a>."
+msgstr ""
+"Puedes conseguir la documentación de las variaciones <a href=\"%s\" target="
+"\"_blank\">aquí</a>."
+
+#: admin/includes/class-products-meta-boxes.php:143
+msgid "Use variations only to construct final product price"
+msgstr "Usa solo variaciones para construir el precio final del producto"
+
+#: admin/includes/class-products-meta-boxes.php:146
+msgid ""
+"When enabled, the total product price will be calculated by using the "
+"variation prices only. Useful if you do not want to have a base price for "
+"this product."
+msgstr ""
+"Cuando está activado, el precio total del producto se calculará usando solo "
+"los precios de variación. Es útil si no quieres tener un precio base para "
+"este producto."
+
+#: admin/includes/class-products-meta-boxes.php:148
+msgid ""
+"Note: To enable this option, you will need to set the product price to 0."
+msgstr ""
+"Nota: para activar esta opción, tendrás que establecer el precio del "
+"producto en 0."
+
+#: admin/includes/class-products-meta-boxes.php:159
+msgid "No variations configured for this product."
+msgstr "No hay variaciones configuradas para este producto."
+
+#: admin/includes/class-products-meta-boxes.php:166
+msgid "Create Group"
+msgstr "Crear un grupo"
+
+#: admin/includes/class-products-meta-boxes.php:171
+msgid "Group Name:"
+msgstr "Nombre del grupo:"
+
+#: admin/includes/class-products-meta-boxes.php:174
+msgid "Delete group"
+msgstr "Borrar el grupo"
+
+#: admin/includes/class-products-meta-boxes.php:177
+msgid "Display As:"
+msgstr "Mostrar como:"
+
+#: admin/includes/class-products-meta-boxes.php:179
+msgid "Dropdown"
+msgstr "Desplegable"
+
+#: admin/includes/class-products-meta-boxes.php:180
+msgid "Radio Buttons"
+msgstr "Botones de radio"
+
+#: admin/includes/class-products-meta-boxes.php:187
+msgid "Price Mod"
+msgstr "Modificación de precio"
+
+#: admin/includes/class-products-meta-boxes.php:188
+msgid "Product URL"
+msgstr "URL del producto"
+
+#: admin/includes/class-products-meta-boxes.php:192
+msgid "Add Variation"
+msgstr "Añadir variación"
+
+#: admin/includes/class-products-meta-boxes.php:203
+msgid "Select from Media Library"
+msgstr "Seleccionar desde la biblioteca de medios"
+
+#: admin/includes/class-products-meta-boxes.php:206
+msgid "Delete variation"
+msgstr "Borrar variación"
+
+#: admin/includes/class-products-meta-boxes.php:222
+msgid "Are you sure you want to delete this group?"
+msgstr "¿Estás seguro de que quieres borrar este grupo?"
+
+#: admin/includes/class-products-meta-boxes.php:223
+msgid "Are you sure you want to delete this variation?"
+msgstr "¿Estás seguro de que quieres borrar esta variación?"
+
+#: admin/includes/class-products-meta-boxes.php:239
+msgid "Item quantity."
+msgstr "Cantidad del artículo."
+
+#: admin/includes/class-products-meta-boxes.php:242
+msgid "Allow customers to specify quantity"
+msgstr "Permitir a los clientes especificar la cantidad"
+
+#: admin/includes/class-products-meta-boxes.php:244
+msgid ""
+"When checked, customers can enter quantity they want to buy. You can set "
+"initial quantity using field above."
+msgstr ""
+"Cuando está marcada, los clientes pueden introducir la cantidad que desean "
+"comprar. Puedes establecer la cantidad inicial usando el campo de arriba."
+
+#: admin/includes/class-products-meta-boxes.php:262
+msgid "Leave it empty if you are not charging shipping cost."
+msgstr "Déjalo en blanco si no estás cobrando el coste de envío."
+
+#: admin/includes/class-products-meta-boxes.php:278
+msgid "This is a Physical Product"
+msgstr "Este es un producto físico"
+
+#: admin/includes/class-products-meta-boxes.php:280
+msgid ""
+"When checked, shipping address will be collected at the time of checkout."
+msgstr ""
+"Cuando está marcado, la dirección de envío será recogida en el momento de la "
+"compra."
+
+#: admin/includes/class-products-meta-boxes.php:287
+msgid "URL of your product."
+msgstr "URL del producto."
+
+#: admin/includes/class-products-meta-boxes.php:293
+msgid ""
+"Manually enter a valid URL of the file in the text box below, or click "
+"\"Select File\" button to upload (or choose) the downloadable file."
+msgstr ""
+"Introduce manualmente una URL válida del archivo en el cuadro de texto a "
+"continuación, o haz clic en el botón «Seleccionar archivo» para subir (o "
+"elegir) el archivo descargable."
+
+#: admin/includes/class-products-meta-boxes.php:297
+#: admin/includes/class-products-meta-boxes.php:315
+msgid "Select File"
+msgstr "Seleccionar un archivo"
+
+#: admin/includes/class-products-meta-boxes.php:301
+msgid "Steps to upload a file or choose one from your media library:"
+msgstr ""
+"Los pasos para subir un archivo o elegir uno de tu biblioteca de medios:"
+
+#: admin/includes/class-products-meta-boxes.php:303
+msgid "Hit the \"Select File\" button."
+msgstr "Presiona el botón «Seleccionar archivo»."
+
+#: admin/includes/class-products-meta-boxes.php:304
+msgid "Upload a new file or choose an existing one from your media library."
+msgstr ""
+"Sube un nuevo archivo o elige uno existente de la biblioteca de medios."
+
+#: admin/includes/class-products-meta-boxes.php:305
+msgid ""
+"Click the \"Insert\" button, this will populate the uploaded file's URL in "
+"the above text field."
+msgstr ""
+"Haz clic en el botón «Insertar», esto completará la URL del archivo subido "
+"en el campo de texto anterior."
+
+#: admin/includes/class-products-meta-boxes.php:317
+#: admin/includes/class-products-meta-boxes.php:363
+msgid "Insert"
+msgstr "Insertar"
+
+#: admin/includes/class-products-meta-boxes.php:341
+msgid ""
+"Manually enter a valid URL, or click \"Select Image\" to upload (or choose) "
+"the file thumbnail image."
+msgstr ""
+"Introduce manualmente una dirección URL válida o haz clic en «Seleccionar "
+"imagen» para subir (o elegir) la imagen en miniatura del archivo."
+
+#: admin/includes/class-products-meta-boxes.php:345
+#: admin/includes/class-products-meta-boxes.php:361
+msgid "Select Image"
+msgstr "Selecciona una imagen"
+
+#: admin/includes/class-products-meta-boxes.php:346
+msgid "Remove Image"
+msgstr "Eliminar la imagen"
+
+#: admin/includes/class-products-meta-boxes.php:394
+msgid ""
+"Enter the Thank You page URL for this product. Leave it blank if you want to "
+"use the default Thank You page created by the plugin."
+msgstr ""
+"Introduce la URL de la página de agradecimiento para este producto. Déjalo "
+"en blanco si deseas usar la página de agradecimiento por defecto creada por "
+"el plugin."
+
+#: admin/includes/class-products-meta-boxes.php:402
+msgid "Use this shortcode to display button for your product."
+msgstr "Usa este shortcode para mostrar el botón de tu producto."
+
+#: admin/includes/class-products-meta-boxes.php:414
+msgid ""
+"Specify the text to be displayed on the button that triggers the payment "
+"popup/modal window. Leave it blank to use the text specified in General "
+"Settings page."
+msgstr ""
+"Especifica el texto que se mostrará en el botón que activa la ventana "
+"emergente/mensaje de pago. Déjalo en blanco para usar el texto especificado "
+"en la página de ajustes generales."
+
+#: admin/includes/class-products-meta-boxes.php:416
+msgid "Button Options"
+msgstr "Opciones del botón"
+
+#: admin/includes/class-products-meta-boxes.php:420
+msgid "-- Default --"
+msgstr "-- Por defecto --"
+
+#: admin/includes/class-products-meta-boxes.php:434
+msgid ""
+"Select a button type/style for the paypal payment button for this product. "
+"By default, it will use the type specified in the General settings of this "
+"plugin."
+msgstr ""
+"Selecciona un tipo/estilo de botón para el botón de pago de PayPal para este "
+"producto. Por defecto, usará el tipo especificado en los ajustes generales "
+"de este plugin."
+
+#: admin/includes/class-products-meta-boxes.php:442
+msgid "Select how Coupons should be handled for this product."
+msgstr "Selecciona cómo se deben gestionar los cupones para este producto."
+
+#: admin/includes/class-products-meta-boxes.php:443
+msgid "Use Global Setting"
+msgstr "Usar los ajustes globales"
+
+#: admin/includes/class-products-meta-boxes.php:444
+msgid "Enabled"
+msgstr "Activado"
+
+#: admin/includes/class-products-meta-boxes.php:445
+msgid "Disabled"
+msgstr "Desactivado"
+
+#: admin/includes/class-products-meta-boxes.php:465
+msgid "Please specify product name."
+msgstr "Por favor, especifica el nombre del producto."
+
+#: admin/includes/class-products-meta-boxes.php:570
+msgid "View product"
+msgstr "Ver el producto"
+
+#: admin/includes/class-products-meta-boxes.php:573
+msgid "Preview product"
+msgstr "Vista previa del producto"
+
+#: admin/includes/class-products-meta-boxes.php:576
+#: admin/includes/class-products-meta-boxes.php:577
+msgid "Product updated."
+msgstr "Se ha actualizado el producto."
+
+#: admin/includes/class-products-meta-boxes.php:578
+msgid "Product published."
+msgstr "El producto está publicado."
+
+#: admin/includes/class-products-meta-boxes.php:579
+msgid "Product saved."
+msgstr "El producto está guardado."
+
+#: admin/includes/class-products-meta-boxes.php:580
+msgid "Product submitted."
+msgstr "El producto ha sido enviado."
+
+#: admin/includes/class-products-meta-boxes.php:581
+msgid "Product draft updated."
+msgstr "Actualizado el borrador del producto."
+
+#: admin/views/admin.php:51
+msgid "General Settings"
+msgstr "Ajustes generales"
+
+#: admin/views/admin.php:52
+msgid "Email Settings"
+msgstr "Ajustes del correo electrónico"
+
+#: admin/views/admin.php:53
+msgid "Advanced Settings"
+msgstr "Ajustes avanzados"
+
+#: admin/views/sidebar.php:9
+msgid "Plugin Documentation"
+msgstr "Documentación del plugin"
+
+#: admin/views/sidebar.php:11
+msgid ""
+"Please read the <a target=\"_blank\" href=\"%s\">WP Express Checkout</a> "
+"plugin setup instructions and tutorials to learn how to configure and use it."
+msgstr ""
+"Por favor, lee las instrucciones de configuración y tutoriales del plugin <a "
+"target=\"_blank\" href=\"%s\">WP Express Checkout</a> para aprender a "
+"configurar y usarlo."
+
+#: admin/views/sidebar.php:15
+msgid "Add-ons"
+msgstr "Extensiones"
+
+#: admin/views/sidebar.php:17
+msgid ""
+"Want additional functionality? Check out our <a target=\"_blank\" href=\"%s"
+"\">Add-Ons!</a>"
+msgstr ""
+"¿Quieres funcionalidad adicional? ¡Echa un vistazo a nuestras <a target="
+"\"_blank\" href=\"%s\">extensiones!</a>"
+
+#: admin/views/sidebar.php:21
+msgid "Need Something Bigger?"
+msgstr "¿Necesitas algo más grande?"
+
+#: admin/views/sidebar.php:28
+msgid "Rate Us"
+msgstr "Valóranos"
+
+#: admin/views/sidebar.php:30
+msgid ""
+"Like the plugin? Please give us a <a href=\"%s\" target=\"_blank\">rating!</"
+"a>"
+msgstr ""
+"¿Te gusta el plugin? ¡Por favor, danos una <a href=\"%s\" target=\"_blank"
+"\">valoración!</a>"
+
+#: admin/views/sidebar.php:43
+msgid "Our Other Plugins"
+msgstr "Nuestros otros plugins"
+
+#: admin/views/sidebar.php:45
+msgid "Check out <a target=\"_blank\" href=\"%s\">our other plugins</a>"
+msgstr ""
+"Echa un vistazo a <a target=\"_blank\" href=\"%s\">nuestros otros plugins</a>"
+
+#: admin/views/tools.php:33
+msgid "General Tools"
+msgstr "Herramientas generales"
+
+#: includes/blocks/product-block/class-product-block.php:40
+#: includes/class-order-summary-table.php:68
+msgid "Product"
+msgstr "Producto"
+
+#: includes/blocks/product-block/class-product-block.php:41
+msgid "Template"
+msgstr "Plantilla"
+
+#: includes/blocks/product-block/class-product-block.php:42
+msgid "Show in Modal"
+msgstr "Mostrar en emergente"
+
+#: includes/blocks/product-block/class-product-block.php:43
+msgid "Layout Options"
+msgstr "Opciones de diseño"
+
+#: includes/blocks/product-block/class-product-block.php:80
+msgid "Select product to view"
+msgstr "Seleccionar un producto para ver"
+
+#: includes/blocks/product-block/class-product-block.php:115
+msgid "(Select product)"
+msgstr "(Seleccionar un producto)"
+
+#: includes/blocks/product-block/class-product-block.php:138
+msgid "Show Button Only"
+msgstr "Mostrar solo el botón"
+
+#: includes/blocks/product-block/class-product-block.php:142
+msgid "Compact Product template"
+msgstr "Plantilla compacta del producto"
+
+#: includes/blocks/product-block/class-product-block.php:146
+msgid "Full Product template"
+msgstr "Plantilla completa del producto"
+
+#: includes/class-coupons.php:44
+msgid "Coupon not found."
+msgstr "No se ha encontrado el cupón."
+
+#: includes/class-coupons.php:51
+msgid "Coupon is not active."
+msgstr "El cupón no está activo."
+
+#: includes/class-coupons.php:58
+msgid "Coupon is not available yet."
+msgstr "El cupón aún no está disponible."
+
+#: includes/class-coupons.php:65
+msgid "Coupon has expired."
+msgstr "El cupón ha caducado."
+
+#: includes/class-coupons.php:73
+msgid "Coupon redemption limit is reached."
+msgstr "Se ha alcanzado el límite de uso del cupón."
+
+#: includes/class-coupons.php:98
+msgid "Empty coupon code"
+msgstr "El código de cupón vacío"
+
+#: includes/class-coupons.php:114
+msgid "No product ID specified."
+msgstr "No se ha especificado ningún ID de producto."
+
+#: includes/class-coupons.php:119
+msgid "Coupon is not allowed for this product."
+msgstr "No se permiten cupones para este producto."
+
+#: includes/class-coupons.php:156 includes/class-coupons.php:226
+#: includes/class-coupons.php:250
+msgid "Coupons"
+msgstr "Cupones"
+
+#: includes/class-coupons.php:166
+msgid "Settings updated."
+msgstr "Ajustes actualizados."
+
+#: includes/class-coupons.php:229
+msgid "Coupon Settings"
+msgstr "Ajustes del cupón"
+
+#: includes/class-coupons.php:235
+msgid "Enable Coupons"
+msgstr "Activar cupones"
+
+#: includes/class-coupons.php:238
+msgid "Enables the discount coupon functionality."
+msgstr "Activa la funcionalidad de cupones de descuento."
+
+#: includes/class-coupons.php:244
+msgid "Save Settings"
+msgstr "Guardar los ajustes"
+
+#: includes/class-coupons.php:250
+msgid "Add a Coupon"
+msgstr "Añadir un cupón"
+
+#: includes/class-coupons.php:306
+msgid "No products created yet."
+msgstr "Aún no se han creado productos."
+
+#: includes/class-coupons.php:311
+msgid "Add Coupon"
+msgstr "Añadir un cupón"
+
+#: includes/class-coupons.php:311
+msgid "Edit Coupon"
+msgstr "Editar el cupón"
+
+#: includes/class-coupons.php:318
+msgid "Use this to enable/disable this coupon."
+msgstr "Usa esto para activar/desactivar este cupón."
+
+#: includes/class-coupons.php:323
+msgid "Coupon ID"
+msgstr "ID del cupón"
+
+#: includes/class-coupons.php:327
+msgid "Coupon ID. This value cannot be changed."
+msgstr "ID de cupón. Este valor no se puede cambiar."
+
+#: includes/class-coupons.php:335
+msgid "Coupon code that you can share with your customers. Example: GET10OFF"
+msgstr ""
+"El código de cupón que puedes compartir con tus clientes. Ejemplo: GET10OFF"
+
+#: includes/class-coupons.php:339
+msgid "Discount"
+msgstr "Descuento"
+
+#: includes/class-coupons.php:343
+msgid "Percent (%)"
+msgstr "Porcentaje (%)"
+
+#: includes/class-coupons.php:344
+msgid "Fixed amount"
+msgstr "Cantidad fija"
+
+#: includes/class-coupons.php:346
+msgid ""
+"Select discount amount and type. Enter a numeric value only. Example: 25"
+msgstr ""
+"Selecciona la cantidad y el tipo de descuento. Introduce un solo valor "
+"numérico. Ejemplo: 25"
+
+#: includes/class-coupons.php:353
+msgid ""
+"Set max number of coupons available for redemption. Put 0 to make it "
+"unlimited."
+msgstr ""
+"Establece el número máximo de cupones disponibles para usar. Pon 0 para que "
+"sea ilimitado."
+
+#: includes/class-coupons.php:360
+msgid "Number of already redeemed coupons."
+msgstr "Número de cupones ya canjeados."
+
+#: includes/class-coupons.php:367
+msgid "Start date when this coupon can be used."
+msgstr "Fecha de inicio en la que se puede usar este cupón."
+
+#: includes/class-coupons.php:374
+msgid "Date when this coupon will expire. Put 0 to disable expiry check."
+msgstr ""
+"Fecha de caducidad de este cupón. Pon 0 para desactivar la comprobación de "
+"caducidad."
+
+#: includes/class-coupons.php:378
+msgid "Coupon Availabe For:"
+msgstr "Cupón disponible para:"
+
+#: includes/class-coupons.php:380
+msgid "All products"
+msgstr "Todos los productos"
+
+#: includes/class-coupons.php:382
+msgid "Specific Products Only"
+msgstr "Solo productos específicos"
+
+#: includes/class-coupons.php:386
+msgid ""
+"Choose availability of the coupon. You can specify which products coupon is "
+"available when \"Specific Products Only\" is selected."
+msgstr ""
+"Elige la disponibilidad del cupón. Puedes especificar qué cupón de productos "
+"está disponible cuando se selecciona «Solamente productos específicos»."
+
+#: includes/class-coupons.php:395
+msgid "Update Coupon"
+msgstr "Actualizar el cupón"
+
+#: includes/class-coupons.php:395
+msgid "Create Coupon"
+msgstr "Crear un cupón"
+
+#: includes/class-coupons.php:420
+msgid "Can't delete coupon: coupon ID is not provided."
+msgstr "No se puede borrar el cupón: no se ha proporcionado el ID del cupón."
+
+#. translators: %d is coupon ID
+#: includes/class-coupons.php:426
+msgid "Can't delete coupon: coupon #%d not found."
+msgstr "No se puede borrar el cupón: no se ha encontrado el cupón #%d."
+
+#. translators: %d is coupon ID
+#: includes/class-coupons.php:431
+msgid "Can't delete coupon: post #%d is not a coupon."
+msgstr "No se puede borrar el cupón: la entrada #%d no es un cupón."
+
+#. translators: %d is coupon ID
+#: includes/class-coupons.php:437
+msgid "Coupon #%d has been deleted."
+msgstr "Se ha borrado el cupón #%d."
+
+#: includes/class-coupons.php:454
+msgid "Please enter coupon code."
+msgstr "Por favor, introduce el código de cupón."
+
+#: includes/class-coupons.php:458
+msgid "Please enter discount."
+msgstr "Por favor, introduce un descuento."
+
+#. translators: %s is coupon code
+#: includes/class-coupons.php:489
+msgid "Coupon \"%s\" has been updated."
+msgstr "Se ha actualizado el cupón «%s»."
+
+#: includes/class-coupons.php:489
+msgid "Coupon \"%s\" has been created."
+msgstr "Se ha creado el cupón «%s»."
+
+#: includes/class-coupons.php:524 includes/class-orders.php:209
+msgid "Coupon Code: %s"
+msgstr "Código del cupón: %s"
+
+#. translators: {Order Summary Item Name}: {Value}
+#: includes/class-order-summary-plain.php:62
+msgid "%1$s: %2$s"
+msgstr "%1$s: %2$s"
+
+#: includes/class-order.php:378
+msgid "Incomplete"
+msgstr "Incompleto"
+
+#: includes/class-order.php:379
+msgid "Paid"
+msgstr "Pagado"
+
+#: includes/class-orders.php:26
+msgid "Digital Goods Orders"
+msgstr "Pedidos de productos digitales"
+
+#: includes/class-orders.php:27
+msgid "Parent Order:"
+msgstr "Pedido principal:"
+
+#: includes/class-orders.php:28
+msgid "Orders"
+msgstr "Pedidos"
+
+#: includes/class-orders.php:29
+msgid "View Order"
+msgstr "Ver el pedido"
+
+#: includes/class-orders.php:30
+msgid "Add New Order"
+msgstr "Añadir un pedido nuevo"
+
+#: includes/class-orders.php:31
+msgid "Add New"
+msgstr "Añadir nuevo"
+
+#: includes/class-orders.php:32
+msgid "Edit Order"
+msgstr "Editar el pedido"
+
+#: includes/class-orders.php:33
+msgid "Update Order"
+msgstr "Actualizar el pedido"
+
+#: includes/class-orders.php:34
+msgid "Search Order"
+msgstr "Buscar pedidos"
+
+#: includes/class-orders.php:35 includes/class-products.php:30
+msgid "Not found"
+msgstr "No se ha encontrado"
+
+#: includes/class-orders.php:36 includes/class-products.php:31
+msgid "Not found in Trash"
+msgstr "No se ha encontrado en la papelera"
+
+#: includes/class-orders.php:39
+msgid "orders"
+msgstr "pedidos"
+
+#: includes/class-orders.php:40
+msgid "WPEC Orders"
+msgstr "Pedidos de WPEC"
+
+#: includes/class-orders.php:74
+msgid "Transaction"
+msgstr "Transacción"
+
+#: includes/class-orders.php:80
+msgid "Transaction Data"
+msgstr "Datos de la transacción"
+
+#: includes/class-orders.php:118
+msgid "Invalid order id given. Must be an integer"
+msgstr "El ID de pedido dado no es válido. Debe ser un número entero"
+
+#: includes/class-orders.php:123
+msgid "Can't find order with ID %s"
+msgstr "No se puede encontrar el pedido con el ID %s"
+
+#: includes/class-orders.php:203 includes/class-payment-processor.php:127
+msgid "Tax"
+msgstr "Impuesto"
+
+#: includes/class-orders.php:206 includes/class-payment-processor.php:130
+msgid "Shipping"
+msgstr "Envío"
+
+#: includes/class-payment-processor-free.php:43
+msgid "Anonymous"
+msgstr "Anónimo"
+
+#: includes/class-payment-processor.php:58
+#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:42
+msgid "No payment data received."
+msgstr "No se han recibido los datos de pago."
+
+#: includes/class-payment-processor.php:63
+#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:47
+#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:111
+msgid "No order data received."
+msgstr "No se han recibido los datos de pedido."
+
+#: includes/class-payment-processor.php:67
+#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:51
+#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:107
+#: public/includes/class-shortcodes.php:325
+msgid "Error! Nonce value is missing in the URL or Nonce verification failed."
+msgstr ""
+"¡Error! El valor nonce no se encuentra en la URL o la verificación de nonce "
+"ha fallado."
+
+#: includes/class-payment-processor.php:81
+#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:64
+msgid "No transaction info found in transient."
+msgstr "No se ha encontrado información de la transacción en dato transitorio."
+
+#. translators: Order title: {Quantity} {Item name} - {Status}
+#: includes/class-payment-processor.php:104
+msgid "%1$d %2$s - %3$s"
+msgstr "%1$d %2$s - %3$s"
+
+#: includes/class-payment-processor.php:138
+#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:75
+msgid "Payment amount mismatch with the original price."
+msgstr "La cantidad del pago no coincide con el precio original."
+
+#: includes/class-payment-processor.php:144
+#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:81
+msgid "Payment currency mismatch."
+msgstr "La moneda de pago no coincide."
+
+#: includes/class-payment-processor.php:177
+#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:98
+msgid ""
+"Error! Thank you page URL configuration is wrong in the plugin settings."
+msgstr ""
+"¡Error! La configuración de la URL de la página de agradecimiento es "
+"incorrecta en los ajustes del plugin."
+
+#: includes/class-payment-processor.php:243
+#: public/includes/class-shortcodes.php:338
+msgid "Payment is not approved. Status: %s"
+msgstr "El pago no está aprobado. Estado: %s"
+
+#. Plugin Name of the plugin/theme
+msgid "WP Express Checkout"
+msgstr "WP Express Checkout"
+
+#: includes/class-products.php:23
+msgid "Products"
+msgstr "Productos"
+
+#: includes/class-products.php:24
+msgid "View Product"
+msgstr "Ver el producto"
+
+#: includes/class-products.php:25 includes/class-products.php:26
+msgid "Add New Product"
+msgstr "Añadir un nuevo producto"
+
+#: includes/class-products.php:28
+msgid "Update Products"
+msgstr "Actualizar los productos"
+
+#: includes/class-products.php:29
+msgid "Search Product"
+msgstr "Buscar un producto"
+
+#: includes/class-products.php:83
+msgid "Invalid product id given. Must be an integer"
+msgstr "El ID de producto dado no es válido. Debe ser un número entero"
+
+#: includes/class-products.php:88
+msgid "Can't find product with ID %s"
+msgstr "No se puede encontrar el producto con el ID %s"
+
+#: includes/class-products.php:121
+msgid ""
+"Unknown product type '%s'. Activate the required addon to use this product "
+"type."
+msgstr ""
+"Tipo de producto desconocido '%s0. Activa la extensión obligatoria para usar "
+"este tipo de producto."
+
+#: includes/class-utils.php:165
+msgid "First name of the buyer"
+msgstr "Nombre del comprador"
+
+#: includes/class-utils.php:166
+msgid "Last name of the buyer"
+msgstr "Apellidos del comprador"
+
+#: includes/class-utils.php:167
+msgid "Email Address of the buyer"
+msgstr "Dirección de correo electrónico del comprador"
+
+#: includes/class-utils.php:168
+msgid "Address of the buyer"
+msgstr "Dirección del comprador"
+
+#: includes/class-utils.php:169
+msgid ""
+"The item details of the purchased product (this will include the download "
+"link for digital items)."
+msgstr ""
+"Los detalles del artículo comprado (esto incluirá el enlace de descarga para "
+"los artículos digitales)."
+
+#: includes/class-utils.php:170
+msgid "The unique transaction ID of the purchase"
+msgstr "El ID único de transacción de la compra"
+
+#: includes/class-utils.php:171
+msgid "The order ID reference of this transaction in the cart orders menu"
+msgstr ""
+"El ID de referencia del pedido de esta transacción en el menú de pedidos del "
+"carrito"
+
+#: includes/class-utils.php:172
+msgid "The amount paid for the current transaction"
+msgstr "La cantidad pagada por la transacción actual"
+
+#: includes/class-utils.php:173
+msgid "The date of the purchase"
+msgstr "La fecha de la compra"
+
+#: includes/class-utils.php:174
+msgid "Coupon code applied to the purchase"
+msgstr "Se ha aplicado a la compra el código del cupón"
+
+#: includes/class-utils.php:175
+msgid "Order currency code"
+msgstr "Código de moneda del pedido"
+
+#: includes/class-utils.php:188
+msgid ""
+"Error! The URL value is empty. Please specify a correct URL value to "
+"redirect to!"
+msgstr ""
+"¡Error! El valor de la URL está vacío. ¡Por favor especifica un valor de URL "
+"correcto al que redirigir!"
+
+#: includes/class-view-downloads.php:140
+msgid "Invalid download URL!"
+msgstr "¡La URL de descarga no es válida!"
+
+#: includes/class-view-downloads.php:154
+msgid "Invalid product ID!"
+msgstr "¡El ID de producto no es válido!"
+
+#: includes/class-view-downloads.php:158
+msgid "The product has no file for download!"
+msgstr "¡El producto no tiene ningún archivo para descargar!"
+
+#: includes/class-view-downloads.php:179
+msgid "Invalid product key!"
+msgstr "¡La clave de producto no es válida!"
+
+#: includes/integrations/emember/class-emember.php:84
+msgid "WP eMember Membership Level"
+msgstr "Nivel de membresía de WP eMember"
+
+#: includes/integrations/emember/class-emember.php:91
+msgid ""
+"Notice: You need to update your copy of the WP eMember plugin before this "
+"feature can be used."
+msgstr ""
+"Aviso: debes actualizar tu copia del plugin WP eMember antes de poder usar "
+"esta característica."
+
+#: includes/integrations/emember/class-emember.php:96
+#: includes/integrations/simple-wp-membership/class-simple-wp-membership.php:43
+msgid "None"
+msgstr "Ninguno"
+
+#: includes/integrations/emember/class-emember.php:102
+#: includes/integrations/simple-wp-membership/class-simple-wp-membership.php:41
+msgid ""
+"If you want this product to be connected to a membership level then select "
+"the membership Level here."
+msgstr ""
+"Si quieres que este producto esté conectado a un nivel de membresía, "
+"selecciona aquí el nivel de membresía."
+
+#: includes/integrations/license-manager/class-license-manager.php:56
+msgid "Item Name: "
+msgstr "Nombre del artículo: "
+
+#: includes/integrations/license-manager/class-license-manager.php:56
+msgid "License Key: "
+msgstr "Clave de licencia: "
+
+#: includes/integrations/license-manager/class-license-manager.php:117
+msgid "Software License Manager Plugin"
+msgstr "Plugin Software License Manager"
+
+#: includes/integrations/license-manager/class-license-manager.php:127
+msgid "Create License"
+msgstr "Crear licencia"
+
+#: includes/integrations/license-manager/class-license-manager.php:129
+msgid ""
+"If this product is a piece of software that has been integrated with the "
+"Software License Manager plugin then checking this box will create a license "
+"for the customer who purchase this product."
+msgstr ""
+"Si este producto es una pieza de software que se ha integrado con el plugin "
+"Software License Manager, al marcar esta casilla se creará una licencia para "
+"el cliente que compre este producto."
+
+#: includes/integrations/license-manager/class-license-manager.php:131
+msgid "Maximum Allowed Domains"
+msgstr "Dominios máximos permitidos"
+
+#: includes/integrations/license-manager/class-license-manager.php:133
+msgid ""
+"Number of domains/installs in which this license can be used. Leave blank if "
+"you wish to use the default value set in the license manager plugin settings."
+msgstr ""
+"Número de dominios/instalaciones donde se puede usar esta licencia. Déjalo "
+"en blanco si deseas usar el valor por defecto establecido en los ajustes del "
+"plugin license manager."
+
+#: includes/integrations/license-manager/class-license-manager.php:135
+msgid "Number of Days before Expiry"
+msgstr "Número de días antes de caducar"
+
+#: includes/integrations/license-manager/class-license-manager.php:137
+msgid ""
+"Number of days before expiry. The expiry date of the license will be set "
+"based on this value. For example, if you want the key to expire in 6 months "
+"then enter a value of 180."
+msgstr ""
+"Número de días antes de caducar. La fecha de caducidad de la licencia se "
+"establecerá basado en este valor. Por ejemplo, si deseas que la clave "
+"caduque en 6 meses, introduce un valor de 180."
+
+#: includes/integrations/simple-wp-membership/class-simple-wp-membership.php:35
+msgid "Simple Membership Level"
+msgstr "Nivel de Simple Membership"
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:30
+msgid "WP Express Checkout Gateway"
+msgstr "Pasarela de WP Express Checkout"
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:31
+msgid ""
+"Use the WP Express Checkout plugin to process payments via PayPal Express "
+"Checkout API."
+msgstr ""
+"Usa el plugin WP Express Checkout para procesar los pagos a través de la API "
+"de pago de PayPal Express."
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:95
+msgid "Enable/Disable"
+msgstr "Activar/desactivar"
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:97
+msgid "Enable WP Express Checkout gateway"
+msgstr "Activa la pasarela de WP Express Checkout"
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:102
+msgid "Title"
+msgstr "Título"
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:104
+msgid "This controls the title which the user sees during checkout."
+msgstr "Esto controla el título que el usuario ve durante el pago."
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:112
+msgid "This controls the description which the user sees during checkout."
+msgstr "Esto controla la descripción que el usuario ve al finalizar la compra."
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:113
+msgid "Pay by PayPal Express Form."
+msgstr "Paga a través del formulario de PayPal Express."
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:116
+msgid "Checkout Popup Title"
+msgstr "Título de la ventana emergente de pago"
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:119
+msgid ""
+"This controls the popup window title which the user sees during checkout."
+msgstr ""
+"Esto controla el título de la ventana emergente que el usuario ve durante el "
+"pago."
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:120
+msgid "PayPal Express Checkout"
+msgstr "PayPal Express Checkout"
+
+#: includes/integrations/woocommerce/class-woocommerce-gateway.php:269
+msgid "Awaiting payment"
+msgstr "Esperando el pago"
+
+#: public/class-main.php:78
+msgid "Error occurred"
+msgstr "Ha ocurrido un error"
+
+#: public/class-main.php:79
+msgid "Payment for"
+msgstr "El pago de"
+
+#: public/class-main.php:80
+msgid "Please enter a valid quantity"
+msgstr "Por favor, introduce una cantidad válida"
+
+#: public/class-main.php:81
+msgid "Please enter a valid amount"
+msgstr "Por favor, introduce una cantidad válida"
+
+#: public/class-main.php:82
+msgid "Please accept the terms and conditions"
+msgstr "Por favor, acepta los términos y condiciones"
+
+#: public/class-main.php:83
+msgid "Payment Completed"
+msgstr "Pago completado"
+
+#: public/class-main.php:84
+msgid "You are now being redirected to the order summary page."
+msgstr "Ahora estás siendo redirigido a la página de resumen del pedido."
+
+#: public/class-main.php:85
+msgid "Remove coupon"
+msgstr "Eliminar el cupón"
+
+#: public/class-main.php:86
+msgid "Remove"
+msgstr "Eliminar"
+
+#: public/class-main.php:349
+msgid ""
+"I accept the <a href=\"https://example.com/terms-and-conditions/\" target="
+"\"_blank\">Terms and Conditions</a>"
+msgstr ""
+"Acepto los <a href=\"https://example.com/terms-and-conditions/\" target="
+"\"_blank\">términos y condiciones</a>"
+
+#: public/includes/class-order-tags-html.php:157
+msgid "Click here to download"
+msgstr "Haz clic aquí para descargar"
+
+#. Translators:  %1$s - download item name; %2$s - download URL
+#: public/includes/class-order-tags-plain.php:52
+msgid "%1$s - download link: %2$s"
+msgstr "%1$s - enlace de descarga: %2$s"
+
+#: public/includes/class-shortcodes.php:195
+msgid "Please enter %s Client ID in the settings."
+msgstr "Por favor, introduce el ID de cliente %s en los ajustes."
+
+#. translators: tax amount
+#: public/includes/class-shortcodes.php:276
+msgid "%s (tax)"
+msgstr "%s (de impuesto)"
+
+#. translators: tax percent
+#: public/includes/class-shortcodes.php:279
+msgid "%s%% tax"
+msgstr "%s%% de impuesto"
+
+#. translators: tax + shipping amount
+#: public/includes/class-shortcodes.php:287
+msgid "+ %s (shipping)"
+msgstr "+ %s (de envío)"
+
+#. translators: shipping amount
+#: public/includes/class-shortcodes.php:290
+msgid "%s (shipping)"
+msgstr "%s (de envío)"
+
+#: public/includes/class-shortcodes.php:296
+msgid "Total:"
+msgstr "Total:"
+
+#: public/includes/class-shortcodes.php:316
+#: public/includes/class-shortcodes.php:323
+msgid ""
+"This page is used to show the transaction result after a customer makes a "
+"payment."
+msgstr ""
+"Se usa esta página para mostrar el resultado de la transacción después de "
+"que un cliente realiza un pago."
+
+#: public/includes/class-shortcodes.php:317
+#: public/includes/class-shortcodes.php:324
+msgid ""
+"It will dynamically show the order details to the customers when they are "
+"redirected here after a payment. Do not access this page directly."
+msgstr ""
+"Se mostrará de forma dinámica los detalles del pedido a los clientes cuando "
+"son redirigidos aquí después de un pago. No acceder a esta página "
+"directamente."
+
+#: public/includes/class-shortcodes.php:318
+msgid "Error! Order ID value is missing in the URL."
+msgstr "¡Error! El valor de ID del pedido no se encuentra en la URL."
+
+#: public/includes/class-shortcodes.php:398
+msgid ""
+"Thank you page shortcodes work after a transaction. Do not access this page "
+"directly."
+msgstr ""
+"El shortcode de la página de agradecimiento funciona después de una "
+"transacción. No acceder a esta página directamente."
+
+#: public/views/templates/content-thank-you-downloads.php:10
+msgid "Download link"
+msgid_plural "Download links"
+msgstr[0] "Enlace de descarga"
+msgstr[1] "Enlaces de descarga"
+
+#: public/views/templates/content-thank-you.php:10
+msgid "Thank you for your purchase."
+msgstr "Gracias por tu compra."
+
+#: public/views/templates/content-thank-you.php:12
+msgid "Your purchase details are below:"
+msgstr "Los detalles de tu compra están a continuación:"
+
+#: public/views/templates/content-thank-you.php:18
+msgid "Transaction ID: "
+msgstr "ID de la transacción: "
+
+#: public/views/templates/payment-form.php:27
+msgid "Enter Amount (%s): "
+msgstr "Introduce la cantidad (%s): "
+
+#: public/views/templates/payment-form.php:38
+msgid "Quantity:"
+msgstr "Cantidad:"
+
+#: public/views/templates/payment-form.php:104
+msgid "Coupon Code:"
+msgstr "Código del cupón:"
+
+#: public/views/templates/payment-form.php:112
+msgid "Apply"
+msgstr "Aplicar"
+
+#: public/views/templates/payment-form.php:139
+msgid ""
+"This is where the Express Checkout Button will show. View it on the front-"
+"end to see how it will look to your visitors"
+msgstr ""
+"Aquí es donde se mostrará el botón de Express Checkout. Míralo en la portada "
+"para ver cómo lo verán tus visitantes"
+
+#. Plugin URI of the plugin/theme
+msgid "https://wp-express-checkout.com/"
+msgstr "https://wp-express-checkout.com/"
+
+#. Description of the plugin/theme
+msgid ""
+"This plugin allows you to generate a customizable PayPal payment button that "
+"lets the customers pay quickly in a popup via PayPal."
+msgstr ""
+"Este plugin te permite crear un botón de pago de PayPal personalizable que "
+"permite pagar rápidamente a los clientes en una ventana emergente a través "
+"de PayPal."
+
+#. Author of the plugin/theme
+msgid "Tips and Tricks HQ"
+msgstr "Tips and Tricks HQ"
+
+#. Author URI of the plugin/theme
+msgid "https://www.tipsandtricks-hq.com/"
+msgstr "https://www.tipsandtricks-hq.com/"
+
+#: admin/includes/class-orders-list.php:129
+msgctxt "Order Date Format"
+msgid "Y/m/d g:i:s A"
+msgstr "A/m/d g:i:s A"
+
+#: admin/includes/class-orders-list.php:138
+msgctxt "Order Date Format"
+msgid "Y/m/d"
+msgstr "A/m/d"
+
+#: admin/includes/class-products-meta-boxes.php:186
+msgctxt "Variation name"
+msgid "Name"
+msgstr "Nombre"
+
+#: admin/views/sidebar.php:23
+msgctxt "Followed by a link to eStore plugin"
+msgid ""
+"If you need a feature rich plugin (with good support) for selling your "
+"products and services then check out our"
+msgstr ""
+"Si necesitas un plugin rico en características (con buen soporte) para "
+"vender tus productos y servicios, consulta nuestro"
+
+#: includes/class-orders.php:24
+msgctxt "Post Type General Name"
+msgid "Orders"
+msgstr "Pedidos"
+
+#: includes/class-products.php:19
+msgctxt "Post Type General Name"
+msgid "Products"
+msgstr "Productos"
+
+#: includes/class-orders.php:25
+msgctxt "Post Type Singular Name"
+msgid "Order"
+msgstr "Pedido"
+
+#: includes/class-products.php:20
+msgctxt "Post Type Singular Name"
+msgid "Product"
+msgstr "Producto"
