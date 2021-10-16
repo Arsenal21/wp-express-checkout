@@ -120,7 +120,7 @@ None
 
 == Changelog ==
 
-= WIP =
+= WIP Since 2.1.4 =
 - Added Spanish language translation file.
 
 = 2.1.4 =
