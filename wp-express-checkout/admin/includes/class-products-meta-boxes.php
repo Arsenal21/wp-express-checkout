@@ -331,12 +331,12 @@ class Products_Meta_Boxes {
 		<label><?php esc_html_e( 'Duration of Download Link', 'wp-express-checkout' ); ?></label>
 		<br/>
 		<input type="number" name="wpec_download_duration" value="<?php echo esc_attr( $post->wpec_download_duration ); ?>"> <span><?php esc_html_e( 'Hours', 'wp-express-checkout' ); ?></span>
-		<p class="description"><?php esc_html_e( 'This is the duration of time the encrypted links will remain active. After this amount of time the link will expire. Leave empty to use global settings or set to 0 to disable link expiry.', 'wp-express-checkout' ); ?></p>
+		<p class="description"><?php esc_html_e( 'This is the duration of time the download links will remain active for a customer. After this amount of time the link will expire. Example value: 48. Leave empty to use global settings or set to 0 to disable link expiry.', 'wp-express-checkout' ); ?></p>
 
 		<label><?php esc_html_e( 'Download Limit Count', 'wp-express-checkout' ); ?></label>
 		<br/>
 		<input type="number" name="wpec_download_count" value="<?php echo esc_attr( $post->wpec_download_count ); ?>"> <span><?php esc_html_e( 'Times', 'wp-express-checkout' ); ?></span>
-		<p class="description"><?php esc_html_e( 'Number of times an item can be downloaded before the link expires. Leave empty to use global settings or set to 0 if you do not want to limit downloads by download count.', 'wp-express-checkout' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Number of times an item can be downloaded before the download link expires. Example value: 3. Leave empty to use global settings or set to 0 if you do not want to limit downloads by download count.', 'wp-express-checkout' ); ?></p>
 		<?php
 	}
 

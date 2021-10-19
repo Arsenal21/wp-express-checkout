@@ -121,6 +121,7 @@ None
 == Changelog ==
 
 = WIP Since 2.1.4 =
+- New feature for download link expiry option.
 - Added Spanish language translation file.
 
 = 2.1.4 =

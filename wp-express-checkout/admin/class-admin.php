@@ -192,7 +192,7 @@ class Admin {
 		add_settings_section( 'ppdg-price-display-section', __( 'Price Display Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
 		add_settings_section( 'ppdg-tos-section', __( 'Terms and Conditions', 'wp-express-checkout' ), array( $this, 'tos_description' ), $this->plugin_slug . '-advanced' );
 
-		add_settings_section( 'ppdg-link-expiry-section', __( 'Download Links', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
+		add_settings_section( 'ppdg-link-expiry-section', __( 'Download Link Expiry', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
 
 		/* Add the settings fields */
 
@@ -450,7 +450,7 @@ class Admin {
 				'type' => 'number',
 				'label' => __( 'Hours', 'wp-express-checkout' ),
 				'label_pos' => 'after',
-				'desc' => __( 'This is the duration of time the encrypted links will remain active. After this amount of time the link will expire. Leave empty or set to 0 to disable link expiry.', 'wp-express-checkout' ),
+				'desc' => __( 'This is the duration of time the download links will remain active for a customer. After this amount of time the link will expire. Example value: 48. Leave empty or set to 0 to disable download link expiry.', 'wp-express-checkout' ),
 			)
 		);
 		add_settings_field(
@@ -464,7 +464,7 @@ class Admin {
 				'type' => 'number',
 				'label' => __( 'Times', 'wp-express-checkout' ),
 				'label_pos' => 'after',
-				'desc' => __( 'Number of times an item can be downloaded before the link expires. Leave empty or set to 0 if you do not want to limit downloads by download count.', 'wp-express-checkout' ),
+				'desc' => __( 'Number of times an item can be downloaded before the link expires. Example value: 3. Leave empty or set to 0 if you do not want to limit downloads by download count.', 'wp-express-checkout' ),
 			)
 		);
 	}
