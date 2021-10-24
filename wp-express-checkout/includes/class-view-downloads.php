@@ -218,7 +218,7 @@ class View_Downloads {
 		$download_duration = $order->get_data( 'download_duration' );
 		if ( ! empty( $download_duration ) ) {
 			if ( get_post_timestamp() < ( time() - ( $download_duration * 60 * 60 ) ) ) {
-				wp_die( esc_html__( 'Download limit time is enabled for this product. This link has expired.', 'wp-express-checkout' ) );
+				wp_die( esc_html__( 'Download limit time is enabled for this product. Time duration limit exceeded. This download link has expired.', 'wp-express-checkout' ) );
 			}
 		}
 
@@ -226,7 +226,7 @@ class View_Downloads {
 		if ( ! empty( $download_count ) ) {
 			$counter = (array) $order->get_data( 'downloads_counter' );
 			if ( ! empty( $counter[ $name ] ) && $counter[ $name ] >= $download_count ) {
-				wp_die( esc_html__( 'Download limit count is enabled for this product. Download count exceeded allowed.', 'wp-express-checkout' ) );
+				wp_die( esc_html__( 'Download limit count is enabled for this product. Count limit exceeded. This download link has expired.', 'wp-express-checkout' ) );
 			}
 		}
 

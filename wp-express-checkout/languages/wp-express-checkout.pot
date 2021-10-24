@@ -1107,7 +1107,7 @@ msgstr ""
 
 #: admin/includes/class-products-meta-boxes.php:293
 msgid ""
-"Manually enter a valid URL of the file in the text box below, or click "
+"Manually enter a valid URL of the file in the text box, or click "
 "\"Select File\" button to upload (or choose) the downloadable file."
 msgstr ""
 

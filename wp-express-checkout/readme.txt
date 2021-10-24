@@ -123,6 +123,8 @@ None
 = WIP Since 2.1.4 =
 - New feature for download link expiry option.
 - Added Spanish language translation file.
+- Fixed a typo in the file download field's description text.
+- Improved the products and orders list table display for mobile device screens.
 
 = 2.1.4 =
 * Added gateway option 'Checkout Popup Title' for the WooCommerce integration.

@@ -290,7 +290,7 @@ class Products_Meta_Boxes {
 			<input id="ppec_product_upload" type="text" style="width: 100%" name="ppec_product_upload" value="<?php echo esc_attr( $current_val ); ?>" placeholder="https://..." />
 
 			<p class="description">
-				<?php esc_html_e( 'Manually enter a valid URL of the file in the text box below, or click "Select File" button to upload (or choose) the downloadable file.', 'wp-express-checkout' ); ?>
+				<?php esc_html_e( 'Manually enter a valid URL of the file in the text box, or click "Select File" button to upload (or choose) the downloadable file.', 'wp-express-checkout' ); ?>
 			</p>
 		</div>
 		<p>
@@ -328,6 +328,10 @@ class Products_Meta_Boxes {
 				} );
 			} );
 		</script>
+		<hr />
+		<strong>Download Link Expiry Settings (Optional)</strong>
+		<br />
+		<p>Read the <a href="https://wp-express-checkout.com/limiting-product-download-links/" target="_blank">download link expiry tutorial</a> to learn how the feature works.</p>
 		<label><?php esc_html_e( 'Duration of Download Link', 'wp-express-checkout' ); ?></label>
 		<br/>
 		<input type="number" name="wpec_download_duration" value="<?php echo esc_attr( $post->wpec_download_duration ); ?>"> <span><?php esc_html_e( 'Hours', 'wp-express-checkout' ); ?></span>
