@@ -529,6 +529,27 @@ class Order {
 	}
 
 	/**
+	 * Adds all order data tags to the order content field for using in search.
+	 */
+	public function generate_search_index() {
+		$renderer = new Order_Tags_Plain( $this );
+		$tags     = array_keys( Utils::get_dynamic_tags_white_list() );
+
+		foreach ( $tags as $tag ) {
+			$args[ $tag ] = $renderer->$tag();
+		}
+
+		$template = "{first_name} {last_name}\n";
+
+		$post_content = Utils::apply_dynamic_tags( $template, $args );
+		foreach ( $tags as $tag ) {
+			$post_content .= $tag . ':' . $renderer->$tag() . "\n";
+		}
+
+		$this->update_post( array( 'post_content' => $post_content ) );
+	}
+
+	/**
 	 * Updates the order's post data
 	 * @param $args array Array of values to update. See wp_update_post.
 	 */
