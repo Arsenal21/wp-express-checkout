@@ -150,6 +150,8 @@ class Payment_Processor {
 
 		$order_id  = $order->get_id();
 
+		$order->generate_search_index();
+
 		// Send email to buyer if enabled.
 		Emails::send_buyer_email( $order );
 
