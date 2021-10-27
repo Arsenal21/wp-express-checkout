@@ -28,6 +28,7 @@ class Orders_Meta_Boxes {
 		add_action( 'save_post_' . Orders::PTYPE, array( $this, 'save' ), 10, 3 );
 
 		add_action( 'wp_ajax_wpec_order_action_resend_email', array( $this, 'resend_email_callback' ) );
+		add_action( 'wp_ajax_wpec_order_action_reset_download_counts', array( $this, 'reset_download_counts_callback' ) );
 	}
 
 	public function add_meta_boxes() {
@@ -159,20 +160,24 @@ class Orders_Meta_Boxes {
 			return;
 		}
 		?>
-		<table id="admin-order-status">
-			<tbody>
-				<tr>
-					<td>
-						<a class="button wpec-order-action" data-action="resend_email" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'resend-email' ); ?>" href="#">
-							<span class="dashicons dashicons-email" style="line-height:1.8;font-size:16px;"></span>
-							<span class="wpec-order-action-label">
-								<?php esc_html_e( 'Resend sale notification email', 'wp-express-checkout' ); ?>
-							</span>
-						</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<ul>
+			<li>
+				<a class="button wpec-order-action" data-action="resend_email" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'resend-email' ); ?>" href="#">
+					<span class="dashicons dashicons-email" style="line-height:1.8;font-size:16px;"></span>
+					<span class="wpec-order-action-label">
+						<?php esc_html_e( 'Resend sale notification email', 'wp-express-checkout' ); ?>
+					</span>
+				</a>
+			</li>
+			<li>
+				<a class="button wpec-order-action" data-action="reset_download_counts" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'reset-download-counts' ); ?>" href="#">
+					<span class="dashicons dashicons-update" style="line-height:1.8;font-size:16px;"></span>
+					<span class="wpec-order-action-label">
+						<?php esc_html_e( 'Regenerate Download Permissions', 'wp-express-checkout' ); ?>
+					</span>
+				</a>
+			</li>
+		</ul>
 		<?php
 
 	}
@@ -287,6 +292,23 @@ class Orders_Meta_Boxes {
 		}
 
 		wp_send_json_success( __( 'Email successfully sent!', 'wp-express-checkout' ) );
+	}
+
+	public function reset_download_counts_callback() {
+
+		check_ajax_referer( 'reset-download-counts', 'nonce' );
+
+		try {
+			$order = Orders::retrieve( $_POST['order'] );
+		} catch ( Exception $exc ) {
+			wp_send_json_error( $exc->getMessage() );
+		}
+
+		// Reset counter and duration.
+		$order->add_data( 'downloads_counter', array() );
+		$order->add_data( 'download_duration', 0 );
+
+		wp_send_json_success( __( 'Download permissions reset!', 'wp-express-checkout' ) );
 	}
 
 }

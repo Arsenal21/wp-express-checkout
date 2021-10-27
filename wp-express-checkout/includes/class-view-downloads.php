@@ -272,6 +272,11 @@ class View_Downloads {
 		}
 
 		$counter = $order->get_data( 'downloads_counter' );
+
+		if ( empty( $counter[ $file_name ] ) ) {
+			$counter[ $file_name ] = 0;
+		}
+
 		$counter[ $file_name ]++;
 		$order->add_data( 'downloads_counter', $counter );
 
