@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
 Requires at least: 5.6
 Tested up to: 5.8
-Stable tag: 2.1.4
+Stable tag: 2.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,19 +32,21 @@ https://www.youtube.com/watch?v=RHVgGQWhCT0
 
 = Features =
 
-* Sell products or services using a quick checkout process.
+* Sell products or services using a quick and easy checkout process.
+* Accept PayPal donations with minimum donation amount limit.
 * Sell downloads, files, or any digital goods.
 * Sell music, video, ebook, PDF or any other digital media files.
-* Accept PayPal donation with minimum donation amount limit.
 * Allow the customers to automatically download the file once the purchase is completed via PayPal.
+* You can deliver the digital downloads using encrypted download links that expire automatically.
+* Offer Buy Now Pay Later payment option to your customers.
 * View the transactions from your WordPress admin dashboard.
 * Option to configure a notification email to be sent to the buyer and the seller after the purchase.
 * Ability to set a product thumbnail for a product.
 * Use a simple shortcode to add a payment button anywhere on your site.
-* Create a PayPal payment button widget and add it to your sidebar.
+* Create a PayPal payment button widget and add it to your site's sidebar.
 * Ability for a customer to enter an amount and pay what they want for a product.
 * Ability to configure variable products. You can charge different amount for different options of the product.
-* Can be used to accept donation.
+* Can be used to accept donations.
 * Option to configure a minimum donation amount so the customers have to pay a minimum amount for donation.
 * Option to customize the currency formatting.
 * Option to charge shipping for your items. Ability to set a shipping cost for each item separately.
@@ -53,6 +55,8 @@ https://www.youtube.com/watch?v=RHVgGQWhCT0
 * Option to configure terms and conditions before checkout.
 * You can see all the orders within your WordPress admin dashboard.
 * Option to customize the Thank You page.
+* Ability to configure the download links to expire after X number of hours.
+* Ability to configure the download links to expire after X number of clicks.
 * Can be integrated with WooCommerce to offer product checkout via PayPal's new express checkout system.
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
@@ -120,11 +124,13 @@ None
 
 == Changelog ==
 
-= WIP Since 2.1.4 =
+= 2.1.5 =
 - New feature for download link expiry option.
+- Increased the transient expiry time to improve the Error Code 3004.
 - Added Spanish language translation file.
 - Fixed a typo in the file download field's description text.
 - Improved the products and orders list table display for mobile device screens.
+- The Order search feature has been revamped. The revamped search feature will work on new orders going forward.
 
 = 2.1.4 =
 * Added gateway option 'Checkout Popup Title' for the WooCommerce integration.
