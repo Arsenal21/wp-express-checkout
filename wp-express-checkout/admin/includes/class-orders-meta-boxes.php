@@ -306,7 +306,7 @@ class Orders_Meta_Boxes {
 
 		// Reset counter and duration.
 		$order->add_data( 'downloads_counter', array() );
-		$order->add_data( 'download_duration', 0 );
+		$order->add_data( 'download_start_date', time() );
 
 		wp_send_json_success( __( 'Download permissions reset!', 'wp-express-checkout' ) );
 	}

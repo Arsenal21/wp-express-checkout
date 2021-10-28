@@ -151,6 +151,7 @@ class View_Downloads {
 
 		if ( $duration ) {
 			$order->add_data( 'download_duration', $duration );
+			$order->add_data( 'download_start_date', time() );
 		}
 
 		if ( $count ) {
@@ -217,7 +218,8 @@ class View_Downloads {
 
 		$download_duration = $order->get_data( 'download_duration' );
 		if ( ! empty( $download_duration ) ) {
-			if ( get_post_timestamp() < ( time() - ( $download_duration * 60 * 60 ) ) ) {
+			$download_start_date = $order->get_data( 'download_start_date' );
+			if ( $download_start_date < ( time() - ( $download_duration * 60 * 60 ) ) ) {
 				wp_die( esc_html__( 'Download limit time is enabled for this product. Time duration limit exceeded. This download link has expired.', 'wp-express-checkout' ) );
 			}
 		}
