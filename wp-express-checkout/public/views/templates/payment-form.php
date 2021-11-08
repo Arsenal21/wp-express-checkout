@@ -116,6 +116,126 @@
 		</div>
 	<?php } ?>
 
+	<div class="wpec_billing_container">
+
+		<div class="wpec_billing_first_name">
+			<label class="wpec_billing_first_name_label"><?php esc_html_e( 'First Name', 'wp-express-checkout' ); ?></label>
+			<input id="wpec_billing_first_name-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_first_name_field_input" type="text" name="wpec_billing_first_name"/>
+			<div class="wp-ppec-form-error-msg"></div>
+		</div>
+
+		<div class="wpec_billing_last_name">
+			<label class="wpec_billing_last_name_label"><?php esc_html_e( 'Last Name', 'wp-express-checkout' ); ?></label>
+			<input id="wpec_billing_last_name-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_last_name_field_input" type="text" name="wpec_billing_last_name"/>
+			<div class="wp-ppec-form-error-msg"></div>
+		</div>
+
+		<div class="wpec_billing_email">
+			<label class="wpec_billing_email_label"><?php esc_html_e( 'Email', 'wp-express-checkout' ); ?></label>
+			<input id="wpec_billing_email-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_email_field_input" type="email" name="wpec_billing_email"/>
+			<div class="wp-ppec-form-error-msg"></div>
+		</div>
+
+		<div class="wpec_billing_address_container">
+
+			<label class="wpec_billing_label"><?php esc_html_e( 'Billing Info', 'wp-express-checkout' ); ?></label>
+
+			<div class="wpec_billing_address">
+				<label class="wpec_billing_address_label"><?php esc_html_e( 'Address', 'wp-express-checkout' ); ?></label>
+				<input id="wpec_billing_address-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_address_field_input" type="text" name="wpec_billing_address"/>
+				<div class="wp-ppec-form-error-msg"></div>
+			</div>
+
+			<div class="wpec_billing_city">
+				<label class="wpec_billing_city_label"><?php esc_html_e( 'City', 'wp-express-checkout' ); ?></label>
+				<input id="wpec_billing_city-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_city_field_input" type="text" name="wpec_billing_city"/>
+				<div class="wp-ppec-form-error-msg"></div>
+			</div>
+
+			<div class="wpec_billing_country">
+				<label class="wpec_billing_country_label"><?php esc_html_e( 'Country', 'wp-express-checkout' ); ?></label>
+				<select id="wpec_billing_country-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_country_field_input" name="wpec_billing_country">
+				<?php
+				$countries = \WP_Express_Checkout\Utils::get_countries();
+				foreach ( $countries as $code => $country ) {
+					?>
+					<option value="<?php echo esc_attr( $code ); ?>"><?php echo esc_html( $country ); ?></option>
+					<?php
+				}
+				?>
+				</select>
+				<div class="wp-ppec-form-error-msg"></div>
+			</div>
+
+			<div class="wpec_billing_state">
+				<label class="wpec_billing_state_label"><?php esc_html_e( 'State', 'wp-express-checkout' ); ?></label>
+				<input id="wpec_billing_state-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_state_field_input" type="text" name="wpec_billing_state"/>
+				<div class="wp-ppec-form-error-msg"></div>
+			</div>
+
+			<div class="wpec_billing_postal_code">
+				<label class="wpec_billing_postal_code_label"><?php esc_html_e( 'Postal Code', 'wp-express-checkout' ); ?></label>
+				<input id="wpec_billing_postal_code-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_postal_code_field_input" type="text" name="wpec_billing_postal_code"/>
+				<div class="wp-ppec-form-error-msg"></div>
+			</div>
+
+		</div>
+
+		<?php if ( $shipping_enable ) { ?>
+
+			<label class="wpec_product_shipping_handle">
+				<input class="wpec_product_shipping_enable" type="checkbox" checked="checked"> <?php esc_html_e( 'Same billing and shipping info', 'wp-express-checkout' ); ?>
+			</label>
+
+			<div class="wpec_shipping_address_container" style="display:none;">
+
+				<label class="wpec_shipping_label"><?php esc_html_e( 'Shipping Info', 'wp-express-checkout' ); ?></label>
+
+				<div class="wpec_shipping_address">
+					<label class="wpec_shipping_address_label"><?php esc_html_e( 'Address', 'wp-express-checkout' ); ?></label>
+					<input id="wpec_shipping_address-<?php echo esc_attr( $button_id ); ?>" class="wpec_shipping_address_field_input" type="text" name="wpec_shipping_address"/>
+					<div class="wp-ppec-form-error-msg"></div>
+				</div>
+
+				<div class="wpec_shipping_city">
+					<label class="wpec_shipping_city_label"><?php esc_html_e( 'City', 'wp-express-checkout' ); ?></label>
+					<input id="wpec_shipping_city-<?php echo esc_attr( $button_id ); ?>" class="wpec_shipping_city_field_input" type="text" name="wpec_shipping_city"/>
+					<div class="wp-ppec-form-error-msg"></div>
+				</div>
+
+				<div class="wpec_shipping_country">
+					<label class="wpec_shipping_country_label"><?php esc_html_e( 'Country', 'wp-express-checkout' ); ?></label>
+					<select id="wpec_shipping_country-<?php echo esc_attr( $button_id ); ?>" class="wpec_shipping_country_field_input" name="wpec_shipping_country">
+					<?php
+					$countries = \WP_Express_Checkout\Utils::get_countries();
+					foreach ( $countries as $code => $country ) {
+						?>
+						<option value="<?php echo esc_attr( $code ); ?>"><?php echo esc_html( $country ); ?></option>
+						<?php
+					}
+					?>
+					</select>
+					<div class="wp-ppec-form-error-msg"></div>
+				</div>
+
+				<div class="wpec_shipping_state">
+					<label class="wpec_shipping_state_label"><?php esc_html_e( 'State', 'wp-express-checkout' ); ?></label>
+					<input id="wpec_shipping_state-<?php echo esc_attr( $button_id ); ?>" class="wpec_shipping_state_field_input" type="text" name="wpec_shipping_state"/>
+					<div class="wp-ppec-form-error-msg"></div>
+				</div>
+
+				<div class="wpec_shipping_postal_code">
+					<label class="wpec_shipping_postal_code_label"><?php esc_html_e( 'Postal Code', 'wp-express-checkout' ); ?></label>
+					<input id="wpec_shipping_postal_code-<?php echo esc_attr( $button_id ); ?>" class="wpec_shipping_postal_code_field_input" type="text" name="wpec_shipping_postal_code"/>
+					<div class="wp-ppec-form-error-msg"></div>
+				</div>
+
+			</div>
+
+		<?php } ?>
+
+	</div>
+
 	<div class = "wp-ppec-button-container">
 
 		<?php if ( $this->ppdg->get_setting( 'tos_enabled' ) ) { ?>

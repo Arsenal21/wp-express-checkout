@@ -165,6 +165,11 @@ var ppecHandler = function( data ) {
 			} );
 			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio:checked' ).change();
 
+			parent.scCont.find( '.wpec_product_shipping_enable' ).change( function() {
+				parent.scCont.find( '.wpec_shipping_address_container' ).toggle();
+				parent.scCont.find( '.wpec_billing_address_container' ).toggleClass( 'shipping_enabled' );
+			} );
+
 			jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).click( function( e ) {
 				e.preventDefault();
 				var couponCode = jQuery( this ).siblings( '#wpec-coupon-field-' + parent.data.id ).val();
