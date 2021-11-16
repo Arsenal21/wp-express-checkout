@@ -100,6 +100,14 @@ class Main {
 		$args['intent']    = 'capture';
 		$args['currency']  = $this->get_setting( 'currency_code' );
 		$disabled_funding  = $this->get_setting( 'disabled_funding' );
+
+		// Enable Venmo by default (could be disabled by 'disable-funding' option).
+		$args['enable-funding']  = 'venmo';
+		// Required for Venmo in sandbox.
+		if ( ! $this->get_setting( 'is_live' ) ) {
+			$args['buyer-country']  = 'US';
+		}
+
 		if ( ! empty( $disabled_funding ) ) {
 			$arg = '';
 			foreach ( $disabled_funding as $funding ) {
