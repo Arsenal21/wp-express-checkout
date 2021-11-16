@@ -116,7 +116,7 @@
 		</div>
 	<?php } ?>
 
-	<div class="wpec_billing_container">
+	<div id="wpec_billing_<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_container" style="display: none;">
 
 		<div class="wpec_billing_user_info">
 			<div class="wpec_billing_first_name">

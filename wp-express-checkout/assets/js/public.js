@@ -108,6 +108,7 @@ var ppecHandler = function( data ) {
 
 		if ( !parent.isValidTotal() ) {
 			enable_actions = false;
+			jQuery( '#wpec_billing_' + parent.data.id ).toggle();
 		}
 
 		if ( enable_actions ) {
