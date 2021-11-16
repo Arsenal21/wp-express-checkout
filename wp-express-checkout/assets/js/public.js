@@ -167,7 +167,7 @@ var ppecHandler = function( data ) {
 
 			parent.scCont.find( '.wpec_product_shipping_enable' ).change( function() {
 				parent.scCont.find( '.wpec_shipping_address_container' ).toggle();
-				parent.scCont.find( '.wpec_billing_address_container' ).toggleClass( 'shipping_enabled' );
+				parent.scCont.find( '.wpec_address_wrap' ).toggleClass( 'shipping_enabled' );
 			} );
 
 			jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).click( function( e ) {

@@ -148,7 +148,7 @@
 	align-items: center;
 }
 
-.editor-styles-wrapper .wp-ppec-button-container {
+.editor-styles-wrapper .wpec_billing_container, .editor-styles-wrapper .wp-ppec-button-container {
 	display: grid;
 	gap: 24px;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -411,22 +411,27 @@
 	pointer-events: none;
 }
 
-.editor-styles-wrapper .wpec-product-variations-wrapper {
+.editor-styles-wrapper .wpec_billing_address_container, .editor-styles-wrapper .wpec_shipping_address_container, .editor-styles-wrapper .wpec_billing_user_info, .editor-styles-wrapper .wpec-product-variations-wrapper {
 	display: grid;
 	gap: 24px;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
 @media (min-width: 640px) {
-	.editor-styles-wrapper .wpec-product-variations-wrapper {
+	.editor-styles-wrapper .wpec_billing_address_container, .editor-styles-wrapper .wpec_shipping_address_container, .editor-styles-wrapper .wpec_billing_user_info, .editor-styles-wrapper .wpec-product-variations-wrapper {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
 
 @media (min-width: 640px) {
-	.editor-styles-wrapper .wpec-product-variations-wrapper .wpec-product-variations-cont:last-child:nth-child(odd) {
+	.editor-styles-wrapper .wpec_billing_address_container label, .editor-styles-wrapper .wpec_billing_address_container > div:last-child:nth-child(odd), .editor-styles-wrapper .wpec_shipping_address_container label, .editor-styles-wrapper .wpec_shipping_address_container > div:last-child:nth-child(odd), .editor-styles-wrapper .wpec_billing_user_info label, .editor-styles-wrapper .wpec_billing_user_info > div:last-child:nth-child(odd), .editor-styles-wrapper .wpec-product-variations-wrapper label, .editor-styles-wrapper .wpec-product-variations-wrapper > div:last-child:nth-child(odd) {
 		grid-column: span 2 / span 2;
 	}
+}
+
+.editor-styles-wrapper .wp-ppec-shortcode-container label.wpec_billing_label, .editor-styles-wrapper .wp-ppec-shortcode-container label.wpec_shipping_label {
+	font-size: 18px;
+	line-height: 28px;
 }
 
 .editor-styles-wrapper .wp-ppec-shortcode-container {
@@ -761,6 +766,39 @@
 	-webkit-box-flex: 0;
 	-ms-flex: none;
 	flex: none;
+}
+
+.editor-styles-wrapper .wpec_address_wrap {
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.editor-styles-wrapper .wpec_address_wrap.shipping_enabled {
+	gap: 24px;
+}
+
+@media (min-width: 640px) {
+	.editor-styles-wrapper .wpec_address_wrap.shipping_enabled {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 640px) {
+	.editor-styles-wrapper .wpec_address_wrap.shipping_enabled .wpec_billing_address_container, .editor-styles-wrapper .wpec_address_wrap.shipping_enabled .wpec_shipping_address_container {
+		grid-template-columns: repeat(1, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 640px) {
+	.editor-styles-wrapper .wpec_address_wrap.shipping_enabled .wpec_billing_address_container label, .editor-styles-wrapper .wpec_address_wrap.shipping_enabled .wpec_shipping_address_container label {
+		grid-column: span 1 / span 1;
+	}
+}
+
+@media (min-width: 640px) {
+	.editor-styles-wrapper .wpec_address_wrap.shipping_enabled .wpec_product_shipping_handle {
+		grid-column: span 2 / span 2;
+	}
 }
 
 .wpec-button-placeholder {
