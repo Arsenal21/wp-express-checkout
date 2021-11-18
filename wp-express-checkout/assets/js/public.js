@@ -156,12 +156,9 @@ var ppecHandler = function( data ) {
 			parent.validateInput( jQuery( '#wpec-tos-' + parent.data.id ), parent.ValidatorTos );
 			parent.validateInput( jQuery( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorQuantity );
 			parent.validateInput( jQuery( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorAmount );
-			parent.validateInput( jQuery( '#wpec_billing_address-' + parent.data.id ), parent.ValidatorBilling );
-			parent.validateInput( jQuery( '#wpec_billing_city-' + parent.data.id ), parent.ValidatorBilling );
-			parent.validateInput( jQuery( '#wpec_billing_country-' + parent.data.id ), parent.ValidatorBilling );
-			parent.validateInput( jQuery( '#wpec_shipping_address-' + parent.data.id ), parent.ValidatorBilling );
-			parent.validateInput( jQuery( '#wpec_shipping_city-' + parent.data.id ), parent.ValidatorBilling );
-			parent.validateInput( jQuery( '#wpec_shipping_country-' + parent.data.id ), parent.ValidatorBilling );
+			jQuery( '#wpec_billing_' + parent.data.id + ' .wpec_required' ).each( function() {
+				parent.validateInput( jQuery( this ), parent.ValidatorBilling );
+			} );
 			parent.data.orig_price = parseFloat( parent.data.price );
 			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio' ).change( function() {
 				var grpId = jQuery( this ).data( 'wpec-variations-group-id' );
@@ -275,7 +272,29 @@ var ppecHandler = function( data ) {
 				errInput.focus();
 				errInput.trigger( 'change' );
 			} else if ( !parent.data.total ) {
-				parent.processPayment( {}, 'wpec_process_empty_payment' );
+				parent.processPayment( {
+					payer: {
+						name: {
+							given_name: jQuery( '#wpec_billing_first_name-' + parent.data.id ).val(),
+							surname: jQuery( '#wpec_billing_last_name-' + parent.data.id ).val()
+						},
+						email_address: jQuery( '#wpec_billing_email-' + parent.data.id ).val(),
+						address: {
+							address_line_1: jQuery( '#wpec_billing_address-' + parent.data.id ).val(),
+							admin_area_1: jQuery( '#wpec_billing_state-' + parent.data.id ).val(),
+							admin_area_2: jQuery( '#wpec_billing_city-' + parent.data.id ).val(),
+							postal_code: jQuery( '#wpec_billing_postal_code-' + parent.data.id ).val(),
+							country_code: jQuery( '#wpec_billing_country-' + parent.data.id ).val()
+						},
+						shipping_address: {
+							address_line_1: jQuery( '#wpec_shipping_address-' + parent.data.id ).val(),
+							admin_area_1: jQuery( '#wpec_shipping_state-' + parent.data.id ).val(),
+							admin_area_2: jQuery( '#wpec_shipping_city-' + parent.data.id ).val(),
+							postal_code: jQuery( '#wpec_shipping_postal_code-' + parent.data.id ).val(),
+							country_code: jQuery( '#wpec_shipping_country-' + parent.data.id ).val()
+						}
+					}
+				}, 'wpec_process_empty_payment' );
 			}
 		},
 		createOrder: function( data, actions ) {

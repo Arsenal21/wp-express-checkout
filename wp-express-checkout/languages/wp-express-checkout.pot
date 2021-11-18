@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Express Checkout 2.1.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 07:51:56+00:00\n"
+"POT-Creation-Date: 2021-11-18 07:54:43+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -298,7 +298,7 @@ msgid "Checkout"
 msgstr ""
 
 #: admin/class-admin.php:283 admin/includes/class-products-meta-boxes.php:437
-#: public/class-main.php:319
+#: public/class-main.php:320
 msgid "Pay"
 msgstr ""
 
@@ -1665,10 +1665,6 @@ msgstr ""
 msgid "Shipping"
 msgstr ""
 
-#: includes/class-payment-processor-free.php:43
-msgid "Anonymous"
-msgstr ""
-
 #: includes/class-payment-processor.php:58
 #: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:42
 msgid "No payment data received."
@@ -2992,7 +2988,11 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: public/class-main.php:349
+#: public/class-main.php:87
+msgid "This field is required"
+msgstr ""
+
+#: public/class-main.php:350
 msgid ""
 "I accept the <a href=\"https://example.com/terms-and-conditions/\" "
 "target=\"_blank\">Terms and Conditions</a>"
@@ -3093,56 +3093,56 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: public/views/templates/payment-form.php:122
+#: public/views/templates/payment-form.php:123
 msgid "First Name"
 msgstr ""
 
-#: public/views/templates/payment-form.php:128
+#: public/views/templates/payment-form.php:129
 msgid "Last Name"
 msgstr ""
 
-#: public/views/templates/payment-form.php:134
+#: public/views/templates/payment-form.php:135
 msgid "Email"
 msgstr ""
 
-#: public/views/templates/payment-form.php:141
-msgid "Billing Info"
-msgstr ""
-
-#: public/views/templates/payment-form.php:144
-#: public/views/templates/payment-form.php:195
-msgid "Address"
-msgstr ""
-
-#: public/views/templates/payment-form.php:150
-#: public/views/templates/payment-form.php:201
-msgid "City"
-msgstr ""
-
-#: public/views/templates/payment-form.php:156
-#: public/views/templates/payment-form.php:207
-msgid "Country"
-msgstr ""
-
-#: public/views/templates/payment-form.php:171
-#: public/views/templates/payment-form.php:222
-msgid "State"
-msgstr ""
-
-#: public/views/templates/payment-form.php:177
-#: public/views/templates/payment-form.php:228
-msgid "Postal Code"
-msgstr ""
-
-#: public/views/templates/payment-form.php:187
+#: public/views/templates/payment-form.php:145
 msgid "Same billing and shipping info"
 msgstr ""
 
-#: public/views/templates/payment-form.php:192
+#: public/views/templates/payment-form.php:152
+msgid "Billing Info"
+msgstr ""
+
+#: public/views/templates/payment-form.php:155
+#: public/views/templates/payment-form.php:202
+msgid "Address"
+msgstr ""
+
+#: public/views/templates/payment-form.php:161
+#: public/views/templates/payment-form.php:208
+msgid "City"
+msgstr ""
+
+#: public/views/templates/payment-form.php:167
+#: public/views/templates/payment-form.php:214
+msgid "Country"
+msgstr ""
+
+#: public/views/templates/payment-form.php:182
+#: public/views/templates/payment-form.php:229
+msgid "State"
+msgstr ""
+
+#: public/views/templates/payment-form.php:188
+#: public/views/templates/payment-form.php:235
+msgid "Postal Code"
+msgstr ""
+
+#: public/views/templates/payment-form.php:199
 msgid "Shipping Info"
 msgstr ""
 
-#: public/views/templates/payment-form.php:259
+#: public/views/templates/payment-form.php:268
 msgid ""
 "This is where the Express Checkout Button will show. View it on the "
 "front-end to see how it will look to your visitors"
