@@ -157,7 +157,8 @@
     text-decoration: line-through;
 }
 
-.wpec-modal-open {
+.wpec-modal-open,
+.wpec-place-order-btn {
 	@apply bg-blue-600 text-white font-bold py-2 px-4 rounded;
 	&:hover {
 		@apply bg-none bg-blue-700 text-white;

@@ -103,7 +103,9 @@ var ppecHandler = function( data ) {
 	this.validateOrder = function() {
 		var enable_actions = true;
 
-		jQuery( '#wpec_billing_' + parent.data.id ).toggle( !parent.isValidTotal() );
+		jQuery( '#wpec_billing_' + parent.data.id + ', #place-order-' + parent.data.id ).toggle( !parent.isValidTotal() );
+		jQuery( '#' + parent.data.id ).toggle( !jQuery( '#place-order-' + parent.data.id ).is( ':visible' ) );
+
 		parent.inputs.forEach( function( inputArr ) {
 			var input = inputArr[ 0 ];
 			var validator = inputArr[ 1 ];
@@ -177,6 +179,10 @@ var ppecHandler = function( data ) {
 			parent.scCont.find( '.wpec_product_shipping_enable' ).change( function() {
 				parent.scCont.find( '.wpec_shipping_address_container' ).toggle();
 				parent.scCont.find( '.wpec_address_wrap' ).toggleClass( 'shipping_enabled' );
+			} );
+
+			jQuery( '#place-order-' + parent.data.id ).click( function() {
+				parent.buttonArgs.onClick();
 			} );
 
 			jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).click( function( e ) {
