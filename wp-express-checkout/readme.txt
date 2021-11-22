@@ -124,9 +124,10 @@ None
 
 == Changelog ==
 
-= WIP since 2.1.5 to 2021-11-16 =
+= WIP since 2.1.5 to 2021-11-22 =
 * Added Venmo payments support
-* Update the POT file. Fixes #54
+* Added button Place Order instead of PayPal button for orders with total 0.
+* Added Billing and Shipping fields on the purchase form for orders with total 0.
 
 = END WIP =
 
