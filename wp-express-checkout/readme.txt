@@ -124,6 +124,12 @@ None
 
 == Changelog ==
 
+= WIP since 2.1.5 to 2021-11-16 =
+* Added Venmo payments support
+* Update the POT file. Fixes #54
+
+= END WIP =
+
 = 2.1.5 =
 - New feature for download link expiry option.
 - Increased the transient expiry time to improve the Error Code 3004.
