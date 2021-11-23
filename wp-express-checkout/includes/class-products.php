@@ -31,15 +31,17 @@ class Products {
 			'not_found_in_trash' => __( 'Not found in Trash', 'wp-express-checkout' ),
 		);
 
+		$cap = Main::get_instance()->get_setting( 'access_permission' );
+
 		$capabilities = array(
-			'edit_post'          => 'manage_options',
-			'delete_post'        => 'manage_options',
-			'read_post'          => 'manage_options',
-			'edit_posts'         => 'manage_options',
-			'edit_others_posts'  => 'manage_options',
-			'delete_posts'       => 'manage_options',
-			'publish_posts'      => 'manage_options',
-			'read_private_posts' => 'manage_options',
+			'edit_post'          => $cap,
+			'delete_post'        => $cap,
+			'read_post'          => $cap,
+			'edit_posts'         => $cap,
+			'edit_others_posts'  => $cap,
+			'delete_posts'       => $cap,
+			'publish_posts'      => $cap,
+			'read_private_posts' => $cap
 		);
 
 		// Using custom dashicon font icon.
@@ -48,7 +50,6 @@ class Products {
 		$slug = untrailingslashit( self::$products_slug );
 		$args = array(
 			'labels'             => $labels,
-			'capability_type'    => 'post',
 			'public'             => true,
 			'publicly_queryable' => true,
 			'capability_type'    => 'post',
