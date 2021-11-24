@@ -25,7 +25,7 @@ class Products_Meta_Boxes {
 		add_meta_box( 'wsp_content', __( 'Description', 'wp-express-checkout' ), array( $this, 'display_description_meta_box' ), Products::$products_slug, 'normal', 'high' );
 		add_meta_box( 'ppec_price_meta_box', __( 'Price', 'wp-express-checkout' ), array( $this, 'display_price_meta_box' ), Products::$products_slug, 'normal', 'high' );
 		add_meta_box( 'wpec_variations_meta_box', __( 'Variations', 'wp-express-checkout' ), array( $this, 'display_variations_meta_box' ), Products::$products_slug, 'normal', 'high' );
-		add_meta_box( 'ppec_quantity_meta_box', __( 'Quantity', 'wp-express-checkout' ), array( $this, 'display_quantity_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'ppec_quantity_meta_box', __( 'Quantity & Stock', 'wp-express-checkout' ), array( $this, 'display_quantity_meta_box' ), Products::$products_slug, 'normal', 'high' );
 		add_meta_box( 'wpec_shipping_tax_meta_box', __( 'Shipping & Tax', 'wp-express-checkout' ), array( $this, 'display_shipping_tax_meta_box' ), Products::$products_slug, 'normal', 'high' );
 		add_meta_box( 'ppec_upload_meta_box', __( 'Download URL', 'wp-express-checkout' ), array( $this, 'display_upload_meta_box' ), Products::$products_slug, 'normal', 'high' );
 		add_meta_box( 'wpec_thumbnail_meta_box', __( 'Product Thumbnail', 'wp-express-checkout' ), array( $this, 'display_thumbnail_meta_box' ), Products::$products_slug, 'normal', 'high' );
@@ -228,20 +228,36 @@ class Products_Meta_Boxes {
 	}
 
 	function display_quantity_meta_box( $post ) {
-		$current_val = get_post_meta( $post->ID, 'ppec_product_quantity', true );
-		$current_val = empty( $current_val ) ? 1 : $current_val;
+		$current_val  = get_post_meta( $post->ID, 'ppec_product_quantity', true );
+		$current_val  = empty( $current_val ) ? 1 : $current_val;
+		$enable_stock = get_post_meta( $post->ID, 'wpec_product_enable_stock', true );
+		$stock_items  = get_post_meta( $post->ID, 'wpec_product_stock_items', true );
 
 		$allow_custom_quantity = get_post_meta( $post->ID, 'ppec_product_custom_quantity', true );
 		?>
-		<label><?php esc_html_e( 'Quantity', 'wp-express-checkout' ); ?></label>
-		<br/>
-		<input type="number" name="ppec_product_quantity" value="<?php echo esc_attr( $current_val ); ?>">
-		<p class="description"><?php esc_html_e( 'Item quantity.', 'wp-express-checkout' ); ?></p>
 		<label>
-			<input type="checkbox" name="ppec_product_custom_quantity" value="1"<?php echo $allow_custom_quantity ? ' checked' : ''; ?>>
+			<input type="checkbox" name="ppec_product_custom_quantity" value="1" <?php checked( $allow_custom_quantity ); ?>>
 			<?php esc_html_e( 'Allow customers to specify quantity', 'wp-express-checkout' ); ?>
 		</label>
 		<p class="description"><?php esc_html_e( 'When checked, customers can enter quantity they want to buy. You can set initial quantity using field above.', 'wp-express-checkout' ); ?></p>
+		<label><?php esc_html_e( 'Set Quantity', 'wp-express-checkout' ); ?></label>
+		<br/>
+		<input type="number" name="ppec_product_quantity" value="<?php echo esc_attr( $current_val ); ?>">
+		<p class="description"><?php esc_html_e( 'If you want to use a set quantity for this item then enter the value in this field.', 'wp-express-checkout' ); ?></p>
+
+		<hr />
+
+		<label>
+			<input type="checkbox" name="wpec_product_enable_stock" value="1" <?php checked( $enable_stock ); ?>>
+			<?php esc_html_e( 'Enable stock control', 'wp-express-checkout' ); ?>
+		</label>
+		<p class="description"><?php esc_html_e( 'When enabled, you can specify the quantity available for this product. It will be decreased each time the item is purchased. When stock reaches zero, an "Out of stock" message will be displayed instead of the buy button.', 'wp-express-checkout' ); ?></p>
+
+		<label><?php esc_html_e( 'Quantity Available:', 'wp-express-checkout' ); ?>	</label>
+		<br />
+		<input type="number" min="0" step="1" name="wpec_product_stock_items" value="<?php echo esc_attr( ! $stock_items ? 0 : $stock_items ); ?>">
+		<p class="description"><?php esc_html_e( 'Specify the quantity available for this product.', 'wp-express-checkout' ); ?></p>
+
 		<?php
 	}
 
@@ -552,6 +568,10 @@ jQuery(document).ready(function($) {
 		// allow custom quantity.
 		$quantity = filter_input( INPUT_POST, 'ppec_product_custom_quantity', FILTER_SANITIZE_NUMBER_INT );
 		update_post_meta( $post_id, 'ppec_product_custom_quantity', $quantity );
+
+		// Stock control
+		update_post_meta( $post_id, 'wpec_product_enable_stock', ! empty( $_POST['wpec_product_enable_stock'] ) ? true : false );
+		update_post_meta( $post_id, 'wpec_product_stock_items', absint( $_POST['wpec_product_stock_items'] ) );
 
 		// shipping & tax.
 		$shipping = filter_input( INPUT_POST, 'wpec_product_shipping', FILTER_SANITIZE_STRING );
