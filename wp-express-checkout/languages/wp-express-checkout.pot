@@ -696,7 +696,7 @@ msgid ""
 msgstr ""
 
 #: admin/class-admin.php:529
-msgid "If don't know what this is for don't change the following value."
+msgid "If you don't know what this is for, don't change the following value."
 msgstr ""
 
 #: admin/class-admin.php:536
