@@ -60,6 +60,12 @@ class Admin {
 		// Add an action link pointing to the options page.
 		$plugin_basename = plugin_basename( plugin_dir_path( realpath( dirname( __FILE__ ) ) ) . $this->plugin_slug . '.php' );
 		add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
+
+		add_filter( 'option_page_capability_ppdg-settings-group', array( $this, 'settings_permissions' ) );
+	}
+
+	public function settings_permissions( $capability ) {
+		return Main::get_instance()->get_setting( 'access_permission' );
 	}
 
 	/**
@@ -160,7 +166,7 @@ class Admin {
 			'edit.php?post_type=' . Products::$products_slug,
 			__( 'WP Express Checkout Settings', 'wp-express-checkout' ),
 			__( 'Settings', 'wp-express-checkout' ),
-			'manage_options',
+			Main::get_instance()->get_setting( 'access_permission' ),
 			'ppec-settings-page',
 			array( $this, 'display_plugin_admin_page' )
 		);
@@ -193,6 +199,7 @@ class Admin {
 		add_settings_section( 'ppdg-tos-section', __( 'Terms and Conditions', 'wp-express-checkout' ), array( $this, 'tos_description' ), $this->plugin_slug . '-advanced' );
 
 		add_settings_section( 'ppdg-link-expiry-section', __( 'Download Link Expiry', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
+		add_settings_section( 'wpec-access-section', __( 'Admin Dashboard Access Permission', 'wp-express-checkout' ), array( $this, 'access_description' ), $this->plugin_slug . '-advanced' );
 
 		/* Add the settings fields */
 
@@ -467,6 +474,23 @@ class Admin {
 				'desc' => __( 'Number of times an item can be downloaded before the link expires. Example value: 3. Leave empty or set to 0 if you do not want to limit downloads by download count.', 'wp-express-checkout' ),
 			)
 		);
+		add_settings_field(
+			'access_permission',
+			__( 'Download Limit Count', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'wpec-access-section',
+			array(
+				'field' => 'access_permission',
+				'type'  => 'select',
+				'vals'  => array( 'manage_options', 'edit_others_posts', 'publish_posts' ),
+				'texts' => array(
+					__( 'Admins Only', 'wp-express-checkout' ),
+					__( 'Admins, Editors', 'wp-express-checkout' ),
+					__( 'Admins, Editors, Authors', 'wp-express-checkout' ),
+				),
+			)
+		);
 	}
 
 	/**
@@ -495,6 +519,14 @@ class Admin {
 		echo '<p><i>';
 		_e( 'Debug logging can be useful to troubleshoot transaction processing related issues on your site. keep it disabled unless you are troubleshooting.', 'wp-express-checkout' );
 		echo '</p></i>';
+	}
+
+	/**
+	 * The section `wpec-access-section` callback.
+	 */
+	public function access_description() {
+		echo '<p>' . __( 'WP Express Checkout\'s admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP role to access the WPEC admin dashboard by selecting a value below.', 'wp-express-checkout' ) . '</p>';
+		echo '<p><strong>' . __( 'If don\'t know what this is for don\'t change the following value.', 'wp-express-checkout' ) . '</strong></p>';
 	}
 
 	/**

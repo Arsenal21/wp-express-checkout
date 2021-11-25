@@ -45,6 +45,11 @@ class Tools extends Admin {
 		return self::$instance;
 	}
 
+	protected function __construct() {
+		parent::__construct();
+		add_filter( 'option_page_capability_wpec-tools-group', array( $this, 'settings_permissions' ) );
+	}
+
 	/**
 	 * Register and enqueue admin-specific style sheet.
 	 *
@@ -75,7 +80,7 @@ class Tools extends Admin {
 			'edit.php?post_type=' . Products::$products_slug,
 			__( 'WP Express Checkout Tools', 'wp-express-checkout' ),
 			__( 'Tools', 'wp-express-checkout' ),
-			'manage_options',
+			Main::get_instance()->get_setting( 'access_permission' ),
 			'wpec-tools-page',
 			array( $this, 'display_plugin_admin_page' )
 		);
