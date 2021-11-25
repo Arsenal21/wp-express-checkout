@@ -476,7 +476,7 @@ class Admin {
 		);
 		add_settings_field(
 			'access_permission',
-			__( 'Download Limit Count', 'wp-express-checkout' ),
+			__( 'Admin Dashboard Access Permission', 'wp-express-checkout' ),
 			array( $this, 'settings_field_callback' ),
 			$this->plugin_slug . '-advanced',
 			'wpec-access-section',
@@ -526,7 +526,7 @@ class Admin {
 	 */
 	public function access_description() {
 		echo '<p>' . __( 'WP Express Checkout\'s admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP role to access the WPEC admin dashboard by selecting a value below.', 'wp-express-checkout' ) . '</p>';
-		echo '<p><strong>' . __( 'If don\'t know what this is for don\'t change the following value.', 'wp-express-checkout' ) . '</strong></p>';
+		echo '<p><strong>' . __( 'If you don\'t know what this is for, don\'t change the following value.', 'wp-express-checkout' ) . '</strong></p>';
 	}
 
 	/**
