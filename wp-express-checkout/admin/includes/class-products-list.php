@@ -67,8 +67,8 @@ class Products_List {
 				<?php
 				break;
 			case 'stock':
-				$stock_enabled = get_post_meta( $post_id, 'wpec_product_enable_stock', true );
-				$stock_items   = get_post_meta( $post_id, 'wpec_product_stock_items', true );
+				$stock_enabled = $product->is_stock_control_enabled();
+				$stock_items   = $product->get_stock_items();
 				if ( $stock_enabled ) {
 					echo ! $stock_items ? __( 'Out of stock', 'wp-express-checkout' ) : $stock_items;
 				} else {
