@@ -184,6 +184,10 @@ div.postbox.yellowish {
 	border-color: black transparent transparent transparent;
 }
 
+input[name="ppec_product_shortcode"] {
+    max-width: 100%;
+}
+
 @media screen and (max-width: 782px) {
 	.wpec-help .wpec-help-text::after {
 		top: 50%;
