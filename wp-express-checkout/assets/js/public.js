@@ -40,6 +40,11 @@ var ppecHandler = function( data ) {
 		return input.prop( 'checked' ) !== true ? ppecFrontVars.str.acceptTos : null;
 	};
 
+	this.ValidatorBilling = function( input ) {
+		var val = input.attr( 'type' ) === 'checkbox' ? input.prop( 'checked' ) === true : input.val();
+		return input.is( ':visible' ) && !val ? ppecFrontVars.str.required : null;
+	};
+
 	this.isValidTotal = function() {
 		parent.calcTotal();
 		return !!parent.data.total;
@@ -98,6 +103,9 @@ var ppecHandler = function( data ) {
 	this.validateOrder = function() {
 		var enable_actions = true;
 
+		jQuery( '#wpec_billing_' + parent.data.id + ', #place-order-' + parent.data.id ).toggle( !parent.isValidTotal() );
+		jQuery( '#' + parent.data.id ).toggle( !jQuery( '#place-order-' + parent.data.id ).is( ':visible' ) );
+
 		parent.inputs.forEach( function( inputArr ) {
 			var input = inputArr[ 0 ];
 			var validator = inputArr[ 1 ];
@@ -150,6 +158,9 @@ var ppecHandler = function( data ) {
 			parent.validateInput( jQuery( '#wpec-tos-' + parent.data.id ), parent.ValidatorTos );
 			parent.validateInput( jQuery( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorQuantity );
 			parent.validateInput( jQuery( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorAmount );
+			jQuery( '#wpec_billing_' + parent.data.id + ' .wpec_required' ).each( function() {
+				parent.validateInput( jQuery( this ), parent.ValidatorBilling );
+			} );
 			parent.data.orig_price = parseFloat( parent.data.price );
 			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio' ).change( function() {
 				var grpId = jQuery( this ).data( 'wpec-variations-group-id' );
@@ -164,6 +175,15 @@ var ppecHandler = function( data ) {
 				}
 			} );
 			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio:checked' ).change();
+
+			parent.scCont.find( '.wpec_product_shipping_enable' ).change( function() {
+				parent.scCont.find( '.wpec_shipping_address_container' ).toggle();
+				parent.scCont.find( '.wpec_address_wrap' ).toggleClass( 'shipping_enabled' );
+			} );
+
+			jQuery( '#place-order-' + parent.data.id ).click( function() {
+				parent.buttonArgs.onClick();
+			} );
 
 			jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).click( function( e ) {
 				e.preventDefault();
@@ -254,13 +274,33 @@ var ppecHandler = function( data ) {
 		onClick: function() {
 			parent.displayErrors();
 			var errInput = parent.scCont.find( '.hasError' ).first();
-			if ( errInput ) {
+			if ( errInput.length > 0 ) {
 				errInput.focus();
 				errInput.trigger( 'change' );
-			}
-
-			if ( !parent.data.total ) {
-				parent.processPayment( {}, 'wpec_process_empty_payment' );
+			} else if ( !parent.data.total ) {
+				parent.processPayment( {
+					payer: {
+						name: {
+							given_name: jQuery( '#wpec_billing_first_name-' + parent.data.id ).val(),
+							surname: jQuery( '#wpec_billing_last_name-' + parent.data.id ).val()
+						},
+						email_address: jQuery( '#wpec_billing_email-' + parent.data.id ).val(),
+						address: {
+							address_line_1: jQuery( '#wpec_billing_address-' + parent.data.id ).val(),
+							admin_area_1: jQuery( '#wpec_billing_state-' + parent.data.id ).val(),
+							admin_area_2: jQuery( '#wpec_billing_city-' + parent.data.id ).val(),
+							postal_code: jQuery( '#wpec_billing_postal_code-' + parent.data.id ).val(),
+							country_code: jQuery( '#wpec_billing_country-' + parent.data.id ).val()
+						},
+						shipping_address: {
+							address_line_1: jQuery( '#wpec_shipping_address-' + parent.data.id ).val(),
+							admin_area_1: jQuery( '#wpec_shipping_state-' + parent.data.id ).val(),
+							admin_area_2: jQuery( '#wpec_shipping_city-' + parent.data.id ).val(),
+							postal_code: jQuery( '#wpec_shipping_postal_code-' + parent.data.id ).val(),
+							country_code: jQuery( '#wpec_shipping_country-' + parent.data.id ).val()
+						}
+					}
+				}, 'wpec_process_empty_payment' );
 			}
 		},
 		createOrder: function( data, actions ) {

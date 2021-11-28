@@ -84,6 +84,7 @@ class Main {
 				'redirectMsg'      => __( 'You are now being redirected to the order summary page.', 'wp-express-checkout' ),
 				'strRemoveCoupon'  => __( 'Remove coupon', 'wp-express-checkout' ),
 				'strRemove'        => __( 'Remove', 'wp-express-checkout' ),
+				'required'         => __( 'This field is required', 'wp-express-checkout' ),
 			),
 			'ajaxUrl' => get_admin_url() . 'admin-ajax.php',
 		) );
