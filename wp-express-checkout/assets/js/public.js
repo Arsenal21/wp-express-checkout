@@ -472,7 +472,7 @@ var ppecHandler = function( data ) {
 				amount = amount + parseFloat( variation.prices[ parent.data.variations.applied[ grpId ] ] );
 			}
 		}
-		return amount;
+		return parent.PHP_round( amount, parent.data.dec_num );
 	};
 
 	jQuery( document ).trigger( 'wpec_before_render_button', [ this ] );
