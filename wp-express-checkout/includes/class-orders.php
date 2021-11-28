@@ -35,6 +35,20 @@ class Orders {
 			'not_found' => __( 'Not found', 'wp-express-checkout' ),
 			'not_found_in_trash' => __( 'Not found in Trash', 'wp-express-checkout' ),
 		);
+
+		$cap = Main::get_instance()->get_setting( 'access_permission' );
+
+		$capabilities = array(
+			'edit_post'          => $cap,
+			'delete_post'        => $cap,
+			'read_post'          => $cap,
+			'edit_posts'         => $cap,
+			'edit_others_posts'  => $cap,
+			'delete_posts'       => $cap,
+			'publish_posts'      => $cap,
+			'read_private_posts' => $cap
+		);
+
 		$args = array(
 			'label' => __( 'orders', 'wp-express-checkout' ),
 			'description' => __( 'WPEC Orders', 'wp-express-checkout' ),
@@ -53,10 +67,7 @@ class Orders {
 			'exclude_from_search' => true,
 			'publicly_queryable' => false,
 			'capability_type' => 'post',
-			'capabilities' => array(
-				'create_posts' => false, // Removes support for the "Add New" function
-			),
-			'map_meta_cap' => true,
+			'capabilities' => $capabilities,
 		);
 
 		register_post_type( self::PTYPE, $args );
