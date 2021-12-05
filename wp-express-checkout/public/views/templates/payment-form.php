@@ -263,7 +263,7 @@
 		<?php } ?>
 
 		<div id="place-order-<?php echo esc_attr( $button_id ); ?>" style="display:none;">
-			<button class="wpec-place-order-btn"><?php esc_html_e( 'Place An Order', 'wp-express-checkout' ); ?></button>
+			<button class="wpec-place-order-btn"><?php esc_html_e( 'Place Order', 'wp-express-checkout' ); ?></button>
 		</div>
 
 		<div id="<?php echo esc_attr( $button_id ); ?>" style="max-width:<?php echo esc_attr( $btn_width ? $btn_width . 'px;' : '' ); ?>"></div>
