@@ -39,6 +39,7 @@ https://www.youtube.com/watch?v=RHVgGQWhCT0
 * Allow the customers to automatically download the file once the purchase is completed via PayPal.
 * You can deliver the digital downloads using encrypted download links that expire automatically.
 * Offer Buy Now Pay Later payment option to your customers.
+* Accept Payments via Venmo easily. Your customers can pay using the Venmo option.
 * View the transactions from your WordPress admin dashboard.
 * Option to configure a notification email to be sent to the buyer and the seller after the purchase.
 * Ability to set a product thumbnail for a product.
