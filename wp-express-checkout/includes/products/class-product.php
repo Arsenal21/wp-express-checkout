@@ -121,6 +121,18 @@ abstract class Product {
 	}
 
 	/**
+	 * Reduces stock items number by a given quantity.
+	 *
+	 * @param int $quantity
+	 *
+	 * @return int
+	 */
+	public function update_stock_items( $quantity ) {
+		$stock = max( 0, $this->get_stock_items() - $quantity );
+		update_post_meta( $this->get_id(), 'wpec_product_stock_items', $stock );
+	}
+
+	/**
 	 * Whether stock control enabled.
 	 *
 	 * @return type

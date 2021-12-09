@@ -95,7 +95,8 @@ class Payment_Processor {
 		}
 
 		try {
-			$order = Orders::create();
+			$order   = Orders::create();
+			$product = Products::retrieve( $item_id );
 		} catch ( Exception $exc ) {
 			$this->send_error( $exc->getMessage(), $exc->getCode() );
 		}
@@ -144,9 +145,16 @@ class Payment_Processor {
 			$this->send_error( __( 'Payment currency mismatch.', 'wp-express-checkout' ), 3006 );
 		}
 
+		// stock control.
+		if ( $product->is_stock_control_enabled() && $product->get_stock_items() < $quantity ) {
+			$this->send_error( __( 'There are not enough product items in stock.', 'wp-express-checkout' ), 3009 );
+		}
+
 		// If code execution got this far, it means everything is ok with payment
 		// let's insert order.
 		$order->set_status( 'paid' );
+
+		$product->update_stock_items( $quantity );
 
 		$order_id  = $order->get_id();
 
