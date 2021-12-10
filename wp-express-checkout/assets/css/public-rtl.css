@@ -763,3 +763,7 @@
 	-ms-flex: none;
 	flex: none;
 }
+
+.wpec-out-of-stock {
+	font-weight: 700;
+}

@@ -763,6 +763,10 @@
 	flex: none;
 }
 
+.editor-styles-wrapper .wpec-out-of-stock {
+	font-weight: 700;
+}
+
 .wpec-button-placeholder {
 	display: block !important;
 }
