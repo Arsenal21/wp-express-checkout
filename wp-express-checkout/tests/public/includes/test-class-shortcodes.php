@@ -487,6 +487,8 @@ class ShortcodesTest extends \WP_UnitTestCase {
 			'use_modal'       => $defaults['use_modal'],
 			'thank_you_url'   => $defaults['thank_you_url'],
 			'variations'      => [],
+			'stock_enabled'   => false,
+			'stock_items'     => 0,
 		];
 		return [
 			[ $args, [ 'is_live' => 0, 'sandbox_client_id' => 'test' ] ],
