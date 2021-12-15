@@ -153,7 +153,7 @@ class Coupons {
 	}
 
 	function add_menu() {
-		add_submenu_page( 'edit.php?post_type=' . Products::$products_slug, __( 'Coupons', 'wp-express-checkout' ), __( 'Coupons', 'wp-express-checkout' ), 'manage_options', 'wpec-coupons', array( $this, 'display_coupons_menu_page' ) );
+		add_submenu_page( 'edit.php?post_type=' . Products::$products_slug, __( 'Coupons', 'wp-express-checkout' ), __( 'Coupons', 'wp-express-checkout' ), Main::get_instance()->get_setting( 'access_permission' ), 'wpec-coupons', array( $this, 'display_coupons_menu_page' ) );
 	}
 
 	function save_settings() {

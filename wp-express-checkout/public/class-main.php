@@ -84,6 +84,7 @@ class Main {
 				'redirectMsg'      => __( 'You are now being redirected to the order summary page.', 'wp-express-checkout' ),
 				'strRemoveCoupon'  => __( 'Remove coupon', 'wp-express-checkout' ),
 				'strRemove'        => __( 'Remove', 'wp-express-checkout' ),
+				'required'         => __( 'This field is required', 'wp-express-checkout' ),
 			),
 			'ajaxUrl' => get_admin_url() . 'admin-ajax.php',
 		) );
@@ -357,6 +358,7 @@ class Main {
 			'tos_text'             => __( 'I accept the <a href="https://example.com/terms-and-conditions/" target="_blank">Terms and Conditions</a>', 'wp-express-checkout' ),
 			'download_duration'    => '',
 			'download_count'       => '',
+			'access_permission'    => 'manage_options',
 		);
 
 		return $defaults;

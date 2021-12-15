@@ -211,12 +211,12 @@ class Orders_Meta_Boxes {
 		$useremail = '';
 		$billing   = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : __( 'N/A', 'wp-express-checkout' );
 		$shipping  = $order->get_data( 'shipping_address' );
-		if ( $user ) {
-			$username  = $user->user_login !== $user->display_name ? $user->display_name . ' (' . $user->user_login . ') ' : $user->user_login;
-			$useremail = $user->user_email;
-		} else if ( $payer ) {
+		if ( $payer ) {
 			$username = implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
 			$useremail = $payer['email_address'];
+		} else if ( $user ) {
+			$username  = $user->user_login !== $user->display_name ? $user->display_name . ' (' . $user->user_login . ') ' : $user->user_login;
+			$useremail = $user->user_email;
 		}
 		?>
 		<?php echo get_avatar( $useremail, 72 ); ?>

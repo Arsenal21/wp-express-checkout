@@ -124,9 +124,13 @@ None
 
 == Changelog ==
 
-= WIP since 2.1.5 to 2021-11-16 =
-* Added Venmo payments support
+= WIP since 2.1.5 to 2021-11-28 =
+* Added Venmo payments support. Your customers can pay using the Venmo option from the PayPal checkout popup window.
 * Update the POT file. Fixes #54
+* Added button Place Order instead of PayPal button for orders with total 0.
+* Added Billing and Shipping fields on the purchase form for orders with total 0.
+* Added a new advanced settings option to allow other WP user roles to be able to access the admin dashboard of the plugin.
+* Fixed Decimal Precision Error.
 
 = END WIP =
 

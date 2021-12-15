@@ -147,7 +147,7 @@
 	align-items: center;
 }
 
-.wp-ppec-button-container {
+.wpec_billing_container, .wp-ppec-button-container {
 	display: grid;
 	gap: 24px;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -270,6 +270,25 @@
 	background-color: rgba(37, 99, 235, 1);
 }
 
+.wpec-place-order-btn {
+	background-color: rgba(37, 99, 235, 1);
+	border-radius: 4px;
+	font-weight: 700;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-left: 16px;
+	padding-right: 16px;
+	color: rgba(255, 255, 255, 1);
+}
+
+.wpec-place-order-btn:hover {
+	color: rgba(255, 255, 255, 1);
+}
+
+.wpec-place-order-btn:hover {
+	background-color: rgba(37, 99, 235, 1);
+}
+
 .wpec-modal-open:hover {
 	background-color: rgba(29, 78, 216, 1);
 	background-image: none;
@@ -281,6 +300,20 @@
 }
 
 .wpec-modal-open:hover:hover {
+	background-color: rgba(29, 78, 216, 1);
+}
+
+.wpec-place-order-btn:hover {
+	background-color: rgba(29, 78, 216, 1);
+	background-image: none;
+	color: rgba(255, 255, 255, 1);
+}
+
+.wpec-place-order-btn:hover:hover {
+	color: rgba(255, 255, 255, 1);
+}
+
+.wpec-place-order-btn:hover:hover {
 	background-color: rgba(29, 78, 216, 1);
 }
 
@@ -410,22 +443,27 @@
 	pointer-events: none;
 }
 
-.wpec-product-variations-wrapper {
+.wpec_billing_address_container, .wpec_shipping_address_container, .wpec_billing_user_info, .wpec-product-variations-wrapper {
 	display: grid;
 	gap: 24px;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
 @media (min-width: 640px) {
-	.wpec-product-variations-wrapper {
+	.wpec_billing_address_container, .wpec_shipping_address_container, .wpec_billing_user_info, .wpec-product-variations-wrapper {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
 
 @media (min-width: 640px) {
-	.wpec-product-variations-wrapper .wpec-product-variations-cont:last-child:nth-child(odd) {
+	.wpec_billing_address_container label, .wpec_billing_address_container > div:last-child:nth-child(odd), .wpec_shipping_address_container label, .wpec_shipping_address_container > div:last-child:nth-child(odd), .wpec_billing_user_info label, .wpec_billing_user_info > div:last-child:nth-child(odd), .wpec-product-variations-wrapper label, .wpec-product-variations-wrapper > div:last-child:nth-child(odd) {
 		grid-column: span 2 / span 2;
 	}
+}
+
+.wp-ppec-shortcode-container label.wpec_billing_label, .wp-ppec-shortcode-container label.wpec_shipping_label {
+	font-size: 18px;
+	line-height: 28px;
 }
 
 .wp-ppec-shortcode-container {
@@ -762,6 +800,39 @@
 	-webkit-box-flex: 0;
 	-ms-flex: none;
 	flex: none;
+}
+
+.wpec_address_wrap {
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.wpec_address_wrap.shipping_enabled {
+	gap: 24px;
+}
+
+@media (min-width: 640px) {
+	.wpec_address_wrap.shipping_enabled {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 640px) {
+	.wpec_address_wrap.shipping_enabled .wpec_billing_address_container, .wpec_address_wrap.shipping_enabled .wpec_shipping_address_container {
+		grid-template-columns: repeat(1, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 640px) {
+	.wpec_address_wrap.shipping_enabled .wpec_billing_address_container label, .wpec_address_wrap.shipping_enabled .wpec_shipping_address_container label {
+		grid-column: span 1 / span 1;
+	}
+}
+
+@media (min-width: 640px) {
+	.wpec_address_wrap.shipping_enabled .wpec_product_shipping_handle {
+		grid-column: span 2 / span 2;
+	}
 }
 
 .wpec-out-of-stock {

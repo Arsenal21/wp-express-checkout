@@ -33,22 +33,13 @@ class Payment_Processor_Free extends Payment_Processor {
 	} // @codeCoverageIgnore
 
 	protected function get_payment_data() {
-		$current_user = wp_get_current_user();
-		$payment = array(
-			'id'     => $this->get_transaction_id( array() ),
-			'intent' => 'CAPTURE',
-			'status' => $this->get_transaction_status( array() ),
-			'payer'  => array(
-				'name' => array(
-					'given_name' => $current_user->display_name ? $current_user->display_name : __( 'Anonymous', 'wp-express-checkout' ),
-					'surname' => ''
-				),
-				'email_address' => $current_user->user_email ? $current_user->user_email : '',
-				'address' => array(),
-			),
+		$payment = array_merge( parent::get_payment_data(), array(
+			'id'          => $this->get_transaction_id( array() ),
+			'intent'      => 'CAPTURE',
+			'status'      => $this->get_transaction_status( array() ),
 			'create_time' => current_time( 'mysql' ),
 			'update_time' => current_time( 'mysql' ),
-		);
+		) );
 
 		return $payment;
 	}

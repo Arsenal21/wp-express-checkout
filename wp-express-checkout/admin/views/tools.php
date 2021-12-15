@@ -10,7 +10,7 @@ use WP_Express_Checkout\Products;
  * This includes the header, options, and other information that should provide
  * The User Interface to the end user.
  */
-if ( ! current_user_can( 'manage_options' ) ) {
+if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' ) ) ) {
     wp_die( 'You do not have permission to access this settings page.' );
 }
 ?>
