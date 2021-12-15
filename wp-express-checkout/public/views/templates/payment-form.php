@@ -115,8 +115,13 @@
 			<div id="wpec-coupon-info-<?php echo esc_attr( $button_id ); ?>" class="wpec_product_coupon_info"></div>
 		</div>
 	<?php } ?>
-
-	<div id="wpec_billing_<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_container" style="display: none;">
+	<?php
+	/**
+	 * Hide billing info for donation product type.
+	 */
+	$hide_billing_info = apply_filters( 'wpec_hide_billing_info_fields', $custom_amount );
+	?>
+	<div id="wpec_billing_<?php echo esc_attr( $button_id ); echo $hide_billing_info ? '_hide' : ''; ?>" class="wpec_billing_container" style="display: none;">
 
 		<div class="wpec_billing_user_info">
 			<div class="wpec_billing_first_name">
