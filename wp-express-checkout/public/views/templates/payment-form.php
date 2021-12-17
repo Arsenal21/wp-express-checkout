@@ -267,7 +267,7 @@
 			</div>
 		<?php } ?>
 
-		<div id="place-order-<?php echo esc_attr( $button_id ); ?>" style="display:none;">
+		<div id="place-order-<?php echo esc_attr( $button_id ); echo $hide_billing_info ? '_hide' : ''; ?>" style="display:none;">
 			<button class="wpec-place-order-btn"><?php esc_html_e( 'Place Order', 'wp-express-checkout' ); ?></button>
 		</div>
 
