@@ -21,7 +21,7 @@ $wpec_shortcode = WP_Express_Checkout\Shortcodes::get_instance();
 		<div class = "wpec-post-description">
 			<?php the_content(); ?>
 		</div>
-		<div class="wpec-price-container">
+		<div class="wpec-price-container <?php echo esc_attr( $wpec_button_args['price_class'] );?>">
 			<?php echo $wpec_shortcode->generate_price_tag( $wpec_button_args ); ?>
 		</div>
 		<div class="wpec-product-buy-button">

@@ -6,7 +6,7 @@
  */
 ?>
 
-<div style="position: relative;" class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $product_id ); ?>" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>">
+<div style="position: relative;" class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $product_id ); ?>" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" data-price-class="<?php echo esc_attr( $price_class ); ?>">
 
 	<div class="wp-ppec-overlay" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>">
 		<div class="wp-ppec-spinner">
@@ -262,7 +262,7 @@
 		<?php } ?>
 
 		<?php if ( $use_modal ) { ?>
-			<div class="wpec-price-container">
+			<div class="wpec-price-container <?php echo esc_attr( $price_class );?>">
 				<?php echo WP_Express_Checkout\Shortcodes::get_instance()->generate_price_tag( $args ); ?>
 			</div>
 		<?php } ?>
