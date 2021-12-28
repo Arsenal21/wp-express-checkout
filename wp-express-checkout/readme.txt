@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
 Requires at least: 5.6
 Tested up to: 5.8
-Stable tag: 2.1.6
+Stable tag: 2.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -124,6 +124,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 2.1.7 =
+* Improved the variation product's price tag related classes.
+* The donation type product will continue to show the PayPal checkout button even when the default price is set at $0.
 
 = 2.1.6 =
 * Added Venmo payments support. Your customers can pay using the Venmo option from the PayPal checkout popup window.
