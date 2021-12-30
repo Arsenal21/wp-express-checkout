@@ -178,6 +178,25 @@ class Order_Tags_Html {
 	}
 
 	/**
+	 * Product id
+	 *
+	 * @return int
+	 */
+	public function product_id() {
+		$product_item = $this->order->get_item( 'ppec-products' );
+		return ! empty( $product_item['post_id'] ) ? $product_item['post_id'] : 0;
+	}
+
+	/**
+	 * Product name
+	 *
+	 * @return string
+	 */
+	public function product_name() {
+		return get_post( $this->product_id() )->post_title;
+	}
+
+	/**
 	 * A stub for an order tag that is not defined.
 	 *
 	 * @param string $name      Method to call.
