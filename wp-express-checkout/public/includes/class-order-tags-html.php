@@ -193,7 +193,8 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function product_name() {
-		return get_post( $this->product_id() )->post_title;
+		$product = get_post( $this->product_id() );
+		return $product ? $product->post_title : '';
 	}
 
 	/**
