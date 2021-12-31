@@ -173,6 +173,8 @@ class Utils {
 			'purchase_date' => __( 'The date of the purchase', 'wp-express-checkout' ),
 			'coupon_code' => __( 'Coupon code applied to the purchase', 'wp-express-checkout' ),
 			'currency_code' => __( 'Order currency code', 'wp-express-checkout' ),
+			'product_id' => __( 'Product ID', 'wp-express-checkout' ),
+			'product_name' => __( 'Product Name', 'wp-express-checkout' ),
 		) );
 
 		return $tags;
