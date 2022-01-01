@@ -125,6 +125,12 @@ None
 
 == Changelog ==
 
+= WIP =
+* Added new email merge tags for the sale notification email: {product_id} - Product ID, {product_name} - Product Name.
+* Added new Thank You page shortcode options: 
+[wpec_ty field=product_id]
+[wpec_ty field=product_name]
+
 = 2.1.7 =
 * Improved the variation product's price tag related classes.
 * The donation type product will continue to show the PayPal checkout button even when the default price is set at $0.
