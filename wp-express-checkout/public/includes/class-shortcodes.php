@@ -244,6 +244,8 @@ class Shortcodes {
 			'coupons_enabled' => $coupons_enabled,
 			'product_id'      => $product_id,
 			'name'            => $name,
+			'stock_enabled'   => $stock_enabled,
+			'stock_items'     => $stock_items,
 			'variations'      => $variations,
 			'btnStyle'        => array(
 				'height' => $btn_height,

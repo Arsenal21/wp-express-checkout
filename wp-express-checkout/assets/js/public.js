@@ -56,6 +56,8 @@ var ppecHandler = function( data ) {
 		var error = false;
 		if ( isNaN( val ) || ( val_orig % 1 !== 0 ) || val <= 0 ) {
 			error = ppecFrontVars.str.enterQuantity;
+		} else if ( parent.data.stock_enabled && val > parent.data.stock_items ) {
+			error = ppecFrontVars.str.stockErr.replace( '%d', parent.data.stock_items );
 		} else {
 			parent.data.quantity = val;
 		}
