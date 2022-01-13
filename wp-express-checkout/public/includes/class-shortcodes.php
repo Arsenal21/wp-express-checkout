@@ -132,6 +132,7 @@ class Shortcodes {
 				'variations'      => array(),
 				'stock_enabled'   => $product->is_stock_control_enabled(),
 				'stock_items'     => $product->get_stock_items(),
+				'price_class'     => isset( $atts['price_class'] ) ? $atts['price_class'] : 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
 			),
 			$args
 		);

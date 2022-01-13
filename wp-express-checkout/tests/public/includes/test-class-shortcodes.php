@@ -489,6 +489,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 			'variations'      => [],
 			'stock_enabled'   => false,
 			'stock_items'     => 0,
+			'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
 		];
 		return [
 			[ $args, [ 'is_live' => 0, 'sandbox_client_id' => 'test' ] ],

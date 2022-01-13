@@ -6,7 +6,7 @@
  */
 ?>
 
-<div style="position: relative;" class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $product_id ); ?>" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>">
+<div style="position: relative;" class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $product_id ); ?>" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" data-price-class="<?php echo esc_attr( $price_class ); ?>">
 
 	<div class="wp-ppec-overlay" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>">
 		<div class="wp-ppec-spinner">
@@ -115,8 +115,13 @@
 			<div id="wpec-coupon-info-<?php echo esc_attr( $button_id ); ?>" class="wpec_product_coupon_info"></div>
 		</div>
 	<?php } ?>
-
-	<div id="wpec_billing_<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_container" style="display: none;">
+	<?php
+	/**
+	 * Hide billing info for donation product type.
+	 */
+	$hide_billing_info = apply_filters( 'wpec_hide_billing_info_fields', $custom_amount );
+	?>
+	<div id="wpec_billing_<?php echo esc_attr( $button_id ); echo $hide_billing_info ? '_hide' : ''; ?>" class="wpec_billing_container" style="display: none;">
 
 		<div class="wpec_billing_user_info">
 			<div class="wpec_billing_first_name">
@@ -257,13 +262,13 @@
 		<?php } ?>
 
 		<?php if ( $use_modal ) { ?>
-			<div class="wpec-price-container">
+			<div class="wpec-price-container <?php echo esc_attr( $price_class );?>">
 				<?php echo WP_Express_Checkout\Shortcodes::get_instance()->generate_price_tag( $args ); ?>
 			</div>
 		<?php } ?>
 
-		<div id="place-order-<?php echo esc_attr( $button_id ); ?>" style="display:none;">
-			<button class="wpec-place-order-btn"><?php esc_html_e( 'Place An Order', 'wp-express-checkout' ); ?></button>
+		<div id="place-order-<?php echo esc_attr( $button_id ); echo $hide_billing_info ? '_hide' : ''; ?>" style="display:none;">
+			<button class="wpec-place-order-btn"><?php esc_html_e( 'Place Order', 'wp-express-checkout' ); ?></button>
 		</div>
 
 		<div id="<?php echo esc_attr( $button_id ); ?>" style="max-width:<?php echo esc_attr( $btn_width ? $btn_width . 'px;' : '' ); ?>"></div>

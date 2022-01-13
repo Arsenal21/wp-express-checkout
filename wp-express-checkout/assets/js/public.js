@@ -213,7 +213,7 @@ var ppecHandler = function( data ) {
 						jQuery( '#wpec-coupon-info-' + parent.data.id ).html( '<span class="wpec_coupon_code">' + response.discountStr + '</span> <button class="wpec_coupon_apply_btn" id="wpec-remove-coupon-' + parent.data.id + '" title="' + ppecFrontVars.str.strRemoveCoupon + '">' + ppecFrontVars.str.strRemove + '</button>' );
 						jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).hide();
 						jQuery( '#wpec-coupon-field-' + parent.data.id ).hide();
-						var totalCont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' ).closest( '.wpec-product-item, .wpec-post-item' ).find( '.wpec-price-container' );
+						var totalCont = parent.getPriceContainer();
 						var totCurr;
 						var totNew;
 						var priceCurr;
@@ -390,9 +390,13 @@ var ppecHandler = function( data ) {
 		return result;
 	};
 
+	this.getPriceContainer = function() {
+		return jQuery( '.' + parent.scCont.data( 'price-class' ) );
+	};
+
 	this.updateAllAmounts = function() {
 		parent.calcTotal();
-		var price_cont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' ).closest( '.wpec-product-item, .wpec-post-item' ).find( '.wpec-price-container' );
+		var price_cont = parent.getPriceContainer();
 		if ( price_cont.length > 0 ) {
 			var price = price_cont.find( '.wpec-price-amount' );
 			if ( price.length > 0 ) {

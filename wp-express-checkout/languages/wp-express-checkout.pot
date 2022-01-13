@@ -3170,7 +3170,7 @@ msgid "Shipping Info"
 msgstr ""
 
 #: public/views/templates/payment-form.php:266
-msgid "Place An Order"
+msgid "Place Order"
 msgstr ""
 
 #: public/views/templates/payment-form.php:272

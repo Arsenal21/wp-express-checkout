@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
 Requires at least: 5.6
 Tested up to: 5.8
-Stable tag: 2.1.5
+Stable tag: 2.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,7 @@ https://www.youtube.com/watch?v=RHVgGQWhCT0
 * Allow the customers to automatically download the file once the purchase is completed via PayPal.
 * You can deliver the digital downloads using encrypted download links that expire automatically.
 * Offer Buy Now Pay Later payment option to your customers.
+* Accept Payments via Venmo easily. Your customers can pay using the Venmo option.
 * View the transactions from your WordPress admin dashboard.
 * Option to configure a notification email to be sent to the buyer and the seller after the purchase.
 * Ability to set a product thumbnail for a product.
@@ -124,15 +125,23 @@ None
 
 == Changelog ==
 
-= WIP since 2.1.5 to 2021-11-28 =
-* Added Venmo payments support. Your customers can pay using the Venmo option from the PayPal checkout popup window.
-* Update the POT file. Fixes #54
-* Added button Place Order instead of PayPal button for orders with total 0.
-* Added Billing and Shipping fields on the purchase form for orders with total 0.
-* Added a new advanced settings option to allow other WP user roles to be able to access the admin dashboard of the plugin.
-* Fixed Decimal Precision Error.
+= WIP =
+* Added new email merge tags for the sale notification email: {product_id} - Product ID, {product_name} - Product Name.
+* Added new Thank You page shortcode options: 
+[wpec_ty field=product_id]
+[wpec_ty field=product_name]
 
-= END WIP =
+= 2.1.7 =
+* Improved the variation product's price tag related classes.
+* The donation type product will continue to show the PayPal checkout button even when the default price is set at $0.
+
+= 2.1.6 =
+* Added Venmo payments support. Your customers can pay using the Venmo option from the PayPal checkout popup window.
+* Added a new advanced settings option to allow other WP user roles to be able to access the admin dashboard of the plugin.
+* Fixed a decimal precision error.
+* Added Place Order button instead of the PayPal button for orders with total $0 (when 100% discount coupon is applied).
+* Added Billing and Shipping fields on the purchase form for orders with total $0 (when 100% discount coupon is applied).
+* Update the language POT file. Fixes #54
 
 = 2.1.5 =
 - New feature for download link expiry option.
