@@ -78,6 +78,7 @@ class Main {
 				'errorOccurred'    => __( 'Error occurred', 'wp-express-checkout' ),
 				'paymentFor'       => __( 'Payment for', 'wp-express-checkout' ),
 				'enterQuantity'    => __( 'Please enter a valid quantity', 'wp-express-checkout' ),
+				'stockErr'         => __( 'You cannot order more items than available: %d', 'wp-express-checkout' ),
 				'enterAmount'      => __( 'Please enter a valid amount', 'wp-express-checkout' ),
 				'acceptTos'        => __( 'Please accept the terms and conditions', 'wp-express-checkout' ),
 				'paymentCompleted' => __( 'Payment Completed', 'wp-express-checkout' ),

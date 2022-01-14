@@ -834,3 +834,7 @@
 		grid-column: span 2 / span 2;
 	}
 }
+
+.wpec-out-of-stock {
+	font-weight: 700;
+}

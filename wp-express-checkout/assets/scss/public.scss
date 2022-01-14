@@ -308,5 +308,8 @@
 			@apply sm:col-span-2;
 		}
 	}
+}
 
+.wpec-out-of-stock {
+	@apply font-bold;
 }

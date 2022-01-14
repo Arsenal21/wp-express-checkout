@@ -487,6 +487,8 @@ class ShortcodesTest extends \WP_UnitTestCase {
 			'use_modal'       => $defaults['use_modal'],
 			'thank_you_url'   => $defaults['thank_you_url'],
 			'variations'      => [],
+			'stock_enabled'   => false,
+			'stock_items'     => 0,
 			'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
 		];
 		return [

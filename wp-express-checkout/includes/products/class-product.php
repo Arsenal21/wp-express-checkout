@@ -112,6 +112,36 @@ abstract class Product {
 	}
 
 	/**
+	 * Retrieves the product stock items number.
+	 *
+	 * @return int
+	 */
+	public function get_stock_items() {
+		return (int) $this->post->wpec_product_stock_items;
+	}
+
+	/**
+	 * Reduces stock items number by a given quantity.
+	 *
+	 * @param int $quantity
+	 *
+	 * @return int
+	 */
+	public function update_stock_items( $quantity ) {
+		$stock = max( 0, $this->get_stock_items() - $quantity );
+		update_post_meta( $this->get_id(), 'wpec_product_stock_items', $stock );
+	}
+
+	/**
+	 * Whether stock control enabled.
+	 *
+	 * @return type
+	 */
+	public function is_stock_control_enabled() {
+		return (bool) $this->post->wpec_product_enable_stock;
+	}
+
+	/**
 	 * Retrieves the product download URL
 	 *
 	 * @return string

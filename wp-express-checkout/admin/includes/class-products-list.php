@@ -27,6 +27,7 @@ class Products_List {
 			'type'      => __( 'Product Type', 'wp-express-checkout' ),
 			'id'        => __( 'ID', 'wp-express-checkout' ),
 			'price'     => __( 'Price', 'wp-express-checkout' ),
+			'stock'     => __( 'Stock', 'wp-express-checkout' ),
 			'shortcode' => __( 'Shortcode', 'wp-express-checkout' ),
 			'date'      => __( 'Date', 'wp-express-checkout' ),
 		);
@@ -64,6 +65,15 @@ class Products_List {
 					</a>
 				</span>
 				<?php
+				break;
+			case 'stock':
+				$stock_enabled = $product->is_stock_control_enabled();
+				$stock_items   = $product->get_stock_items();
+				if ( $stock_enabled ) {
+					echo ! $stock_items ? __( 'Out of stock', 'wp-express-checkout' ) : $stock_items;
+				} else {
+					echo '—';
+				}
 				break;
 			case 'price':
 				$price_args = array_merge(

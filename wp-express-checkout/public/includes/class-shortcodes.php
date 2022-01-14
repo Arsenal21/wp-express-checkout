@@ -130,6 +130,8 @@ class Shortcodes {
 				'use_modal'       => ! isset( $atts['modal'] ) ? $this->ppdg->get_setting( 'use_modal' ) : $atts['modal'],
 				'thank_you_url'   => $thank_you_url ? $thank_you_url : $this->ppdg->get_setting( 'thank_you_url' ),
 				'variations'      => array(),
+				'stock_enabled'   => $product->is_stock_control_enabled(),
+				'stock_items'     => $product->get_stock_items(),
 				'price_class'     => isset( $atts['price_class'] ) ? $atts['price_class'] : 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
 			),
 			$args
@@ -157,6 +159,10 @@ class Shortcodes {
 	function generate_pp_express_checkout_button( $args ) {
 
 		extract( $args );
+
+		if ( $stock_enabled && empty( $stock_items ) ) {
+			return '<div class="wpec-out-of-stock">' . esc_html( 'Out of stock', 'wp-express-checkout' ) . '</div>';
+		}
 
 		// The button ID.
 		$button_id = 'paypal_button_' . count( self::$payment_buttons );
@@ -238,6 +244,8 @@ class Shortcodes {
 			'coupons_enabled' => $coupons_enabled,
 			'product_id'      => $product_id,
 			'name'            => $name,
+			'stock_enabled'   => $stock_enabled,
+			'stock_items'     => $stock_items,
 			'variations'      => $variations,
 			'btnStyle'        => array(
 				'height' => $btn_height,
