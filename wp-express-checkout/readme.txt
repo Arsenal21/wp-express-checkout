@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
 Requires at least: 5.6
 Tested up to: 5.8
-Stable tag: 2.1.7
+Stable tag: 2.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,7 @@ https://www.youtube.com/watch?v=RHVgGQWhCT0
 * Can be used to accept donations.
 * Option to configure a minimum donation amount so the customers have to pay a minimum amount for donation.
 * Option to customize the currency formatting.
+* Stock control option. You can limit the number of quantity available for a product.
 * Option to charge shipping for your items. Ability to set a shipping cost for each item separately.
 * Option to charge tax for your items.
 * Option to configure discount coupon codes.
@@ -125,11 +126,12 @@ None
 
 == Changelog ==
 
-= WIP =
+= 2.1.8 =
 * Added new email merge tags for the sale notification email: {product_id} - Product ID, {product_name} - Product Name.
 * Added new Thank You page shortcode options: 
 [wpec_ty field=product_id]
 [wpec_ty field=product_name]
+* Added a new feature to sell limited quantity of a product. You can edit a product and enter a value in the "Quantity Available" field to sell limited quantity of a product.
 
 = 2.1.7 =
 * Improved the variation product's price tag related classes.
