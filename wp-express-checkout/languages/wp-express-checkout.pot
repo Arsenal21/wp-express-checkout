@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Express Checkout 2.1.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-13 06:34:02+00:00\n"
+"POT-Creation-Date: 2022-01-18 03:39:55+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3216,11 +3216,15 @@ msgstr ""
 msgid "Shipping Info"
 msgstr ""
 
-#: public/views/templates/payment-form.php:271
+#: public/views/templates/payment-form.php:265
+msgid "Available Quantity: %d"
+msgstr ""
+
+#: public/views/templates/payment-form.php:275
 msgid "Place Order"
 msgstr ""
 
-#: public/views/templates/payment-form.php:277
+#: public/views/templates/payment-form.php:281
 msgid ""
 "This is where the Express Checkout Button will show. View it on the "
 "front-end to see how it will look to your visitors"

@@ -261,6 +261,10 @@
 			</div>
 		<?php } ?>
 
+		<?php if ( $stock_enabled ) { ?>
+			<label class="wpec_stock_items_label"><?php printf( __( 'Available Quantity: %d', 'wp-express-checkout' ), $stock_items ); ?></label>
+		<?php } ?>
+
 		<?php if ( $use_modal ) { ?>
 			<div class="wpec-price-container <?php echo esc_attr( $price_class );?>">
 				<?php echo WP_Express_Checkout\Shortcodes::get_instance()->generate_price_tag( $args ); ?>
