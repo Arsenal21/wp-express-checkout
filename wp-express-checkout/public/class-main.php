@@ -362,7 +362,7 @@ class Main {
 			'access_permission'    => 'manage_options',
 		);
 
-		return $defaults;
+		return apply_filters( 'wpec_settings_defaults', $defaults );
 	}
 
 	/**
