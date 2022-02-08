@@ -149,8 +149,11 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 					btn_layout: 'vertical',
 					btn_sizes: {small: 25, medium: 35, large: 45, xlarge: 55}
 					};
+					var ppbutton = null;
 					function wp_ppdg_render_preview() {
-					jQuery('#paypal-button-container').html('');
+						if (ppbutton) {
+							ppbutton.hide();
+						}
 					var styleOpts = {
 						layout: wp_ppdg.btn_layout,
 						shape: wp_ppdg.btn_shape,
@@ -161,7 +164,7 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 					if (styleOpts.layout === 'horizontal') {
 						styleOpts.tagline = false;
 					}
-					paypal.Buttons({
+					ppbutton = paypal.Buttons({
 						style: styleOpts,
 
 						client: {
@@ -169,7 +172,8 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 						},
 						funding: 'paypal',
 
-					}).render('#paypal-button-container');
+					});
+					ppbutton.render('#paypal-button-container');
 					}
 
 					jQuery('.wp-ppdg-button-style').change(function () {
