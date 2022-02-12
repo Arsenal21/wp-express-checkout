@@ -445,6 +445,9 @@ var ppecHandler = function( data ) {
 			} else {
 				discountAmount = data.discount;
 			}
+			if ( discountAmount > tAmount ) {
+				discountAmount = tAmount;
+			}
 			tAmount = tAmount - discountAmount;
 			parent.data.discountAmount = parent.PHP_round( discountAmount, parent.data.dec_num );
 			parent.data.newPrice = parent.PHP_round( itemSubt - discountAmount / quantity, parent.data.dec_num );
