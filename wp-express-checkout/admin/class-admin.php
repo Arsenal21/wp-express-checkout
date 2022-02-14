@@ -200,6 +200,7 @@ class Admin {
 
 		add_settings_section( 'ppdg-link-expiry-section', __( 'Download Link Expiry', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
 		add_settings_section( 'wpec-access-section', __( 'Admin Dashboard Access Permission', 'wp-express-checkout' ), array( $this, 'access_description' ), $this->plugin_slug . '-advanced' );
+		add_settings_section( 'wpec-recaptcha-section', __( 'reCAPTCHA Settings', 'wp-express-checkout' ), array( $this, 'recaptcha_description' ), $this->plugin_slug . '-advanced' );
 
 		/* Add the settings fields */
 
@@ -491,6 +492,54 @@ class Admin {
 				),
 			)
 		);
+		add_settings_field(
+			'recaptcha_enabled',
+			__( 'Enable reCAPTCHA', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'wpec-recaptcha-section',
+			array(
+				'field' => 'recaptcha_enabled',
+				'type'  => 'checkbox',
+				'desc'  => __( 'Enables the reCAPTCHA feature. Enter reCAPTCHA v2 API Keys below.', 'wp-express-checkout' ),
+			)
+		);
+		add_settings_field(
+			'recaptcha_site_key',
+			__( 'Site Key', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'wpec-recaptcha-section',
+			array(
+				'field' => 'recaptcha_site_key',
+				'type'  => 'text',
+				'desc'  => __( 'Your reCaptcha Site Key.', 'wp-express-checkout' ),
+			)
+		);
+		add_settings_field(
+			'recaptcha_secret_key',
+			__( 'Secret Key', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'wpec-recaptcha-section',
+			array(
+				'field' => 'recaptcha_secret_key',
+				'type'  => 'text',
+				'desc'  => __( 'Your reCaptcha Secret Key.', 'wp-express-checkout' ),
+			)
+		);
+		add_settings_field(
+			'show_for_zero',
+			__( 'Show Captcha for $0 manual transaction', 'wp-express-checkout' ),
+			array( &$this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'wpec-recaptcha-section',
+			array(
+				'field' => 'show_for_zero',
+				'type'  => 'checkbox',
+				'desc'  => __( 'Enable reCaptcha only for zero total.', 'wp-express-checkout' ),
+			)
+		);
 	}
 
 	/**
@@ -527,6 +576,10 @@ class Admin {
 	public function access_description() {
 		echo '<p>' . __( 'WP Express Checkout\'s admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP role to access the WPEC admin dashboard by selecting a value below.', 'wp-express-checkout' ) . '</p>';
 		echo '<p><strong>' . __( 'If you don\'t know what this is for, don\'t change the following value.', 'wp-express-checkout' ) . '</strong></p>';
+	}
+
+	public function recaptcha_description() {
+		echo __( '<a href="https://wp-express-checkout.com/" target="_blank">Click here</a> to read the documentation to learn how to configure this and get API keys for your website.', 'wp-express-checkout' );
 	}
 
 	/**

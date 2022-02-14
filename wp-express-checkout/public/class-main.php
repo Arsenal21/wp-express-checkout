@@ -360,6 +360,10 @@ class Main {
 			'download_duration'    => '',
 			'download_count'       => '',
 			'access_permission'    => 'manage_options',
+			'recaptcha_enabled'    => 0,
+			'recaptcha_site_key'   => '',
+			'recaptcha_secret_key' => '',
+			'show_for_zero'        => 0,
 		);
 
 		return apply_filters( 'wpec_settings_defaults', $defaults );
