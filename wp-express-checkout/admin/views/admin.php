@@ -205,10 +205,12 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 						$( 'a#wpec-reset-log' ).click( function( e ) {
 							e.preventDefault();
 							$.post( ajaxurl,
-									{ 'action': 'wpec_reset_log' },
+									{ 'action': 'wpec_reset_log', 'nonce': wpecAdminSideVars.wpec_settings_ajax_nonce },
 									function( result ) {
 										if ( result === '1' ) {
 											alert( 'Log file has been reset.' );
+										} else {
+											alert( 'Error trying to reset log: ' + result );
 										}
 									} );
 						} );

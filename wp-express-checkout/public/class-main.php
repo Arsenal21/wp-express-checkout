@@ -7,7 +7,7 @@ namespace WP_Express_Checkout;
  * public-facing side of the WordPress site.
  *
  * If you're interested in introducing administrative or dashboard
- * functionality, then refer to `class-plugin-name-admin.php`
+ * functionality, then refer to `class-admin.php`
  *
  *
  */
@@ -47,6 +47,8 @@ class Main {
 	 * @since     1.0.0
 	 */
 	private function __construct() {
+		//This is called from the front-end side. Refer to 'admin/class-admin.php' for admin side related tasks.
+
 		// Load plugin text domain.
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
@@ -60,11 +62,14 @@ class Main {
 	}
 
 	/**
-	 * Enqueue public styles and scripts.
+	 * Enqueue public styles and scripts for front-end.
 	 *
 	 * @since     1.0.0
 	 */
 	public function enqueue_styles() {
+		//This function will be called from the front-end side.
+		//Refer to the enqueue_admin_scripts() in the 'admin/class-admin.php' file for admin side related scripts.
+
 		// Minimize prod or show expanded in dev.
 		$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 

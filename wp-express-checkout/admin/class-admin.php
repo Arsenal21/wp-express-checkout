@@ -132,10 +132,18 @@ class Admin {
 		}
 
 		$screen = get_current_screen();
+
+		//Register and enqueue the admin side scripts.
 		if ( $this->plugin_screen_hook_suffix === $screen->id ) {
-			wp_enqueue_script( $this->plugin_slug . '-admin-script', WPEC_PLUGIN_URL . '/assets/js/admin.js', array( 'jquery' ), WPEC_PLUGIN_VER );
+			wp_register_script( $this->plugin_slug . '-admin-script', WPEC_PLUGIN_URL . '/assets/js/admin.js', array( 'jquery' ), WPEC_PLUGIN_VER );
+			wp_localize_script( $this->plugin_slug . '-admin-script', 'wpecAdminSideVars', array(
+				'ajaxurl' => get_admin_url() . 'admin-ajax.php',
+				'wpec_settings_ajax_nonce' => wp_create_nonce('wpec_settings_ajax_nonce'),
+			) );
+			wp_enqueue_script( $this->plugin_slug . '-admin-script' );
 		}
 
+		//Scripts for the product add/edit interface.
 		if ( Products::$products_slug === $screen->id ) {
 			wp_enqueue_script( 'wpec-admin-edit-product-js',  WPEC_PLUGIN_URL . '/assets/js/edit-product.js', array( 'jquery' ), WPEC_PLUGIN_VER, true );
 		}

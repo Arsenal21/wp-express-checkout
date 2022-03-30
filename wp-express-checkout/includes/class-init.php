@@ -55,6 +55,18 @@ class Init {
 	}
 
 	public function wpec_handle_reset_log() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+				Logger::log("Error! No permission to reset log file.");
+				//No permission for the current user to do this operation.
+				wp_die( 0 );
+		}
+
+		if ( ! check_ajax_referer( 'wpec_settings_ajax_nonce', 'nonce', false ) ) {
+				//The nonce check failed
+				echo 'Error! Nonce security check failed. Could not reset the log file.';
+				wp_die( 0 );
+		}
+
 		Logger::reset_log();
 		echo '1';
 		wp_die();

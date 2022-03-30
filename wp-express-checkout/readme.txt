@@ -126,6 +126,11 @@ None
 
 == Changelog ==
 
+= WIP 2.1.9 =
+* The reset log feature will show an error if the user doesn't have permission to reset log file.
+* Added nonce validation check to the reset log feature.
+* Added additional comment in the enqueue_styles() function.
+
 = 2.1.8 =
 * Added new email merge tags for the sale notification email: {product_id} - Product ID, {product_name} - Product Name.
 * Added new Thank You page shortcode options: 
