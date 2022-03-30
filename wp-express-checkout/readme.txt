@@ -3,8 +3,8 @@ Contributors: Tips and Tricks HQ, dikiy_forester, alexanderfoxc, mbrsolution, Iv
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
 Requires at least: 5.6
-Tested up to: 5.8
-Stable tag: 2.1.8
+Tested up to: 5.9
+Stable tag: 2.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,10 +126,13 @@ None
 
 == Changelog ==
 
-= WIP 2.1.9 =
+= 2.1.9 =
 * The reset log feature will show an error if the user doesn't have permission to reset log file.
 * Added nonce validation check to the reset log feature.
 * Added additional comment in the enqueue_styles() function.
+* Added a filter to the plugin's default settings array.
+* Fixed a PHP Notice when the coupon discount amount was greater than the total amount.
+* Fixed a JavaScript warning in the settings menu.
 
 = 2.1.8 =
 * Added new email merge tags for the sale notification email: {product_id} - Product ID, {product_name} - Product Name.
