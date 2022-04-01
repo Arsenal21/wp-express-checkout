@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Express Checkout 2.1.7\n"
+"Project-Id-Version: WP Express Checkout 2.1.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-18 03:39:55+00:00\n"
+"POT-Creation-Date: 2022-04-01 03:42:32+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,203 +24,203 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: admin/class-admin.php:167
+#: admin/class-admin.php:175
 msgid "WP Express Checkout Settings"
 msgstr ""
 
-#: admin/class-admin.php:168 admin/class-admin.php:739
+#: admin/class-admin.php:176 admin/class-admin.php:747
 msgid "Settings"
 msgstr ""
 
-#: admin/class-admin.php:187
+#: admin/class-admin.php:195
 msgid "Global Settings"
 msgstr ""
 
-#: admin/class-admin.php:188
+#: admin/class-admin.php:196
 msgid "PayPal Credentials"
 msgstr ""
 
-#: admin/class-admin.php:189
+#: admin/class-admin.php:197
 msgid "Checkout Form"
 msgstr ""
 
-#: admin/class-admin.php:190
+#: admin/class-admin.php:198
 msgid "PayPal Button Style"
 msgstr ""
 
-#: admin/class-admin.php:191
+#: admin/class-admin.php:199
 msgid "Disable Funding"
 msgstr ""
 
-#: admin/class-admin.php:193 admin/includes/class-products-meta-boxes.php:29
+#: admin/class-admin.php:201 admin/includes/class-products-meta-boxes.php:29
 msgid "Shipping & Tax"
 msgstr ""
 
-#: admin/class-admin.php:194
+#: admin/class-admin.php:202
 msgid "Debug Logging"
 msgstr ""
 
-#: admin/class-admin.php:196
+#: admin/class-admin.php:204
 msgid "Purchase Confirmation Email Settings"
 msgstr ""
 
-#: admin/class-admin.php:198
+#: admin/class-admin.php:206
 msgid "Price Display Settings"
 msgstr ""
 
-#: admin/class-admin.php:199
+#: admin/class-admin.php:207
 msgid "Terms and Conditions"
 msgstr ""
 
-#: admin/class-admin.php:201
+#: admin/class-admin.php:209
 msgid "Download Link Expiry"
 msgstr ""
 
-#: admin/class-admin.php:202 admin/class-admin.php:479
+#: admin/class-admin.php:210 admin/class-admin.php:487
 msgid "Admin Dashboard Access Permission"
 msgstr ""
 
-#: admin/class-admin.php:207
+#: admin/class-admin.php:215
 msgid "Currency Code"
 msgstr ""
 
-#: admin/class-admin.php:207
+#: admin/class-admin.php:215
 msgid "Example: USD, CAD, GBP etc"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "US Dollars (USD)"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "Euros (EUR)"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "Pounds Sterling (GBP)"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "Australian Dollars (AUD)"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "Brazilian Real (BRL)"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "Canadian Dollars (CAD)"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "Chinese Yuan (CNY)"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "Czech Koruna (CZK)"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "Danish Krone (DKK)"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "Hong Kong Dollar (HKD)"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "Hungarian Forint (HUF)"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "Indian Rupee (INR)"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:217
 msgid "Indonesia Rupiah (IDR)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "Israeli Shekel (ILS)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "Japanese Yen (JPY)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "Malaysian Ringgits (MYR)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "Mexican Peso (MXN)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "New Zealand Dollar (NZD)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "Norwegian Krone (NOK)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "Philippine Pesos (PHP)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "Polish Zloty (PLN)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "Singapore Dollar (SGD)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "South African Rand (ZAR)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "South Korean Won (KRW)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "Swedish Krona (SEK)"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:218
 msgid "Swiss Franc (CHF)"
 msgstr ""
 
-#: admin/class-admin.php:211
+#: admin/class-admin.php:219
 msgid "Taiwan New Dollars (TWD)"
 msgstr ""
 
-#: admin/class-admin.php:211
+#: admin/class-admin.php:219
 msgid "Thai Baht (THB)"
 msgstr ""
 
-#: admin/class-admin.php:211
+#: admin/class-admin.php:219
 msgid "Turkish Lira (TRY)"
 msgstr ""
 
-#: admin/class-admin.php:211
+#: admin/class-admin.php:219
 msgid "Vietnamese Dong (VND)"
 msgstr ""
 
-#: admin/class-admin.php:211
+#: admin/class-admin.php:219
 msgid "Russian Ruble (RUB)"
 msgstr ""
 
-#: admin/class-admin.php:216
+#: admin/class-admin.php:224
 msgid "Currency Symbol"
 msgstr ""
 
-#: admin/class-admin.php:227 admin/includes/class-products-meta-boxes.php:32
+#: admin/class-admin.php:235 admin/includes/class-products-meta-boxes.php:32
 msgid "Thank You Page URL"
 msgstr ""
 
-#: admin/class-admin.php:231
+#: admin/class-admin.php:239
 msgid ""
 "This is the thank you page. This page is automatically created for you when "
 "you install the plugin. Do not delete this page from the pages menu of your "
@@ -230,481 +230,481 @@ msgid ""
 "checkout-plugin-pages/\" target=\"_blank\">this documentation</a>."
 msgstr ""
 
-#: admin/class-admin.php:237
+#: admin/class-admin.php:245
 msgid "Live Mode"
 msgstr ""
 
-#: admin/class-admin.php:237
+#: admin/class-admin.php:245
 msgid ""
 "Check this to run the transaction in live mode. When unchecked it will run "
 "in sandbox mode."
 msgstr ""
 
-#: admin/class-admin.php:238
+#: admin/class-admin.php:246
 msgid "Live Client ID"
 msgstr ""
 
-#: admin/class-admin.php:242
+#: admin/class-admin.php:250
 msgid ""
 "Enter your PayPal Client ID for live mode. <a href=\"%s\" "
 "target=\"_blank\">Read this documentation</a> to learn how to locate your "
 "Client ID."
 msgstr ""
 
-#: admin/class-admin.php:246
+#: admin/class-admin.php:254
 msgid "Live Secret key"
 msgstr ""
 
-#: admin/class-admin.php:250
+#: admin/class-admin.php:258
 msgid "Enter your PayPal Secret Key for live mode."
 msgstr ""
 
-#: admin/class-admin.php:254
+#: admin/class-admin.php:262
 msgid "Sandbox Client ID"
 msgstr ""
 
-#: admin/class-admin.php:258
+#: admin/class-admin.php:266
 msgid "Enter your PayPal Client ID for sandbox mode."
 msgstr ""
 
-#: admin/class-admin.php:262
+#: admin/class-admin.php:270
 msgid "Sandbox Secret key"
 msgstr ""
 
-#: admin/class-admin.php:266
+#: admin/class-admin.php:274
 msgid "Enter your PayPal Secret Key for sandbox mode."
 msgstr ""
 
-#: admin/class-admin.php:272
+#: admin/class-admin.php:280
 msgid "Show in a Popup/Modal Window"
 msgstr ""
 
-#: admin/class-admin.php:276
+#: admin/class-admin.php:284
 msgid ""
 "Enable it to display the checkout form in a dedicated popup/modal window "
 "(instead of on the page)."
 msgstr ""
 
-#: admin/class-admin.php:280 admin/includes/class-products-meta-boxes.php:440
+#: admin/class-admin.php:288 admin/includes/class-products-meta-boxes.php:440
 msgid "Popup/Modal Trigger Button Text"
 msgstr ""
 
-#: admin/class-admin.php:285
+#: admin/class-admin.php:293
 msgid "The button text for the button that will trigger the popup/modal window."
 msgstr ""
 
-#: admin/class-admin.php:290 admin/includes/class-products-meta-boxes.php:446
+#: admin/class-admin.php:298 admin/includes/class-products-meta-boxes.php:446
 msgid "Button Type"
 msgstr ""
 
-#: admin/class-admin.php:290 admin/includes/class-products-meta-boxes.php:452
+#: admin/class-admin.php:298 admin/includes/class-products-meta-boxes.php:452
 msgid "Checkout"
 msgstr ""
 
-#: admin/class-admin.php:290 admin/includes/class-products-meta-boxes.php:453
-#: public/class-main.php:329
+#: admin/class-admin.php:298 admin/includes/class-products-meta-boxes.php:453
+#: public/class-main.php:334
 msgid "Pay"
 msgstr ""
 
-#: admin/class-admin.php:290 admin/includes/class-products-meta-boxes.php:454
+#: admin/class-admin.php:298 admin/includes/class-products-meta-boxes.php:454
 #: includes/integrations/woocommerce/class-woocommerce-gateway.php:105
 msgid "PayPal"
 msgstr ""
 
-#: admin/class-admin.php:290 admin/includes/class-products-meta-boxes.php:455
+#: admin/class-admin.php:298 admin/includes/class-products-meta-boxes.php:455
 msgid "Buy Now"
 msgstr ""
 
-#: admin/class-admin.php:291
+#: admin/class-admin.php:299
 msgid "Button Shape"
 msgstr ""
 
-#: admin/class-admin.php:291
+#: admin/class-admin.php:299
 msgid "Pill"
 msgstr ""
 
-#: admin/class-admin.php:291
+#: admin/class-admin.php:299
 msgid "Rectangle"
 msgstr ""
 
-#: admin/class-admin.php:292
+#: admin/class-admin.php:300
 msgid "Button Layout"
 msgstr ""
 
-#: admin/class-admin.php:292
+#: admin/class-admin.php:300
 msgid "Vertical"
 msgstr ""
 
-#: admin/class-admin.php:292
+#: admin/class-admin.php:300
 msgid "Horizontal"
 msgstr ""
 
-#: admin/class-admin.php:293
+#: admin/class-admin.php:301
 msgid "Button Height"
 msgstr ""
 
-#: admin/class-admin.php:293
+#: admin/class-admin.php:301
 msgid "Small"
 msgstr ""
 
-#: admin/class-admin.php:293
+#: admin/class-admin.php:301
 msgid "Medium"
 msgstr ""
 
-#: admin/class-admin.php:293
+#: admin/class-admin.php:301
 msgid "Large"
 msgstr ""
 
-#: admin/class-admin.php:293
+#: admin/class-admin.php:301
 msgid "Extra Large"
 msgstr ""
 
-#: admin/class-admin.php:294
+#: admin/class-admin.php:302
 msgid "Button Width"
 msgstr ""
 
-#: admin/class-admin.php:294
+#: admin/class-admin.php:302
 msgid "Auto"
 msgstr ""
 
-#: admin/class-admin.php:294
+#: admin/class-admin.php:302
 msgid ""
 "Button width in pixels. Minimum width is 150px. Leave it blank for auto "
 "width."
 msgstr ""
 
-#: admin/class-admin.php:295
+#: admin/class-admin.php:303
 msgid "Button Color"
 msgstr ""
 
-#: admin/class-admin.php:295
+#: admin/class-admin.php:303
 msgid "Button preview:"
 msgstr ""
 
-#: admin/class-admin.php:295
+#: admin/class-admin.php:303
 msgid "Gold"
 msgstr ""
 
-#: admin/class-admin.php:295
+#: admin/class-admin.php:303
 msgid "Blue"
 msgstr ""
 
-#: admin/class-admin.php:295
+#: admin/class-admin.php:303
 msgid "Silver"
 msgstr ""
 
-#: admin/class-admin.php:295
+#: admin/class-admin.php:303
 msgid "White"
 msgstr ""
 
-#: admin/class-admin.php:295
+#: admin/class-admin.php:303
 msgid "Black"
 msgstr ""
 
-#: admin/class-admin.php:298
+#: admin/class-admin.php:306
 msgid "Disabled Funding Options"
 msgstr ""
 
-#: admin/class-admin.php:298
+#: admin/class-admin.php:306
 msgid "Credit or debit cards"
 msgstr ""
 
-#: admin/class-admin.php:298
+#: admin/class-admin.php:306
 msgid "PayPal Credit"
 msgstr ""
 
-#: admin/class-admin.php:302 admin/includes/class-products-meta-boxes.php:271
+#: admin/class-admin.php:310 admin/includes/class-products-meta-boxes.php:271
 msgid "Shipping Cost"
 msgstr ""
 
-#: admin/class-admin.php:302 admin/includes/class-products-meta-boxes.php:276
+#: admin/class-admin.php:310 admin/includes/class-products-meta-boxes.php:276
 msgid "Enter numbers only. Example: 5.50"
 msgstr ""
 
-#: admin/class-admin.php:302
+#: admin/class-admin.php:310
 msgid ""
 "Leave it empty if you are not charging shipping cost. You can also set "
 "shipping cost on a per product basis."
 msgstr ""
 
-#: admin/class-admin.php:303 admin/includes/class-products-meta-boxes.php:282
+#: admin/class-admin.php:311 admin/includes/class-products-meta-boxes.php:282
 msgid "Tax (%)"
 msgstr ""
 
-#: admin/class-admin.php:303 admin/includes/class-products-meta-boxes.php:287
+#: admin/class-admin.php:311 admin/includes/class-products-meta-boxes.php:287
 msgid "Enter tax (in percent) which will be added to the product price."
 msgstr ""
 
-#: admin/class-admin.php:303 admin/includes/class-products-meta-boxes.php:289
+#: admin/class-admin.php:311 admin/includes/class-products-meta-boxes.php:289
 msgid "Leave it empty if you don't want to apply tax."
 msgstr ""
 
-#: admin/class-admin.php:306
+#: admin/class-admin.php:314
 msgid "Enable Debug Logging"
 msgstr ""
 
-#: admin/class-admin.php:310
+#: admin/class-admin.php:318
 msgid "Check this option to enable debug logging."
 msgstr ""
 
-#: admin/class-admin.php:312 admin/class-admin.php:314
+#: admin/class-admin.php:320 admin/class-admin.php:322
 msgid "Click here"
 msgstr ""
 
-#: admin/class-admin.php:313
+#: admin/class-admin.php:321
 msgid " to view log file."
 msgstr ""
 
-#: admin/class-admin.php:315
+#: admin/class-admin.php:323
 msgid " to reset log file."
 msgstr ""
 
-#: admin/class-admin.php:324
+#: admin/class-admin.php:332
 msgid "Send Emails to Buyer After Purchase"
 msgstr ""
 
-#: admin/class-admin.php:324
+#: admin/class-admin.php:332
 msgid ""
 "If checked the plugin will send an email to the buyer with the sale "
 "details. If digital goods are purchased then the email will contain the "
 "download links for the purchased products."
 msgstr ""
 
-#: admin/class-admin.php:327
+#: admin/class-admin.php:335
 msgid "Email Content Type"
 msgstr ""
 
-#: admin/class-admin.php:334
+#: admin/class-admin.php:342
 msgid "Choose which format of email to send."
 msgstr ""
 
-#: admin/class-admin.php:337
+#: admin/class-admin.php:345
 msgid "Plain Text"
 msgstr ""
 
-#: admin/class-admin.php:338
+#: admin/class-admin.php:346
 msgid "HTML"
 msgstr ""
 
-#: admin/class-admin.php:342 admin/class-tools.php:106
+#: admin/class-admin.php:350 admin/class-tools.php:106
 msgid "From Email Address"
 msgstr ""
 
-#: admin/class-admin.php:342
+#: admin/class-admin.php:350
 msgid ""
 "Example: Your Name &lt;sales@your-domain.com&gt; This is the email address "
 "that will be used to send the email to the buyer. This name and email "
 "address will appear in the from field of the email."
 msgstr ""
 
-#: admin/class-admin.php:343
+#: admin/class-admin.php:351
 msgid "Buyer Email Subject"
 msgstr ""
 
-#: admin/class-admin.php:343
+#: admin/class-admin.php:351
 msgid "This is the subject of the email that will be sent to the buyer."
 msgstr ""
 
-#: admin/class-admin.php:352
+#: admin/class-admin.php:360
 msgid "Buyer Email Body"
 msgstr ""
 
-#: admin/class-admin.php:353
+#: admin/class-admin.php:361
 msgid ""
 "This is the body of the email that will be sent to the buyer. Do not change "
 "the text within the braces {}. You can use the following email tags in this "
 "email body field:"
 msgstr ""
 
-#: admin/class-admin.php:356
+#: admin/class-admin.php:364
 msgid "Send Emails to Seller After Purchase"
 msgstr ""
 
-#: admin/class-admin.php:356
+#: admin/class-admin.php:364
 msgid "If checked the plugin will send an email to the seller with the sale details"
 msgstr ""
 
-#: admin/class-admin.php:357
+#: admin/class-admin.php:365
 msgid "Notification Email Address*"
 msgstr ""
 
-#: admin/class-admin.php:357
+#: admin/class-admin.php:365
 msgid ""
 "This is the email address where the seller will be notified of product "
 "sales. You can put multiple email addresses separated by comma (,) in the "
 "above field to send the notification to multiple email addresses."
 msgstr ""
 
-#: admin/class-admin.php:358
+#: admin/class-admin.php:366
 msgid "Seller Email Subject*"
 msgstr ""
 
-#: admin/class-admin.php:358
+#: admin/class-admin.php:366
 msgid "This is the subject of the email that will be sent to the seller for record."
 msgstr ""
 
-#: admin/class-admin.php:359
+#: admin/class-admin.php:367
 msgid "Seller Email Body*"
 msgstr ""
 
-#: admin/class-admin.php:360
+#: admin/class-admin.php:368
 msgid ""
 "This is the body of the email that will be sent to the seller for record. "
 "Do not change the text within the braces {}. You can use the following "
 "email tags in this email body field:"
 msgstr ""
 
-#: admin/class-admin.php:371
+#: admin/class-admin.php:379
 msgid "Currency Position"
 msgstr ""
 
-#: admin/class-admin.php:378
+#: admin/class-admin.php:386
 msgid "This controls the position of the currency symbol."
 msgstr ""
 
-#: admin/class-admin.php:381
+#: admin/class-admin.php:389
 msgid "Left (%s1.00)"
 msgstr ""
 
-#: admin/class-admin.php:382
+#: admin/class-admin.php:390
 msgid "Left with space (%s 1.00)"
 msgstr ""
 
-#: admin/class-admin.php:383
+#: admin/class-admin.php:391
 msgid "Right (1.00%s)"
 msgstr ""
 
-#: admin/class-admin.php:384
+#: admin/class-admin.php:392
 msgid "Right with space (1.00 %s)"
 msgstr ""
 
-#: admin/class-admin.php:389
+#: admin/class-admin.php:397
 msgid "Decimal Separator"
 msgstr ""
 
-#: admin/class-admin.php:396
+#: admin/class-admin.php:404
 msgid "This sets the decimal separator of the displayed price."
 msgstr ""
 
-#: admin/class-admin.php:401
+#: admin/class-admin.php:409
 msgid "Thousand Separator"
 msgstr ""
 
-#: admin/class-admin.php:408
+#: admin/class-admin.php:416
 msgid "This sets the thousand separator of the displayed price."
 msgstr ""
 
-#: admin/class-admin.php:413
+#: admin/class-admin.php:421
 msgid "Number of Decimals"
 msgstr ""
 
-#: admin/class-admin.php:420
+#: admin/class-admin.php:428
 msgid "This sets the number of decimal points shown in the displayed price."
 msgstr ""
 
-#: admin/class-admin.php:427
+#: admin/class-admin.php:435
 msgid "Enable Terms and Conditions"
 msgstr ""
 
-#: admin/class-admin.php:434
+#: admin/class-admin.php:442
 msgid "Enable Terms and Conditions checkbox."
 msgstr ""
 
-#: admin/class-admin.php:439
+#: admin/class-admin.php:447
 msgid "Checkbox Text"
 msgstr ""
 
-#: admin/class-admin.php:446
+#: admin/class-admin.php:454
 msgid ""
 "Text to be displayed for the checkbox. It accepts HTML code so you can put "
 "a link to your terms and conditions page."
 msgstr ""
 
-#: admin/class-admin.php:451 admin/includes/class-products-meta-boxes.php:351
+#: admin/class-admin.php:459 admin/includes/class-products-meta-boxes.php:351
 msgid "Duration of Download Link"
 msgstr ""
 
-#: admin/class-admin.php:458 admin/includes/class-products-meta-boxes.php:353
+#: admin/class-admin.php:466 admin/includes/class-products-meta-boxes.php:353
 msgid "Hours"
 msgstr ""
 
-#: admin/class-admin.php:460
+#: admin/class-admin.php:468
 msgid ""
 "This is the duration of time the download links will remain active for a "
 "customer. After this amount of time the link will expire. Example value: "
 "48. Leave empty or set to 0 to disable download link expiry."
 msgstr ""
 
-#: admin/class-admin.php:465 admin/includes/class-products-meta-boxes.php:356
+#: admin/class-admin.php:473 admin/includes/class-products-meta-boxes.php:356
 msgid "Download Limit Count"
 msgstr ""
 
-#: admin/class-admin.php:472 admin/includes/class-products-meta-boxes.php:358
+#: admin/class-admin.php:480 admin/includes/class-products-meta-boxes.php:358
 msgid "Times"
 msgstr ""
 
-#: admin/class-admin.php:474
+#: admin/class-admin.php:482
 msgid ""
 "Number of times an item can be downloaded before the link expires. Example "
 "value: 3. Leave empty or set to 0 if you do not want to limit downloads by "
 "download count."
 msgstr ""
 
-#: admin/class-admin.php:488
+#: admin/class-admin.php:496
 msgid "Admins Only"
 msgstr ""
 
-#: admin/class-admin.php:489
+#: admin/class-admin.php:497
 msgid "Admins, Editors"
 msgstr ""
 
-#: admin/class-admin.php:490
+#: admin/class-admin.php:498
 msgid "Admins, Editors, Authors"
 msgstr ""
 
-#: admin/class-admin.php:500
+#: admin/class-admin.php:508
 msgid ""
 "The following options affect the emails that gets sent to your buyers after "
 "a purchase."
 msgstr ""
 
-#: admin/class-admin.php:508
+#: admin/class-admin.php:516
 msgid ""
 "By default, funding source eligibility is smartly decided based on a "
 "variety of factors. You can force disable funding options by selecting them "
 "below."
 msgstr ""
 
-#: admin/class-admin.php:511
+#: admin/class-admin.php:519
 msgid ""
 "Note: disabled options will disappear from button preview once you save "
 "changes."
 msgstr ""
 
-#: admin/class-admin.php:520
+#: admin/class-admin.php:528
 msgid ""
 "Debug logging can be useful to troubleshoot transaction processing related "
 "issues on your site. keep it disabled unless you are troubleshooting."
 msgstr ""
 
-#: admin/class-admin.php:528
+#: admin/class-admin.php:536
 msgid ""
 "WP Express Checkout's admin dashboard is accessible to admin users only "
 "(just like any other plugin). You can allow users with other WP role to "
 "access the WPEC admin dashboard by selecting a value below."
 msgstr ""
 
-#: admin/class-admin.php:529
+#: admin/class-admin.php:537
 msgid "If you don't know what this is for, don't change the following value."
 msgstr ""
 
-#: admin/class-admin.php:536
+#: admin/class-admin.php:544
 msgid ""
 "This section allows you to configure Terms and Conditions or Privacy Policy "
 "that customers must accept before making a payment."
 msgstr ""
 
-#: admin/class-admin.php:673
+#: admin/class-admin.php:681
 #. translators: "%s" - field title
 msgid "You must specify a value in the \"%s\" field."
 msgstr ""
@@ -3022,51 +3022,51 @@ msgstr ""
 msgid "Awaiting payment"
 msgstr ""
 
-#: public/class-main.php:78
+#: public/class-main.php:83
 msgid "Error occurred"
 msgstr ""
 
-#: public/class-main.php:79
+#: public/class-main.php:84
 msgid "Payment for"
 msgstr ""
 
-#: public/class-main.php:80
+#: public/class-main.php:85
 msgid "Please enter a valid quantity"
 msgstr ""
 
-#: public/class-main.php:81
+#: public/class-main.php:86
 msgid "You cannot order more items than available: %d"
 msgstr ""
 
-#: public/class-main.php:82
+#: public/class-main.php:87
 msgid "Please enter a valid amount"
 msgstr ""
 
-#: public/class-main.php:83
+#: public/class-main.php:88
 msgid "Please accept the terms and conditions"
 msgstr ""
 
-#: public/class-main.php:84
+#: public/class-main.php:89
 msgid "Payment Completed"
 msgstr ""
 
-#: public/class-main.php:85
+#: public/class-main.php:90
 msgid "You are now being redirected to the order summary page."
 msgstr ""
 
-#: public/class-main.php:86
+#: public/class-main.php:91
 msgid "Remove coupon"
 msgstr ""
 
-#: public/class-main.php:87
+#: public/class-main.php:92
 msgid "Remove"
 msgstr ""
 
-#: public/class-main.php:88
+#: public/class-main.php:93
 msgid "This field is required"
 msgstr ""
 
-#: public/class-main.php:359
+#: public/class-main.php:364
 msgid ""
 "I accept the <a href=\"https://example.com/terms-and-conditions/\" "
 "target=\"_blank\">Terms and Conditions</a>"

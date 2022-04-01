@@ -414,7 +414,7 @@ var ppecHandler = function( data ) {
 			var tot_new = price_cont.find( '.wpec_tot_new_price' );
 			var price_new = price_cont.find( '.wpec-new-price-amount' );
 
-			if ( typeof parent.data.discountAmount !== "undefined" && total.length > 0 ) {
+			if ( typeof parent.data.discountAmount !== "undefined" ) {
 				price_new.html( parent.formatMoney( parent.data.newPrice ) );
 				tot_new.html( parent.formatMoney( parent.data.total ) );
 				total.html( parent.formatMoney( parent.data.subtotal ) );
