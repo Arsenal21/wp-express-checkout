@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
 Requires at least: 5.6
 Tested up to: 5.9
-Stable tag: 2.1.9
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -110,11 +110,17 @@ Yes, you can.
 
 = Can I customize the payment button? =
 
-Yes, you can customize it in the settings menu of this plugin.
+Yes, there are some customization options in the settings menu of this plugin.
 
 = Can I test it using PayPal sandbox? =
 
 Yes, you can enable the sandbox mode from the settings menu of the plugin.
+
+= Can I use WooCommerce with this plugin? =
+
+Yes, there is an option to use this plugin to offer PayPal Express Checkout gateway to WooCommerce.
+
+View the [WooCommerce Integration for PayPal Express Checkout](https://wp-express-checkout.com/woocommerce-paypal-express-checkout/) page for details.
 
 
 == Screenshots ==
@@ -125,6 +131,9 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 2.2.0 =
+* Applying discount coupon to digital items will correctly show the discounted amount in the payment popup window.
 
 = 2.1.9 =
 * The reset log feature will show an error if the user doesn't have permission to reset log file.
