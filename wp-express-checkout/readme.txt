@@ -1,7 +1,7 @@
 === WP Express Checkout (Accept PayPal Payments) ===
 Contributors: Tips and Tricks HQ, dikiy_forester, alexanderfoxc, mbrsolution, Ivy2120, chanelstone
 Donate link: https://wp-express-checkout.com/
-Tags: paypal, payment, express checkout, instant payment, digital downloads, e-commerce
+Tags: paypal, payment, express checkout, digital downloads, woocommerce, e-commerce
 Requires at least: 5.6
 Tested up to: 5.9
 Stable tag: 2.2.0
@@ -59,7 +59,7 @@ https://www.youtube.com/watch?v=RHVgGQWhCT0
 * Option to customize the Thank You page.
 * Ability to configure the download links to expire after X number of hours.
 * Ability to configure the download links to expire after X number of clicks.
-* Can be integrated with WooCommerce to offer product checkout via PayPal's new express checkout system.
+* Option to [Integrate it with WooCommerce](https://wp-express-checkout.com/woocommerce-paypal-express-checkout/) to offer product checkout via PayPal's express checkout system.
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
 
