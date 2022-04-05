@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, express checkout, digital downloads, woocommerce, e-commerce
 Requires at least: 5.6
 Tested up to: 5.9
-Stable tag: 2.2.0
+Stable tag: 2.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -131,6 +131,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 2.2.1 =
+* Software License Manager plugin integration issue fixed.
+* Added a new function in the logger class to log array data (when needed).
 
 = 2.2.0 =
 * Applying discount coupon to digital items will correctly show the discounted amount in the payment popup window.

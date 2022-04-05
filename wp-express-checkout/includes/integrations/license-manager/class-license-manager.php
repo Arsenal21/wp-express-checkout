@@ -5,6 +5,7 @@ namespace WP_Express_Checkout\Integrations;
 use Exception;
 use WP_Express_Checkout\Orders;
 use WP_Express_Checkout\Products;
+use WP_Express_Checkout\Debug\Logger;
 
 class License_Manager {
 
@@ -45,13 +46,15 @@ class License_Manager {
 
 		$slm_debug_logger->log_debug( 'Checking license key generation for single item product.' );
 
-		if ( ! $retrieved_product->wpec_slm_license_enabled ) {
+		$enabled = get_post_meta( $retrieved_product->ID, 'wpec_slm_license_enabled', true );
+
+		if ( ! $enabled ) {
 			$slm_debug_logger->log_debug( 'Don\'t need to create a license key for this product (' . $prod_id . ')' );
 			return $body;
 		}
 
 		for ( $i = 0; $i < $quantity; $i++ ) {
-			$slm_debug_logger->log_debug( 'Need to create a license key for this product (' . $retrieved_product->id . ')' );
+			$slm_debug_logger->log_debug( 'Need to create a license key for this product (' . $retrieved_product->ID . ')' );
 			$slm_key = $this->create_license( $retrieved_product, $payment );
 			$license_data = "\n" . __( 'Item Name: ', 'wp-express-checkout' ) . $item_name . " - " . __( 'License Key: ', 'wp-express-checkout' ) . $slm_key;
 			$slm_debug_logger->log_debug( 'Liense data: ' . $license_data );
@@ -63,23 +66,29 @@ class License_Manager {
 		return $body;
 	}
 
-	public function create_license( $retrieved_product, $payment_data ) {
+	public function create_license( $retrieved_product, $order ) {
 		global $slm_debug_logger;
 
 		//Retrieve the default settings values.
-		$options        = get_option( 'slm_plugin_options' );
+		$options = get_option( 'slm_plugin_options' );
 		$lic_key_prefix = $options['lic_prefix'];
-		$max_domains    = $options['default_max_domains'];
+		$max_domains = $options['default_max_domains'];
+
+		$order_id = $order->get_id();
+		$transaction_id = get_post_meta( $order_id, 'wpec_order_resource_id', true );
+		$payer = $order->get_data( 'payer' );
 
 		//Lets check any product specific configuration.
-		if ( $retrieved_product->wpec_slm_max_allowed_domains ) {
+		$prod_spec_max_domains = get_post_meta( $retrieved_product->ID, 'wpec_slm_max_allowed_domains', true );
+		$prod_spec_expiry_days = get_post_meta( $retrieved_product->ID, 'wpec_slm_date_of_expiry', true );
+		if ( ! empty ( $prod_spec_max_domains ) ) {
 			//Found product specific SLM config data.
-			$max_domains = $retrieved_product->wpec_slm_max_allowed_domains;
+			$max_domains = $prod_spec_max_domains;
 		}
 		//Lets check if any product specific expiry date is set
-		if ( $retrieved_product->wpec_slm_date_of_expiry ) {
+		if ( ! empty ( $prod_spec_expiry_days ) ) {
 			//Found product specific SLM config data.
-			$slm_date_of_expiry = date( 'Y-m-d', strtotime( '+' . $retrieved_product->wpec_slm_date_of_expiry . ' days' ) );
+			$slm_date_of_expiry = date( 'Y-m-d', strtotime( '+' . $prod_spec_expiry_days . ' days' ) );
 		} else {
 			//Use the default value (1 year from today).
 			$slm_date_of_expiry = date( 'Y-m-d', strtotime( '+1 year' ) );
@@ -88,22 +97,23 @@ class License_Manager {
 		$fields = array();
 		$fields['license_key'] = uniqid( $lic_key_prefix );
 		$fields['lic_status'] = 'pending';
-		$fields['first_name'] = ! empty( $payment_data['payer']['name']['given_name'] ) ? $payment_data['payer']['name']['given_name'] : '';
-		$fields['last_name'] = ! empty( $payment_data['payer']['name']['surname'] ) ? $payment_data['payer']['name']['surname'] : '';
-		$fields['email'] = $payment_data['payer']['email_address'];
+		$fields['first_name'] = isset( $payer['name']['given_name'] ) ? $payer['name']['given_name'] : '';
+		$fields['last_name'] = isset( $payer['name']['surname'] ) ? $payer['name']['surname'] : '';
+		$fields['email'] = isset ( $payer['email_address'] ) ? $payer['email_address'] : '';
 		$fields['company_name'] = ''; // Not implemented
-		$fields['txn_id'] = $payment_data['id'];
+		$fields['txn_id'] = isset( $transaction_id ) ? $transaction_id : '';
 		$fields['max_allowed_domains'] = $max_domains;
 		$fields['date_created'] = date( "Y-m-d" ); //Today's date
 		$fields['date_expiry'] = $slm_date_of_expiry;
 		$fields['product_ref'] = $retrieved_product->ID; //WPEC product ID
-		$fields['subscr_id'] = isset( $payment_data['subscription']['id'] ) ? $payment_data['subscription']['id'] : '';
+		$fields['subscr_id'] = isset( $payer['payer_id'] ) ? $payer['payer_id'] : '';
 
 		$slm_debug_logger->log_debug( 'Inserting license data into the license manager DB table.' );
 
+		//SLM plugin
 		\SLM_API_Utility::insert_license_data_internal( $fields );
 
-		do_action( 'wpec_license_created', $payment_data, $fields );
+		do_action( 'wpec_license_created', $order, $fields );
 
 		return $fields['license_key'];
 	}
