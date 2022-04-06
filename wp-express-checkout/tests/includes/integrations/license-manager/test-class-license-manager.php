@@ -55,15 +55,13 @@ class License_ManagerTest extends WP_UnitTestCase {
 	 */
 	public function test_email_body_filter__no_product_id() {
 		$body    = '{wpec_slm_data}';
-		$payment = json_decode( file_get_contents( WPEC_TESTS_DIR . '/data/payment-data.json' ), true );
 		$order   = Orders::create();
 		$order_id = $order->get_id();
 		$args = array(
 			'order_id' => $order_id,
 		);
-		$payment['id'] = $order_id;
 
-		$output = $this->object->email_body_filter( $body, $payment, $args );
+		$output = $this->object->email_body_filter( $body, $order, $args );
 
 		$this->assertEquals( $body, $output );
 	}
@@ -74,17 +72,15 @@ class License_ManagerTest extends WP_UnitTestCase {
 	public function test_email_body_filter__no_product_license() {
 		$product_id = $this->factory->post->create( [ 'post_type' => Products::$products_slug ] );
 		$body    = '{wpec_slm_data}';
-		$payment = json_decode( file_get_contents( WPEC_TESTS_DIR . '/data/payment-data.json' ), true );
 		$order   = Orders::create();
 		$order_id = $order->get_id();
 		$args = array(
 			'order_id' => $order_id,
 		);
-		$payment['id'] = $order_id;
 
 		$order->add_item( Products::$products_slug, 'test product', 42, 3, $product_id, true );
 
-		$output = $this->object->email_body_filter( $body, $payment, $args );
+		$output = $this->object->email_body_filter( $body, $order, $args );
 
 		$this->assertEquals( $body, $output );
 	}
@@ -100,17 +96,15 @@ class License_ManagerTest extends WP_UnitTestCase {
 			],
 		] );
 		$body    = '{wpec_slm_data}';
-		$payment = json_decode( file_get_contents( WPEC_TESTS_DIR . '/data/payment-data.json' ), true );
 		$order   = Orders::create();
 		$order_id = $order->get_id();
 		$args = array(
 			'order_id' => $order_id,
 		);
-		$payment['id'] = $order_id;
 
 		$order->add_item( Products::$products_slug, 'test product', 42, 3, $product_id, true );
 
-		$output = $this->object->email_body_filter( $body, $payment, $args );
+		$output = $this->object->email_body_filter( $body, $order, $args );
 
 		$lic_fields = \SLM_API_Utility::$lics[ $order_id ];
 
@@ -131,17 +125,15 @@ class License_ManagerTest extends WP_UnitTestCase {
 			],
 		] );
 		$body    = '{wpec_slm_data}';
-		$payment = json_decode( file_get_contents( WPEC_TESTS_DIR . '/data/payment-data.json' ), true );
 		$order   = Orders::create();
 		$order_id = $order->get_id();
 		$args = array(
 			'order_id' => $order_id,
 		);
-		$payment['id'] = $order_id;
 
 		$order->add_item( Products::$products_slug, 'test product', 42, 3, $product_id, true );
 
-		$output = $this->object->email_body_filter( $body, $payment, $args );
+		$output = $this->object->email_body_filter( $body, $order, $args );
 
 		$lic_fields = \SLM_API_Utility::$lics[ $order_id ];
 
