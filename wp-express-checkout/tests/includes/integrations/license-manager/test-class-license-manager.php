@@ -61,6 +61,8 @@ class License_ManagerTest extends WP_UnitTestCase {
 			'order_id' => $order_id,
 		);
 
+		$order->set_resource_id( 'set_resource_id' . $order_id );
+
 		$output = $this->object->email_body_filter( $body, $order, $args );
 
 		$this->assertEquals( $body, $output );
@@ -78,6 +80,7 @@ class License_ManagerTest extends WP_UnitTestCase {
 			'order_id' => $order_id,
 		);
 
+		$order->set_resource_id( 'set_resource_id' . $order_id );
 		$order->add_item( Products::$products_slug, 'test product', 42, 3, $product_id, true );
 
 		$output = $this->object->email_body_filter( $body, $order, $args );
@@ -102,11 +105,12 @@ class License_ManagerTest extends WP_UnitTestCase {
 			'order_id' => $order_id,
 		);
 
+		$order->set_resource_id( 'set_resource_id' . $order_id );
 		$order->add_item( Products::$products_slug, 'test product', 42, 3, $product_id, true );
 
 		$output = $this->object->email_body_filter( $body, $order, $args );
 
-		$lic_fields = \SLM_API_Utility::$lics[ $order_id ];
+		$lic_fields = \SLM_API_Utility::$lics[ 'set_resource_id' . $order_id ];
 
 		$this->assertContains( $lic_fields['license_key'], $output );
 		$this->assertEquals( 42, $lic_fields['max_allowed_domains'] );
@@ -131,11 +135,12 @@ class License_ManagerTest extends WP_UnitTestCase {
 			'order_id' => $order_id,
 		);
 
+		$order->set_resource_id( 'set_resource_id' . $order_id );
 		$order->add_item( Products::$products_slug, 'test product', 42, 3, $product_id, true );
 
 		$output = $this->object->email_body_filter( $body, $order, $args );
 
-		$lic_fields = \SLM_API_Utility::$lics[ $order_id ];
+		$lic_fields = \SLM_API_Utility::$lics[ 'set_resource_id' . $order_id ];
 
 		$this->assertContains( $lic_fields['license_key'], $output );
 		$this->assertEquals( 24, $lic_fields['max_allowed_domains'] );
