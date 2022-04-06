@@ -55,7 +55,7 @@ class License_Manager {
 
 		for ( $i = 0; $i < $quantity; $i++ ) {
 			$slm_debug_logger->log_debug( 'Need to create a license key for this product (' . $retrieved_product->ID . ')' );
-			$slm_key = $this->create_license( $retrieved_product, $payment );
+			$slm_key = $this->create_license( $retrieved_product, $order );
 			$license_data = "\n" . __( 'Item Name: ', 'wp-express-checkout' ) . $item_name . " - " . __( 'License Key: ', 'wp-express-checkout' ) . $slm_key;
 			$slm_debug_logger->log_debug( 'Liense data: ' . $license_data );
 			$license_data = apply_filters( 'wpec_item_license_data', $license_data );
@@ -74,8 +74,7 @@ class License_Manager {
 		$lic_key_prefix = $options['lic_prefix'];
 		$max_domains = $options['default_max_domains'];
 
-		$order_id = $order->get_id();
-		$transaction_id = get_post_meta( $order_id, 'wpec_order_resource_id', true );
+		$transaction_id = $order->get_resource_id();
 		$payer = $order->get_data( 'payer' );
 
 		//Lets check any product specific configuration.
