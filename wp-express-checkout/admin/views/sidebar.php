@@ -25,9 +25,9 @@
 		</div>
 	</div>
 	<div class="postbox" style="min-width: inherit;">
-		<h3 class="hndle"><label for="title"><?php _e( 'Rate Us', 'wp-express-checkout' ); ?></label></h3>
+		<h3 class="hndle"><label for="title"><?php _e( 'Help Us Keep the Plugin Free & Maintained', 'wp-express-checkout' ); ?></label></h3>
 		<div class="inside">
-			<?php echo sprintf( __( 'Like the plugin? Please give us a <a href="%s" target="_blank">rating!</a>', 'wp-express-checkout' ), 'https://wordpress.org/support/plugin/wp-express-checkout/reviews/?filter=5' ); ?>
+			<?php echo sprintf( __( 'Like the plugin? Please give it a good <a href="%s" target="_blank">rating!</a>', 'wp-express-checkout' ), 'https://wordpress.org/support/plugin/wp-express-checkout/reviews/?filter=5' ); ?>
 			<div class="wpec-stars-container">
 				<a href="https://wordpress.org/support/plugin/wp-express-checkout/reviews/?filter=5" target="_blank">
 					<span class="dashicons dashicons-star-filled"></span>
