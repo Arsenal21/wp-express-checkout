@@ -1,22 +1,24 @@
-=== WP Express Checkout (Accept Payments Easily) ===
+=== WP Express Checkout (Accept PayPal Payments Easily) ===
 Contributors: Tips and Tricks HQ, dikiy_forester, mbrsolution, Ivy2120, chanelstone
 Donate link: https://wp-express-checkout.com/
-Tags: paypal, payment, express checkout, digital downloads, woocommerce, e-commerce
+Tags: paypal, payment, checkout, digital downloads, woocommerce, e-commerce
 Requires at least: 5.6
 Tested up to: 6.0
 Stable tag: 2.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Allows you to accept payments quickly for a product or service via a payment popup window. It uses the Express Checkout API of PayPal.
+Allows you to accept payments quickly for a product or service via a payment popup window. It uses PayPal Checkout.
 
 == Description ==
 
-This plugin provides you a shortcode to generate a customizable PayPal payment button that allows a customer to pay for an item instantly via a popup window using the PayPal's Express Checkout API/Gateway. The checkout process is quick and easy.
+This plugin provides you a shortcode to generate a customizable PayPal payment button that allows a customer to pay for an item instantly via a popup window. Customers can pay using PayPal or a credit card. It uses the PayPal's Express Checkout API/Gateway. The checkout process is quick and easy.
 
 The full checkout takes place in a payment popup window and the customer never leaves your site. It creates a fast and elegant checkout experience.
 
-This is ideal for selling a product or service via PayPal.
+This is ideal for users who want a lightweight and simple solution for selling products or services via PayPal. 
+
+If you want to sell digital products using PayPal then you will love the simplicity of this plugin.
 
 There is also an option for WooCommerce. So you can use this plugin to add PayPal Express Checkout gateway to WooCommerce.
 
@@ -49,7 +51,7 @@ https://www.youtube.com/watch?v=RHVgGQWhCT0
 * Create a PayPal payment button widget and add it to your site's sidebar.
 * Ability for a customer to enter an amount and pay what they want for a product.
 * Ability to configure variable products. You can charge different amount for different options of the product.
-* Can be used to accept donations.
+* It can be used to accept donations on your site.
 * Option to configure a minimum donation amount so the customers have to pay a minimum amount for donation.
 * Option to customize the currency formatting.
 * Stock control option. You can limit the number of quantity available for a product.
