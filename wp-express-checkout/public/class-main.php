@@ -59,6 +59,9 @@ class Main {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 99 );
 		// add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'after_switch_theme', array( __CLASS__, 'rewrite_flush' ) );
+
+
+		add_action( "parse_request", array( $this, "handleLinkURLTemplate" ) );
 	}
 
 	/**
@@ -485,6 +488,33 @@ class Main {
 	public static function rewrite_flush() {
 		flush_rewrite_rules();
 	}
+
+	/**
+	 *  Manage redirect based on Link URL click. Show template page after payment 
+	 *  link is clicked.
+	 *
+	 * @since    2.2.1
+	 */
+	public function handleLinkURLTemplate( $wp ) {
+
+		$pattern = "/wpe-checkout\/\?product_id=[0-9*]/i";
+
+		if ( preg_match( $pattern, $_SERVER["REQUEST_URI"]  ) ) {
+			
+			$templatePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "templates" . DIRECTORY_SEPARATOR . "page-link.php";
+
+			require( $templatePath );
+
+			exit;
+
+		}
+
+
+	}
+
+
+
+
 
 	// public function get_plugin_slug()
 	// {
