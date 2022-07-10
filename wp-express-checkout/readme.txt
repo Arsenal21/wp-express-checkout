@@ -136,6 +136,9 @@ None
 
 == Changelog ==
 
+= WIP 2.2.2 =
+* WIP - Option to create a Buy Now link using a simple URL (instead of a shortcode). 
+
 = 2.2.1 =
 * Software License Manager plugin integration issue fixed.
 * Added a new function in the logger class to log array data (when needed).

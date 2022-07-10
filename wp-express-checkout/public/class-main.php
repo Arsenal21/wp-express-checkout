@@ -524,7 +524,9 @@ class Main {
 		
 		do_action( 'wpec_link_url_before_output' );
 	
-		require_once WPEC_PLUGIN_PATH . 'public/views/templates/url-payment-box.php';
+		$product_id = filter_input( INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT );
+
+		require WPEC_PLUGIN_PATH . 'public/views/templates/url-payment-box.php';
 		exit;
 	}
 	
