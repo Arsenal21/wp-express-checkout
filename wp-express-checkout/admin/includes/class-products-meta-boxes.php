@@ -30,8 +30,8 @@ class Products_Meta_Boxes {
 		add_meta_box( 'ppec_upload_meta_box', __( 'Download URL', 'wp-express-checkout' ), array( $this, 'display_upload_meta_box' ), Products::$products_slug, 'normal', 'high' );
 		add_meta_box( 'wpec_thumbnail_meta_box', __( 'Product Thumbnail', 'wp-express-checkout' ), array( $this, 'display_thumbnail_meta_box' ), Products::$products_slug, 'normal', 'high' );
 		add_meta_box( 'wpec_thankyou_page_meta_box', __( 'Thank You Page URL', 'wp-express-checkout' ), array( $this, 'display_thankyou_page_meta_box' ), Products::$products_slug, 'normal', 'high' );
-		add_meta_box( 'ppec_shortcode_meta_box', __( 'Shortcode', 'wp-express-checkout' ), array( $this, 'display_shortcode_meta_box' ), Products::$products_slug, 'side', 'high' );
-		add_meta_box( 'ppec_link_meta_box', __( 'Link URL', 'wp-express-checkout' ), array( $this, 'display_link_meta_box' ), Products::$products_slug, 'side', 'high' );
+		add_meta_box( 'ppec_shortcode_meta_box', __( 'Shortcode', 'wp-express-checkout' ), array( $this, 'display_shortcode_meta_box' ), Products::$products_slug, 'side', 'default' );
+		add_meta_box( 'ppec_link_meta_box', __( 'Link URL', 'wp-express-checkout' ), array( $this, 'display_link_meta_box' ), Products::$products_slug, 'side', 'default' );
 		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance Related', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), Products::$products_slug, 'normal', 'high' );
 		add_meta_box( 'wpec_coupons_meta_box', __( 'Coupons Settings', 'wp-express-checkout' ), array( $this, 'display_coupons_meta_box' ), Products::$products_slug, 'normal', 'high' );
 	}
@@ -435,8 +435,8 @@ jQuery(document).ready(function($) {
 
 	function display_link_meta_box( $post ) {
 		?>
-		<input type="text" name="ppec_product_link" style="width: 100%;" class="ppec-select-on-click" readonly value="<?php echo home_url('/wpe-checkout/?product_id='.$post->ID) ?>">
-		<p class="description"><?php esc_html_e( 'Use this URL to create a custom payment button using a text or image link..', 'wp-express-checkout' ); ?></p>
+		<input type="text" name="ppec_product_link" style="width: 100%;" class="ppec-select-on-click" readonly value="<?php echo home_url('/wpec-payment-box/?product_id='.$post->ID) ?>">
+		<p class="description"><?php esc_html_e( 'This URL can be used to create a custom payment button using a text or image link.', 'wp-express-checkout' ); ?></p>
 		<?php
 	}
 

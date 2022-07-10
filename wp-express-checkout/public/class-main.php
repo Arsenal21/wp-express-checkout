@@ -22,8 +22,10 @@ class Main {
 	 * plugin file.
 	 * @var      string
 	 */
-	protected $plugin_slug = 'paypal-for-digital-goods';
+	protected $plugin_slug = 'paypal-for-digital-goods'; //TODO - need to change this to 'wp-express-checkout' after evaluating the impact
 
+	public static $link_url_slug = 'wpec-payment-box';
+	
 	/**
 	 * Instance of this class.
 	 *
@@ -60,8 +62,7 @@ class Main {
 		// add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'after_switch_theme', array( __CLASS__, 'rewrite_flush' ) );
 
-
-		add_action( "parse_request", array( $this, "handleLinkURLTemplate" ) );
+		add_action( 'wp', array( $this, 'handle_wp_hook' ) );
 	}
 
 	/**
@@ -490,32 +491,44 @@ class Main {
 	}
 
 	/**
-	 *  Manage redirect based on Link URL click. Show template page after payment 
-	 *  link is clicked.
+	 *  Handle the wp hook.
 	 *
 	 * @since    2.2.1
 	 */
-	public function handleLinkURLTemplate( $wp ) {
-
-		$pattern = "/wpe-checkout\/\?product_id=[0-9*]/i";
-
-		if ( preg_match( $pattern, $_SERVER["REQUEST_URI"]  ) ) {
-			
-			$templatePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "templates" . DIRECTORY_SEPARATOR . "page-link.php";
-
-			require( $templatePath );
-
-			exit;
-
+	public function handle_wp_hook() {
+		global $wp;
+		$current_slug = $wp->request;
+		if ( Main::$link_url_slug === $current_slug ) {
+			$this->show_link_url_payment_box();
 		}
-
-
 	}
 
+	public function show_link_url_payment_box(){
+		if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+			define( 'DONOTCACHEPAGE', true );
+		}
 
-
-
-
+		if ( ! headers_sent() ) {
+			status_header( 200 );
+			// disable WPEngine cache for the page
+			if ( class_exists( 'WpeCommon' ) ) {
+				$cookiepath    = parse_url( get_home_url( null, Main::$link_url_slug ), PHP_URL_PATH );
+				$cookie_domain = ! defined( 'COOKIE_DOMAIN' ) ? false : COOKIE_DOMAIN;
+				setcookie( 'wordpress_wpe_no_cache', 1, 0, $cookiepath, $cookie_domain, true, true );
+			}
+			// set no-cache headers
+			header( 'Cache-Control: no-cache, must-revalidate, max-age=0' );
+			header( 'Cache-Control: post-check=0, pre-check=0', false );
+			header( 'Pragma: no-cache' );
+		}
+		
+		do_action( 'wpec_link_url_before_output' );
+	
+		require_once WPEC_PLUGIN_PATH . 'public/views/templates/url-payment-box.php';
+		exit;
+	}
+	
+	
 	// public function get_plugin_slug()
 	// {
 	// 	return $this->plugin_slug;
