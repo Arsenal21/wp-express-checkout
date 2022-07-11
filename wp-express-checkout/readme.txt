@@ -138,6 +138,7 @@ None
 
 = WIP 2.2.2 =
 * WIP - Option to create a Buy Now link using a simple URL (instead of a shortcode). 
+* TODO - documentation and link in readme.
 
 = 2.2.1 =
 * Software License Manager plugin integration issue fixed.
