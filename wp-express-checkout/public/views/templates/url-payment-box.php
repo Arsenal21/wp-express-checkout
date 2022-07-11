@@ -129,7 +129,7 @@
 		extract( $args );
 
 		if ( $stock_enabled && empty( $stock_items ) ) {
-			return '<div class="wpec-out-of-stock">' . esc_html( 'Out of stock', 'wp-express-checkout' ) . '</div>';
+			wp_die( '<div class="wpec-out-of-stock">' . esc_html( 'Out of stock', 'wp-express-checkout' ) . '</div>' );
 		}
 
 		// The button ID.
