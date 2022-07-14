@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, checkout, digital downloads, woocommerce, e-commerce
 Requires at least: 5.6
 Tested up to: 6.0
-Stable tag: 2.2.1
+Stable tag: 2.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,9 +136,9 @@ None
 
 == Changelog ==
 
-= WIP 2.2.2 =
-* WIP - Option to create a Buy Now link using a simple URL (instead of a shortcode). 
-* TODO - documentation and link in readme.
+= 2.2.2 =
+* Option to create a sharable payment link using a simple URL (instead of a shortcode).
+* Documentation - https://wp-express-checkout.com/creating-a-shareable-payment-link-text-link-or-url/
 
 = 2.2.1 =
 * Software License Manager plugin integration issue fixed.

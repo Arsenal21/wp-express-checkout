@@ -94,7 +94,7 @@ class Products_List {
 				);
 				$wpec_shortcode = Shortcodes::get_instance();
 				$output = $wpec_shortcode->generate_price_tag( $price_args );
-				$output = apply_filters( 'ppec_products_table_price_column', $output, $price_args, $post_id );
+				$output = apply_filters( 'wpec_products_table_price_column', $output, $price_args, $post_id );
 				echo $output;
 				break;
 			case 'shortcode':

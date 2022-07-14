@@ -194,7 +194,10 @@
 								<img width="150" height="150" src="<?php echo esc_url( $thumbnail_url ); ?>" class="attachment-thumbnail size-thumbnail wp-post-image" alt="">
 							</div>
 							<div class="wpec-modal-item-excerpt">
-								<?php echo wp_trim_words( get_the_content(), 30 ); ?>
+								<?php 
+								$url_payment_box_prod_desc = wp_trim_words( $post->post_content, 55 );
+								echo apply_filters( 'wpec_url_payment_box_product_description', $url_payment_box_prod_desc, $product_id); 
+								?>
 							</div>
 						</div>
 					<?php } ?>
