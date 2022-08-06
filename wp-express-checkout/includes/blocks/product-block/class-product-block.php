@@ -146,6 +146,10 @@ class Product_Block extends Dynamic_Block {
 				'label' => __( 'Full Product template', 'wp-express-checkout' ),
 				'value' => 2,
 			),
+			array(
+				'label' => __( 'Product template 3', 'wp-express-checkout' ),
+				'value' => 3,
+			),
 		);
 		return $templates;
 	}
