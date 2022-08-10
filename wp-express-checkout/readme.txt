@@ -136,6 +136,9 @@ None
 
 == Changelog ==
 
+= WIP 2.2.3 =
+* Added a new product template 3. [Usage details here](https://wp-express-checkout.com/embedding-a-product-using-a-template-display/)
+
 = 2.2.2 =
 * Option to create a sharable payment link using a simple URL (instead of a shortcode).
 * Documentation - https://wp-express-checkout.com/creating-a-shareable-payment-link-text-link-or-url/

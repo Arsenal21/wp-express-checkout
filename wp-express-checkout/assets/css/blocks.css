@@ -842,7 +842,11 @@
 	display: block !important;
 }
 
+/* Product template 3 CSS */
 .wpec-product-item-thumbnail-3 {
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .wpec-post-title-template-3 {
@@ -851,7 +855,14 @@
 }
 
 .wpec-product-item-template-3 {
-	width: 250px;
+	width: 250px !important;
+	border: 1px solid #E7E9EB;
+	-webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 15px;
+	text-align: center;
 }
 
 .wpec-product-inner-cont-template-3 {
@@ -859,7 +870,8 @@
 }
 
 .wpec-product-inner-cont-template-3 .wpec-modal-open {
-	background-color: #fff;
+	background-color: #f0f0f0;
+	border: 3px solid #2D3140;
 	border-radius: 4px;
 	font-weight: 700;
 	padding-top: 8px;
@@ -870,8 +882,7 @@
 }
 
 .wpec-product-inner-cont-template-3 .wpec-modal-open:hover {
-	background-color: #f0f0f0;
-	color: #000;
-	font-weight: bold;
+	background-color: #2D3140;
+	color: #ffffff;
 	cursor: pointer;
 }
