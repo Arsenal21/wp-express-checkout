@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, checkout, digital downloads, woocommerce, e-commerce
 Requires at least: 5.6
 Tested up to: 6.0
-Stable tag: 2.2.2
+Stable tag: 2.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,7 +136,7 @@ None
 
 == Changelog ==
 
-= WIP 2.2.3 =
+= 2.2.3 =
 * Added a new product template 3. [Usage details here](https://wp-express-checkout.com/embedding-a-product-using-a-template-display/)
 
 = 2.2.2 =
