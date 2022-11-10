@@ -136,6 +136,9 @@ None
 
 == Changelog ==
 
+= WIP 2.2.4 =
+* Fixed coupon code Redemption Count not updating correctly after a discount code is used in a transaction.
+
 = 2.2.3 =
 * Added a new product template 3. [Usage details here](https://wp-express-checkout.com/embedding-a-product-using-a-template-display/)
 

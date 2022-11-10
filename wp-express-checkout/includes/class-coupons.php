@@ -4,6 +4,7 @@ namespace WP_Express_Checkout;
 
 use Exception;
 use WP_Express_Checkout\Admin\Coupons_List;
+use WP_Express_Checkout\Debug\Logger;
 
 class Coupons {
 
@@ -540,7 +541,11 @@ class Coupons {
 		$coupon_item = $order->get_item( 'coupon' );
 		if ( $coupon_item ) {
 			// Check the coupon code.
-			$coupon = self::get_coupon( $coupon_item['meta']['coupon_code'] );
+			$coupon_code_used = isset( $coupon_item['meta']['code'] ) ? $coupon_item['meta']['code'] : '';
+			Logger::log( 'Coupon code was used in this transaction. Code used: ' . $coupon_code_used );
+			//Logger::log_array_data( $coupon_item );
+			$coupon = self::get_coupon( $coupon_code_used );
+			
 			// Redeem coupon count if needed.
 			if ( $coupon && $coupon['valid'] ) {
 				$curr_redeem_cnt = get_post_meta( $coupon['id'], 'wpec_coupon_red_count', true );
