@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.1
-Stable tag: 2.2.3
+Stable tag: 2.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,7 +136,7 @@ None
 
 == Changelog ==
 
-= WIP 2.2.4 =
+= 2.2.4 =
 * Fixed coupon code Redemption Count not updating correctly after a discount code is used in a transaction.
 
 = 2.2.3 =
