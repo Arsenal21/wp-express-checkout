@@ -136,6 +136,9 @@ None
 
 == Changelog ==
 
+= WIP 2.2.5 =
+* Added new shortcode [wpec_show_all_products]
+
 = 2.2.4 =
 * Fixed coupon code Redemption Count not updating correctly after a discount code is used in a transaction.
 
