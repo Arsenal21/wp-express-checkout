@@ -1,0 +1,204 @@
+/*
+This CSS file is used to apply styles to the "All Products" page that this plugin creates.
+CSS class names should use dashes. Example: asp-product-description
+*/
+
+.wpec-grid button {
+    background: #409ddb;
+    color: white;
+    padding: 10px 15px;
+    font-weight: normal;
+    line-height: normal;
+}
+
+.wpec-grid button:hover {
+    background: #308dcb;
+}
+
+.wpec-grid {
+    font-family: Tahoma,Verdana,Segoe,sans-serif;
+}
+
+.wpec-grid a,.wpec-grid a:hover,.wpec-grid a:active,.wpec-grid a:focus {
+    text-decoration: none;
+    box-shadow: none;
+    border: none;
+}
+
+.wpec-grid a, .wpec-grid button {
+    outline: 0;
+}
+
+.wpec-grid-item {
+    width: auto;
+    border: none;
+    background: #ededed;
+    position: relative;
+    margin: 0px 1% 10px 0px;
+    padding: 7px;
+}
+
+.wpec-grid-row {
+    width: 100%;
+    clear: both;
+    margin: 5px 0;
+    margin-bottom: 20px;
+    padding: 0;
+}
+
+.wpec-post-grid {
+    display: inline-block;
+    clear: both;
+    width: 100%;
+}
+
+.wpec-product-name {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1em;
+    margin: 5px;
+    padding-bottom: 60px;
+}
+
+.wpec-product-thumb {
+    text-align: center;
+    margin: 10px 10px 5px 10px;
+}
+.wpec-product-thumb img {
+    margin: 0 auto;
+    min-height: 128px;
+    min-width: 128px;
+    width: 100%;
+    max-width: 100%;
+}
+.wpec-product-price {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+}
+
+.wpec-view-product-btn {
+    bottom: 15px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}
+
+.wpec-view-product-btn button {
+    border-radius: 4px;
+    border: none;
+    background: #409ddb;
+    color: white;
+    text-transform: none;
+    font-family: Tahoma,Verdana,Segoe,sans-serif;
+    font-size: 1em;
+    line-height: 1em;
+}
+
+/* Search */
+
+#wpec-search-form{
+    text-align: center;
+    margin-bottom: 20px;
+}
+.wpec-listing-search-field{
+    width: 90%;
+    max-width: 90%;
+    text-align: center;
+    position: relative;
+    height: 35px;
+    margin: 0 auto;
+}
+.wpec-listing-search-field input {
+    vertical-align: middle;
+    height: 35px;
+    padding: 5px;
+    box-sizing: border-box;
+    width: 100%;
+    display: inline-block;
+    line-height: normal;
+}
+.wpec-listing-search-field button {
+    box-sizing: border-box;
+    vertical-align: middle;
+    padding: 5px 5px;
+    height: 35px;
+    width: 35px;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.wpec-listing-search-submit button span {
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+}
+.wpec-search-res-text {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.wpec-search-res-text a {
+    color: #000;
+}
+
+.wpec-search-res-text a:hover, .wpec-search-res-text a:focus, .wpec-search-res-text a:active {
+    border-bottom: 1px solid grey;
+}
+
+/* Pagination */
+
+.wpec-pagination {
+    clear: both;
+    text-align: center;
+}
+
+.wpec-pagination ul {
+    font-weight: normal;
+    list-style: none;
+}
+
+.wpec-pagination li {
+    margin: 0 5px;
+    display: inline;
+}
+
+.wpec-pagination span {
+    padding: 5px 10px;
+    background: #409ddb;
+    color: white;
+}
+
+.wpec-pagination a {
+    opacity: 0.7;
+    color: black;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: none;
+    box-shadow: none;
+}
+
+.wpec-pagination a:hover,.wpec-pagination a:active,.wpec-pagination a:focus {
+    background: #c0c0c0;
+}
+
+@media (min-width: 768px) {
+    .wpec-grid-row {
+        display: flex;
+    }
+    .wpec-listing-search-field{
+        width: 70%;
+        max-width: 70%;
+    }
+    .wpec-grid-item {
+        width: 31%;
+        margin-right: 1.5%;
+        margin-left: 1.5%;
+	display: inline-block;
+        position: relative;
+        box-sizing: border-box;
+        align-items: stretch;
+    }
+}

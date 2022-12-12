@@ -89,6 +89,8 @@ class Products {
 			throw new Exception( sprintf( __( "Can't find product with ID %s", 'wp-express-checkout' ), $product_id ), 1002 );
 		}
 
+		
+
 		if ( ! empty( $product_data->wpec_product_type ) ) {
 			$product_type = $product_data->wpec_product_type;
 		} elseif ( ! empty( $product_data->wpec_product_custom_amount ) ) {
@@ -97,6 +99,8 @@ class Products {
 		} else {
 			$product_type = 'one_time';
 		}
+
+		
 
 		/**
 		 * Filter for setting an extended Product type object .
@@ -124,5 +128,25 @@ class Products {
 
 		return $product;
 	}
+
+
+	static public function retrieve_all( $filters,$search ) {
+
+	
+		$products_data = new \WP_Query( $filters );
+				
+
+		if ( ! $products_data->have_posts() ) {
+			//query returned no results. Let's see if that was a search query
+			if ( $search === false ) {
+				//that wasn't search query. That means there is no products configured
+				wp_reset_postdata();
+				throw new Exception(__( "'No products have been configured yet", 'wp-express-checkout' ) , 1004 );
+			}
+		}		
+		
+		return $products_data;
+	}
+
 
 }
