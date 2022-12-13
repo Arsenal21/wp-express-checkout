@@ -137,7 +137,9 @@ None
 == Changelog ==
 
 = WIP 2.2.5 =
+[TODO] - add the steps to re-create the shop page here - https://wp-express-checkout.com/recreating-the-required-express-checkout-plugin-pages/
 * Added new shortcode [wpec_show_all_products]
+* The shop page will be automatically created at install time.
 
 = 2.2.4 =
 * Fixed coupon code Redemption Count not updating correctly after a discount code is used in a transaction.

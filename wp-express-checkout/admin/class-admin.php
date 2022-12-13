@@ -241,6 +241,15 @@ class Admin {
 			)
 		);
 
+		add_settings_field( 'shop_page_url', __( 'Shop Page URL', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section',
+			array(
+				'field' => 'shop_page_url',
+				'type'  => 'text',
+				'desc'  => sprintf( __( 'All your products will be listed here in a grid display. When you create new products, they will show up in this page. This page is automatically created for you when you install the plugin. You can add this page to your navigation menu if you want the site visitors to find it easily. Do not delete this page. If you have accidentally deleted this page, then re-create it using <a href="https://wp-express-checkout.com/recreating-the-required-express-checkout-plugin-pages/" target="_blank">this documentation</a>.', 'wp-express-checkout' ) ),
+				'size'  => 100,
+			)
+		);
+		
 		// API details.
 		add_settings_field( 'is_live', __( 'Live Mode', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'is_live', 'type' => 'checkbox', 'desc' => __( 'Check this to run the transaction in live mode. When unchecked it will run in sandbox mode.', 'wp-express-checkout' ) ) );
 		add_settings_field( 'live_client_id', __( 'Live Client ID', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section',

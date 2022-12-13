@@ -389,6 +389,7 @@ class Main {
 
 		// Check and create required pages.
 		self::check_and_create_thank_you_page(); // Create the thank you page.
+		self::check_and_create_shop_page(); // Create the shop page.
 
 		// Explicitly register post types and flush rewrite rules.
 		Products::register_post_type();
@@ -429,6 +430,39 @@ class Main {
 		}
 	}
 
+	/**
+	 * Creates the Shop page.
+	 */
+	public static function check_and_create_shop_page() {
+		// Check if Shop page exists. Create new if it doesn't exist.
+		$args  = array(
+			'post_type' => 'page',
+		);
+		$pages = get_pages( $args );
+
+		$shop_page_id = '';
+		foreach ( $pages as $page ) {
+			// Check if there is a page that contins our shop page shortcode.
+			if ( strpos( $page->post_content, 'wpec_show_all_products' ) !== false ) {
+				$shop_page_id = $page->ID;
+			}
+		}
+		if ( '' === $shop_page_id ) {
+			// Shop page missing. Create a new one.
+			$shop_page_id  = self::create_post( 'page', 'Shop', 'Shop-Products', '[wpec_show_all_products]' );
+			$shop_page     = get_post( $shop_page_id );
+			$shop_page_url = $shop_page->guid;
+
+			// Save the Shop page URL in settings.
+			$settings = get_option( 'ppdg-settings' );
+			if ( ! empty( $settings ) ) { // Settings should already be initialized when this function is called.
+				$settings['shop_page_url'] = $shop_page_url;
+				$settings['shop_page_id'] = $shop_page_id;
+				update_option( 'ppdg-settings', $settings );
+			}
+		}
+	}
+	
 	/**
 	 * Creates a single post by given parameters.
 	 *
