@@ -8,31 +8,41 @@ Stable tag: 2.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Allows you to accept payments quickly for a product or service via a payment popup window. It uses PayPal Checkout.
+Allows you to accept payments quickly for products and services via a payment popup window. It uses the new PayPal Checkout option.
 
 == Description ==
 
-This plugin provides you a shortcode to generate a customizable PayPal payment button that allows a customer to pay for an item instantly via a popup window. Customers can pay using PayPal or a credit card. It uses PayPal's new/latest Checkout API/Gateway. The checkout process is quick and easy.
+The WP Express Checkout plugin allows you to sell any type of products and services from your WordPress powered site easily using the new PayPal Checkout option. Install the plugin, configure some basic settings, create a few products and you are ready to sell products and services from your site. The checkout process is quick and easy.
+
+This plugin gives you shortcodes to generate customizable PayPal payment buttons that allow customers to pay for items instantly via a payment popup window. Customers can pay using PayPal or a credit card. It uses PayPal's new/latest Checkout API/Gateway.
 
 The full checkout takes place in a payment popup window and the customer never leaves your site. It creates a fast and elegant checkout experience.
 
 This is ideal for users who want a lightweight and simple solution for selling products or services via PayPal. 
 
-If you want to sell digital products using PayPal then you will love the simplicity of this plugin.
-
-There is also an option for WooCommerce. So you can use this plugin to add PayPal Express Checkout gateway to WooCommerce.
-
-This plugin works with PayPal's Pay in 4 (Buy Now, Pay Later) feature also. It lets your customers pay later in 4 installments.
-
-View configuration and usage details on the [WP Express Checkout](https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/) plugin's documentation page.
-
 = Checkout Demonstration =
 
 https://www.youtube.com/watch?v=KF32ZOgsb2U
 
+= Great for Selling Digital Downloads =
+
+If you want to sell digital products using PayPal then you will love the simplicity of this plugin. You can configure it to expire the download links after it has been used a few times or after a certain period of time.
+
+= Optional WooCommerce Integration =
+
+There is also an option for WooCommerce. So you can use this plugin to add the new PayPal Express Checkout gateway to WooCommerce.
+
+= Works with PayPal's Buy Now Pay Later Feature =
+
+This plugin works with PayPal's Pay in 4 (Buy Now, Pay Later) feature also. It lets your customers pay later in 4 installments.
+
 = Basic Setup and Usage Video =
 
 https://www.youtube.com/watch?v=RHVgGQWhCT0
+
+= Usage Documentation =
+
+View configuration and usage details on the [WP Express Checkout](https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/) plugin's documentation page.
 
 = Features =
 
@@ -69,7 +79,7 @@ The setup is very easy. Once you have installed the plugin, all you need to do i
 
 You can also accept payment using [PayPal's Pay in 4](https://www.paypal.com/us/webapps/mpp/pay-in-4) feature (buy now pay later offering). Read the [Buy Now, Pay Later Tutorial](https://wp-express-checkout.com/paypal-pay-in-4-wp-express-checkout-plugin/) to learn more.
 
-= Shortcode Attributes =
+= Shortcode =
 
 This plugin adds the following shortcode to your site:
 
