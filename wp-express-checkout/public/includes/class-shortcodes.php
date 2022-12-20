@@ -546,7 +546,8 @@ class Shortcodes {
 			try {
 				$product = Products::retrieve( $id );
 			} catch ( Exception $exc ) {
-				return $this->show_err_msg( $exc->getMessage() );
+				//return $this->show_err_msg( $exc->getMessage() );				
+				continue;
 			}
 
 			$thumb_url = $product->get_thumbnail_url();
