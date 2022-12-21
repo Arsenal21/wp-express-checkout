@@ -14,7 +14,7 @@ Allows you to accept payments quickly for products and services via a payment po
 
 The WP Express Checkout plugin allows you to sell any type of products and services from your WordPress powered site easily using the new PayPal Checkout option. Install the plugin, configure some basic settings, create a few products and you are ready to sell products and services from your site. The checkout process is quick and easy.
 
-This plugin gives you shortcodes to generate customizable PayPal payment buttons that allow customers to pay for items instantly via a payment popup window. Customers can pay using PayPal or a credit card. It uses PayPal's new/latest Checkout API/Gateway.
+This plugin gives you shortcodes to generate customizable PayPal payment buttons that allow customers to pay for items instantly via a payment popup window. Customers can pay using PayPal or a credit card. It uses PayPal's newest/latest Checkout API/Gateway.
 
 The full checkout takes place in a payment popup window and the customer never leaves your site. It creates a fast and elegant checkout experience.
 
@@ -115,7 +115,10 @@ View [this usage documentation](https://wp-express-checkout.com/basic-installati
 
 == Frequently Asked Questions ==
 
-= Does it use the new/latest PayPal checkout option? =
+= Where can I find complete documentation for this plugin =
+You can find the full documentation for this plugin on the [WP Express Checkout plugin documentation](https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/) page.
+
+= Does it use the newest/latest PayPal checkout option? =
 
 Yes, this plugin uses the new PayPal checkout API.
 
