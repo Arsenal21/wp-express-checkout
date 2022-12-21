@@ -99,7 +99,7 @@ class Products_List {
 				break;
 			case 'shortcode':
 				?>
-				<input type="text" name="ppec_product_shortcode" class="ppec-select-on-click" readonly value="[wp_express_checkout product_id=&quot;<?php echo $post_id; ?>&quot;]">
+				<input type="text" name="ppec_product_shortcode" class="wpec-select-on-click large-text code" onfocus="this.select();" readonly value="[wp_express_checkout product_id=&quot;<?php echo $post_id; ?>&quot;]">
 				<?php
 				break;
 			case 'type':
