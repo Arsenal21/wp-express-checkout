@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.1
-Stable tag: 2.2.4
+Stable tag: 2.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,7 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 * Accept PayPal donations with minimum donation amount limit.
 * Sell downloads, files, or any digital goods.
 * Sell music, video, ebook, PDF or any other digital media files.
+* Shop page that will list all your products in a grid view. Users can browse your products and purchase it.
 * Allow the customers to automatically download the file once the purchase is completed via PayPal.
 * You can deliver the digital downloads using encrypted download links that expire automatically.
 * Offer Buy Now Pay Later payment option to your customers.
@@ -150,9 +151,8 @@ None
 
 == Changelog ==
 
-= WIP 2.2.5 =
-[TODO] - add the steps to re-create the shop page here - https://wp-express-checkout.com/recreating-the-required-express-checkout-plugin-pages/
-* Added new shortcode [wpec_show_all_products]
+= 2.2.5 =
+* Added a new shortcode [wpec_show_all_products] that can be used on the "Shop" page to display all the products in a grid view.
 * The shop page will be automatically created at install time.
 
 = 2.2.4 =
