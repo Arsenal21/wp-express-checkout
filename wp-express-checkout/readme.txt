@@ -154,6 +154,9 @@ None
 
 == Changelog ==
 
+= WIP 2.2.6 =
+* Fixed the Shop Page URL update not working in the settings menu. 
+
 = 2.2.5 =
 * Added a new shortcode [wpec_show_all_products] that can be used on the "Shop" page to display all the products in a grid view.
 * The shop page will be automatically created at install time.
