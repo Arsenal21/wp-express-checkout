@@ -185,6 +185,9 @@ class Admin {
 	 * Register Admin page settings
 	 */
 	public function register_settings() {
+		/*
+		 * NOTE: If a new field is added. It needs to be addeed to the Main::get_defaults() function also.
+		 */
 
 		$wpec = Main::get_instance();
 
