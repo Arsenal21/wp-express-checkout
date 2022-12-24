@@ -148,5 +148,48 @@ class Products {
 		return $products_data;
 	}
 
+	static public function retrieve_all_active_products( $filters,$search ) {
+			
+		$filters["meta_query"]=array("relation"=>"OR");
+
+		foreach(Products::wpec_product_type() as $product_type)
+		{
+			array_push($filters["meta_query"],array(
+				"key"=>"wpec_product_type",
+				"value"=>$product_type
+			));
+		}
+
+		
+		$products_data = new \WP_Query( $filters );
+				
+
+		if ( ! $products_data->have_posts() ) {
+			//query returned no results. Let's see if that was a search query
+			if ( $search === false ) {
+				//that wasn't search query. That means there is no products configured
+				wp_reset_postdata();
+				throw new Exception(__( "'No products have been configured yet", 'wp-express-checkout' ) , 1004 );
+			}
+		}		
+		
+		return $products_data;
+	}
+
+
+	static public function wpec_product_type()
+	{
+		$product_types = array("one_time","donation");
+
+		//WPEC Subscription Payment Addon
+		if ( defined( 'WPEC_SUB_PLUGIN_VER' ) )
+		{
+			array_push($product_types,"subscription");
+		}
+
+		return $product_types;
+
+	}
+
 
 }

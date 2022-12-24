@@ -506,7 +506,7 @@ class Shortcodes {
 			$q['s'] = $search;
 		}
 
-		$products = Products::retrieve_all($q,$search);
+		$products = Products::retrieve_all_active_products($q,$search);
 
 
 		$search_box = ! empty( $params['search_box'] ) ? $params['search_box'] : false;
@@ -546,8 +546,7 @@ class Shortcodes {
 			try {
 				$product = Products::retrieve( $id );
 			} catch ( Exception $exc ) {
-				//return $this->show_err_msg( $exc->getMessage() );				
-				continue;
+				return $this->show_err_msg( $exc->getMessage() );								
 			}
 
 			$thumb_url = $product->get_thumbnail_url();
