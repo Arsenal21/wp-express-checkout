@@ -1,4 +1,4 @@
-var ppecHandler = function( data ) {
+var ppecHandler = function( data ) {	
 	this.data = data;
 	this.actions = {};
 
@@ -183,7 +183,7 @@ var ppecHandler = function( data ) {
 				parent.scCont.find( '.wpec_address_wrap' ).toggleClass( 'shipping_enabled' );
 			} );
 
-			jQuery( '#place-order-' + parent.data.id ).click( function() {
+			jQuery( '#place-order-' + parent.data.id ).click( function() {				
 				parent.buttonArgs.onClick();
 			} );
 
@@ -274,12 +274,23 @@ var ppecHandler = function( data ) {
 			jQuery( '.wpec-button-placeholder' ).remove();
 		},
 		onClick: function() {
+			console.log("place order click");
+						
+			jQuery("#place-order-"+parent.data.id).find("button>svg").show();
+			jQuery("#place-order-"+parent.data.id).find("button").attr("disabled",true);
+			
 			parent.displayErrors();
 			var errInput = parent.scCont.find( '.hasError' ).first();
 			if ( errInput.length > 0 ) {
+
+				
 				errInput.focus();
 				errInput.trigger( 'change' );
+
+				jQuery("#place-order-"+parent.data.id).find("button>svg").hide();
+				jQuery("#place-order-"+parent.data.id).find("button").attr("disabled",false);
 			} else if ( !parent.data.total ) {
+			
 				parent.processPayment( {
 					payer: {
 						name: {
@@ -365,6 +376,10 @@ var ppecHandler = function( data ) {
 			} );
 		},
 		onError: function( err ) {
+
+			jQuery("#place-order-"+parent.data.id).find("button>svg").hide();
+			jQuery("#place-order-"+parent.data.id).find("button").attr("disabled",false);
+
 			alert( err );
 		}
 	};

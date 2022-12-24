@@ -289,6 +289,20 @@
 	background-color: rgba(37, 99, 235, 1);
 }
 
+.wpec-place-order-btn svg {
+	display: none;
+	-webkit-animation: wpec-spinner 1s linear infinite;
+	animation: wpec-spinner 1s linear infinite;
+	height: 20px;
+	margin-right: 12px;
+	margin-left: -4px;
+	width: 20px;
+}
+
+.wpec-place-order-btn svg circle {
+	opacity: 0.25;
+  }
+
 .wpec-modal-open:hover {
 	background-color: rgba(29, 78, 216, 1);
 	background-image: none;
