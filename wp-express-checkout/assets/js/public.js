@@ -274,8 +274,6 @@ var ppecHandler = function( data ) {
 			jQuery( '.wpec-button-placeholder' ).remove();
 		},
 		onClick: function() {
-			console.log("place order click");
-						
 			jQuery("#place-order-"+parent.data.id).find("button>svg").show();
 			jQuery("#place-order-"+parent.data.id).find("button").attr("disabled",true);
 			
@@ -507,8 +505,8 @@ var ppecHandler = function( data ) {
 var wpecModal = function( $ ) {
 	var openModalId = false;
 
-	$( '.wpec-modal-open, .wpec-modal-overlay, .wpec-modal-close' ).on( 'click', function() {
-		event.preventDefault();
+	$( '.wpec-modal-open, .wpec-modal-overlay, .wpec-modal-close' ).on( 'click', function( e ) {
+		e.preventDefault();
 		toggleModal( $( this ).data( 'wpec-modal' ) );
 	} );
 

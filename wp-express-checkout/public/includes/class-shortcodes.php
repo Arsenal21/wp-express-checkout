@@ -472,8 +472,8 @@ class Shortcodes {
 		$params = shortcode_atts(
 			array(
 				'items_per_page' => '30',
-				'sort_by'        => 'none',
-				'sort_order'     => 'desc',
+				'sort_by'        => 'ID',
+				'sort_order'     => 'DESC',
 				'template'       => '',
 				'search_box'     => '1',
 			),

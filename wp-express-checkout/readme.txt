@@ -155,7 +155,9 @@ None
 == Changelog ==
 
 = WIP 2.2.6 =
-* Fixed the Shop Page URL update not working in the settings menu. 
+* The shop page will list the products in descending order by default.
+* Fixed the Shop Page URL update not working in the settings menu.
+* The "Place Order" button (for the free checkout option with 100% discount coupon) now has a processing icon while it is being processed.
 
 = 2.2.5 =
 * Added a new shortcode [wpec_show_all_products] that can be used on the "Shop" page to display all the products in a grid view.
