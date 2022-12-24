@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.1
-Stable tag: 2.2.5
+Stable tag: 2.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -154,10 +154,11 @@ None
 
 == Changelog ==
 
-= WIP 2.2.6 =
-* The shop page will list the products in descending order by default.
+= 2.2.6 =
+* The shop page will list the products by ID in descending order by default.
 * Fixed the Shop Page URL update not working in the settings menu.
 * The "Place Order" button (for the free checkout option with 100% discount coupon) now has a processing icon while it is being processed.
+* Fixed a JavaScript error with the WooCommerce cart checkout.
 
 = 2.2.5 =
 * Added a new shortcode [wpec_show_all_products] that can be used on the "Shop" page to display all the products in a grid view.
