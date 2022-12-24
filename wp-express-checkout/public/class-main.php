@@ -333,6 +333,7 @@ class Main {
 			'price_thousand_sep'   => ',',
 			'price_decimals_num'   => '2',
 			'thank_you_url'        => '',
+			'shop_page_url'        => '',
 			'shipping'             => '',
 			'tax'                  => '',
 			'button_text'          => __( 'Pay', 'wp-express-checkout' ),

@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.1
-Stable tag: 2.2.4
+Stable tag: 2.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ Allows you to accept payments quickly for products and services via a payment po
 
 The WP Express Checkout plugin allows you to sell any type of products and services from your WordPress powered site easily using the new PayPal Checkout option. Install the plugin, configure some basic settings, create a few products and you are ready to sell products and services from your site. The checkout process is quick and easy.
 
-This plugin gives you shortcodes to generate customizable PayPal payment buttons that allow customers to pay for items instantly via a payment popup window. Customers can pay using PayPal or a credit card. It uses PayPal's new/latest Checkout API/Gateway.
+This plugin gives you shortcodes to generate customizable PayPal payment buttons that allow customers to pay for items instantly via a payment popup window. Customers can pay using PayPal or a credit card. It uses PayPal's newest/latest Checkout API/Gateway.
 
 The full checkout takes place in a payment popup window and the customer never leaves your site. It creates a fast and elegant checkout experience.
 
@@ -50,6 +50,7 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 * Accept PayPal donations with minimum donation amount limit.
 * Sell downloads, files, or any digital goods.
 * Sell music, video, ebook, PDF or any other digital media files.
+* Shop page that will list all your products in a grid view. Users can browse your products and purchase it.
 * Allow the customers to automatically download the file once the purchase is completed via PayPal.
 * You can deliver the digital downloads using encrypted download links that expire automatically.
 * Offer Buy Now Pay Later payment option to your customers.
@@ -114,7 +115,10 @@ View [this usage documentation](https://wp-express-checkout.com/basic-installati
 
 == Frequently Asked Questions ==
 
-= Does it use the new/latest PayPal checkout option? =
+= Where can I find complete documentation for this plugin =
+You can find the full documentation for this plugin on the [WP Express Checkout plugin documentation](https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/) page.
+
+= Does it use the newest/latest PayPal checkout option? =
 
 Yes, this plugin uses the new PayPal checkout API.
 
@@ -150,9 +154,11 @@ None
 
 == Changelog ==
 
-= WIP 2.2.5 =
-[TODO] - add the steps to re-create the shop page here - https://wp-express-checkout.com/recreating-the-required-express-checkout-plugin-pages/
-* Added new shortcode [wpec_show_all_products]
+= WIP 2.2.6 =
+* Fixed the Shop Page URL update not working in the settings menu. 
+
+= 2.2.5 =
+* Added a new shortcode [wpec_show_all_products] that can be used on the "Shop" page to display all the products in a grid view.
 * The shop page will be automatically created at install time.
 
 = 2.2.4 =
