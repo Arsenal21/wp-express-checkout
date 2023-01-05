@@ -26,7 +26,9 @@ class Init {
 		//Register the post types
 		Orders::register_post_type();
 		Products::register_post_type();
-
+		Categories::register_post_type();
+		Tags::register_post_type();
+		
 		View_Downloads::get_instance();
 
 		if ( function_exists( 'register_block_type' ) ) {
