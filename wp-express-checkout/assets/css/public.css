@@ -206,15 +206,14 @@
 	border-color: transparent;
 	color: rgba(255, 255, 255, 1);
 }
-
+/*
 .wpec_coupon_apply_btn:hover:hover {
 	color: rgba(255, 255, 255, 1);
 }
-
 .wpec_coupon_apply_btn:hover:hover {
 	background-color: rgba(37, 99, 235, 1);
 }
-
+*/
 .wpec_coupon_apply_btn svg {
 	display: none;
 	-webkit-animation: wpec-spinner 1s linear infinite;
@@ -312,7 +311,6 @@
 /* .wpec-modal-open:hover:hover {
 	color: rgba(255, 255, 255, 1);
 }
-
 .wpec-modal-open:hover:hover {
 	background-color: rgba(29, 78, 216, 1);
 } */
@@ -322,14 +320,14 @@
 	background-image: none;
 	color: rgba(255, 255, 255, 1);
 }
-
+/*
 .wpec-place-order-btn:hover:hover {
 	color: rgba(255, 255, 255, 1);
 }
-
 .wpec-place-order-btn:hover:hover {
 	background-color: rgba(29, 78, 216, 1);
 }
+*/
 
 .wpec-modal {
 	display: -webkit-box;
@@ -744,11 +742,11 @@
 	background-color: rgba(255, 255, 255, 1);
 	background-image: none;
 }
-
+/*
 .wpec-custom-number-input button:hover:hover {
 	background-color: rgba(255, 255, 255, 1);
 }
-
+*/
 .wpec-custom-number-input button:first-of-type {
 	border-radius: 6px;
 	border-top-right-radius: 0px;
