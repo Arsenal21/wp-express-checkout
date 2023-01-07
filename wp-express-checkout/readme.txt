@@ -72,6 +72,8 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 * Option to configure terms and conditions before checkout.
 * You can see all the orders within your WordPress admin dashboard.
 * Option to customize the Thank You page.
+* Option to create product categories and apply it to some products. 
+* Option to create product tags and apply it to certain products.
 * Ability to configure the download links to expire after X number of hours.
 * Ability to configure the download links to expire after X number of clicks.
 * Option to [Integrate it with WooCommerce](https://wp-express-checkout.com/woocommerce-paypal-express-checkout/) to offer product checkout via PayPal's express checkout system.
@@ -153,6 +155,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= WIP 2.2.7 =
+- Added option to create product categories and apply it to certain products.
+- Added option to create product tags and apply it to some products.
 
 = 2.2.6 =
 * The shop page will list the products by ID in descending order by default.

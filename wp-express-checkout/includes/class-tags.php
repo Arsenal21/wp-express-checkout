@@ -8,13 +8,13 @@ use WP_Express_Checkout\Products;
 
 class Tags {
 
-	static $POST_SLUG = 'wpec_tags';
+	static $TAGS_SLUG = 'wpec_tags';
 
 	function __construct() {
 		
 	}
 
-	public static function register_post_type() {
+	public static function register_tags_taxonomy() {
 		
         $labels_tags = array(
             'name'              => __( 'Product Tags', 'wp-express-checkout' ),
@@ -29,19 +29,21 @@ class Tags {
             'new_item_name'     => __( 'New Tag', 'wp-express-checkout' ),
             'menu_name'         => __( 'Tags', 'wp-express-checkout' ),
         );
+		
         $args_tags   = array(
             'hierarchical'      => false,
             'labels'            => $labels_tags,
             'show_ui'           => true,
             'query_var'         => true,
-            'rewrite'           => array( 'slug' => self::$POST_SLUG ),
+            'rewrite'           => array( 'slug' => self::$TAGS_SLUG ),
             'show_admin_column' => true,
         );
 
-        register_taxonomy( self::$POST_SLUG, array( Products::$products_slug ), $args_tags );
+		//Trigger filter
+		$args_tags = apply_filters( 'wpec_product_tags_before_register', $args_tags );
+		
+        register_taxonomy( self::$TAGS_SLUG, array( Products::$products_slug ), $args_tags );
         
-
 	}
-
 
 }

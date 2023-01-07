@@ -26,9 +26,12 @@ class Init {
 		//Register the post types
 		Orders::register_post_type();
 		Products::register_post_type();
-		Categories::register_post_type();
-		Tags::register_post_type();
 		
+		//Register taxonomy
+		Categories::register_category_taxonomy();
+		Tags::register_tags_taxonomy();
+		
+		//Download request handler
 		View_Downloads::get_instance();
 
 		if ( function_exists( 'register_block_type' ) ) {
@@ -36,6 +39,7 @@ class Init {
 			new Blocks\Product_Block();
 		}
 
+		//Debug log reset ajax action handler
 		add_action( 'wp_ajax_wpec_reset_log', array( $this, 'wpec_handle_reset_log' ) );
 
 		if ( is_admin() ) {

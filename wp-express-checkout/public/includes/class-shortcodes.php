@@ -643,9 +643,7 @@ class Shortcodes {
 			'wpec_show_products_from_category'
 		);
 
-		
-		include_once WPEC_PLUGIN_PATH . 'public/views/templates/all-products/all-products.php';
-
+		include_once WPEC_PLUGIN_PATH . 'public/views/templates/all-products/all-products-from-category.php';
 		
 		$page = filter_input(INPUT_GET, 'wpec_page', FILTER_SANITIZE_NUMBER_INT);
 
@@ -655,7 +653,6 @@ class Shortcodes {
 
 		$category_slugs = isset($params['category_slug']) ? $params['category_slug'] : false;
 
-		
 		if ($category_slugs) {
 			$category_slugs = explode(",", $category_slugs);
 
@@ -663,15 +660,13 @@ class Shortcodes {
 				array_push(
 					$wp_tax_query,
 					array(
-						'taxonomy' => Categories::$POST_SLUG,
+						'taxonomy' => Categories::$CATEGORY_SLUG,
 						'field' => 'slug',
 						'terms' => $cat_slug
 					)
 				);
 			}
 		}
-
-	
 
 		$tag_slugs = isset($params['tag_slug']) ? $params['tag_slug'] : false;
 
@@ -682,7 +677,7 @@ class Shortcodes {
 				array_push(
 					$wp_tax_query,
 					array(
-						'taxonomy' => Tags::$POST_SLUG,
+						'taxonomy' => Tags::$TAGS_SLUG,
 						'field' => 'slug',
 						'terms' => $tag_slug
 					)
@@ -712,7 +707,6 @@ class Shortcodes {
 		}
 
 		$products = Products::retrieve_all_active_products($q, $search);
-
 
 		$search_box = !empty($params['search_box']) ? $params['search_box'] : false;
 
