@@ -37,6 +37,9 @@ class Shortcodes {
 		//show all product
 		add_shortcode( 'wpec_show_all_products', array( $this, 'shortcode_wpec_show_all_products' ) );
 
+		//show all product based on tags / categories
+		add_shortcode( 'wpec_show_products_from_category', array( $this, 'shortcode_wpec_show_products_from_category' ) );
+
 		if ( ! is_admin() ) {
 			add_filter( 'widget_text', 'do_shortcode' );
 		}
@@ -619,6 +622,208 @@ class Shortcodes {
 		//Build template
 		foreach ( $tpl as $key => $value ) {
 			$tpl['page'] = str_replace( '_%' . $key . '%_', $value, $tpl['page'] );
+		}
+
+		return $tpl['page'];
+	}
+
+	public function shortcode_wpec_show_products_from_category($params = array())
+	{
+		$params=shortcode_atts(
+			array(
+				'items_per_page' => '30',
+				'sort_by'        => 'ID',
+				'sort_order'     => 'DESC',
+				'template'       => '1',
+				'search_box'     => '1',
+				'category_slug' => '',
+				'tag_slug'	=> ''
+			),
+			$params,
+			'wpec_show_products_from_category'
+		);
+
+		
+		include_once WPEC_PLUGIN_PATH . 'public/views/templates/all-products/all-products.php';
+
+		
+		$page = filter_input(INPUT_GET, 'wpec_page', FILTER_SANITIZE_NUMBER_INT);
+
+		$page = empty($page) ? 1 : $page;
+
+		$wp_tax_query = array("relation" => "or");
+
+		$category_slugs = isset($params['category_slug']) ? $params['category_slug'] : false;
+
+		
+		if ($category_slugs) {
+			$category_slugs = explode(",", $category_slugs);
+
+			foreach ($category_slugs as $cat_slug) {
+				array_push(
+					$wp_tax_query,
+					array(
+						'taxonomy' => Categories::$POST_SLUG,
+						'field' => 'slug',
+						'terms' => $cat_slug
+					)
+				);
+			}
+		}
+
+	
+
+		$tag_slugs = isset($params['tag_slug']) ? $params['tag_slug'] : false;
+
+		if ($tag_slugs) {
+			$tag_slugs = explode(",", $tag_slugs);
+
+			foreach ($tag_slugs as $tag_slug) {
+				array_push(
+					$wp_tax_query,
+					array(
+						'taxonomy' => Tags::$POST_SLUG,
+						'field' => 'slug',
+						'terms' => $tag_slug
+					)
+				);
+			}
+		}
+
+		
+		$q = array(
+			'post_type'      => Products::$products_slug,			
+			'post_status'    => 'publish',
+			'posts_per_page' => isset($params['items_per_page']) ? $params['items_per_page'] : 30,
+			'paged'          => $page,
+			'orderby'        => isset($params['sort_by']) ? ($params['sort_by']) : 'none',
+			'order'          => isset($params['sort_order']) ? strtoupper($params['sort_order']) : 'DESC',
+			'tax_query' => $wp_tax_query
+		);
+
+
+		//handle search
+		$search = filter_input(INPUT_GET, 'wpec_search', FILTER_SANITIZE_STRING);
+
+		$search = empty($search) ? false : $search;
+
+		if ($search !== false) {
+			$q['s'] = $search;
+		}
+
+		$products = Products::retrieve_all_active_products($q, $search);
+
+
+		$search_box = !empty($params['search_box']) ? $params['search_box'] : false;
+
+		if ($search_box) {
+			if ($search !== false) {
+				$tpl['clear_search_url']   = esc_url(remove_query_arg(array('wpec_search', 'wpec_page')));
+				$tpl['search_result_text'] = $products->found_posts === 0 ? __('Nothing found for', 'wp-express-checkout') . ' "%s".' : __('Search results for', 'wp-express-checkout') . ' "%s".';
+				$tpl['search_result_text'] = sprintf($tpl['search_result_text'], htmlentities($search));
+				$tpl['search_term']        = htmlentities($search);
+			} else {
+				$tpl['search_result_text']  = '';
+				$tpl['clear_search_button'] = '';
+				$tpl['search_term']         = '';
+			}
+		} else {
+			$tpl['search_box'] = '';
+		}
+
+		$tpl['products_list'] .= $tpl['products_row_start'];
+		$i                     = $tpl['products_per_row']; //items per row
+
+		while ($products->have_posts()) {
+			$products->the_post();
+			$product;
+
+			$i--;
+			if ($i < 0) { //new row
+				$tpl['products_list'] .= $tpl['products_row_end'];
+				$tpl['products_list'] .= $tpl['products_row_start'];
+				$i                     = $tpl['products_per_row'] - 1;
+			}
+
+			$id = get_the_ID();
+
+
+			try {
+				$product = Products::retrieve($id);
+			} catch (Exception $exc) {
+				return $this->show_err_msg($exc->getMessage());
+			}
+
+			$thumb_url = $product->get_thumbnail_url();
+
+
+			if (!$thumb_url) {
+				$thumb_url = WPEC_PLUGIN_URL . '/assets/img/product-thumb-placeholder.png';
+			}
+
+			$view_btn = str_replace('%[product_url]%', get_permalink(), $tpl['view_product_btn']);
+
+			$price = $product->get_price();
+
+			if (empty($price)) {
+				$price = '0';
+			}
+
+			$price = esc_html(Utils::price_format($price));
+
+			$item = str_replace(
+				array(
+					'%[product_id]%',
+					'%[product_name]%',
+					'%[product_thumb]%',
+					'%[view_product_btn]%',
+					'%[product_price]%',
+				),
+				array(
+					$id,
+					get_the_title(),
+					$thumb_url,
+					$view_btn,
+					$price,
+				),
+				$tpl['products_item']
+			);
+
+			$tpl['products_list'] .= $item;
+		}
+
+		$tpl['products_list'] .= $tpl['products_row_end'];
+
+		//pagination
+
+		$tpl['pagination_items'] = '';
+
+		$pages = $products->max_num_pages;
+
+		if ($pages > 1) {
+			$i = 1;
+
+			while ($i <= $pages) {
+				if ($i != $page) {
+					$url = esc_url(add_query_arg('wpec_page', $i));
+					$str = str_replace(array('%[url]%', '%[page_num]%'), array($url, $i), $tpl['pagination_item']);
+				} else {
+					$str = str_replace('%[page_num]%', $i, $tpl['pagination_item_current']);
+				}
+				$tpl['pagination_items'] .= $str;
+				$i++;
+			}
+		}
+
+		if (empty($tpl['pagination_items'])) {
+			$tpl['pagination'] = '';
+		}
+
+		wp_reset_postdata();
+
+		//Build template
+		foreach ($tpl as $key => $value) {
+			$tpl['page'] = str_replace('_%' . $key . '%_', $value, $tpl['page']);
 		}
 
 		return $tpl['page'];

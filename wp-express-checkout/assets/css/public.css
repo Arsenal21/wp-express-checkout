@@ -309,13 +309,13 @@
 	color: rgba(255, 255, 255, 1);
 }
 
-.wpec-modal-open:hover:hover {
+/* .wpec-modal-open:hover:hover {
 	color: rgba(255, 255, 255, 1);
 }
 
 .wpec-modal-open:hover:hover {
 	background-color: rgba(29, 78, 216, 1);
-}
+} */
 
 .wpec-place-order-btn:hover {
 	background-color: rgba(29, 78, 216, 1);
