@@ -537,6 +537,13 @@ var wpecModal = function( $ ) {
 		var step = input.attr( 'step' ) ? Number( input.attr( 'step' ) ) : 1;
 		input.val( Number( input.val() ) + increment * step ).change();
 	} );
+
+	//shortcode_wpec_show_all_products
+	$("#wpec-sort-by").change(function(){
+		$("#wpec-sort-by-form").submit();
+	});
 };
 
 jQuery( wpecModal );
+
+

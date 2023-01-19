@@ -92,7 +92,7 @@ class Products {
 		
 
 		if ( ! empty( $product_data->wpec_product_type ) ) {
-			$product_type = $product_data->wpec_product_type;
+			$product_type = $product_data->wpec_product_type;			
 		} elseif ( ! empty( $product_data->wpec_product_custom_amount ) ) {
 			// Check Custom amount for backward compatibility.
 			$product_type = 'donation';
@@ -114,6 +114,7 @@ class Products {
 		if ( $product instanceof Product ) {
 			return $product;
 		}
+
 
 		switch ( $product_type ) {
 			case 'one_time':
@@ -148,17 +149,59 @@ class Products {
 		return $products_data;
 	}
 
+	public static  function wpec_orderby_price_callback( $orderby ) {
+		global $wpdb;
+		$order = "";				
+		if(stripos($orderby,"desc")!==false)
+		{
+			$order="desc";
+		}
+		else{
+			$order="asc";
+		}		
+
+		$orderby = "
+		CASE 
+			WHEN  (select wp.meta_value from ".$wpdb->prefix."postmeta wp where wp.meta_key='wpec_product_type' and wp.post_id=wp_posts.ID limit 1) ='one_time' THEN cast((select wp.meta_value from ".$wpdb->prefix."postmeta wp where wp.meta_key='ppec_product_price' and wp.post_id=wp_posts.ID limit 1) as decimal) 
+			WHEN  (select wp.meta_value from ".$wpdb->prefix."postmeta wp where wp.meta_key='wpec_product_type' and wp.post_id=wp_posts.ID limit 1) ='donation' THEN cast((select wp.meta_value from ".$wpdb->prefix."postmeta wp where wp.meta_key='wpec_product_min_amount' and wp.post_id=wp_posts.ID limit 1) as decimal) 			
+			WHEN  (select wp.meta_value from ".$wpdb->prefix."postmeta wp where wp.meta_key='wpec_product_type' and wp.post_id=wp_posts.ID limit 1) ='subscription' THEN cast((select wp.meta_value from ".$wpdb->prefix."postmeta wp where wp.meta_key='wpec_sub_recur_price' and wp.post_id=wp_posts.ID limit 1) as decimal)
+			else 0 
+		END ".$order."
+			";
+			
+		return $orderby;
+	}
+
 	static public function retrieve_all_active_products( $filters, $search ) {
-		$filters["meta_query"] = array( "relation" => "OR" );
+		
+		if(!isset($filters["meta_query"]))
+		{
+			$filters["meta_query"]=array();
+		}
+		
+		$product_types = array( "relation" => "OR" );		
 
 		foreach( Products::wpec_active_product_types() as $product_type ) {
-			array_push( $filters["meta_query"], array(
+			array_push( $product_types, array(
 				"key" => "wpec_product_type",
 				"value" => $product_type
 			));
 		}
 
+		array_push($filters["meta_query"],$product_types);
+		
+		if($filters["orderby"]=="price")
+		{
+			add_filter( 'posts_orderby', array(__CLASS__,'wpec_orderby_price_callback' ));		
+		}
+
 		$products_data = new \WP_Query( $filters );
+		
+		if($filters["orderby"]=="price")
+		{
+			remove_filter( 'posts_orderby',array(__CLASS__,'wpec_orderby_price_callback')  );
+		}
+		
 
 		if ( ! $products_data->have_posts() ) {
 			//query returned no results. Let's see if that was a search query
