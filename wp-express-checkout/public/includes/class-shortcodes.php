@@ -472,6 +472,7 @@ class Shortcodes {
 
 	public function shortcode_wpec_show_all_products($params=array())
 	{
+		
 		$params = shortcode_atts(
 			array(
 				'items_per_page' => '30',
@@ -484,21 +485,36 @@ class Shortcodes {
 			'wpec_show_all_products'
 		);
 
+		//if user has changed sort by from UI
+		$sort_by = filter_input( INPUT_GET, 'wpec-sortby', FILTER_SANITIZE_STRING );
+
 		include_once WPEC_PLUGIN_PATH . 'public/views/templates/all-products/all-products.php';
 
 		$page = filter_input( INPUT_GET, 'wpec_page', FILTER_SANITIZE_NUMBER_INT );
 
-		$page = empty( $page ) ? 1 : $page;
+		$page = empty( $page ) ? 1 : $page;		
+
+		$order_by = isset( $params['sort_by'] ) ? ( $params['sort_by'] ) : 'none';
+
+		
+		$sort_direction = isset( $params['sort_order'] ) ? strtoupper( $params['sort_order'] ) : 'DESC';
+
+		if($sort_by)
+		{
+			$order_by=explode("-",$sort_by)[0];
+			$sort_direction=isset(explode("-",$sort_by)[1])?explode("-",$sort_by)[1]:"asc";
+		}
+		
 
 		$q = array(
 			'post_type'      => Products::$products_slug,
 			'post_status'    => 'publish',
 			'posts_per_page' => isset( $params['items_per_page'] ) ? $params['items_per_page'] : 30,
 			'paged'          => $page,
-			'orderby'        => isset( $params['sort_by'] ) ? ( $params['sort_by'] ) : 'none',
-			'order'          => isset( $params['sort_order'] ) ? strtoupper( $params['sort_order'] ) : 'DESC',
+			'orderby'        => $order_by,
+			'order'          => $sort_direction,
 		);
-
+		
 		//handle search
 
 		$search = filter_input( INPUT_GET, 'wpec_search', FILTER_SANITIZE_STRING );
@@ -529,6 +545,8 @@ class Shortcodes {
 			$tpl['search_box'] = '';
 		}
 
+		
+
 		$tpl['products_list'] .= $tpl['products_row_start'];
 		$i                     = $tpl['products_per_row']; //items per row
 
@@ -547,7 +565,7 @@ class Shortcodes {
 			
 
 			try {
-				$product = Products::retrieve( $id );
+				$product = Products::retrieve( $id );				
 			} catch ( Exception $exc ) {
 				return $this->show_err_msg( $exc->getMessage() );								
 			}
@@ -561,7 +579,7 @@ class Shortcodes {
 
 			$view_btn = str_replace( '%[product_url]%', get_permalink(), $tpl['view_product_btn'] );
 
-			$price = $product->get_price();
+			$price = $product->get_price();			
 			
 			if ( empty( $price ) ) {
 				$price = '0';

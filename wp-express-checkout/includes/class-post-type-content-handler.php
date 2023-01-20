@@ -28,6 +28,9 @@ class Post_Type_Content_Handler {
 	public function __construct() {
 		// handle single product page display.
 		add_filter( 'the_content', array( __CLASS__, 'filter_post_type_content' ), 10 );
+
+		//handle the output on archive pages
+		add_filter( 'the_content', array( __CLASS__, 'filter_archive_post_content' ), 10 );
 	}
 
 	/**
@@ -57,6 +60,20 @@ class Post_Type_Content_Handler {
 				remove_filter( 'the_content', array( __CLASS__, 'filter_post_type_content' ), 10 );
 				$content = do_shortcode( '[wp_express_checkout product_id="' . $post->ID . '" template="2" is_post_tpl="1" in_the_loop="' . + in_the_loop() . '"]' );
 				add_filter( 'the_content', array( __CLASS__, 'filter_post_type_content' ), 10 );
+			}
+		}
+		return $content;
+	}
+
+	public static function filter_archive_post_content( $content ) {
+		global $post, $wp_query;
+		if ( isset( $post ) && $wp_query->is_main_query() ) {
+			if (   isset( $post->post_type ) && is_archive() && Products::$products_slug === $post->post_type ) { // Handle the content for product type post.
+				remove_filter( 'the_content', array( __CLASS__, 'filter_archive_post_content' ), 10 );
+
+				$content = do_shortcode( '[wp_express_checkout product_id="' . $post->ID . '" template="1" is_post_tpl="1" in_the_loop="' . + in_the_loop() . '"]' );
+				
+				add_filter( 'the_content', array( __CLASS__, 'filter_archive_post_content' ), 10 );
 			}
 		}
 		return $content;

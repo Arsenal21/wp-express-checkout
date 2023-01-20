@@ -96,19 +96,43 @@ CSS class names should use dashes. Example: asp-product-description
     line-height: 1em;
 }
 
+/* Sorting */
+#wpec-sort-by-form{
+    float:left;
+    width:30%
+}
+
+#wpec-sort-by-form select{
+vertical-align: middle;
+height: 35px;
+padding: 5px;
+box-sizing: border-box;
+width: 100%;
+display: inline-block;
+line-height: normal;
+}
+
 /* Search */
 
 #wpec-search-form{
     text-align: center;
     margin-bottom: 20px;
+    float:right;
+    width: 60%;
 }
 .wpec-listing-search-field{
-    width: 90%;
+    /* width: 90%;
     max-width: 90%;
-    text-align: center;
+    text-align: center; */
     position: relative;
     height: 35px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
+
+
+    margin: 0;
+    text-align: right;
+    width: 100%;
+    max-width: 100%;
 }
 .wpec-listing-search-field input {
     vertical-align: middle;
@@ -189,8 +213,13 @@ CSS class names should use dashes. Example: asp-product-description
         display: flex;
     }
     .wpec-listing-search-field{
-        width: 70%;
-        max-width: 70%;
+        /* width: 70%;
+        max-width: 70%; */
+
+        margin: 0;
+        text-align: right;
+        width: 100%;
+        max-width: 100%;
     }
     .wpec-grid-item {
         width: 31%;
