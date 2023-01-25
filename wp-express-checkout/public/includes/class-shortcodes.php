@@ -95,7 +95,7 @@ class Shortcodes {
 
 		$quantity        = $product->get_quantity();
 		$url             = $product->get_download_url();
-		$button_text     = $product->get_button_text();
+		$button_text     = isset( $atts['button_text'] ) ? $atts['button_text'] : $product->get_button_text();
 		$thank_you_url   = ! empty( $atts['thank_you_url'] ) ? $atts['thank_you_url'] : $product->get_thank_you_url();
 		$btn_type        = $product->get_button_type();
 		$btn_sizes       = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );

@@ -160,6 +160,7 @@ None
 - Added option to create product categories and apply it to certain products.
 - Added option to create product tags and apply it to some products.
 - Added the following options to sort products in the shop page (sort by latest, sort by title, sort by price).
+- The "button_text" parameter can now be used in the [wp_express_checkout] shortcode to customize the text of the Buy Now button.
 
 = 2.2.6 =
 * The shop page will list the products by ID in descending order by default.
