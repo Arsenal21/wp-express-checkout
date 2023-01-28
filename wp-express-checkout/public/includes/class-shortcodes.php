@@ -163,8 +163,8 @@ class Shortcodes {
 			load_template( $located, false );
 			$output .= ob_get_clean();
 		} else {
+			//Load the defalt template
 			$located  = self::locate_template( "content-product-default.php" );
-			
 			ob_start();
 			load_template( $located, false );
 			$output .= ob_get_clean();			
