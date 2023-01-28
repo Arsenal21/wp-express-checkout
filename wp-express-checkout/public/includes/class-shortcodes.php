@@ -163,7 +163,11 @@ class Shortcodes {
 			load_template( $located, false );
 			$output .= ob_get_clean();
 		} else {
-			$output .= $this->generate_pp_express_checkout_button( $args );
+			$located  = self::locate_template( "content-product-default.php" );
+			
+			ob_start();
+			load_template( $located, false );
+			$output .= ob_get_clean();			
 		}
 		wp_reset_postdata();
 
@@ -581,11 +585,25 @@ class Shortcodes {
 
 			$price = $product->get_price();			
 			
-			if ( empty( $price ) ) {
-				$price = '0';
-			}
+			$price_args = array_merge(
+				array(
+					'price'           => 0,
+					'shipping'        => 0,
+					'tax'             => 0,
+					'quantity'        => 1,
+				),
+				array(
+					'name'            => get_the_title( $id ),
+					'price'           => (float) $product->get_price(),
+					'shipping'        => $product->get_shipping(),
+					'tax'             => $product->get_tax(),
+					'quantity'        => $product->get_quantity(),
+					'product_id'      => $id,
+				)
+			);
 
-			$price=esc_html( Utils::price_format( $price ) );
+			
+			$price = $this->generate_price_tag( $price_args );
 
 			$item = str_replace(
 				array(
@@ -777,12 +795,25 @@ class Shortcodes {
 
 			$price = $product->get_price();
 
-			if (empty($price)) {
-				$price = '0';
-			}
-
-			$price = esc_html(Utils::price_format($price));
-
+			$price_args = array_merge(
+				array(
+					'price'           => 0,
+					'shipping'        => 0,
+					'tax'             => 0,
+					'quantity'        => 1,
+				),
+				array(
+					'name'            => get_the_title( $id ),
+					'price'           => (float) $product->get_price(),
+					'shipping'        => $product->get_shipping(),
+					'tax'             => $product->get_tax(),
+					'quantity'        => $product->get_quantity(),
+					'product_id'      => $id,
+				)
+			);
+			
+			$price = $this->generate_price_tag( $price_args );
+			
 			$item = str_replace(
 				array(
 					'%[product_id]%',
