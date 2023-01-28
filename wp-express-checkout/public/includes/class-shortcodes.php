@@ -283,7 +283,8 @@ class Shortcodes {
 	}
 
 	public function generate_price_tag( $args ) {
-		$output = '<span class="wpec-price-amount">' . esc_html( Utils::price_format( (float)$args['price'] ) ) . '</span>';
+		$args['price'] = (float)$args['price'];//Cast the price amount to float.
+		$output = '<span class="wpec-price-amount">' . esc_html( Utils::price_format( $args['price'] ) ) . '</span>';
 		$output .= ' <span class="wpec-new-price-amount"></span>';
 		$qnt_style = 2 > $args['quantity'] ? ' style="display:none;"' : '';
 		/* translators: quantity */
