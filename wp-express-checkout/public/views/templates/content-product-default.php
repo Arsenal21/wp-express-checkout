@@ -7,8 +7,8 @@
 
 $wpec_shortcode = WP_Express_Checkout\Shortcodes::get_instance();
 ?>
-
-<div class="wpec-product-item wpec-product-item-<?php echo esc_attr( $wpec_button_args['product_id'] ); ?> wpec-product-default-template">
+<!-- the .wpec-product-item-wrapper class is needed for the JS code to find the .wpec-price-container within it -->
+<div class="wpec-product-default-template wpec-product-item-wrapper wpec-product-item-<?php echo esc_attr( $wpec_button_args['product_id'] ); ?>">
 	
 	<div class="wpec-price-container <?php echo esc_attr( $wpec_button_args['price_class'] );?>" style="display:none">
 		<?php echo $wpec_shortcode->generate_price_tag( $wpec_button_args ); ?>

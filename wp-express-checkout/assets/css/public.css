@@ -10,16 +10,6 @@
 	padding: 15px;
 }
 
-.wpec-product-default-template{
-	display: inline;
-	border: 0;
-	-webkit-box-shadow: none;
-	box-shadow: none;
-	margin-top: 0px;
-	margin-bottom: 0px;
-	padding: 5px;
-}
-
 .wpec-product-item-thumbnail img {
 	width: 75px;
 	height: 75px;

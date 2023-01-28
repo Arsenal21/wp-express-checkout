@@ -11,7 +11,7 @@ $wpec_button_args["button_text"] = __( "Buy Now" , "wp-express-checkout" );
 
 ?>
 
-<div class="wpec-product-item-template-3 wpec-product-item-<?php echo esc_attr( $wpec_button_args['product_id'] ); ?>">
+<div class="wpec-product-item-template-3 wpec-product-item-wrapper wpec-product-item-<?php echo esc_attr( $wpec_button_args['product_id'] ); ?>">
     <div class="wpec-product-inner-cont-template-3">
         <div class="wpec-product-item-thumbnail-3">
             <?php if ( ! empty( $wpec_button_args['thumbnail_url'] ) ) { ?>
