@@ -1,6 +1,8 @@
 <?php
 
 namespace WP_Express_Checkout;
+use WP_UnitTest_Factory_For_User;
+use WP_UnitTest_Factory_For_Post;
 
 require_once WPEC_TESTS_DIR . '/mocks/mock-product-type.php';
 
@@ -17,13 +19,17 @@ class ProductsTest extends \WP_UnitTestCase {
 	 * @var Products
 	 */
 	protected $object;
+	protected $factory;
+	protected $factory_post;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
-	public function setUp() {
+	public function setUp() :void{
 		$this->object = new Products;
+		$this->factory = new WP_UnitTest_Factory_For_User();
+		$this->factory_post = new WP_UnitTest_Factory_For_Post();
 	}
 
 	/**
@@ -40,15 +46,15 @@ class ProductsTest extends \WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Products::register_post_type
 	 */
 	public function testRegister_post_type__permissions() {
-		$contributor_id = $this->factory->user->create( [ 'role' => 'contributor' ] );
-		$admin_id       = $this->factory->user->create( [ 'role' => 'administrator' ] );
+		$contributor_id = $this->factory->create( [ 'role' => 'contributor' ] );
+		$admin_id       = $this->factory->create( [ 'role' => 'administrator' ] );
 
-		$product_id = $this->factory->post->create( [ 'post_type' => Products::$products_slug, 'post_author' => $contributor_id ] );
+		$product_id = $this->factory_post->create( [ 'post_type' => Products::$products_slug, 'post_author' => $contributor_id ] );
 
 		$this->assertFalse( user_can( $contributor_id, 'edit_post', $product_id ) );
 		$this->assertTrue( user_can( $admin_id, 'edit_post', $product_id ) );
 
-		$product_id = $this->factory->post->create( [ 'post_type' => Products::$products_slug, 'post_author' => $admin_id ] );
+		$product_id = $this->factory_post->create( [ 'post_type' => Products::$products_slug, 'post_author' => $admin_id ] );
 
 		$this->assertTrue( user_can( $admin_id, 'edit_post', $product_id ) );
 		$this->assertTrue( user_can( $admin_id, 'edit_post', $product_id ) );
@@ -74,7 +80,7 @@ class ProductsTest extends \WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Products::retrieve
 	 */
 	public function testRetrieve__invalid_type() {
-		$product_id = $this->factory->post->create(
+		$product_id = $this->factory_post->create(
 			[
 				'post_type' => 'post',
 			]
@@ -87,7 +93,7 @@ class ProductsTest extends \WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Products::retrieve
 	 */
 	public function testRetrieve__unknown_product_type() {
-		$product_id = $this->factory->post->create(
+		$product_id = $this->factory_post->create(
 			[
 				'post_type' => \WP_Express_Checkout\Products::$products_slug,
 				'meta_input' => [
@@ -103,7 +109,7 @@ class ProductsTest extends \WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Products::retrieve
 	 */
 	public function testRetrieve__reflects_type_filter() {
-		$product_id = $this->factory->post->create(
+		$product_id = $this->factory_post->create(
 			[
 				'post_type' => \WP_Express_Checkout\Products::$products_slug,
 				'meta_input' => [
@@ -123,7 +129,7 @@ class ProductsTest extends \WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Products::retrieve
 	 */
 	public function testRetrieve__reflects_type_default() {
-		$product_id = $this->factory->post->create(
+		$product_id = $this->factory_post->create(
 			[
 				'post_type' => \WP_Express_Checkout\Products::$products_slug,
 			]
@@ -139,7 +145,7 @@ class ProductsTest extends \WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Products::retrieve
 	 */
 	public function testRetrieve__reflects_type_one_time() {
-		$product_id = $this->factory->post->create(
+		$product_id = $this->factory_post->create(
 			[
 				'post_type' => \WP_Express_Checkout\Products::$products_slug,
 				'meta_input' => [
@@ -157,7 +163,7 @@ class ProductsTest extends \WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Products::retrieve
 	 */
 	public function testRetrieve__reflects_type_legacy_donation() {
-		$product_id = $this->factory->post->create(
+		$product_id = $this->factory_post->create(
 			[
 				'post_type' => \WP_Express_Checkout\Products::$products_slug,
 				'meta_input' => [
@@ -175,7 +181,7 @@ class ProductsTest extends \WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Products::retrieve
 	 */
 	public function testRetrieve__reflects_type_donation() {
-		$product_id = $this->factory->post->create(
+		$product_id = $this->factory_post->create(
 			[
 				'post_type' => \WP_Express_Checkout\Products::$products_slug,
 				'meta_input' => [
@@ -200,7 +206,7 @@ class ProductsTest extends \WP_UnitTestCase {
 
 		new Integrations();
 
-		$product_id = $this->factory->post->create(
+		$product_id = $this->factory_post->create(
 			[
 				'post_type' => \WP_Express_Checkout\Products::$products_slug,
 				'meta_input' => [

@@ -163,8 +163,8 @@ class Shortcodes {
 			load_template( $located, false );
 			$output .= ob_get_clean();
 		} else {
-			//Load the defalt template
 			$located  = self::locate_template( "content-product-default.php" );
+			
 			ob_start();
 			load_template( $located, false );
 			$output .= ob_get_clean();			
@@ -282,9 +282,9 @@ class Shortcodes {
 		return $output;
 	}
 
-	public function generate_price_tag( $args ) {
-		$args['price'] = (float)$args['price'];//Cast the price amount to float.
-		$output = '<span class="wpec-price-amount">' . esc_html( Utils::price_format( $args['price'] ) ) . '</span>';
+	public function generate_price_tag( $args ) {		
+		$args['price']	= floatval($args['price']);
+		$output = '<span class="wpec-price-amount">' . esc_html( Utils::price_format( $args['price'] ) ) . '</span>';		
 		$output .= ' <span class="wpec-new-price-amount"></span>';
 		$qnt_style = 2 > $args['quantity'] ? ' style="display:none;"' : '';
 		/* translators: quantity */

@@ -20,7 +20,7 @@ class Payment_Processor_FreeTest extends \WP_Ajax_UnitTestCase {
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
-	public function setUp() {
+	public function setUp():void {
 		parent::setUp();
 		remove_all_actions( 'wp_ajax_wpec_process_empty_payment' );
 		remove_all_actions( 'wp_ajax_nopriv_wpec_process_empty_payment' );
