@@ -27,7 +27,7 @@ class Dynamic_BlockTest extends WP_UnitTestCase {
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
-	public function setUp() {
+	public function setUp() :void{
 		require_once WPEC_TESTS_DIR . '/mocks/mock-dynamic-block.php';
 		$this->registry = WP_Block_Type_Registry::get_instance();
 		$this->object   = new Dynamic_Block_Test( [ 'test' => true ] );

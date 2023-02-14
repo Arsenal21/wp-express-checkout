@@ -30,7 +30,7 @@ class Order_Tags_HtmlTest extends WP_UnitTestCase {
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
-	public function setUp() {
+	public function setUp():void {
 		parent::setUp();
 
 		$product_id = $this->factory->post->create(
@@ -86,8 +86,8 @@ class Order_Tags_HtmlTest extends WP_UnitTestCase {
 	public function testProduct_details() {
 		$this->order->add_item( 'dummy', 'Dummy stuff', 42 );
 		$output = $this->object->product_details();
-		$this->assertContains( 'Dummy stuff', $output );
-		$this->assertContains( '42', $output );
+		$this->assertStringContainsString( 'Dummy stuff', $output );
+		$this->assertStringContainsString( '42', $output );
 	}
 
 	/**
@@ -172,8 +172,8 @@ class Order_Tags_HtmlTest extends WP_UnitTestCase {
 				'target'      => "_test_blank",
 			]
 		);
-		$this->assertContains( 'test download link 2', $output );
-		$this->assertContains( '_test_blank', $output );
+		$this->assertStringContainsString( 'test download link 2', $output );
+		$this->assertStringContainsString( '_test_blank', $output );
 	}
 
 	/**

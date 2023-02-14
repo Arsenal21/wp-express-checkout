@@ -20,7 +20,7 @@ class EmailsTest extends \WP_Ajax_UnitTestCase {
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
-	public function setUp() {
+	public function setUp() :void{
 		parent::setUp();
 		require_once WPEC_TESTS_DIR . '/mocks/mock-payment-processor.php';
 		reset_phpmailer_instance();
@@ -121,10 +121,10 @@ class EmailsTest extends \WP_Ajax_UnitTestCase {
 
 		$result = Emails::send( 'to@example.com', 'Dummy sender <from@example.com>', 'test email', "This is a test email \r\n with <strong>HTML</strong>" );
 
-		$this->assertTrue( $result );
-		$this->assertNotContains( 'text/html', $this->mailer->get_sent()->header );
-		$this->assertNotContains( '<br />', $this->mailer->get_sent()->body );
-		$this->assertContains( 'From: Dummy sender <from@example.com>', $this->mailer->get_sent()->header );
+		$this->assertTrue( $result );		
+		$this->assertStringNotContainsString( 'text/html', $this->mailer->get_sent()->header );
+		$this->assertStringNotContainsString( '<br />', $this->mailer->get_sent()->body );
+		$this->assertStringContainsString( 'From: Dummy sender <from@example.com>', $this->mailer->get_sent()->header );
 	}
 
 	/**
@@ -136,8 +136,8 @@ class EmailsTest extends \WP_Ajax_UnitTestCase {
 		$result = Emails::send( 'to@example.com', 'Dummy sender <from@example.com>', 'test email', "This is a test email \r\n with <strong>HTML</strong>" );
 
 		$this->assertTrue( $result );
-		$this->assertContains( 'text/html', $this->mailer->get_sent()->header );
-		$this->assertContains( '<br />', $this->mailer->get_sent()->body );
+		$this->assertStringContainsString( 'text/html', $this->mailer->get_sent()->header );
+		$this->assertStringContainsString( '<br />', $this->mailer->get_sent()->body );
 	}
 
 }

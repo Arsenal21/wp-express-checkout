@@ -21,7 +21,7 @@ class WooCommerce_Payment_ProcessorTest extends \WP_UnitTestCase {
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
-	public function setUp() {
+	public function setUp():void {
 		$this->object = new WooCommerce_Payment_Processor;
 	}
 

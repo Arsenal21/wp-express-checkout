@@ -30,7 +30,7 @@ class Order_Tags_PlainTest extends WP_UnitTestCase {
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
-	public function setUp() {
+	public function setUp():void {
 		parent::setUp();
 
 		$product_id = $this->factory->post->create(
@@ -55,9 +55,9 @@ class Order_Tags_PlainTest extends WP_UnitTestCase {
 	public function testProduct_details() {
 		$this->order->add_item( 'dummy', 'Dummy stuff', 42 );
 		$output = $this->object->product_details();
-		$this->assertContains( 'Dummy stuff', $output );
-		$this->assertContains( '42', $output );
-		$this->assertContains( "\n", $output );
+		$this->assertStringContainsString( 'Dummy stuff', $output );
+		$this->assertStringContainsString( '42', $output );
+		$this->assertStringContainsString( "\n", $output );
 	}
 
 	/**
@@ -74,7 +74,7 @@ class Order_Tags_PlainTest extends WP_UnitTestCase {
 	 */
 	public function testDownload_link__reflects() {
 		$output = $this->object->download_link();
-		$this->assertContains( "\n" . $this->product_id . ' - download link:', $output );
+		$this->assertStringContainsString( "\n" . $this->product_id . ' - download link:', $output );
 	}
 
 }

@@ -7,6 +7,7 @@ namespace WP_Express_Checkout\Admin;
  *
  * @covers WP_Express_Checkout\Admin\Admin
  */
+//push for running unit test on repo
 class AdminTest extends \WP_UnitTestCase {
 
 	/**
@@ -18,7 +19,7 @@ class AdminTest extends \WP_UnitTestCase {
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
-	public function setUp() {
+	public function setUp():void {
 		$this->object = Admin::get_instance();
 	}
 

@@ -25,7 +25,7 @@ class Payment_ProcessorTest extends \WP_Ajax_UnitTestCase {
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
-	public function setUp() {
+	public function setUp():void {
 		parent::setUp();
 		require_once WPEC_TESTS_DIR . '/mocks/mock-payment-processor.php';
 
@@ -160,8 +160,8 @@ class Payment_ProcessorTest extends \WP_Ajax_UnitTestCase {
 		} catch ( \WPAjaxDieContinueException $e ) {
 			// We expected this, do nothing.
 		}
-		$this->assertTrue( isset( $e ) );
-		$this->assertNotContains( 'download link', $this->mailer->get_sent()->body );
+		$this->assertTrue( isset( $e ) );		
+		$this->assertStringNotContainsString( 'download link', $this->mailer->get_sent()->body );
 	}
 
 	/**
@@ -176,7 +176,7 @@ class Payment_ProcessorTest extends \WP_Ajax_UnitTestCase {
 		}
 
 		$this->assertTrue( isset( $e ) );
-		$this->assertContains( 'download link', $this->mailer->get_sent()->body );
+		$this->assertStringContainsString( 'download link', $this->mailer->get_sent()->body );
 	}
 
 	/**

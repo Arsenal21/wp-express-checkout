@@ -18,7 +18,7 @@ class Coupons_ListTest extends \WP_UnitTestCase {
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
-	public function setUp() {
+	public function setUp():void {
 		$this->object = new Coupons_List( [ 'screen' => 'front' ] );
 	}
 
