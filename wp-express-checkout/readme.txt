@@ -157,6 +157,7 @@ None
 == Changelog ==
 
 = WIP 2.2.7 =
+- [TODO] - Update the shop page documentation. Show screenshot with the new sorting options
 - Added option to create product categories and apply it to certain products.
 - Added option to create product tags and apply it to some products.
 - Added the following options to sort products in the shop page (sort by latest, sort by title, sort by price).

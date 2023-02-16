@@ -429,7 +429,13 @@ jQuery(document).ready(function($) {
 	function display_shortcode_meta_box( $post ) {
 		?>
 		<input type="text" name="ppec_product_shortcode" style="width: 100%;" class="wpec-select-on-click large-text" onfocus="this.select();" readonly value="[wp_express_checkout product_id=&quot;<?php echo $post->ID; ?>&quot;]">
-		<p class="description"><?php esc_html_e( 'Use this shortcode to display button for your product.', 'wp-express-checkout' ); ?></p>
+		<p class="description">
+			<?php esc_html_e( 'Use this shortcode to display button for your product.', 'wp-express-checkout' ); ?>
+			<?php esc_html_e( ' Read the ', 'wp-express-checkout' ); ?>
+			<a href="https://wp-express-checkout.com/creating-and-display-a-product/" target="_blank"><?php esc_html_e( 'documentation', 'wp-express-checkout' ); ?></a>
+			<?php esc_html_e( ' to learn more.', 'wp-express-checkout' ); ?>
+			
+		</p>
 		<?php
 	}
 
