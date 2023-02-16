@@ -491,7 +491,7 @@ class Shortcodes {
 		);
 
 		//if user has changed sort by from UI
-		$sort_by = filter_input( INPUT_GET, 'wpec-sortby', FILTER_SANITIZE_STRING );
+		$sort_by = isset( $_GET['wpec-sortby'] ) ? sanitize_text_field( stripslashes ( $_GET['wpec-sortby'] ) ) : '';
 
 		include_once WPEC_PLUGIN_PATH . 'public/views/templates/all-products/all-products.php';
 
@@ -522,7 +522,7 @@ class Shortcodes {
 		
 		//handle search
 
-		$search = filter_input( INPUT_GET, 'wpec_search', FILTER_SANITIZE_STRING );
+		$search = isset( $_GET['wpec_search'] ) ? sanitize_text_field( stripslashes ( $_GET['wpec_search'] ) ) : '';
 
 		$search = empty( $search ) ? false : $search;
 
@@ -735,7 +735,7 @@ class Shortcodes {
 
 
 		//handle search
-		$search = filter_input(INPUT_GET, 'wpec_search', FILTER_SANITIZE_STRING);
+		$search = isset( $_GET['wpec_search'] ) ? sanitize_text_field( stripslashes ( $_GET['wpec_search'] ) ) : '';
 
 		$search = empty($search) ? false : $search;
 

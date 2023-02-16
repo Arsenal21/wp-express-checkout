@@ -531,7 +531,7 @@ jQuery(document).ready(function($) {
 			update_post_meta( $post_id, 'wpec_variations_opts', false );
 		}
 
-		$hide_amount_input = filter_input( INPUT_POST, 'wpec_product_hide_amount_input', FILTER_SANITIZE_STRING );
+		$hide_amount_input = isset( $_POST['wpec_product_hide_amount_input'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_hide_amount_input'] ) ) : '';
 		$hide_amount_input = ! empty( $hide_amount_input ) ? true : false;
 		update_post_meta( $post_id, 'wpec_product_hide_amount_input', $hide_amount_input );
 
@@ -549,7 +549,7 @@ jQuery(document).ready(function($) {
 		update_post_meta( $post_id, 'wpec_download_count', $download_count );
 
 		// product type.
-		$product_type = filter_input( INPUT_POST, 'wpec_product_type_radio', FILTER_SANITIZE_STRING );
+		$product_type = isset( $_POST['wpec_product_type_radio'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_type_radio'] ) ) : '';
 		update_post_meta( $post_id, 'wpec_product_type', $product_type );
 
 		// product thumbnail.
@@ -563,13 +563,13 @@ jQuery(document).ready(function($) {
 		update_post_meta( $post_id, 'wpec_product_thankyou_page', $thank_url );
 
 		// price.
-		$price = filter_input( INPUT_POST, 'ppec_product_price', FILTER_SANITIZE_STRING );
+		$price = isset( $_POST['ppec_product_price'] ) ? sanitize_text_field( stripslashes ( $_POST['ppec_product_price'] ) ) : '';
 		$price = ! empty( $price ) ? floatval( $price ) : 0;
 
 		update_post_meta( $post_id, 'ppec_product_price', $price );
 
 		// min amount.
-		$min_amount = filter_input( INPUT_POST, 'wpec_product_min_amount', FILTER_SANITIZE_STRING );
+		$min_amount = isset( $_POST['wpec_product_min_amount'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_min_amount'] ) ) : '';
 		$min_amount = ! empty( $min_amount ) ? floatval( $min_amount ) : 0;
 
 		update_post_meta( $post_id, 'wpec_product_min_amount', $min_amount );
@@ -588,22 +588,22 @@ jQuery(document).ready(function($) {
 		update_post_meta( $post_id, 'wpec_product_stock_items', absint( $_POST['wpec_product_stock_items'] ) );
 
 		// shipping & tax.
-		$shipping = filter_input( INPUT_POST, 'wpec_product_shipping', FILTER_SANITIZE_STRING );
+		$shipping = isset( $_POST['wpec_product_shipping'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_shipping'] ) ) : '';
 		$shipping = ! empty( $shipping ) ? floatval( $shipping ) : $shipping;
 		update_post_meta( $post_id, 'wpec_product_shipping', $shipping );
 		// allow custom quantity.
 		$enable_shipping = filter_input( INPUT_POST, 'wpec_product_shipping_enable', FILTER_SANITIZE_NUMBER_INT );
 		update_post_meta( $post_id, 'wpec_product_shipping_enable', $enable_shipping );
 
-		$tax = filter_input( INPUT_POST, 'wpec_product_tax', FILTER_SANITIZE_STRING );
+		$tax = isset( $_POST['wpec_product_tax'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_tax'] ) ) : '';
 		$tax = floatval( $tax );
 		$tax = empty( $tax ) ? '' : $tax;
 		update_post_meta( $post_id, 'wpec_product_tax', $tax );
 
-		$button_text = filter_input( INPUT_POST, 'wpec_product_button_text', FILTER_SANITIZE_STRING );
+		$button_text = isset( $_POST['wpec_product_button_text'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_button_text'] ) ) : '';
 		update_post_meta( $post_id, 'wpec_product_button_text', sanitize_text_field( $button_text ) );
 
-		$button_type = filter_input( INPUT_POST, 'wpec_product_button_type', FILTER_SANITIZE_STRING );
+		$button_type = isset( $_POST['wpec_product_button_type'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_button_type'] ) ) : '';
 		update_post_meta( $post_id, 'wpec_product_button_type', sanitize_text_field( $button_type ) );
 
 		update_post_meta( $post_id, 'wpec_product_coupons_setting', isset( $_POST['wpec_product_coupons_setting'] ) ? sanitize_text_field( $_POST['wpec_product_coupons_setting'] ) : '0' );
