@@ -850,6 +850,25 @@
 .wpec-out-of-stock {
 	font-weight: 700;
 }
+/* Product template 1 CSS */
+.wpec-product-item-template-1 .wpec-product-item-thumbnail{
+	width: 150px;
+	height: 150px;
+	float: left;
+	margin-right: 10px;
+}
+.wpec-product-item-template-1 .wpec-product-item-thumbnail img{
+	width:100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+@media (max-width:768px)
+{
+	.wpec-product-item-template-1 .wpec-entry-title{
+		line-height: 40px;
+	}
+}
 
 /* Product template 3 CSS */
 .wpec-product-item-thumbnail-3 {

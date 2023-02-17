@@ -97,8 +97,7 @@ CSS class names should use dashes. Example: asp-product-description
 }
 
 /* Sorting */
-#wpec-sort-by-form{
-    float:left;
+#wpec-sort-by-form{    
     width:30%
 }
 
@@ -116,9 +115,19 @@ line-height: normal;
 
 #wpec-search-form{
     text-align: center;
-    margin-bottom: 20px;
-    float:right;
+    margin-bottom: 20px;    
     width: 60%;
+}
+#wpec-sort-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+#wpec-search-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .wpec-listing-search-field{
     /* width: 90%;
