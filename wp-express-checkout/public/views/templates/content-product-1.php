@@ -8,7 +8,7 @@
 $wpec_shortcode = WP_Express_Checkout\Shortcodes::get_instance();
 ?>
 
-<div class="wpec-product-item wpec-product-item-<?php echo esc_attr( $wpec_button_args['product_id'] ); ?>">
+<div class="wpec-product-item wpec-product-item-template-1 wpec-product-item-<?php echo esc_attr( $wpec_button_args['product_id'] ); ?>">
 	<div class="wpec-product-item-top">
 		<div class="wpec-product-item-thumbnail">
 			<?php if ( ! empty( $wpec_button_args['thumbnail_url'] ) ) { ?>
