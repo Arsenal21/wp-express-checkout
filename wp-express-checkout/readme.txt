@@ -164,6 +164,7 @@ None
 - The "button_text" parameter can now be used in the [wp_express_checkout] shortcode to customize the text of the Buy Now button.
 - Fixed tax amount display issue with a subscription type product.
 - Added a separate template file for the "button only" shortcode output.
+- Better thumbnail image fit for product template 1.
 
 = 2.2.6 =
 * The shop page will list the products by ID in descending order by default.
