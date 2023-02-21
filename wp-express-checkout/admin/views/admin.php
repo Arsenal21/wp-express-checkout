@@ -136,7 +136,7 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 					$args[ 'disable-card' ]	 = $arg;
 					}
 				}
-				$script_url = add_query_arg( $args, 'https://www.paypal.com/sdk/js?client-id=123' );
+				$script_url = add_query_arg( $args, 'https://www.paypal.com/sdk/js?client-id=test' );
 				printf( '<script src="%s"></script>', $script_url );
 				?>
 				<script>

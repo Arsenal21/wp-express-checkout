@@ -545,5 +545,3 @@ var wpecModal = function( $ ) {
 };
 
 jQuery( wpecModal );
-
-

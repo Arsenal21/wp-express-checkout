@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.1
-Stable tag: 2.2.6
+Stable tag: 2.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -156,8 +156,8 @@ None
 
 == Changelog ==
 
-= WIP 2.2.7 =
-- [TODO] - Update the shop page documentation. Show screenshot with the new sorting options
+= 2.2.7 =
+- Added a feature to enable "Force Download" option for digital products.
 - Added option to create product categories and apply it to certain products.
 - Added option to create product tags and apply it to some products.
 - Added the following options to sort products in the shop page (sort by latest, sort by title, sort by price).
@@ -165,6 +165,8 @@ None
 - Fixed tax amount display issue with a subscription type product.
 - Added a separate template file for the "button only" shortcode output.
 - Better thumbnail image fit for product template 1.
+- The shop page has new options to sort the products by title, price, date.
+- Fixed the button preview not working in the settings page.
 
 = 2.2.6 =
 * The shop page will list the products by ID in descending order by default.
