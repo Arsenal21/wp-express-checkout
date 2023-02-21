@@ -346,6 +346,11 @@ class Products_Meta_Boxes {
 			} );
 		</script>
 		<hr />
+		<strong>Force Download</strong>
+		<br />		
+		<p>Read about <a href="https://wp-express-checkout.com/force-download/" target="_blank">force download tutorial</a> to learn how the feature works.</p>
+		<input type="checkbox" value="1" name="wpec_force_download" <?php echo $post->wpec_force_download==1?"checked":""  ?> ><span><?php esc_html_e( 'Enable Force Download', 'wp-express-checkout' ); ?></span>
+		<hr />
 		<strong>Download Link Expiry Settings (Optional)</strong>
 		<br />
 		<p>Read the <a href="https://wp-express-checkout.com/limiting-product-download-links/" target="_blank">download link expiry tutorial</a> to learn how the feature works.</p>
@@ -543,6 +548,9 @@ jQuery(document).ready(function($) {
 		} else {
 			update_post_meta( $post_id, 'ppec_product_upload', esc_url( $product_url, array( 'http', 'https', 'dropbox' ) ) );
 		}
+		$force_download = filter_input( INPUT_POST, 'wpec_force_download', FILTER_SANITIZE_NUMBER_INT );				
+		update_post_meta( $post_id, 'wpec_force_download', $force_download );
+		
 		$download_duration = filter_input( INPUT_POST, 'wpec_download_duration', FILTER_SANITIZE_NUMBER_INT );
 		update_post_meta( $post_id, 'wpec_download_duration', $download_duration );
 		$download_count = filter_input( INPUT_POST, 'wpec_download_count', FILTER_SANITIZE_NUMBER_INT );

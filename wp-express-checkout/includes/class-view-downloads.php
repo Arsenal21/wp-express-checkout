@@ -285,7 +285,13 @@ class View_Downloads {
 		// Clean the file URL.
 		$file_url = stripslashes( trim( $file_url ) );
 
-		Utils::redirect_to_url( $file_url );
+		if($product->wpec_force_download)
+		{
+			Utils::force_download_file($file_url);
+		}
+		else{
+			Utils::redirect_to_url( $file_url );					
+		}
 
 	}
 
