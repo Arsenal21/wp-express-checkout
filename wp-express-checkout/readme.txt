@@ -53,6 +53,7 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 * Shop page that will list all your products in a grid view. Users can browse your products and purchase it.
 * Allow the customers to automatically download the file once the purchase is completed via PayPal.
 * You can deliver the digital downloads using encrypted download links that expire automatically.
+* Ability to enable force download option on your digital products.
 * Offer Buy Now Pay Later payment option to your customers.
 * Accept Payments via Venmo easily. Your customers can pay using the Venmo option.
 * View the transactions from your WordPress admin dashboard.
