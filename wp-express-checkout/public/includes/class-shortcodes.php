@@ -661,7 +661,8 @@ class Shortcodes {
 			$tpl['page'] = str_replace( '_%' . $key . '%_', $value, $tpl['page'] );
 		}
 
-		return $tpl['page'];
+		$output = '<div class="wpec_shop_products">'.$tpl['page'].'</div>';
+		return $output;
 	}
 
 	public function shortcode_wpec_show_products_from_category($params = array())
@@ -870,7 +871,8 @@ class Shortcodes {
 			$tpl['page'] = str_replace('_%' . $key . '%_', $value, $tpl['page']);
 		}
 
-		return $tpl['page'];
+		$output = '<div class="wpec_shop_products">'.$tpl['page'].'</div>';
+		return $output;
 	}
 
 

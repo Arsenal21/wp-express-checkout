@@ -157,6 +157,9 @@ None
 
 == Changelog ==
 
+= WIP 2.2.9 =
+* The Shop page shortcode is now wrapped in a div element so it works better with block themes.
+
 = 2.2.8 =
 * Added a feature to enable "Force Download" option for digital products.
 * Added option to create product categories and apply it to certain products.
