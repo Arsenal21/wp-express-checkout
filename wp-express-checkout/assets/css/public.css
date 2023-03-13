@@ -454,7 +454,9 @@
 .wpec-pointer-events-none {
 	pointer-events: none;
 }
-
+.wpec-pointer-events-all{
+	pointer-events: all !important;
+}
 .wpec_billing_address_container, .wpec_shipping_address_container, .wpec_billing_user_info, .wpec-product-variations-wrapper {
 	display: grid;
 	gap: 24px;

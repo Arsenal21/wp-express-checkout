@@ -182,7 +182,7 @@
 
 			<div class="wpec-modal-overlay"></div>
 
-			<div class="wpec-modal-container">
+			<div class="wpec-modal-container wpec-pointer-events-all">
 				<div class="wpec-modal-content">
 					<!--Title-->
 					<div class="wpec-modal-content-title">
