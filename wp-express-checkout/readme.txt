@@ -159,6 +159,7 @@ None
 
 = WIP 2.2.9 =
 * The Shop page shortcode is now wrapped in a div element so it works better with block themes.
+* The URL payment feaature: Improved the scroll bar behavior in Google chrome browser.
 
 = 2.2.8 =
 * Added a feature to enable "Force Download" option for digital products.
