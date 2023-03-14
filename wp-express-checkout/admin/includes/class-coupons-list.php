@@ -69,13 +69,13 @@ class Coupons_List extends WP_List_Table {
 	public function column_default( $item, $column_name ) {
 		switch ( $column_name ) {
 			case 'exp_date':
-				return $item[ $column_name ] == 0 ? __( 'No expiry', 'wp-express-checkout' ) : $item[ $column_name ];
+				return $item[ $column_name ] == 0 ? __( 'No expiry', 'wp-express-checkout' ) : esc_attr($item[ $column_name ]);
 			case 'active':
 				return $item[ $column_name ] == 0 ? __( 'No', 'wp-express-checkout' ) : __( 'Yes', 'wp-express-checkout' );
 			case 'coupon':
 				$str = '';
 				// translators: %s is coupon code
-				$confirm_coupon_delete_msg = sprintf( __( 'Are you sure you want to delete "%s" coupon? This can\'t be undone.', 'wp-express-checkout' ), $item['coupon'] );
+				$confirm_coupon_delete_msg = sprintf( __( 'Are you sure you want to delete "%s" coupon? This can\'t be undone.', 'wp-express-checkout' ), esc_attr($item['coupon']) );
 				ob_start();
 				?>
 <a href="edit.php?post_type=<?php echo esc_attr( Products::$products_slug ); ?>&page=wpec-coupons&action=wpec_add_edit_coupon&wpec_coupon_id=<?php echo esc_attr( $item['id'] ); ?>" aria-label="<?php echo esc_attr( __( 'Edit coupon', 'wp-express-checkout' ) ); ?>"><?php echo esc_html( $item[ $column_name ] ); ?></a>
@@ -92,13 +92,13 @@ class Coupons_List extends WP_List_Table {
 				return $str;
 			case 'discount':
 				if ( $item['discount_type'] === 'perc' ) {
-					return $item[ $column_name ] . '%';
+					return esc_attr($item[ $column_name ]) . '%';
 				}
-				return $item[ $column_name ];
+				return esc_attr($item[ $column_name ]);
 			case 'red_limit':
-				return ! empty( $item[ $column_name ] ) ? $item[ $column_name ] : '—';
+				return ! empty( $item[ $column_name ] ) ? esc_attr($item[ $column_name ]) : '—';
 			default:
-				return $item[ $column_name ];
+				return esc_attr($item[ $column_name ]);
 		}
 	}
 

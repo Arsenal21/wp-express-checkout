@@ -332,14 +332,14 @@ class Coupons {
 			<tr>
 			<th scope="row"><?php _e( 'Coupon Code', 'wp-express-checkout' ); ?></th>
 			<td>
-				<input type="text" name="wpec_coupon[code]" value="<?php echo $is_edit ? $coupon['code'] : ''; ?>">
+				<input type="text" name="wpec_coupon[code]" value="<?php echo $is_edit ? esc_attr($coupon['code']) : ''; ?>">
 				<p class="description"><?php _e( 'Coupon code that you can share with your customers. Example: GET10OFF', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
 			<tr>
 			<th scope="row"><?php _e( 'Discount', 'wp-express-checkout' ); ?></th>
 			<td>
-				<input style="vertical-align: middle;" type="text" name="wpec_coupon[discount]" value="<?php echo $is_edit ? $coupon['discount'] : ''; ?>">
+				<input style="vertical-align: middle;" type="text" name="wpec_coupon[discount]" value="<?php echo $is_edit ? esc_attr($coupon['discount']) : ''; ?>">
 				<select name="wpec_coupon[discount_type]">
 				<option value="perc"<?php echo $is_edit && $coupon['discount_type'] === 'perc' ? ' selected' : ''; ?>><?php _e( 'Percent (%)', 'wp-express-checkout' ); ?></option>
 				<option value="fixed"<?php echo $is_edit && $coupon['discount_type'] === 'fixed' ? ' selected' : ''; ?>><?php _e( 'Fixed amount', 'wp-express-checkout' ); ?></option>
@@ -350,28 +350,28 @@ class Coupons {
 			<tr>
 			<th scope="row"><?php _e( 'Redemption Limit', 'wp-express-checkout' ); ?></th>
 			<td>
-				<input type="number" name="wpec_coupon[red_limit]"value="<?php echo $is_edit ? $coupon['red_limit'] : 0; ?>">
+				<input type="number" name="wpec_coupon[red_limit]"value="<?php echo $is_edit ? esc_attr($coupon['red_limit']) : 0; ?>">
 				<p class="description"><?php _e( 'Set max number of coupons available for redemption. Put 0 to make it unlimited.', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
 			<tr>
 			<th scope="row"><?php _e( 'Redemption Count', 'wp-express-checkout' ); ?></th>
 			<td>
-				<input type="number" name="wpec_coupon[red_count]"value="<?php echo $is_edit ? $coupon['red_count'] : 0; ?>">
+				<input type="number" name="wpec_coupon[red_count]"value="<?php echo $is_edit ? esc_attr($coupon['red_count']) : 0; ?>">
 				<p class="description"><?php _e( 'Number of already redeemed coupons.', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
 			<tr>
 			<th scope="row"><?php _e( 'Start Date', 'wp-express-checkout' ); ?></th>
 			<td>
-				<input class="datepicker-input" type="text" name="wpec_coupon[start_date]"value="<?php echo $is_edit ? $coupon['start_date'] : date( 'Y-m-d' ); ?>">
+				<input class="datepicker-input" type="text" name="wpec_coupon[start_date]"value="<?php echo $is_edit ? esc_attr($coupon['start_date']) : date( 'Y-m-d' ); ?>">
 				<p class="description"><?php _e( 'Start date when this coupon can be used.', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
 			<tr>
 			<th scope="row"><?php _e( 'Expiry Date', 'wp-express-checkout' ); ?></th>
 			<td>
-				<input class="datepicker-input" type="text" name="wpec_coupon[exp_date]"value="<?php echo $is_edit ? $coupon['exp_date'] : 0; ?>">
+				<input class="datepicker-input" type="text" name="wpec_coupon[exp_date]"value="<?php echo $is_edit ? esc_attr($coupon['exp_date']) : 0; ?>">
 				<p class="description"><?php _e( 'Date when this coupon will expire. Put 0 to disable expiry check.', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
@@ -487,7 +487,7 @@ class Coupons {
 		}
 		do_action( 'wpec_admin_save_coupon', $coupon_id, $coupon );
 		// translators: %s is coupon code
-		set_transient( 'wpec_coupons_admin_notice', sprintf( $is_edit ? __( 'Coupon "%s" has been updated.', 'wp-express-checkout' ) : __( 'Coupon "%s" has been created.', 'wp-express-checkout' ), $coupon['code'] ), 60 * 60 );
+		set_transient( 'wpec_coupons_admin_notice', sprintf( $is_edit ? __( 'Coupon "%s" has been updated.', 'wp-express-checkout' ) : __( 'Coupon "%s" has been created.', 'wp-express-checkout' ), esc_attr($coupon['code']) ), 60 * 60 );
 
 		wp_safe_redirect( 'edit.php?post_type=' . Products::$products_slug . '&page=wpec-coupons' );
 		exit;

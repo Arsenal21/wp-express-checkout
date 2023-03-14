@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.1
-Stable tag: 2.2.8
+Stable tag: 2.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -157,9 +157,10 @@ None
 
 == Changelog ==
 
-= WIP 2.2.9 =
+= 2.2.9 =
 * The Shop page shortcode is now wrapped in a div element so it works better with block themes.
-* The URL payment feaature: Improved the scroll bar behavior in Google chrome browser.
+* The URL payment feature: Improved the scroll bar behavior in Google chrome browser.
+* Better output escaping in the "Add Coupons" interface.
 
 = 2.2.8 =
 * Added a feature to enable "Force Download" option for digital products.
