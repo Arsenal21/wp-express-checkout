@@ -435,6 +435,7 @@
 
 .wpec-modal-item-thumbnail img {
 	border-radius: 6px;
+	object-fit: cover;
 }
 
 .wpec-modal-item-excerpt {
