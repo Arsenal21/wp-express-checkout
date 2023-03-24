@@ -34,6 +34,8 @@ class Admin {
 	 * @var string
 	 */
 	protected $option_name = 'ppdg-settings';
+	
+	public $plugin_slug;
 
 	/**
 	 * Initialize the plugin by loading admin scripts & styles and adding a
