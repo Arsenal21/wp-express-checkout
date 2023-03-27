@@ -509,7 +509,7 @@ class Order {
 			return;
 		}
 
-		$this->state = $date;
+		$this->refund_date = $date;
 		$this->update_meta( 'wpec_order_refund_date', $date );		
 	}
 
