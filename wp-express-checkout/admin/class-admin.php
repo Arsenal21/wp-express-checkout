@@ -637,17 +637,17 @@ class Admin {
 				remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
 				break;
 			case 'number':
-				$input = "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='{$this->option_name}[{$field}]' value='{$field_value}' size='{$size}' step='{$step}' min='{$min}' />";
+				$input = "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='{$this->option_name}[{$field}]' value='". esc_attr($field_value) ."' size='{$size}' step='{$step}' min='{$min}' />";
 				echo $this->wrap_label( $input, $label, $label_pos );
 				break;
 			default:
-				$input = "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='{$this->option_name}[{$field}]' value='{$field_value}' size='{$size}' />";
+				$input = "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='{$this->option_name}[{$field}]' value='". esc_attr($field_value) ."' size='{$size}' />";
 				echo $this->wrap_label( $input, $label, $label_pos );
 				break;
 		}
 
 		if ( $desc ) {
-			echo "<p class='description'>{$desc}</p>";
+			echo "<p class='description'>". wp_kses_post($desc) ."</p>";
 		}
 	}
 

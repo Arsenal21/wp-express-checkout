@@ -157,6 +157,10 @@ None
 
 == Changelog ==
 
+= WIP 2.3.0 =
+- Allow the apostrophe character to be used within the email subject field.
+- Output escaping for the settings menu item's description fields.
+
 = 2.2.9 =
 * The Shop page shortcode is now wrapped in a div element so it works better with block themes.
 * The URL payment feature: Improved the scroll bar behavior in Google chrome browser.
