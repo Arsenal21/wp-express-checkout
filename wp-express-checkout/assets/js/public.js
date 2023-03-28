@@ -383,26 +383,31 @@ var ppecHandler = function( data ) {
 	};
 
 	this.formatMoney = function( n ) {
-		var c = isNaN( c = Math.abs( parent.data.dec_num ) ) ? 2 : parent.data.dec_num,
-			d = d == undefined ? "." : parent.data.dec_sep,
-			t = t == undefined ? "," : parent.data.thousand_sep,
-			s = n < 0 ? "-" : "",
-			i = String( parseInt( n = Math.abs( Number( n ) || 0 ).toFixed( c ) ) ),
-			j = ( j = i.length ) > 3 ? j % 3 : 0;
+	var decimalPlaces = isNaN(decimalPlaces = Math.abs(parent.data.dec_num)) ? 2 : parent.data.dec_num;
+    var decimalSeparator = parent.data.dec_sep || ".";
+    var thousandSeparator = parent.data.thousand_sep || ",";
+    var sign = n < 0 ? "-" : "";
+    var integerPart = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(decimalPlaces)));
+    var integerPartLength = integerPart.length;
+    var remainderLength = integerPartLength > 3 ? integerPartLength % 3 : 0;
 
-		var result = s + ( j ? i.substr( 0, j ) + t : "" ) + i.substr( j ).replace( /(\d{3})(?=\d)/g, "$1" + t ) + ( c ? d + Math.abs( n - i ).toFixed( c ).slice( 2 ) : "" );
-		var formats = {
-			left: '{symbol}{price}',
-			left_space: '{symbol} {price}',
-			right: '{price}{symbol}',
-			right_space: '{price} {symbol}'
-		};
+    var formattedIntegerPart = sign +
+        (remainderLength ? integerPart.substr(0, remainderLength) + thousandSeparator : "") +
+        integerPart.substr(remainderLength).replace(/(\d{3})(?=\d)/g, "$1" + thousandSeparator) +
+        (decimalPlaces ? decimalSeparator + Math.abs(n - integerPart).toFixed(decimalPlaces).slice(2) : "");
 
-		result = formats[ parent.data.curr_pos ]
-			.replace( '{symbol}', parent.data.currency_symbol )
-			.replace( '{price}', result );
+    var formats = {
+        left: '{symbol}{price}',
+        left_space: '{symbol} {price}',
+        right: '{price}{symbol}',
+        right_space: '{price} {symbol}'
+    };
 
-		return result;
+	var formattedPrice = formats[parent.data.curr_pos]
+        .replace('{symbol}', parent.data.currency_symbol)
+        .replace('{price}', formattedIntegerPart);
+
+    return formattedPrice;
 	};
 
 	this.getPriceContainer = function() {

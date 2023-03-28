@@ -280,7 +280,7 @@ class Orders {
 		
 		if( $response->result->status == "COMPLETED" ){			
 			$order->set_status("refunded");
-			$order->set_refund_date(date( 'Y-m-d H:i:s', time() ));
+			$order->set_refund_date(gmdate( 'Y-m-d H:i:s', time() ));
 			Logger::log( 'Refund processed successfully!' );
 			return true;
 		}

@@ -185,12 +185,16 @@ class Orders_Meta_Boxes {
 				</a>
 			</li>
 			<li>
+				<?php if($order->get_status()=="refunded"):?>
+					<strong><?php esc_html_e( 'Transaction Refunded', 'wp-express-checkout' ); ?></strong>
+				<?php else:?>				
 				<a class="button wpec-order-action" data-action="paypal_refund" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'paypal-refund' ); ?>" href="#">
 					<span class="dashicons dashicons-money" style="line-height:1.8;font-size:16px;"></span>
 					<span class="wpec-order-action-label">
 						<?php esc_html_e( 'Refund Transaction', 'wp-express-checkout' ); ?>
 					</span>
 				</a>
+				<?php endif;?>
 			</li>
 		</ul>
 		<?php
