@@ -380,9 +380,9 @@ class Order {
 	 */
 	public function get_display_status() {
 		$statuses = array(
-			'incomplete' => __( 'Incomplete', 'wp-express-checkout' ),
-			'paid'       => __( 'Paid', 'wp-express-checkout' ),
-			'refunded'       => __( 'Refunded', 'wp-express-checkout' ),
+			'incomplete' => '<span class="wpec_status_incomplete">' . __( 'Incomplete', 'wp-express-checkout' ) . '</span>',
+			'paid'       => '<span class="wpec_status_paid">' . __( 'Paid', 'wp-express-checkout' ) . '</span>',
+			'refunded'   => '<span class="wpec_status_refunded">' . __( 'Refunded', 'wp-express-checkout' ) . '</span>',
 		);
 		$status = $this->get_status();
 		return $statuses[ $status ];

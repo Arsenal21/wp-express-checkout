@@ -30,8 +30,27 @@
 .dashicons-wpec-dashicon-1:before {
 	content: '\0043';
 }
-
 /* End dashicons */
+
+.wpec_status_paid{
+	padding: 7px 15px;
+	width: auto;
+	display: inline-block;
+	text-align: center;
+	min-width: 80px;
+	border-radius: 5px;
+	background-color: #b6e4b6;
+}
+
+.wpec_status_refunded, .wpec_status_incomplete{
+	padding: 7px 15px;
+	width: auto;
+	display: inline-block;
+	text-align: center;
+	min-width: 80px;
+	border-radius: 5px;
+	background-color: #e4d4b6;
+}
 
 .wpec-stars-container {
 	text-align: center;

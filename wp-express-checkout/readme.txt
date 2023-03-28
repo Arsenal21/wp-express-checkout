@@ -158,6 +158,7 @@ None
 == Changelog ==
 
 = WIP 2.3.0 =
+- Added an option to refund a transaction from the orders menu of the plugin.
 - Allow the apostrophe character to be used within the email subject field.
 - Output escaping for the settings menu item's description fields.
 
