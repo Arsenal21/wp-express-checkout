@@ -42,7 +42,7 @@
 	background-color: #b6e4b6;
 }
 
-.wpec_status_refunded, .wpec_status_incomplete{
+.wpec_status_refunded{
 	padding: 7px 15px;
 	width: auto;
 	display: inline-block;
@@ -50,6 +50,16 @@
 	min-width: 80px;
 	border-radius: 5px;
 	background-color: #e4d4b6;
+}
+
+.wpec_status_incomplete{
+	padding: 7px 15px;
+	width: auto;
+	display: inline-block;
+	text-align: center;
+	min-width: 80px;
+	border-radius: 5px;
+	background-color: #dedede;
 }
 
 .wpec-stars-container {
