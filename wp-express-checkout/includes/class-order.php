@@ -22,6 +22,7 @@ class Order {
 	 */
 	protected $resource_id = '0';
 
+	protected $capture_id='0';
 	/**
 	 * Parent order id for child order
 	 * @var int
@@ -70,6 +71,8 @@ class Order {
 	 */
 	protected $data = array();
 
+	protected $refund_date='';
+
 	/**
 	 * Sets up the order objects
 	 *
@@ -94,6 +97,8 @@ class Order {
 		$this->data  = array_filter( (array) get_post_meta( $this->id, 'wpec_order_data', true ) );
 
 		$this->resource_id = $this->get_meta_field( 'wpec_order_resource_id', '', $meta_fields );
+		$this->capture_id=$this->get_meta_field( 'wpec_order_capture_id', '', $meta_fields );
+		$this->refund_date=$this->get_meta_field( 'wpec_order_refund_date', '', $meta_fields );
 
 		$this->refresh_total();
 
@@ -377,6 +382,7 @@ class Order {
 		$statuses = array(
 			'incomplete' => __( 'Incomplete', 'wp-express-checkout' ),
 			'paid'       => __( 'Paid', 'wp-express-checkout' ),
+			'refunded'       => __( 'Refunded', 'wp-express-checkout' ),
 		);
 		$status = $this->get_status();
 		return $statuses[ $status ];
@@ -481,6 +487,32 @@ class Order {
 		return $this->resource_id;
 	}
 
+
+	public function get_capture_id()
+	{
+		return $this->capture_id;
+	}
+
+	public function get_refund_date($date_format='')
+	{
+		if($date_format)
+		{
+			$this->refund_date = date($date_format,strtotime($this->refund_date));
+		}
+		
+		return $this->refund_date;
+	}
+
+	public function set_refund_date($date)
+	{
+		if ( $this->refund_date === $date ) {
+			return;
+		}
+
+		$this->refund_date = $date;
+		$this->update_meta( 'wpec_order_refund_date', $date );		
+	}
+
 	/**
 	 * Sets the PayPal order resource ID.
 	 *
@@ -497,6 +529,17 @@ class Order {
 
 		$this->resource_id = $resource_id;
 		$this->update_meta( 'wpec_order_resource_id', $this->resource_id );
+		return true;
+	}
+
+	public function set_capture_id( $capture_id ) {
+
+		if( ! is_string( $capture_id ) ) {
+			trigger_error( 'Capture ID must be string', E_USER_WARNING );
+		}
+
+		$this->capture_id = $capture_id;
+		$this->update_meta( 'wpec_order_capture_id', $this->capture_id );
 		return true;
 	}
 

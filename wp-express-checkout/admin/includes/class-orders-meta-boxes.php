@@ -29,6 +29,7 @@ class Orders_Meta_Boxes {
 
 		add_action( 'wp_ajax_wpec_order_action_resend_email', array( $this, 'resend_email_callback' ) );
 		add_action( 'wp_ajax_wpec_order_action_reset_download_counts', array( $this, 'reset_download_counts_callback' ) );
+		add_action( 'wp_ajax_wpec_order_action_paypal_refund', array( $this, 'paypal_refund_callback' ) );
 	}
 
 	public function add_meta_boxes() {
@@ -135,6 +136,12 @@ class Orders_Meta_Boxes {
 					<th><?php _e( 'Order Time', 'wp-express-checkout' ); ?>: </th>
 					<td><?php echo get_post_time( 'F j, Y, g:i a', false, $order->get_id() ); ?></td>
 				</tr>
+				<?php if($order->get_refund_date()):?>
+				<tr>
+					<th><?php _e( 'Refund Time', 'wp-express-checkout' ); ?>: </th>
+					<td><?php echo $order->get_refund_date('F j, Y, g:i a'); ?></td>
+				</tr>
+				<?php endif;?>
 				<tr>
 					<th><?php _e( 'Transaction ID', 'wp-express-checkout' ); ?>: </th>
 					<td><?php echo $order->get_resource_id(); ?></td>
@@ -174,6 +181,14 @@ class Orders_Meta_Boxes {
 					<span class="dashicons dashicons-update" style="line-height:1.8;font-size:16px;"></span>
 					<span class="wpec-order-action-label">
 						<?php esc_html_e( 'Regenerate Download Permissions', 'wp-express-checkout' ); ?>
+					</span>
+				</a>
+			</li>
+			<li>
+				<a class="button wpec-order-action" data-action="paypal_refund" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'paypal-refund' ); ?>" href="#">
+					<span class="dashicons dashicons-money" style="line-height:1.8;font-size:16px;"></span>
+					<span class="wpec-order-action-label">
+						<?php esc_html_e( 'Refund', 'wp-express-checkout' ); ?>
 					</span>
 				</a>
 			</li>
@@ -292,6 +307,25 @@ class Orders_Meta_Boxes {
 		}
 
 		wp_send_json_success( __( 'Email successfully sent!', 'wp-express-checkout' ) );
+	}
+
+	public function paypal_refund_callback()
+	{
+		check_ajax_referer( 'paypal-refund', 'nonce' );
+
+		try {
+			$order = Orders::retrieve( $_POST['order'] );						
+		} catch ( Exception $exc ) {
+			wp_send_json_error( $exc->getMessage() );
+		}
+
+		$response = Orders::refund( $order );		
+		
+		if(is_wp_error($response) ){
+				wp_send_json_error( $response->get_error_message() );
+		}		
+
+		wp_send_json_success( __( 'Order refunded successfully!', 'wp-express-checkout' ) );
 	}
 
 	public function reset_download_counts_callback() {

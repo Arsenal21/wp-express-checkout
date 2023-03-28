@@ -105,6 +105,7 @@ class Payment_Processor {
 		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $this->get_transaction_status( $payment ) ) );
 		$order->set_currency( $currency );
 		$order->set_resource_id( $this->get_transaction_id( $payment ) );
+		$order->set_capture_id( $this->get_capture_id( $payment ) );
 		$order->set_author_email( $payment['payer']['email_address'] );
 		$order->add_item( Products::$products_slug, $item_name, $price, $quantity, $item_id, true );
 		$order->add_data( 'state', $this->get_transaction_status( $payment ) );
@@ -358,6 +359,24 @@ class Payment_Processor {
 	 */
 	protected function get_transaction_id( $payment ) {
 		return $payment['id'];
+	}
+
+	protected function get_capture_id( $payment ) {
+		if(isset($payment["purchase_units"]) && is_array($payment["purchase_units"]) && sizeof($payment["purchase_units"])>0)
+		{
+			$purchase_unit_obj = $payment["purchase_units"][0];
+			
+			if(isset($purchase_unit_obj["payments"]))
+			{
+				if(isset($purchase_unit_obj["payments"]["captures"]) && is_array($purchase_unit_obj["payments"]["captures"]) && sizeof($purchase_unit_obj["payments"]["captures"])>0)
+				{
+					$capture_id=$purchase_unit_obj["payments"]["captures"][0]["id"];
+					return $capture_id;
+				}
+			}
+		}
+
+		return "";
 	}
 
 	/**
