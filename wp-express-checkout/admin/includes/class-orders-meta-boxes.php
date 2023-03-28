@@ -172,7 +172,7 @@ class Orders_Meta_Boxes {
 				<a class="button wpec-order-action" data-action="resend_email" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'resend-email' ); ?>" href="#">
 					<span class="dashicons dashicons-email" style="line-height:1.8;font-size:16px;"></span>
 					<span class="wpec-order-action-label">
-						<?php esc_html_e( 'Resend sale notification email', 'wp-express-checkout' ); ?>
+						<?php esc_html_e( 'Resend Sale Notification Email', 'wp-express-checkout' ); ?>
 					</span>
 				</a>
 			</li>
@@ -188,7 +188,7 @@ class Orders_Meta_Boxes {
 				<a class="button wpec-order-action" data-action="paypal_refund" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'paypal-refund' ); ?>" href="#">
 					<span class="dashicons dashicons-money" style="line-height:1.8;font-size:16px;"></span>
 					<span class="wpec-order-action-label">
-						<?php esc_html_e( 'Refund', 'wp-express-checkout' ); ?>
+						<?php esc_html_e( 'Refund Transaction', 'wp-express-checkout' ); ?>
 					</span>
 				</a>
 			</li>

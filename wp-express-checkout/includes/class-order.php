@@ -22,7 +22,7 @@ class Order {
 	 */
 	protected $resource_id = '0';
 
-	protected $capture_id='0';
+	protected $capture_id = '0';
 	/**
 	 * Parent order id for child order
 	 * @var int
@@ -71,7 +71,7 @@ class Order {
 	 */
 	protected $data = array();
 
-	protected $refund_date='';
+	protected $refund_date = '';
 
 	/**
 	 * Sets up the order objects
@@ -97,8 +97,8 @@ class Order {
 		$this->data  = array_filter( (array) get_post_meta( $this->id, 'wpec_order_data', true ) );
 
 		$this->resource_id = $this->get_meta_field( 'wpec_order_resource_id', '', $meta_fields );
-		$this->capture_id=$this->get_meta_field( 'wpec_order_capture_id', '', $meta_fields );
-		$this->refund_date=$this->get_meta_field( 'wpec_order_refund_date', '', $meta_fields );
+		$this->capture_id = $this->get_meta_field( 'wpec_order_capture_id', '', $meta_fields );
+		$this->refund_date = $this->get_meta_field( 'wpec_order_refund_date', '', $meta_fields );
 
 		$this->refresh_total();
 
