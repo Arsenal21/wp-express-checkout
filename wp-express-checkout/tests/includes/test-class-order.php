@@ -432,7 +432,7 @@ class OrderTest extends \WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Order::get_display_status
 	 */
 	public function testGet_display_status() {
-		$this->assertEquals( 'Incomplete', $this->object->get_display_status() );
+		$this->assertEquals( '<span class="wpec_status_incomplete">' . __( 'Incomplete', 'wp-express-checkout' ) . '</span>', $this->object->get_display_status() );
 	}
 
 	/**
