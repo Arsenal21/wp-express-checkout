@@ -3,8 +3,8 @@ Contributors: Tips and Tricks HQ, dikiy_forester, mbrsolution, Ivy2120, chanelst
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
-Tested up to: 6.1
-Stable tag: 2.2.9
+Tested up to: 6.2
+Stable tag: 2.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -157,10 +157,12 @@ None
 
 == Changelog ==
 
-= WIP 2.3.0 =
-- Added an option to refund a transaction from the orders menu of the plugin.
+= 2.3.0 =
+- Added a confirmation dialogue option to the order action items.
+- Added an option to refund a transaction from the orders menu of the plugin. This will work for the new transactions that you receive after the upgrade.
 - Allow the apostrophe character to be used within the email subject field.
 - Output escaping for the settings menu item's description fields.
+- Fixed the price display formatting (regarding the thousand and decimal separator for some currencies).
 
 = 2.2.9 =
 * The Shop page shortcode is now wrapped in a div element so it works better with block themes.
