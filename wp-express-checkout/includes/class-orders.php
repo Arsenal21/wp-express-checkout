@@ -280,7 +280,8 @@ class Orders {
 		
 		if( $response->result->status == "COMPLETED" ){			
 			$order->set_status("refunded");
-			$order->set_refund_date(gmdate( 'Y-m-d H:i:s', time() ));
+			$current_wp_time = current_time('mysql');
+			$order->set_refund_date($current_wp_time);
 			Logger::log( 'Refund processed successfully!' );
 			return true;
 		}

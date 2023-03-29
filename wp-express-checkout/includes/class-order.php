@@ -493,13 +493,11 @@ class Order {
 		return $this->capture_id;
 	}
 
-	public function get_refund_date($date_format='')
+	public function get_refund_date($date_format = '')
 	{
-		if($date_format)
-		{
-			$this->refund_date = date($date_format,strtotime($this->refund_date));
+		if( $date_format ) {
+			$this->refund_date = date($date_format, strtotime($this->refund_date));
 		}
-		
 		return $this->refund_date;
 	}
 

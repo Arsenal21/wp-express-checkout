@@ -6,6 +6,8 @@
 		var button = $( this );
 		var label = $(this).find(".wpec-order-action-label");		
 		var original_text = label.text().trim();
+		var button_action = button.data( 'action' );
+		console.log('Order action: ' + button_action);
 		
 		if (confirm("Do you really want to "+original_text+"?") == true) {									
 			button.prop("disabled",true);
@@ -21,6 +23,10 @@
 					button.prop( "disabled",false );
 					label.text( original_text );
 					alert( msg );
+					if( button_action == 'paypal_refund'){
+						console.log('Refund successful. Reloading the page.');
+						window.location.reload();
+					}
 				} )
 				.fail( function() {
 					button.prop( "disabled",false );
