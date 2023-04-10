@@ -453,6 +453,14 @@ class Order {
 	}
 
 	/**
+	 * Returns the Email Address used to create the order
+	 * @return string Email Address
+	 */
+	public function get_email_address() {
+		return $this->creator['email'];
+	}
+
+	/**
 	 * Returns the URL to redirect to for processing the order
 	 * @return string URL
 	 */

@@ -4,6 +4,7 @@ namespace WP_Express_Checkout\Admin;
 
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Products;
+use WP_Express_Checkout\Orders;
 use WP_Express_Checkout\Utils;
 
 class Admin {
@@ -148,6 +149,12 @@ class Admin {
 		//Scripts for the product add/edit interface.
 		if ( Products::$products_slug === $screen->id ) {
 			wp_enqueue_script( 'wpec-admin-edit-product-js',  WPEC_PLUGIN_URL . '/assets/js/edit-product.js', array( 'jquery' ), WPEC_PLUGIN_VER, true );
+		}
+
+		//scripts & style for order export feature / datepicker		
+		if ( "edit-".Orders::PTYPE === $screen->id ) {
+			wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.min.css', array(), '1.11.4' );
+			wp_enqueue_script( 'jquery-ui-datepicker' );
 		}
 	}
 
