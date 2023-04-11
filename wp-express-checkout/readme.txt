@@ -157,6 +157,9 @@ None
 
 == Changelog ==
 
+= WIP 2.3.1 =
+- New feature in the orders menu to export the orders data to a CSV file.
+
 = 2.3.0 =
 - Added a confirmation dialogue option to the order action items.
 - Added an option to refund a transaction from the orders menu of the plugin. This will work for the new transactions that you receive after the upgrade.
