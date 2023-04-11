@@ -18,7 +18,184 @@ class Orders_List {
 		add_filter( 'manage_edit-' . Orders::PTYPE . '_sortable_columns', array( __CLASS__, 'order_manage_sortable_columns' ) );
 		add_action( 'manage_' . Orders::PTYPE . '_posts_custom_column', array( __CLASS__, 'order_add_column_data' ), 10, 2 );
 		add_filter( 'list_table_primary_column',  array( __CLASS__, 'primary_column' ), 10, 2 );
+		add_filter( 'months_dropdown_results', '__return_empty_array' );	//removing months dropdown 
+		add_action( 'restrict_manage_posts', array( __CLASS__, 'add_order_export_daterange' ) );
+		add_action( 'pre_get_posts', array( __CLASS__, 'wpec_filter_order_daterange' ) );
+		add_action( 'pre_get_posts', array(__CLASS__, 'wpec_order_export' ) );
 	}
+	
+	public static function add_order_export_daterange( ) {
+		global $typenow;
+		if ( $typenow === 'ppdgorder' ) {
+		?>
+			<script>
+				jQuery(function($) {
+					var from = $('input[name="order_date_from"]'),
+						to = $('input[name="order_date_to"]');
+
+					if (from !== undefined && to !== undefined) {
+						$('input[name="order_date_from"], input[name="order_date_to"]').datepicker({
+							dateFormat: "yy-mm-dd"
+						});
+						from.on('change', function() {
+							to.datepicker('option', 'minDate', from.val());
+						});
+
+						to.on('change', function() {
+							from.datepicker('option', 'maxDate', to.val());
+						});
+					}
+
+					$('#wpec_order_export_button').insertAfter('#post-query-submit');
+
+				});
+			</script>
+
+			<style>
+				input[name="order_date_from"],
+				input[name="order_date_to"] {
+					
+					height: 30px;	
+					width: 125px;
+				}
+				input[name="order_date_from"]{margin-right:5px}
+				.alignleft.actions{
+					display: flex;
+				align-items: baseline;
+				}
+			</style>
+
+			<div class="alignleft actions">				
+				<input type="text" autocomplete="off" id="order_date_from" name="order_date_from" class="" value="<?php echo isset($_GET['order_date_from']) ? esc_attr($_GET['order_date_from']) : ''; ?>" placeholder="<?php _e('From Date'); ?>" />
+				<label for="order_date_to" class="screen-reader-text"><?php _e('Filter orders by date to'); ?></label>
+				<input type="text" autocomplete="off" id="order_date_to" name="order_date_to" class="" value="<?php echo isset($_GET['order_date_to']) ? esc_attr($_GET['order_date_to']) : ''; ?>" placeholder="<?php _e('To Date'); ?>" />
+				<input type="hidden" name="wpec_order_export_nonce" value="<?php echo wp_create_nonce( 'wpec_order_export_nonce' ); ?>">
+				<input type="submit" id="wpec_order_export_button" name="wpec_order_export_button" class="button button-primary" value="<?php _e('Export Orders'); ?>">
+			</div>
+		<?php
+		}
+	}
+
+	public static function wpec_order_export( $query ) {
+		if ($query->is_main_query() && isset( $_GET['wpec_order_export_button'] )
+		 && 'ppdgorder' === $query->query_vars['post_type']
+		 && wp_verify_nonce( $_GET['wpec_order_export_nonce'], 'wpec_order_export_nonce' ) ) {		
+
+			$query->set( 'post_type', 'ppdgorder' );
+			$query->set( 'post_status', 'publish' );
+			$query->query_vars['suppress_filters'] = false;
+			$query->set( 'posts_per_page', -1 );
+
+			// Check if date range is set
+			if (isset($_REQUEST['order_date_from'], $_REQUEST['order_date_to'])) {
+			$query->set(
+				'date_query',
+				array(
+					array(
+						'after'     => sanitize_text_field( wp_unslash( $_GET['order_date_from'] ) ),
+						'before'    => sanitize_text_field( wp_unslash( $_GET['order_date_to'] ) ),
+						'inclusive' => true,
+						'column'    => 'post_date',
+					),
+				)
+			);
+		}
+
+			global $post;
+			$args  = $query->query_vars;
+			
+			// Get the orders
+			$orders = get_posts( $args );
+						
+			$filename = 'orders-' . date('Ymd-his') . '.csv';
+			header('Content-Type: text/csv; charset=utf-8');
+			header('Content-Disposition: attachment; filename=' . $filename);
+			
+			// Create the CSV
+			$fp = fopen('php://output', 'w');
+
+			// Headers
+			$headers = array(
+				'Order ID',
+				'PayPal Transaction ID',
+				'Date',
+				'Item Name',
+				'Price',
+				'Tax',
+				'Shipping',
+				'Customer Email',
+				'IP Address',
+				'Billing Address',
+				'Shipping Address',
+			);
+			fputcsv($fp, $headers);
+			
+			// Loop through the orders and add them to the CSV
+			foreach ($orders as $order) {
+				$order_obj = Orders::retrieve($order->ID);
+				$items     = $order_obj->get_items();				
+				$payer     = $order_obj->get_data( 'payer' );
+				$billing_address   = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : '';
+				$shipping_address = $order_obj->get_data("shipping_address");
+				$ip        = $order_obj->get_ip_address();
+				$tax = 0;
+				$shipping_amount = 0;
+				$item_name="";
+				$item_price=0;
+
+				foreach ($items as $item) {
+					if($item["type"]=="tax"){
+						$tax = $item["price"];
+					}					
+					else if($item["type"]=="shipping"){
+						$shipping_amount = $item["price"];
+					}		
+					else if($item["type"]=="ppec-products"){
+						$item_name=$item["name"];
+						$item_price=$item["price"];
+					}
+				}			
+				
+				$data = array(
+						$order->ID,
+						$order_obj->get_resource_id(),
+						$order->post_date,
+						$item_name,
+						$item_price,
+						$tax,
+						$shipping_amount,
+						$order_obj->get_email_address(),
+						$ip,
+						$billing_address,
+						$shipping_address,
+					);					
+					fputcsv($fp, $data);
+			}
+
+			fclose($fp);
+			exit;
+		}
+	}
+
+	public static function wpec_filter_order_daterange($query){
+
+		global $typenow;
+		if ($typenow === 'ppdgorder' && isset($_GET['order_date_from']) && isset($_GET['order_date_to'])) {
+			
+			$from_date = sanitize_text_field($_GET['order_date_from']);
+			$to_date = sanitize_text_field($_GET['order_date_to']);
+			$date_query = array(
+				array(
+					'after' => $from_date,
+					'before' => $to_date,
+					'inclusive' => true,
+					'column' => 'post_date'
+				)
+			);
+			$query->set('date_query', $date_query);
+		}
+	}
+
 
 	/**
 	 * Sets the columns for the orders page
