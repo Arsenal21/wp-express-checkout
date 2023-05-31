@@ -70,3 +70,11 @@ function wpec_add_settings_link($links, $file) {
     return $links;
 }
 add_filter('plugin_action_links', 'wpec_add_settings_link', 10, 2);
+
+//Manage admin user feedback
+function wpec_manage_admin_feedback(){
+	include_once WPEC_PLUGIN_PATH . 'admin/includes/class-admin-user-feedback.php';
+	$user_feedback = new WPEC_Admin_User_Feedback();
+	$user_feedback->init();
+}
+add_action( 'admin_init', 'wpec_manage_admin_feedback' );
