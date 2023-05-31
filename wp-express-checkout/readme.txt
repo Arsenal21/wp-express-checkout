@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.2
-Stable tag: 2.3.0
+Stable tag: 2.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -157,7 +157,7 @@ None
 
 == Changelog ==
 
-= WIP 2.3.1 =
+= 2.3.1 =
 - New feature in the orders menu to export the orders data to a CSV file.
 
 = 2.3.0 =
