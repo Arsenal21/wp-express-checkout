@@ -120,9 +120,12 @@ class Orders_List {
 				'PayPal Transaction ID',
 				'Date',
 				'Item Name',
-				'Price',
+				'Quantity',
+				'Unit Price',
+				'Item Amount',
 				'Tax',
 				'Shipping',
+				'Total Amount',
 				'Customer Email',
 				'IP Address',
 				'Billing Address',
@@ -133,15 +136,19 @@ class Orders_List {
 			// Loop through the orders and add them to the CSV
 			foreach ($orders as $order) {
 				$order_obj = Orders::retrieve($order->ID);
-				$items     = $order_obj->get_items();				
-				$payer     = $order_obj->get_data( 'payer' );
-				$billing_address   = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : '';
+				$items = $order_obj->get_items();				
+				$payer = $order_obj->get_data( 'payer' );
+				$billing_address = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : '';
 				$shipping_address = $order_obj->get_data("shipping_address");
-				$ip        = $order_obj->get_ip_address();
+				$ip = $order_obj->get_ip_address();
 				$tax = 0;
 				$shipping_amount = 0;
-				$item_name="";
-				$item_price=0;
+				$item_name = "";
+				$item_quantity = 1;
+				$unit_price = 0;
+				$item_amount = 0;
+				$total_amount = 0;
+				
 
 				foreach ($items as $item) {
 					if($item["type"]=="tax"){
@@ -151,19 +158,26 @@ class Orders_List {
 						$shipping_amount = $item["price"];
 					}		
 					else if($item["type"]=="ppec-products"){
-						$item_name=$item["name"];
-						$item_price=$item["price"];
+						$item_name = $item["name"];
+						$item_quantity = $item["quantity"];
+						$unit_price = $item["price"];
+						$item_amount = $item["price"] * $item["quantity"];
 					}
-				}			
+				}
+				
+				$total_amount = $order_obj->get_total();
 				
 				$data = array(
 						$order->ID,
 						$order_obj->get_resource_id(),
 						$order->post_date,
 						$item_name,
-						$item_price,
+						$item_quantity,
+						$unit_price,
+						$item_amount,
 						$tax,
 						$shipping_amount,
+						$total_amount,
 						$order_obj->get_email_address(),
 						$ip,
 						$billing_address,

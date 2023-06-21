@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.2
-Stable tag: 2.3.1
+Stable tag: 2.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,8 +75,10 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 * Option to customize the Thank You page.
 * Option to create product categories and apply it to some products. 
 * Option to create product tags and apply it to certain products.
+* Option to export the orders data to a CSV file.
 * Ability to configure the download links to expire after X number of hours.
 * Ability to configure the download links to expire after X number of clicks.
+* Option to test it on PayPal Sandbox mode before going Live.
 * Option to [Integrate it with WooCommerce](https://wp-express-checkout.com/woocommerce-paypal-express-checkout/) to offer product checkout via PayPal's express checkout system.
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
@@ -93,7 +95,7 @@ Or use the following shortcode to output product details and the express checkou
 
 [wp_express_checkout id="123" template="1"]
 
-You can also test it on PayPal Sandbox mode before going Live.
+Additionally, you have the option to utilize the product block for adding a product into the post or page editor.
 
 == Usage ==
 
@@ -156,6 +158,9 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 2.3.2 =
+- Added quantity, unit price and total amount columns to the CSV export feature.
 
 = 2.3.1 =
 - New feature in the orders menu to export the orders data to a CSV file.
