@@ -50,8 +50,17 @@ class Admin_Order_Summary_Table extends Order_Summary_Table {
 			$quantity = $this->html( 'strong', sprintf( __( 'x %s', 'wp-express-checkout' ), $item['quantity'] ) );
 		}
 
+		//Add additional item details to the row if this row is for a product (not tax or shipping row)
+		$additional_item_details = '';
+		if( isset( $item['type'] ) && $item['type'] == WPEC_PRODUCT_POST_TYPE_SLUG ){
+			$additional_item_details .= '<div class="wpec-admin-additional-item-details">';
+			$additional_item_details .= __( 'Quantity: ', 'wp-express-checkout' ) . esc_attr($item['quantity']) . '&nbsp;';
+			$additional_item_details .= __( 'Unit Price: ', 'wp-express-checkout' ) . esc_attr(Utils::price_format( $item['price'], $this->currency ));
+			$additional_item_details .= '</div>';
+		}
+
 		$cells = array(
-			$item['name'] . '&nbsp;' . $quantity,
+			$item['name'] . '&nbsp;' . $quantity . $additional_item_details,
 			Utils::price_format( $item['price'] * $item['quantity'], $this->currency ),
 			$item_link
 		);
