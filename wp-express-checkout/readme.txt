@@ -16,6 +16,8 @@ The WP Express Checkout plugin allows you to sell any type of products and servi
 
 This plugin gives you shortcodes to generate customizable PayPal payment buttons that allow customers to pay for items instantly via a payment popup window. Customers can pay using PayPal or a credit card. It uses PayPal's newest/latest Checkout API/Gateway.
 
+Additionally, this plugin provides a product block that seamlessly integrates with the WordPress block editor, enabling you to easily incorporate products into your website.
+
 The full checkout takes place in a payment popup window and the customer never leaves your site. It creates a fast and elegant checkout experience.
 
 This is ideal for users who want a lightweight and simple solution for selling products or services via PayPal. 
@@ -30,7 +32,9 @@ If you want to sell digital products using PayPal then you will love the simplic
 
 = Optional WooCommerce Integration =
 
-There is also an option for WooCommerce. So you can use this plugin to add the new PayPal Express Checkout gateway to WooCommerce.
+There is also an option for WooCommerce. So you can use this plugin to add the new PayPal Express Checkout gateway to WooCommerce. 
+
+Please note that the integration with WooCommerce is entirely optional. It is important to highlight that this plugin is primarily designed for standalone use and does not depend on WooCommerce.
 
 = Works with PayPal's Buy Now Pay Later Feature =
 
@@ -161,6 +165,7 @@ None
 
 = 2.3.2 =
 - Added quantity, unit price and total amount columns to the CSV export feature.
+- The order summary table now shows the unit price of the item also.
 
 = 2.3.1 =
 - New feature in the orders menu to export the orders data to a CSV file.
