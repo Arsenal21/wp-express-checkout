@@ -30,6 +30,8 @@ class Orders_Meta_Boxes {
 		add_action( 'wp_ajax_wpec_order_action_resend_email', array( $this, 'resend_email_callback' ) );
 		add_action( 'wp_ajax_wpec_order_action_reset_download_counts', array( $this, 'reset_download_counts_callback' ) );
 		add_action( 'wp_ajax_wpec_order_action_paypal_refund', array( $this, 'paypal_refund_callback' ) );
+		add_action( 'wp_ajax_wpec_add_order_note', array( $this, 'wpec_add_order_note_callback' ) );
+		add_action( 'wp_ajax_wpec_delete_order_note', array( $this, 'wpec_delete_order_note_callback' ) );
 	}
 
 	public function add_meta_boxes() {
@@ -38,8 +40,14 @@ class Orders_Meta_Boxes {
 		add_meta_box( 'wpec_order_actions', __( 'Order Actions', 'wp-express-checkout' ), array( $this, 'display_actions_meta_box' ), Orders::PTYPE, 'side', 'high' );
 		add_meta_box( 'wpec_order_status', __( 'Order Status', 'wp-express-checkout' ), array( $this, 'display_status_meta_box' ), Orders::PTYPE, 'side', 'high' );
 		add_meta_box( 'wpec_order_author', __( 'Order Author', 'wp-express-checkout' ), array( $this, 'display_author_meta_box' ), Orders::PTYPE, 'side', 'low' );
+		add_meta_box( 'wpec_order_notes', __( 'Order Notes', 'wp-express-checkout' ), array( $this, 'display_notes_meta_box' ), Orders::PTYPE, 'side', 'low' );
 
 		wp_enqueue_script( 'wpec-admin-scripts', WPEC_PLUGIN_URL . '/assets/js/admin.js', array(), WPEC_PLUGIN_VER, true );
+		wp_localize_script( 'wpec-admin-scripts', 'wpecAdminSideVars', array(
+			'ajaxurl' => get_admin_url() . 'admin-ajax.php',			
+			'add_order_note_nonance' => wp_create_nonce('wpec_add_order_note_ajax_nonce'),
+			'delete_order_note_nonance' => wp_create_nonce('wpec_delete_order_note_ajax_nonce'),
+		) );
 	}
 
 	public function display_summary_meta_box( $post ) {
@@ -275,6 +283,81 @@ class Orders_Meta_Boxes {
 
 	}
 
+	/**
+	 * Displays the order notes box
+	 * @param  object $post Wordpress Post object
+	 * @return void
+	 */
+	function display_notes_meta_box ( $post ){
+
+		try {
+			$order = Orders::retrieve( $post->ID );
+		} catch ( Exception $exc ) {
+			return;
+		}
+		?>
+		<style type="text/css">
+			#wpec_order_note{
+				width:100%;
+				min-height: 70px;
+			}
+			.wpec-single-note{
+				margin:20px 0;
+			}
+			.wpec-single-note p{
+				margin:0;
+				background: #d7cad3;
+				color:#000;
+				padding:10px 10px
+			}
+			.wpec-single-note .wpec-single-note-meta{
+				color: #c0c4c7;
+			}
+			.wpec-single-note .wpec-single-note-meta span{
+				border-bottom: 1px dotted #c0c4c7;				
+			}
+			.wpec-single-note .wpec-single-note-meta a{
+				color:#a57178
+			}
+		</style>
+		
+		<div class="order-note-form">			
+				<div><textarea id="wpec_order_note" name="order_note"></textarea></div>
+				<input type="hidden" value="<?=$post->ID?>" id="wpec_order_id" name="order_id" />
+				<input type="submit" class="button" id="order-note-form-submit"  value="<?=esc_html_e( 'Add', 'wp-express-checkout' )?>" />			
+		</div>
+
+		<div id="admin-order-notes">		
+            <?php
+            $order_notes = get_post_meta( $post->ID, 'wpec_order_notes', true );
+
+			if(!is_array($order_notes))
+			{
+				$order_notes = array();
+			}
+
+            foreach ( $order_notes as $note ) {
+                $admin_name  = get_userdata( $note['admin_id'] )->display_name;
+                $date_time   = date('F j, Y \a\t g:ia', $note['timestamp'] );				
+                $note_content = $note['content'];
+
+				?>
+				<div class="wpec-single-note" id="wpec_single_note_<?=$note["id"]?>">
+					<p><?=esc_html( $note_content )?></p>
+					<div class="wpec-single-note-meta">
+						<span title="Added by <?=$admin_name?>">added on <?=esc_html( $date_time )?></span>
+						<a href="#" class="delete-order-note" data-orderid="<?=esc_attr($post->ID)?>" data-note-id="<?=esc_attr( $note['id'] ) ?>">Delete</a>
+					</div>
+				</div>
+				<?php                
+            }
+            ?>        
+		</div>
+		<div class="clear"></div>
+		<?php
+
+	}
+
 	public function save( $post_id, $post, $update ) {
 		if ( ! isset( $_POST['action'] ) ) {
 			// this is probably not edit or new post creation event.
@@ -332,6 +415,76 @@ class Orders_Meta_Boxes {
 		}		
 
 		wp_send_json_success( __( 'Order refunded successfully!', 'wp-express-checkout' ) );
+	}
+
+	public function wpec_add_order_note_callback()
+	{
+		check_ajax_referer( 'wpec_add_order_note_ajax_nonce', 'nonce' );
+
+		$note = isset( $_POST['note'] ) ? sanitize_textarea_field( $_POST['note'] ) : '';
+		
+		if ( $note !== '' ) {
+			$current_time = current_time( 'timestamp' );
+			$note_data = array(
+				'id'         => uniqid("",true),
+				'admin_id'   => get_current_user_id(),
+				'timestamp'  => $current_time,
+				'content'    => $note
+			);
+	
+			$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : 0;
+			$order_notes = get_post_meta( $order_id, 'wpec_order_notes', true );
+	
+			if ( ! is_array( $order_notes ) ) {
+				$order_notes = array();
+			}
+	
+			$order_notes[] = $note_data;
+	
+			update_post_meta( $order_id, 'wpec_order_notes', $order_notes );
+	
+			$admin_user = get_userdata(get_current_user_id());
+			$username  = $admin_user->user_login !== $admin_user->display_name ? $admin_user->display_name . ' (' . $admin_user->user_login . ') ' : $admin_user->user_login;
+			
+			$note_data["admin_name"]=$username;
+			$note_data["note_date"]=date('F j, Y \a\t g:ia', $current_time);		
+			$note_data["order_id"]	=$order_id;
+
+			wp_send_json_success( array( 'note' => $note_data ) );
+		} else {
+			wp_send_json_error( 'Invalid order note.' );
+		}
+
+	}
+
+	public function wpec_delete_order_note_callback()
+	{
+		check_ajax_referer( 'wpec_delete_order_note_ajax_nonce', 'nonce' ); // Verify the AJAX request's nonce
+
+		$note_id = isset( $_POST['note_id'] ) ? sanitize_text_field( $_POST['note_id'] ) : '';
+	
+		if ( $note_id !== '' ) {
+			$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : 0;
+			$order_notes = get_post_meta( $order_id, 'wpec_order_notes', true );
+	
+			if ( ! empty( $order_notes ) ) {
+				foreach ( $order_notes as $index => $note ) {
+					if ( $note['id'] === $note_id ) {
+						unset( $order_notes[ $index ] );
+						break;
+					}
+				}
+	
+				// Update the order notes meta
+				update_post_meta( $order_id, 'wpec_order_notes', array_values( $order_notes ) );
+	
+				wp_send_json_success();
+			} else {
+				wp_send_json_error( 'No order notes found.' );
+			}
+		} else {
+			wp_send_json_error( 'Invalid note ID.' );
+		}
 	}
 
 	public function reset_download_counts_callback() {
