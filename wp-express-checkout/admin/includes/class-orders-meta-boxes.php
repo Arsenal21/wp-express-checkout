@@ -321,13 +321,13 @@ class Orders_Meta_Boxes {
 			}
 		</style>
 		
-		<div class="order-note-form">			
-				<div><textarea id="wpec_order_note" name="order_note"></textarea></div>
-				<input type="hidden" value="<?=$post->ID?>" id="wpec_order_id" name="order_id" />
-				<input type="submit" class="button" id="order-note-form-submit"  value="<?=esc_html_e( 'Add', 'wp-express-checkout' )?>" />			
+		<div class="wpec-order-note-form">			
+				<div><textarea id="wpec_order_note" name="wpec_order_note"></textarea></div>
+				<input type="hidden" value="<?php echo esc_attr($post->ID); ?>" id="wpec_order_id" name="wpec_order_id" />
+				<input type="submit" class="button" id="wpec_order_note_btn_submit"  value="<?php echo esc_html_e( 'Add', 'wp-express-checkout' ); ?>" />			
 		</div>
 
-		<div id="admin-order-notes">		
+		<div id="wpec-admin-order-notes">		
             <?php
             $order_notes = get_post_meta( $post->ID, 'wpec_order_notes', true );
 
@@ -342,11 +342,11 @@ class Orders_Meta_Boxes {
                 $note_content = $note['content'];
 
 				?>
-				<div class="wpec-single-note" id="wpec_single_note_<?=$note["id"]?>">
-					<p><?=esc_html( $note_content )?></p>
+				<div class="wpec-single-note" id="wpec_single_note_<?php echo esc_attr($note["id"]); ?>">
+					<p><?php echo esc_html( $note_content ); ?></p>
 					<div class="wpec-single-note-meta">
-						<span title="Added by <?=$admin_name?>">added on <?=esc_html( $date_time )?></span>
-						<a href="#" class="delete-order-note" data-orderid="<?=esc_attr($post->ID)?>" data-note-id="<?=esc_attr( $note['id'] ) ?>">Delete</a>
+						<span title="Added by <?php echo esc_html($admin_name); ?>">added on <?php echo esc_html( $date_time ); ?></span>
+						<a href="#" class="wpec-delete-order-note" data-orderid="<?php echo esc_attr($post->ID); ?>" data-note-id="<?php echo esc_attr( $note['id'] ) ?>">Delete</a>
 					</div>
 				</div>
 				<?php                
@@ -421,7 +421,7 @@ class Orders_Meta_Boxes {
 	{
 		check_ajax_referer( 'wpec_add_order_note_ajax_nonce', 'nonce' );
 
-		$note = isset( $_POST['note'] ) ? sanitize_textarea_field( $_POST['note'] ) : '';
+		$note = isset( $_POST['wpec_note'] ) ? sanitize_textarea_field( $_POST['wpec_note'] ) : '';
 		
 		if ( $note !== '' ) {
 			$current_time = current_time( 'timestamp' );
@@ -432,7 +432,7 @@ class Orders_Meta_Boxes {
 				'content'    => $note
 			);
 	
-			$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : 0;
+			$order_id = isset( $_POST['wpec_order_id'] ) ? intval( $_POST['wpec_order_id'] ) : 0;
 			$order_notes = get_post_meta( $order_id, 'wpec_order_notes', true );
 	
 			if ( ! is_array( $order_notes ) ) {
@@ -461,10 +461,10 @@ class Orders_Meta_Boxes {
 	{
 		check_ajax_referer( 'wpec_delete_order_note_ajax_nonce', 'nonce' ); // Verify the AJAX request's nonce
 
-		$note_id = isset( $_POST['note_id'] ) ? sanitize_text_field( $_POST['note_id'] ) : '';
+		$note_id = isset( $_POST['wpec_note_id'] ) ? sanitize_text_field( $_POST['wpec_note_id'] ) : '';
 	
 		if ( $note_id !== '' ) {
-			$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : 0;
+			$order_id = isset( $_POST['wpec_order_id'] ) ? intval( $_POST['wpec_order_id'] ) : 0;
 			$order_notes = get_post_meta( $order_id, 'wpec_order_notes', true );
 	
 			if ( ! empty( $order_notes ) ) {
