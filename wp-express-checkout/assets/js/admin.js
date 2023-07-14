@@ -2,7 +2,7 @@
 	"use strict";
 
 	 // Add order note
-	 $('#order-note-form-submit').on('click', function(e) {
+	 $('#wpec_order_note_btn_submit').on('click', function(e) {
         e.preventDefault();
 
 		var btn = $(this);
@@ -22,8 +22,8 @@
         if (note !== '') {
             var data = {
                 action: 'wpec_add_order_note',
-                note: note,
-				order_id: order_id,
+                wpec_note: note,
+				wpec_order_id: order_id,
 				nonce: wpecAdminSideVars.add_order_note_nonance
             };
 
@@ -45,10 +45,10 @@
                         '<p>' + response.data.note.content + '</p>' +
 						'<div class="wpec-single-note-meta">'    +
 							'<span title="Added by '+response.data.note.admin_name+'">added on '+response.data.note.note_date+'</span>'+
-							'<a href="#" class="delete-order-note" data-orderid="'+response.data.note.order_id+'" data-note-id="' + response.data.note.id + '">Delete</a>'+
+							'<a href="#" class="wpec-delete-order-note" data-orderid="'+response.data.note.order_id+'" data-note-id="' + response.data.note.id + '">Delete</a>'+
 						'</div>'+						
                             '</div>';
-                        $('#admin-order-notes').append(noteRow);
+                        $('#wpec-admin-order-notes').append(noteRow);
                     } else {
                         // Handle error response
                         console.error(response.error);
@@ -65,7 +65,7 @@
     });
 
     // Delete order note
-    $(document).on('click', '.delete-order-note', function(e) {
+    $(document).on('click', '.wpec-delete-order-note', function(e) {
         e.preventDefault();
 
 		var btn = $(this);
@@ -79,9 +79,9 @@
             if (noteId !== '') {
                 var data = {
                     action: 'wpec_delete_order_note',
-                    note_id: noteId,
+                    wpec_note_id: noteId,
 					nonce: wpecAdminSideVars.delete_order_note_nonance,
-					order_id: order_id
+					wpec_order_id: order_id
                 };
 
                 $.ajax({
