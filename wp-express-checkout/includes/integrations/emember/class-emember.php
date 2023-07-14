@@ -9,7 +9,11 @@ use WP_Express_Checkout\Utils;
 class Emember {
 
 	public function __construct() {
+		//Standard payment completed hook.
 		add_action( 'wpec_payment_completed', array( $this, 'handle_signup' ), 10, 3 );
+
+		//Subscription payment related hooks.
+		add_action( 'wpec_sub_webhook_event', array( $this, 'handle_subscription_webhook_event_for_emember' ) );
 
 		if ( is_admin() ) {
 			$this->admin();
@@ -39,6 +43,69 @@ class Emember {
 			require_once WP_EMEMBER_PATH . 'ipn/eMember_handle_subsc_ipn_stand_alone.php';
 			eMember_handle_subsc_signup_stand_alone( $ipn_data, $level_id, $payment['id'], $emember_id );
 		}
+
+	}
+
+	public function handle_subscription_webhook_event_for_emember( $event ){
+		/*
+		Note: the Payment_Handler() function has a summary of the type of events we can handle for a subscription webhook. Check function Factory::create for more details.
+		*/
+
+		// Get the subscr_id from the event
+		$sub_id = isset($event['resource']['billing_agreement_id'])? $event['resource']['billing_agreement_id'] : '';
+		if(empty($sub_id)){
+			Logger::log( 'handle_subscription_webhook_event: no subscription ID found in the event', false );
+			return;
+		}
+
+		//We can retrieve the Subscription object from the database to get additional info (but it may not be needed here)
+		//$subscription = Subscriptions::retrieve( $sub_id );
+		//if ( ! $subscription ) {
+		//	return;
+		//}
+
+		$webhook_event_type = isset($event['event_type'])? $event['event_type'] : '';
+		if(empty($webhook_event_type)){
+			Logger::log( 'handle_subscription_webhook_event: no event type found in the webhook.', false );
+			return;
+		}
+
+		if ( !defined( 'WP_EMEMBER_PATH' ) ) {
+			//This class won't initialize if eMember is not installed. However, we are going to have this check here just in case.
+			Logger::log( 'handle_subscription_webhook_event: WP eMember plugin is not installed.', false );
+			return;
+		}
+		require_once WP_EMEMBER_PATH . 'ipn/eMember_handle_subsc_ipn_stand_alone.php';
+
+		$ipn_data = array('subscr_id' => $sub_id, 'payer_email' => '');//The payer_email is not really needed for this function.
+
+		Logger::log( 'Checking if WP eMember function call is needed to handle the webhook event type: ' .  $webhook_event_type);
+
+		switch ( $webhook_event_type ) {
+			case 'BILLING.SUBSCRIPTION.ACTIVATED':
+				// We don't need to do anything here for WP eMember.
+				break;
+			case 'BILLING.SUBSCRIPTION.EXPIRED':
+				// A subscription expires.
+				eMember_handle_subsc_cancel_stand_alone($ipn_data);
+				break;
+			case 'BILLING.SUBSCRIPTION.CANCELLED':
+				// A subscription is cancelled.
+				eMember_handle_subsc_cancel_stand_alone($ipn_data);
+				break;
+			case 'BILLING.SUBSCRIPTION.SUSPENDED':
+				// A subscription is suspended.
+				eMember_handle_subsc_cancel_stand_alone($ipn_data);
+				break;
+			case 'PAYMENT.SALE.COMPLETED':
+				// A payment is made on a subscription.
+				eMember_update_member_subscription_start_date_if_applicable($ipn_data);
+				break;
+			default:
+				// NOP
+				break;
+		}
+		
 
 	}
 

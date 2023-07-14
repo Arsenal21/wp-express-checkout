@@ -163,6 +163,10 @@ None
 
 == Changelog ==
 
+= WIP =
+- Added a new feature: ability to add order notes in the admin order edit interface.
+- WP eMember integration update for subscription payment addon.
+
 = 2.3.2 =
 - Added quantity, unit price and total amount columns to the CSV export feature.
 - The order summary table now shows the unit price of the item also.
