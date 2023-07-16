@@ -322,7 +322,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 
 		$output = $this->object->shortcode_wpec_thank_you( [], 'test transaction id [wpec_ty field=transaction_id]' );
 
-		$this->assertEquals( "test transaction id test-resource-id-{$product_id}-{$order->get_id()}", $output );
+		$this->assertEquals( "test transaction id test-resource-id-{$product_id}-{$order->get_capture_id()}", $output );
 	}
 
 	/**
@@ -381,7 +381,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 
 		$output = $this->object->shortcode_wpec_thank_you_parts( [ 'field' => 'transaction_id' ] );
 
-		$this->assertEquals( "test-resource-id-{$product_id}-{$order->get_id()}", $output );
+		$this->assertEquals( "test-resource-id-{$product_id}-{$order->get_capture_id()}", $output );
 	}
 
 	/**
