@@ -169,7 +169,7 @@ class Orders_List {
 				
 				$data = array(
 						$order->ID,
-						$order_obj->get_resource_id(),
+						$order_obj->get_capture_id(),
 						$order->post_date,
 						$item_name,
 						$item_quantity,

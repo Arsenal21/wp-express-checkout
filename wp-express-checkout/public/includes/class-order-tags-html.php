@@ -72,7 +72,7 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function transaction_id() {
-		return $this->order->get_resource_id();
+		return $this->order->get_capture_id();
 	}
 
 	/**
