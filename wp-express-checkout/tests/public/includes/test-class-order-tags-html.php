@@ -101,7 +101,7 @@ class Order_Tags_HtmlTest extends WP_UnitTestCase {
 	 * @covers WP_Express_Checkout\Order_Tags_Html::transaction_id
 	 */
 	public function testTransaction_id() {
-		$this->assertEquals( $this->order->get_resource_id(), $this->object->transaction_id() );
+		$this->assertEquals( $this->order->get_capture_id(), $this->object->transaction_id() );
 	}
 
 	/**
