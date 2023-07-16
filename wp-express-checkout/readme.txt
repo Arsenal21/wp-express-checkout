@@ -165,6 +165,7 @@ None
 
 = WIP =
 - Added a new feature: ability to add order notes in the admin order edit interface.
+- The orders menu will show the Capture ID (instead of the Resource ID) in the Transaction ID field.
 - WP eMember integration update for subscription payment addon.
 
 = 2.3.2 =

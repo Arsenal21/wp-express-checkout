@@ -279,7 +279,7 @@ class Orders_List {
 				break;
 
 			case 'trans_id' :
-				echo $order->get_resource_id();
+				echo $order->get_capture_id();
 				break;
 
 			case 'order_author':
