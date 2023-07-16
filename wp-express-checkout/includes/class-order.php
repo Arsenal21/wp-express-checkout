@@ -259,9 +259,12 @@ class Order {
 	}
 
 	/**
-	 * Returns the first item in an order, or another as specified
+	 * Returns the first item from the items array of the order [an item can be the product, the variation, meta, etc]. or return the item specified by "type".
+	 * When called without arguments, returns the Main Product (type='ppec-products') of the order. Example of returned array:
+	 * Array ( [type] => ppec-products [name] => My Test Product [price] => 5.00 [quantity] => 1 [post_id] => 1234
+	 * 
 	 * @param  integer $index The index number of the item to return
-	 * @return array          An associative array of information about the item
+	 * @return array An associative array of information about the item
 	 */
 	public function get_item( $type = '', $index = 0 ) {
 
@@ -280,11 +283,11 @@ class Order {
 	}
 
 	/**
-	 * Returns an array of all the items in an order that match a given
-	 * type, or all items in the order.
+	 * Returns an array of all the items of an order that match a given type, or all items in the order.
+	 * An item can be the product (type='ppec-products'), the variation (type='variation'), meta, etc
 	 *
 	 * @param  string $type (optional) Item Type to filter by
-	 * @return array        An array of items matching the criteria
+	 * @return array An array of items matching the criteria
 	 */
 	public function get_items( $type = '' ) {
 
@@ -337,6 +340,33 @@ class Order {
 		$ppdg = Main::get_instance();
 		$prec = ( ! $ppdg->get_setting( 'price_decimals_num' ) ) ? 0 : $ppdg->get_setting( 'price_decimals_num' );
 		return number_format( (float) $this->payment['total'], $prec, '.', '' );
+	}
+
+	public function get_quantity_ordered(){
+		$main_product_item = $this->get_item();
+		$quantity = isset($main_product_item['quantity']) ? $main_product_item['quantity'] : 1;
+		return $quantity;
+	}
+
+	/*
+	 * Returns an array containing all the variations selected for the order
+	 */
+	public function get_selected_variations(){
+		$variations = $this->get_items( 'variation' );//Get any and all the variations of the order.
+		return $variations;
+	}
+
+	/*
+	 * Returns a string (comma separated) containing all the variations selected for the order
+	 */
+	public function get_selected_variations_string(){
+		$variations = $this->get_selected_variations();
+		$variations_string = '';
+		foreach ($variations as $variation) {
+			$variations_string .= $variation['name'] . ', ';
+		}
+		$variations_string = rtrim($variations_string, ', ');
+		return $variations_string;
 	}
 
 	/**

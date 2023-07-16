@@ -93,6 +93,14 @@ class Order_Tags_Html {
 		return get_post_time( 'F j, Y, g:i a', false, $this->order->get_id() );
 	}
 
+	public function quantity_ordered() {
+		return $this->order->get_quantity_ordered();
+	}
+
+	public function selected_variations() {
+		return $this->order->get_selected_variations_string();
+	}
+
 	/**
 	 * Order currency code.
 	 *

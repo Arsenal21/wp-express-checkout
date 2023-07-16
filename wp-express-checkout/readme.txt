@@ -167,6 +167,7 @@ None
 - Added a new feature: ability to add order notes in the admin order edit interface.
 - The orders menu will show the Capture ID (instead of the Resource ID) in the Transaction ID field.
 - WP eMember integration update for subscription payment addon.
+- Added new email merge tags: {quantity_ordered} and {selected_variations}
 
 = 2.3.2 =
 - Added quantity, unit price and total amount columns to the CSV export feature.

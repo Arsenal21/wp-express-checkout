@@ -172,9 +172,12 @@ class Utils {
 			'purchase_amt' => __( 'The amount paid for the current transaction', 'wp-express-checkout' ),
 			'purchase_date' => __( 'The date of the purchase', 'wp-express-checkout' ),
 			'coupon_code' => __( 'Coupon code applied to the purchase', 'wp-express-checkout' ),
-			'currency_code' => __( 'Order currency code', 'wp-express-checkout' ),
+			'currency_code' => __( 'Order currency code', 'wp-express-checkout' ),			
 			'product_id' => __( 'Product ID', 'wp-express-checkout' ),
 			'product_name' => __( 'Product Name', 'wp-express-checkout' ),
+			'quantity_ordered' => __( 'Quantity ordered', 'wp-express-checkout' ),
+			'download_link' => __( 'Download link of the product (if any)', 'wp-express-checkout' ),			
+			'selected_variations' => __( 'Selected variations of the order', 'wp-express-checkout' ),
 		) );
 
 		return $tags;
