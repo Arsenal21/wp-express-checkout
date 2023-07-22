@@ -267,7 +267,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 			]
 		);
 		$order = Orders::create();
-		$order->set_resource_id( "test-resource-id-{$product_id}-{$order->get_capture_id()}" );
+		$order->set_capture_id( "test-capture-id-{$product_id}-{$order->get_id()}" );
 		$order->add_data(
 			'payer',
 			[
@@ -285,7 +285,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		$_GET['_wpnonce'] = wp_create_nonce( 'thank_you_url' . $_GET['order_id'] );
 
 		$output = $this->object->shortcode_wpec_thank_you();
-		$this->assertStringContainsString( "test-resource-id-{$product_id}-{$order->get_capture_id()}", $output );
+		$this->assertStringContainsString( "test-capture-id-{$product_id}-{$order->get_id()}", $output );
 		$this->assertStringContainsString( 'wpec_thank_you_message', $output );
 		$this->assertStringContainsString( 'wpec-thank-you-page-download-link', $output );
 	}
@@ -303,7 +303,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 			]
 		);
 		$order = Orders::create();
-		$order->set_resource_id( "test-resource-id-{$product_id}-{$order->get_capture_id()}" );
+		$order->set_capture_id( "test-capture-id-{$product_id}-{$order->get_id()}" );
 		$order->add_data(
 			'payer',
 			[
@@ -322,7 +322,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 
 		$output = $this->object->shortcode_wpec_thank_you( [], 'test transaction id [wpec_ty field=transaction_id]' );
 
-		$this->assertEquals( "test transaction id test-resource-id-{$product_id}-{$order->get_capture_id()}", $output );
+		$this->assertEquals( "test transaction id test-capture-id-{$product_id}-{$order->get_id()}", $output );
 	}
 
 	/**
@@ -373,7 +373,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 			]
 		);
 		$order = Orders::create();
-		$order->set_resource_id( "test-resource-id-{$product_id}-{$order->get_capture_id()}" );
+		$order->set_capture_id( "test-capture-id-{$product_id}-{$order->get_id()}" );
 		$order->add_data( 'state', 'COMPLETED' );
 
 		$_GET['order_id'] = $order->get_id();
@@ -381,7 +381,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 
 		$output = $this->object->shortcode_wpec_thank_you_parts( [ 'field' => 'transaction_id' ] );
 
-		$this->assertEquals( "test-resource-id-{$product_id}-{$order->get_capture_id()}", $output );
+		$this->assertEquals( "test-capture-id-{$product_id}-{$order->get_id()}", $output );
 	}
 
 	/**
