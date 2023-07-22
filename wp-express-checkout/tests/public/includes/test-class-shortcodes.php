@@ -373,7 +373,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 			]
 		);
 		$order = Orders::create();
-		$order->set_resource_id( "test-capture-id-{$product_id}-{$order->get_id()}" );
+		$order->set_capture_id( "test-capture-id-{$product_id}-{$order->get_id()}" );
 		$order->add_data( 'state', 'COMPLETED' );
 
 		$_GET['order_id'] = $order->get_id();
