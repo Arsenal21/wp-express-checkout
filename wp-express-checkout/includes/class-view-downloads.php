@@ -9,6 +9,7 @@
 namespace WP_Express_Checkout;
 
 use Exception;
+use WP_Express_Checkout\Debug\Logger;
 
 /**
  * Download request class.
@@ -274,6 +275,10 @@ class View_Downloads {
 		}
 
 		$counter = $order->get_data( 'downloads_counter' );
+		if(!is_array($counter)){
+			//if it's not an array, reset it to an empty array.
+			$counter = array();
+		}
 
 		if ( empty( $counter[ $file_name ] ) ) {
 			$counter[ $file_name ] = 0;
@@ -281,15 +286,15 @@ class View_Downloads {
 
 		$counter[ $file_name ]++;
 		$order->add_data( 'downloads_counter', $counter );
+		//Logger::log( 'Process download - updating download counter.', true);
 
 		// Clean the file URL.
 		$file_url = stripslashes( trim( $file_url ) );
 
-		if($product->wpec_force_download)
-		{
+		if($product->wpec_force_download) {
 			Utils::force_download_file($file_url);
 		}
-		else{
+		else {
 			Utils::redirect_to_url( $file_url );					
 		}
 
