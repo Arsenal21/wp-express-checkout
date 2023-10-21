@@ -334,7 +334,10 @@ var ppecHandler = function( data ) {
 					items: [ {
 						name: parent.data.name,
 						quantity: parent.data.quantity,
+						/*
+						//No need to specify category for digital goods (it is handled via the 'shipping_preference' parameter)
 						category: parent.data.shipping_enable ? 'PHYSICAL_GOODS' : 'DIGITAL_GOODS',
+						*/
 						unit_amount: {
 							value: parent.data.price,
 							currency_code: parent.data.currency

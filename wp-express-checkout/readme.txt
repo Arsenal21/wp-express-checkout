@@ -163,6 +163,9 @@ None
 
 == Changelog ==
 
+= WIP 2.3.4 =
+- The shipping enabled option uses the "shipping_preference" parameter of the PayPal API.
+
 = 2.3.3 =
 - Added a new feature: ability to add order notes in the admin order edit interface.
 - The orders menu will show the Capture ID (instead of the Resource ID) in the Transaction ID field.
