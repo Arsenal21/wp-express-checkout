@@ -1,4 +1,6 @@
 <?php
+// The all-products template for shop/products page. Used in the shortcode [wpec_show_all_products]
+
 wp_enqueue_style('dashicons');
 wp_enqueue_style('wpec-all-products-css');
 
@@ -51,7 +53,7 @@ ob_start();
 <div class="wpec-grid-item wpec-product-id-%[product_id]%">
 	<div class="wpec-product-thumb"><img src="%[product_thumb]%"></div>
 	<div class="wpec-product-price">%[product_price]%</div>
-	<div class="wpec-product-name-tpl-all-products">%[product_name]%</div>
+	<div class="wpec-tpl-ap-product-name">%[product_name]%</div>
 	%[view_product_btn]%
 </div>
 
