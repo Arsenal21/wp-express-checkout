@@ -51,8 +51,8 @@ ob_start();
 ?>
 
 <div class="wpec-grid-item wpec-product-id-%[product_id]%">
-	<div class="wpec-product-thumb"><img src="%[product_thumb]%"></div>
-	<div class="wpec-product-price">%[product_price]%</div>
+	<div class="wpec-tpl-ap-product-thumb"><img src="%[product_thumb]%"></div>
+	<div class="wpec-tpl-ap-product-price">%[product_price]%</div>
 	<div class="wpec-tpl-ap-product-name">%[product_name]%</div>
 	%[view_product_btn]%
 </div>

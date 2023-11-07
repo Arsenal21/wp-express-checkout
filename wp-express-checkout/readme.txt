@@ -167,7 +167,7 @@ None
 - The shipping enabled option uses the "shipping_preference" parameter of the PayPal API.
 - PHP 8.0 compatibility related fix for the wpec_ty shortcode.
 - Product block's dependency issue fixed.
-- A css issue for small screen devices was fixed.
+- Fixed a css issue for the shop/products page in the small screen devices.
 
 = 2.3.3 =
 - Added a new feature: ability to add order notes in the admin order edit interface.
