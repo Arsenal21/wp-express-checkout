@@ -163,7 +163,7 @@ None
 
 == Changelog ==
 
-= WIP 2.3.4 =
+= 2.3.4 =
 - Added a new email merge tag {download_link_url_only}. It outputs the download link URL only, omitting any associated product name.
 - The shipping enabled option uses the "shipping_preference" parameter of the PayPal API.
 - PHP 8.0 compatibility related fix for the wpec_ty shortcode.
