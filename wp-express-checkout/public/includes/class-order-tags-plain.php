@@ -56,4 +56,29 @@ class Order_Tags_Plain extends Order_Tags_Html {
 
 	}
 
+	/**
+	 * Download link that contains the URL only, omitting any associated product name.
+	 */
+	public function download_link_url_only( $args = array() ) {
+		$downloads = View_Downloads::get_order_downloads_list( $this->order->get_id() );
+
+		if ( ! $downloads ) {
+			return '';
+		}
+
+		$content = "";
+		// Include the download link URL(s) if any
+		// Variations can have their own download link
+		foreach ( $downloads as $name => $download_url ) {
+			$content .= $download_url;
+			//If more than one download item, add a new line
+			$total_dl_items = count($downloads);
+			if($total_dl_items > 1) {
+				$content .= "\n";
+			}
+		}
+
+		return $content;		
+	}
+
 }

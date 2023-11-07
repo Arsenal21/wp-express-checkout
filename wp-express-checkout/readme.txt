@@ -3,8 +3,8 @@ Contributors: Tips and Tricks HQ, dikiy_forester, mbrsolution, Ivy2120, chanelst
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
-Tested up to: 6.3
-Stable tag: 2.3.3
+Tested up to: 6.4
+Stable tag: 2.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -164,6 +164,7 @@ None
 == Changelog ==
 
 = WIP 2.3.4 =
+- Added a new email merge tag {download_link_url_only}. It outputs the download link URL only, omitting any associated product name.
 - The shipping enabled option uses the "shipping_preference" parameter of the PayPal API.
 - PHP 8.0 compatibility related fix for the wpec_ty shortcode.
 - Product block's dependency issue fixed.

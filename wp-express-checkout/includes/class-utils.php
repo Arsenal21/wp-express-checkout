@@ -176,7 +176,8 @@ class Utils {
 			'product_id' => __( 'Product ID', 'wp-express-checkout' ),
 			'product_name' => __( 'Product Name', 'wp-express-checkout' ),
 			'quantity_ordered' => __( 'Quantity ordered', 'wp-express-checkout' ),
-			'download_link' => __( 'Download link of the product (if any)', 'wp-express-checkout' ),			
+			'download_link' => __( 'Download link of the product (if any)', 'wp-express-checkout' ),
+			'download_link_url_only' => __( 'Download link that contains the URL only, omitting any associated product name (if any).', 'wp-express-checkout' ),
 			'selected_variations' => __( 'Selected variations of the order', 'wp-express-checkout' ),
 		) );
 
