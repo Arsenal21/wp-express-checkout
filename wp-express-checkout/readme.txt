@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.4
-Stable tag: 2.3.4
+Stable tag: 2.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -163,9 +163,9 @@ None
 
 == Changelog ==
 
-= WIP =
+= 2.3.5 =
 - Resolved an issue where product quantities with fractional pricing caused an error with PayPal.
-- New sort by chronological order option added to product lists.
+- Added a new toption to 'sort by chronological order' to the products/shop page
 
 = 2.3.4 =
 - Added a new email merge tag {download_link_url_only}. It outputs the download link URL only, omitting any associated product name.
