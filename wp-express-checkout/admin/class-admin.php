@@ -117,8 +117,7 @@ class Admin {
 	 * @since     1.0.0
 	 */
 	public function enqueue_admin_styles() {
-		$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		wp_enqueue_style( $this->plugin_slug . '-admin-styles', WPEC_PLUGIN_URL . "/assets/css/admin{$min}.css", array(), WPEC_PLUGIN_VER );
+		wp_enqueue_style( $this->plugin_slug . '-admin-styles', WPEC_PLUGIN_URL . "/assets/css/admin.css", array(), WPEC_PLUGIN_VER );
 	}
 
 	/**

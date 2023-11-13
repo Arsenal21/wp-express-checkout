@@ -74,11 +74,13 @@ class Main {
 		//This function will be called from the front-end side.
 		//Refer to the enqueue_admin_scripts() in the 'admin/class-admin.php' file for admin side related scripts.
 
-		// Minimized or full
-		$min = '';// we can use a value of .min for production. For now, we will use the full version.
+		// Minimized or full version
+		$min = ( defined( 'WPEC_SCRIPT_DEBUG' ) && WPEC_SCRIPT_DEBUG ) ? '' : '.min';
 
+		// Enqueue public.js
 		wp_enqueue_script( 'wp-ppec-frontend-script', WPEC_PLUGIN_URL . "/assets/js/public{$min}.js", array( 'jquery' ), WPEC_PLUGIN_VER, true );
 
+		// Enqueue public.css
 		wp_enqueue_style( 'wp-ppec-frontend-style', WPEC_PLUGIN_URL . "/assets/css/public{$min}.css", array(), WPEC_PLUGIN_VER );
 		wp_style_add_data( 'wp-ppec-frontend-style', 'rtl', 'replace' );
 		wp_style_add_data( 'wp-ppec-frontend-style', 'suffix', $min );
