@@ -26,7 +26,8 @@ $strViewItem    = __('View Item', 'wp-express-checkout');
 <form method="GET" id="wpec-sort-by-form">
 <select id="wpec-sort-by" name="wpec-sortby">
 	<option <?php echo ("id-desc"==$sort_by?"selected='selected'":"")?> value="id-desc">Sort by latest</option>
-	<option <?php echo "title-asc"==$sort_by?"selected='selected'":""?> value="title-asc">Sort by title</option>
+	<option <?php echo ("id-asc"==$sort_by?"selected='selected'":"")?> value="id-asc">Sort by chronological order</option>
+	<option <?php echo ("title-asc"==$sort_by?"selected='selected'":"")?> value="title-asc">Sort by title</option>
 	<option <?php echo ("price-asc"==$sort_by?"selected='selected'":"")?> value="price-asc">Sort by price (low to high)</option>
 	<option <?php echo ("price-desc"==$sort_by?"selected='selected'":"")?> value="price-desc">Sort by price(high to low)</option>
 </select>
