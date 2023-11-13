@@ -165,6 +165,7 @@ None
 
 = WIP =
 - Resolved an issue where product quantities with fractional pricing caused an error with PayPal.
+- New sort by chronological order option added to product lists.
 
 = 2.3.4 =
 - Added a new email merge tag {download_link_url_only}. It outputs the download link URL only, omitting any associated product name.
