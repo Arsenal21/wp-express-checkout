@@ -316,6 +316,11 @@ var ppecHandler = function( data ) {
 		},
 		createOrder: function( data, actions ) {
 			parent.calcTotal();
+			
+			//We need to round to 2 decimal places to make sure that the API call will not fail.
+			let itemTotalValueRounded = (parent.data.price * parent.data.quantity).toFixed(2);
+			//console.log('Item total value rounded: ' + itemTotalValueRounded);
+
 			var order_data = {
 				application_context: {
 					shipping_preference: parent.data.shipping_enable ? 'GET_FROM_FILE' : 'NO_SHIPPING'
@@ -327,7 +332,7 @@ var ppecHandler = function( data ) {
 						breakdown: {
 							item_total: {
 								currency_code: parent.data.currency,
-								value: parent.data.price * parent.data.quantity
+								value: itemTotalValueRounded
 							}
 						}
 					},
@@ -455,6 +460,10 @@ var ppecHandler = function( data ) {
 		var itemSubt = parseFloat( parent.data.price );
 		var quantity = parseInt( parent.data.quantity );
 		var tAmount = itemSubt * quantity;
+		//We need to round to 2 decimal places to make sure that the API call will not fail.
+		let roundedTotal = tAmount.toFixed(2);//round to 2 decimal places
+		let roundedTotalAsNumber = parseFloat(roundedTotal);//convert to number
+		tAmount = roundedTotalAsNumber;
 		var subtotal = tAmount;
 
 		parent.data.newPrice = itemSubt;

@@ -74,8 +74,8 @@ class Main {
 		//This function will be called from the front-end side.
 		//Refer to the enqueue_admin_scripts() in the 'admin/class-admin.php' file for admin side related scripts.
 
-		// Minimize prod or show expanded in dev.
-		$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+		// Minimized or full
+		$min = '';// we can use a value of .min for production. For now, we will use the full version.
 
 		wp_enqueue_script( 'wp-ppec-frontend-script', WPEC_PLUGIN_URL . "/assets/js/public{$min}.js", array( 'jquery' ), WPEC_PLUGIN_VER, true );
 
