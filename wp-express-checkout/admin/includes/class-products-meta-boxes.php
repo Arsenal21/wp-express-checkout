@@ -264,6 +264,7 @@ class Products_Meta_Boxes {
 
 	public function display_shipping_tax_meta_box( $post ) {
 		$current_shipping = get_post_meta( $post->ID, 'wpec_product_shipping', true );
+		$shipping_cost_per_quantity = get_post_meta( $post->ID, 'wpec_product_shipping_per_quantity', true );
 		$current_tax      = get_post_meta( $post->ID, 'wpec_product_tax', true );
 		$step             = pow( 10, -intval( $this->WPEC_Main->get_setting( 'price_decimals_num' ) ) );
 		$enable_shipping  = get_post_meta( $post->ID, 'wpec_product_shipping_enable', true );
@@ -280,6 +281,20 @@ class Products_Meta_Boxes {
 		?>
 			</p>
 		</div>
+
+		<div id="wpec_shipping_cost_container">
+			<label><?php esc_html_e( 'Shipping Cost Per Quantity', 'wp-express-checkout' ); ?></label>
+			<br />
+			<input type="number" name="wpec_product_shipping_per_quantity" step="<?php echo esc_attr( $step ); ?>" min="0" value="<?php echo esc_attr( $shipping_cost_per_quantity ); ?>">
+			<p class="description">
+			<?php
+			esc_html_e( 'Additional shipping cost per quantity', 'wp-express-checkout' );
+			echo '<br>';
+			esc_html_e( 'Leave it empty if you are not charging any additional shipping cost per quantity.', 'wp-express-checkout' );
+			?>
+			</p>
+		</div>
+
 		<label><?php esc_html_e( 'Tax (%)', 'wp-express-checkout' ); ?></label>
 		<br />
 		<input type="number" min="0" step="any" name="wpec_product_tax" value="<?php echo esc_attr( $current_tax ); ?>">
@@ -602,6 +617,10 @@ jQuery(document).ready(function($) {
 		// allow custom quantity.
 		$enable_shipping = filter_input( INPUT_POST, 'wpec_product_shipping_enable', FILTER_SANITIZE_NUMBER_INT );
 		update_post_meta( $post_id, 'wpec_product_shipping_enable', $enable_shipping );
+
+		$shipping_per_quantity = isset( $_POST['wpec_product_shipping_per_quantity'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_shipping_per_quantity'] ) ) : '';
+		$shipping_per_quantity = ! empty( $shipping_per_quantity ) ? floatval( $shipping_per_quantity ) : $shipping_per_quantity;
+		update_post_meta( $post_id, 'wpec_product_shipping_per_quantity', $shipping_per_quantity );
 
 		$tax = isset( $_POST['wpec_product_tax'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_tax'] ) ) : '';
 		$tax = floatval( $tax );

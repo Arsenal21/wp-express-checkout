@@ -195,6 +195,15 @@ abstract class Product {
 	}
 
 	/**
+	 * Retrieves the shipping cost per quantity.
+	 *
+	 * @return string
+	 */
+	public function get_shipping_per_quantity() {
+		return $this->post->wpec_product_shipping_per_quantity;
+	}
+
+	/**
 	 * Whether product type is physical.
 	 *
 	 * @return bool
