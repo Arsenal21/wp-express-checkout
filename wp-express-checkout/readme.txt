@@ -163,10 +163,12 @@ None
 
 == Changelog ==
 
+= WIP =
+- New option to add shipping cost per quantity in product add/edit page.
+
 = 2.3.5 =
 - Resolved an issue where product quantities with fractional pricing caused an error with PayPal.
 - Added a new option to 'sort by chronological order' to the products/shop page.
-- New option to add shipping cost per quantity in product add/edit page.
 
 = 2.3.4 =
 - Added a new email merge tag {download_link_url_only}. It outputs the download link URL only, omitting any associated product name.
