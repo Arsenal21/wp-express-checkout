@@ -93,6 +93,14 @@ class Payment_Processor {
 			// custom quantity enabled. let's take quantity from PayPal results.
 			$quantity = $this->get_quantity( $payment );
 		}
+		
+		if (isset($trans['shipping_per_quantity']) && !empty($trans['shipping_per_quantity'])) {
+			// $product_args = array(...$trans);
+			$product_args['quantity'] = $quantity;
+			$product_args['shipping'] = $trans['shipping'];
+			$product_args['shipping_per_quantity'] = $trans['shipping_per_quantity'];
+			$shipping = Utils::get_total_shipping_cost( $product_args ); // Get the total shipping cost including per quantity shipping cost.
+		}
 
 		try {
 			$order   = Orders::create();

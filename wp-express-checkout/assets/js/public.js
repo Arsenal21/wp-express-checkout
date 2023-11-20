@@ -364,7 +364,7 @@ var ppecHandler = function( data ) {
 			if ( parent.data.shipping ) {
 				order_data.purchase_units[ 0 ].amount.breakdown.shipping = {
 					currency_code: parent.data.currency,
-					value: parseFloat( parent.data.shipping )
+					value: parent.getTotalShippingCost(),
 				};
 			}
 			if ( parent.data.discount ) {
@@ -440,7 +440,7 @@ var ppecHandler = function( data ) {
 			var total = price_cont.find( '.wpec_tot_current_price' );
 			var tot_new = price_cont.find( '.wpec_tot_new_price' );
 			var price_new = price_cont.find( '.wpec-new-price-amount' );
-
+			var shipping_new = price_cont.find( '.wpec_price_shipping_amount' );
 			if ( typeof parent.data.discountAmount !== "undefined" ) {
 				price_new.html( parent.formatMoney( parent.data.newPrice ) );
 				tot_new.html( parent.formatMoney( parent.data.total ) );
@@ -448,6 +448,10 @@ var ppecHandler = function( data ) {
 			} else if ( total.length > 0 ) {
 				total.html( parent.formatMoney( parent.data.total ) );
 			}
+	
+			// Update the total shipping cost.
+			shipping_new.html(parent.formatMoney(parent.getTotalShippingCost()));
+			
 			var tax_val = price_cont.find( '.wpec-tax-val' );
 			if ( tax_val.length > 0 ) {
 				tax_val.html( parent.formatMoney( parent.data.tax_amount * parent.data.quantity ) );
@@ -491,11 +495,11 @@ var ppecHandler = function( data ) {
 			subtotal += parent.PHP_round( subtotal / quantity * parent.data.tax / 100, parent.data.dec_num ) * parent.data.quantity;
 		}
 
-		if ( parent.data.shipping ) {
-			tAmount += parseFloat( parent.data.shipping );
-			subtotal += parseFloat( parent.data.shipping );
+		const totalShippingCost = parent.getTotalShippingCost();
+		if ( totalShippingCost ) {
+			tAmount += parseFloat( totalShippingCost );			
+			subtotal += parseFloat( totalShippingCost );
 		}
-
 		parent.data.total = parent.PHP_round( tAmount, parent.data.dec_num );
 		parent.data.subtotal = parent.PHP_round( subtotal, parent.data.dec_num );
 	};
@@ -514,6 +518,24 @@ var ppecHandler = function( data ) {
 		}
 		return parent.PHP_round( amount, parent.data.dec_num );
 	};
+
+	/**
+	 * Calculates the total shipping cost.
+	 * It calculates the per quantity shipping cost along with the base shipping cost of that product.
+	 * 
+	 * @returns {float} The total shipping cost in float of two decimal places. 
+	 */
+	this.getTotalShippingCost = function() {
+		let total = 0;
+		const quantity = parent.data.quantity ? parseInt(parent.data.quantity) : 1;
+		const baseShipping = parent.data.shipping ? parseFloat( parent.data.shipping ) : 0;
+		const shippingPerQuantity = parent.data.shipping_per_quantity ? parseFloat( parent.data.shipping_per_quantity ) : 0;
+	
+		total = baseShipping + (shippingPerQuantity * quantity);
+		// Round to 2 decimal places.
+		total = parseFloat(total.toFixed(2))
+		return total;
+	}
 
 	jQuery( document ).trigger( 'wpec_before_render_button', [ this ] );
 

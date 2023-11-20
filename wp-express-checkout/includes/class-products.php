@@ -70,7 +70,7 @@ class Products {
 	}
 
 	/**
-	 * Retrieves an existing produt by ID.
+	 * Retrieves an existing product by ID.
 	 *
 	 * @param int $product_id Product ID
 	 *

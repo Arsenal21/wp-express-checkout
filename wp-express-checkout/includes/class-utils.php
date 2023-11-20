@@ -3,7 +3,7 @@
 namespace WP_Express_Checkout;
 
 use Exception;
-
+use WP_Express_Checkout\Debug\Logger;
 class Utils {
 
 	/**
@@ -73,6 +73,47 @@ class Utils {
 		} else {
 			return 0;
 		}
+	}
+
+	/**
+	 * Calculates the total shipping amount from provided product arguments.
+	 * It calculates the total per quantity shipping cost (if specified) and 
+	 * adds that to the base shipping cost. If the base shipping cose is not
+	 * specified, it returns zero.
+	 * 
+	 * @param array $product_args The product shipping costs data.
+	 * @return float Total shipping cost
+	 */
+	public static function get_total_shipping_cost($product_args){
+		$total = 0;
+		$quantity = 1;
+		$base_shipping = 0;
+		$shipping_per_quantity = 0;
+	
+		if ( isset($product_args['shipping_per_quantity']) && ! empty( $product_args['shipping_per_quantity'] )) {
+			$shipping_per_quantity = floatval( esc_attr($product_args['shipping_per_quantity']));
+
+			// To calculate total shipping per quantity cost.
+			if ( isset($product_args['quantity']) && ! empty( $product_args['quantity'] )) {
+				$quantity = intval($product_args['quantity']);
+			}
+		}
+		
+		// Check if product specific shipping cost is specified or not.
+		if (isset($product_args['shipping']) && !empty( $product_args['shipping'] )){
+			// Get the base shipping cost specified for a particular product.
+			$base_shipping = floatval(esc_attr( $product_args['shipping'] ));
+		} else {
+			// Use global base shipping settings only if the base shipping is explicitly set to '' (empty) in the product add/edit page.
+			$global_settings = get_option( 'ppdg-settings');
+			if ( isset( $global_settings->shipping ) && !empty( isset( $global_settings->shipping ) ) ) {
+				$base_shipping = floatval(esc_attr($global_settings->shipping));
+			}
+		}
+		
+		$total = $base_shipping + ($shipping_per_quantity * $quantity);
+		
+		return $total;
 	}
 
 	public static function round_price( $price ) {

@@ -107,6 +107,7 @@ class Shortcodes {
 			'name'            => get_the_title( $post_id ),
 			'price'           => $product->get_price(),
 			'shipping'        => $product->get_shipping(),
+			'shipping_per_quantity' => $product->get_shipping_per_quantity(),
 			'shipping_enable' => $product->is_physical(),
 			'tax'             => $product->get_tax(),
 			'custom_amount'   => 'donation' === $product->get_type(), // Temporary, until we remove custom_amount parameter.
@@ -124,6 +125,7 @@ class Shortcodes {
 				'name'            => 'Item Name',
 				'price'           => 0,
 				'shipping'        => 0,
+				'shipping_per_quantity' => 0,
 				'shipping_enable' => 0,
 				'tax'             => 0,
 				'quantity'        => 1,
@@ -195,6 +197,7 @@ class Shortcodes {
 			'quantity'        => $quantity,
 			'tax'             => $tax,
 			'shipping'        => $shipping,
+			'shipping_per_quantity' => $shipping_per_quantity,
 			'shipping_enable' => $shipping_enable,
 			'url'             => $url,
 			'custom_quantity' => $custom_quantity,
@@ -249,6 +252,7 @@ class Shortcodes {
 			'quantity'        => $quantity,
 			'tax'             => $tax,
 			'shipping'        => $shipping,
+			'shipping_per_quantity' => $shipping_per_quantity,
 			'shipping_enable' => $shipping_enable,
 			'dec_num'         => intval( $this->ppdg->get_setting( 'price_decimals_num' ) ),
 			'thousand_sep'    => $this->ppdg->get_setting( 'price_thousand_sep' ),
@@ -308,14 +312,17 @@ class Shortcodes {
 			}
 			$tax_line = '<span class="wpec_price_tax_section">' . $tax_tag . '</span>';
 		}
-		if ( ! empty( $args['shipping'] ) ) {
-			$tot_price += $args['shipping'];
+
+		$shipping_cost = Utils::get_total_shipping_cost( $args );
+		if ( ! empty( $shipping_cost ) ) {
+			$tot_price += $shipping_cost;
+			$formatted_shipping_cost =  Utils::price_format( $shipping_cost );
 			if ( ! empty( $args['tax'] ) ) {
 				/* translators: tax + shipping amount */
-				$shipping_tag = sprintf( __( '+ %s (shipping)', 'wp-express-checkout' ), Utils::price_format( $args['shipping'] ) );
+				$shipping_tag = sprintf( __( '+ <span class="wpec_price_shipping_amount">%s</span> (shipping)', 'wp-express-checkout' ), $formatted_shipping_cost );
 			} else {
 				/* translators: shipping amount */
-				$shipping_tag = sprintf( __( '%s (shipping)', 'wp-express-checkout' ), Utils::price_format( $args['shipping'] ) );
+				$shipping_tag = sprintf( __( '<span class="wpec_price_shipping_amount">%s</span> (shipping)', 'wp-express-checkout' ), $formatted_shipping_cost );
 			}
 			$shipping_line = '<span class="wpec_price_shipping_section">' . $shipping_tag . '</span>';
 		}
@@ -597,6 +604,7 @@ class Shortcodes {
 					'name'            => get_the_title( $id ),
 					'price'           => (float) $product->get_price(),
 					'shipping'        => $product->get_shipping(),
+					'shipping_per_quantity' => $product->get_shipping_per_quantity(),
 					'tax'             => $product->get_tax(),
 					'quantity'        => $product->get_quantity(),
 					'product_id'      => $id,
@@ -808,6 +816,7 @@ class Shortcodes {
 					'name'            => get_the_title( $id ),
 					'price'           => (float) $product->get_price(),
 					'shipping'        => $product->get_shipping(),
+					'shipping_per_quantity' => $product->get_shipping_per_quantity(),
 					'tax'             => $product->get_tax(),
 					'quantity'        => $product->get_quantity(),
 					'product_id'      => $id,
