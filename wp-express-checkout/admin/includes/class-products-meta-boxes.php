@@ -134,7 +134,7 @@ class Products_Meta_Boxes {
 <p>
 		<?php
 		// translators: %s is a link to documentation page
-		echo sprintf( __( 'You can find documentation on variations <a href="%s" target="_blank">here</a>.', 'wp-express-checkout' ), 'https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/' );
+		echo sprintf( __( 'You can find documentation on variations <a href="%s" target="_blank">here</a>.', 'wp-express-checkout' ), 'https://wp-express-checkout.com/creating-product-with-variations/' );
 		?>
 </p>
 		<?php
@@ -268,6 +268,11 @@ class Products_Meta_Boxes {
 		$current_tax      = get_post_meta( $post->ID, 'wpec_product_tax', true );
 		$step             = pow( 10, -intval( $this->WPEC_Main->get_setting( 'price_decimals_num' ) ) );
 		$enable_shipping  = get_post_meta( $post->ID, 'wpec_product_shipping_enable', true );
+
+		// translators: %s is a link to documentation page
+		echo '<p>';
+		echo sprintf( __( 'You can find documentation on shipping and tax <a href="%s" target="_blank">here</a>.', 'wp-express-checkout' ), 'https://wp-express-checkout.com/shipping-tax-for-express-checkout/' );
+		echo '</p>';
 		?>
 		<label>
 			<input type="checkbox" name="wpec_product_shipping_enable" value="1" <?php checked( $enable_shipping ); ?>>
@@ -309,7 +314,7 @@ class Products_Meta_Boxes {
 		esc_html_e( 'Enter tax (in percent) which will be added to the product price.', 'wp-express-checkout' );
 		echo '<br>';
 		esc_html_e( 'Leave it empty if you don\'t want to apply tax.', 'wp-express-checkout' );
-		
+
 	}
 
 	public function display_upload_meta_box( $post ) {

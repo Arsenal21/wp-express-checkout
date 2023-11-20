@@ -326,8 +326,17 @@ class Admin {
 		add_settings_field( 'disabled_funding', __( 'Disabled Funding Options', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_funding', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'card', 'credit', 'venmo'/*, 'sepa'*/ ), 'texts' => array( __( 'Credit or debit cards', 'wp-express-checkout' ), __( 'PayPal Credit', 'wp-express-checkout' ), 'Venmo'/*, __( 'SEPA-Lastschrift', 'wp-express-checkout' )*/ ) ) );
 		//add_settings_field( 'disabled_cards', __( 'Disabled Cards', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_cards', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'visa', 'mastercard', 'amex', 'discover', 'jcb', 'elo', 'hiper' ), 'texts' => array( __( 'Visa', 'wp-express-checkout' ), __( 'Mastercard', 'wp-express-checkout' ), __( 'American Express', 'wp-express-checkout' ), __( 'Discover', 'wp-express-checkout' ), __( 'JCB', 'wp-express-checkout' ), __( 'Elo', 'wp-express-checkout' ), __( 'Hiper', 'wp-express-checkout' ) ) ) );
 
-		// Shipping & Tax.
-		add_settings_field( 'shipping', __( 'Shipping Cost', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-shipping-tax-section', array( 'field' => 'shipping', 'type' => 'number', 'step' => 0.01, 'class' => 'wp-ppdg-shipping', 'desc' => __( 'Enter numbers only. Example: 5.50', 'wp-express-checkout' ) . '<br>' . __( 'Leave it empty if you are not charging shipping cost. You can also set shipping cost on a per product basis.', 'wp-express-checkout' ), 'size' => 10 ) );
+		// Shipping & Tax section.
+		add_settings_field( 'shipping', __( 'Shipping Cost', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-shipping-tax-section', 
+			array( 
+				'field' => 'shipping', 
+				'type' => 'number', 
+				'step' => 0.01, 
+				'class' => 'wp-ppdg-shipping', 
+				'desc' => __( 'Enter numbers only. Example: 5.50', 'wp-express-checkout' ) . '<br>' . __( 'Leave it empty if you are not charging shipping cost. You can also set shipping cost on a per product basis.', 'wp-express-checkout' ) . '<br />' . sprintf( __( '<a href="%s" target="_blank">Read this documentation</a> to learn how to configure shipping.', 'wp-express-checkout' ), 'https://wp-express-checkout.com/configuring-shipping-options/' ), 
+				'size' => 10 
+				) 
+		);
 		add_settings_field( 'tax', __( 'Tax (%)', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-shipping-tax-section', array( 'field' => 'tax', 'type' => 'number', 'step' => 0.01, 'class' => 'wp-ppdg-tax', 'desc' => __( 'Enter tax (in percent) which will be added to the product price.', 'wp-express-checkout' ) . '<br>' . __( 'Leave it empty if you don\'t want to apply tax.', 'wp-express-checkout' ), 'size' => 10 ) );
 
 		// debug logging section.

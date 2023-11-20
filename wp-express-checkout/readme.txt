@@ -164,7 +164,7 @@ None
 == Changelog ==
 
 = WIP =
-- New option to add shipping cost per quantity in product add/edit page.
+- New option to configure additional shipping cost per quantity in the product add/edit interface.
 
 = 2.3.5 =
 - Resolved an issue where product quantities with fractional pricing caused an error with PayPal.
