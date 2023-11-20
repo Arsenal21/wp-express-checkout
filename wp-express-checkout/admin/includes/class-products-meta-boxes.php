@@ -269,6 +269,12 @@ class Products_Meta_Boxes {
 		$step             = pow( 10, -intval( $this->WPEC_Main->get_setting( 'price_decimals_num' ) ) );
 		$enable_shipping  = get_post_meta( $post->ID, 'wpec_product_shipping_enable', true );
 		?>
+		<label>
+			<input type="checkbox" name="wpec_product_shipping_enable" value="1" <?php checked( $enable_shipping ); ?>>
+			<?php esc_html_e( 'This is a Physical Product', 'wp-express-checkout' ); ?>
+		</label>
+		<p class="description"><?php esc_html_e( 'When checked, shipping address will be collected at the time of checkout.', 'wp-express-checkout' ); ?></p>
+
 		<div id="wpec_shipping_cost_container">
 			<label><?php esc_html_e( 'Shipping Cost', 'wp-express-checkout' ); ?></label>
 			<br />
@@ -282,7 +288,7 @@ class Products_Meta_Boxes {
 			</p>
 		</div>
 
-		<div id="wpec_shipping_cost_container">
+		<div id="wpec_additional_shipping_cost_container">
 			<label><?php esc_html_e( 'Shipping Cost Per Quantity', 'wp-express-checkout' ); ?></label>
 			<br />
 			<input type="number" name="wpec_product_shipping_per_quantity" step="<?php echo esc_attr( $step ); ?>" min="0" value="<?php echo esc_attr( $shipping_cost_per_quantity ); ?>">
@@ -303,14 +309,7 @@ class Products_Meta_Boxes {
 		esc_html_e( 'Enter tax (in percent) which will be added to the product price.', 'wp-express-checkout' );
 		echo '<br>';
 		esc_html_e( 'Leave it empty if you don\'t want to apply tax.', 'wp-express-checkout' );
-		?>
-		</p>
-		<label>
-			<input type="checkbox" name="wpec_product_shipping_enable" value="1" <?php checked( $enable_shipping ); ?>>
-			<?php esc_html_e( 'This is a Physical Product', 'wp-express-checkout' ); ?>
-		</label>
-		<p class="description"><?php esc_html_e( 'When checked, shipping address will be collected at the time of checkout.', 'wp-express-checkout' ); ?></p>
-		<?php
+		
 	}
 
 	public function display_upload_meta_box( $post ) {
