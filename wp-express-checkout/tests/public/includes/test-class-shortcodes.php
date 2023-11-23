@@ -481,6 +481,7 @@ class ShortcodesTest extends \WP_UnitTestCase {
 			'price'           => 0,
 			'shipping'        => 0,
 			'shipping_enable' => 0,
+			'shipping_per_quantity' => 0,
 			'tax'             => 0,
 			'quantity'        => 1,
 			'url'             => '',
