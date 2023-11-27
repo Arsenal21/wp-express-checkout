@@ -34,7 +34,7 @@
     "grunt-rtlcss": "^2.0.1",
     "grunt-wp-i18n": "^1.0.3",
     "node-bourbon": "^4.2.3",
-    "postcss": "^7.0.35",
+    "postcss": "^7.0.36",
     "postcss-css-variables": "^0.17.0",
     "postcss-nested": "^4.2.1",
     "postcss-rem-to-pixel": "^4.1.2",
