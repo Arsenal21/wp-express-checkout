@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.4
-Stable tag: 2.3.5
+Stable tag: 2.3.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -163,8 +163,9 @@ None
 
 == Changelog ==
 
-= WIP =
-- New option to configure additional shipping cost per quantity in the product add/edit interface.
+= 2.3.6 =
+- New option to configure additional shipping cost per quantity in the product add/edit interface. [Shipping Documentation](https://wp-express-checkout.com/configuring-shipping-options/)
+- New free extension to reset plugin settings and data to start over. [Download the extension here](https://wp-express-checkout.com/wp-express-checkout-reset-settings-and-data/)
 
 = 2.3.5 =
 - Resolved an issue where product quantities with fractional pricing caused an error with PayPal.
