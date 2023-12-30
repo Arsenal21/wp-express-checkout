@@ -253,7 +253,6 @@ class View_Downloads {
 		}
 
 		// Trigger the action hook (product object is also passed).
-		// It can be used to override the download handling via an addon.
 		do_action( 'wpec_process_download_request', $product, $order_id );
 
 		if ( isset( $_GET['var_id'] ) && isset( $_GET['grp_id'] ) ) {
@@ -290,6 +289,10 @@ class View_Downloads {
 
 		// Clean the file URL.
 		$file_url = stripslashes( trim( $file_url ) );
+
+		// Trigger action hook (file_url, product object is also passed).
+		// It can be used to override the download handling via an addon.
+		do_action( 'wpec_before_file_download', $file_url, $product, $order_id );		
 
 		if($product->wpec_force_download) {
 			Utils::force_download_file($file_url);

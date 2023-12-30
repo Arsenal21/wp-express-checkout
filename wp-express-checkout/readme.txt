@@ -163,6 +163,10 @@ None
 
 == Changelog ==
 
+= WIP = 
+- Added a new action hook - wpec_before_file_download.
+
+
 = 2.3.6 =
 - New option to configure additional shipping cost per quantity in the product add/edit interface. [Shipping Documentation](https://wp-express-checkout.com/configuring-shipping-options/)
 - New free extension to reset plugin settings and data to start over. [Download the extension here](https://wp-express-checkout.com/wp-express-checkout-reset-settings-and-data/)
