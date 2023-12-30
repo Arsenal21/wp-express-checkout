@@ -246,38 +246,6 @@ class Utils {
 			exit;
 		}
 	}
-
-	public static function force_download_file($file_url)
-	{		
-		$file_size = intval(get_headers($file_url, true)['Content-Length']);
-		
-		header('Content-Type: application/octet-stream');
-		header('Content-Disposition: attachment; filename="' . basename($file_url) . '"');
-		header('Content-Length: ' . $file_size);
-		
-		// Clear any output that may have already been sent
-		ob_end_clean();
-		
-		// Open the file for reading
-		$fp = fopen($file_url, 'rb');
-		
-		// Set the time limit to 0 to prevent the script from timing out
-		set_time_limit(0);
-		
-		// Send the file in 8KB chunks
-		$chunk_size = 8192;
-		while (!feof($fp) && ($p = ftell($fp)) <= $file_size) {
-			if ($p + $chunk_size > $file_size) {
-				// Last chunk
-				$chunk_size = $file_size - $p;
-			}
-			echo fread($fp, $chunk_size);
-			flush(); // flush the output buffer
-		}
-		
-		// Close the file pointer
-		fclose($fp);
-	}
 	
 	// There is no need in untranslated countries list currently, so let's use
 	// translated.

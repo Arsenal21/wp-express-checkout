@@ -295,12 +295,147 @@ class View_Downloads {
 		do_action( 'wpec_before_file_download', $file_url, $product, $order_id );		
 
 		if($product->wpec_force_download) {
-			Utils::force_download_file($file_url);
+			View_Downloads::handle_force_download_file($file_url);
 		}
 		else {
 			Utils::redirect_to_url( $file_url );					
 		}
 
+	}
+
+	public static function handle_force_download_file( $file_url )
+	{
+		//First, verify if the file URL is accessible. If not, it will use wp_die() to display the error message.
+		//It will also return the file size.
+		$file_size = View_Downloads::verify_file_url_accessible( $file_url );
+
+		if( $file_size > 0) {
+			//If the file size is available, use the first download method.
+			View_Downloads::download_method_1_uses_fopen( $file_url, $file_size );
+		}
+		else {
+			//If the file size is not available, use the second download method (uses curl)
+			View_Downloads::download_method_2_uses_curl( $file_url );
+		}
+
+	}
+
+	/*
+	 * Verify if the file URL is accessible. If not, it will use wp_die() to display the error message.
+	 * It will also return the file size if available. If not, it will return 0.
+	 */
+	public static function verify_file_url_accessible( $file_url ){
+		//Uses wp_remote_get() to check if the file exists and the response code is 200.
+		$remote_get_args = array(
+			'method'      => 'HEAD',
+			'timeout'     => 30,
+			'redirection' => 5,
+			'sslverify'   => false,
+		);
+
+		$data = wp_remote_get( $file_url, $remote_get_args );
+
+		if ( is_wp_error( $data ) ) {
+			$err = $data->get_error_message();
+			wp_die( __( 'Error occurred when trying to fetch the file using wp_remote_get().', 'wp-express-checkout' ) . ' ' . $err );
+		}
+
+		// Check if the file exists and the response code is 200.
+		if ( $data['response']['code'] !== 200 ) {
+			if ( $data['response']['code'] === 404 ) {
+				status_header( 404 );
+				$err_msg = ( __( "Requested file could not be found (error code 404). Verify the file URL specified in the product configuration.", 'wp-express-checkout' ) );
+				Logger::log( $err_msg, false );
+				wp_die( $err_msg );
+			} else {
+				status_header( $data['response']['code'] );
+				$err_msg = sprintf( __( 'An HTTP error occurred during file retrieval. Error Code: %s', 'wp-express-checkout' ), $data['response']['code'] );
+				Logger::log( $err_msg, false );
+				wp_die( $err_msg );
+			}
+		}
+
+		//Check if the file size is available.
+		if( isset( $data['headers']['content-length'] ) ) {
+			$file_size = intval( $data['headers']['content-length'] );
+		} else {
+			$file_size = 0;
+		}
+
+		return $file_size;
+	}
+
+	public static function download_method_1_uses_fopen( $file_url, $file_size ){
+		Logger::log( 'Trying to dispatch file using download method 1 (uses fopen).', true);
+
+		header('Content-Type: application/octet-stream');
+		header('Content-Disposition: attachment; filename="' . basename($file_url) . '"');
+		
+		// Send Content-Length header only if we have a valid size
+		if ( $file_size > 0 ) {
+			header('Content-Length: ' . $file_size);
+		}
+		
+		// Clear any output that may have already been sent
+		ob_end_clean();
+		
+		// Open the file for reading
+		$fp = @fopen($file_url, 'rb');
+		if ($fp) {
+			// Set the time limit to 0 to prevent the script from timing out
+			set_time_limit(0);
+			
+			// Send the file in 8KB chunks
+			$chunk_size = 8192;
+			while (!feof($fp) && ($p = ftell($fp)) <= $file_size) {
+				if ($file_size > 0 && $p + $chunk_size > $file_size) {
+					// Last chunk
+					$chunk_size = $file_size - $p;
+				}
+				echo fread($fp, $chunk_size);
+				flush(); // flush the output buffer
+			}
+			
+			// Close the file pointer
+			fclose($fp);
+		} else {
+			// Handle error if file can't be opened
+			header('HTTP/1.1 500 Internal Server Error');
+			wp_die( "Unable to open file using fopen()." );
+		}
+	}
+
+	public static function download_method_2_uses_curl( $file_url ){
+		Logger::log( 'Trying to dispatch file using download method 2 (uses cURL).', true);
+
+		if ( !function_exists('curl_init') ) {
+			$error_msg = __( 'cURL is not installed on this server. Cannot dispatch the download using cURL method.', 'wp-express-checkout' );
+			Logger::log( $error_msg, false);
+			wp_die( $error_msg );
+		}
+
+		$output_headers = array();
+		$output_headers[] = 'Content-Type: application/octet-stream';
+		$output_headers[] = 'Content-Disposition: attachment; filename="' . basename($file_url) . '"';
+		$output_headers[] = 'Content-Encoding: none';
+
+		foreach ( $output_headers as $header ) {
+			header( $header );
+		}
+
+		$ch = curl_init();
+		curl_setopt( $ch, CURLOPT_BINARYTRANSFER, 1 );
+		curl_setopt( $ch, CURLOPT_HEADER, 0 );
+		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1 );
+		curl_setopt( $ch, CURLOPT_MAXREDIRS, 5 );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 0 );
+		curl_setopt( $ch, CURLOPT_URL, $file_url );
+		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
+		curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
+		// curl_setopt( $ch, CURLOPT_WRITEFUNCTION, array( $this, 'stream_handler' ) );
+
+		curl_exec( $ch );
+		curl_close( $ch );
 	}
 
 }

@@ -165,7 +165,7 @@ None
 
 = WIP = 
 - Added a new action hook - wpec_before_file_download.
-
+- Enhanced the force download feature to check if the file is accessible before trying to dispatch it.
 
 = 2.3.6 =
 - New option to configure additional shipping cost per quantity in the product add/edit interface. [Shipping Documentation](https://wp-express-checkout.com/configuring-shipping-options/)
