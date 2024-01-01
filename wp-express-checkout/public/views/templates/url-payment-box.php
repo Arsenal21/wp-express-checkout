@@ -40,6 +40,8 @@
 			),
 			'ajaxUrl' => get_admin_url() . 'admin-ajax.php',
 		);
+		//Allow other plugins to add their own local vars
+		$localVars = apply_filters('wpec_url_payment_box_script_local_vars', $localVars );
 		?>
         <link rel="stylesheet" href="<?php echo $styleFrontEnd ?>" />
 
@@ -57,9 +59,16 @@
                 pointer-events: auto !important;
             }
         </style>
+		<?php 
+		//Trigger action to allow other plugins to load their scripts
+		do_action( 'wpec_url_payment_box_before_head_close', $product_id );
+		?>
 	</head>
 	<body>
 		<?php
+		//Trigger action hook
+		do_action( 'wpec_url_payment_box_after_body_open', $product_id );
+
 		$class_main_inst = WP_Express_Checkout\Main::get_instance();
 		//$wpec_shortcode = WP_Express_Checkout\Shortcodes::get_instance();
 
@@ -257,6 +266,9 @@
 		echo '<script type="text/javascript">var wpec_' . esc_attr( $button_id ) . '_data=' . json_encode( $data ) . ';jQuery( function( $ ) {$( document ).on( "wpec_paypal_sdk_loaded", function() { new ppecHandler(wpec_' . esc_attr( $button_id ) . '_data) } );} );</script>';
 
 		WP_Express_Checkout\Main::get_instance()->load_paypal_sdk();
+
+		//Trigger action hook
+		do_action( 'wpec_url_payment_box_before_body_close', $product_id );
 		?>
 	</body>
 </html>
