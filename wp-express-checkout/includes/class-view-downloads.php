@@ -9,7 +9,6 @@
 namespace WP_Express_Checkout;
 
 use Exception;
-use ftp;
 use WP_Express_Checkout\Debug\Logger;
 use WP_Express_Checkout\Utils_Downloads;
 
