@@ -312,14 +312,18 @@ class View_Downloads {
 		$download_method = Main::get_instance()->get_setting( 'download_method' );
 		$download_url_conversion_preference = Main::get_instance()->get_setting( 'download_url_conversion_preference' );
 		
+		Logger::log("Download attempt using download method $download_method and path conversion preference to $download_url_conversion_preference ");
+
 		$result = true; // Stores the file download result.
 
 		if ($download_method == '1' && $download_url_conversion_preference === 'absolute') {
 			// The default method to use that should work for most of the cases.
-			self::handle_download_method_default( $file_url );
+			Logger::log("Download attempt by default settings.");
+			$result = self::handle_download_method_default( $file_url );
 		}else{
 			// Handle download method according to the user preferences.
-			self::handle_download_method( $file_url );
+			Logger::log("Download attempt by custom user preference.");
+			$result = self::handle_download_method( $file_url, $download_method, $download_url_conversion_preference );
 		}
 
 		if ($result !== true) {
@@ -330,11 +334,19 @@ class View_Downloads {
 		Logger::log("Download completed with no server-side errors detected.");
 	}
 
+	/**
+	 * Download file using default process. Assumed that the following procedure will work most of 
+	 * the cases, so user don't need to change default settings.
+	 *
+	 * @param string $file_url
+	 * 
+	 * @return string|bool Error messages if any.
+	 */
 	public static function handle_download_method_default($file_url) {
 		$is_local_file = Utils_Downloads::is_local_file($file_url);
 		if( $is_local_file ) {
 			// If the file is locally available, use the default file download method.
-			$file_path = Utils_Downloads::url_to_path_converter($file_url, 'absolute');
+			$file_path = Utils_Downloads::absolute_path_from_url($file_url);
 			return Utils_Downloads::download_using_fopen($file_path);
 		}
 
@@ -342,10 +354,22 @@ class View_Downloads {
 		return Utils_Downloads::download_using_curl( $file_url );
 	}
 
-	public static function handle_download_method($file_url){
-		$download_method = Main::get_instance()->get_setting( 'download_method' );
-		Logger::log( "Trying to dispatch file using download method $download_method.");
-
+	/**
+	 * Download file according to the user preferences. If any server have special config, user can
+	 * change the settings however they want.
+	 * 
+	 * * NOTE: If url to path conversion fails, the download url will remain unchanged.
+	 *
+	 * @param string $file_url The file URL
+	 * @param string $download_method The preferred download method.
+	 * @param string $path_type The preferred file path type.
+	 * 
+	 * @return string|bool Error messages if any.
+	 */
+	public static function handle_download_method($file_url, $download_method, $path_type){
+		// Try to convert to target path type. If conversion fails, keep the url unchanged. 
+		$file_url = Utils_Downloads::url_to_path_converter($file_url, $path_type);
+		Logger::log("Download file path/url after conversion: $file_url");
 		switch($download_method) {
 			case 2:
 				// Method 2, Fopen-1M.

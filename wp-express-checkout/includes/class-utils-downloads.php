@@ -16,6 +16,7 @@ class Utils_Downloads
      */
     public static function is_local_file($src_file_url)
     {
+        Logger::log('Trying to check if the file is a local file or not.');
         if (preg_match("/^http/i", $src_file_url) != 1) {
             return false;
         }
@@ -26,9 +27,11 @@ class Utils_Downloads
         $wp_root_pos = stripos($src_file_url, $wpurl);
 
         if ($wp_root_pos !== false && file_exists(self::absolute_path_from_url($src_file_url))) {
+            Logger::log('Target download file is a local file.');
             return true;
         }
 
+        Logger::log('Target download file is not a local file.');
         return false;
     }
 
@@ -44,6 +47,7 @@ class Utils_Downloads
      */
     public static function absolute_path_from_url($src_file_url)
     {
+        Logger::log('Trying to convert url to absolute file path.');
         if (preg_match("/^http/i", $src_file_url) != 1) {
             return false;
         }
@@ -73,39 +77,6 @@ class Utils_Downloads
         $total_length = $domain_name_pos + $domain_name_length;
         // Replace http*://SERVER_NAME in $src_file_url with the absolute document root path.
         return substr_replace($src_file_url, $absolute_path_root, 0, $total_length);
-    }
-
-    /**
-     * Converts $src_file_url into a file path, that is relative to the main eStore plugin directory.
-     * Warning: Assumes that $src_file_url is at, or below, the WordPress root directory. A value of FALSE is returned
-     * under the following conditions:
-     * 1. $src_file_url is not a qualified URL.
-     * 2. $src_file_url is outside the scope of the WordPress root directory.
-     * 3. $src_file_url and get_bloginfo('wpurl') are different, because one uses HTTP and the other uses HTTPS. This could
-     *       happen if the product is stored in the DB with an HTTPS and the WP root uses HTTP, or vice versa.
-     * -- The Assurer, 2010-10-15.
-     *
-     * @param string $src_file_url File URL
-     * @return string Relative file path
-     */
-    public static function relative_path_from_url($src_file_url)
-    {
-        if (preg_match("/^http/i", $src_file_url) != 1) {
-            return false;
-        }
-        // Not a qualified URL.
-        $wpurl = get_bloginfo('wpurl'); // iGet WP root URL1 and directory.
-        // Calculate position in $src_file_url just after the WP root URL and directory.
-        $wp_root_pos = stripos($src_file_url, $wpurl);
-        if ($wp_root_pos === false) {
-            return false;
-        }
-        // Rats!  URL is not under WP root directory.
-        $wp_root_length = strlen($wpurl);
-        $total_length = $wp_root_pos + $wp_root_length;
-        $relative_path_to_wpurl = '../../..'; // Relative path to WP root directory.
-        // Replace $wpurl with $relative_path_to_wpurl in $src_file_url and return the result.
-        return substr_replace($src_file_url, $relative_path_to_wpurl, 0, $total_length);
     }
 
     /**
@@ -195,6 +166,7 @@ class Utils_Downloads
      */
     public static function url_to_path_converter($src_file_url, $conversion_type)
     {
+        Logger::log('Trying to convert url to specified type of path.', true);
         switch ($conversion_type) {
                 // Return conversion, based on conversion type...
             case 'absolute': // Absolute path...
@@ -212,11 +184,13 @@ class Utils_Downloads
                 //     break;
         }
         //If the preferred URL conversions failed, or if "No Conversion" was choosen, then return the original URL.
+        Logger::log('URL to path conversion failed, returning default value.', false);
         return $src_file_url;
     }
 
     public static function download_using_fopen($file_path, $chunk_blocks = 8, $session_close = false)
     {
+        Logger::log('Trying to dispatch file using fopen.', true);
         $file_name = basename($file_path);
         // Download methods #1, #2, #4 and #5.
         // -- The Assurer, 2010-10-22.
@@ -277,6 +251,7 @@ class Utils_Downloads
 
     public static function download_using_xsend_file($file_path)
     {
+        Logger::log('Trying to dispatch file using xsend file.', true);
         $file_name = basename($file_path);
         // Write headers to browser and send file using X-sendfile
         header('X-Sendfile: ' . $file_path);
@@ -286,7 +261,7 @@ class Utils_Downloads
 
     public static function download_using_curl($file_url)
     {
-        Logger::log('Trying to dispatch file using remote file download method (uses cURL).', true);
+        Logger::log('Trying to dispatch file using cURL.', true);
 
         if (!function_exists('curl_init')) {
             $error_msg = __('cURL is not installed on this server. Cannot dispatch the download using cURL method.', 'wp-express-checkout');
