@@ -371,6 +371,8 @@ class Main {
 			'tos_text'             => __( 'I accept the <a href="https://example.com/terms-and-conditions/" target="_blank">Terms and Conditions</a>', 'wp-express-checkout' ),
 			'download_duration'    => '',
 			'download_count'       => '',
+			'download_method'       => '1',
+			'download_url_conversion_preference' => 'absolute',
 			'access_permission'    => 'manage_options',
 		);
 

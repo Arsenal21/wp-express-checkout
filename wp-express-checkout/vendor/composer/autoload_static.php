@@ -35,6 +35,7 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'WPEC_Admin_User_Feedback' => __DIR__ . '/../..' . '/admin/includes/class-admin-user-feedback.php',
         'WP_Express_Checkout\\Admin\\Admin' => __DIR__ . '/../..' . '/admin/class-admin.php',
         'WP_Express_Checkout\\Admin\\Admin_Order_Summary_Table' => __DIR__ . '/../..' . '/admin/includes/class-admin-order-summary-table.php',
         'WP_Express_Checkout\\Admin\\Coupons_List' => __DIR__ . '/../..' . '/admin/includes/class-coupons-list.php',
@@ -76,6 +77,7 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WP_Express_Checkout\\Shortcodes' => __DIR__ . '/../..' . '/public/includes/class-shortcodes.php',
         'WP_Express_Checkout\\Tags' => __DIR__ . '/../..' . '/includes/class-tags.php',
         'WP_Express_Checkout\\Utils' => __DIR__ . '/../..' . '/includes/class-utils.php',
+        'WP_Express_Checkout\\Utils_Downloads' => __DIR__ . '/../..' . '/includes/class-utils-downloads.php',
         'WP_Express_Checkout\\Variations' => __DIR__ . '/../..' . '/includes/class-variations.php',
         'WP_Express_Checkout\\View_Downloads' => __DIR__ . '/../..' . '/includes/class-view-downloads.php',
     );
