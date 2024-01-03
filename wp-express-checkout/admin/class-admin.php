@@ -218,6 +218,7 @@ class Admin {
 		add_settings_section( 'ppdg-tos-section', __( 'Terms and Conditions', 'wp-express-checkout' ), array( $this, 'tos_description' ), $this->plugin_slug . '-advanced' );
 
 		add_settings_section( 'ppdg-link-expiry-section', __( 'Download Link Expiry', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
+		add_settings_section( 'ppdg-dl-manager-section', __( 'Download Manager Related', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
 		add_settings_section( 'wpec-access-section', __( 'Admin Dashboard Access Permission', 'wp-express-checkout' ), array( $this, 'access_description' ), $this->plugin_slug . '-advanced' );
 
 		/* Add the settings fields */
@@ -511,6 +512,46 @@ class Admin {
 				'desc' => __( 'Number of times an item can be downloaded before the link expires. Example value: 3. Leave empty or set to 0 if you do not want to limit downloads by download count.', 'wp-express-checkout' ),
 			)
 		);
+		
+		add_settings_field(
+			'download_method',
+			__( 'Download Method', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'ppdg-dl-manager-section',
+			array(
+				'field' => 'download_method',
+				'type' => 'select',
+				'vals'  => array( '1', '2', '3', '4', '5' ),
+				'texts' => array(
+					__( '(Default) Method 1, Fopen-8K', 'wp-express-checkout' ),
+					__( 'Method 2, Fopen-1M', 'wp-express-checkout' ),
+					__( 'Method 3, Readfile-1M-SessionWriteClose', 'wp-express-checkout' ),
+					__( 'Method 4, cURL', 'wp-express-checkout' ),
+					__( 'Method 5, Mod X-Sendfile', 'wp-express-checkout' ),
+				),
+				'desc' => __( 'If the default download method does not work on your server, please try one of the other available methods. WARNING: Method 7, cURL requires the "Do Not Convert" Automatic URL Conversion Preference, and that ALL product download files be specified as fully qualified URL (not absolute or relative file names). If the cURL library is not installed on your server, Method 7 will not appear in the drop down menu.', 'wp-express-checkout' ),
+			)
+		);
+
+		add_settings_field(
+			'download_url_conversion_preference',
+			__( 'URL Conversion Preference', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-advanced',
+			'ppdg-dl-manager-section',
+			array(
+				'field' => 'download_url_conversion_preference',
+				'type' => 'select',
+				'vals'  => array( 'absolute', 'do_not_convert'),
+				'texts' => array(
+					__( '(Default) Absolute', 'wp-express-checkout' ),
+					__( 'Do not convert', 'wp-express-checkout' ),
+				),
+				'desc' => __( 'By default, the plugin tries to convert product download file URL into absolute file paths.', 'wp-express-checkout' ),
+			)
+		);
+		
 		add_settings_field(
 			'access_permission',
 			__( 'Admin Dashboard Access Permission', 'wp-express-checkout' ),
@@ -582,7 +623,7 @@ class Admin {
 		return Main::get_defaults();
 	}
 
-		/**
+	/**
 	 * Settings HTML
 	 *
 	 * @param array $args Field arguments passed into the add_settings_field().

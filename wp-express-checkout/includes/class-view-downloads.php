@@ -10,6 +10,7 @@ namespace WP_Express_Checkout;
 
 use Exception;
 use WP_Express_Checkout\Debug\Logger;
+use WP_Express_Checkout\Utils_Downloads;
 
 /**
  * Download request class.
@@ -305,22 +306,90 @@ class View_Downloads {
 
 	public static function handle_force_download_file( $file_url )
 	{
-		//First, verify if the file URL is accessible. If not, it will use wp_die() to display the error message.
-		//It will also return the file size.
-		$file_size = View_Downloads::verify_file_url_accessible( $file_url );
+		// First, verify if the file URL is accessible. If not, it will use wp_die() to display the error message.
+		View_Downloads::verify_file_url_accessible( $file_url );
 
-		if( $file_size > 0) {
-			//If the file size is available, use the first download method.
-			View_Downloads::download_method_1_uses_fopen( $file_url, $file_size );
-		}
-		else {
-			//If the file size is not available, use the second download method (uses curl)
-			View_Downloads::download_method_2_uses_curl( $file_url );
+		$download_method = Main::get_instance()->get_setting( 'download_method' );
+		$download_url_conversion_preference = Main::get_instance()->get_setting( 'download_url_conversion_preference' );
+		
+		Logger::log("Download attempt using download method $download_method and path conversion preference to $download_url_conversion_preference ");
+
+		$result = true; // Stores the file download result.
+
+		if ($download_method == '1' && $download_url_conversion_preference === 'absolute') {
+			// The default method to use that should work for most of the cases.
+			Logger::log("Download attempt by default settings.");
+			$result = self::handle_download_method_default( $file_url );
+		}else{
+			// Handle download method according to the user preferences.
+			Logger::log("Download attempt by custom user preference.");
+			$result = self::handle_download_method( $file_url, $download_method, $download_url_conversion_preference );
 		}
 
+		if ($result !== true) {
+			Logger::log( "Download error: " . $result, false);
+			wp_die("Download error: " . $result);
+		}
+
+		Logger::log("Download completed with no server-side errors detected.");
 	}
 
-	/*
+	/**
+	 * Download file using default process. Assumed that the following procedure will work most of 
+	 * the cases, so user don't need to change default settings.
+	 *
+	 * @param string $file_url
+	 * 
+	 * @return string|bool Error messages if any.
+	 */
+	public static function handle_download_method_default($file_url) {
+		$is_local_file = Utils_Downloads::is_local_file($file_url);
+		if( $is_local_file ) {
+			// If the file is locally available, use the default file download method.
+			$file_path = Utils_Downloads::absolute_path_from_url($file_url);
+			return Utils_Downloads::download_using_fopen($file_path);
+		}
+
+		// The file URI is not local, so use the curl method as default.
+		return Utils_Downloads::download_using_curl( $file_url );
+	}
+
+	/**
+	 * Download file according to the user preferences. If any server have special config, user can
+	 * change the settings however they want.
+	 * 
+	 * * NOTE: If url to path conversion fails, the download url will remain unchanged.
+	 *
+	 * @param string $file_url The file URL
+	 * @param string $download_method The preferred download method.
+	 * @param string $path_type The preferred file path type.
+	 * 
+	 * @return string|bool Error messages if any.
+	 */
+	public static function handle_download_method($file_url, $download_method, $path_type){
+		// Try to convert to target path type. If conversion fails, keep the url unchanged. 
+		$file_url = Utils_Downloads::url_to_path_converter($file_url, $path_type);
+		Logger::log("Download file path/url after conversion: $file_url");
+		switch($download_method) {
+			case 2:
+				// Method 2, Fopen-1M.
+				return Utils_Downloads::download_using_fopen($file_url, 1024);
+			case 3:
+				// Method 3, Readfile-1M-SessionWriteClose.
+				return Utils_Downloads::download_using_fopen($file_url, 1024, TRUE);
+			case 4:
+				// Method 4, cURL.
+				return Utils_Downloads::download_using_curl($file_url);
+			case 5:
+				// Method 5, Mod X-Sendfile (only if your server have this library installed)
+				return Utils_Downloads::download_using_xsend_file($file_url);       			
+			default:	
+				// (Default) Method 1, Fopen-8K.
+				return Utils_Downloads::download_using_fopen($file_url);
+		}
+	}
+
+	/**
 	 * Verify if the file URL is accessible. If not, it will use wp_die() to display the error message.
 	 * It will also return the file size if available. If not, it will return 0.
 	 */
@@ -364,78 +433,4 @@ class View_Downloads {
 
 		return $file_size;
 	}
-
-	public static function download_method_1_uses_fopen( $file_url, $file_size ){
-		Logger::log( 'Trying to dispatch file using download method 1 (uses fopen).', true);
-
-		header('Content-Type: application/octet-stream');
-		header('Content-Disposition: attachment; filename="' . basename($file_url) . '"');
-		
-		// Send Content-Length header only if we have a valid size
-		if ( $file_size > 0 ) {
-			header('Content-Length: ' . $file_size);
-		}
-		
-		// Clear any output that may have already been sent
-		ob_end_clean();
-		
-		// Open the file for reading
-		$fp = @fopen($file_url, 'rb');
-		if ($fp) {
-			// Set the time limit to 0 to prevent the script from timing out
-			set_time_limit(0);
-			
-			// Send the file in 8KB chunks
-			$chunk_size = 8192;
-			while (!feof($fp) && ($p = ftell($fp)) <= $file_size) {
-				if ($file_size > 0 && $p + $chunk_size > $file_size) {
-					// Last chunk
-					$chunk_size = $file_size - $p;
-				}
-				echo fread($fp, $chunk_size);
-				flush(); // flush the output buffer
-			}
-			
-			// Close the file pointer
-			fclose($fp);
-		} else {
-			// Handle error if file can't be opened
-			header('HTTP/1.1 500 Internal Server Error');
-			wp_die( "Unable to open file using fopen()." );
-		}
-	}
-
-	public static function download_method_2_uses_curl( $file_url ){
-		Logger::log( 'Trying to dispatch file using download method 2 (uses cURL).', true);
-
-		if ( !function_exists('curl_init') ) {
-			$error_msg = __( 'cURL is not installed on this server. Cannot dispatch the download using cURL method.', 'wp-express-checkout' );
-			Logger::log( $error_msg, false);
-			wp_die( $error_msg );
-		}
-
-		$output_headers = array();
-		$output_headers[] = 'Content-Type: application/octet-stream';
-		$output_headers[] = 'Content-Disposition: attachment; filename="' . basename($file_url) . '"';
-		$output_headers[] = 'Content-Encoding: none';
-
-		foreach ( $output_headers as $header ) {
-			header( $header );
-		}
-
-		$ch = curl_init();
-		curl_setopt( $ch, CURLOPT_BINARYTRANSFER, 1 );
-		curl_setopt( $ch, CURLOPT_HEADER, 0 );
-		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1 );
-		curl_setopt( $ch, CURLOPT_MAXREDIRS, 5 );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 0 );
-		curl_setopt( $ch, CURLOPT_URL, $file_url );
-		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
-		curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
-		// curl_setopt( $ch, CURLOPT_WRITEFUNCTION, array( $this, 'stream_handler' ) );
-
-		curl_exec( $ch );
-		curl_close( $ch );
-	}
-
 }
