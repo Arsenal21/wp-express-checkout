@@ -16,7 +16,7 @@ class Utils_Downloads
      */
     public static function is_local_file($src_file_url)
     {
-        Logger::log('Trying to check if the file is a local file or not.');
+        //Logger::log('Determining if the file is local or remote.');
         if (preg_match("/^http/i", $src_file_url) != 1) {
             return false;
         }
@@ -27,7 +27,7 @@ class Utils_Downloads
         $wp_root_pos = stripos($src_file_url, $wpurl);
 
         if ($wp_root_pos !== false && file_exists(self::absolute_path_from_url($src_file_url))) {
-            Logger::log('Target download file is a local file.');
+            //Logger::log('Target download file is a local file.');
             return true;
         }
 
@@ -47,7 +47,7 @@ class Utils_Downloads
      */
     public static function absolute_path_from_url($src_file_url)
     {
-        Logger::log('Trying to convert url to absolute file path.');
+        Logger::log('Converting URL to absolute file path.');
         if (preg_match("/^http/i", $src_file_url) != 1) {
             return false;
         }
@@ -59,14 +59,14 @@ class Utils_Downloads
         // Calculate position in $src_file_url just after the domain name.
         $domain_name_pos = stripos($src_file_url, $domain_url);
         if ($domain_name_pos === false) {
-            Logger::log("Didn't find a direct match for the domain URL in the src file.", false);
+            Logger::log("No direct domain URL match found in the source file.", false);
             $file_on_this_domain = stripos($src_file_url, $domain_url_no_www);
             if ($file_on_this_domain === false) {
-                Logger::log("The src file is not stored in this domain. This is an external file link.", true);
+                Logger::log("The source file is hosted externally, not on this domain.", true);
                 return false;
             }
             //Lets try another method of conversion
-            Logger::log("Trying a secondary URL conversion method.");
+            Logger::log("Trying the secondary URL conversion method.");
             $path = parse_url($src_file_url, PHP_URL_PATH);
             $abs_path = $absolute_path_root . $path;
             //$abs_path = ABSPATH.$path;//another option
@@ -81,7 +81,6 @@ class Utils_Downloads
 
     /**
      * Returns file_exists($file_path) and if necessary, writes appropriate ADVISORY and WARNING messages to the debugger log file.
-     * -- The Assurer, 2010-11-20.
      *
      * @param string $file_path Target file path
      * @return boolean Return failed file_exists() status
@@ -91,11 +90,8 @@ class Utils_Downloads
         if (file_exists($file_path) === true) {
             return true;
         }
-        // Target $file_path is valid.
-        // Target $local_file_path is invalid (does not exist)...
-        Logger::log("Invalid URL conversion target = $file_path", false);
-        Logger::log('Forcing "Do Not Convert" option.');
 
+        Logger::log("Invalid URL conversion target: " . $file_path . ". Forcing 'Do Not Convert' option.", true);
         return false;
     }
 
@@ -103,7 +99,6 @@ class Utils_Downloads
      * Returns the size, in bytes, of a file whose path is specified by a URI.  If the URI is a qualified URL and cURL is not
      * installed on the server, a string of "unknown" is returned.  Note: We use "URI" instead of "URL" because this is not
      * necessarily an HTTP request.
-     * -- The Assurer, 2010-10-07.
      *
      * @param string $uri
      * @param string $user
@@ -157,7 +152,6 @@ class Utils_Downloads
      * $src_file_url is not a qualified URL, or it is outside the scope of either the WP root directory or the
      * SERVER_NAME document root directory.  Also, trying to pass the path of a file, instead of its URL will
      * also result in a non-conversion.
-     * -- The Assurer, 2010-10-07.
      *
      * @param string $src_file_url File URL
      * @param string $conversion_type Path type to convert to
@@ -240,7 +234,7 @@ class Utils_Downloads
                     case 2:
                         return 'Connection timeout.';
                     default:
-                        return "Unrecognized connection_status() = $constat";
+                        return "Unrecognized connection_status(). Value: " . $constat;
                 }
             }
         }
@@ -261,7 +255,11 @@ class Utils_Downloads
 
     public static function download_using_curl($file_url)
     {
-        Logger::log('Trying to dispatch file using cURL.', true);
+        Logger::log('Trying to dispatch file using cURL. The cURL method uses the file URL (it cannot use a local file path)', true);
+
+        //Before we proceed, lets check if the file URL is accessible. 
+		//The verify function will be used only when the file URL is used for the download. (not the local file-path).        
+        View_Downloads::verify_file_url_accessible( $file_url );
 
         if (!function_exists('curl_init')) {
             $error_msg = __('cURL is not installed on this server. Cannot dispatch the download using cURL method.', 'wp-express-checkout');

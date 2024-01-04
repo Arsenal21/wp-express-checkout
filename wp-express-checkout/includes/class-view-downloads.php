@@ -306,32 +306,31 @@ class View_Downloads {
 
 	public static function handle_force_download_file( $file_url )
 	{
-		// First, verify if the file URL is accessible. If not, it will use wp_die() to display the error message.
-		View_Downloads::verify_file_url_accessible( $file_url );
-
 		$download_method = Main::get_instance()->get_setting( 'download_method' );
 		$download_url_conversion_preference = Main::get_instance()->get_setting( 'download_url_conversion_preference' );
 		
-		Logger::log("Download attempt using download method $download_method and path conversion preference to $download_url_conversion_preference ");
+		Logger::log("Force download option is enabled. Using download method: ". $download_method .". URL conversion preference is set to: ". $download_url_conversion_preference );
 
-		$result = true; // Stores the file download result.
+		//Stores the file download function's return value.
+		$result = true; 
 
+		// If the download method is set to default, use the default method.
 		if ($download_method == '1' && $download_url_conversion_preference === 'absolute') {
-			// The default method to use that should work for most of the cases.
-			Logger::log("Download attempt by default settings.");
+			// The default method (good for most cases).
 			$result = self::handle_download_method_default( $file_url );
 		}else{
-			// Handle download method according to the user preferences.
-			Logger::log("Download attempt by custom user preference.");
+			// Handle download method according to the user preferences set in the settings.
 			$result = self::handle_download_method( $file_url, $download_method, $download_url_conversion_preference );
 		}
 
+		// If the download process fails, display the error message.
 		if ($result !== true) {
-			Logger::log( "Download error: " . $result, false);
-			wp_die("Download error: " . $result);
+			$error_msg = __( 'Error occurred when trying to download the file.', 'wp-express-checkout' );
+			Logger::log( $error_msg . $result, false);
+			wp_die($error_msg . $result);
 		}
 
-		Logger::log("Download completed with no server-side errors detected.");
+		Logger::log("Download completed successfully with no server-side errors.");
 	}
 
 	/**

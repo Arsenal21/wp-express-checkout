@@ -218,7 +218,7 @@ class Admin {
 		add_settings_section( 'ppdg-tos-section', __( 'Terms and Conditions', 'wp-express-checkout' ), array( $this, 'tos_description' ), $this->plugin_slug . '-advanced' );
 
 		add_settings_section( 'ppdg-link-expiry-section', __( 'Download Link Expiry', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
-		add_settings_section( 'ppdg-dl-manager-section', __( 'Download Manager Related', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
+		add_settings_section( 'ppdg-dl-manager-section', __( 'Download Manager Related', 'wp-express-checkout' ), array( $this, 'dl_manager_description' ), $this->plugin_slug . '-advanced' );
 		add_settings_section( 'wpec-access-section', __( 'Admin Dashboard Access Permission', 'wp-express-checkout' ), array( $this, 'access_description' ), $this->plugin_slug . '-advanced' );
 
 		/* Add the settings fields */
@@ -530,7 +530,7 @@ class Admin {
 					__( 'Method 4, cURL', 'wp-express-checkout' ),
 					__( 'Method 5, Mod X-Sendfile', 'wp-express-checkout' ),
 				),
-				'desc' => __( 'If the default download method does not work on your server, please try one of the other available methods. WARNING: Method 7, cURL requires the "Do Not Convert" Automatic URL Conversion Preference, and that ALL product download files be specified as fully qualified URL (not absolute or relative file names). If the cURL library is not installed on your server, Method 7 will not appear in the drop down menu.', 'wp-express-checkout' ),
+				'desc' => __( "Note: cURL requires the 'Do Not Convert' URL preference and fully qualified URLs for all product download files, not file paths.", 'wp-express-checkout' ),
 			)
 		);
 
@@ -548,7 +548,7 @@ class Admin {
 					__( '(Default) Absolute', 'wp-express-checkout' ),
 					__( 'Do not convert', 'wp-express-checkout' ),
 				),
-				'desc' => __( 'By default, the plugin tries to convert product download file URL into absolute file paths.', 'wp-express-checkout' ),
+				'desc' => __( 'By default, the plugin attempts to convert product download URLs into absolute file paths.', 'wp-express-checkout' ),
 			)
 		);
 		
@@ -597,6 +597,10 @@ class Admin {
 		echo '<p><i>';
 		_e( 'Debug logging can be useful to troubleshoot transaction processing related issues on your site. keep it disabled unless you are troubleshooting.', 'wp-express-checkout' );
 		echo '</p></i>';
+	}
+
+	public function dl_manager_description() {
+		echo '<p>' . __( 'The default settings for the force download option should work on most sites/servers. If you encounter issues, consider trying one of the following available methods.', 'wp-express-checkout' ) . '</p>';
 	}
 
 	/**
