@@ -47,7 +47,7 @@ class Utils_Downloads
      */
     public static function absolute_path_from_url($src_file_url)
     {
-        Logger::log('Converting URL to absolute file path.');
+        //Logger::log('Converting URL to absolute file path.');
         if (preg_match("/^http/i", $src_file_url) != 1) {
             return false;
         }
