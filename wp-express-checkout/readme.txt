@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.4
-Stable tag: 2.3.6
+Stable tag: 2.3.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -163,10 +163,10 @@ None
 
 == Changelog ==
 
-= WIP = 
+= 2.3.7 = 
 - Added a new action hook - wpec_before_file_download.
 - Added new action and filter hooks to the URL payment feature.
-- Added a new settings option in the advanced settings menu to configure for file download option.
+- Added a new settings option in the advanced settings menu to allow configuration of force download manager.
 - Enhanced the force download feature to check if the file is accessible before trying to dispatch it for cURL method.
 
 = 2.3.6 =

@@ -218,7 +218,7 @@ class Admin {
 		add_settings_section( 'ppdg-tos-section', __( 'Terms and Conditions', 'wp-express-checkout' ), array( $this, 'tos_description' ), $this->plugin_slug . '-advanced' );
 
 		add_settings_section( 'ppdg-link-expiry-section', __( 'Download Link Expiry', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
-		add_settings_section( 'ppdg-dl-manager-section', __( 'Download Manager Related', 'wp-express-checkout' ), array( $this, 'dl_manager_description' ), $this->plugin_slug . '-advanced' );
+		add_settings_section( 'ppdg-dl-manager-section', __( 'Download Manager (Force Download)', 'wp-express-checkout' ), array( $this, 'dl_manager_description' ), $this->plugin_slug . '-advanced' );
 		add_settings_section( 'wpec-access-section', __( 'Admin Dashboard Access Permission', 'wp-express-checkout' ), array( $this, 'access_description' ), $this->plugin_slug . '-advanced' );
 
 		/* Add the settings fields */
@@ -600,7 +600,11 @@ class Admin {
 	}
 
 	public function dl_manager_description() {
-		echo '<p>' . __( 'The default settings for the force download option should work on most sites/servers. If you encounter issues, consider trying one of the following available methods.', 'wp-express-checkout' ) . '</p>';
+		echo '<p>';
+		_e( 'The default settings for the ', 'wp-express-checkout');
+		echo '<a href="https://wp-express-checkout.com/force-download-option-for-digital-products/" target="_blank">'. __('force download option', 'wp-express-checkout') . '</a>';
+		_e (' should work on most sites/servers. If you encounter issues, consider trying one of the following available methods.', 'wp-express-checkout' );
+		echo '</p>';
 	}
 
 	/**
