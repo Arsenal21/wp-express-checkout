@@ -163,6 +163,9 @@ None
 
 == Changelog ==
 
+= WIP =
+- Added new action hooks that is triggered after the output of download headers (for force download feature).
+
 = 2.3.7 = 
 - Added a new action hook - wpec_before_file_download.
 - Added new action and filter hooks to the URL payment feature.

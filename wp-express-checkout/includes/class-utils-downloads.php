@@ -209,6 +209,10 @@ class Utils_Downloads
         header("Content-Disposition: attachment; filename=\"$file_name\"");
         header("Content-Transfer-Encoding: binary");
         header("Content-Length: " . self::dl_filesize($file_path));
+
+        //Trigger an action hook so additional headers can be added from a 3rd party plugin or custom code.
+        do_action('wpec_fopen_after_download_headers', $file_path);
+
         $chunks_transferred = 0; // Reset chunks transferred counter.
         while (!feof($fp)) {
             // Process source file in $chunk_size byte chunks...
@@ -251,6 +255,9 @@ class Utils_Downloads
         header('X-Sendfile: ' . $file_path);
         header("Content-Type: application/octet-stream");
         header("Content-Disposition: attachment; filename=\"$file_name\"");
+
+        //Trigger an action hook so additional headers can be added from a 3rd party plugin or custom code.
+        do_action('wpec_xsend_file_after_download_headers', $file_path);
     }
 
     public static function download_using_curl($file_url)
@@ -276,6 +283,9 @@ class Utils_Downloads
         foreach ($output_headers as $header) {
             header($header);
         }
+
+        //Trigger an action hook so additional headers can be added from a 3rd party plugin or custom code.
+        do_action('wpec_curl_after_download_headers', $file_url);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
