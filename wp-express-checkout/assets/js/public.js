@@ -314,7 +314,7 @@ var ppecHandler = function( data ) {
 				}, 'wpec_process_empty_payment' );
 			}
 		},
-		createOrder: function( data, actions ) {
+		createOrder: async function( data, actions ) {
 			parent.calcTotal();
 
 			//We need to round to 2 decimal places to make sure that the API call will not fail.
@@ -374,7 +374,36 @@ var ppecHandler = function( data ) {
 				};
 			}
 
-			return actions.order.create( order_data );
+			let nonce = wpec_create_order_vars.nonce;
+
+			let post_data = 'action=wpec_pp_create_order&data=' + JSON.stringify(order_data) + '&_wpnonce=' + nonce;
+			try {
+				// Using fetch for AJAX request. This is supported in all modern browsers.
+				const response = await fetch(wpec_create_order_vars.ajaxUrl, {
+					method: "post",
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body: post_data
+				});
+
+				const response_data = await response.json();
+
+				if (response_data.order_id) {
+					console.log('Create-order API call to PayPal completed successfully.');
+					//If we need to see the order details, uncomment the following line.
+					//const order_data = response_data.order_data;
+					//console.log('Order data: ' + JSON.stringify(order_data));
+					return response_data.order_id;
+				} else {
+					const error_message = JSON.stringify(response_data);
+					console.error('Error occurred during create-order call to PayPal. ' + error_message);
+					throw new Error(error_message);
+				}
+			} catch (error) {
+				console.error(error);
+				alert('Could not initiate PayPal Checkout...\n\n' + JSON.stringify(error));
+			}
 		},
 		onApprove: function( data, actions ) {
 			jQuery( 'div.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).css( 'display', 'flex' );

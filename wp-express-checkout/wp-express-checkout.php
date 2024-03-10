@@ -22,7 +22,7 @@ define( 'WPEC_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 define( 'WPEC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPEC_PLUGIN_FILE', __FILE__ );
 define( 'WPEC_PRODUCT_POST_TYPE_SLUG', 'ppec-products' );//Slowy use this constant instead of hardcoding the slug in the code.
-define( 'WPEC_SCRIPT_DEBUG', false );//Set to true to load the non-minified version.
+define( 'WPEC_SCRIPT_DEBUG', true );//Set to true to load the non-minified version.
 
 /* ----------------------------------------------------------------------------*
  * Includes
@@ -46,6 +46,7 @@ function wpec_load_classes() {
 	new WP_Express_Checkout\Payment_Processor_Free();
 	new WP_Express_Checkout\Init();
 	new WP_Express_Checkout\Integrations();
+	new WP_Express_Checkout\PayPal_Payment_Button_Ajax_Handler();
 
 	// Load admin side class
 	if ( is_admin() ) {

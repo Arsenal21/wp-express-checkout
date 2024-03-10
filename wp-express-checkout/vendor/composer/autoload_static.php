@@ -66,6 +66,7 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WP_Express_Checkout\\Orders' => __DIR__ . '/../..' . '/includes/class-orders.php',
         'WP_Express_Checkout\\PayPal\\Client' => __DIR__ . '/../..' . '/includes/paypal-client/class-client.php',
         'WP_Express_Checkout\\PayPal\\Request' => __DIR__ . '/../..' . '/includes/paypal-client/class-request.php',
+        'WP_Express_Checkout\\PayPal_Payment_Button_Ajax_Handler' => __DIR__ . '/../..' . '/includes/class-paypal-button-ajax-handler.php',
         'WP_Express_Checkout\\Payment_Processor' => __DIR__ . '/../..' . '/includes/class-payment-processor.php',
         'WP_Express_Checkout\\Payment_Processor_Free' => __DIR__ . '/../..' . '/includes/class-payment-processor-free.php',
         'WP_Express_Checkout\\Post_Type_Content_Handler' => __DIR__ . '/../..' . '/includes/class-post-type-content-handler.php',
