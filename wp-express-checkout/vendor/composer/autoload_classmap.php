@@ -38,6 +38,7 @@ return array(
     'WP_Express_Checkout\\Orders' => $baseDir . '/includes/class-orders.php',
     'WP_Express_Checkout\\PayPal\\Client' => $baseDir . '/includes/paypal-client/class-client.php',
     'WP_Express_Checkout\\PayPal\\Request' => $baseDir . '/includes/paypal-client/class-request.php',
+    'WP_Express_Checkout\\PayPal_Payment_Button_Ajax_Handler' => $baseDir . '/includes/class-paypal-button-ajax-handler.php',
     'WP_Express_Checkout\\Payment_Processor' => $baseDir . '/includes/class-payment-processor.php',
     'WP_Express_Checkout\\Payment_Processor_Free' => $baseDir . '/includes/class-payment-processor-free.php',
     'WP_Express_Checkout\\Post_Type_Content_Handler' => $baseDir . '/includes/class-post-type-content-handler.php',
