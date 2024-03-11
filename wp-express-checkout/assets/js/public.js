@@ -322,9 +322,17 @@ var ppecHandler = function( data ) {
 			let itemTotalValueRoundedAsNumber = parseFloat(itemTotalValueRounded);
 			//console.log('Item total value rounded: ' + itemTotalValueRoundedAsNumber);
 
+			// Create order_data object to be sent to the server.
 			var order_data = {
-				application_context: {
-					shipping_preference: parent.data.shipping_enable ? 'GET_FROM_FILE' : 'NO_SHIPPING'
+				intent: 'CAPTURE',
+				payment_source: {
+					paypal: {
+						experience_context: {
+							payment_method_preference: 'IMMEDIATE_PAYMENT_REQUIRED',
+							shipping_preference: parent.data.shipping_enable ? 'GET_FROM_FILE' : 'NO_SHIPPING',
+							user_action: 'PAY_NOW',
+						}
+					}
 				},
 				purchase_units: [ {
 					amount: {
@@ -340,10 +348,6 @@ var ppecHandler = function( data ) {
 					items: [ {
 						name: parent.data.name,
 						quantity: parent.data.quantity,
-						/*
-						//No need to specify category for digital goods (it is handled via the 'shipping_preference' parameter)
-						category: parent.data.shipping_enable ? 'PHYSICAL_GOODS' : 'DIGITAL_GOODS',
-						*/
 						unit_amount: {
 							value: parent.data.price,
 							currency_code: parent.data.currency
@@ -351,6 +355,7 @@ var ppecHandler = function( data ) {
 					} ]
 				} ]
 			};
+
 			if ( parent.data.tax ) {
 				order_data.purchase_units[ 0 ].amount.breakdown.tax_total = {
 					currency_code: parent.data.currency,
@@ -373,6 +378,8 @@ var ppecHandler = function( data ) {
 					value: parseFloat( parent.data.discountAmount )
 				};
 			}
+			//console.log('Order data: ' + JSON.stringify(order_data));
+			//End of create order_data object.
 
 			let nonce = wpec_create_order_vars.nonce;
 
@@ -391,9 +398,6 @@ var ppecHandler = function( data ) {
 
 				if (response_data.order_id) {
 					console.log('Create-order API call to PayPal completed successfully.');
-					//If we need to see the order details, uncomment the following line.
-					//const order_data = response_data.order_data;
-					//console.log('Order data: ' + JSON.stringify(order_data));
 					return response_data.order_id;
 				} else {
 					const error_message = JSON.stringify(response_data);
