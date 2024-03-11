@@ -431,79 +431,21 @@ var ppecHandler = function( data ) {
 				});
 
 				const response_data = await response.json();
-				const txn_data = response_data.txn_data;
-				const error_detail = txn_data?.details?.[0];
-				const error_msg = response_data.error_msg; //Our custom error message.
 
-				// Three cases to handle:
-				// (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-				// (2) Other non-recoverable errors -> Show a failure message
-				// (3) Successful transaction -> Show confirmation or thank you message
-
-				if (response_data.capture_id) {
-					// Successful transaction -> Show confirmation or thank you message
-					console.log('Capture-order API call to PayPal completed successfully.');
-
-					// Redirect to the Thank you page URL if it is set.
-					return_url = wpec_pp_btn_vars.return_url;
-					if( return_url ){
-						//redirect to the Thank you page URL.
-						console.log('Redirecting to the Thank you page URL: ' + return_url);
-						window.location.href = return_url;
-						return;
-					} else { // TODO: Need to fix the else condition later...
-						//No return URL is set. Just show a success message.
-						console.log('No return URL is set in the settings. Showing a success message.');
-
-						//We are going to show the success message in the shopping_cart's container.
-						txn_success_msg = wpec_pp_btn_vars.txn_success_message + ' ' + wpec_pp_btn_vars.txn_success_extra_msg;
-						// Select all elements with the class 'shopping_cart'
-						var shoppingCartDivs = document.querySelectorAll('.shopping_cart');
-
-						// Loop through the NodeList and update each element
-						shoppingCartDivs.forEach(function(div, index) {
-							div.innerHTML = '<div id="wpsc-cart-txn-success-msg-' + index + '" class="wpsc-cart-txn-success-msg">' + txn_success_msg + '</div>';
-						});
-
-						//Note: We need to use on_page_cart_div_ids for compact carts. 
-						//Then we will be able to use the on_page_cart_div_ids array to get the cart div ids of the page (including the compact carts)
-
-						// Scroll to the success message container of the cart we are interacting with.
-						const interacted_cart_element = document.getElementById('wpsc_shopping_cart_' + <?php echo esc_attr($carts_cnt); ?>);
-						if (interacted_cart_element) {
-							interacted_cart_element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-						}
-						return;
-					}
-
-				} else if (error_detail?.issue === "INSTRUMENT_DECLINED") {
-					// Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-					console.log('Recoverable INSTRUMENT_DECLINED error. Calling actions.restart()');
-					return actions.restart();
-				} else if ( error_msg && error_msg.trim() !== '' ) {
-					//Our custom error message from the server.
-					console.error('Error occurred during PayPal checkout process.');
-					console.error( error_msg );
-					alert( error_msg );
-				} else {
-					// Other non-recoverable errors -> Show a failure message
-					console.error('Non-recoverable error occurred during PayPal checkout process.');
-					console.error( error_detail );
-					//alert('Unexpected error occurred with the transaction. Enable debug logging to get more details.\n\n' + JSON.stringify(error_detail));
-				}
-
-				//Return the button and the spinner back to their orignal display state.
-				pp_button_container.style.display = 'block'; // Show the buttons
-				pp_button_spinner_container.style.display = 'none'; // Hide the spinner
+				// Finish up with user feedback
+				parent.completePayment(response_data); // TODO: The response_data should contains the attributes that is required by the completePayment method.
 
 			} catch (error) {
 				console.error(error);
 				alert('PayPal returned an error! Transaction could not be processed. Enable the debug logging feature to get more details...\n\n' + JSON.stringify(error));
 			}
 
+			// OLD Code: Kept for reference!
+			/*		
 			return actions.order.capture().then( function( details ) {
 				parent.processPayment( details, "wpec_process_payment" );
 			} );
+			*/
 		},
 		onError: function( err ) {
 

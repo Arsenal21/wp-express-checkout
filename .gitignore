@@ -50,3 +50,5 @@ tests/unit.suite.yml
 # Netbeans #
 ##############
 /nbproject/private/
+
+wp-express-checkout.zip
