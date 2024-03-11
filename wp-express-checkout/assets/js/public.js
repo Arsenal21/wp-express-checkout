@@ -321,6 +321,14 @@ var ppecHandler = function( data ) {
 			let itemTotalValueRounded = (parent.data.price * parent.data.quantity).toFixed(2);
 			let itemTotalValueRoundedAsNumber = parseFloat(itemTotalValueRounded);
 			//console.log('Item total value rounded: ' + itemTotalValueRoundedAsNumber);
+			//console.log(parent.data);
+
+			// Checking if shipping will be required
+			let shipping_pref = 'NO_SHIPPING'; // Default value
+			if (parent.data.shipping !== "" || parent.data.shipping_enable === true) {
+				console.log("The physical product checkbox is enabled or there is shipping value has been configured. Setting the shipping preference to collect shipping.");
+				shipping_pref = 'GET_FROM_FILE';
+			}
 
 			// Create order_data object to be sent to the server.
 			var order_data = {
@@ -329,7 +337,7 @@ var ppecHandler = function( data ) {
 					paypal: {
 						experience_context: {
 							payment_method_preference: 'IMMEDIATE_PAYMENT_REQUIRED',
-							shipping_preference: parent.data.shipping_enable ? 'GET_FROM_FILE' : 'NO_SHIPPING',
+							shipping_preference: shipping_pref,
 							user_action: 'PAY_NOW',
 						}
 					}
@@ -414,13 +422,14 @@ var ppecHandler = function( data ) {
 
 			console.log('Setting up the AJAX request for capture-order call.');
 			
-			console.log(data); // TODO: Remove this line
-
+			// Create the data object to be sent to the server.
 			let pp_bn_data = {};
-			pp_bn_data.order_id = data.orderID;
+			pp_bn_data.order_id = data.orderID;//The orderID is the ID of the order that was created in the createOrder method.
+			let wpec_data = parent.data;//wpec_data is the data object that was passed to the ppecHandler constructor.
+			//console.log('wpec data (json): ' + JSON.stringify(wpec_data));
 
 			let nonce = wpec_on_approve_vars.nonce;
-			let post_data = 'action=wpec_pp_capture_order&data=' + JSON.stringify(pp_bn_data) + '&_wpnonce=' + nonce;
+			let post_data = 'action=wpec_pp_capture_order&data=' + JSON.stringify(pp_bn_data)+ '&wpec_data=' + JSON.stringify(wpec_data) + '&_wpnonce=' + nonce;
 			try {
 				const response = await fetch( ppecFrontVars.ajaxUrl, {
 					method: "post",
@@ -432,20 +441,16 @@ var ppecHandler = function( data ) {
 
 				const response_data = await response.json();
 
-				// Finish up with user feedback
-				parent.completePayment(response_data); // TODO: The response_data should contains the attributes that is required by the completePayment method.
+				console.log('Capture-order API call to PayPal completed successfully.');
+
+				// Call the completePayment method to do any redirection or display a message to the user.
+				parent.completePayment(response_data); 
 
 			} catch (error) {
 				console.error(error);
 				alert('PayPal returned an error! Transaction could not be processed. Enable the debug logging feature to get more details...\n\n' + JSON.stringify(error));
 			}
 
-			// OLD Code: Kept for reference!
-			/*		
-			return actions.order.capture().then( function( details ) {
-				parent.processPayment( details, "wpec_process_payment" );
-			} );
-			*/
 		},
 		onError: function( err ) {
 

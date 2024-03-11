@@ -152,7 +152,7 @@ class Orders_Meta_Boxes {
 				<?php endif;?>
 				<tr>
 					<th><?php _e( 'Transaction ID', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo $order->get_resource_id(); ?></td>
+					<td><?php echo $order->get_capture_id(); ?></td>
 				</tr>
 			</tbody>
 		</table>
