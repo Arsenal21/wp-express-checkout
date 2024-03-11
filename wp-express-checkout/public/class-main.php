@@ -80,8 +80,13 @@ class Main {
 		// Enqueue public.js
 		wp_enqueue_script( 'wp-ppec-frontend-script', WPEC_PLUGIN_URL . "/assets/js/public{$min}.js", array( 'jquery' ), WPEC_PLUGIN_VER, true );
 		wp_localize_script( 'wp-ppec-frontend-script', 'wpec_create_order_vars', array(
-			'nonce' => wp_create_nonce('wpec-js-ajax-nonce'),
-			'ajaxUrl' => admin_url('admin-ajax.php')
+			'nonce' => wp_create_nonce('wpec-create-order-js-ajax-nonce'),
+		));
+		wp_localize_script( 'wp-ppec-frontend-script', 'wpec_on_approve_vars', array(
+			'nonce' => wp_create_nonce('wpec-onapprove-js-ajax-nonce'),
+			'return_url' => $this->get_setting( 'thank_you_url' ),
+			'txn_success_message' => __('Transaction completed successfully!', 'wp-express-checkout'),
+    		'txn_success_extra_msg' => __('Feel free to add more items to your shopping cart for another checkout.', 'wp-express-checkout'),
 		));
 
 		// Enqueue public.css

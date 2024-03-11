@@ -386,7 +386,7 @@ var ppecHandler = function( data ) {
 			let post_data = 'action=wpec_pp_create_order&data=' + JSON.stringify(order_data) + '&_wpnonce=' + nonce;
 			try {
 				// Using fetch for AJAX request. This is supported in all modern browsers.
-				const response = await fetch(wpec_create_order_vars.ajaxUrl, {
+				const response = await fetch( ppecFrontVars.ajaxUrl, {
 					method: "post",
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
@@ -409,11 +409,43 @@ var ppecHandler = function( data ) {
 				alert('Could not initiate PayPal Checkout...\n\n' + JSON.stringify(error));
 			}
 		},
-		onApprove: function( data, actions ) {
+		onApprove: async function( data, actions ) {
 			jQuery( 'div.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).css( 'display', 'flex' );
+
+			console.log('Setting up the AJAX request for capture-order call.');
+			
+			console.log(data); // TODO: Remove this line
+
+			let pp_bn_data = {};
+			pp_bn_data.order_id = data.orderID;
+
+			let nonce = wpec_on_approve_vars.nonce;
+			let post_data = 'action=wpec_pp_capture_order&data=' + JSON.stringify(pp_bn_data) + '&_wpnonce=' + nonce;
+			try {
+				const response = await fetch( ppecFrontVars.ajaxUrl, {
+					method: "post",
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body: post_data
+				});
+
+				const response_data = await response.json();
+
+				// Finish up with user feedback
+				parent.completePayment(response_data); // TODO: The response_data should contains the attributes that is required by the completePayment method.
+
+			} catch (error) {
+				console.error(error);
+				alert('PayPal returned an error! Transaction could not be processed. Enable the debug logging feature to get more details...\n\n' + JSON.stringify(error));
+			}
+
+			// OLD Code: Kept for reference!
+			/*		
 			return actions.order.capture().then( function( details ) {
 				parent.processPayment( details, "wpec_process_payment" );
 			} );
+			*/
 		},
 		onError: function( err ) {
 
