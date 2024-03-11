@@ -80,7 +80,7 @@ class Main {
 		// Enqueue public.js
 		wp_enqueue_script( 'wp-ppec-frontend-script', WPEC_PLUGIN_URL . "/assets/js/public{$min}.js", array( 'jquery' ), WPEC_PLUGIN_VER, true );
 		wp_localize_script( 'wp-ppec-frontend-script', 'wpec_create_order_vars', array(
-			'nonce' => wp_create_nonce('wpec-create-order-ajax-nonce'),
+			'nonce' => wp_create_nonce('wpec-js-ajax-nonce'),
 			'ajaxUrl' => admin_url('admin-ajax.php')
 		));
 

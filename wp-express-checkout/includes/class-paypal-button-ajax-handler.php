@@ -39,7 +39,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 		Logger::log_array_data($data, true);
 
 		// Verify nonce.
-		if ( ! check_ajax_referer( 'wpec-create-order-ajax-nonce', '_wpnonce', false ) ) {
+		if ( ! check_ajax_referer( 'wpec-js-ajax-nonce', '_wpnonce', false ) ) {
 			wp_send_json(
 				array(
 					'success' => false,
