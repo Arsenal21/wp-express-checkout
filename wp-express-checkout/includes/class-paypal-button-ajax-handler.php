@@ -4,7 +4,7 @@ namespace WP_Express_Checkout;
 
 use WP_Express_Checkout\Debug\Logger;
 
-use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
+use WP_Express_Checkout\PayPal\Request;
 use WP_Express_Checkout\PayPal\Client;
 
 
@@ -107,12 +107,12 @@ class PayPal_Payment_Button_Ajax_Handler {
 				],
 			],
 		];
-				
-				
-        $request = new OrdersCreateRequest();
-        //$request->headers["prefer"] = "return=representation";
-        $request->body = $order_data;
+		
+		//Create the request for the PayPal API call.
+		$request = new Request( '/v2/checkout/orders', 'POST' );
+		$request->body = $order_data;
 
+		//Execute the request.
 		$client = Client::client();
         $response = $client->execute($request);
 
