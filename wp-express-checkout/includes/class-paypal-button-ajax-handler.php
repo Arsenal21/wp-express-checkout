@@ -10,6 +10,9 @@ use WP_Express_Checkout\PayPal\Client;
 
 class PayPal_Payment_Button_Ajax_Handler {
 
+	private $item_for_validation;
+	private $last_error = '';
+
 	public function __construct()
 	{
 		//Handle the create-order ajax request for 'Buy Now' type buttons.
@@ -41,7 +44,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 		}
 		
 		//If we need the data as an array, we can use the following code.
-		// $array_data = json_decode( $json_order_data, true );
+		$order_data_array = json_decode( $json_order_data, true );
 		// Logger::log('Received data in array format: ', true);
 		// Logger::log_array_data($array_data, true);
 
@@ -56,18 +59,46 @@ class PayPal_Payment_Button_Ajax_Handler {
 			exit;
 		}
 
-		// TODO - Fix the validation for the amount data received.
-		/* 		
-		if( ! $this->validate_total_amount( $json_order_data) ){
-			//Error condition. The validation function will set the error message which we will use to send back to the client in the next stage of the code.
-			Logger::log( "API pre-submission amount validation failed. The amount appears to have been altered.", false );
+		// >>>> Start of pre API submission validation.
+		$amount = $order_data_array['purchase_units'][0]['amount']['value'];
+		$quantity = $order_data_array['purchase_units'][0]['items'][0]['quantity'];
+		// $product_name = $order_data_array['purchase_units'][0]['item'][0]['name'];
+		// $coupon_code = '';
+		// $price_variation = '';
+		$custom_inputs = array(
+			// 'coupon_code' 		=> $coupon_code,
+			// 'price_variation' 	=> $price_variation,
+			// 'billing_details' 	=> json_decode( html_entity_decode( $post_billing_details ) , true),
+			// 'shipping_details' 	=> json_decode( html_entity_decode( $post_shipping_details ) , true),
+		);
+		$this->item_for_validation = Products::retrieve( intval( $order_data_array['product_id'] ) );
+		Logger::log_array_data($this->item_for_validation, true);
 
-			$out['err'] = __( 'Error occurred:', 'stripe-payments' ) . ' ' . $item_for_validation->get_last_error();
-			wp_send_json( $out );
-		}else{
-			Logger::log( "API pre-submission amount validation successful.", true );
-		} 
-		*/
+		//Do the API pre-submission price/amount validation.
+		if ( $this->item_for_validation->get_type() === 'one_time' ) {
+			//It's a one-time payment product.
+			
+			if( ! $this->validate_total_amount( $amount, $quantity, $custom_inputs ) ){
+				//Error condition. The validation function will set the error message which we will use to send back to the client in the next stage of the code.
+				Logger::log( "API pre-submission amount validation failed. The amount appears to have been altered.", false );
+
+				wp_send_json(
+					array(
+						'success' => false,
+						'err_msg'  => __( 'Error occurred:', 'wp-express-checkout' ) . ' ' . $this->get_last_error(),
+					)
+				);
+
+			}else{
+				Logger::log( "API pre-submission amount validation successful.", true );
+			}
+		} else if ( $this->item_for_validation->get_type() === 'donation' ) {
+			//It's a donation product. Don't need to validate the amount since the user can enter any amount to donate.
+			Logger::log( "This is a donation type product. API pre-submission amount validation is not required.", true );
+		}
+		//Trigger action hook that can be used to do additional API pre-submission validation from an addon.
+		do_action( 'wpec_ng_before_api_pre_submission_validation', $this->item_for_validation );
+		// <<<< End of pre API submission validation.
 
 
 		// Create the order using the PayPal API call (pass the order data in JSON format so we can use it directly in the API call)
@@ -268,8 +299,25 @@ class PayPal_Payment_Button_Ajax_Handler {
 		exit;
 	}
 
+	public function get_last_error() {
+		return $this->last_error;
+	}
 
-	public function validate_total_amount($order_data){
+	// TODO - Fix the validation for the amount data received.
+	public function validate_total_amount($amount, $quantity, $custom_inputs){
+
+		$expected_total_amount = $this->item_for_validation->get_price() * $quantity;
+
+		// Check if the expected total amount matches the given amount.
+		if ( $expected_total_amount < $amount ) {
+			Logger::log("Pre-API Submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, true);
+			// Set the last error message that will be displayed to the user.
+			$mismatch_err_msg = __( "Price validation failed. The submitted amount does not match the product's configured price. ", 'wp-express-checkout' );
+			$mismatch_err_msg .= "Expected: " . $expected_total_amount . ", Submitted: " . $amount;
+			$this->last_error = $mismatch_err_msg;
+			return false;
+		}
+
 		return true;
 	}
 

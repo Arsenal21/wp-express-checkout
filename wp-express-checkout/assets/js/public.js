@@ -324,6 +324,7 @@ var ppecHandler = function( data ) {
 
 			// Create order_data object to be sent to the server.
 			var order_data = {
+				product_id: parent.data.product_id,
 				intent: 'CAPTURE',
 				payment_source: {
 					paypal: {
