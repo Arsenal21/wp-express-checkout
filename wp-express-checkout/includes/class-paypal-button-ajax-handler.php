@@ -208,84 +208,6 @@ class PayPal_Payment_Button_Ajax_Handler {
 	}
 
 	/**
-	 * Handles the order capture for standard 'Buy Now' type buttons.
-	 */
-	public function pp_capture_order(){
-		//Get the data from the request
-		$json_pp_bn_data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : '{}';
-		//We need the data in an array format so lets convert it.
-		$array_pp_bn_data = json_decode( $json_pp_bn_data, true );
-		//Logger::log_array_data($array_pp_bn_data, true);	
-
-		//Get the PayPal order_id from the data
-		$order_id = isset( $array_pp_bn_data['order_id'] ) ? sanitize_text_field($array_pp_bn_data['order_id']) : '';
-		Logger::log( 'PayPal capture order request received - PayPal order ID: ' . $order_id, true );
-
-		if ( empty( $order_id ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Error! Empty order ID received for PayPal capture order request.', 'wp-express-checkout' ),
-				)
-			);
-		}
-
-		//Get the WPEC plugin specific data from the request
-		$json_wpec_data = isset( $_POST['wpec_data'] ) ? stripslashes_deep( $_POST['wpec_data'] ) : '{}';
-		//We need the data in an array format so lets convert it.
-		$array_wpec_data = json_decode( $json_wpec_data, true );		
-		//Logger::log_array_data($array_wpec_data, true);
-
-		if ( empty( $array_wpec_data ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Error! Empty WPEC plugin data received.', 'wp-express-checkout' ),
-				)
-			);
-		}
-
-		// Check nonce.
-		if ( ! check_ajax_referer( 'wpec-onapprove-js-ajax-nonce', '_wpnonce', false ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'wp-express-checkout' ),
-				)
-			);
-			exit;
-		}
-
-		// Capture the order using the PayPal API. (https://developer.paypal.com/docs/api/orders/v2/#orders_capture)
-		$pp_capture_response_data = $this->capture_order_pp_api_call( $order_id, $array_wpec_data );
-		if ( is_wp_error( $pp_capture_response_data ) ) {
-			//Failed to capture the order.
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __('Error! PayPal capture-order API call failed.', 'wp-express-checkout'),
-				)
-			);
-			exit;
-		}
-
-		
-		$array_txn_data = $pp_capture_response_data;
-
-		//Logger::log_array_data($array_txn_data, true); // Debugging purpose.
-		//Logger::log_array_data($array_wpec_data, true); // Debugging purpose.
-		
-		//Process the transaction/payment data.
-		Logger::log( 'Going to create/update record and save transaction data.', true );
-		$payment_processor = Payment_Processor::get_instance();
-
-		//It will send the appropriate response back to the client (after processing the payment data).
-		$payment_processor->wpec_server_side_process_payment( $array_txn_data, $array_wpec_data );
-
-		/* Everything is processed successfully, the previous function call will also send the response back to the client. */
-	}
-
-	/**
 	 * Create the order using the PayPal API call.
 	 * return the PayPal order ID if successful, or a WP_Error object if there is an error.
 	 */
@@ -384,7 +306,24 @@ class PayPal_Payment_Button_Ajax_Handler {
         return $txn_data_array;
     }
 
-	public function validate_total_amount($order_data){
+	public function get_last_error(){
+		return $this->last_error;
+	}
+
+	public function validate_total_amount($amount, $quantity, $custom_inputs){
+		// Calculate the expected total amount.
+		$expected_total_amount = $this->item_for_validation->get_price() * $quantity;
+		
+		// Check if the expected total amount matches the given amount.
+		if ( $expected_total_amount < $amount ) {
+			Logger::log("Pre-API Submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, true);
+			// Set the last error message that will be displayed to the user.
+			$mismatch_err_msg = __( "Price validation failed. The submitted amount does not match the product's configured price. ", 'wp-express-checkout' );
+			$mismatch_err_msg .= "Expected: " . $expected_total_amount . ", Submitted: " . $amount;
+			$this->last_error = $mismatch_err_msg;
+			return false;
+		}
+
 		return true;
 	}
 
