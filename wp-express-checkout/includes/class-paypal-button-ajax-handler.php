@@ -4,6 +4,10 @@ namespace WP_Express_Checkout;
 
 use WP_Express_Checkout\Debug\Logger;
 
+use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
+use WP_Express_Checkout\PayPal\Client;
+
+
 class PayPal_Payment_Button_Ajax_Handler {
 
 	public function __construct()
@@ -48,19 +52,18 @@ class PayPal_Payment_Button_Ajax_Handler {
 			);
 			exit;
 		}
-		Logger::log('Nonce verification successful!', true);
-		
-		// Set the additional args for the API call.
-		// $additional_args = array();
-		// $additional_args['return_response_body'] = true;
 
-		// TODO: Create the order using the PayPal API.
+		// FIXME - add validation for the amount data received.
+		// TODO...
+
+		// Create the order using the PayPal API call
+		$response = self::create_order_pp_api_call($data);
+		$paypal_order_id = isset($response->result->id) ? $response->result->id : '';
+		Logger::log( 'PayPal Order ID: ' . $paypal_order_id, true );
 		// $api_injector = new PayPal_Request_API_Injector();
 		// $response = $api_injector->create_paypal_order_by_url_and_args( $data, $additional_args, $pu_items );
             
-		//We requested the response body to be returned, so we need to JSON decode it.
-		/* 
-		if( $response === false ){
+		if( empty( $paypal_order_id ) ){
 			//Failed to create the order.
 			wp_send_json(
 				array(
@@ -71,20 +74,56 @@ class PayPal_Payment_Button_Ajax_Handler {
 			exit;
 		}
 
-		$order_data = json_decode( $response, true );
-		$paypal_order_id = isset( $order_data['id'] ) ? $order_data['id'] : '';
-
-        Logger::log( 'PayPal Order ID: ' . $paypal_order_id, true );
-		*/
-
 		// If everything is processed successfully, send the success response.
 		wp_send_json( 
 			array( 
 				'success' => true,
-				'order_id' => 1234, 	// put $paypal_order_id here
+				'order_id' => $paypal_order_id, 	// put $paypal_order_id here
 				'order_data' => array() // put $order_data here 
 			)
 		);
 		exit;
     }
+
+    public static function create_order_pp_api_call($data)
+    {
+		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
+
+		//FIXME - we will create the full order_data after we get the basics working.
+		$currency = 'USD';
+		$grand_total = 16.50;
+		$description = 'Test order description';
+		//Use the simple order_data. It uses purchase unit without the items array.
+		//A simple order_data (useful for simple payments)
+		$order_data = [
+			"intent" => "CAPTURE",
+			"purchase_units" => [
+				[
+					"amount" => [
+						"currency_code" => $currency,
+						"value" => $grand_total,
+					],
+					"description" => $description,
+				],
+			],
+		];
+				
+				
+        $request = new OrdersCreateRequest();
+        //$request->headers["prefer"] = "return=representation";
+        $request->body = $order_data;
+
+		$client = Client::client();
+        $response = $client->execute($request);
+
+		// Logger::log_array_data($response->result, true);
+		// Logger::log( 'PayPal Order ID: ' . $response->result->id, true );
+
+		// Logger::log( 'PayPal API var exported full response below: ', true );
+		// $debug_export = var_export($response, true);
+		// Logger::log_array_data($debug_export, true);
+
+        return $response;
+    }
+
 }
