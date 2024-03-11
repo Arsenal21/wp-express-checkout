@@ -45,6 +45,169 @@ class Payment_Processor {
 		return self::$instance;
 	}
 
+
+	/**
+	 * Processes the payment after server-side capture. 
+	 * Saves order data to the database. Sends notification emails.
+	 * It also returns the response to the client side.
+	 */
+	public function wpec_server_side_process_payment($payment, $data) {
+
+		if ( empty( $payment ) ) {
+			// no payment data provided.
+			$this->send_error( __( 'No payment data received.', 'wp-express-checkout' ), 3001 );
+		}
+
+		if ( empty( $data ) ) {
+			// no order data provided.
+			$this->send_error( __( 'No order data received.', 'wp-express-checkout' ), 3002 );
+		}
+
+		$this->check_status( $payment );
+
+		// Log debug (if enabled).
+		Logger::log( 'Processing payment (server-side capture) ...' );
+
+		// get item name.
+		$item_name = $data['name'];
+		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $item_name );
+		$trans = get_transient( $trans_name );
+
+		// Debugging purposes.
+		// Logger::log( 'Transient name: ' . $trans_name );
+		// Logger::log( 'Transient data: ' . print_r($trans, true) );
+		// Logger::log( 'WPEC data: ' . print_r($data, true) );
+		// Logger::log( 'Payment data: ' . print_r($payment, true) );
+
+		// let's check if the payment matches transient data.
+		if ( ! $trans ) {
+			// no price set.
+			$this->send_error( __( 'No transaction info found in transient.', 'wp-express-checkout' ), 3004 );
+		}
+		$price    = $this->get_price( $payment, $trans, $data );
+		$quantity = $trans['quantity'];
+		$tax      = $trans['tax'];
+		$shipping = $trans['shipping'];
+		$currency = $trans['currency'];
+		$item_id  = $trans['product_id'];
+
+		$wpec_plugin = Main::get_instance();
+
+		if ( $trans['custom_quantity'] ) {
+			// custom quantity enabled. let's take quantity from wpec data (or we can get from the paypal order/transaction).
+			//$quantity = $this->get_quantity( $payment );
+			$quantity = $data['quantity'];
+		}
+		
+		if (isset($trans['shipping_per_quantity']) && !empty($trans['shipping_per_quantity'])) {
+			// $product_args = array(...$trans);
+			$product_args['quantity'] = $quantity;
+			$product_args['shipping'] = $trans['shipping'];
+			$product_args['shipping_per_quantity'] = $trans['shipping_per_quantity'];
+			$shipping = Utils::get_total_shipping_cost( $product_args ); // Get the total shipping cost including per quantity shipping cost.
+		}
+
+		try {
+			$order   = Orders::create();
+			$product = Products::retrieve( $item_id );
+		} catch ( Exception $exc ) {
+			$this->send_error( $exc->getMessage(), $exc->getCode() );
+		}
+
+		/* translators: Order title: {Quantity} {Item name} - {Status} */
+		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $this->get_transaction_status( $payment ) ) );
+		$order->set_currency( $currency );
+		$order->set_resource_id( $this->get_transaction_id( $payment ) );
+		$order->set_capture_id( $this->get_capture_id( $payment ) );
+		$order->set_author_email( $payment['payer']['email_address'] );
+		$order->add_item( Products::$products_slug, $item_name, $price, $quantity, $item_id, true );
+		$order->add_data( 'state', $this->get_transaction_status( $payment ) );
+		$order->add_data( 'payer', $payment['payer'] );
+
+		if ( $trans['shipping_enable'] || $trans['shipping'] ) {
+			//If the physical product checkbox is enabled or shipping cost is set; then add shipping address to the order.
+			$order->add_data( 'shipping_address', $this->get_address( $payment ) );
+		}
+
+		/**
+		 * Runs after draft order created, but before adding items.
+		 *
+		 * @param Order $order   The order object.
+		 * @param array      $payment The raw order data retrieved via API.
+		 * @param array      $data    The purchase data generated on a client side.
+		 */
+		do_action( 'wpec_create_order', $order, $payment, $data );
+
+		if ( $tax ) {
+			$item_tax_amount = $this->get_item_tax_amount( $order->get_total(), $quantity, $tax );
+			$order->add_item( 'tax', __( 'Tax', 'wp-express-checkout' ), $item_tax_amount * $quantity );
+		}
+		if ( $shipping ) {
+			$order->add_item( 'shipping', __( 'Shipping', 'wp-express-checkout' ), $shipping );
+		}
+
+		//Txn amount for server side capture.
+		$txn_amt = $payment['purchase_units'][0]['payments']['captures'][0]['amount']['value'];
+		$amount = Utils::round_price( floatval( $txn_amt ) );
+		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
+		if ( $amount < $order->get_total() ) {
+			// payment amount mismatch. Amount paid is less.
+			Logger::log( 'Error! Payment amount mismatch. Original: ' . $order->get_total() . ', Received: ' . $amount, false );
+			$this->send_error( __( 'Payment amount mismatch with the original price.', 'wp-express-checkout' ), 3005 );
+		}
+
+		// check if payment currency matches.
+		$txn_currency = $payment['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'];
+		if ( $txn_currency !== $currency ) {
+			// payment currency mismatch.
+			$this->send_error( __( 'Payment currency mismatch.', 'wp-express-checkout' ), 3006 );
+		}
+
+		// stock control.
+		if ( $product->is_stock_control_enabled() && $product->get_stock_items() < $quantity ) {
+			$this->send_error( __( 'There are not enough product items in stock.', 'wp-express-checkout' ), 3009 );
+		}
+
+		// If code execution got this far, it means everything is ok with payment
+		// let's insert order.
+		$order->set_status( 'paid' );
+
+		$product->update_stock_items( $quantity );
+
+		$order_id  = $order->get_id();
+
+		$order->generate_search_index();
+
+		// Send email to buyer if enabled.
+		Emails::send_buyer_email( $order );
+
+		// Send email to seller if needs.
+		Emails::send_seller_email( $order );
+
+		// Trigger the action hook.
+		do_action( 'wpec_payment_completed', $payment, $order_id, $item_id );
+		Logger::log( 'Payment processing completed' );
+
+		$res = array();
+
+		$thank_you_url = $trans['thank_you_url'];
+
+		if ( wp_http_validate_url( $thank_you_url ) ) {
+			$redirect_url = add_query_arg(
+				array(
+					'order_id' => $order_id,
+					'_wpnonce' => wp_create_nonce( 'thank_you_url' . $order_id ),
+				),
+				$thank_you_url
+			);
+			$res['redirect_url'] = esc_url_raw( $redirect_url );
+		} else {
+			$this->send_error( __( 'Error! Thank you page URL configuration is wrong in the plugin settings.', 'wp-express-checkout' ), 3007 );
+		}
+
+		$this->send_response( $res );
+	}
+
 	/**
 	 * Processes the payment on AJAX call.
 	 */
@@ -119,7 +282,7 @@ class Payment_Processor {
 		$order->add_data( 'state', $this->get_transaction_status( $payment ) );
 		$order->add_data( 'payer', $payment['payer'] );
 
-		if ( $trans['shipping_enable'] ) {
+		if ( $trans['shipping_enable'] || $trans['shipping'] ) {
 			$order->add_data( 'shipping_address', $this->get_address( $payment ) );
 		}
 

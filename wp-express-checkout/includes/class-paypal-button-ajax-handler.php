@@ -130,6 +130,162 @@ class PayPal_Payment_Button_Ajax_Handler {
     }
 
 	/**
+	 * Handles the order capture for standard 'Buy Now' type buttons.
+	 */
+	public function pp_capture_order(){
+		//Get the data from the request
+		$json_pp_bn_data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : '{}';
+		//We need the data in an array format so lets convert it.
+		$array_pp_bn_data = json_decode( $json_pp_bn_data, true );
+		//Logger::log_array_data($array_pp_bn_data, true);	
+
+		//Get the PayPal order_id from the data
+		$order_id = isset( $array_pp_bn_data['order_id'] ) ? sanitize_text_field($array_pp_bn_data['order_id']) : '';
+		Logger::log( 'PayPal capture order request received - PayPal order ID: ' . $order_id, true );
+
+		if ( empty( $order_id ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Error! Empty order ID received for PayPal capture order request.', 'wp-express-checkout' ),
+				)
+			);
+		}
+
+		//Get the WPEC plugin specific data from the request
+		$json_wpec_data = isset( $_POST['wpec_data'] ) ? stripslashes_deep( $_POST['wpec_data'] ) : '{}';
+		//We need the data in an array format so lets convert it.
+		$array_wpec_data = json_decode( $json_wpec_data, true );		
+		//Logger::log_array_data($array_wpec_data, true);
+
+		if ( empty( $array_wpec_data ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Error! Empty WPEC plugin data received.', 'wp-express-checkout' ),
+				)
+			);
+		}
+
+		// Check nonce.
+		if ( ! check_ajax_referer( 'wpec-onapprove-js-ajax-nonce', '_wpnonce', false ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'wp-express-checkout' ),
+				)
+			);
+			exit;
+		}
+
+		// Capture the order using the PayPal API. (https://developer.paypal.com/docs/api/orders/v2/#orders_capture)
+		$pp_capture_response_data = $this->capture_order_pp_api_call( $order_id, $array_wpec_data );
+		if ( is_wp_error( $pp_capture_response_data ) ) {
+			//Failed to capture the order.
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __('Error! PayPal capture-order API call failed.', 'wp-express-checkout'),
+				)
+			);
+			exit;
+		}
+
+		
+		$array_txn_data = $pp_capture_response_data;
+
+		//Logger::log_array_data($array_txn_data, true); // Debugging purpose.
+		//Logger::log_array_data($array_wpec_data, true); // Debugging purpose.
+		
+		//Process the transaction/payment data.
+		Logger::log( 'Going to create/update record and save transaction data.', true );
+		$payment_processor = Payment_Processor::get_instance();
+
+		//It will send the appropriate response back to the client (after processing the payment data).
+		$payment_processor->wpec_server_side_process_payment( $array_txn_data, $array_wpec_data );
+
+		/* Everything is processed successfully, the previous function call will also send the response back to the client. */
+	}
+
+	/**
+	 * Handles the order capture for standard 'Buy Now' type buttons.
+	 */
+	public function pp_capture_order(){
+		//Get the data from the request
+		$json_pp_bn_data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : '{}';
+		//We need the data in an array format so lets convert it.
+		$array_pp_bn_data = json_decode( $json_pp_bn_data, true );
+		//Logger::log_array_data($array_pp_bn_data, true);	
+
+		//Get the PayPal order_id from the data
+		$order_id = isset( $array_pp_bn_data['order_id'] ) ? sanitize_text_field($array_pp_bn_data['order_id']) : '';
+		Logger::log( 'PayPal capture order request received - PayPal order ID: ' . $order_id, true );
+
+		if ( empty( $order_id ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Error! Empty order ID received for PayPal capture order request.', 'wp-express-checkout' ),
+				)
+			);
+		}
+
+		//Get the WPEC plugin specific data from the request
+		$json_wpec_data = isset( $_POST['wpec_data'] ) ? stripslashes_deep( $_POST['wpec_data'] ) : '{}';
+		//We need the data in an array format so lets convert it.
+		$array_wpec_data = json_decode( $json_wpec_data, true );		
+		//Logger::log_array_data($array_wpec_data, true);
+
+		if ( empty( $array_wpec_data ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Error! Empty WPEC plugin data received.', 'wp-express-checkout' ),
+				)
+			);
+		}
+
+		// Check nonce.
+		if ( ! check_ajax_referer( 'wpec-onapprove-js-ajax-nonce', '_wpnonce', false ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'wp-express-checkout' ),
+				)
+			);
+			exit;
+		}
+
+		// Capture the order using the PayPal API. (https://developer.paypal.com/docs/api/orders/v2/#orders_capture)
+		$pp_capture_response_data = $this->capture_order_pp_api_call( $order_id, $array_wpec_data );
+		if ( is_wp_error( $pp_capture_response_data ) ) {
+			//Failed to capture the order.
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __('Error! PayPal capture-order API call failed.', 'wp-express-checkout'),
+				)
+			);
+			exit;
+		}
+
+		
+		$array_txn_data = $pp_capture_response_data;
+
+		//Logger::log_array_data($array_txn_data, true); // Debugging purpose.
+		//Logger::log_array_data($array_wpec_data, true); // Debugging purpose.
+		
+		//Process the transaction/payment data.
+		Logger::log( 'Going to create/update record and save transaction data.', true );
+		$payment_processor = Payment_Processor::get_instance();
+
+		//It will send the appropriate response back to the client (after processing the payment data).
+		$payment_processor->wpec_server_side_process_payment( $array_txn_data, $array_wpec_data );
+
+		/* Everything is processed successfully, the previous function call will also send the response back to the client. */
+	}
+
+	/**
 	 * Create the order using the PayPal API call.
 	 * return the PayPal order ID if successful, or a WP_Error object if there is an error.
 	 */
@@ -174,150 +330,61 @@ class PayPal_Payment_Button_Ajax_Handler {
     }
 
 	/**
-	 * Handles the order capture for standard 'Buy Now' type buttons.
+	 * Capture the order using the PayPal API call.
+	 * return the transaction data if successful, or a WP_Error object if there is an error.
 	 */
-	public function pp_capture_order(){
-		//Get the data from the request
-		$data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : array();
-		if ( empty( $data ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Empty data received.', 'wordpress-simple-paypal-shopping-cart' ),
-				)
-			);
-		}
+    public static function capture_order_pp_api_call( $order_id, $array_wpec_data )
+    {
+		//https://developer.paypal.com/docs/api/orders/v2/#orders_capture
+
+		Logger::log( 'Capturing the PayPal order using the PayPal API call...', true);
+
+		$api_params = array( 'order_id' => $order_id );
+		$json_api_params = json_encode($api_params);
 		
-		if( !is_array( $data ) ){
-			//Convert the JSON string to an array (Vanilla JS AJAX data will be in JSON format).
-			$data = json_decode( $data, true);		
+		//Create the request for the PayPal API call.
+		$endpoint = '/v2/checkout/orders/' . $order_id . '/capture';
+		$request = new Request( $endpoint, 'POST' );
+		//The order data alreaady in JSON format so we don't need to json_encode it again.
+		$request->body = $json_api_params;
+
+		//Execute the request.
+		$client = Client::client();
+
+		try{
+        	$response = $client->execute($request);
+		}
+		catch( \Exception $e ) {
+			//If there is an error, log the error and return the error message.
+			$exception_msg = json_decode($e->getMessage());
+			if(is_array($exception_msg->details) && sizeof($exception_msg->details)>0){
+				$error_string = $exception_msg->details[0]->issue.". ".$exception_msg->details[0]->description;							
+				Logger::log( 'Error capturing the PayPal order via API call: ' . $error_string, true );
+				return new \WP_Error(2002,$error_string);
+			}
+			Logger::log( 'Error creating PayPal order: ' . $e->getMessage(), true );
+			return new \WP_Error(2002,__( 'Something went wrong, the PayPal capture-order API call failed!', 'wp-express-checkout' ));
 		}
 
-		//Get the order_id from data
-		$order_id = isset( $data['order_id'] ) ? sanitize_text_field($data['order_id']) : '';
-		if ( empty( $order_id ) ) {
-			Logger::log( 'pp_capture_order - empty order ID received.', false );
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Empty order ID received.', 'wordpress-simple-paypal-shopping-cart' ),
-				)
-			);
-		}
-
-		Logger::log( 'Received request - pp_capture_order. PayPal Order ID: ' . $order_id, true );
-
-		// Check nonce.
-		if ( ! check_ajax_referer( 'wpec-onapprove-js-ajax-nonce', '_wpnonce', false ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'wordpress-simple-paypal-shopping-cart' ),
-				)
-			);
-			exit;
-		}
-
-		// Set the additional args for the API call.
-		// $additional_args = array();
-		// $additional_args['return_response_body'] = true;
-
-		// Capture the order using the PayPal API. (https://developer.paypal.com/docs/api/orders/v2/#orders_capture)
-		// $api_injector = new PayPal_Request_API_Injector(); // TODO: Fix this.
-		// $response = $api_injector->capture_paypal_order( $order_id, $additional_args );
-
-		// We requested the response body to be returned, so we need to JSON decode it.
-		/*
-		if($response !== false){
-			$txn_data = json_decode( $response, true );
-		} else {
-			//Failed to capture the order.
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Failed to capture the order. Enable the debug logging feature to get more details.', 'wordpress-simple-paypal-shopping-cart' ),
-				)
-			);
-			exit;
-		}
-		*/
-
-		// Logger::log_array_data($data, true); // Debugging purpose.
-		// Logger::log_array_data($txn_data, true); // Debugging purpose.
-
-		// Create the IPN data array from the transaction data.
-		// Need to include the following values in the $data array.
-		// $data['custom_field'] = get_post_meta( $cart_id, 'wpec_cart_custom_values', true ); // TODO: Take care of the custom fields data.
+		//The paypal debug ID if available (useful for debugging purposes)
+		//$paypal_debug_Id = isset($response->headers['Paypal-Debug-Id']) ? $response->headers['Paypal-Debug-Id'] : '';
+		//Logger::log( 'PayPal Debug ID: ' . $paypal_debug_Id, true );
 		
-		// $ipn_data = PayPal_Utility_IPN_Related::create_ipn_data_array_from_capture_order_txn_data( $data, $txn_data ); // TODO: Fix this.
-		// $paypal_capture_id = isset( $ipn_data['txn_id'] ) ? $ipn_data['txn_id'] : '';
-		// Logger::log( 'PayPal Capture ID (Transaction ID): ' . $paypal_capture_id, true );
-		// Logger::log_array_data( $ipn_data, true ); //Debugging purpose.
-		
-		/* Since this capture is done from server side, the validation is not required but we are doing it anyway. */
-		// Validate the buy now txn data before using it.
-		// $validation_response = PayPal_Utility_IPN_Related::validate_buy_now_checkout_txn_data( $data, $txn_data ); // TODO: Fix this
-		
-		/*
-		if( $validation_response !== true ){
-			//Debug logging will reveal more details.
-			wp_send_json(
-				array(
-					'success' => false,
-					'error_detail'  => $validation_response, // It contains the error message.
-				)
-			);
-			exit;
-		}
-		 */
+		//Get the transaction data from the response.
+		$txn_data = $response->result;
 
-		//Process the IPN data array
-		Logger::log( 'Validation passed. Going to create/update record and save transaction data.', true );
-		
-		/**
-		 * TODO: Fix this
-		 */
-		// PayPal_Utility_IPN_Related::complete_post_payment_processing( $data, $txn_data, $ipn_data );
+		//We need to convert the object to an array so we can use it in our process payment function easily. 
+		//json_encode then json_decode will do this.
+		$txn_data_array = json_decode(json_encode($txn_data), true);
+		//Logger::log_array_data($txn_data_array, true); // Debugging purpose.
 
-		/**
-		 * Trigger the IPN processed action hook (so other plugins can can listen for this event).
-		 */ 
-		// do_action( 'wpec_paypal_checkout_ipn_processed', $ipn_data );
-		// do_action( 'wpec_payment_ipn_processed', $ipn_data );
+		$paypal_capture_id = isset($txn_data_array['purchase_units'][0]['payments']['captures'][0]['id']) ? $txn_data_array['purchase_units'][0]['payments']['captures'][0]['id'] : '';
+		Logger::log( 'PayPal Capture ID: ' . $paypal_capture_id, true );
 
-		//Everything is processed successfully, send the success response.
-		/* 
-		wp_send_json( array( 
-			'success' => true, 
-			'order_id' => $order_id, 
-			'capture_id' => $paypal_capture_id, 
-			'txn_data' => $txn_data 
-			)
-		); 
-		*/
+        return $txn_data_array;
+    }
 
-		exit;
-	}
-
-	public function get_last_error() {
-		return $this->last_error;
-	}
-
-	// TODO - Fix the validation for the amount data received.
-	public function validate_total_amount($amount, $quantity, $custom_inputs){
-
-		$expected_total_amount = $this->item_for_validation->get_price() * $quantity;
-
-		// Check if the expected total amount matches the given amount.
-		if ( $expected_total_amount < $amount ) {
-			Logger::log("Pre-API Submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, true);
-			// Set the last error message that will be displayed to the user.
-			$mismatch_err_msg = __( "Price validation failed. The submitted amount does not match the product's configured price. ", 'wp-express-checkout' );
-			$mismatch_err_msg .= "Expected: " . $expected_total_amount . ", Submitted: " . $amount;
-			$this->last_error = $mismatch_err_msg;
-			return false;
-		}
-
+	public function validate_total_amount($order_data){
 		return true;
 	}
 
