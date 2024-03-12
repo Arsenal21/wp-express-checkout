@@ -386,6 +386,8 @@ class PayPal_Payment_Button_Ajax_Handler {
 				// Calculate the expected total amount.
 				$expected_total_amount = $total_product_price + $tax_amount + $total_shipping ;
 				
+				// Logger::log("Pre-API Submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, false);
+				
 				// Check if the expected total amount matches the given amount.
 				if ( $expected_total_amount < $amount ) {
 					Logger::log("Pre-API Submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, false);
@@ -399,21 +401,21 @@ class PayPal_Payment_Button_Ajax_Handler {
 				}
 
 				// Check if the expected currency matches the given currency.
-				$configured_currency = Main::get_instance()->get_settings( 'currency_code' );
-				if ($submitted_currency != $configured_currency) {
-					Logger::log("Pre-API Submission validation currency mismatch. Expected currency: ". $configured_currency . ", Submitted currency: " . $submitted_currency, false);
+				// $configured_currency = Main::get_instance()->get_settings( 'currency_code' );
+				// if ($submitted_currency != $configured_currency) {
+				// 	Logger::log("Pre-API Submission validation currency mismatch. Expected currency: ". $configured_currency . ", Submitted currency: " . $submitted_currency, false);
 					
-					// Set the last error message that will be displayed to the user.
-					$error_msg .= __( "Currency validation failed. The submitted currency does not match the configured currency. ", 'wp-express-checkout' );
-					$error_msg .= "Expected: " .  $configured_currency . ", Submitted: " . $submitted_currency;
+				// 	// Set the last error message that will be displayed to the user.
+				// 	$error_msg .= __( "Currency validation failed. The submitted currency does not match the configured currency. ", 'wp-express-checkout' );
+				// 	$error_msg .= "Expected: " .  $configured_currency . ", Submitted: " . $submitted_currency;
 
-					//Set the validation failed flag.
-					$validated = false;
-				}
+				// 	//Set the validation failed flag.
+				// 	$validated = false;
+				// }
 
 				break;
 		}
-		
+
 		//Trigger action hook that can be used to do additional API pre-submission validation from an addon.
 		$validated = apply_filters( 'wpec_pre_api_submission_validation', $validated, $this->item_for_validation, $order_data_array, $array_wpec_data );
 
