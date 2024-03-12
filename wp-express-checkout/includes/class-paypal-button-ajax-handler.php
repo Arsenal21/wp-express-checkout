@@ -32,6 +32,8 @@ class PayPal_Payment_Button_Ajax_Handler {
 		//Get the order data from the request (it will be in JSON format). 
 		//Keep the order data in JSON format so we can use it directly in the API call later.
 		$json_order_data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : '{}';
+		//Lets have the data in array format also.
+		$order_data_array = json_decode( $json_order_data, true );
 
 		//If the data is empty, send the error response.
 		if ( empty( $json_order_data ) ) {
@@ -42,11 +44,21 @@ class PayPal_Payment_Button_Ajax_Handler {
 				)
 			);
 		}
-		
-		//If we need the data as an array, we can use the following code.
-		$order_data_array = json_decode( $json_order_data, true );
-		// Logger::log('Received data in array format: ', true);
-		// Logger::log_array_data($array_data, true);
+
+		//Get the WPEC plugin specific data from the request
+		$json_wpec_data = isset( $_POST['wpec_data'] ) ? stripslashes_deep( $_POST['wpec_data'] ) : '{}';
+		//We need the data in an array format so lets convert it.
+		$array_wpec_data = json_decode( $json_wpec_data, true );		
+		//Logger::log_array_data($array_wpec_data, true);
+
+		if ( empty( $array_wpec_data ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Error! Empty WPEC plugin data received from the create-order AJAX call.', 'wp-express-checkout' ),
+				)
+			);
+		}		
 
 		// Verify nonce.
 		if ( ! check_ajax_referer( 'wpec-create-order-js-ajax-nonce', '_wpnonce', false ) ) {
@@ -59,46 +71,8 @@ class PayPal_Payment_Button_Ajax_Handler {
 			exit;
 		}
 
-		// >>>> Start of pre API submission validation.
-		$amount = $order_data_array['purchase_units'][0]['amount']['value'];
-		$quantity = $order_data_array['purchase_units'][0]['items'][0]['quantity'];
-		// $product_name = $order_data_array['purchase_units'][0]['item'][0]['name'];
-		// $coupon_code = '';
-		// $price_variation = '';
-		$custom_inputs = array(
-			// 'coupon_code' 		=> $coupon_code,
-			// 'price_variation' 	=> $price_variation,
-			// 'billing_details' 	=> json_decode( html_entity_decode( $post_billing_details ) , true),
-			// 'shipping_details' 	=> json_decode( html_entity_decode( $post_shipping_details ) , true),
-		);
-		$this->item_for_validation = Products::retrieve( intval( $order_data_array['product_id'] ) );
-		Logger::log_array_data($this->item_for_validation, true);
-
-		//Do the API pre-submission price/amount validation.
-		if ( $this->item_for_validation->get_type() === 'one_time' ) {
-			//It's a one-time payment product.
-			
-			if( ! $this->validate_total_amount( $amount, $quantity, $custom_inputs ) ){
-				//Error condition. The validation function will set the error message which we will use to send back to the client in the next stage of the code.
-				Logger::log( "API pre-submission amount validation failed. The amount appears to have been altered.", false );
-
-				wp_send_json(
-					array(
-						'success' => false,
-						'err_msg'  => __( 'Error occurred:', 'wp-express-checkout' ) . ' ' . $this->get_last_error(),
-					)
-				);
-
-			}else{
-				Logger::log( "API pre-submission amount validation successful.", true );
-			}
-		} else if ( $this->item_for_validation->get_type() === 'donation' ) {
-			//It's a donation product. Don't need to validate the amount since the user can enter any amount to donate.
-			Logger::log( "This is a donation type product. API pre-submission amount validation is not required.", true );
-		}
-		//Trigger action hook that can be used to do additional API pre-submission validation from an addon.
-		do_action( 'wpec_ng_before_api_pre_submission_validation', $this->item_for_validation );
-		// <<<< End of pre API submission validation.
+		// Do the pre API submission validation.
+		$this->do_pre_api_submission_validation($order_data_array, $array_wpec_data);
 
 
 		// Create the order using the PayPal API call (pass the order data in JSON format so we can use it directly in the API call)
@@ -310,21 +284,84 @@ class PayPal_Payment_Button_Ajax_Handler {
 		return $this->last_error;
 	}
 
-	public function validate_total_amount($amount, $quantity, $custom_inputs){
-		// Calculate the expected total amount.
-		$expected_total_amount = $this->item_for_validation->get_price() * $quantity;
-		
-		// Check if the expected total amount matches the given amount.
-		if ( $expected_total_amount < $amount ) {
-			Logger::log("Pre-API Submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, true);
-			// Set the last error message that will be displayed to the user.
-			$mismatch_err_msg = __( "Price validation failed. The submitted amount does not match the product's configured price. ", 'wp-express-checkout' );
-			$mismatch_err_msg .= "Expected: " . $expected_total_amount . ", Submitted: " . $amount;
-			$this->last_error = $mismatch_err_msg;
-			return false;
+	/**
+	 * Do the pre API submission validation. It will send the error message back to the client if there is an error.
+	 * return nothing if the validation is successful, or the error message if there is an error.
+	 */
+	public function do_pre_api_submission_validation($order_data_array, $array_wpec_data){
+
+		$amount = $order_data_array['purchase_units'][0]['amount']['value'];
+		$quantity = $order_data_array['purchase_units'][0]['items'][0]['quantity'];
+		// $product_name = $order_data_array['purchase_units'][0]['item'][0]['name'];
+		// $coupon_code = '';
+		// $price_variation = '';
+		$custom_inputs = array(
+			// 'coupon_code' 		=> $coupon_code,
+			// 'price_variation' 	=> $price_variation,
+			// 'billing_details' 	=> json_decode( html_entity_decode( $post_billing_details ) , true),
+			// 'shipping_details' 	=> json_decode( html_entity_decode( $post_shipping_details ) , true),
+		);
+
+		$product_id = $array_wpec_data['product_id'];
+		$this->item_for_validation = Products::retrieve( intval( $product_id ) );
+		Logger::log_array_data($this->item_for_validation, true);
+
+		//Trigger action hook that can be used to do additional API pre-submission validation from an addon.
+		do_action( 'wpec_before_api_pre_submission_validation', $this->item_for_validation, $order_data_array, $array_wpec_data );		
+
+		$validated = true;//we will set it to false if the validation fails in the following code.
+		$error_msg = '';
+
+		$product_type = $this->item_for_validation->get_type();
+		switch ( $product_type ) {
+			case 'subscription':
+				//It's a subscription payment product. The extension will handle the validation using filter.
+				break;
+			case 'donation':
+				//It's a donation product.
+				Logger::log( "This is a donation type product. API pre-submission amount validation is not required.", true );
+				break;
+			default:
+				//It's a one-time product.
+				Logger::log( "This is a one-time payment product. API pre-submission amount validation is required.", true );
+
+				// Calculate the expected total amount.
+				$expected_total_amount = $this->item_for_validation->get_price() * $quantity;
+				
+				// Check if the expected total amount matches the given amount.
+				if ( $expected_total_amount < $amount ) {
+					Logger::log("Pre-API Submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, false);
+					// Set the last error message that will be displayed to the user.
+					$error_msg .= __( "Price validation failed. The submitted amount does not match the product's configured price. ", 'wp-express-checkout' );
+					$error_msg .= "Expected: " . $expected_total_amount . ", Submitted: " . $amount;
+
+					//Set the validation failed flag.
+					$validated = false;
+				}
+
+				//TODO & FIXME - Add currency validation here as well
+
+				break;
 		}
 
-		return true;
+		//Trigger action hook that can be used to do additional API pre-submission validation from an addon.
+		$validated = apply_filters( 'wpec_pre_api_submission_validation', $validated, $this->item_for_validation, $order_data_array, $array_wpec_data );
+
+		//If the validation failed, send the error message back to the client.
+		if( ! $validated ){
+			//Error condition. The validation function will set the error message which we will use to send back to the client in the next stage of the code.
+			Logger::log( "API pre-submission amount validation failed.", false );
+
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Validation Error: ', 'wp-express-checkout' ) . $error_msg,
+				)
+			);
+
+		}
+
+		//Validation is successful, return nothing.
 	}
 
 }
