@@ -292,27 +292,21 @@ class PayPal_Payment_Button_Ajax_Handler {
 
 		$amount = $order_data_array['purchase_units'][0]['amount']['value'];
 		$quantity = $order_data_array['purchase_units'][0]['items'][0]['quantity'];
-		// $product_name = $order_data_array['purchase_units'][0]['item'][0]['name'];
-		// $coupon_code = '';
-		// $price_variation = '';
-		$custom_inputs = array(
-			// 'coupon_code' 		=> $coupon_code,
-			// 'price_variation' 	=> $price_variation,
-			// 'billing_details' 	=> json_decode( html_entity_decode( $post_billing_details ) , true),
-			// 'shipping_details' 	=> json_decode( html_entity_decode( $post_shipping_details ) , true),
-		);
-
+		$submitted_currency = $order_data_array['purchase_units'][0]['amount'][0]['currency_code'];
+		
 		$product_id = $array_wpec_data['product_id'];
+
 		$this->item_for_validation = Products::retrieve( intval( $product_id ) );
 		Logger::log_array_data($this->item_for_validation, true);
 
 		//Trigger action hook that can be used to do additional API pre-submission validation from an addon.
 		do_action( 'wpec_before_api_pre_submission_validation', $this->item_for_validation, $order_data_array, $array_wpec_data );		
 
-		$validated = true;//we will set it to false if the validation fails in the following code.
+		$validated = true; // We will set it to false if the validation fails in the following code.
 		$error_msg = '';
 
 		$product_type = $this->item_for_validation->get_type();
+
 		switch ( $product_type ) {
 			case 'subscription':
 				//It's a subscription payment product. The extension will handle the validation using filter.
@@ -325,12 +319,77 @@ class PayPal_Payment_Button_Ajax_Handler {
 				//It's a one-time product.
 				Logger::log( "This is a one-time payment product. API pre-submission amount validation is required.", true );
 
+				// Calculate product price amount.
+				$product_price = $this->item_for_validation->get_price();
+
+				$variations = (new Variations( $this->item_for_validation->get_id() ))->variations;
+				$variation_price_total = 0; 
+				$price_variations_applied = $array_wpec_data['variations']['applied'];
+				if (is_array($variations)) {
+					foreach ($variations as $index => $variation) {
+						$applied_var_index = (int) $price_variations_applied[$index];
+						$variation_price = Utils::round_price($variation['prices'][$applied_var_index]);
+						$variation_price_total += $variation_price;
+						Logger::log( "Variation price: " . $variation_price, true );
+					}
+					if ($variation_price_total > 0) {
+						$construct_final_price = get_post_meta( $product_id, 'wpec_product_hide_amount_input', true );
+						$product_price = !empty($construct_final_price) ? $variation_price_total : $product_price + $variation_price_total;
+					}
+				}
+
+				// Calculate total product price amount.
+				$total_product_price = Utils::round_price($product_price * $quantity);
+				Logger::log( "Total product price: " . $total_product_price, true );
+
+				// Calculate coupon discount amount.
+				if (isset($array_wpec_data['couponCode'])) {
+					$coupon_code = $array_wpec_data['couponCode'];
+					$coupon = Coupons::get_coupon($coupon_code);
+					$discount = 0;
+					if ($coupon['valid'] && Coupons::is_coupon_allowed_for_product($coupon['id'], $product_id)) {
+						// Get the discount amount.
+						if ( $coupon['discountType'] === 'perc' ) {
+							// Discount type percentage.
+							$discount = Utils::round_price( $total_product_price * ( $coupon['discount'] / 100 ) );
+						} else {
+							// Discount type fixed.
+							$discount = $coupon['discount'];
+						}
+					}
+
+					$total_product_price = $total_product_price - $discount;
+				}
+
+				// Calculate tax amount.
+				$tax_percentage = $this->item_for_validation->get_tax();
+				$tax_amount = Utils::get_tax_amount( $total_product_price , $tax_percentage );
+				$tax_amount = Utils::round_price($tax_amount );
+
+				Logger::log( "Tax percentage: " . $tax_percentage, true );
+				Logger::log( "Tax amount: " . $tax_amount, true );
+
+				// Calculate shipping amount.
+				$shipping = $this->item_for_validation->get_shipping();
+				$shipping_per_quantity = $this->item_for_validation->get_shipping_per_quantity();
+				$total_shipping = Utils::get_total_shipping_cost(
+					array(
+						'shipping' => $shipping,
+						'shipping_per_quantity' => $shipping_per_quantity,
+						'quantity' => $quantity,
+					)
+				);
+				Logger::log( "Base Shipping: " . $shipping, true );
+				Logger::log( "Shipping per quantity: " . $shipping_per_quantity, true );
+				Logger::log( "Total shipping cost: " . $total_shipping, true );
+
 				// Calculate the expected total amount.
-				$expected_total_amount = $this->item_for_validation->get_price() * $quantity;
+				$expected_total_amount = $total_product_price + $tax_amount + $total_shipping ;
 				
 				// Check if the expected total amount matches the given amount.
 				if ( $expected_total_amount < $amount ) {
 					Logger::log("Pre-API Submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, false);
+					
 					// Set the last error message that will be displayed to the user.
 					$error_msg .= __( "Price validation failed. The submitted amount does not match the product's configured price. ", 'wp-express-checkout' );
 					$error_msg .= "Expected: " . $expected_total_amount . ", Submitted: " . $amount;
@@ -339,11 +398,22 @@ class PayPal_Payment_Button_Ajax_Handler {
 					$validated = false;
 				}
 
-				//TODO & FIXME - Add currency validation here as well
+				// Check if the expected currency matches the given currency.
+				$configured_currency = Main::get_instance()->get_settings( 'currency_code' );
+				if ($submitted_currency != $configured_currency) {
+					Logger::log("Pre-API Submission validation currency mismatch. Expected currency: ". $configured_currency . ", Submitted currency: " . $submitted_currency, false);
+					
+					// Set the last error message that will be displayed to the user.
+					$error_msg .= __( "Currency validation failed. The submitted currency does not match the configured currency. ", 'wp-express-checkout' );
+					$error_msg .= "Expected: " .  $configured_currency . ", Submitted: " . $submitted_currency;
+
+					//Set the validation failed flag.
+					$validated = false;
+				}
 
 				break;
 		}
-
+		
 		//Trigger action hook that can be used to do additional API pre-submission validation from an addon.
 		$validated = apply_filters( 'wpec_pre_api_submission_validation', $validated, $this->item_for_validation, $order_data_array, $array_wpec_data );
 
