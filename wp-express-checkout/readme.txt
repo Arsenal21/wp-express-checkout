@@ -168,6 +168,7 @@ None
 - The PayPal create-order and the capture-order API calls have been moved to the server side.
 - Added a new function to handle the server side payment processing.
 - The Transaction ID section in the order status meta box displays the capture ID.
+- API pre-submission validation added.
 
 = 2.3.7 = 
 - Added a new action hook - wpec_before_file_download.
