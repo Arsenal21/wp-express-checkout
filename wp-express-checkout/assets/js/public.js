@@ -410,13 +410,13 @@ var ppecHandler = function( data ) {
 					console.log('Create-order API call to PayPal completed successfully.');
 					return response_data.order_id;
 				} else {
-					const error_message = JSON.stringify(response_data);
+					const error_message = response_data.err_msg
 					console.error('Error occurred during create-order call to PayPal. ' + error_message);
 					throw new Error(error_message);
 				}
 			} catch (error) {
-				console.error(error);
-				alert('Could not initiate PayPal Checkout...\n\n' + JSON.stringify(error));
+				console.error(error.message);
+				alert('Could not initiate PayPal Checkout...\n\n' + error.message);
 			}
 		},
 		onApprove: async function( data, actions ) {

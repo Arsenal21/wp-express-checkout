@@ -292,12 +292,11 @@ class PayPal_Payment_Button_Ajax_Handler {
 
 		$amount = $order_data_array['purchase_units'][0]['amount']['value'];
 		$quantity = $order_data_array['purchase_units'][0]['items'][0]['quantity'];
-		$submitted_currency = $order_data_array['purchase_units'][0]['amount'][0]['currency_code'];
+		$submitted_currency = $order_data_array['purchase_units'][0]['amount']['currency_code'];
 		
 		$product_id = $array_wpec_data['product_id'];
 
 		$this->item_for_validation = Products::retrieve( intval( $product_id ) );
-		Logger::log_array_data($this->item_for_validation, true);
 
 		//Trigger action hook that can be used to do additional API pre-submission validation from an addon.
 		do_action( 'wpec_before_api_pre_submission_validation', $this->item_for_validation, $order_data_array, $array_wpec_data );		
@@ -316,8 +315,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 				Logger::log( "This is a donation type product. API pre-submission amount validation is not required.", true );
 				break;
 			default:
-				//It's a one-time product.
-				Logger::log( "This is a one-time payment product. API pre-submission amount validation is required.", true );
+				//It's a one-time product. API pre-submission amount validation is required.
 
 				// Calculate product price amount.
 				$product_price = $this->item_for_validation->get_price();
@@ -330,7 +328,6 @@ class PayPal_Payment_Button_Ajax_Handler {
 						$applied_var_index = (int) $price_variations_applied[$index];
 						$variation_price = Utils::round_price($variation['prices'][$applied_var_index]);
 						$variation_price_total += $variation_price;
-						Logger::log( "Variation price: " . $variation_price, true );
 					}
 					if ($variation_price_total > 0) {
 						$construct_final_price = get_post_meta( $product_id, 'wpec_product_hide_amount_input', true );
@@ -340,7 +337,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 
 				// Calculate total product price amount.
 				$total_product_price = Utils::round_price($product_price * $quantity);
-				Logger::log( "Total product price: " . $total_product_price, true );
+				// Logger::log( "Total product price: " . $total_product_price, true );
 
 				// Calculate coupon discount amount.
 				if (isset($array_wpec_data['couponCode'])) {
@@ -366,8 +363,8 @@ class PayPal_Payment_Button_Ajax_Handler {
 				$tax_amount = Utils::get_tax_amount( $total_product_price , $tax_percentage );
 				$tax_amount = Utils::round_price($tax_amount );
 
-				Logger::log( "Tax percentage: " . $tax_percentage, true );
-				Logger::log( "Tax amount: " . $tax_amount, true );
+				// Logger::log( "Tax percentage: " . $tax_percentage, true );
+				// Logger::log( "Tax amount: " . $tax_amount, true );
 
 				// Calculate shipping amount.
 				$shipping = $this->item_for_validation->get_shipping();
@@ -379,18 +376,18 @@ class PayPal_Payment_Button_Ajax_Handler {
 						'quantity' => $quantity,
 					)
 				);
-				Logger::log( "Base Shipping: " . $shipping, true );
-				Logger::log( "Shipping per quantity: " . $shipping_per_quantity, true );
-				Logger::log( "Total shipping cost: " . $total_shipping, true );
+				// Logger::log( "Base Shipping: " . $shipping, true );
+				// Logger::log( "Shipping per quantity: " . $shipping_per_quantity, true );
+				// Logger::log( "Total shipping cost: " . $total_shipping, true );
 
 				// Calculate the expected total amount.
 				$expected_total_amount = $total_product_price + $tax_amount + $total_shipping ;
 				
-				// Logger::log("Pre-API Submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, false);
+				// Logger::log("Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, false);
 				
 				// Check if the expected total amount matches the given amount.
-				if ( $expected_total_amount < $amount ) {
-					Logger::log("Pre-API Submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, false);
+				if ( $amount < $expected_total_amount ) {
+					Logger::log("Pre-API Submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount ."\n", false);
 					
 					// Set the last error message that will be displayed to the user.
 					$error_msg .= __( "Price validation failed. The submitted amount does not match the product's configured price. ", 'wp-express-checkout' );
@@ -399,19 +396,19 @@ class PayPal_Payment_Button_Ajax_Handler {
 					//Set the validation failed flag.
 					$validated = false;
 				}
-
+				
 				// Check if the expected currency matches the given currency.
-				// $configured_currency = Main::get_instance()->get_settings( 'currency_code' );
-				// if ($submitted_currency != $configured_currency) {
-				// 	Logger::log("Pre-API Submission validation currency mismatch. Expected currency: ". $configured_currency . ", Submitted currency: " . $submitted_currency, false);
+				$configured_currency = Main::get_instance()->get_setting( 'currency_code' );
+				if ($submitted_currency != $configured_currency) {
+					Logger::log("Pre-API Submission validation currency mismatch. Expected currency: ". $configured_currency . ", Submitted currency: " . $submitted_currency ."\n", false);
 					
-				// 	// Set the last error message that will be displayed to the user.
-				// 	$error_msg .= __( "Currency validation failed. The submitted currency does not match the configured currency. ", 'wp-express-checkout' );
-				// 	$error_msg .= "Expected: " .  $configured_currency . ", Submitted: " . $submitted_currency;
+					// Set the last error message that will be displayed to the user.
+					$error_msg .= __( "Currency validation failed. The submitted currency does not match the configured currency. ", 'wp-express-checkout' );
+					$error_msg .= "Expected: " .  $configured_currency . ", Submitted: " . $submitted_currency;
 
-				// 	//Set the validation failed flag.
-				// 	$validated = false;
-				// }
+					//Set the validation failed flag.
+					$validated = false;
+				}
 
 				break;
 		}
@@ -422,7 +419,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 		//If the validation failed, send the error message back to the client.
 		if( ! $validated ){
 			//Error condition. The validation function will set the error message which we will use to send back to the client in the next stage of the code.
-			Logger::log( "API pre-submission amount validation failed.", false );
+			Logger::log( "API pre-submission validation failed.", false );
 
 			wp_send_json(
 				array(
