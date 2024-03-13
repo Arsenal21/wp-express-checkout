@@ -71,8 +71,8 @@ class PayPal_Payment_Button_Ajax_Handler {
 			exit;
 		}
 
-		// Do the pre API submission validation.
-		$this->do_pre_api_submission_validation($order_data_array, $array_wpec_data);
+		// Do the API pre-submission validation.
+		$this->do_api_pre_submission_validation($order_data_array, $array_wpec_data);
 
 
 		// Create the order using the PayPal API call (pass the order data in JSON format so we can use it directly in the API call)
@@ -285,10 +285,10 @@ class PayPal_Payment_Button_Ajax_Handler {
 	}
 
 	/**
-	 * Do the pre API submission validation. It will send the error message back to the client if there is an error.
+	 * Do the API pre-submission validation. It will send the error message back to the client if there is an error.
 	 * return nothing if the validation is successful, or the error message if there is an error.
 	 */
-	public function do_pre_api_submission_validation($order_data_array, $array_wpec_data){
+	public function do_api_pre_submission_validation($order_data_array, $array_wpec_data){
 
 		$amount = $order_data_array['purchase_units'][0]['amount']['value'];
 		$quantity = $order_data_array['purchase_units'][0]['items'][0]['quantity'];
@@ -387,7 +387,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 				
 				// Check if the expected total amount matches the given amount.
 				if ( $amount < $expected_total_amount ) {
-					Logger::log("Pre-API Submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount ."\n", false);
+					Logger::log("API pre-submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount ."\n", false);
 					
 					// Set the last error message that will be displayed to the user.
 					$error_msg .= __( "Price validation failed. The submitted amount does not match the product's configured price. ", 'wp-express-checkout' );
@@ -400,7 +400,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 				// Check if the expected currency matches the given currency.
 				$configured_currency = Main::get_instance()->get_setting( 'currency_code' );
 				if ($submitted_currency != $configured_currency) {
-					Logger::log("Pre-API Submission validation currency mismatch. Expected currency: ". $configured_currency . ", Submitted currency: " . $submitted_currency ."\n", false);
+					Logger::log("API pre-submission validation currency mismatch. Expected currency: ". $configured_currency . ", Submitted currency: " . $submitted_currency ."\n", false);
 					
 					// Set the last error message that will be displayed to the user.
 					$error_msg .= __( "Currency validation failed. The submitted currency does not match the configured currency. ", 'wp-express-checkout' );
