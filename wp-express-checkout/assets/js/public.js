@@ -412,7 +412,7 @@ var ppecHandler = function( data ) {
 				} else {
 					const error_message = response_data.err_msg
 					console.error('Error occurred during create-order call to PayPal. ' + error_message);
-					throw new Error(error_message);
+					throw new Error(error_message);//This will trigger the alert in the "catch" block below.
 				}
 			} catch (error) {
 				console.error(error.message);

@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.4
-Stable tag: 2.3.7
+Stable tag: 2.3.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -163,7 +163,7 @@ None
 
 == Changelog ==
 
-= WIP =
+= 2.3.8 =
 - Added new action hooks that is triggered after the output of download headers (for force download feature).
 - The PayPal create-order and the capture-order API calls have been moved to the server side.
 - Added a new function to handle the server side payment processing.

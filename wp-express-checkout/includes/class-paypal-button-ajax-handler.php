@@ -387,7 +387,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 				
 				// Check if the expected total amount matches the given amount.
 				if ( $amount < $expected_total_amount ) {
-					Logger::log("API pre-submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount ."\n", false);
+					Logger::log("API pre-submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, false);
 					
 					// Set the last error message that will be displayed to the user.
 					$error_msg .= __( "Price validation failed. The submitted amount does not match the product's configured price. ", 'wp-express-checkout' );
@@ -419,7 +419,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 		//If the validation failed, send the error message back to the client.
 		if( ! $validated ){
 			//Error condition. The validation function will set the error message which we will use to send back to the client in the next stage of the code.
-			Logger::log( "API pre-submission validation failed.", false );
+			Logger::log( "API pre-submission validation failed. Stopping the process.", false );
 
 			wp_send_json(
 				array(
