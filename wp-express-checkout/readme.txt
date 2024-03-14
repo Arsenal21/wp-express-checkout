@@ -165,6 +165,7 @@ None
 
 = WIP =
 - Taxonomy page's 404 error fixed.
+- Hide billing info for digital products on checkout.
 
 = 2.3.8 =
 - Added new action hooks that is triggered after the output of download headers (for force download feature).
