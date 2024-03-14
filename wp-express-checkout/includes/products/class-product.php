@@ -212,6 +212,21 @@ abstract class Product {
 		return (bool) $this->post->wpec_product_shipping_enable;
 	}
 
+	public function is_digital(){
+		$base_shipping = $this->get_shipping();
+		$shipping_per_quantity = $this->get_shipping_per_quantity();
+		if ( isset( $base_shipping ) && !empty( $base_shipping ) ){
+			return false;
+		}
+		if ( isset( $shipping_per_quantity ) && !empty( $shipping_per_quantity ) ){
+			return false;
+		}
+		if ( $this->post->wpec_product_shipping_enable ){
+			return false;
+		}
+		return true;
+	  }
+
 	/**
 	 * Retrieves the tax percentage.
 	 *

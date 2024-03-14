@@ -142,7 +142,7 @@
 				<div class="wp-ppec-form-error-msg"></div>
 			</div>
 		</div>
-
+		<?php if( ! WP_Express_Checkout\Products::retrieve( intval( $product_id ) )->is_digital() ){ ?>	
 		<div class="wpec_address_wrap">
 
 			<?php if ( $shipping_enable ) { ?>
@@ -247,7 +247,8 @@
 			<?php } ?>
 
 		</div>
-
+		<?php } ?>
+		
 	</div>
 
 	<div class = "wp-ppec-button-container">
