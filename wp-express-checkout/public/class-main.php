@@ -86,7 +86,7 @@ class Main {
 			'nonce' => wp_create_nonce('wpec-onapprove-js-ajax-nonce'),
 			'return_url' => $this->get_setting( 'thank_you_url' ),
 			'txn_success_message' => __('Transaction completed successfully!', 'wp-express-checkout'),
-    		'txn_success_extra_msg' => __('Feel free to add more items to your shopping cart for another checkout.', 'wp-express-checkout'),
+    		'txn_success_extra_msg' => __('Feel free to browse our site further for your next purchase.', 'wp-express-checkout'),
 		));
 
 		// Enqueue public.css
