@@ -42,13 +42,25 @@
 		);
 		//Allow other plugins to add their own local vars
 		$localVars = apply_filters('wpec_url_payment_box_script_local_vars', $localVars );
+
+		$wpec_create_order_vars = array(
+			'nonce' => wp_create_nonce('wpec-create-order-js-ajax-nonce'),
+		);
+		$wpec_on_approve_vars = array(
+			'nonce' => wp_create_nonce('wpec-onapprove-js-ajax-nonce'),
+			'return_url' => $this->get_setting( 'thank_you_url' ),
+			'txn_success_message' => __('Transaction completed successfully!', 'wp-express-checkout'),
+			'txn_success_extra_msg' => __('Feel free to add more items to your shopping cart for another checkout.', 'wp-express-checkout'),
+		);
+
 		?>
         <link rel="stylesheet" href="<?php echo $styleFrontEnd ?>" />
 
         <script type="text/javascript">
-			var ppecFrontVars = <?php echo json_encode( $localVars ) ?>
+			var ppecFrontVars = <?php echo json_encode( $localVars ) ?>;
+			const wpec_create_order_vars = <?php echo json_encode( $wpec_create_order_vars ) ?>;
+			const wpec_on_approve_vars = <?php echo json_encode( $wpec_on_approve_vars ) ?>;
         </script>
-
         <script src="<?php echo $scriptFrontEnd ?>"></script>
 
         <style>
