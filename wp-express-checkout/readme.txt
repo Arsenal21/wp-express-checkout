@@ -163,6 +163,9 @@ None
 
 == Changelog ==
 
+= WIP =
+- Taxonomy page's 404 error fixed.
+
 = 2.3.8 =
 - Added new action hooks that is triggered after the output of download headers (for force download feature).
 - The PayPal create-order and the capture-order API calls have been moved to the server side.

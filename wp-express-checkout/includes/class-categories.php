@@ -15,7 +15,16 @@ class Categories {
 	}
 
 	public static function register_category_taxonomy() {
-		
+
+		$cap = Main::get_instance()->get_setting( 'access_permission' );
+        
+        $capabilities = array(
+            'manage_terms' 		 => $cap,
+            'edit_terms'   		 => $cap,
+            'delete_terms'  	 => $cap,
+            'assign_terms' 		 => $cap,
+        );
+
         $labels_tags = array(
             'name'              => __( 'Product Categories', 'wp-express-checkout' ),
             'singular_name'     => __( 'Product Category', 'wp-express-checkout' ),
@@ -37,6 +46,7 @@ class Categories {
             'query_var'         => true,
             'rewrite'           => array( 'slug' => self::$CATEGORY_SLUG ),
             'show_admin_column' => true,
+            'capabilities'      => $capabilities,
         );
 
 		//Trigger filter

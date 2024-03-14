@@ -15,7 +15,15 @@ class Tags {
 	}
 
 	public static function register_tags_taxonomy() {
-		
+        $cap = Main::get_instance()->get_setting( 'access_permission' );
+        
+        $capabilities = array(
+            'manage_terms' 		 => $cap,
+            'edit_terms'   		 => $cap,
+            'delete_terms'  	 => $cap,
+            'assign_terms' 		 => $cap,
+        );
+
         $labels_tags = array(
             'name'              => __( 'Product Tags', 'wp-express-checkout' ),
             'singular_name'     => __( 'Product Tag', 'wp-express-checkout' ),
@@ -37,6 +45,7 @@ class Tags {
             'query_var'         => true,
             'rewrite'           => array( 'slug' => self::$TAGS_SLUG ),
             'show_admin_column' => true,
+            'capabilities'      => $capabilities,
         );
 
 		//Trigger filter
