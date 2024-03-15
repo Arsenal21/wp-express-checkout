@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.4
-Stable tag: 2.3.8
+Stable tag: 2.3.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,7 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 * Option to charge shipping for your items. Ability to set a shipping cost for each item separately.
 * Option to charge tax for your items.
 * Option to configure discount coupon codes.
+* Option to give a free product using 100% discount coupon code (offer complimentary product).
 * Option to configure terms and conditions before checkout.
 * You can see all the orders within your WordPress admin dashboard.
 * Option to customize the Thank You page.
@@ -163,10 +164,11 @@ None
 
 == Changelog ==
 
-= WIP =
-- Taxonomy page's 404 error fixed.
+= 2.3.9 =
 - For 100% discount coupond checkout, the billing address fields will be hidden for digital products.
 - Added a new filter 'wpec_hide_billing_address_fields' to hide billing address fields for digital products for the 100% discount coupon checkout.
+- Taxonomy page's 404 error fixed.
+- Fixed the URL payment feature's issue with the newly added validation.
 
 = 2.3.8 =
 - Added new action hooks that is triggered after the output of download headers (for force download feature).
