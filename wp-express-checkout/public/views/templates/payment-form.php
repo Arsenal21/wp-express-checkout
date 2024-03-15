@@ -116,9 +116,8 @@
 		</div>
 	<?php } ?>
 	<?php
-	/**
-	 * Hide billing info for donation product type.
-	 */
+	//Billing info fields section. 
+	//Trigger a filter that can be used to hide the billing info fields.
 	$hide_billing_info = apply_filters( 'wpec_hide_billing_info_fields', $custom_amount );
 	?>
 	<div id="wpec_billing_<?php echo esc_attr( $button_id ); echo $hide_billing_info ? '_hide' : ''; ?>" class="wpec_billing_container" style="display: none;">
@@ -142,7 +141,17 @@
 				<div class="wp-ppec-form-error-msg"></div>
 			</div>
 		</div>
-		<?php if( ! WP_Express_Checkout\Products::retrieve( intval( $product_id ) )->is_digital() ){ ?>	
+		<?php 
+		// Check if the product is digital or not. If it is not digital, then show the billing address fields.
+		$the_product = WP_Express_Checkout\Products::retrieve( intval( $product_id ) );
+		//By default, hide the billing address fields for digital products.
+		$hide_billing_address_fields = $the_product->is_digital_product();
+		//Trigger a filter that can be used to override the hiding of the billing address fields.
+		$hide_billing_address_fields = apply_filters( 'wpec_hide_billing_address_fields', $hide_billing_address_fields );
+
+		if( ! $hide_billing_address_fields ){
+		//Output/show the billing address fields.
+		?>	
 		<div class="wpec_address_wrap">
 
 			<?php if ( $shipping_enable ) { ?>
@@ -246,10 +255,11 @@
 
 			<?php } ?>
 
-		</div>
-		<?php } ?>
-		
-	</div>
+		</div><!-- end of billing address fields wrap -->
+		<?php 
+		}//end of digital product check 
+		?>
+	</div><!-- end of billing info fields container -->
 
 	<div class = "wp-ppec-button-container">
 

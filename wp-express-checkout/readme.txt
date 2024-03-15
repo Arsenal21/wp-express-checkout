@@ -165,7 +165,8 @@ None
 
 = WIP =
 - Taxonomy page's 404 error fixed.
-- Hide billing info for digital products on checkout.
+- For 100% discount coupond checkout, the billing address fields will be hidden for digital products.
+- Added a new filter 'wpec_hide_billing_address_fields' to hide billing address fields for digital products for the 100% discount coupon checkout.
 
 = 2.3.8 =
 - Added new action hooks that is triggered after the output of download headers (for force download feature).
