@@ -3,6 +3,7 @@
 namespace WP_Express_Checkout;
 
 use Exception;
+use WP_Express_Checkout\Debug\Logger;
 
 class Shortcodes {
 
@@ -388,15 +389,17 @@ class Shortcodes {
 
 		$atts = shortcode_atts(
 			array(
-				'redirect_on_direct_access' => home_url(),
+				'redirect_on_direct_access' => '',
 			),
 			$atts
 		);
 
-		if (!is_admin() && !isset($_GET['order_id']) && !isset($_GET['_wpnonce'])) {
-			$redirect_url = esc_url($atts['redirect_on_direct_access']);
-			Utils::redirect_to_url($redirect_url);
-			exit;
+		if ( isset( $atts['redirect_on_direct_access'] ) && ! empty( $atts['redirect_on_direct_access'] ) ) {
+			if (!is_admin() && !isset($_GET['order_id']) && !isset($_GET['_wpnonce'])) {
+				$redirect_url = esc_url($atts['redirect_on_direct_access']);
+				Utils::redirect_to_url($redirect_url);
+				exit;
+			}
 		}
 
 		$order = $this->get_thank_you_page_order();
