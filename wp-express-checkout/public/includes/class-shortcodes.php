@@ -386,6 +386,19 @@ class Shortcodes {
 	 */
 	public function shortcode_wpec_thank_you( $atts = array(), $content = '' ) {
 
+		$atts = shortcode_atts(
+			array(
+				'redirect_on_direct_access' => home_url(),
+			),
+			$atts
+		);
+
+		if (!is_admin() && !isset($_GET['order_id']) && !isset($_GET['_wpnonce'])) {
+			$redirect_url = esc_url($atts['redirect_on_direct_access']);
+			Utils::redirect_to_url($redirect_url);
+			exit;
+		}
+
 		$order = $this->get_thank_you_page_order();
 
 		if ( ! $order instanceof Order ) {
