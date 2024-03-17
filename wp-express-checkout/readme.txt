@@ -165,7 +165,7 @@ None
 == Changelog ==
 
 = WIP =
-- New parameter 'redirect_on_direct_access' for thank you page shortcode to specify the redirect url if the page is accessed directly.
+- Added a new action hook 'before_wpec_thank_you_page_shortcode_execution' that can be used to redirect from the thank you page shortcode.
 
 = 2.3.9 =
 - For 100% discount coupon checkout, the billing address fields will be hidden for digital products.

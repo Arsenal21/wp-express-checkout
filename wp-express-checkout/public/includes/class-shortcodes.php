@@ -387,21 +387,10 @@ class Shortcodes {
 	 */
 	public function shortcode_wpec_thank_you( $atts = array(), $content = '' ) {
 
-		$atts = shortcode_atts(
-			array(
-				'redirect_on_direct_access' => '',
-			),
-			$atts
-		);
+		// Trigger the action.
+		do_action( 'before_wpec_thank_you_page_shortcode_execution' );
 
-		if ( isset( $atts['redirect_on_direct_access'] ) && ! empty( $atts['redirect_on_direct_access'] ) ) {
-			if (!is_admin() && !isset($_GET['order_id']) && !isset($_GET['_wpnonce'])) {
-				$redirect_url = esc_url($atts['redirect_on_direct_access']);
-				Utils::redirect_to_url($redirect_url);
-				exit;
-			}
-		}
-
+		// Get the order.
 		$order = $this->get_thank_you_page_order();
 
 		if ( ! $order instanceof Order ) {
