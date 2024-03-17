@@ -13,7 +13,7 @@ class Coupons {
 	function __construct() {
 		add_action( 'init', array( $this, 'init_handler' ) );
 		add_action( 'wpec_create_order', array( $this, 'add_discount_to_order' ), 30, 3 );
-		add_action( 'wpec_payment_completed', array( $this, 'redeem_coupon' ), 10, 2 );
+		add_action( 'wpec_payment_completed', array( $this, 'redeem_coupon' ), 10, 3 );
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'add_menu' ) );
 			if ( wp_doing_ajax() ) {
@@ -532,7 +532,7 @@ class Coupons {
 	 * @param array $payment  The raw payment data.
 	 * @param int   $order_id The order ID.
 	 */
-	public function redeem_coupon( $payment, $order_id ) {
+	public function redeem_coupon( $payment, $order_id, $item_id ) {
 		try {
 			$order = Orders::retrieve( $order_id );
 		} catch ( Exception $exc ) {
