@@ -164,6 +164,9 @@ None
 
 == Changelog ==
 
+= WIP =
+- New parameter 'redirect_on_direct_access' for thank you page shortcode to specify the redirect url if the page is accessed directly.
+
 = 2.3.9 =
 - For 100% discount coupon checkout, the billing address fields will be hidden for digital products.
 - Added a new filter 'wpec_hide_billing_address_fields' to hide billing address fields for digital products for the 100% discount coupon checkout.
