@@ -241,24 +241,24 @@ class PayPal_Payment_Button_Ajax_Handler {
 
 		$item_for_pp_order = Products::retrieve( intval( $product_id ) );
 
-		//We need to use the item name from the database to retain the original name (without any special characters creating issues with ajax data).
+		//We need to use the item name from the database to retain the original name (without any special characters creating issues with data coming from ajax request).
 		$item_name = $item_for_pp_order->get_item_name();
-		//$item_name = htmlspecialchars($item_name);
 		$item_name = substr($item_name, 0, 127);//Limit the item name to 127 characters (PayPal limit)
+
+		//$shipping_preference = $item_for_pp_order->is_digital_product() ? 'NO_SHIPPING' : 'SET_PROVIDED_ADDRESS';
+		$shipping_preference = $order_data_array['payment_source']['paypal']['experience_context']['shipping_preference'];
 
 		//Get the item quantity and amount from the order data.
 		$quantity = $order_data_array['purchase_units'][0]['items'][0]['quantity'];
 		$item_amount = $order_data_array['purchase_units'][0]['items'][0]['unit_amount']['value'];
 
-		//$shipping_preference = $item_for_pp_order->is_digital_product() ? 'NO_SHIPPING' : 'SET_PROVIDED_ADDRESS';
-		$shipping_preference = $order_data_array['payment_source']['paypal']['experience_context']['shipping_preference'];
-		$grand_total = $order_data_array['purchase_units'][0]['amount']['value'];
 		$currency_code = $order_data_array['purchase_units'][0]['amount']['currency_code'];
-		$sub_total = $order_data_array['purchase_units'][0]['amount']['breakdown']['item_total']['value'];
-		//Transaction specific amounts (may or may not be available in the order data array depending on the transaction type).
-		$shipping_amt = $order_data_array['purchase_units'][0]['amount']['breakdown']['shipping']['value'];
-		$tax_amt = $order_data_array['purchase_units'][0]['amount']['breakdown']['tax_total']['value'];
-		$discount_amt = $order_data_array['purchase_units'][0]['amount']['breakdown']['discount']['value'];		
+		$grand_total = $order_data_array['purchase_units'][0]['amount']['value'];
+		$sub_total = $order_data_array['purchase_units'][0]['amount']['breakdown']['item_total']['value']; //This should be equal to (item_amount * quantity)
+		//Transaction specific amounts for purchase_units breakdowns (may or may not be available in the order data array depending on the product configuration).
+		$shipping_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['shipping']['value'])? $order_data_array['purchase_units'][0]['amount']['breakdown']['shipping']['value'] : 0;
+		$tax_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['tax_total']['value']) ? $order_data_array['purchase_units'][0]['amount']['breakdown']['tax_total']['value'] : 0;
+		$discount_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['discount']['value']) ? $order_data_array['purchase_units'][0]['amount']['breakdown']['discount']['value'] : 0;		
 
 		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
 		$pp_api_order_data = [
