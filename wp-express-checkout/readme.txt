@@ -166,6 +166,7 @@ None
 
 = WIP =
 - Added a new action hook 'before_wpec_thank_you_page_shortcode_execution' that can be used to redirect from the thank you page shortcode.
+- Fixed an issue with item names having special characters.
 
 = 2.3.9 =
 - For 100% discount coupon checkout, the billing address fields will be hidden for digital products.

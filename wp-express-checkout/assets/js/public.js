@@ -392,7 +392,7 @@ var ppecHandler = function( data ) {
 			let nonce = wpec_create_order_vars.nonce;
 
 			let wpec_data_for_create = parent.data;//parent.data is the data object that was passed to the ppecHandler constructor.
-			console.log('WPEC Data for create-order: ' + JSON.stringify(wpec_data_for_create));
+			console.log('WPEC data for create-order: ' + JSON.stringify(wpec_data_for_create));
 
 			let post_data = 'action=wpec_pp_create_order&data=' + encodeURIComponent(JSON.stringify(order_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data_for_create)) + '&_wpnonce=' + nonce;
 			try {
@@ -429,10 +429,10 @@ var ppecHandler = function( data ) {
 			let pp_bn_data = {};
 			pp_bn_data.order_id = data.orderID;//The orderID is the ID of the order that was created in the createOrder method.
 			let wpec_data = parent.data;//parent.data is the data object that was passed to the ppecHandler constructor.
-			//console.log('wpec data (json): ' + JSON.stringify(wpec_data));
+			//console.log('WPEC data (JSON): ' + JSON.stringify(wpec_data));
 
 			let nonce = wpec_on_approve_vars.nonce;
-			let post_data = 'action=wpec_pp_capture_order&data=' + JSON.stringify(pp_bn_data) + '&wpec_data=' + JSON.stringify(wpec_data) + '&_wpnonce=' + nonce;
+			let post_data = 'action=wpec_pp_capture_order&data=' + encodeURIComponent(JSON.stringify(pp_bn_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data)) + '&_wpnonce=' + nonce;
 			try {
 				const response = await fetch( ppecFrontVars.ajaxUrl, {
 					method: "post",
