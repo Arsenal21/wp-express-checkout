@@ -194,8 +194,6 @@ class PayPal_Payment_Button_Ajax_Handler {
     {
 		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
 
-		Logger::log( 'Creating PayPal order using the PayPal API call...', true);
-
 		//Create the order-data for the PayPal API call.
 		$pp_api_order_data = self::create_order_data_for_pp_api($order_data_array, $array_wpec_data);
 
