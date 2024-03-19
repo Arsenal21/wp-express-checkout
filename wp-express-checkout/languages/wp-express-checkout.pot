@@ -1,96 +1,105 @@
-# Copyright (C) 2023 Tips and Tricks HQ
+# Copyright (C) 2024 Tips and Tricks HQ
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Express Checkout 2.3.3\n"
+"Project-Id-Version: WP Express Checkout 2.3.10\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-express-checkout\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-11-06T16:27:20+00:00\n"
+"POT-Creation-Date: 2024-03-19T09:53:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.9.0\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: wp-express-checkout\n"
 
 #. Plugin Name of the plugin
+#: D:/Tips and Tricks HQ/wp-express-checkout/wp-express-checkout/wp-express-checkout.php
 #: includes/class-products.php:21
 msgid "WP Express Checkout"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: D:/Tips and Tricks HQ/wp-express-checkout/wp-express-checkout/wp-express-checkout.php
 msgid "https://wp-express-checkout.com/"
 msgstr ""
 
 #. Description of the plugin
+#: D:/Tips and Tricks HQ/wp-express-checkout/wp-express-checkout/wp-express-checkout.php
 msgid "This plugin allows you to create a customizable PayPal payment button that lets the customers pay quickly in a popup via PayPal."
 msgstr ""
 
 #. Author of the plugin
+#: D:/Tips and Tricks HQ/wp-express-checkout/wp-express-checkout/wp-express-checkout.php
 msgid "Tips and Tricks HQ"
 msgstr ""
 
 #. Author URI of the plugin
+#: D:/Tips and Tricks HQ/wp-express-checkout/wp-express-checkout/wp-express-checkout.php
 msgid "https://www.tipsandtricks-hq.com/"
 msgstr ""
 
-#: admin/class-admin.php:184
+#: admin/class-admin.php:183
 msgid "WP Express Checkout Settings"
 msgstr ""
 
-#: admin/class-admin.php:185
-#: admin/class-admin.php:768
+#: admin/class-admin.php:184
+#: admin/class-admin.php:825
 msgid "Settings"
 msgstr ""
 
-#: admin/class-admin.php:207
+#: admin/class-admin.php:206
 msgid "Global Settings"
 msgstr ""
 
-#: admin/class-admin.php:208
+#: admin/class-admin.php:207
 msgid "PayPal Credentials"
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:208
 msgid "Checkout Form"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:209
 msgid "PayPal Button Style"
 msgstr ""
 
-#: admin/class-admin.php:211
+#: admin/class-admin.php:210
 msgid "Disable Funding"
 msgstr ""
 
-#: admin/class-admin.php:213
+#: admin/class-admin.php:212
 #: admin/includes/class-products-meta-boxes.php:29
 msgid "Shipping & Tax"
 msgstr ""
 
-#: admin/class-admin.php:214
+#: admin/class-admin.php:213
 msgid "Debug Logging"
 msgstr ""
 
-#: admin/class-admin.php:216
+#: admin/class-admin.php:215
 msgid "Purchase Confirmation Email Settings"
 msgstr ""
 
-#: admin/class-admin.php:218
+#: admin/class-admin.php:217
 msgid "Price Display Settings"
 msgstr ""
 
-#: admin/class-admin.php:219
+#: admin/class-admin.php:218
 msgid "Terms and Conditions"
 msgstr ""
 
-#: admin/class-admin.php:221
+#: admin/class-admin.php:220
 msgid "Download Link Expiry"
 msgstr ""
 
+#: admin/class-admin.php:221
+msgid "Download Manager (Force Download)"
+msgstr ""
+
 #: admin/class-admin.php:222
-#: admin/class-admin.php:508
+#: admin/class-admin.php:557
 msgid "Admin Dashboard Access Permission"
 msgstr ""
 
@@ -296,7 +305,7 @@ msgid "Enable it to display the checkout form in a dedicated popup/modal window 
 msgstr ""
 
 #: admin/class-admin.php:309
-#: admin/includes/class-products-meta-boxes.php:459
+#: admin/includes/class-products-meta-boxes.php:478
 msgid "Popup/Modal Trigger Button Text"
 msgstr ""
 
@@ -305,29 +314,29 @@ msgid "The button text for the button that will trigger the popup/modal window."
 msgstr ""
 
 #: admin/class-admin.php:319
-#: admin/includes/class-products-meta-boxes.php:465
+#: admin/includes/class-products-meta-boxes.php:484
 msgid "Button Type"
 msgstr ""
 
 #: admin/class-admin.php:319
-#: admin/includes/class-products-meta-boxes.php:471
+#: admin/includes/class-products-meta-boxes.php:490
 msgid "Checkout"
 msgstr ""
 
 #: admin/class-admin.php:319
-#: admin/includes/class-products-meta-boxes.php:472
-#: public/class-main.php:339
+#: admin/includes/class-products-meta-boxes.php:491
+#: public/class-main.php:350
 msgid "Pay"
 msgstr ""
 
 #: admin/class-admin.php:319
-#: admin/includes/class-products-meta-boxes.php:473
+#: admin/includes/class-products-meta-boxes.php:492
 #: includes/integrations/woocommerce/class-woocommerce-gateway.php:105
 msgid "PayPal"
 msgstr ""
 
 #: admin/class-admin.php:319
-#: admin/includes/class-products-meta-boxes.php:474
+#: admin/includes/class-products-meta-boxes.php:493
 #: public/views/templates/content-product-3.php:10
 msgid "Buy Now"
 msgstr ""
@@ -429,270 +438,330 @@ msgid "PayPal Credit"
 msgstr ""
 
 #: admin/class-admin.php:331
-#: admin/includes/class-products-meta-boxes.php:272
+#: admin/includes/class-products-meta-boxes.php:284
 msgid "Shipping Cost"
 msgstr ""
 
-#: admin/class-admin.php:331
-#: admin/includes/class-products-meta-boxes.php:277
+#: admin/class-admin.php:337
+#: admin/includes/class-products-meta-boxes.php:289
 msgid "Enter numbers only. Example: 5.50"
 msgstr ""
 
-#: admin/class-admin.php:331
+#: admin/class-admin.php:337
 msgid "Leave it empty if you are not charging shipping cost. You can also set shipping cost on a per product basis."
 msgstr ""
 
-#: admin/class-admin.php:332
-#: admin/includes/class-products-meta-boxes.php:283
-msgid "Tax (%)"
-msgstr ""
-
-#: admin/class-admin.php:332
-#: admin/includes/class-products-meta-boxes.php:288
-msgid "Enter tax (in percent) which will be added to the product price."
-msgstr ""
-
-#: admin/class-admin.php:332
-#: admin/includes/class-products-meta-boxes.php:290
-msgid "Leave it empty if you don't want to apply tax."
-msgstr ""
-
-#: admin/class-admin.php:335
-msgid "Enable Debug Logging"
-msgstr ""
-
-#: admin/class-admin.php:339
-msgid "Check this option to enable debug logging."
+#: admin/class-admin.php:337
+msgid "<a href=\"%s\" target=\"_blank\">Read this documentation</a> to learn how to configure shipping."
 msgstr ""
 
 #: admin/class-admin.php:341
-#: admin/class-admin.php:343
-msgid "Click here"
+#: admin/includes/class-products-meta-boxes.php:309
+msgid "Tax (%)"
 msgstr ""
 
-#: admin/class-admin.php:342
-msgid " to view log file."
+#: admin/class-admin.php:341
+#: admin/includes/class-products-meta-boxes.php:314
+msgid "Enter tax (in percent) which will be added to the product price."
+msgstr ""
+
+#: admin/class-admin.php:341
+#: admin/includes/class-products-meta-boxes.php:316
+msgid "Leave it empty if you don't want to apply tax."
 msgstr ""
 
 #: admin/class-admin.php:344
+msgid "Enable Debug Logging"
+msgstr ""
+
+#: admin/class-admin.php:348
+msgid "Check this option to enable debug logging."
+msgstr ""
+
+#: admin/class-admin.php:350
+#: admin/class-admin.php:352
+msgid "Click here"
+msgstr ""
+
+#: admin/class-admin.php:351
+msgid " to view log file."
+msgstr ""
+
+#: admin/class-admin.php:353
 msgid " to reset log file."
 msgstr ""
 
-#: admin/class-admin.php:353
+#: admin/class-admin.php:362
 msgid "Send Emails to Buyer After Purchase"
 msgstr ""
 
-#: admin/class-admin.php:353
+#: admin/class-admin.php:362
 msgid "If checked the plugin will send an email to the buyer with the sale details. If digital goods are purchased then the email will contain the download links for the purchased products."
 msgstr ""
 
-#: admin/class-admin.php:356
+#: admin/class-admin.php:365
 msgid "Email Content Type"
 msgstr ""
 
-#: admin/class-admin.php:363
+#: admin/class-admin.php:372
 msgid "Choose which format of email to send."
 msgstr ""
 
-#: admin/class-admin.php:366
+#: admin/class-admin.php:375
 msgid "Plain Text"
 msgstr ""
 
-#: admin/class-admin.php:367
+#: admin/class-admin.php:376
 msgid "HTML"
 msgstr ""
 
-#: admin/class-admin.php:371
+#: admin/class-admin.php:380
 #: admin/class-tools.php:106
 msgid "From Email Address"
 msgstr ""
 
-#: admin/class-admin.php:371
+#: admin/class-admin.php:380
 msgid "Example: Your Name &lt;sales@your-domain.com&gt; This is the email address that will be used to send the email to the buyer. This name and email address will appear in the from field of the email."
 msgstr ""
 
-#: admin/class-admin.php:372
+#: admin/class-admin.php:381
 msgid "Buyer Email Subject"
 msgstr ""
 
-#: admin/class-admin.php:372
+#: admin/class-admin.php:381
 msgid "This is the subject of the email that will be sent to the buyer."
 msgstr ""
 
-#: admin/class-admin.php:381
+#: admin/class-admin.php:390
 msgid "Buyer Email Body"
 msgstr ""
 
-#: admin/class-admin.php:382
+#: admin/class-admin.php:391
 msgid "This is the body of the email that will be sent to the buyer. Do not change the text within the braces {}. You can use the following email tags in this email body field:"
 msgstr ""
 
-#: admin/class-admin.php:385
+#: admin/class-admin.php:394
 msgid "Send Emails to Seller After Purchase"
 msgstr ""
 
-#: admin/class-admin.php:385
+#: admin/class-admin.php:394
 msgid "If checked the plugin will send an email to the seller with the sale details"
 msgstr ""
 
-#: admin/class-admin.php:386
+#: admin/class-admin.php:395
 msgid "Notification Email Address*"
 msgstr ""
 
-#: admin/class-admin.php:386
+#: admin/class-admin.php:395
 msgid "This is the email address where the seller will be notified of product sales. You can put multiple email addresses separated by comma (,) in the above field to send the notification to multiple email addresses."
 msgstr ""
 
-#: admin/class-admin.php:387
+#: admin/class-admin.php:396
 msgid "Seller Email Subject*"
 msgstr ""
 
-#: admin/class-admin.php:387
+#: admin/class-admin.php:396
 msgid "This is the subject of the email that will be sent to the seller for record."
 msgstr ""
 
-#: admin/class-admin.php:388
+#: admin/class-admin.php:397
 msgid "Seller Email Body*"
 msgstr ""
 
-#: admin/class-admin.php:389
+#: admin/class-admin.php:398
 msgid "This is the body of the email that will be sent to the seller for record. Do not change the text within the braces {}. You can use the following email tags in this email body field:"
 msgstr ""
 
-#: admin/class-admin.php:400
+#: admin/class-admin.php:409
 msgid "Currency Position"
 msgstr ""
 
-#: admin/class-admin.php:407
+#: admin/class-admin.php:416
 msgid "This controls the position of the currency symbol."
 msgstr ""
 
-#: admin/class-admin.php:410
+#: admin/class-admin.php:419
 msgid "Left (%s1.00)"
 msgstr ""
 
-#: admin/class-admin.php:411
+#: admin/class-admin.php:420
 msgid "Left with space (%s 1.00)"
 msgstr ""
 
-#: admin/class-admin.php:412
+#: admin/class-admin.php:421
 msgid "Right (1.00%s)"
 msgstr ""
 
-#: admin/class-admin.php:413
+#: admin/class-admin.php:422
 msgid "Right with space (1.00 %s)"
 msgstr ""
 
-#: admin/class-admin.php:418
+#: admin/class-admin.php:427
 msgid "Decimal Separator"
 msgstr ""
 
-#: admin/class-admin.php:425
+#: admin/class-admin.php:434
 msgid "This sets the decimal separator of the displayed price."
 msgstr ""
 
-#: admin/class-admin.php:430
+#: admin/class-admin.php:439
 msgid "Thousand Separator"
 msgstr ""
 
-#: admin/class-admin.php:437
+#: admin/class-admin.php:446
 msgid "This sets the thousand separator of the displayed price."
 msgstr ""
 
-#: admin/class-admin.php:442
+#: admin/class-admin.php:451
 msgid "Number of Decimals"
 msgstr ""
 
-#: admin/class-admin.php:449
+#: admin/class-admin.php:458
 msgid "This sets the number of decimal points shown in the displayed price."
 msgstr ""
 
-#: admin/class-admin.php:456
+#: admin/class-admin.php:465
 msgid "Enable Terms and Conditions"
 msgstr ""
 
-#: admin/class-admin.php:463
+#: admin/class-admin.php:472
 msgid "Enable Terms and Conditions checkbox."
 msgstr ""
 
-#: admin/class-admin.php:468
+#: admin/class-admin.php:477
 msgid "Checkbox Text"
 msgstr ""
 
-#: admin/class-admin.php:475
+#: admin/class-admin.php:484
 msgid "Text to be displayed for the checkbox. It accepts HTML code so you can put a link to your terms and conditions page."
 msgstr ""
 
-#: admin/class-admin.php:480
-#: admin/includes/class-products-meta-boxes.php:357
+#: admin/class-admin.php:489
+#: admin/includes/class-products-meta-boxes.php:376
 msgid "Duration of Download Link"
 msgstr ""
 
-#: admin/class-admin.php:487
-#: admin/includes/class-products-meta-boxes.php:359
+#: admin/class-admin.php:496
+#: admin/includes/class-products-meta-boxes.php:378
 msgid "Hours"
 msgstr ""
 
-#: admin/class-admin.php:489
+#: admin/class-admin.php:498
 msgid "This is the duration of time the download links will remain active for a customer. After this amount of time the link will expire. Example value: 48. Leave empty or set to 0 to disable download link expiry."
 msgstr ""
 
-#: admin/class-admin.php:494
-#: admin/includes/class-products-meta-boxes.php:362
+#: admin/class-admin.php:503
+#: admin/includes/class-products-meta-boxes.php:381
 msgid "Download Limit Count"
 msgstr ""
 
-#: admin/class-admin.php:501
-#: admin/includes/class-products-meta-boxes.php:364
+#: admin/class-admin.php:510
+#: admin/includes/class-products-meta-boxes.php:383
 msgid "Times"
 msgstr ""
 
-#: admin/class-admin.php:503
+#: admin/class-admin.php:512
 msgid "Number of times an item can be downloaded before the link expires. Example value: 3. Leave empty or set to 0 if you do not want to limit downloads by download count."
 msgstr ""
 
-#: admin/class-admin.php:517
-msgid "Admins Only"
-msgstr ""
-
 #: admin/class-admin.php:518
-msgid "Admins, Editors"
+msgid "Download Method"
 msgstr ""
 
-#: admin/class-admin.php:519
-msgid "Admins, Editors, Authors"
+#: admin/class-admin.php:527
+msgid "(Default) Method 1, Fopen-8K"
+msgstr ""
+
+#: admin/class-admin.php:528
+msgid "Method 2, Fopen-1M"
 msgstr ""
 
 #: admin/class-admin.php:529
-msgid "The following options affect the emails that gets sent to your buyers after a purchase."
+msgid "Method 3, Readfile-1M-SessionWriteClose"
 msgstr ""
 
-#: admin/class-admin.php:537
-msgid "By default, funding source eligibility is smartly decided based on a variety of factors. You can force disable funding options by selecting them below."
+#: admin/class-admin.php:530
+msgid "Method 4, cURL"
 msgstr ""
 
-#: admin/class-admin.php:540
-msgid "Note: disabled options will disappear from button preview once you save changes."
+#: admin/class-admin.php:531
+msgid "Method 5, Mod X-Sendfile"
+msgstr ""
+
+#: admin/class-admin.php:533
+msgid "Note: cURL requires the 'Do Not Convert' URL preference and fully qualified URLs for all product download files, not file paths."
+msgstr ""
+
+#: admin/class-admin.php:539
+msgid "URL Conversion Preference"
+msgstr ""
+
+#: admin/class-admin.php:548
+msgid "(Default) Absolute"
 msgstr ""
 
 #: admin/class-admin.php:549
+msgid "Do not convert"
+msgstr ""
+
+#: admin/class-admin.php:551
+msgid "By default, the plugin attempts to convert product download URLs into absolute file paths."
+msgstr ""
+
+#: admin/class-admin.php:566
+msgid "Admins Only"
+msgstr ""
+
+#: admin/class-admin.php:567
+msgid "Admins, Editors"
+msgstr ""
+
+#: admin/class-admin.php:568
+msgid "Admins, Editors, Authors"
+msgstr ""
+
+#: admin/class-admin.php:578
+msgid "The following options affect the emails that gets sent to your buyers after a purchase."
+msgstr ""
+
+#: admin/class-admin.php:586
+msgid "By default, funding source eligibility is smartly decided based on a variety of factors. You can force disable funding options by selecting them below."
+msgstr ""
+
+#: admin/class-admin.php:589
+msgid "Note: disabled options will disappear from button preview once you save changes."
+msgstr ""
+
+#: admin/class-admin.php:598
 msgid "Debug logging can be useful to troubleshoot transaction processing related issues on your site. keep it disabled unless you are troubleshooting."
 msgstr ""
 
-#: admin/class-admin.php:557
+#: admin/class-admin.php:604
+msgid "The default settings for the "
+msgstr ""
+
+#: admin/class-admin.php:605
+msgid "force download option"
+msgstr ""
+
+#: admin/class-admin.php:606
+msgid " should work on most sites/servers. If you encounter issues, consider trying one of the following available methods."
+msgstr ""
+
+#: admin/class-admin.php:614
 msgid "WP Express Checkout's admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP role to access the WPEC admin dashboard by selecting a value below."
 msgstr ""
 
-#: admin/class-admin.php:558
+#: admin/class-admin.php:615
 msgid "If you don't know what this is for, don't change the following value."
 msgstr ""
 
-#: admin/class-admin.php:565
+#: admin/class-admin.php:622
 msgid "This section allows you to configure Terms and Conditions or Privacy Policy that customers must accept before making a payment."
 msgstr ""
 
 #. translators: "%s" - field title
-#: admin/class-admin.php:702
+#: admin/class-admin.php:759
 msgid "You must specify a value in the \"%s\" field."
 msgstr ""
 
@@ -762,14 +831,14 @@ msgstr ""
 
 #: admin/includes/class-admin-order-summary-table.php:31
 #: admin/includes/class-orders-list.php:229
-#: includes/class-order-summary-table.php:120
+#: includes/class-order-summary-table.php:121
 msgid "Total"
 msgstr ""
 
 #. translators: quantity
 #: admin/includes/class-admin-order-summary-table.php:50
-#: includes/class-order-summary-table.php:130
-#: public/includes/class-shortcodes.php:291
+#: includes/class-order-summary-table.php:131
+#: public/includes/class-shortcodes.php:296
 msgid "x %s"
 msgstr ""
 
@@ -782,8 +851,8 @@ msgid "Unit Price: "
 msgstr ""
 
 #: admin/includes/class-admin-order-summary-table.php:78
-#: includes/class-order-summary-table.php:69
-#: includes/class-order-summary-table.php:110
+#: includes/class-order-summary-table.php:70
+#: includes/class-order-summary-table.php:111
 msgid "Subtotal"
 msgstr ""
 
@@ -1045,7 +1114,7 @@ msgstr ""
 
 #: admin/includes/class-products-list.php:26
 #: includes/class-order-summary-plain.php:39
-#: includes/class-utils.php:177
+#: includes/class-utils.php:218
 msgid "Product Name"
 msgstr ""
 
@@ -1250,171 +1319,188 @@ msgstr ""
 msgid "Specify the quantity available for this product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:279
-msgid "Leave it empty if you are not charging shipping cost."
+#. translators: %s is a link to documentation page
+#: admin/includes/class-products-meta-boxes.php:274
+msgid "You can find documentation on shipping and tax <a href=\"%s\" target=\"_blank\">here</a>."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:295
+#: admin/includes/class-products-meta-boxes.php:279
 msgid "This is a Physical Product"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:297
+#: admin/includes/class-products-meta-boxes.php:281
 msgid "When checked, shipping address will be collected at the time of checkout."
 msgstr ""
 
+#: admin/includes/class-products-meta-boxes.php:291
+msgid "Leave it empty if you are not charging shipping cost."
+msgstr ""
+
+#: admin/includes/class-products-meta-boxes.php:297
+msgid "Shipping Cost Per Quantity"
+msgstr ""
+
+#: admin/includes/class-products-meta-boxes.php:302
+msgid "Additional shipping cost per quantity"
+msgstr ""
+
 #: admin/includes/class-products-meta-boxes.php:304
+msgid "Leave it empty if you are not charging any additional shipping cost per quantity."
+msgstr ""
+
+#: admin/includes/class-products-meta-boxes.php:323
 msgid "URL of your product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:310
+#: admin/includes/class-products-meta-boxes.php:329
 msgid "Manually enter a valid URL of the file in the text box, or click \"Select File\" button to upload (or choose) the downloadable file."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:314
-#: admin/includes/class-products-meta-boxes.php:332
+#: admin/includes/class-products-meta-boxes.php:333
+#: admin/includes/class-products-meta-boxes.php:351
 msgid "Select File"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:318
+#: admin/includes/class-products-meta-boxes.php:337
 msgid "Steps to upload a file or choose one from your media library:"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:320
+#: admin/includes/class-products-meta-boxes.php:339
 msgid "Hit the \"Select File\" button."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:321
+#: admin/includes/class-products-meta-boxes.php:340
 msgid "Upload a new file or choose an existing one from your media library."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:322
+#: admin/includes/class-products-meta-boxes.php:341
 msgid "Click the \"Insert\" button, this will populate the uploaded file's URL in the above text field."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:334
-#: admin/includes/class-products-meta-boxes.php:398
+#: admin/includes/class-products-meta-boxes.php:353
+#: admin/includes/class-products-meta-boxes.php:417
 msgid "Insert"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:349
+#: admin/includes/class-products-meta-boxes.php:368
 msgid "Force Download"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:352
+#: admin/includes/class-products-meta-boxes.php:371
 msgid "Enable Force Download"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:354
+#: admin/includes/class-products-meta-boxes.php:373
 msgid "Download Link Expiry Settings (Optional)"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:360
+#: admin/includes/class-products-meta-boxes.php:379
 msgid "This is the duration of time the download links will remain active for a customer. After this amount of time the link will expire. Example value: 48. Leave empty to use global settings or set to 0 to disable link expiry."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:365
+#: admin/includes/class-products-meta-boxes.php:384
 msgid "Number of times an item can be downloaded before the download link expires. Example value: 3. Leave empty to use global settings or set to 0 if you do not want to limit downloads by download count."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:376
+#: admin/includes/class-products-meta-boxes.php:395
 msgid "Manually enter a valid URL, or click \"Select Image\" to upload (or choose) the file thumbnail image."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:380
-#: admin/includes/class-products-meta-boxes.php:396
+#: admin/includes/class-products-meta-boxes.php:399
+#: admin/includes/class-products-meta-boxes.php:415
 msgid "Select Image"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:381
+#: admin/includes/class-products-meta-boxes.php:400
 msgid "Remove Image"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:429
+#: admin/includes/class-products-meta-boxes.php:448
 msgid "Enter the Thank You page URL for this product. Leave it blank if you want to use the default Thank You page created by the plugin."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:438
+#: admin/includes/class-products-meta-boxes.php:457
 msgid "Use this shortcode to display button for your product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:439
+#: admin/includes/class-products-meta-boxes.php:458
 msgid " Read the "
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:440
+#: admin/includes/class-products-meta-boxes.php:459
 msgid "documentation"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:441
+#: admin/includes/class-products-meta-boxes.php:460
 msgid " to learn more."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:450
+#: admin/includes/class-products-meta-boxes.php:469
 msgid "This URL can be used to create a custom payment button using a text or image link."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:462
+#: admin/includes/class-products-meta-boxes.php:481
 msgid "Specify the text to be displayed on the button that triggers the payment popup/modal window. Leave it blank to use the text specified in General Settings page."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:464
+#: admin/includes/class-products-meta-boxes.php:483
 msgid "Button Options"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:468
+#: admin/includes/class-products-meta-boxes.php:487
 msgid "-- Default --"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:482
+#: admin/includes/class-products-meta-boxes.php:501
 msgid "Select a button type/style for the paypal payment button for this product. By default, it will use the type specified in the General settings of this plugin."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:490
+#: admin/includes/class-products-meta-boxes.php:509
 msgid "Select how Coupons should be handled for this product."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:491
+#: admin/includes/class-products-meta-boxes.php:510
 msgid "Use Global Setting"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:492
+#: admin/includes/class-products-meta-boxes.php:511
 msgid "Enabled"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:493
+#: admin/includes/class-products-meta-boxes.php:512
 msgid "Disabled"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:513
+#: admin/includes/class-products-meta-boxes.php:532
 msgid "Please specify product name."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:629
+#: admin/includes/class-products-meta-boxes.php:652
 msgid "View product"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:632
+#: admin/includes/class-products-meta-boxes.php:655
 msgid "Preview product"
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:635
-#: admin/includes/class-products-meta-boxes.php:636
+#: admin/includes/class-products-meta-boxes.php:658
+#: admin/includes/class-products-meta-boxes.php:659
 msgid "Product updated."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:637
+#: admin/includes/class-products-meta-boxes.php:660
 msgid "Product published."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:638
+#: admin/includes/class-products-meta-boxes.php:661
 msgid "Product saved."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:639
+#: admin/includes/class-products-meta-boxes.php:662
 msgid "Product submitted."
 msgstr ""
 
-#: admin/includes/class-products-meta-boxes.php:640
+#: admin/includes/class-products-meta-boxes.php:663
 msgid "Product draft updated."
 msgstr ""
 
@@ -1476,7 +1562,7 @@ msgid "General Tools"
 msgstr ""
 
 #: includes/blocks/product-block/class-product-block.php:40
-#: includes/class-order-summary-table.php:68
+#: includes/class-order-summary-table.php:69
 msgid "Product"
 msgstr ""
 
@@ -1516,47 +1602,47 @@ msgstr ""
 msgid "Product template 3"
 msgstr ""
 
-#: includes/class-categories.php:20
+#: includes/class-categories.php:29
 msgid "Product Categories"
 msgstr ""
 
-#: includes/class-categories.php:21
+#: includes/class-categories.php:30
 msgid "Product Category"
 msgstr ""
 
-#: includes/class-categories.php:22
+#: includes/class-categories.php:31
 msgid "Search Categories"
 msgstr ""
 
-#: includes/class-categories.php:23
+#: includes/class-categories.php:32
 msgid "All Categories"
 msgstr ""
 
-#: includes/class-categories.php:24
+#: includes/class-categories.php:33
 msgid "Categories Genre"
 msgstr ""
 
-#: includes/class-categories.php:25
+#: includes/class-categories.php:34
 msgid "Categories Genre:"
 msgstr ""
 
-#: includes/class-categories.php:26
+#: includes/class-categories.php:35
 msgid "Edit Category"
 msgstr ""
 
-#: includes/class-categories.php:27
+#: includes/class-categories.php:36
 msgid "Update Category"
 msgstr ""
 
-#: includes/class-categories.php:28
+#: includes/class-categories.php:37
 msgid "Add New Category"
 msgstr ""
 
-#: includes/class-categories.php:29
+#: includes/class-categories.php:38
 msgid "New Category"
 msgstr ""
 
-#: includes/class-categories.php:30
+#: includes/class-categories.php:39
 msgid "Categories"
 msgstr ""
 
@@ -1850,12 +1936,14 @@ msgid "Can't find order with ID %s"
 msgstr ""
 
 #: includes/class-orders.php:216
-#: includes/class-payment-processor.php:129
+#: includes/class-payment-processor.php:143
+#: includes/class-payment-processor.php:300
 msgid "Tax"
 msgstr ""
 
 #: includes/class-orders.php:219
-#: includes/class-payment-processor.php:132
+#: includes/class-payment-processor.php:146
+#: includes/class-payment-processor.php:303
 msgid "Shipping"
 msgstr ""
 
@@ -1869,55 +1957,112 @@ msgid "Something went wrong, refund is not completed!"
 msgstr ""
 
 #: includes/class-payment-processor.php:58
+#: includes/class-payment-processor.php:221
 #: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:42
 msgid "No payment data received."
 msgstr ""
 
 #: includes/class-payment-processor.php:63
+#: includes/class-payment-processor.php:226
 #: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:47
 #: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:111
 msgid "No order data received."
 msgstr ""
 
-#: includes/class-payment-processor.php:67
-#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:51
-#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:107
-#: public/includes/class-shortcodes.php:353
-msgid "Error! Nonce value is missing in the URL or Nonce verification failed."
-msgstr ""
-
-#: includes/class-payment-processor.php:81
+#: includes/class-payment-processor.php:85
+#: includes/class-payment-processor.php:244
 #: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:64
 msgid "No transaction info found in transient."
 msgstr ""
 
 #. translators: Order title: {Quantity} {Item name} - {Status}
-#: includes/class-payment-processor.php:105
+#: includes/class-payment-processor.php:118
+#: includes/class-payment-processor.php:276
 msgid "%1$d %2$s - %3$s"
 msgstr ""
 
-#: includes/class-payment-processor.php:140
+#: includes/class-payment-processor.php:156
+#: includes/class-payment-processor.php:311
 #: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:75
 msgid "Payment amount mismatch with the original price."
 msgstr ""
 
-#: includes/class-payment-processor.php:146
+#: includes/class-payment-processor.php:163
+#: includes/class-payment-processor.php:317
 #: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:81
 msgid "Payment currency mismatch."
 msgstr ""
 
-#: includes/class-payment-processor.php:151
+#: includes/class-payment-processor.php:168
+#: includes/class-payment-processor.php:322
 msgid "There are not enough product items in stock."
 msgstr ""
 
-#: includes/class-payment-processor.php:188
+#: includes/class-payment-processor.php:205
+#: includes/class-payment-processor.php:359
 #: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:98
 msgid "Error! Thank you page URL configuration is wrong in the plugin settings."
 msgstr ""
 
-#: includes/class-payment-processor.php:254
-#: public/includes/class-shortcodes.php:366
+#: includes/class-payment-processor.php:230
+#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:51
+#: includes/integrations/woocommerce/class-woocommerce-payment-processor.php:107
+#: public/includes/class-shortcodes.php:361
+msgid "Error! Nonce value is missing in the URL or Nonce verification failed."
+msgstr ""
+
+#: includes/class-payment-processor.php:425
+#: public/includes/class-shortcodes.php:374
 msgid "Payment is not approved. Status: %s"
+msgstr ""
+
+#: includes/class-paypal-button-ajax-handler.php:50
+msgid "Empty data received."
+msgstr ""
+
+#: includes/class-paypal-button-ajax-handler.php:65
+msgid "Error! Empty WPEC plugin data received from the create-order AJAX call."
+msgstr ""
+
+#: includes/class-paypal-button-ajax-handler.php:75
+#: includes/class-paypal-button-ajax-handler.php:155
+msgid "Nonce check failed. The page was most likely cached. Please reload the page and try again."
+msgstr ""
+
+#: includes/class-paypal-button-ajax-handler.php:91
+msgid "Failed to create the order using PayPal API. Enable the debug logging feature to get more details."
+msgstr ""
+
+#: includes/class-paypal-button-ajax-handler.php:130
+msgid "Error! Empty order ID received for PayPal capture order request."
+msgstr ""
+
+#: includes/class-paypal-button-ajax-handler.php:145
+msgid "Error! Empty WPEC plugin data received."
+msgstr ""
+
+#: includes/class-paypal-button-ajax-handler.php:168
+msgid "Error! PayPal capture-order API call failed."
+msgstr ""
+
+#: includes/class-paypal-button-ajax-handler.php:223
+msgid "Something went wrong, the PayPal create-order API call failed!"
+msgstr ""
+
+#: includes/class-paypal-button-ajax-handler.php:379
+msgid "Something went wrong, the PayPal capture-order API call failed!"
+msgstr ""
+
+#: includes/class-paypal-button-ajax-handler.php:510
+msgid "Price validation failed. The submitted amount does not match the product's configured price. "
+msgstr ""
+
+#: includes/class-paypal-button-ajax-handler.php:523
+msgid "Currency validation failed. The submitted currency does not match the configured currency. "
+msgstr ""
+
+#: includes/class-paypal-button-ajax-handler.php:544
+msgid "Validation Error: "
 msgstr ""
 
 #: includes/class-products.php:19
@@ -1968,1136 +2113,1160 @@ msgstr ""
 msgid "'No products have been configured yet"
 msgstr ""
 
-#: includes/class-tags.php:20
+#: includes/class-tags.php:28
 msgid "Product Tags"
 msgstr ""
 
-#: includes/class-tags.php:21
+#: includes/class-tags.php:29
 msgid "Product Tag"
 msgstr ""
 
-#: includes/class-tags.php:22
+#: includes/class-tags.php:30
 msgid "Search Tags"
 msgstr ""
 
-#: includes/class-tags.php:23
+#: includes/class-tags.php:31
 msgid "All Tags"
 msgstr ""
 
-#: includes/class-tags.php:24
+#: includes/class-tags.php:32
 msgid "Tags Genre"
 msgstr ""
 
-#: includes/class-tags.php:25
+#: includes/class-tags.php:33
 msgid "Tags Genre:"
 msgstr ""
 
-#: includes/class-tags.php:26
+#: includes/class-tags.php:34
 msgid "Edit Tag"
 msgstr ""
 
-#: includes/class-tags.php:27
+#: includes/class-tags.php:35
 msgid "Update Tag"
 msgstr ""
 
-#: includes/class-tags.php:28
+#: includes/class-tags.php:36
 msgid "Add New Tag"
 msgstr ""
 
-#: includes/class-tags.php:29
+#: includes/class-tags.php:37
 msgid "New Tag"
 msgstr ""
 
-#: includes/class-tags.php:30
+#: includes/class-tags.php:38
 msgid "Tags"
 msgstr ""
 
-#: includes/class-utils.php:165
+#: includes/class-utils-downloads.php:272
+msgid "cURL is not installed on this server. Cannot dispatch the download using cURL method."
+msgstr ""
+
+#: includes/class-utils.php:206
 msgid "First name of the buyer"
 msgstr ""
 
-#: includes/class-utils.php:166
+#: includes/class-utils.php:207
 msgid "Last name of the buyer"
 msgstr ""
 
-#: includes/class-utils.php:167
+#: includes/class-utils.php:208
 msgid "Email Address of the buyer"
 msgstr ""
 
-#: includes/class-utils.php:168
+#: includes/class-utils.php:209
 msgid "Address of the buyer"
 msgstr ""
 
-#: includes/class-utils.php:169
+#: includes/class-utils.php:210
 msgid "The item details of the purchased product (this will include the download link for digital items)."
 msgstr ""
 
-#: includes/class-utils.php:170
+#: includes/class-utils.php:211
 msgid "The unique transaction ID of the purchase"
 msgstr ""
 
-#: includes/class-utils.php:171
+#: includes/class-utils.php:212
 msgid "The order ID reference of this transaction in the cart orders menu"
 msgstr ""
 
-#: includes/class-utils.php:172
+#: includes/class-utils.php:213
 msgid "The amount paid for the current transaction"
 msgstr ""
 
-#: includes/class-utils.php:173
+#: includes/class-utils.php:214
 msgid "The date of the purchase"
 msgstr ""
 
-#: includes/class-utils.php:174
+#: includes/class-utils.php:215
 msgid "Coupon code applied to the purchase"
 msgstr ""
 
-#: includes/class-utils.php:175
+#: includes/class-utils.php:216
 msgid "Order currency code"
 msgstr ""
 
-#: includes/class-utils.php:176
+#: includes/class-utils.php:217
 msgid "Product ID"
 msgstr ""
 
-#: includes/class-utils.php:178
+#: includes/class-utils.php:219
 msgid "Quantity ordered"
 msgstr ""
 
-#: includes/class-utils.php:179
+#: includes/class-utils.php:220
 msgid "Download link of the product (if any)"
 msgstr ""
 
-#: includes/class-utils.php:180
+#: includes/class-utils.php:221
+msgid "Download link that contains the URL only, omitting any associated product name (if any)."
+msgstr ""
+
+#: includes/class-utils.php:222
 msgid "Selected variations of the order"
 msgstr ""
 
-#: includes/class-utils.php:193
+#: includes/class-utils.php:235
 msgid "Error! The URL value is empty. Please specify a correct URL value to redirect to!"
 msgstr ""
 
-#: includes/class-utils.php:249
+#: includes/class-utils.php:259
 msgid "Afghanistan"
 msgstr ""
 
-#: includes/class-utils.php:250
+#: includes/class-utils.php:260
 msgid "Aland Islands"
 msgstr ""
 
-#: includes/class-utils.php:251
+#: includes/class-utils.php:261
 msgid "Albania"
 msgstr ""
 
-#: includes/class-utils.php:252
+#: includes/class-utils.php:262
 msgid "Algeria"
 msgstr ""
 
-#: includes/class-utils.php:253
+#: includes/class-utils.php:263
 msgid "American Samoa"
 msgstr ""
 
-#: includes/class-utils.php:254
+#: includes/class-utils.php:264
 msgid "Andorra"
 msgstr ""
 
-#: includes/class-utils.php:255
+#: includes/class-utils.php:265
 msgid "Angola"
 msgstr ""
 
-#: includes/class-utils.php:256
+#: includes/class-utils.php:266
 msgid "Anguilla"
 msgstr ""
 
-#: includes/class-utils.php:257
+#: includes/class-utils.php:267
 msgid "Antarctica"
 msgstr ""
 
-#: includes/class-utils.php:258
+#: includes/class-utils.php:268
 msgid "Antigua and Barbuda"
 msgstr ""
 
-#: includes/class-utils.php:259
+#: includes/class-utils.php:269
 msgid "Argentina"
 msgstr ""
 
-#: includes/class-utils.php:260
+#: includes/class-utils.php:270
 msgid "Armenia"
 msgstr ""
 
-#: includes/class-utils.php:261
+#: includes/class-utils.php:271
 msgid "Aruba"
 msgstr ""
 
-#: includes/class-utils.php:262
+#: includes/class-utils.php:272
 msgid "Australia"
 msgstr ""
 
-#: includes/class-utils.php:263
+#: includes/class-utils.php:273
 msgid "Austria"
 msgstr ""
 
-#: includes/class-utils.php:264
+#: includes/class-utils.php:274
 msgid "Azerbaijan"
 msgstr ""
 
-#: includes/class-utils.php:265
+#: includes/class-utils.php:275
 msgid "Bahamas"
 msgstr ""
 
-#: includes/class-utils.php:266
+#: includes/class-utils.php:276
 msgid "Bahrain"
 msgstr ""
 
-#: includes/class-utils.php:267
+#: includes/class-utils.php:277
 msgid "Bangladesh"
 msgstr ""
 
-#: includes/class-utils.php:268
+#: includes/class-utils.php:278
 msgid "Barbados"
 msgstr ""
 
-#: includes/class-utils.php:269
+#: includes/class-utils.php:279
 msgid "Belarus"
 msgstr ""
 
-#: includes/class-utils.php:270
+#: includes/class-utils.php:280
 msgid "Belgium"
 msgstr ""
 
-#: includes/class-utils.php:271
+#: includes/class-utils.php:281
 msgid "Belize"
 msgstr ""
 
-#: includes/class-utils.php:272
+#: includes/class-utils.php:282
 msgid "Benin"
 msgstr ""
 
-#: includes/class-utils.php:273
+#: includes/class-utils.php:283
 msgid "Bermuda"
 msgstr ""
 
-#: includes/class-utils.php:274
+#: includes/class-utils.php:284
 msgid "Bhutan"
 msgstr ""
 
-#: includes/class-utils.php:275
+#: includes/class-utils.php:285
 msgid "Bolivia"
 msgstr ""
 
-#: includes/class-utils.php:276
+#: includes/class-utils.php:286
 msgid "Bonaire"
 msgstr ""
 
-#: includes/class-utils.php:277
+#: includes/class-utils.php:287
 msgid "Bosnia and Herzegovina"
 msgstr ""
 
-#: includes/class-utils.php:278
+#: includes/class-utils.php:288
 msgid "Botswana"
 msgstr ""
 
-#: includes/class-utils.php:279
+#: includes/class-utils.php:289
 msgid "Bouvet Island"
 msgstr ""
 
-#: includes/class-utils.php:280
+#: includes/class-utils.php:290
 msgid "Brazil"
 msgstr ""
 
-#: includes/class-utils.php:281
+#: includes/class-utils.php:291
 msgid "British Indian Ocean Territory"
 msgstr ""
 
-#: includes/class-utils.php:282
+#: includes/class-utils.php:292
 msgid "British Virgin Islands"
 msgstr ""
 
-#: includes/class-utils.php:283
+#: includes/class-utils.php:293
 msgid "Brunei"
 msgstr ""
 
-#: includes/class-utils.php:284
+#: includes/class-utils.php:294
 msgid "Bulgaria"
 msgstr ""
 
-#: includes/class-utils.php:285
+#: includes/class-utils.php:295
 msgid "Burkina Faso"
 msgstr ""
 
-#: includes/class-utils.php:286
+#: includes/class-utils.php:296
 msgid "Burundi"
 msgstr ""
 
-#: includes/class-utils.php:287
+#: includes/class-utils.php:297
 msgid "Cambodia"
 msgstr ""
 
-#: includes/class-utils.php:288
+#: includes/class-utils.php:298
 msgid "Cameroon"
 msgstr ""
 
-#: includes/class-utils.php:289
+#: includes/class-utils.php:299
 msgid "Canada"
 msgstr ""
 
-#: includes/class-utils.php:290
+#: includes/class-utils.php:300
 msgid "Cape Verde"
 msgstr ""
 
-#: includes/class-utils.php:291
+#: includes/class-utils.php:301
 msgid "Cayman Islands"
 msgstr ""
 
-#: includes/class-utils.php:292
+#: includes/class-utils.php:302
 msgid "Central African Republic"
 msgstr ""
 
-#: includes/class-utils.php:293
+#: includes/class-utils.php:303
 msgid "Chad"
 msgstr ""
 
-#: includes/class-utils.php:294
+#: includes/class-utils.php:304
 msgid "Chile"
 msgstr ""
 
-#: includes/class-utils.php:295
+#: includes/class-utils.php:305
 msgid "China"
 msgstr ""
 
-#: includes/class-utils.php:296
+#: includes/class-utils.php:306
 msgid "Christmas Island"
 msgstr ""
 
-#: includes/class-utils.php:297
+#: includes/class-utils.php:307
 msgid "Cocos (Keeling) Islands"
 msgstr ""
 
-#: includes/class-utils.php:298
+#: includes/class-utils.php:308
 msgid "Colombia"
 msgstr ""
 
-#: includes/class-utils.php:299
+#: includes/class-utils.php:309
 msgid "Comoros"
 msgstr ""
 
-#: includes/class-utils.php:300
+#: includes/class-utils.php:310
 msgid "Congo, Democratic Republic of"
 msgstr ""
 
-#: includes/class-utils.php:301
+#: includes/class-utils.php:311
 msgid "Congo, Republic of"
 msgstr ""
 
-#: includes/class-utils.php:302
+#: includes/class-utils.php:312
 msgid "Cook Islands"
 msgstr ""
 
-#: includes/class-utils.php:303
+#: includes/class-utils.php:313
 msgid "Costa Rica"
 msgstr ""
 
-#: includes/class-utils.php:304
+#: includes/class-utils.php:314
 msgid "Croatia"
 msgstr ""
 
-#: includes/class-utils.php:305
+#: includes/class-utils.php:315
 msgid "Cuba"
 msgstr ""
 
-#: includes/class-utils.php:306
+#: includes/class-utils.php:316
 msgid "Curacao"
 msgstr ""
 
-#: includes/class-utils.php:307
+#: includes/class-utils.php:317
 msgid "Cyprus"
 msgstr ""
 
-#: includes/class-utils.php:308
+#: includes/class-utils.php:318
 msgid "Czech Republic"
 msgstr ""
 
-#: includes/class-utils.php:309
+#: includes/class-utils.php:319
 msgid "Denmark"
 msgstr ""
 
-#: includes/class-utils.php:310
+#: includes/class-utils.php:320
 msgid "Djibouti"
 msgstr ""
 
-#: includes/class-utils.php:311
+#: includes/class-utils.php:321
 msgid "Dominica"
 msgstr ""
 
-#: includes/class-utils.php:312
+#: includes/class-utils.php:322
 msgid "Dominican Republic"
 msgstr ""
 
-#: includes/class-utils.php:313
+#: includes/class-utils.php:323
 msgid "Ecuador"
 msgstr ""
 
-#: includes/class-utils.php:314
+#: includes/class-utils.php:324
 msgid "Egypt"
 msgstr ""
 
-#: includes/class-utils.php:315
+#: includes/class-utils.php:325
 msgid "El Salvador"
 msgstr ""
 
-#: includes/class-utils.php:316
+#: includes/class-utils.php:326
 msgid "Equatorial Guinea"
 msgstr ""
 
-#: includes/class-utils.php:317
+#: includes/class-utils.php:327
 msgid "Eritrea"
 msgstr ""
 
-#: includes/class-utils.php:318
+#: includes/class-utils.php:328
 msgid "Estonia"
 msgstr ""
 
-#: includes/class-utils.php:319
+#: includes/class-utils.php:329
 msgid "Ethiopia"
 msgstr ""
 
-#: includes/class-utils.php:320
+#: includes/class-utils.php:330
 msgid "Falkland Islands"
 msgstr ""
 
-#: includes/class-utils.php:321
+#: includes/class-utils.php:331
 msgid "Faroe Islands"
 msgstr ""
 
-#: includes/class-utils.php:322
+#: includes/class-utils.php:332
 msgid "Fiji"
 msgstr ""
 
-#: includes/class-utils.php:323
+#: includes/class-utils.php:333
 msgid "Finland"
 msgstr ""
 
-#: includes/class-utils.php:324
+#: includes/class-utils.php:334
 msgid "France"
 msgstr ""
 
-#: includes/class-utils.php:325
+#: includes/class-utils.php:335
 msgid "French Guiana"
 msgstr ""
 
-#: includes/class-utils.php:326
+#: includes/class-utils.php:336
 msgid "French Polynesia"
 msgstr ""
 
-#: includes/class-utils.php:327
+#: includes/class-utils.php:337
 msgid "French Southern and Antarctic Lands"
 msgstr ""
 
-#: includes/class-utils.php:328
+#: includes/class-utils.php:338
 msgid "Gabon"
 msgstr ""
 
-#: includes/class-utils.php:329
+#: includes/class-utils.php:339
 msgid "Gambia"
 msgstr ""
 
-#: includes/class-utils.php:330
+#: includes/class-utils.php:340
 msgid "Georgia"
 msgstr ""
 
-#: includes/class-utils.php:331
+#: includes/class-utils.php:341
 msgid "Germany"
 msgstr ""
 
-#: includes/class-utils.php:332
+#: includes/class-utils.php:342
 msgid "Ghana"
 msgstr ""
 
-#: includes/class-utils.php:333
+#: includes/class-utils.php:343
 msgid "Gibraltar"
 msgstr ""
 
-#: includes/class-utils.php:334
+#: includes/class-utils.php:344
 msgid "Greece"
 msgstr ""
 
-#: includes/class-utils.php:335
+#: includes/class-utils.php:345
 msgid "Greenland"
 msgstr ""
 
-#: includes/class-utils.php:336
+#: includes/class-utils.php:346
 msgid "Grenada"
 msgstr ""
 
-#: includes/class-utils.php:337
+#: includes/class-utils.php:347
 msgid "Guadeloupe"
 msgstr ""
 
-#: includes/class-utils.php:338
+#: includes/class-utils.php:348
 msgid "Guam"
 msgstr ""
 
-#: includes/class-utils.php:339
+#: includes/class-utils.php:349
 msgid "Guatemala"
 msgstr ""
 
-#: includes/class-utils.php:340
+#: includes/class-utils.php:350
 msgid "Guernsey"
 msgstr ""
 
-#: includes/class-utils.php:341
+#: includes/class-utils.php:351
 msgid "Guinea"
 msgstr ""
 
-#: includes/class-utils.php:342
+#: includes/class-utils.php:352
 msgid "Guinea-Bissau"
 msgstr ""
 
-#: includes/class-utils.php:343
+#: includes/class-utils.php:353
 msgid "Guyana"
 msgstr ""
 
-#: includes/class-utils.php:344
+#: includes/class-utils.php:354
 msgid "Haiti"
 msgstr ""
 
-#: includes/class-utils.php:345
+#: includes/class-utils.php:355
 msgid "Heard Island and McDonald Islands"
 msgstr ""
 
-#: includes/class-utils.php:346
+#: includes/class-utils.php:356
 msgid "Honduras"
 msgstr ""
 
-#: includes/class-utils.php:347
+#: includes/class-utils.php:357
 msgid "Hong Kong"
 msgstr ""
 
-#: includes/class-utils.php:348
+#: includes/class-utils.php:358
 msgid "Hungary"
 msgstr ""
 
-#: includes/class-utils.php:349
+#: includes/class-utils.php:359
 msgid "Iceland"
 msgstr ""
 
-#: includes/class-utils.php:350
+#: includes/class-utils.php:360
 msgid "India"
 msgstr ""
 
-#: includes/class-utils.php:351
+#: includes/class-utils.php:361
 msgid "Indonesia"
 msgstr ""
 
-#: includes/class-utils.php:352
+#: includes/class-utils.php:362
 msgid "Iran"
 msgstr ""
 
-#: includes/class-utils.php:353
+#: includes/class-utils.php:363
 msgid "Iraq"
 msgstr ""
 
-#: includes/class-utils.php:354
+#: includes/class-utils.php:364
 msgid "Ireland"
 msgstr ""
 
-#: includes/class-utils.php:355
+#: includes/class-utils.php:365
 msgid "Isle of Man"
 msgstr ""
 
-#: includes/class-utils.php:356
+#: includes/class-utils.php:366
 msgid "Israel"
 msgstr ""
 
-#: includes/class-utils.php:357
+#: includes/class-utils.php:367
 msgid "Italy"
 msgstr ""
 
-#: includes/class-utils.php:358
+#: includes/class-utils.php:368
 msgid "Ivory Coast"
 msgstr ""
 
-#: includes/class-utils.php:359
+#: includes/class-utils.php:369
 msgid "Jamaica"
 msgstr ""
 
-#: includes/class-utils.php:360
+#: includes/class-utils.php:370
 msgid "Japan"
 msgstr ""
 
-#: includes/class-utils.php:361
+#: includes/class-utils.php:371
 msgid "Jersey"
 msgstr ""
 
-#: includes/class-utils.php:362
+#: includes/class-utils.php:372
 msgid "Jordan"
 msgstr ""
 
-#: includes/class-utils.php:363
+#: includes/class-utils.php:373
 msgid "Kazakhstan"
 msgstr ""
 
-#: includes/class-utils.php:364
+#: includes/class-utils.php:374
 msgid "Kenya"
 msgstr ""
 
-#: includes/class-utils.php:365
+#: includes/class-utils.php:375
 msgid "Kiribati"
 msgstr ""
 
-#: includes/class-utils.php:366
+#: includes/class-utils.php:376
 msgid "Korea, Democratic People's Republic of"
 msgstr ""
 
-#: includes/class-utils.php:367
+#: includes/class-utils.php:377
 msgid "Korea, Republic of"
 msgstr ""
 
-#: includes/class-utils.php:368
+#: includes/class-utils.php:378
 msgid "Kosovo"
 msgstr ""
 
-#: includes/class-utils.php:369
+#: includes/class-utils.php:379
 msgid "Kuwait"
 msgstr ""
 
-#: includes/class-utils.php:370
+#: includes/class-utils.php:380
 msgid "Kyrgyzstan"
 msgstr ""
 
-#: includes/class-utils.php:371
+#: includes/class-utils.php:381
 msgid "Laos"
 msgstr ""
 
-#: includes/class-utils.php:372
+#: includes/class-utils.php:382
 msgid "Latvia"
 msgstr ""
 
-#: includes/class-utils.php:373
+#: includes/class-utils.php:383
 msgid "Lebanon"
 msgstr ""
 
-#: includes/class-utils.php:374
+#: includes/class-utils.php:384
 msgid "Lesotho"
 msgstr ""
 
-#: includes/class-utils.php:375
+#: includes/class-utils.php:385
 msgid "Liberia"
 msgstr ""
 
-#: includes/class-utils.php:376
+#: includes/class-utils.php:386
 msgid "Libya"
 msgstr ""
 
-#: includes/class-utils.php:377
+#: includes/class-utils.php:387
 msgid "Liechtenstein"
 msgstr ""
 
-#: includes/class-utils.php:378
+#: includes/class-utils.php:388
 msgid "Lithuania"
 msgstr ""
 
-#: includes/class-utils.php:379
+#: includes/class-utils.php:389
 msgid "Luxembourg"
 msgstr ""
 
-#: includes/class-utils.php:380
+#: includes/class-utils.php:390
 msgid "Macau"
 msgstr ""
 
-#: includes/class-utils.php:381
+#: includes/class-utils.php:391
 msgid "Macedonia"
 msgstr ""
 
-#: includes/class-utils.php:382
+#: includes/class-utils.php:392
 msgid "Madagascar"
 msgstr ""
 
-#: includes/class-utils.php:383
+#: includes/class-utils.php:393
 msgid "Malawi"
 msgstr ""
 
-#: includes/class-utils.php:384
+#: includes/class-utils.php:394
 msgid "Malaysia"
 msgstr ""
 
-#: includes/class-utils.php:385
+#: includes/class-utils.php:395
 msgid "Maldives"
 msgstr ""
 
-#: includes/class-utils.php:386
+#: includes/class-utils.php:396
 msgid "Mali"
 msgstr ""
 
-#: includes/class-utils.php:387
+#: includes/class-utils.php:397
 msgid "Malta"
 msgstr ""
 
-#: includes/class-utils.php:388
+#: includes/class-utils.php:398
 msgid "Marshall Islands"
 msgstr ""
 
-#: includes/class-utils.php:389
+#: includes/class-utils.php:399
 msgid "Martinique"
 msgstr ""
 
-#: includes/class-utils.php:390
+#: includes/class-utils.php:400
 msgid "Mauritania"
 msgstr ""
 
-#: includes/class-utils.php:391
+#: includes/class-utils.php:401
 msgid "Mauritius"
 msgstr ""
 
-#: includes/class-utils.php:392
+#: includes/class-utils.php:402
 msgid "Mayotte"
 msgstr ""
 
-#: includes/class-utils.php:393
+#: includes/class-utils.php:403
 msgid "Mexico"
 msgstr ""
 
-#: includes/class-utils.php:394
+#: includes/class-utils.php:404
 msgid "Micronesia"
 msgstr ""
 
-#: includes/class-utils.php:395
+#: includes/class-utils.php:405
 msgid "Moldova"
 msgstr ""
 
-#: includes/class-utils.php:396
+#: includes/class-utils.php:406
 msgid "Monaco"
 msgstr ""
 
-#: includes/class-utils.php:397
+#: includes/class-utils.php:407
 msgid "Mongolia"
 msgstr ""
 
-#: includes/class-utils.php:398
+#: includes/class-utils.php:408
 msgid "Montenegro"
 msgstr ""
 
-#: includes/class-utils.php:399
+#: includes/class-utils.php:409
 msgid "Montserrat"
 msgstr ""
 
-#: includes/class-utils.php:400
+#: includes/class-utils.php:410
 msgid "Morocco"
 msgstr ""
 
-#: includes/class-utils.php:401
+#: includes/class-utils.php:411
 msgid "Mozambique"
 msgstr ""
 
-#: includes/class-utils.php:402
+#: includes/class-utils.php:412
 msgid "Myanmar"
 msgstr ""
 
-#: includes/class-utils.php:403
+#: includes/class-utils.php:413
 msgid "Namibia"
 msgstr ""
 
-#: includes/class-utils.php:404
+#: includes/class-utils.php:414
 msgid "Nauru"
 msgstr ""
 
-#: includes/class-utils.php:405
+#: includes/class-utils.php:415
 msgid "Nepal"
 msgstr ""
 
-#: includes/class-utils.php:406
+#: includes/class-utils.php:416
 msgid "Netherlands"
 msgstr ""
 
-#: includes/class-utils.php:407
+#: includes/class-utils.php:417
 msgid "New Caledonia"
 msgstr ""
 
-#: includes/class-utils.php:408
+#: includes/class-utils.php:418
 msgid "New Zealand"
 msgstr ""
 
-#: includes/class-utils.php:409
+#: includes/class-utils.php:419
 msgid "Nicaragua"
 msgstr ""
 
-#: includes/class-utils.php:410
+#: includes/class-utils.php:420
 msgid "Niger"
 msgstr ""
 
-#: includes/class-utils.php:411
+#: includes/class-utils.php:421
 msgid "Nigeria"
 msgstr ""
 
-#: includes/class-utils.php:412
+#: includes/class-utils.php:422
 msgid "Niue"
 msgstr ""
 
-#: includes/class-utils.php:413
+#: includes/class-utils.php:423
 msgid "Norfolk Island"
 msgstr ""
 
-#: includes/class-utils.php:414
+#: includes/class-utils.php:424
 msgid "Northern Mariana Islands"
 msgstr ""
 
-#: includes/class-utils.php:415
+#: includes/class-utils.php:425
 msgid "Norway"
 msgstr ""
 
-#: includes/class-utils.php:416
+#: includes/class-utils.php:426
 msgid "Oman"
 msgstr ""
 
-#: includes/class-utils.php:417
+#: includes/class-utils.php:427
 msgid "Pakistan"
 msgstr ""
 
-#: includes/class-utils.php:418
+#: includes/class-utils.php:428
 msgid "Palau"
 msgstr ""
 
-#: includes/class-utils.php:419
+#: includes/class-utils.php:429
 msgid "Palestine"
 msgstr ""
 
-#: includes/class-utils.php:420
+#: includes/class-utils.php:430
 msgid "Panama"
 msgstr ""
 
-#: includes/class-utils.php:421
+#: includes/class-utils.php:431
 msgid "Papua New Guinea"
 msgstr ""
 
-#: includes/class-utils.php:422
+#: includes/class-utils.php:432
 msgid "Paraguay"
 msgstr ""
 
-#: includes/class-utils.php:423
+#: includes/class-utils.php:433
 msgid "Peru"
 msgstr ""
 
-#: includes/class-utils.php:424
+#: includes/class-utils.php:434
 msgid "Philippines"
 msgstr ""
 
-#: includes/class-utils.php:425
+#: includes/class-utils.php:435
 msgid "Pitcairn Islands"
 msgstr ""
 
-#: includes/class-utils.php:426
+#: includes/class-utils.php:436
 msgid "Poland"
 msgstr ""
 
-#: includes/class-utils.php:427
+#: includes/class-utils.php:437
 msgid "Portugal"
 msgstr ""
 
-#: includes/class-utils.php:428
+#: includes/class-utils.php:438
 msgid "Puerto Rico"
 msgstr ""
 
-#: includes/class-utils.php:429
+#: includes/class-utils.php:439
 msgid "Qatar"
 msgstr ""
 
-#: includes/class-utils.php:430
+#: includes/class-utils.php:440
 msgid "Reunion"
 msgstr ""
 
-#: includes/class-utils.php:431
+#: includes/class-utils.php:441
 msgid "Romania"
 msgstr ""
 
-#: includes/class-utils.php:432
+#: includes/class-utils.php:442
 msgid "Russia"
 msgstr ""
 
-#: includes/class-utils.php:433
+#: includes/class-utils.php:443
 msgid "Rwanda"
 msgstr ""
 
-#: includes/class-utils.php:434
+#: includes/class-utils.php:444
 msgid "Saint Barthelemy"
 msgstr ""
 
-#: includes/class-utils.php:435
+#: includes/class-utils.php:445
 msgid "Saint Helena, Ascension, and Tristan da Cunha"
 msgstr ""
 
-#: includes/class-utils.php:436
+#: includes/class-utils.php:446
 msgid "Saint Kitts and Nevis"
 msgstr ""
 
-#: includes/class-utils.php:437
+#: includes/class-utils.php:447
 msgid "Saint Lucia"
 msgstr ""
 
-#: includes/class-utils.php:438
+#: includes/class-utils.php:448
 msgid "Saint Martin"
 msgstr ""
 
-#: includes/class-utils.php:439
+#: includes/class-utils.php:449
 msgid "Saint Pierre and Miquelon"
 msgstr ""
 
-#: includes/class-utils.php:440
+#: includes/class-utils.php:450
 msgid "Saint Vincent and the Grenadines"
 msgstr ""
 
-#: includes/class-utils.php:441
+#: includes/class-utils.php:451
 msgid "Samoa"
 msgstr ""
 
-#: includes/class-utils.php:442
+#: includes/class-utils.php:452
 msgid "San Marino"
 msgstr ""
 
-#: includes/class-utils.php:443
+#: includes/class-utils.php:453
 msgid "Sao Tome and Principe"
 msgstr ""
 
-#: includes/class-utils.php:444
+#: includes/class-utils.php:454
 msgid "Saudi Arabia"
 msgstr ""
 
-#: includes/class-utils.php:445
+#: includes/class-utils.php:455
 msgid "Senegal"
 msgstr ""
 
-#: includes/class-utils.php:446
+#: includes/class-utils.php:456
 msgid "Serbia"
 msgstr ""
 
-#: includes/class-utils.php:447
+#: includes/class-utils.php:457
 msgid "Seychelles"
 msgstr ""
 
-#: includes/class-utils.php:448
+#: includes/class-utils.php:458
 msgid "Sierra Leone"
 msgstr ""
 
-#: includes/class-utils.php:449
+#: includes/class-utils.php:459
 msgid "Singapore"
 msgstr ""
 
-#: includes/class-utils.php:450
+#: includes/class-utils.php:460
 msgid "Sint Maarten"
 msgstr ""
 
-#: includes/class-utils.php:451
+#: includes/class-utils.php:461
 msgid "Slovakia"
 msgstr ""
 
-#: includes/class-utils.php:452
+#: includes/class-utils.php:462
 msgid "Slovenia"
 msgstr ""
 
-#: includes/class-utils.php:453
+#: includes/class-utils.php:463
 msgid "Solomon Islands"
 msgstr ""
 
-#: includes/class-utils.php:454
+#: includes/class-utils.php:464
 msgid "Somalia"
 msgstr ""
 
-#: includes/class-utils.php:455
+#: includes/class-utils.php:465
 msgid "South Africa"
 msgstr ""
 
-#: includes/class-utils.php:456
+#: includes/class-utils.php:466
 msgid "South Georgia"
 msgstr ""
 
-#: includes/class-utils.php:457
+#: includes/class-utils.php:467
 msgid "South Sudan"
 msgstr ""
 
-#: includes/class-utils.php:458
+#: includes/class-utils.php:468
 msgid "Spain"
 msgstr ""
 
-#: includes/class-utils.php:459
+#: includes/class-utils.php:469
 msgid "Sri Lanka"
 msgstr ""
 
-#: includes/class-utils.php:460
+#: includes/class-utils.php:470
 msgid "Sudan"
 msgstr ""
 
-#: includes/class-utils.php:461
+#: includes/class-utils.php:471
 msgid "Suriname"
 msgstr ""
 
-#: includes/class-utils.php:462
+#: includes/class-utils.php:472
 msgid "Svalbard and Jan Mayen"
 msgstr ""
 
-#: includes/class-utils.php:463
+#: includes/class-utils.php:473
 msgid "Swaziland"
 msgstr ""
 
-#: includes/class-utils.php:464
+#: includes/class-utils.php:474
 msgid "Sweden"
 msgstr ""
 
-#: includes/class-utils.php:465
+#: includes/class-utils.php:475
 msgid "Switzerland"
 msgstr ""
 
-#: includes/class-utils.php:466
+#: includes/class-utils.php:476
 msgid "Syria"
 msgstr ""
 
-#: includes/class-utils.php:467
+#: includes/class-utils.php:477
 msgid "Taiwan"
 msgstr ""
 
-#: includes/class-utils.php:468
+#: includes/class-utils.php:478
 msgid "Tajikistan"
 msgstr ""
 
-#: includes/class-utils.php:469
+#: includes/class-utils.php:479
 msgid "Tanzania"
 msgstr ""
 
-#: includes/class-utils.php:470
+#: includes/class-utils.php:480
 msgid "Thailand"
 msgstr ""
 
-#: includes/class-utils.php:471
+#: includes/class-utils.php:481
 msgid "Timor-Leste"
 msgstr ""
 
-#: includes/class-utils.php:472
+#: includes/class-utils.php:482
 msgid "Togo"
 msgstr ""
 
-#: includes/class-utils.php:473
+#: includes/class-utils.php:483
 msgid "Tokelau"
 msgstr ""
 
-#: includes/class-utils.php:474
+#: includes/class-utils.php:484
 msgid "Tonga"
 msgstr ""
 
-#: includes/class-utils.php:475
+#: includes/class-utils.php:485
 msgid "Trinidad and Tobago"
 msgstr ""
 
-#: includes/class-utils.php:476
+#: includes/class-utils.php:486
 msgid "Tunisia"
 msgstr ""
 
-#: includes/class-utils.php:477
+#: includes/class-utils.php:487
 msgid "Turkey"
 msgstr ""
 
-#: includes/class-utils.php:478
+#: includes/class-utils.php:488
 msgid "Turkmenistan"
 msgstr ""
 
-#: includes/class-utils.php:479
+#: includes/class-utils.php:489
 msgid "Turks and Caicos Islands"
 msgstr ""
 
-#: includes/class-utils.php:480
+#: includes/class-utils.php:490
 msgid "Tuvalu"
 msgstr ""
 
-#: includes/class-utils.php:481
+#: includes/class-utils.php:491
 msgid "Uganda"
 msgstr ""
 
-#: includes/class-utils.php:482
+#: includes/class-utils.php:492
 msgid "Ukraine"
 msgstr ""
 
-#: includes/class-utils.php:483
+#: includes/class-utils.php:493
 msgid "United Arab Emirates"
 msgstr ""
 
-#: includes/class-utils.php:484
+#: includes/class-utils.php:494
 msgid "United Kingdom"
 msgstr ""
 
-#: includes/class-utils.php:485
+#: includes/class-utils.php:495
 msgid "United States"
 msgstr ""
 
-#: includes/class-utils.php:486
+#: includes/class-utils.php:496
 msgid "United States Minor Outlying Islands"
 msgstr ""
 
-#: includes/class-utils.php:487
+#: includes/class-utils.php:497
 msgid "United States Virgin Islands"
 msgstr ""
 
-#: includes/class-utils.php:488
+#: includes/class-utils.php:498
 msgid "Uruguay"
 msgstr ""
 
-#: includes/class-utils.php:489
+#: includes/class-utils.php:499
 msgid "Uzbekistan"
 msgstr ""
 
-#: includes/class-utils.php:490
+#: includes/class-utils.php:500
 msgid "Vanuatu"
 msgstr ""
 
-#: includes/class-utils.php:491
+#: includes/class-utils.php:501
 msgid "Vatican City"
 msgstr ""
 
-#: includes/class-utils.php:492
+#: includes/class-utils.php:502
 msgid "Venezuela"
 msgstr ""
 
-#: includes/class-utils.php:493
+#: includes/class-utils.php:503
 msgid "Vietnam"
 msgstr ""
 
-#: includes/class-utils.php:494
+#: includes/class-utils.php:504
 msgid "Wallis and Futuna"
 msgstr ""
 
-#: includes/class-utils.php:495
+#: includes/class-utils.php:505
 msgid "Western Sahara"
 msgstr ""
 
-#: includes/class-utils.php:496
+#: includes/class-utils.php:506
 msgid "Yemen"
 msgstr ""
 
-#: includes/class-utils.php:497
+#: includes/class-utils.php:507
 msgid "Zambia"
 msgstr ""
 
-#: includes/class-utils.php:498
+#: includes/class-utils.php:508
 msgid "Zimbabwe"
 msgstr ""
 
-#: includes/class-view-downloads.php:171
+#: includes/class-view-downloads.php:172
 msgid "Invalid download URL!"
 msgstr ""
 
-#: includes/class-view-downloads.php:185
+#: includes/class-view-downloads.php:186
 msgid "Invalid product ID!"
 msgstr ""
 
-#: includes/class-view-downloads.php:189
+#: includes/class-view-downloads.php:190
 msgid "The product has no file for download!"
 msgstr ""
 
-#: includes/class-view-downloads.php:217
+#: includes/class-view-downloads.php:218
 msgid "Invalid product key!"
 msgstr ""
 
-#: includes/class-view-downloads.php:224
+#: includes/class-view-downloads.php:225
 msgid "Download limit time is enabled for this product. Time duration limit exceeded. This download link has expired."
 msgstr ""
 
-#: includes/class-view-downloads.php:232
+#: includes/class-view-downloads.php:233
 msgid "Download limit count is enabled for this product. Count limit exceeded. This download link has expired."
+msgstr ""
+
+#: includes/class-view-downloads.php:328
+msgid "Error occurred when trying to download the file."
+msgstr ""
+
+#: includes/class-view-downloads.php:408
+msgid "Error occurred when trying to fetch the file using wp_remote_get()."
+msgstr ""
+
+#: includes/class-view-downloads.php:415
+msgid "Requested file could not be found (error code 404). Verify the file URL specified in the product configuration."
+msgstr ""
+
+#: includes/class-view-downloads.php:420
+msgid "An HTTP error occurred during file retrieval. Error Code: %s"
 msgstr ""
 
 #: includes/integrations/emember/class-emember.php:151
@@ -3206,62 +3375,72 @@ msgstr ""
 msgid "Awaiting payment"
 msgstr ""
 
-#: public/class-main.php:87
+#: public/class-main.php:88
+#: public/views/templates/url-payment-box.php:52
+msgid "Transaction completed successfully!"
+msgstr ""
+
+#: public/class-main.php:89
+#: public/views/templates/url-payment-box.php:53
+msgid "Feel free to browse our site further for your next purchase."
+msgstr ""
+
+#: public/class-main.php:98
 #: public/views/templates/url-payment-box.php:29
 msgid "Error occurred"
 msgstr ""
 
-#: public/class-main.php:88
+#: public/class-main.php:99
 #: public/views/templates/url-payment-box.php:30
 msgid "Payment for"
 msgstr ""
 
-#: public/class-main.php:89
+#: public/class-main.php:100
 #: public/views/templates/url-payment-box.php:31
 msgid "Please enter a valid quantity"
 msgstr ""
 
-#: public/class-main.php:90
+#: public/class-main.php:101
 #: public/views/templates/url-payment-box.php:32
 msgid "You cannot order more items than available: %d"
 msgstr ""
 
-#: public/class-main.php:91
+#: public/class-main.php:102
 #: public/views/templates/url-payment-box.php:33
 msgid "Please enter a valid amount"
 msgstr ""
 
-#: public/class-main.php:92
+#: public/class-main.php:103
 #: public/views/templates/url-payment-box.php:34
 msgid "Please accept the terms and conditions"
 msgstr ""
 
-#: public/class-main.php:93
+#: public/class-main.php:104
 #: public/views/templates/url-payment-box.php:35
 msgid "Payment Completed"
 msgstr ""
 
-#: public/class-main.php:94
+#: public/class-main.php:105
 #: public/views/templates/url-payment-box.php:36
 msgid "You are now being redirected to the order summary page."
 msgstr ""
 
-#: public/class-main.php:95
+#: public/class-main.php:106
 #: public/views/templates/url-payment-box.php:37
 msgid "Remove coupon"
 msgstr ""
 
-#: public/class-main.php:96
+#: public/class-main.php:107
 #: public/views/templates/url-payment-box.php:38
 msgid "Remove"
 msgstr ""
 
-#: public/class-main.php:97
+#: public/class-main.php:108
 #: public/views/templates/url-payment-box.php:39
 msgid "This field is required"
 msgstr ""
 
-#: public/class-main.php:369
+#: public/class-main.php:380
 msgid "I accept the <a href=\"https://example.com/terms-and-conditions/\" target=\"_blank\">Terms and Conditions</a>"
 msgstr ""
 
@@ -3274,75 +3453,75 @@ msgstr ""
 msgid "%1$s - download link: %2$s"
 msgstr ""
 
-#: public/includes/class-shortcodes.php:220
-#: public/views/templates/url-payment-box.php:174
+#: public/includes/class-shortcodes.php:224
+#: public/views/templates/url-payment-box.php:198
 msgid "Please enter %s Client ID in the settings."
 msgstr ""
 
 #. translators: tax amount
-#: public/includes/class-shortcodes.php:304
+#: public/includes/class-shortcodes.php:309
 msgid "%s (tax)"
 msgstr ""
 
 #. translators: tax percent
-#: public/includes/class-shortcodes.php:307
+#: public/includes/class-shortcodes.php:312
 msgid "%s%% tax"
 msgstr ""
 
 #. translators: tax + shipping amount
-#: public/includes/class-shortcodes.php:315
-msgid "+ %s (shipping)"
+#: public/includes/class-shortcodes.php:323
+msgid "+ <span class=\"wpec_price_shipping_amount\">%s</span> (shipping)"
 msgstr ""
 
 #. translators: shipping amount
-#: public/includes/class-shortcodes.php:318
-msgid "%s (shipping)"
+#: public/includes/class-shortcodes.php:326
+msgid "<span class=\"wpec_price_shipping_amount\">%s</span> (shipping)"
 msgstr ""
 
-#: public/includes/class-shortcodes.php:324
+#: public/includes/class-shortcodes.php:332
 msgid "Total:"
 msgstr ""
 
-#: public/includes/class-shortcodes.php:344
-#: public/includes/class-shortcodes.php:351
+#: public/includes/class-shortcodes.php:352
+#: public/includes/class-shortcodes.php:359
 msgid "This page is used to show the transaction result after a customer makes a payment."
 msgstr ""
 
-#: public/includes/class-shortcodes.php:345
-#: public/includes/class-shortcodes.php:352
+#: public/includes/class-shortcodes.php:353
+#: public/includes/class-shortcodes.php:360
 msgid "It will dynamically show the order details to the customers when they are redirected here after a payment. Do not access this page directly."
 msgstr ""
 
-#: public/includes/class-shortcodes.php:346
+#: public/includes/class-shortcodes.php:354
 msgid "Error! Order ID value is missing in the URL."
 msgstr ""
 
-#: public/includes/class-shortcodes.php:426
+#: public/includes/class-shortcodes.php:438
 msgid "Thank you page shortcodes work after a transaction. Do not access this page directly."
 msgstr ""
 
-#: public/includes/class-shortcodes.php:541
-#: public/includes/class-shortcodes.php:754
+#: public/includes/class-shortcodes.php:553
+#: public/includes/class-shortcodes.php:767
 msgid "Nothing found for"
 msgstr ""
 
-#: public/includes/class-shortcodes.php:541
-#: public/includes/class-shortcodes.php:754
+#: public/includes/class-shortcodes.php:553
+#: public/includes/class-shortcodes.php:767
 msgid "Search results for"
-msgstr ""
-
-#: public/views/templates/all-products/all-products-from-category.php:18
-#: public/views/templates/all-products/all-products.php:18
-msgid "Search"
-msgstr ""
-
-#: public/views/templates/all-products/all-products-from-category.php:19
-#: public/views/templates/all-products/all-products.php:19
-msgid "Clear search"
 msgstr ""
 
 #: public/views/templates/all-products/all-products-from-category.php:20
 #: public/views/templates/all-products/all-products.php:20
+msgid "Search"
+msgstr ""
+
+#: public/views/templates/all-products/all-products-from-category.php:21
+#: public/views/templates/all-products/all-products.php:21
+msgid "Clear search"
+msgstr ""
+
+#: public/views/templates/all-products/all-products-from-category.php:22
+#: public/views/templates/all-products/all-products.php:22
 msgid "View Item"
 msgstr ""
 
@@ -3380,63 +3559,63 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: public/views/templates/payment-form.php:128
+#: public/views/templates/payment-form.php:127
 msgid "First Name"
 msgstr ""
 
-#: public/views/templates/payment-form.php:134
+#: public/views/templates/payment-form.php:133
 msgid "Last Name"
 msgstr ""
 
-#: public/views/templates/payment-form.php:140
+#: public/views/templates/payment-form.php:139
 msgid "Email"
 msgstr ""
 
-#: public/views/templates/payment-form.php:150
+#: public/views/templates/payment-form.php:159
 msgid "Same billing and shipping info"
 msgstr ""
 
-#: public/views/templates/payment-form.php:157
+#: public/views/templates/payment-form.php:166
 msgid "Billing Info"
 msgstr ""
 
-#: public/views/templates/payment-form.php:160
-#: public/views/templates/payment-form.php:207
+#: public/views/templates/payment-form.php:169
+#: public/views/templates/payment-form.php:216
 msgid "Address"
 msgstr ""
 
-#: public/views/templates/payment-form.php:166
-#: public/views/templates/payment-form.php:213
+#: public/views/templates/payment-form.php:175
+#: public/views/templates/payment-form.php:222
 msgid "City"
 msgstr ""
 
-#: public/views/templates/payment-form.php:172
-#: public/views/templates/payment-form.php:219
+#: public/views/templates/payment-form.php:181
+#: public/views/templates/payment-form.php:228
 msgid "Country"
 msgstr ""
 
-#: public/views/templates/payment-form.php:187
-#: public/views/templates/payment-form.php:234
+#: public/views/templates/payment-form.php:196
+#: public/views/templates/payment-form.php:243
 msgid "State"
 msgstr ""
 
-#: public/views/templates/payment-form.php:193
-#: public/views/templates/payment-form.php:240
+#: public/views/templates/payment-form.php:202
+#: public/views/templates/payment-form.php:249
 msgid "Postal Code"
 msgstr ""
 
-#: public/views/templates/payment-form.php:204
+#: public/views/templates/payment-form.php:213
 msgid "Shipping Info"
 msgstr ""
 
-#: public/views/templates/payment-form.php:265
+#: public/views/templates/payment-form.php:276
 msgid "Available Quantity: %d"
 msgstr ""
 
-#: public/views/templates/payment-form.php:280
+#: public/views/templates/payment-form.php:291
 msgid "Place Order"
 msgstr ""
 
-#: public/views/templates/payment-form.php:287
+#: public/views/templates/payment-form.php:298
 msgid "This is where the Express Checkout Button will show. View it on the front-end to see how it will look to your visitors"
 msgstr ""
