@@ -254,6 +254,11 @@ class PayPal_Payment_Button_Ajax_Handler {
 		$shipping_preference = $order_data_array['payment_source']['paypal']['experience_context']['shipping_preference'];
 		$grand_total = $order_data_array['purchase_units'][0]['amount']['value'];
 		$currency_code = $order_data_array['purchase_units'][0]['amount']['currency_code'];
+		$sub_total = $order_data_array['purchase_units'][0]['amount']['breakdown']['item_total']['value'];
+		//Transaction specific amounts (may or may not be available in the order data array depending on the transaction type).
+		$shipping_amt = $order_data_array['purchase_units'][0]['amount']['breakdown']['shipping']['value'];
+		$tax_amt = $order_data_array['purchase_units'][0]['amount']['breakdown']['tax_total']['value'];
+		$discount_amt = $order_data_array['purchase_units'][0]['amount']['breakdown']['discount']['value'];		
 
 		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
 		$pp_api_order_data = [
@@ -275,7 +280,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 						"breakdown" => [
 							"item_total" => [
 								"currency_code" => $currency_code,
-								"value" => (string) $grand_total, /* We can break down the total amount into item_total, tax_total, shipping etc */
+								"value" => (string) $sub_total, /* We can break down the total amount into item_total, tax_total, shipping etc */
 							]
 						]
 					],
@@ -292,6 +297,31 @@ class PayPal_Payment_Button_Ajax_Handler {
 				]
 			]
 		];
+
+		//Add the shipping amount if available.
+		if( isset($shipping_amt) && $shipping_amt > 0){
+			$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['shipping'] = [
+				"currency_code" => $currency_code,
+				"value" => (string) $shipping_amt, /* Cast to string to make sure there is no precision issue */
+			];
+		}
+
+		//Add the tax amount if available.
+		if( isset($tax_amt) && $tax_amt > 0){
+			$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['tax_total'] = [
+				"currency_code" => $currency_code,
+				"value" => (string) $tax_amt, /* Cast to string to make sure there is no precision issue */
+			];
+		}
+
+		//Add the discount amount if available.
+		if( isset($discount_amt) && $discount_amt > 0){
+			$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['discount'] = [
+				"currency_code" => $currency_code,
+				"value" => (string) $discount_amt, /* Cast to string to make sure there is no precision issue */
+			];
+		}
+
 
 		//A simple order data for testing            
 		// $order_data = [
