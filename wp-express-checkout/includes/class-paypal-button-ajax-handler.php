@@ -40,7 +40,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 
 		//Set this decoded item name back to the order data.
 		$order_data_array['purchase_units'][0]['items'][0]['name'] = $decoded_item_name;
-		Logger::log_array_data($order_data_array, true);
+		//Logger::log_array_data($order_data_array, true);
 
 		//If the data is empty, send the error response.
 		if ( empty( $json_order_data ) ) {
@@ -56,7 +56,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 		$json_wpec_data = isset( $_POST['wpec_data'] ) ? stripslashes_deep( $_POST['wpec_data'] ) : '{}';
 		//We need the data in an array format so lets convert it.
 		$array_wpec_data = json_decode( $json_wpec_data, true );		
-		Logger::log_array_data($array_wpec_data, true);
+		//Logger::log_array_data($array_wpec_data, true);
 
 		if ( empty( $array_wpec_data ) ) {
 			wp_send_json(
@@ -81,9 +81,8 @@ class PayPal_Payment_Button_Ajax_Handler {
 		// Do the API pre-submission validation.
 		$this->do_api_pre_submission_validation($order_data_array, $array_wpec_data);
 
-
 		// Create the order using the PayPal API call (pass the order data so we can use it in the API call)
-		$result = self::create_order_pp_api_call($order_data_array);
+		$result = self::create_order_pp_api_call($order_data_array, $array_wpec_data);
 		if(is_wp_error($result) ){
 			//Failed to create the order.
 			wp_send_json(
@@ -171,7 +170,6 @@ class PayPal_Payment_Button_Ajax_Handler {
 			);
 			exit;
 		}
-
 		
 		$array_txn_data = $pp_capture_response_data;
 
@@ -192,27 +190,22 @@ class PayPal_Payment_Button_Ajax_Handler {
 	 * Create the order using the PayPal API call.
 	 * return the PayPal order ID if successful, or a WP_Error object if there is an error.
 	 */
-    public static function create_order_pp_api_call($order_data_array)
+    public static function create_order_pp_api_call($order_data_array, $array_wpec_data)
     {
 		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
 
 		Logger::log( 'Creating PayPal order using the PayPal API call...', true);
 
-		//TODO - Preparing for PayPal API call.
-		// $item_name = htmlspecialchars($decoded_item_name);
-		// $item_name = substr($item_name, 0, 127);//Limit the item name to 127 characters (PayPal limit)
+		//Create the order-data for the PayPal API call.
+		$pp_api_order_data = self::create_order_data_for_pp_api($order_data_array, $array_wpec_data);
 
-		//TODO - We will create our order data in JSON format so we can use it in the API call.
-
-
-		$json_order_data = json_encode($order_data_array);
-		Logger::log_array_data($json_order_data, true);
-		//$json_order_string = 
+		$json_encoded_pp_api_order_data = wp_json_encode($pp_api_order_data);
+		Logger::log_array_data($json_encoded_pp_api_order_data, true);
 		
 		//Create the request for the PayPal API call.
 		$request = new Request( '/v2/checkout/orders', 'POST' );
 		//The order data already in JSON format so we don't need to json_encode it again.
-		$request->body = $json_order_data;
+		$request->body = $json_encoded_pp_api_order_data;
 
 		//Execute the request.
 		$client = Client::client();
@@ -241,6 +234,85 @@ class PayPal_Payment_Button_Ajax_Handler {
 
         return $paypal_order_id;
     }
+
+
+	public static function create_order_data_for_pp_api($order_data_array, $array_wpec_data){
+
+		$product_id = $array_wpec_data['product_id'];
+		Logger::log( 'Creating PayPal order data for product ID: ' . $product_id, true );
+
+		$item_for_pp_order = Products::retrieve( intval( $product_id ) );
+
+		//We need to use the item name from the database to retain the original name (without any special characters creating issues with ajax data).
+		$item_name = $item_for_pp_order->get_item_name();
+		//$item_name = htmlspecialchars($item_name);
+		$item_name = substr($item_name, 0, 127);//Limit the item name to 127 characters (PayPal limit)
+
+		//Get the item quantity and amount from the order data.
+		$quantity = $order_data_array['purchase_units'][0]['items'][0]['quantity'];
+		$item_amount = $order_data_array['purchase_units'][0]['items'][0]['unit_amount']['value'];
+
+		//$shipping_preference = $item_for_pp_order->is_digital_product() ? 'NO_SHIPPING' : 'SET_PROVIDED_ADDRESS';
+		$shipping_preference = $order_data_array['payment_source']['paypal']['experience_context']['shipping_preference'];
+		$grand_total = $order_data_array['purchase_units'][0]['amount']['value'];
+		$currency_code = $order_data_array['purchase_units'][0]['amount']['currency_code'];
+
+		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
+		$pp_api_order_data = [
+			"intent" => "CAPTURE",
+			"payment_source" => [
+				"paypal" => [
+					"experience_context" => [
+						"payment_method_preference" => "IMMEDIATE_PAYMENT_REQUIRED",
+						"shipping_preference" => $shipping_preference,
+						"user_action" => "PAY_NOW",
+					]
+				]
+			], 			
+			"purchase_units" => [
+				[
+					"amount" => [
+						"value" => (string) $grand_total, /* The grand total that will be charged for the transaction. Cast to string to make sure there is no precision issue */
+						"currency_code" => $currency_code,
+						"breakdown" => [
+							"item_total" => [
+								"currency_code" => $currency_code,
+								"value" => (string) $grand_total, /* We can break down the total amount into item_total, tax_total, shipping etc */
+							]
+						]
+					],
+					"items" => [
+						[
+							"name" => $item_name,
+							"quantity" => $quantity,
+							"unit_amount" => [
+								"value" => (string) $item_amount, /* Cast to string to make sure there is no precision issue */
+								"currency_code" => $currency_code,
+							]
+						]
+					],
+				]
+			]
+		];
+
+		//A simple order data for testing            
+		// $order_data = [
+		//     "intent" => "CAPTURE",
+		//     "purchase_units" => [
+		//         [
+		//             amount => [
+		//             currency_code => "USD",
+		//             value => "100.00",
+		//             ],
+		//         ],
+		//     ],
+		// ];
+
+		//Debug purposes.
+		//Logger::log_array_data($pp_api_order_data, true);
+
+		return $pp_api_order_data;
+	}
 
 	/**
 	 * Capture the order using the PayPal API call.

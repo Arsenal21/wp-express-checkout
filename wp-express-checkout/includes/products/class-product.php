@@ -13,6 +13,8 @@ use WP_Post;
  */
 abstract class Product {
 
+	protected $item_name = '';
+
 	/**
 	 * Product type (one_time, donation, subscription, etc.)
 	 * @var  string
@@ -40,8 +42,17 @@ abstract class Product {
 	 */
 	public function __construct( $post ) {
 		$this->post = $post;
+		$this->item_name = $post->post_title;
 		$this->wpec = Main::get_instance();
 	}
+
+	/**
+	 * Retrieves the product name.
+	 */
+	public function get_item_name() {
+		$item_name = isset( $this->item_name ) ? $this->item_name : '';
+		return $item_name;
+	}	
 
 	/**
 	 * Retrieves the product type.
