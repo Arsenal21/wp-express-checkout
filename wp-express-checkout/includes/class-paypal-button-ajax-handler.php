@@ -29,11 +29,18 @@ class PayPal_Payment_Button_Ajax_Handler {
 	 */
 	public function pp_create_order(){
 
-		//Get the order data from the request (it will be in JSON format). 
-		//Keep the order data in JSON format so we can use it directly in the API call later.
+		//Get the order data from the request. 
+		//The data will be in JSON format string (not actual JSON object). We can json_decode it to get it in json object or array format.
 		$json_order_data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : '{}';
-		//Lets have the data in array format also.
+		//Lets have the data in array format (easier to work with in PHP).
 		$order_data_array = json_decode( $json_order_data, true );
+		$encoded_item_name = isset($order_data_array['purchase_units'][0]['items'][0]['name']) ? $order_data_array['purchase_units'][0]['items'][0]['name'] : '';
+		$decoded_item_name = html_entity_decode($encoded_item_name);
+		Logger::log( 'PayPal create-order request received for item name: ' . $decoded_item_name, true );
+
+		//Set this decoded item name back to the order data.
+		$order_data_array['purchase_units'][0]['items'][0]['name'] = $decoded_item_name;
+		Logger::log_array_data($order_data_array, true);
 
 		//If the data is empty, send the error response.
 		if ( empty( $json_order_data ) ) {
@@ -49,7 +56,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 		$json_wpec_data = isset( $_POST['wpec_data'] ) ? stripslashes_deep( $_POST['wpec_data'] ) : '{}';
 		//We need the data in an array format so lets convert it.
 		$array_wpec_data = json_decode( $json_wpec_data, true );		
-		//Logger::log_array_data($array_wpec_data, true);
+		Logger::log_array_data($array_wpec_data, true);
 
 		if ( empty( $array_wpec_data ) ) {
 			wp_send_json(
@@ -75,8 +82,8 @@ class PayPal_Payment_Button_Ajax_Handler {
 		$this->do_api_pre_submission_validation($order_data_array, $array_wpec_data);
 
 
-		// Create the order using the PayPal API call (pass the order data in JSON format so we can use it directly in the API call)
-		$result = self::create_order_pp_api_call($json_order_data);
+		// Create the order using the PayPal API call (pass the order data so we can use it in the API call)
+		$result = self::create_order_pp_api_call($order_data_array);
 		if(is_wp_error($result) ){
 			//Failed to create the order.
 			wp_send_json(
@@ -185,16 +192,26 @@ class PayPal_Payment_Button_Ajax_Handler {
 	 * Create the order using the PayPal API call.
 	 * return the PayPal order ID if successful, or a WP_Error object if there is an error.
 	 */
-    public static function create_order_pp_api_call($json_order_data)
+    public static function create_order_pp_api_call($order_data_array)
     {
 		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
 
 		Logger::log( 'Creating PayPal order using the PayPal API call...', true);
+
+		//TODO - Preparing for PayPal API call.
+		// $item_name = htmlspecialchars($decoded_item_name);
+		// $item_name = substr($item_name, 0, 127);//Limit the item name to 127 characters (PayPal limit)
+
+		//TODO - We will create our order data in JSON format so we can use it in the API call.
+
+
+		$json_order_data = json_encode($order_data_array);
 		Logger::log_array_data($json_order_data, true);
+		//$json_order_string = 
 		
 		//Create the request for the PayPal API call.
 		$request = new Request( '/v2/checkout/orders', 'POST' );
-		//The order data alreaady in JSON format so we don't need to json_encode it again.
+		//The order data already in JSON format so we don't need to json_encode it again.
 		$request->body = $json_order_data;
 
 		//Execute the request.

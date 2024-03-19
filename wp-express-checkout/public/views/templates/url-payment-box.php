@@ -20,7 +20,7 @@
 
 		$wp_scripts->print_scripts( "jquery" );
 
-		$min = ( defined( 'WPEC_SCRIPT_DEBUG' ) && WPEC_SCRIPT_DEBUG ) ? '' : '.min';
+		$min = ( defined( 'WPEC_LOAD_NON_MINIFIED' ) && WPEC_LOAD_NON_MINIFIED ) ? '' : '.min';
 
 		$scriptFrontEnd = WPEC_PLUGIN_URL . "/assets/js/public{$min}.js";
 		$styleFrontEnd = WPEC_PLUGIN_URL . "/assets/css/public{$min}.css";

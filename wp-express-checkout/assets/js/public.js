@@ -386,14 +386,15 @@ var ppecHandler = function( data ) {
 					value: parseFloat( parent.data.discountAmount )
 				};
 			}
-			//console.log('Order data: ' + JSON.stringify(order_data));
+			console.log('Order data: ' + JSON.stringify(order_data));
 			//End of create order_data object.
 
 			let nonce = wpec_create_order_vars.nonce;
 
 			let wpec_data_for_create = parent.data;//parent.data is the data object that was passed to the ppecHandler constructor.
+			console.log('WPEC Data for create-order: ' + JSON.stringify(wpec_data_for_create));
 
-			let post_data = 'action=wpec_pp_create_order&data=' + JSON.stringify(order_data) + '&wpec_data=' + JSON.stringify(wpec_data_for_create) + '&_wpnonce=' + nonce;
+			let post_data = 'action=wpec_pp_create_order&data=' + encodeURIComponent(JSON.stringify(order_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data_for_create)) + '&_wpnonce=' + nonce;
 			try {
 				// Using fetch for AJAX request. This is supported in all modern browsers.
 				const response = await fetch( ppecFrontVars.ajaxUrl, {

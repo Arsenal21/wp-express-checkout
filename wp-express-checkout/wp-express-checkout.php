@@ -17,12 +17,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //Define constants
-define( 'WPEC_PLUGIN_VER', '2.3.9' );
+define( 'WPEC_PLUGIN_VER', '2.3.9t3' );
 define( 'WPEC_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 define( 'WPEC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPEC_PLUGIN_FILE', __FILE__ );
 define( 'WPEC_PRODUCT_POST_TYPE_SLUG', 'ppec-products' );//Slowy use this constant instead of hardcoding the slug in the code.
-define( 'WPEC_SCRIPT_DEBUG', false );//Set to true to load the non-minified version.
+define( 'WPEC_LOAD_NON_MINIFIED', true );//Set to true to load the non-minified version.
 
 /* ----------------------------------------------------------------------------*
  * Includes

@@ -75,7 +75,7 @@ class Main {
 		//Refer to the enqueue_admin_scripts() in the 'admin/class-admin.php' file for admin side related scripts.
 
 		// Minimized or full version
-		$min = ( defined( 'WPEC_SCRIPT_DEBUG' ) && WPEC_SCRIPT_DEBUG ) ? '' : '.min';
+		$min = ( defined( 'WPEC_LOAD_NON_MINIFIED' ) && WPEC_LOAD_NON_MINIFIED ) ? '' : '.min';
 
 		// Enqueue public.js
 		wp_enqueue_script( 'wp-ppec-frontend-script', WPEC_PLUGIN_URL . "/assets/js/public{$min}.js", array( 'jquery' ), WPEC_PLUGIN_VER, true );
