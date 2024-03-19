@@ -10,6 +10,7 @@ namespace WP_Express_Checkout;
 class Order_Summary_Table {
 
 	protected $order, $currency;
+	public $args;
 
 	public function __construct( $order, $args = array() ) {
 
