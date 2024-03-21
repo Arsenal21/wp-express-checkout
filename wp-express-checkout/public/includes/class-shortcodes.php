@@ -128,6 +128,7 @@ class Shortcodes {
 				'shipping'        => 0,
 				'shipping_per_quantity' => 0,
 				'shipping_enable' => 0,
+				'is_digital_product' => $product->is_digital_product(),
 				'tax'             => 0,
 				'quantity'        => 1,
 				'url'             => '',

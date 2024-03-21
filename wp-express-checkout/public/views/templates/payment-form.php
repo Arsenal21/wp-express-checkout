@@ -142,10 +142,8 @@
 			</div>
 		</div>
 		<?php 
-		// Check if the product is digital or not. If it is not digital, then show the billing address fields.
-		$the_product = WP_Express_Checkout\Products::retrieve( intval( $product_id ) );
-		//By default, hide the billing address fields for digital products.
-		$hide_billing_address_fields = $the_product->is_digital_product();
+		// Check if the product is digital or not. If it is not digital, then show the billing address fields. By default, hide the billing address fields for digital products.
+		$hide_billing_address_fields = $is_digital_product;
 		//Trigger a filter that can be used to override the hiding of the billing address fields.
 		$hide_billing_address_fields = apply_filters( 'wpec_hide_billing_address_fields', $hide_billing_address_fields );
 
