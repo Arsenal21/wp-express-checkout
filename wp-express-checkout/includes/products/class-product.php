@@ -223,6 +223,15 @@ abstract class Product {
 		return (bool) $this->post->wpec_product_shipping_enable;
 	}
 
+	/**
+	 * Whether product type is digital.
+	 * 
+	 * It check if the 'This is a Physical Product' option is checked in the product edit page and
+	 * also checks if any kind of shipping charge is specified (for backward compatibility) to determine
+	 * whether its a digital product or not.
+	 * 
+	 * @return bool
+	 */
 	public function is_digital_product(){
 		$base_shipping = $this->get_shipping();
 		$shipping_per_quantity = $this->get_shipping_per_quantity();

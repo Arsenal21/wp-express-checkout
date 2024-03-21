@@ -476,12 +476,44 @@ class ShortcodesTest extends \WP_UnitTestCase {
 
 	public function shortcode_args() {
 		$defaults = Main::get_defaults();
-		$args = [
+		$args_for_physical_product = [
+			'name'            => 'Item Name',
+			'price'           => 0,
+			'shipping'        => 2,
+			'shipping_enable' => 1,
+			'shipping_per_quantity' => 3,
+			'is_digital_product' => false,
+			'tax'             => 0,
+			'quantity'        => 1,
+			'url'             => '',
+			'product_id'      => '',
+			'thumbnail_url'   => '',
+			'custom_amount'   => 0,
+			'custom_quantity' => 0,
+			'currency'        => $defaults['currency_code'],
+			'btn_shape'       => $defaults['btn_shape'],
+			'btn_type'        => $defaults['btn_type'],
+			'btn_height'      => 25,
+			'btn_width'       => 0,
+			'btn_layout'      => $defaults['btn_layout'],
+			'btn_color'       => $defaults['btn_color'],
+			'coupons_enabled' => $defaults['coupons_enabled'],
+			'button_text'     => $defaults['button_text'],
+			'use_modal'       => $defaults['use_modal'],
+			'thank_you_url'   => $defaults['thank_you_url'],
+			'variations'      => [],
+			'stock_enabled'   => false,
+			'stock_items'     => 0,
+			'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
+		];
+
+		$args_for_digital_product = [
 			'name'            => 'Item Name',
 			'price'           => 0,
 			'shipping'        => 0,
 			'shipping_enable' => 0,
 			'shipping_per_quantity' => 0,
+			'is_digital_product' => true,
 			'tax'             => 0,
 			'quantity'        => 1,
 			'url'             => '',
@@ -506,8 +538,11 @@ class ShortcodesTest extends \WP_UnitTestCase {
 			'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
 		];
 		return [
-			[ $args, [ 'is_live' => 0, 'sandbox_client_id' => 'test' ] ],
-			[ $args, [ 'is_live' => 1, 'live_client_id' => 'test' ] ],
+			[ $args_for_physical_product, [ 'is_live' => 0, 'sandbox_client_id' => 'test' ] ],
+			[ $args_for_physical_product, [ 'is_live' => 1, 'live_client_id' => 'test' ] ],
+			
+			[ $args_for_digital_product, [ 'is_live' => 0, 'sandbox_client_id' => 'test' ] ],
+			[ $args_for_digital_product, [ 'is_live' => 1, 'live_client_id' => 'test' ] ],
 		];
 	}
 

@@ -197,6 +197,13 @@ class ProductTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers WP_Express_Checkout\Products\Product::is_digital_product
+	 */
+	public function testIs_digital_product() {
+		$this->assertEquals( false, $this->object->is_digital_product() );
+	}
+
+	/**
 	 * @covers WP_Express_Checkout\Products\Product::get_tax
 	 */
 	public function testGet_tax() {
