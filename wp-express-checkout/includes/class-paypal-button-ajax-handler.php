@@ -446,7 +446,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 						$variation_price = Utils::round_price($variation['prices'][$applied_var_index]);
 						$variation_price_total += $variation_price;
 					}
-					if ($variation_price_total > 0) {
+					if (!empty($variation_price_total)) {
 						$construct_final_price = get_post_meta( $product_id, 'wpec_product_hide_amount_input', true );
 						$product_price = !empty($construct_final_price) ? $variation_price_total : $product_price + $variation_price_total;
 					}

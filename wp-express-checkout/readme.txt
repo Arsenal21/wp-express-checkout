@@ -163,6 +163,8 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+= WIP =
+- Negative price variation issue fixed.
 
 = 2.3.10 =
 - Added a new action hook 'before_wpec_thank_you_page_shortcode_execution' that can be used to redirect from the thank you page shortcode.
