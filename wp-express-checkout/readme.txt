@@ -166,6 +166,8 @@ None
 
 = 2.3.11 =
 - Product variation feature related: Negative price variation issue fixed for the pre-api submission check.
+- Reorganized some of the product data that is submitted to the PayPal API.
+- Minor unit testing related changes.
 
 = 2.3.10 =
 - Added a new action hook 'before_wpec_thank_you_page_shortcode_execution' that can be used to redirect from the thank you page shortcode.
