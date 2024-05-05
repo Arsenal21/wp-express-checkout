@@ -9,7 +9,7 @@ use WP_Express_Checkout\Debug\Logger;
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Shortcodes;
 
-defined( 'ABSPATH' ) || die( 'No script kiddies please!' ); // @codeCoverageIgnore
+defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 
 class WooCommerce_Gateway extends WC_Payment_Gateway {
 
@@ -24,7 +24,9 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 
 	/** @var Main */
 	public $wpec;
-
+	
+	public $notify_url;
+	
 	public function __construct() {
 		$this->id                 = 'wp-express-checkout';
 		$this->method_title       = __( 'WP Express Checkout Gateway', 'wp-express-checkout' );
