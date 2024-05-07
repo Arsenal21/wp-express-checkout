@@ -28,6 +28,7 @@ return array(
     'WP_Express_Checkout\\Integrations\\License_Manager' => $baseDir . '/includes/integrations/license-manager/class-license-manager.php',
     'WP_Express_Checkout\\Integrations\\Simple_WP_Membership' => $baseDir . '/includes/integrations/simple-wp-membership/class-simple-wp-membership.php',
     'WP_Express_Checkout\\Integrations\\WooCommerce_Gateway' => $baseDir . '/includes/integrations/woocommerce/class-woocommerce-gateway.php',
+    'WP_Express_Checkout\\Integrations\\WooCommerce_Payment_Button' => $baseDir . '/includes/integrations/woocommerce/class-woocommerce-payment-button.php',
     'WP_Express_Checkout\\Integrations\\WooCommerce_Payment_Processor' => $baseDir . '/includes/integrations/woocommerce/class-woocommerce-payment-processor.php',
     'WP_Express_Checkout\\Main' => $baseDir . '/public/class-main.php',
     'WP_Express_Checkout\\Order' => $baseDir . '/includes/class-order.php',

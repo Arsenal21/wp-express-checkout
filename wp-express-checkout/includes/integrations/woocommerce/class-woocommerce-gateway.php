@@ -51,7 +51,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 		}
 		//add_action( 'woocommerce_api_' . strtolower( __CLASS__ ), array( $this, 'check_response' ) );
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
-        add_filter( 'wpec_modal_window_title', array( $this, 'modal_window_title' ), 10, 2 );
+//        add_filter( 'wpec_modal_window_title', array( $this, 'modal_window_title' ), 10, 2 ); // TODO: Code reduced
 	}
 
 	/**
@@ -155,6 +155,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 			'tos_enabled'     => $this->wpec->get_setting( 'tos_enabled' ),
 			'url'             => '',
 			'use_modal'       => true,
+			'modal_title'     => $this->get_option( 'popup_title' ),
 			'variations'      => array(),
 			'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
 		);
@@ -288,11 +289,11 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	 * @param array $args
 	 * @return string
 	 */
-	public function modal_window_title( $title, $args ) {
-		if ( empty( $args['product_id'] ) ) {
-			$title = $this->get_option( 'popup_title' );
-		}
-		return $title;
-	}
+//	public function modal_window_title( $title, $args ) {
+//		if ( empty( $args['product_id'] ) ) {
+//			$title = $this->get_option( 'popup_title' );
+//		}
+//		return $title;
+//	}
 
 }
