@@ -52,3 +52,5 @@ tests/unit.suite.yml
 /nbproject/private/
 
 wp-express-checkout.zip
+other-helpful-files/temp/
+.idea

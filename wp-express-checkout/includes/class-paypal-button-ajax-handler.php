@@ -413,7 +413,18 @@ class PayPal_Payment_Button_Ajax_Handler {
 		
 		$product_id = $array_wpec_data['product_id'];
 
-		$this->item_for_validation = Products::retrieve( intval( $product_id ) );
+		// Retrieve product item.
+		try {
+			$this->item_for_validation = Products::retrieve( intval( $product_id ) );
+		}catch (\Exception $exception){
+			Logger::log( 'API pre-submission validation failed. '. $exception->getMessage(), true );
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Validation Error: ', 'wp-express-checkout' ) . $exception->getMessage(),
+				)
+			);
+		}
 
 		//Trigger action hook that can be used to do additional API pre-submission validation from an addon.
 		do_action( 'wpec_before_api_pre_submission_validation', $this->item_for_validation, $order_data_array, $array_wpec_data );		
