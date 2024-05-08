@@ -46,8 +46,6 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 
 		self::$log_enabled = $this->wpec->get_setting( 'enable_debug_logging' );
 
-        new WooCommerce_Payment_Button_Ajax_Handler();
-
 		if ( is_admin() ) {
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		}
@@ -248,8 +246,9 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 						//$( '#place_order' ).before( data.data );
 						$( '.wpec-wc-button-container' ).html( data.data );
 						//$( 'form.processing' ).unblock();
-						new ppecHandler( wpec_paypal_button_0_data );
-						new wpecModal( $ );
+						new ppecWoocommerceHandler( wpec_paypal_button_0_data );
+						new wpecModal( $ ); // TODO: This need to be handled.
+
 						$( '.wpec-modal-open' ).trigger( 'click' );
 						$( 'form.processing' ).removeClass( 'processing' ).unblock();
 					}

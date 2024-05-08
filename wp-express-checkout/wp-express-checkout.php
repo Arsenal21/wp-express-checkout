@@ -47,6 +47,7 @@ function wpec_load_classes() {
 	new WP_Express_Checkout\Init();
 	new WP_Express_Checkout\Integrations();
 	new WP_Express_Checkout\PayPal_Payment_Button_Ajax_Handler();
+	new WP_Express_Checkout\Integrations\WooCommerce_Payment_Button_Ajax_Handler();
 
 	// Load admin side class
 	if ( is_admin() ) {
