@@ -7,7 +7,6 @@ use WC_Order;
 use WC_Payment_Gateway;
 use WP_Express_Checkout\Debug\Logger;
 use WP_Express_Checkout\Main;
-use WP_Express_Checkout\Shortcodes;
 
 defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 
@@ -51,7 +50,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 		}
 		//add_action( 'woocommerce_api_' . strtolower( __CLASS__ ), array( $this, 'check_response' ) );
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
-		add_filter( 'wpec_modal_window_title', array( $this, 'modal_window_title' ), 10, 2 );
+//        add_filter( 'wpec_modal_window_title', array( $this, 'modal_window_title' ), 10, 2 ); // TODO: Code reduced
 	}
 
 	/**
@@ -155,21 +154,27 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 			'tos_enabled'     => $this->wpec->get_setting( 'tos_enabled' ),
 			'url'             => '',
 			'use_modal'       => true,
+			'modal_title'     => $this->get_option( 'popup_title' ),
 			'variations'      => array(),
+			'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
 		);
 
 		$this->wpec_wc_order = $order;
 
 		add_filter( 'wpec_paypal_sdk_args', array( $this, 'paypal_sdk_args' ), 10 );
 
-		$button_sc = Shortcodes::get_instance();
+//		$button_sc = Shortcodes::get_instance(); // TODO: Line Replaced
 
-		echo $button_sc->generate_pp_express_checkout_button( $form_args );
+        $woo_button_sc = new WooCommerce_Payment_Button($order, $this->wpec);
 
-		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $form_args['name'] );
-		$trans_data = get_transient( $trans_name );
-		$trans_data['wc_id'] = $order->get_id();
-		set_transient( $trans_name, $trans_data, 2 * 3600 );
+		// echo $button_sc->generate_pp_express_checkout_button( $form_args ); // TODO: Line Replaced
+		echo $woo_button_sc->wpec_generate_woo_payment_button( $form_args );
+
+        // TODO: Equivalent code moved in generate_pp_express_checkout_button()
+//		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $form_args['name'] );
+//		$trans_data = get_transient( $trans_name );
+//		$trans_data['wc_id'] = $order->get_id();
+//		set_transient( $trans_name, $trans_data, 2 * 3600 );
 
 		?>
 		<script>
@@ -240,8 +245,9 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 						//$( '#place_order' ).before( data.data );
 						$( '.wpec-wc-button-container' ).html( data.data );
 						//$( 'form.processing' ).unblock();
-						new ppecHandler( wpec_paypal_button_0_data );
-						new wpecModal( $ );
+						new ppecWoocommerceHandler( wpec_paypal_button_0_data );
+						new wpecModal( $ ); // TODO: This need to be replaced.
+
 						$( '.wpec-modal-open' ).trigger( 'click' );
 						$( 'form.processing' ).removeClass( 'processing' ).unblock();
 					}
@@ -283,11 +289,11 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	 * @param array $args
 	 * @return string
 	 */
-	public function modal_window_title( $title, $args ) {
-		if ( empty( $args['product_id'] ) ) {
-			$title = $this->get_option( 'popup_title' );
-		}
-		return $title;
-	}
+//	public function modal_window_title( $title, $args ) {
+//		if ( empty( $args['product_id'] ) ) {
+//			$title = $this->get_option( 'popup_title' );
+//		}
+//		return $title;
+//	}
 
 }
