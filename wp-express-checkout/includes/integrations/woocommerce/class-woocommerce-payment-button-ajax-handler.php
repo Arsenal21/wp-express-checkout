@@ -228,109 +228,107 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 
 
 	public static function create_order_data_for_pp_api($order_data_array, $array_wpec_data){
-
-		$product_id = $array_wpec_data['product_id'];
-		Logger::log( 'Creating PayPal order data for product ID: ' . $product_id, true );
-
-		$item_for_pp_order = \WP_Express_Checkout\Products::retrieve( intval( $product_id ) );
+		Logger::log( 'Creating PayPal order data for Woocommerce Checkout', true );
 
 		//We need to use the item name from the database to retain the original name (without any special characters creating issues with data coming from ajax request).
-		$item_name = $item_for_pp_order->get_item_name();
-		$item_name = substr($item_name, 0, 127);//Limit the item name to 127 characters (PayPal limit)
+		// $item_name = $item_for_pp_order->get_item_name();
+		// $item_name = substr($item_name, 0, 127);//Limit the item name to 127 characters (PayPal limit)
 
-		//$shipping_preference = $item_for_pp_order->is_digital_product() ? 'NO_SHIPPING' : 'SET_PROVIDED_ADDRESS';
-		$shipping_preference = $order_data_array['payment_source']['paypal']['experience_context']['shipping_preference'];
+		// //$shipping_preference = $item_for_pp_order->is_digital_product() ? 'NO_SHIPPING' : 'SET_PROVIDED_ADDRESS';
+		// $shipping_preference = $order_data_array['payment_source']['paypal']['experience_context']['shipping_preference'];
 
-		//Get the item quantity and amount from the order data.
-		$quantity = $order_data_array['purchase_units'][0]['items'][0]['quantity'];
-		$item_amount = $order_data_array['purchase_units'][0]['items'][0]['unit_amount']['value'];
+		// //Get the item quantity and amount from the order data.
+		// $quantity = $order_data_array['purchase_units'][0]['items'][0]['quantity'];
+		// $item_amount = $order_data_array['purchase_units'][0]['items'][0]['unit_amount']['value'];
 
-		$currency_code = $order_data_array['purchase_units'][0]['amount']['currency_code'];
-		$grand_total = $order_data_array['purchase_units'][0]['amount']['value'];
-		$sub_total = $order_data_array['purchase_units'][0]['amount']['breakdown']['item_total']['value']; //This should be equal to (item_amount * quantity)
-		//Transaction specific amounts for purchase_units breakdowns (may or may not be available in the order data array depending on the product configuration).
-		$shipping_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['shipping']['value'])? $order_data_array['purchase_units'][0]['amount']['breakdown']['shipping']['value'] : 0;
-		$tax_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['tax_total']['value']) ? $order_data_array['purchase_units'][0]['amount']['breakdown']['tax_total']['value'] : 0;
-		$discount_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['discount']['value']) ? $order_data_array['purchase_units'][0]['amount']['breakdown']['discount']['value'] : 0;		
+		// $currency_code = $order_data_array['purchase_units'][0]['amount']['currency_code'];
+		// $grand_total = $order_data_array['purchase_units'][0]['amount']['value'];
+		// $sub_total = $order_data_array['purchase_units'][0]['amount']['breakdown']['item_total']['value']; //This should be equal to (item_amount * quantity)
+		// //Transaction specific amounts for purchase_units breakdowns (may or may not be available in the order data array depending on the product configuration).
+		// $shipping_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['shipping']['value'])? $order_data_array['purchase_units'][0]['amount']['breakdown']['shipping']['value'] : 0;
+		// $tax_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['tax_total']['value']) ? $order_data_array['purchase_units'][0]['amount']['breakdown']['tax_total']['value'] : 0;
+		// $discount_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['discount']['value']) ? $order_data_array['purchase_units'][0]['amount']['breakdown']['discount']['value'] : 0;		
 
 		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
-		$pp_api_order_data = [
-			"intent" => "CAPTURE",
-			"payment_source" => [
-				"paypal" => [
-					"experience_context" => [
-						"payment_method_preference" => "IMMEDIATE_PAYMENT_REQUIRED",
-						"shipping_preference" => $shipping_preference,
-						"user_action" => "PAY_NOW",
-					]
-				]
-			], 			
-			"purchase_units" => [
-				[
-					"amount" => [
-						"value" => (string) $grand_total, /* The grand total that will be charged for the transaction. Cast to string to make sure there is no precision issue */
-						"currency_code" => $currency_code,
-						"breakdown" => [
-							"item_total" => [
-								"currency_code" => $currency_code,
-								"value" => (string) $sub_total, /* We can break down the total amount into item_total, tax_total, shipping etc */
-							]
-						]
-					],
-					"items" => [
-						[
-							"name" => $item_name,
-							"quantity" => $quantity,
-							"unit_amount" => [
-								"value" => (string) $item_amount, /* Cast to string to make sure there is no precision issue */
-								"currency_code" => $currency_code,
-							]
-						]
-					],
-				]
-			]
-		];
-
-		//Add the shipping amount if available.
-		if( isset($shipping_amt) && $shipping_amt > 0){
-			$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['shipping'] = [
-				"currency_code" => $currency_code,
-				"value" => (string) $shipping_amt, /* Cast to string to make sure there is no precision issue */
-			];
-		}
-
-		//Add the tax amount if available.
-		if( isset($tax_amt) && $tax_amt > 0){
-			$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['tax_total'] = [
-				"currency_code" => $currency_code,
-				"value" => (string) $tax_amt, /* Cast to string to make sure there is no precision issue */
-			];
-		}
-
-		//Add the discount amount if available.
-		if( isset($discount_amt) && $discount_amt > 0){
-			$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['discount'] = [
-				"currency_code" => $currency_code,
-				"value" => (string) $discount_amt, /* Cast to string to make sure there is no precision issue */
-			];
-		}
-
-
-		//A simple order data for testing            
-		// $order_data = [
-		//     "intent" => "CAPTURE",
-		//     "purchase_units" => [
-		//         [
-		//             amount => [
-		//             currency_code => "USD",
-		//             value => "100.00",
-		//             ],
-		//         ],
-		//     ],
+		// $pp_api_order_data = [
+		// 	"intent" => "CAPTURE",
+		// 	"payment_source" => [
+		// 		"paypal" => [
+		// 			"experience_context" => [
+		// 				"payment_method_preference" => "IMMEDIATE_PAYMENT_REQUIRED",
+		// 				"shipping_preference" => $shipping_preference,
+		// 				"user_action" => "PAY_NOW",
+		// 			]
+		// 		]
+		// 	], 			
+		// 	"purchase_units" => [
+		// 		[
+		// 			"amount" => [
+		// 				"value" => (string) $grand_total, /* The grand total that will be charged for the transaction. Cast to string to make sure there is no precision issue */
+		// 				"currency_code" => $currency_code,
+		// 				"breakdown" => [
+		// 					"item_total" => [
+		// 						"currency_code" => $currency_code,
+		// 						"value" => (string) $sub_total, /* We can break down the total amount into item_total, tax_total, shipping etc */
+		// 					]
+		// 				]
+		// 			],
+		// 			"items" => [
+		// 				[
+		// 					"name" => $item_name,
+		// 					"quantity" => $quantity,
+		// 					"unit_amount" => [
+		// 						"value" => (string) $item_amount, /* Cast to string to make sure there is no precision issue */
+		// 						"currency_code" => $currency_code,
+		// 					]
+		// 				]
+		// 			],
+		// 		]
+		// 	]
 		// ];
 
+		// //Add the shipping amount if available.
+		// if( isset($shipping_amt) && $shipping_amt > 0){
+		// 	$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['shipping'] = [
+		// 		"currency_code" => $currency_code,
+		// 		"value" => (string) $shipping_amt, /* Cast to string to make sure there is no precision issue */
+		// 	];
+		// }
+
+		// //Add the tax amount if available.
+		// if( isset($tax_amt) && $tax_amt > 0){
+		// 	$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['tax_total'] = [
+		// 		"currency_code" => $currency_code,
+		// 		"value" => (string) $tax_amt, /* Cast to string to make sure there is no precision issue */
+		// 	];
+		// }
+
+		// //Add the discount amount if available.
+		// if( isset($discount_amt) && $discount_amt > 0){
+		// 	$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['discount'] = [
+		// 		"currency_code" => $currency_code,
+		// 		"value" => (string) $discount_amt, /* Cast to string to make sure there is no precision issue */
+		// 	];
+		// }
+
+
+		//A simple order data for testing
+		$currency_code = isset($order_data_array['purchase_units'][0]['amount']['currency_code']) ? $order_data_array['purchase_units'][0]['amount']['currency_code'] : 'USD';
+		$woo_order_grand_total = $order_data_array['purchase_units'][0]['amount']['breakdown']['item_total']['value'];
+		$pp_api_order_data = [
+		    "intent" => "CAPTURE",
+		    "purchase_units" => [
+		        [
+		            "amount" => [
+		            "currency_code" => $currency_code,
+		            "value" => (string)$woo_order_grand_total,
+		            ],
+		        ],
+		    ],
+		];
+
 		//Debug purposes.
-		//Logger::log_array_data($pp_api_order_data, true);
+		Logger::log_array_data($pp_api_order_data, true);
 
 		return $pp_api_order_data;
 	}
