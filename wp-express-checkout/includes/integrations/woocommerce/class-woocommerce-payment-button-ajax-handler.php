@@ -64,7 +64,7 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 		}		
 
 		// Verify nonce.
-		if ( ! check_ajax_referer( 'wpec-create-order-js-ajax-nonce', '_wpnonce', false ) ) {
+		if ( ! check_ajax_referer( 'wpec-woocommerce-create-order-js-ajax-nonce', '_wpnonce', false ) ) {
 			wp_send_json(
 				array(
 					'success' => false,

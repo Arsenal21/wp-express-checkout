@@ -83,7 +83,7 @@ class WooCommerce_Payment_Button {
 				'product_id'  => $product_id
 			), $button_html );
 		}
-        $nonce = wp_create_nonce( $button_id . $product_id );
+        $nonce = wp_create_nonce( 'wpec-woocommerce-create-order-js-ajax-nonce' );
 		Logger::log( "Code Come here >>> Before data process", true );
 		$data = array(
 			'id'                    => $button_id,
@@ -128,6 +128,7 @@ class WooCommerce_Payment_Button {
         ?>
 
         <script type="text/javascript">
+            // TODO: Code replaced
             //var wpec_<?php //echo $this->button_id;?>//_data = <?php //echo json_encode( $data )?>//;
             //jQuery( function( $ ) {
             //    $( document ).on( "wpec_paypal_sdk_loaded", function() {
@@ -175,7 +176,6 @@ class WooCommerce_Payment_Button {
                         onInit: function (data, actions)  {
                             actions.enable();
                         },
-
 
                         /**
                          * OnClick is called when the button is clicked
@@ -275,6 +275,7 @@ class WooCommerce_Payment_Button {
                          * See documentation: https://developer.paypal.com/sdk/js/reference/#link-onapprove
                          */
                         onApprove: async function (data, actions) {
+                            // TODO: Need to wonk on.
                             console.log('Successfully created a transaction.');
                         },
 

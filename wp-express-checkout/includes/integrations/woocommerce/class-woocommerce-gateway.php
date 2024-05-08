@@ -7,7 +7,6 @@ use WC_Order;
 use WC_Payment_Gateway;
 use WP_Express_Checkout\Debug\Logger;
 use WP_Express_Checkout\Main;
-use WP_Express_Checkout\Shortcodes;
 
 defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 
@@ -247,7 +246,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 						$( '.wpec-wc-button-container' ).html( data.data );
 						//$( 'form.processing' ).unblock();
 						new ppecWoocommerceHandler( wpec_paypal_button_0_data );
-						new wpecModal( $ ); // TODO: This need to be handled.
+						new wpecModal( $ ); // TODO: This need to be replaced.
 
 						$( '.wpec-modal-open' ).trigger( 'click' );
 						$( 'form.processing' ).removeClass( 'processing' ).unblock();
