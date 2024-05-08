@@ -106,11 +106,11 @@ class WooCommerce_Payment_Button {
 				'product_id'  => $product_id
 			), $button_html );
 		}
-
+        $nonce = wp_create_nonce( $button_id . $product_id );
 		Logger::log( "Code Come here >>> Before data process", true );
 		$data = array(
 			'id'                    => $button_id,
-			'nonce'                 => wp_create_nonce( $button_id . $product_id ),
+			'nonce'                 => $nonce,
 			'env'                   => $env,
 			'client_id'             => $client_id,
 			'price'                 => $price,
@@ -156,6 +156,305 @@ class WooCommerce_Payment_Button {
                     new ppecHandler( wpec_<?php echo $this->button_id; ?>_data )
                 } );
             } );
+        </script>
+        <script type="text/javascript">
+            document.addEventListener( "wpec_paypal_sdk_loaded", function() {
+                //Anything that goes here will only be executed after the PayPal SDK is loaded.
+                console.log('PayPal JS SDK is loaded.');
+
+                /**
+                 * See documentation: https://developer.paypal.com/sdk/js/reference/
+                 */
+                paypal.Buttons({
+                    /**
+                     * Optional styling for buttons.
+                     *
+                     * See documentation: https://developer.paypal.com/sdk/js/reference/#link-style
+                     */
+                    style: {
+                        color: '<?php echo esc_js($args['btn_color']); ?>',
+                        shape: '<?php echo esc_js($args['btn_shape']); ?>',
+                        height: <?php echo esc_js($args['btn_height']); ?>,
+                        label: '<?php echo esc_js($args['btn_type']); ?>',
+                        layout: '<?php echo esc_js($args['btn_layout']); ?>',
+                    },
+
+                    // Triggers when the button first renders.
+                    onInit: onInitHandler,
+
+                    // Triggers when the button is clicked.
+                    onClick: onClickHandler,
+
+                    // Setup the transaction.
+                    createOrder: createOrderHandler,
+
+                    // Handle the onApprove event.
+                    onApprove: onApproveHandler,
+
+                    // Handle unrecoverable errors.
+                    onError: onErrorHandler,
+
+                    // Handles onCancel event.
+                    onCancel: onCancelHandler,
+
+                })
+                    .render('#<?php echo esc_js($button_id); ?>')
+                    .catch((err) => {
+                        console.error('PayPal Buttons failed to render');
+                    });
+
+                /**
+                 * OnInit is called when the button first renders.
+                 *
+                 * See documentation: https://developer.paypal.com/sdk/js/reference/#link-oninitonclick
+                 */
+                function onInitHandler(data, actions)  {
+                    actions.enable();
+                }
+
+                /**
+                 * OnClick is called when the button is clicked
+                 *
+                 * See documentation: https://developer.paypal.com/sdk/js/reference/#link-oninitonclick
+                 */
+                function onClickHandler(){
+
+                }
+
+                /**
+                 * This is called when the buyer clicks the PayPal button, which launches the PayPal Checkout
+                 * window where the buyer logs in and approves the transaction on the paypal.com website.
+                 *
+                 * See documentation: https://developer.paypal.com/sdk/js/reference/#link-createorder
+                 */
+                async function createOrderHandler() {
+                    // Create the order in PayPal using the PayPal API.
+                    // https://developer.paypal.com/docs/checkout/standard/integrate/
+                    // The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.
+                    console.log('Setting up the AJAX request for create-order call.');
+
+                    // Create order_data object to be sent to the server.
+                    let price_amount = parseFloat( <?php echo $args['price']; ?> );
+                    let roundedTotal = price_amount.toFixed(2); //round to 2 decimal places, to make sure that the API call dont fail.
+                    price_amount = parseFloat(roundedTotal); //convert to number
+                    let itemTotalValueRoundedAsNumber = price_amount;
+
+                    const order_data = { // TODO: Need to Fix This.
+                        intent: 'CAPTURE',
+                        payment_source: {
+                            paypal: {
+                                experience_context: {
+                                    payment_method_preference: 'IMMEDIATE_PAYMENT_REQUIRED',
+                                    shipping_preference: 'NO_SHIPPING',
+                                    user_action: 'PAY_NOW',
+                                }
+                            }
+                        },
+                        purchase_units: [ {
+                            amount: {
+                                value: price_amount,
+                                currency_code: '<?php echo $args['currency']; ?>',
+                                breakdown: {
+                                    item_total: {
+                                        currency_code: '<?php echo $args['currency']; ?>',
+                                        value: itemTotalValueRoundedAsNumber
+                                    }
+                                }
+                            },
+                            items: [ {
+                                name: '<?php echo $args['name']; ?>',
+                                quantity: <?php echo $args['quantity']; ?>,
+                                unit_amount: {
+                                    value: price_amount,
+                                    currency_code: '<?php echo $args['currency']; ?>'
+                                }
+                            } ]
+                        } ]
+                    };
+
+                    const wpec_data_for_create = <?php echo json_encode($args); ?>;
+                    console.log("Ispect order_data: ", order_data);
+                    console.log("Ispect wpec_data: ", JSON.parse(wpec_data_for_create));
+                    let post_data = 'action=wpec_woocommerce_pp_create_order&data=' + encodeURIComponent(JSON.stringify(order_data)) + '&wpec_data=' + encodeURIComponent(wpec_data_for_create) + '&_wpnonce=' + nonce;
+                    try {
+                        // Using fetch for AJAX request. This is supported in all modern browsers.
+                        const response = await fetch("<?php echo admin_url( 'admin-ajax.php' ); ?>", {
+                            method: "post",
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: post_data
+                        });
+
+                        const response_data = await response.json();
+
+                        if (response_data.order_id) {
+                            console.log('Create-order API call to PayPal completed successfully.');
+                            //If we need to see the order details, uncomment the following line.
+                            //const order_data = response_data.order_data;
+                            //console.log('Order data: ' + JSON.stringify(order_data));
+                            return response_data.order_id;
+                        } else {
+                            const error_message = response_data.err_msg
+                            console.error('Error occurred during create-order call to PayPal. ' + error_message);
+                            throw new Error(error_message);//This will trigger the alert in the "catch" block below.
+                        }
+                    } catch (error) {
+                        console.error(error.message);
+                        alert('Could not initiate PayPal Checkout...\n\n' + error.message);
+                    }
+                }
+
+                /**
+                 * Captures the funds from the transaction and shows a message to the buyer to let them know the
+                 * transaction is successful. The method is called after the buyer approves the transaction on paypal.com.
+                 *
+                 * See documentation: https://developer.paypal.com/sdk/js/reference/#link-onapprove
+                 */
+                async function onApproveHandler(data, actions) {
+                    console.log('Successfully created a transaction.');
+
+                    //Show the spinner while we process this transaction.
+                    const pp_button_container = document.getElementById('<?php echo esc_js($on_page_embed_button_id); ?>');
+                    const pp_button_spinner_container = wspsc_getClosestElement(pp_button_container, '.wpsc-pp-button-spinner-container', '.shopping_cart');
+                    pp_button_container.style.display = 'none'; //Hide the buttons
+                    pp_button_spinner_container.style.display = 'inline-block'; //Show the spinner.
+
+                    // Capture the order in PayPal using the PayPal API.
+                    // https://developer.paypal.com/docs/checkout/standard/integrate/
+                    // The server-side capture-order API is used. Then the Capture-ID is returned.
+                    console.log('Setting up the AJAX request for capture-order call.');
+                    let pp_bn_data = {};
+                    pp_bn_data.order_id = data.orderID;
+                    pp_bn_data.cart_id = '<?php echo esc_js($cart_id); ?>';
+                    pp_bn_data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
+                    //Add custom_field data. It is important to encode the custom_field data so it doesn't mess up the data with & character.
+                    //const custom_data = document.getElementById('<?php echo esc_attr($on_page_embed_button_id."-custom-field"); ?>').value;
+                    //pp_bn_data.custom_field = encodeURIComponent(custom_data);
+
+                    //Ajax action: <prefix>_pp_capture_order
+                    let post_data = 'action=wpec_woocommerce_pp_capture_order&data=' + JSON.stringify(pp_bn_data) + '&_wpnonce=<?php echo $wp_nonce; ?>';
+                    try {
+                        const response = await fetch("<?php echo admin_url( 'admin-ajax.php' ); ?>", {
+                            method: "post",
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: post_data
+                        });
+
+                        const response_data = await response.json();
+                        const txn_data = response_data.txn_data;
+                        const error_detail = txn_data?.details?.[0];
+                        const error_msg = response_data.error_msg;//Our custom error message.
+                        // Three cases to handle:
+                        // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+                        // (2) Other non-recoverable errors -> Show a failure message
+                        // (3) Successful transaction -> Show confirmation or thank you message
+
+                        if (response_data.capture_id) {
+                            // Successful transaction -> Show confirmation or thank you message
+                            console.log('Capture-order API call to PayPal completed successfully.');
+
+                            //Redirect to the Thank you page URL if it is set.
+                            return_url = '<?php echo esc_url_raw($return_url); ?>';
+                            if( return_url ){
+                                //redirect to the Thank you page URL.
+                                console.log('Redirecting to the Thank you page URL: ' + return_url);
+                                window.location.href = return_url;
+                                return;
+                            } else {
+                                //No return URL is set. Just show a success message.
+                                console.log('No return URL is set in the settings. Showing a success message.');
+
+                                //We are going to show the success message in the shopping_cart's container.
+                                txn_success_msg = '<?php echo esc_attr($txn_success_message).' '.esc_attr($txn_success_extra_msg); ?>';
+                                // Select all elements with the class 'shopping_cart'
+                                var shoppingCartDivs = document.querySelectorAll('.shopping_cart');
+
+                                // Loop through the NodeList and update each element
+                                shoppingCartDivs.forEach(function(div, index) {
+                                    div.innerHTML = '<div id="wpsc-cart-txn-success-msg-' + index + '" class="wpsc-cart-txn-success-msg">' + txn_success_msg + '</div>';
+                                });
+
+                                //Note: We need to use on_page_cart_div_ids for compact carts.
+                                //Then we will be able to use the on_page_cart_div_ids array to get the cart div ids of the page (including the compact carts)
+
+                                // Scroll to the success message container of the cart we are interacting with.
+                                const interacted_cart_element = document.getElementById('wpsc_shopping_cart_' + <?php echo esc_attr($carts_cnt); ?>);
+                                if (interacted_cart_element) {
+                                    interacted_cart_element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }
+                                return;
+                            }
+
+                        } else if (error_detail?.issue === "INSTRUMENT_DECLINED") {
+                            // Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+                            console.log('Recoverable INSTRUMENT_DECLINED error. Calling actions.restart()');
+                            return actions.restart();
+                        } else if ( error_msg && error_msg.trim() !== '' ) {
+                            //Our custom error message from the server.
+                            console.error('Error occurred during PayPal checkout process.');
+                            console.error( error_msg );
+                            alert( error_msg );
+                        } else {
+                            // Other non-recoverable errors -> Show a failure message
+                            console.error('Non-recoverable error occurred during PayPal checkout process.');
+                            console.error( error_detail );
+                            //alert('Unexpected error occurred with the transaction. Enable debug logging to get more details.\n\n' + JSON.stringify(error_detail));
+                        }
+
+                        //Return the button and the spinner back to their orignal display state.
+                        pp_button_container.style.display = 'block'; // Show the buttons
+                        pp_button_spinner_container.style.display = 'none'; // Hide the spinner
+
+                    } catch (error) {
+                        console.error(error);
+                        alert('PayPal returned an error! Transaction could not be processed. Enable the debug logging feature to get more details...\n\n' + JSON.stringify(error));
+                    }
+                }
+
+                /**
+                 * If an error prevents buyer checkout, alert the user that an error has occurred with the buttons using this callback.
+                 *
+                 * See documentation: https://developer.paypal.com/sdk/js/reference/#link-onerror
+                 */
+                function onErrorHandler(err) {
+                    console.error('An error prevented the user from checking out with PayPal. ' + JSON.stringify(err));
+                    alert( '<?php echo esc_js(__("Error occurred during PayPal checkout process.", "wordpress-simple-paypal-shopping-cart")); ?>\n\n' + JSON.stringify(err) );
+                }
+
+                /**
+                 *
+                 * See documentation: https://developer.paypal.com/sdk/js/reference/#link-oncancel
+                 */
+                function onCancelHandler (data) {
+                    console.log('Checkout operation cancelled by the customer.');
+                    //Return to the parent page which the button does by default.
+                }
+
+            });
+
+            /**
+             * Checks if any input element has required attribute with empty value
+             * @param cart_no Target cart no.
+             * @returns {boolean} TRUE if empty required field found, FALSE otherwise.
+             */
+            function has_empty_required_input(cart_no) {
+                let has_any = false;
+                const target_input = '.wpspsc_cci_input';
+                const currentPPCPButtonWrapper = '#wpsc_paypal_button_'+cart_no;
+                const target_form = wspsc_getClosestElement(currentPPCPButtonWrapper, 'table', '.shopping_cart');
+                const cciInputElements = target_form.querySelectorAll(target_input);
+                cciInputElements.forEach(function (inputElement) {
+                    if (inputElement.required && !inputElement.value.trim()) {
+                        // Empty required field found!
+                        has_any = true;
+                    }
+                });
+
+                return has_any;
+            }
         </script>
         <?php
 		$output .= ob_get_clean();

@@ -46,6 +46,8 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 
 		self::$log_enabled = $this->wpec->get_setting( 'enable_debug_logging' );
 
+        new WooCommerce_Payment_Button_Ajax_Handler();
+
 		if ( is_admin() ) {
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		}
