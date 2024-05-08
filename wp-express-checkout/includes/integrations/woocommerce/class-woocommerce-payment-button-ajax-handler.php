@@ -169,12 +169,8 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 		//Logger::log_array_data($array_txn_data, true); // Debugging purpose.
 		//Logger::log_array_data($array_wpec_data, true); // Debugging purpose.
 		
-		//Process the transaction/payment data.
-		Logger::log( 'Going to create/update record and save transaction data.', true );
-		$payment_processor = \WP_Express_Checkout\Payment_Processor::get_instance();
-
-		//It will send the appropriate response back to the client (after processing the payment data).
-		$payment_processor->wpec_server_side_process_payment( $array_txn_data, $array_wpec_data );
+		//The transaction has been finalized. Now we can tell woocomemrce to process the order.
+		//TODO - FIXIT.
 
 		/* Everything is processed successfully, the previous function call will also send the response back to the client. */
 	}
