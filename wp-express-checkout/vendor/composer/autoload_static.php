@@ -57,6 +57,7 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WP_Express_Checkout\\Integrations\\Simple_WP_Membership' => __DIR__ . '/../..' . '/includes/integrations/simple-wp-membership/class-simple-wp-membership.php',
         'WP_Express_Checkout\\Integrations\\WooCommerce_Gateway' => __DIR__ . '/../..' . '/includes/integrations/woocommerce/class-woocommerce-gateway.php',
         'WP_Express_Checkout\\Integrations\\WooCommerce_Payment_Button' => __DIR__ . '/../..' . '/includes/integrations/woocommerce/class-woocommerce-payment-button.php',
+        'WP_Express_Checkout\\Integrations\\WooCommerce_Payment_Button_Ajax_Handler' => __DIR__ . '/../..' . '/includes/integrations/woocommerce/class-woocommerce-payment-button-ajax-handler.php',
         'WP_Express_Checkout\\Integrations\\WooCommerce_Payment_Processor' => __DIR__ . '/../..' . '/includes/integrations/woocommerce/class-woocommerce-payment-processor.php',
         'WP_Express_Checkout\\Main' => __DIR__ . '/../..' . '/public/class-main.php',
         'WP_Express_Checkout\\Order' => __DIR__ . '/../..' . '/includes/class-order.php',
