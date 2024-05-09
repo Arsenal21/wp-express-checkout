@@ -178,16 +178,16 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 
 		?>
 		<script>
-		jQuery( document ).on( 'wpec_before_render_button', function( e, handler ) {
-
-			handler.buttonArgs.onApprove = function( data, actions ) {
-				jQuery( 'div.wp-ppec-overlay[data-ppec-button-id="' + handler.data.id + '"]' ).css( 'display', 'flex' );
-				return actions.order.capture().then( function( details ) {
-					handler.processPayment( details, "wpec_process_wc_payment" );
-				} );
-			};
-
-		} );
+		// jQuery( document ).on( 'wpec_before_render_button', function( e, handler ) {
+        //
+		// 	handler.buttonArgs.onApprove = function( data, actions ) {
+		// 		jQuery( 'div.wp-ppec-overlay[data-ppec-button-id="' + handler.data.id + '"]' ).css( 'display', 'flex' );
+		// 		return actions.order.capture().then( function( details ) {
+		// 			handler.processPayment( details, "wpec_process_wc_payment" );
+		// 		} );
+		// 	};
+        //
+		// } );
 		</script>
 	<?php
 	}
