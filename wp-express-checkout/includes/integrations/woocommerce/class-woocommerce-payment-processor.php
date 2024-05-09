@@ -25,8 +25,6 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 	public function __construct() {
 //		add_action( 'wp_ajax_wpec_process_wc_payment', array( $this, 'wpec_process_payment' ) );
 //		add_action( 'wp_ajax_nopriv_wpec_process_wc_payment', array( $this, 'wpec_process_payment' ) );
-		add_action( 'wp_ajax_wpec_wc_render_button', array( $this, 'render_button' ) );
-		add_action( 'wp_ajax_nopriv_wpec_wc_render_button', array( $this, 'render_button' ) );
 	}
 
 	/**
@@ -82,14 +80,12 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 			);
 		}
 
-		$this->check_status( $payment );
-
 		$status =  $payment['status'];
 		if ( strtoupper( $status ) !== 'COMPLETED' ) {
 			// payment is not successful.
-			$msg =  sprintf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $status );
+			$msg =  sprintf( __( 'Payment status is not completed. Status: %s', 'wp-express-checkout' ), $status );
 			$code = 3008;
-			Logger::log( "Code $code - $msg", false );
+			Logger::log( 'Code: '. $code . ' - '. $msg, false );
 			wp_send_json(
 				array(
 					'success' => false,
@@ -99,7 +95,7 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 		}
 
 		// Log debug (if enabled).
-		Logger::log( 'Received IPN. Processing payment ...' );
+		Logger::log( 'Payment Captured. Doing post payment processing tasks ...' );
 
 		// get item name.
 		$trans_name  = 'wp-ppdg-' . sanitize_title_with_dashes( $order_data['name'] );
@@ -156,20 +152,22 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 		$received_transaction_id = $payment['id'];
 		Logger::log( 'Check transaction id is: '. $received_transaction_id, true );
 
-		$wc_payment_complete = $order->payment_complete( $received_transaction_id );
-		Logger::log( "Is Payment Complete: " . $wc_payment_complete, true );
+		$wc_payment_complete = true;
+		$order->payment_complete();
+		Logger::log( "Executed the payment_complete() function.", true );
+		//Logger::log( "Is Payment Complete: " . $wc_payment_complete, true );
 
-		if (!$wc_payment_complete){
-			$msg =  __( 'Error! WooCommerce payment process could not be completed.', 'wp-express-checkout' );
-			$code = 3007;
-			Logger::log( "Code $code - $msg", false );
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  =>  $msg,
-				)
-			);
-		}
+		// if (!$wc_payment_complete){
+		// 	$msg =  __( 'Error! WooCommerce payment process could not be completed.', 'wp-express-checkout' );
+		// 	$code = 3007;
+		// 	Logger::log( "Code $code - $msg", false );
+		// 	wp_send_json(
+		// 		array(
+		// 			'success' => false,
+		// 			'err_msg'  =>  $msg,
+		// 		)
+		// 	);
+		// }
 
 		if ( class_exists( 'WooCommerce' ) ) {
 			Logger::log( "WooCommerce Class exists.", true );
@@ -177,7 +175,7 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 			Logger::log( 'Class WooCommerce Not found', false );
 		}
 
-		WC()->cart->empty_cart();
+		//WC()->cart->empty_cart();
 
 		$res = array();
 
@@ -206,25 +204,6 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 			)
 		);
 
-	} // @codeCoverageIgnore
-
-
-	public function render_button() {
-		if ( ! check_ajax_referer( 'wpec-wc-render-button-nonce', 'nonce', false ) ) {
-			wp_send_json_error( __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'wp-express-checkout' ) );
-		}
-
-		if ( empty( $_POST['order_id'] ) ) {
-			wp_send_json_error( __( 'No order data received.', 'wp-express-checkout' ) );
-		}
-
-		$gateway = array_shift( wp_list_filter( WC()->payment_gateways()->payment_gateways, array( 'id' => 'wp-express-checkout' ) ) );
-
-		// Get our WC gateway and call receipt_page()
-		ob_start();
-		$gateway->receipt_page( intval( $_POST['order_id'] ) );
-		$output = ob_get_clean();
-		wp_send_json_success( $output );
 	}
 
 }

@@ -67,7 +67,7 @@ class WooCommerce_Payment_Button {
 		$button_html = $this->get_button_tpl_html( $args );
 
 		if ( $use_modal ) {
-			$output      = $this->get_modal_html( array(
+			$output = $this->get_modal_html( array(
 				'modal_title' => $modal_title,
 				'product_id'  => $product_id
 			), $button_html );

@@ -5,20 +5,95 @@ namespace WP_Express_Checkout\Integrations;
 use WP_Express_Checkout\Debug\Logger;
 use WP_Express_Checkout\PayPal\Request;
 use WP_Express_Checkout\PayPal\Client;
+use WP_Express_Checkout\Main;
 
 
 class WooCommerce_Payment_Button_Ajax_Handler {
 
 	public function __construct()
 	{
-		//Handle the create-order ajax request for 'Buy Now' type buttons.
+		//Handle the generate-button ajax request.
+		add_action( 'wp_ajax_wpec_wc_generate_button', array( $this, 'handle_wpec_wc_generate_button' ) );
+		add_action( 'wp_ajax_nopriv_wpec_wc_generate_button', array( $this, 'handle_wpec_wc_generate_button' ) );
+				
+		//Handle the create-order ajax request for woocommerce checkout.
 		add_action( 'wp_ajax_wpec_woocommerce_pp_create_order', array(&$this, 'pp_create_order' ) );
 		add_action( 'wp_ajax_nopriv_wpec_woocommerce_pp_create_order', array(&$this, 'pp_create_order' ) );
 		
+		//Handle the capture-order ajax request for woocommerce checkout.
 		add_action( 'wp_ajax_wpec_woocommerce_pp_capture_order', array(&$this, 'pp_capture_order' ) );
 		add_action( 'wp_ajax_nopriv_wpec_woocommerce_pp_capture_order', array(&$this, 'pp_capture_order' ) );
 	}
 
+
+	/*
+	 * Generates the PPCP button that will be used for the checkout.
+	 * This is called via AJAX from the WooCommerce checkout page (when the user clicks the 'Place Order' button).
+	 */
+	public function handle_wpec_wc_generate_button() {
+		if ( ! check_ajax_referer( 'wpec-wc-render-button-nonce', 'nonce', false ) ) {
+			wp_send_json_error( __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'wp-express-checkout' ) );
+		}
+
+		if ( empty( $_POST['order_id'] ) ) {
+			wp_send_json_error( __( 'No order data received.', 'wp-express-checkout' ) );
+		}
+		$wc_order_id = intval( $_POST['order_id'] );
+
+		//$gateway = array_shift( wp_list_filter( WC()->payment_gateways()->payment_gateways, array( 'id' => 'wp-express-checkout' ) ) );
+
+		// Get our WC gateway and call receipt_page()
+		$output = $this->wc_generate_ppcp_button( $wc_order_id );
+		wp_send_json_success( $output );
+	}
+
+	public function wc_generate_ppcp_button( $wc_order_id){
+
+			Logger::log( 'wc_generate_ppcp_button(). WC Order ID: ' . $wc_order_id, true );
+	
+			$order = new \WC_Order( $wc_order_id );
+
+			$wpec = Main::get_instance();
+	
+			$btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
+	
+			$form_args = array(
+				'btn_color'  => $wpec->get_setting( 'btn_color' ),
+				'btn_height' => ! empty( $btn_sizes[ $wpec->get_setting( 'btn_height' ) ] ) ? $btn_sizes[ $wpec->get_setting( 'btn_height' ) ] : 25,
+				'btn_layout' => $wpec->get_setting( 'btn_layout' ),
+				'btn_shape'  => $wpec->get_setting( 'btn_shape' ),
+				'btn_type'   => $wpec->get_setting( 'btn_type' ),
+				'coupons_enabled' => false,
+				'curr_pos'        => $wpec->get_setting( 'price_currency_pos' ),
+				'currency'        => $order->get_currency(),
+				'custom_amount'   => 0,
+				'custom_quantity' => 0,
+				'dec_num'         => intval( $wpec->get_setting( 'price_decimals_num' ) ),
+				'dec_sep'         => $wpec->get_setting( 'price_decimal_sep' ),
+				'name'            => '#' . $order->get_id(),
+				'price'           => $order->get_total(),
+				'product_id'      => 0,
+				'quantity'        => 1,
+				'shipping'        => 0,
+				'shipping_enable' => 0,
+				'tax'             => 0,
+				'thank_you_url'   => $order->get_checkout_order_received_url(),
+				'thousand_sep'    => $wpec->get_setting( 'price_thousand_sep' ),
+				'tos_enabled'     => $wpec->get_setting( 'tos_enabled' ),
+				'url'             => '',
+				'use_modal'       => true,
+				/*'modal_title'     => $WC_Gateway_Object->get_option( 'popup_title' ),*/ //TODO - FIX THIS Later (we can send this from the ajax)
+				'variations'      => array(),
+				'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
+			);
+	
+			// add_filter( 'wpec_paypal_sdk_args', array( $this, 'paypal_sdk_args' ), 10 );
+			// $wpec->load_paypal_sdk();
+	
+			$woo_button_sc = new WooCommerce_Payment_Button($order, $wpec);
+			$ppcp_output = $woo_button_sc->wpec_generate_woo_payment_button( $form_args );
+			return $ppcp_output;
+	}
 
 	/**
 	 * Handle the pp_create_order ajax request.
