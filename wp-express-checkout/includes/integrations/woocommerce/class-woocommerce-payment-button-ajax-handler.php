@@ -141,7 +141,7 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 		}
 
 		// Check nonce.
-		if ( ! check_ajax_referer( 'wpec-onapprove-js-ajax-nonce', '_wpnonce', false ) ) {
+		if ( ! check_ajax_referer( 'wpec-woocommerce-create-order-js-ajax-nonce', '_wpnonce', false ) ) {
 			wp_send_json(
 				array(
 					'success' => false,
@@ -163,15 +163,28 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 			);
 			exit;
 		}
-		
-		$array_txn_data = $pp_capture_response_data;
 
-		//Logger::log_array_data($array_txn_data, true); // Debugging purpose.
+		Logger::log( 'PayPal capture order API call success! ' . $order_id, true );
+
+		logger::log('PayPal capture order data for Woocommerce Checkout: ');
+		logger::log_array_data($pp_capture_response_data);
+
+		$payment_data_array = $pp_capture_response_data;
+
+		//Logger::log_array_data($payment_data_array, true); // Debugging purpose.
 		//Logger::log_array_data($array_wpec_data, true); // Debugging purpose.
 		
 		//The transaction has been finalized. Now we can tell woocomemrce to process the order.
-		//TODO - FIXIT.
 
+		$wc_payment_processor = new WooCommerce_Payment_Processor();
+		$wc_payment_processor->wpec_woocommerce_process_payment($payment_data_array, $array_wpec_data);
+
+//		wp_send_json(
+//			array(
+//				'success' => true,
+//				'data' => $payment_data_array
+//			)
+//		);
 		/* Everything is processed successfully, the previous function call will also send the response back to the client. */
 	}
 

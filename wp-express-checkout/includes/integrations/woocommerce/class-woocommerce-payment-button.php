@@ -20,22 +20,11 @@ class WooCommerce_Payment_Button {
 	}
 
 	public function wpec_generate_woo_payment_button( $args ) {
-		Logger::log( "Code Come here >>>", true );
 		extract( $args );
 
-		// TODO: Code Remove
-//		if ( $stock_enabled && empty( $stock_items ) ) {
-//			return '<div class="wpec-out-of-stock">' . esc_html( 'Out of stock', 'wp-express-checkout' ) . '</div>';
-//		}
-
-		// The button ID.
-//		$button_id = 'paypal_button_' . count( self::$payment_buttons ); // TODO: Line Replaced
 		$button_id = $this->button_id;
 
-//		self::$payment_buttons[] = $button_id; // TODO: Line Removed
-		Logger::log( "Code Come here >>> Prep trans name", true );
 		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $name ); // Create key using the item name.
-		Logger::log( "Code Come here >>> trans name" . $trans_name, true );
 
 		$trans_data = array(
 			'price'           => $price,
@@ -43,7 +32,7 @@ class WooCommerce_Payment_Button {
 			'quantity'        => $quantity,
 			'tax'             => $tax,
 			'shipping'        => $shipping,
-//			'shipping_per_quantity' => $shipping_per_quantity,
+            // 'shipping_per_quantity' => $shipping_per_quantity,
 			'shipping_enable' => $shipping_enable,
 			'url'             => $url,
 			'custom_quantity' => $custom_quantity,
@@ -53,13 +42,13 @@ class WooCommerce_Payment_Button {
 			'thank_you_url'   => $thank_you_url,
 			'wc_id'           => $this->order->get_id(),
 		);
-		Logger::log_array_data( $trans_data, true );
-		Logger::log( "Code Come here >>> Prep trans data", true );
 
-		set_transient( $trans_name, $trans_data, 2 * 3600 );
+        Logger::log('Transient name: ' . $trans_name, true);
+        Logger::log_array_data( $trans_data, true ); // Debug purpose.
+
+        set_transient( $trans_name, $trans_data, 2 * 3600 );
 
 		$is_live = $this->wpec->get_setting( 'is_live' );
-		Logger::log( "Code Come here >>> is live settings", true );
 		if ( $is_live ) {
 			$env       = 'production';
 			$client_id = $this->wpec->get_setting( 'live_client_id' );
@@ -84,7 +73,6 @@ class WooCommerce_Payment_Button {
 			), $button_html );
 		}
         $nonce = wp_create_nonce( 'wpec-woocommerce-create-order-js-ajax-nonce' );
-		Logger::log( "Code Come here >>> Before data process", true );
 		$data = array(
 			'id'                    => $button_id,
 			'nonce'                 => $nonce,
@@ -94,7 +82,7 @@ class WooCommerce_Payment_Button {
 			'quantity'              => $quantity,
 			'tax'                   => $tax,
 			'shipping'              => $shipping,
-//			'shipping_per_quantity' => $shipping_per_quantity,
+            // 'shipping_per_quantity' => $shipping_per_quantity,
 			'shipping_per_quantity' => 0,
 			'shipping_enable'       => $shipping_enable,
 			'dec_num'               => intval( $this->wpec->get_setting( 'price_decimals_num' ) ),
@@ -121,25 +109,12 @@ class WooCommerce_Payment_Button {
 			),
 		);
 
-		Logger::log_array_data( $data, true );
-		Logger::log( "Code Come here >>> Before scripting", true );
+		// Logger::log_array_data( $data, true ); // Debug purpose.
 
         ob_start();
         ?>
-
-        <script type="text/javascript">
-            // TODO: Code replaced
-            //var wpec_<?php //echo $this->button_id;?>//_data = <?php //echo json_encode( $data )?>//;
-            //jQuery( function( $ ) {
-            //    $( document ).on( "wpec_paypal_sdk_loaded", function() {
-            //        new ppecHandler( wpec_<?php //echo $this->button_id;?>//_data )
-            //    } );
-            //} );
-        </script>
-
         <script type="text/javascript">
             var wpec_paypal_button_0_data = <?php echo json_encode( $data )?>;
-
 
             class ppecWoocommerceHandler {
                 constructor(data) {
@@ -188,21 +163,21 @@ class WooCommerce_Payment_Button {
                          * This is called when the buyer clicks the PayPal button, which launches the PayPal Checkout
                          * window where the buyer logs in and approves the transaction on the paypal.com website.
                          *
+                         * The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.
+                         *
                          * See documentation: https://developer.paypal.com/sdk/js/reference/#link-createorder
                          */
                         createOrder: async function () {
-                            // Create the order in PayPal using the PayPal API.
-                            // https://developer.paypal.com/docs/checkout/standard/integrate/
-                            // The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.
                             console.log('Setting up the AJAX request for create-order call.');
 
                             // Create order_data object to be sent to the server.
                             let price_amount = parseFloat( parent.data.price );
-                            let roundedTotal = price_amount.toFixed(2); //round to 2 decimal places, to make sure that the API call dont fail.
-                            price_amount = parseFloat(roundedTotal); //convert to number
+                            //round to 2 decimal places, to make sure that the API call dont fail.
+                            price_amount = parseFloat(price_amount.toFixed(2));
+
                             let itemTotalValueRoundedAsNumber = price_amount;
 
-                            const order_data = { // TODO: Need to Fix This.
+                            const order_data = {
                                 intent: 'CAPTURE',
                                 payment_source: {
                                     paypal: {
@@ -235,12 +210,13 @@ class WooCommerce_Payment_Button {
                                 } ]
                             };
 
-                            const wpec_data_for_create = parent.data;
-                            console.log("Ispect order_data: ", order_data);
-                            console.log("Ispect wpec_data: ", wpec_data_for_create);
-                            let post_data = 'action=wpec_woocommerce_pp_create_order&data=' + encodeURIComponent(JSON.stringify(order_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data_for_create)) + '&_wpnonce=' + parent.data.nonce;
+                            const wpec_data = parent.data;
+
+                            // console.log("Ispect order_data: ", order_data);
+                            // console.log("Ispect wpec_data: ", wpec_data);
+
+                            let post_data = 'action=wpec_woocommerce_pp_create_order&data=' + encodeURIComponent(JSON.stringify(order_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data)) + '&_wpnonce=' + parent.data.nonce;
                             try {
-                                // Using fetch for AJAX request. This is supported in all modern browsers.
                                 const response = await fetch("<?php echo admin_url( 'admin-ajax.php' ); ?>", {
                                     method: "post",
                                     headers: {
@@ -258,9 +234,9 @@ class WooCommerce_Payment_Button {
                                     //console.log('Order data: ' + JSON.stringify(order_data));
                                     return response_data.order_id;
                                 } else {
-                                    const error_message = response_data.err_msg
+                                    const error_message = response_data.err_msg;
                                     console.error('Error occurred during create-order call to PayPal. ', error_message);
-                                    throw new Error(error_message);//This will trigger the alert in the "catch" block below.
+                                    throw new Error(error_message);
                                 }
                             } catch (error) {
                                 console.error(error.message);
@@ -277,6 +253,54 @@ class WooCommerce_Payment_Button {
                         onApprove: async function (data, actions) {
                             // TODO: Need to wonk on.
                             console.log('Successfully created a transaction.');
+                            // console.log(data, actions);
+
+                            // const ppec_overlay = document.querySelector('div.wp-ppec-overlay[data-ppec-button-id="' + handler.data.id + '"]');
+                            // ppec_overlay.style.display = 'flex';
+
+                            // Create the data object to be sent to the server.
+                            let pp_bn_data = {};
+                            // The orderID is the ID of the order that was created in the createOrder method.
+                            pp_bn_data.order_id = data.orderID;
+                            // parent.data is the data object that was passed to the constructor.
+                            const wpec_data = parent.data;
+                            const post_data = 'action=wpec_woocommerce_pp_capture_order&data=' + encodeURIComponent(JSON.stringify(pp_bn_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data)) + '&_wpnonce=' + parent.data.nonce;
+                            try {
+                                const capture_order_response = await fetch( "<?php echo admin_url( 'admin-ajax.php' ); ?>", {
+                                    method: "post",
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded'
+                                    },
+                                    body: post_data
+                                });
+
+                                const capture_order_response_data = await capture_order_response.json();
+                                console.log('Capture-order API call to PayPal completed successfully.');
+                                console.log('Capture order response data: ', capture_order_response_data);
+
+                                // Call the completePayment method to do any redirection or display a message to the user.
+                                // parent.completePayment(response_data);
+
+                            } catch (error) {
+                                console.error(error.message);
+                                alert('PayPal returned an error! Transaction could not be processed.\n\n' + error.message);
+                            }
+
+                            //actions.order.capture().then( function( payment ) {
+                            //    jQuery.post( "<?php //echo admin_url( 'admin-ajax.php' ); ?>//", {
+                            //        action:  "wpec_process_wc_payment",
+                            //        wp_ppdg_payment: payment,
+                            //        data: parent.data,
+                            //        nonce: parent.data.nonce
+                            //    } ).done( function( data ) {
+                            //        parent.completePayment( data );
+                            //    } );
+                            //
+                            //} ).catch(function (error){
+                            //    console.log("Some thing went wrong");
+                            //    console.log(error.message);
+                            //    console.log(error);
+                            //} );
                         },
 
                         /**
@@ -304,13 +328,34 @@ class WooCommerce_Payment_Button {
                             console.error('PayPal Buttons failed to render');
                         });
                 }
+
+                completePayment( data ) {
+                    var ret = true;
+                    var dlgTitle = ppecFrontVars.str.paymentCompleted;
+                    var dlgMsg = ppecFrontVars.str.redirectMsg;
+                    if ( data.redirect_url ) {
+                        var redirect_url = data.redirect_url;
+                    } else {
+                        dlgTitle = ppecFrontVars.str.errorOccurred;
+                        dlgMsg = data;
+                        ret = false;
+                    }
+                    jQuery( '.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).hide();
+                    var dialog = jQuery( '<div id="wp-ppdg-dialog-message" title="' + dlgTitle + '"><p id="wp-ppdg-dialog-msg">' + dlgMsg + '</p></div>' );
+                    jQuery( '#' + parent.data.id ).before( dialog ).fadeIn();
+                    if ( redirect_url ) {
+                        location.href = redirect_url;
+                    }
+                    return ret;
+                };
+
+
             }
         </script>
         <?php
 		$output .= ob_get_clean();
 
 		add_action( 'wp_footer', array( $this->wpec, 'load_paypal_sdk' ) );
-		Logger::log( "Code Come here >>> After add action", true );
 
 		return $output;
 	}
