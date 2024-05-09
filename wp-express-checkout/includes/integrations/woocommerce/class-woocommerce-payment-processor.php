@@ -148,12 +148,12 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 		}
 
 		// If code execution got this far, it means everything is ok with payment
-		// let's insert order.
-		$received_transaction_id = $payment['id'];
-		Logger::log( 'Check transaction id is: '. $received_transaction_id, true );
+		// let's insert order into WooCommerce.
+		$paypal_capture_id = isset($txn_data['purchase_units'][0]['payments']['captures'][0]['id']) ? $txn_data['purchase_units'][0]['payments']['captures'][0]['id'] : '';
+		Logger::log( 'PayPal transaction id is: '. $paypal_capture_id, true );
 
 		$wc_payment_complete = true;
-		$order->payment_complete();
+		$order->payment_complete( $paypal_capture_id );
 		Logger::log( "Executed the payment_complete() function.", true );
 		//Logger::log( "Is Payment Complete: " . $wc_payment_complete, true );
 
@@ -169,13 +169,7 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 		// 	);
 		// }
 
-		if ( class_exists( 'WooCommerce' ) ) {
-			Logger::log( "WooCommerce Class exists.", true );
-		}else{
-			Logger::log( 'Class WooCommerce Not found', false );
-		}
-
-		//WC()->cart->empty_cart();
+		WC()->cart->empty_cart();
 
 		$res = array();
 

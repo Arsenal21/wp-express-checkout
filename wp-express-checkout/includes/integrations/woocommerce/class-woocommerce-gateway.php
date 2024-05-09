@@ -129,6 +129,8 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	}
 
 	public function payment_fields() {
+		Logger::log( 'payment_fields() function triggered' );
+		
 		$popup_title = $this->get_option( 'popup_title' );
 
 		echo $this->get_option( 'description' );
