@@ -45,53 +45,30 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 		if ( empty( $payment ) ) {
 			// no payment data provided.
 			$msg = __( 'No payment data received.', 'wp-express-checkout' );
-			$code = 3001;
-			Logger::log( "Code $code - $msg", false );
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  =>  $msg,
-				)
-			);
+			Logger::log( $msg, false );
+			$this->send_json_response($msg, false);
 		}
 
 		if ( empty( $data ) ) {
 			// no order data provided.
 			$msg = __( 'No order data received.', 'wp-express-checkout' );
-			$code = 3002;
-			Logger::log( "Code $code - $msg", false );
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  =>  $msg,
-				)
-			);
+			Logger::log( $msg, false );
+			$this->send_json_response($msg, false);
 		}
 
 		if ( ! check_ajax_referer( 'wpec-woocommerce-create-order-js-ajax-nonce', 'nonce', false ) ) {
+			// nonce verification failed.
 			$msg = __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'wp-express-checkout' );
-			$code = 3003;
-			Logger::log( "Code $code - $msg", false );
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  =>  $msg,
-				)
-			);
+			Logger::log( $msg, false );
+			$this->send_json_response($msg, false);
 		}
 
 		$status =  $payment['status'];
 		if ( strtoupper( $status ) !== 'COMPLETED' ) {
 			// payment is not successful.
 			$msg =  sprintf( __( 'Payment status is not completed. Status: %s', 'wp-express-checkout' ), $status );
-			$code = 3008;
-			Logger::log( 'Code: '. $code . ' - '. $msg, false );
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  =>  $msg,
-				)
-			);
+			Logger::log( $msg, false );
+			$this->send_json_response($msg, false);
 		}
 
 		// Log debug (if enabled).
@@ -101,21 +78,12 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 		$trans_name  = 'wp-ppdg-' . sanitize_title_with_dashes( $order_data['name'] );
 		$trans = get_transient($trans_name);
 
-		Logger::log('Check Transient name: ' . $trans_name, true);
-		Logger::log_array_data( $trans, true ); // Debug purpose.
-
 		// let's check if the payment matches transient data.
 		if ( ! $trans ) {
 			// no price set.
 			$msg =  __( 'No transaction info found in transient.', 'wp-express-checkout' );
-			$code = 3004;
-			Logger::log( "Code $code - $msg", false );
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  =>  $msg,
-				)
-			);
+			Logger::log( $msg, false );
+			$this->send_json_response($msg, false);
 		}
 		$currency = $trans['currency'];
 
@@ -127,8 +95,9 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
 		if ( $received_amount < $order->get_total() ) {
 			// payment amount mismatch. Amount paid is less.
+			$msg = __( 'Payment amount mismatch with the original price.', 'wp-express-checkout' );
 			Logger::log( 'Error! Payment amount mismatch. Original: ' . $order->get_total() . ', Received: ' . $received_amount, false );
-			$this->send_error( __( 'Payment amount mismatch with the original price.', 'wp-express-checkout' ), 3005 );
+			$this->send_json_response($msg, false );
 		}
 
 		// check if payment currency matches.
@@ -137,14 +106,8 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 		if ( $received_currency !== $order->get_currency() ) {
 			// payment currency mismatch.
 			$msg =  __( 'Payment currency mismatch.', 'wp-express-checkout' );
-			$code = 3006;
-			Logger::log( "Code $code - $msg", false );
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  =>  $msg,
-				)
-			);
+			Logger::log( $msg, false );
+			$this->send_json_response($msg, false);
 		}
 
 		// If code execution got this far, it means everything is ok with payment
@@ -155,20 +118,8 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 		$wc_payment_complete = true;
 		$order->payment_complete( $paypal_capture_id );
 		Logger::log( "Executed the payment_complete() function.", true );
-		//Logger::log( "Is Payment Complete: " . $wc_payment_complete, true );
 
-		// if (!$wc_payment_complete){
-		// 	$msg =  __( 'Error! WooCommerce payment process could not be completed.', 'wp-express-checkout' );
-		// 	$code = 3007;
-		// 	Logger::log( "Code $code - $msg", false );
-		// 	wp_send_json(
-		// 		array(
-		// 			'success' => false,
-		// 			'err_msg'  =>  $msg,
-		// 		)
-		// 	);
-		// }
-
+		// Clear cart.
 		WC()->cart->empty_cart();
 
 		$res = array();
@@ -180,24 +131,28 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 			$res['redirect_url'] = esc_url_raw( $redirect_url );
 		} else {
 			$msg =  __( 'Error! Thank you page URL configuration is wrong in the plugin settings.', 'wp-express-checkout' );
-			$code = 3008;
-			Logger::log( "Code $code - $msg", false );
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  =>  $msg,
-				)
-			);
+			Logger::log( $msg, false );
+			$this->send_json_response($msg, false);
 		}
 
 		Logger::log( "Order captured successfully", true );
-		wp_send_json(
-			array(
-				'success' => true,
-				'data'  =>  $res,
-			)
+		$this->send_json_response(__('Order captured successfully', 'simple-membership'), true, $res);
+
+	}
+
+
+	public function send_json_response($message, $success = true, $data = null) {
+		$payload = 	array(
+			'success' => $success,
+			'message' => $message,
 		);
 
+		if (!empty($data)){
+			$payload['data'] = $data;
+		}
+
+		wp_send_json($payload);
+		exit;
 	}
 
 }

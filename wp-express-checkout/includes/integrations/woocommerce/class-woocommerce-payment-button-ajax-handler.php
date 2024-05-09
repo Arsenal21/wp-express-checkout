@@ -56,7 +56,8 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 			$wpec = Main::get_instance();
 	
 			$btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
-	
+
+			$modal_title = sanitize_text_field( $_POST['modal_title'] );
 			$form_args = array(
 				'btn_color'  => $wpec->get_setting( 'btn_color' ),
 				'btn_height' => ! empty( $btn_sizes[ $wpec->get_setting( 'btn_height' ) ] ) ? $btn_sizes[ $wpec->get_setting( 'btn_height' ) ] : 25,
@@ -82,7 +83,7 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 				'tos_enabled'     => $wpec->get_setting( 'tos_enabled' ),
 				'url'             => '',
 				'use_modal'       => true,
-				/*'modal_title'     => $WC_Gateway_Object->get_option( 'popup_title' ),*/ //TODO - FIX THIS Later (we can send this from the ajax)
+				'modal_title'     => $modal_title,
 				'variations'      => array(),
 				'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
 			);
@@ -309,7 +310,6 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 
         return $paypal_order_id;
     }
-
 
 	public static function create_order_data_for_pp_api($order_data_array, $array_wpec_data){
 		Logger::log( 'Creating PayPal order data for Woocommerce Checkout', true );

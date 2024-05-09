@@ -266,7 +266,7 @@ class WooCommerce_Payment_Button {
                             const wpec_data = parent.data;
                             const post_data = 'action=wpec_woocommerce_pp_capture_order&data=' + encodeURIComponent(JSON.stringify(pp_bn_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data)) + '&_wpnonce=' + parent.data.nonce;
                             try {
-                                const capture_order_response = await fetch( "<?php echo admin_url( 'admin-ajax.php' ); ?>", {
+                                let capture_order_response = await fetch( "<?php echo admin_url( 'admin-ajax.php' ); ?>", {
                                     method: "post",
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -274,12 +274,17 @@ class WooCommerce_Payment_Button {
                                     body: post_data
                                 });
 
-                                const capture_order_response_data = await capture_order_response.json();
-                                console.log('Capture-order API call to PayPal completed successfully.');
-                                console.log('Capture order response data: ', capture_order_response_data);
+                                capture_order_response = await capture_order_response.json();
+                                if (capture_order_response.success){
 
-                                // Call the completePayment method to do any redirection or display a message to the user.
-                                // parent.completePayment(response_data);
+                                    console.log('Capture-order API call to PayPal completed successfully.');
+                                    console.log('Capture order response data: ', capture_order_response);
+
+                                    window.location.href = capture_order_response.data.redirect_url;
+
+                                    // Call the completePayment method to do any redirection or display a message to the user.
+                                    // parent.completePayment(response_data);
+                                }
 
                             } catch (error) {
                                 console.error(error.message);

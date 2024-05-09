@@ -172,7 +172,8 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 					data: {
 						action: 'wpec_wc_generate_button',
 						order_id: order_id,
-						nonce: "<?php echo esc_js( wp_create_nonce( 'wpec-wc-render-button-nonce' ) ); ?>"
+						modal_title: "<?php echo $this->get_option( 'popup_title' ); ?>",
+						nonce: "<?php echo esc_js( wp_create_nonce( 'wpec-wc-render-button-nonce' ) ); ?>",
 					},
 					dataType: 'json',
 					success: function( data ) {
