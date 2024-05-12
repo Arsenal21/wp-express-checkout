@@ -53,4 +53,5 @@ tests/unit.suite.yml
 
 wp-express-checkout.zip
 other-helpful-files/temp/
+other-helpful-files/backups/
 .idea

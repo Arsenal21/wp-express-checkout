@@ -12,10 +12,6 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 
 	public function __construct()
 	{
-		//Handle the generate-button ajax request.
-		add_action( 'wp_ajax_wpec_wc_generate_button', array( $this, 'handle_wpec_wc_generate_button' ) );
-		add_action( 'wp_ajax_nopriv_wpec_wc_generate_button', array( $this, 'handle_wpec_wc_generate_button' ) );
-				
 		//Handle the create-order ajax request for woocommerce checkout.
 		add_action( 'wp_ajax_wpec_woocommerce_pp_create_order', array(&$this, 'pp_create_order' ) );
 		add_action( 'wp_ajax_nopriv_wpec_woocommerce_pp_create_order', array(&$this, 'pp_create_order' ) );
@@ -23,77 +19,6 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 		//Handle the capture-order ajax request for woocommerce checkout.
 		add_action( 'wp_ajax_wpec_woocommerce_pp_capture_order', array(&$this, 'pp_capture_order' ) );
 		add_action( 'wp_ajax_nopriv_wpec_woocommerce_pp_capture_order', array(&$this, 'pp_capture_order' ) );
-	}
-
-
-	/*
-	 * Generates the PPCP button that will be used for the checkout.
-	 * This is called via AJAX from the WooCommerce checkout page (when the user clicks the 'Place Order' button).
-	 */
-	public function handle_wpec_wc_generate_button() {
-		if ( ! check_ajax_referer( 'wpec-wc-render-button-nonce', 'nonce', false ) ) {
-			wp_send_json_error( __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'wp-express-checkout' ) );
-		}
-
-		if ( empty( $_POST['order_id'] ) ) {
-			wp_send_json_error( __( 'No order data received.', 'wp-express-checkout' ) );
-		}
-		$wc_order_id = intval( $_POST['order_id'] );
-
-		//$gateway = array_shift( wp_list_filter( WC()->payment_gateways()->payment_gateways, array( 'id' => 'wp-express-checkout' ) ) );
-
-		// Get our WC gateway and call receipt_page()
-		$output = $this->wc_generate_ppcp_button( $wc_order_id );
-		wp_send_json_success( $output );
-	}
-
-	public function wc_generate_ppcp_button( $wc_order_id){
-
-			Logger::log( 'wc_generate_ppcp_button(). WC Order ID: ' . $wc_order_id, true );
-	
-			$order = new \WC_Order( $wc_order_id );
-
-			$wpec = Main::get_instance();
-	
-			$btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
-
-			$modal_title = sanitize_text_field( $_POST['modal_title'] );
-			$form_args = array(
-				'btn_color'  => $wpec->get_setting( 'btn_color' ),
-				'btn_height' => ! empty( $btn_sizes[ $wpec->get_setting( 'btn_height' ) ] ) ? $btn_sizes[ $wpec->get_setting( 'btn_height' ) ] : 25,
-				'btn_layout' => $wpec->get_setting( 'btn_layout' ),
-				'btn_shape'  => $wpec->get_setting( 'btn_shape' ),
-				'btn_type'   => $wpec->get_setting( 'btn_type' ),
-				'coupons_enabled' => false,
-				'curr_pos'        => $wpec->get_setting( 'price_currency_pos' ),
-				'currency'        => $order->get_currency(),
-				'custom_amount'   => 0,
-				'custom_quantity' => 0,
-				'dec_num'         => intval( $wpec->get_setting( 'price_decimals_num' ) ),
-				'dec_sep'         => $wpec->get_setting( 'price_decimal_sep' ),
-				'name'            => '#' . $order->get_id(),
-				'price'           => $order->get_total(),
-				'product_id'      => 0,
-				'quantity'        => 1,
-				'shipping'        => 0,
-				'shipping_enable' => 0,
-				'tax'             => 0,
-				'thank_you_url'   => $order->get_checkout_order_received_url(),
-				'thousand_sep'    => $wpec->get_setting( 'price_thousand_sep' ),
-				'tos_enabled'     => $wpec->get_setting( 'tos_enabled' ),
-				'url'             => '',
-				'use_modal'       => true,
-				'modal_title'     => $modal_title,
-				'variations'      => array(),
-				'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
-			);
-	
-			// add_filter( 'wpec_paypal_sdk_args', array( $this, 'paypal_sdk_args' ), 10 );
-			// $wpec->load_paypal_sdk();
-	
-			$woo_button_sc = new WooCommerce_Payment_Button($order, $wpec);
-			$ppcp_output = $woo_button_sc->wpec_generate_woo_payment_button( $form_args );
-			return $ppcp_output;
 	}
 
 	/**
@@ -152,6 +77,7 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 
 		// Create the order using the PayPal API call (pass the order data so we can use it in the API call)
 		$result = self::create_order_pp_api_call($order_data_array, $array_wpec_data);
+
 		if(is_wp_error($result) ){
 			//Failed to create the order.
 			wp_send_json(
@@ -167,6 +93,24 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 		$paypal_order_id = isset($result) ? $result : '';
 		Logger::log( 'PayPal Order ID: ' . $paypal_order_id, true );
 
+		// TODO: PayPal Create order complete. Now create woocommerce order as well.
+		try {
+			$wc_order_id = $this->create_woocommerce_order();
+
+			Logger::log( 'WooCommerce Order ID: ' . $wc_order_id, true );
+
+			// WooCommerce Order created. Now save the order id in transient.
+			$this->handle_order_transients($paypal_order_id, $wc_order_id);
+		} catch (\Exception $exception){
+			Logger::log( $exception->getMessage(), false );
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Error occurred on create_woocommerce_order(). ', 'wp-express-checkout' ) . $exception->getMessage(),
+				)
+			);
+		}
+
 		//If everything is processed successfully, send the success response.
 		wp_send_json( 
 			array( 
@@ -177,6 +121,181 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 		);
 		exit;
     }
+
+
+	/**
+	 * Create the order using the PayPal API call.
+	 * return the PayPal order ID if successful, or a WP_Error object if there is an error.
+	 */
+	public static function create_order_pp_api_call($order_data_array, $array_wpec_data)
+	{
+		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
+
+		//Create the order-data for the PayPal API call.
+		$pp_api_order_data = self::create_order_data_for_pp_api($order_data_array, $array_wpec_data);
+
+		$json_encoded_pp_api_order_data = wp_json_encode($pp_api_order_data);
+		Logger::log_array_data($json_encoded_pp_api_order_data, true);
+
+		//Create the request for the PayPal API call.
+		$request = new Request( '/v2/checkout/orders', 'POST' );
+		//The order data already in JSON format so we don't need to json_encode it again.
+		$request->body = $json_encoded_pp_api_order_data;
+
+		//Execute the request.
+		$client = Client::client();
+
+		try{
+			$response = $client->execute($request);
+		}
+		catch( \Exception $e ) {
+			//If there is an error, log the error and return the error message.
+			$exception_msg = json_decode($e->getMessage());
+			if(is_array($exception_msg->details) && sizeof($exception_msg->details)>0){
+				$error_string = $exception_msg->details[0]->issue.". ".$exception_msg->details[0]->description;
+				Logger::log( 'Error creating PayPal order via API call: ' . $error_string, true );
+				return new \WP_Error(2002,$error_string);
+			}
+			Logger::log( 'Error creating PayPal order: ' . $e->getMessage(), true );
+			return new \WP_Error(2002,__( 'Something went wrong, the PayPal create-order API call failed!', 'wp-express-checkout' ));
+		}
+
+		//The paypal debug ID if available (useful for debugging purposes)
+		//$paypal_debug_Id = isset($response->headers['Paypal-Debug-Id']) ? $response->headers['Paypal-Debug-Id'] : '';
+		//Logger::log( 'PayPal Debug ID: ' . $paypal_debug_Id, true );
+
+		$paypal_order_id = isset($response->result->id) ? $response->result->id : '';
+		// Logger::log( 'PayPal Order ID: ' . $paypal_order_id, true );
+
+		return $paypal_order_id;
+	}
+
+
+	public static function create_order_data_for_pp_api($order_data_array, $array_wpec_data){
+		Logger::log( 'Creating PayPal order data for Woocommerce Checkout', true );
+
+		//We need to use the item name from the database to retain the original name (without any special characters creating issues with data coming from ajax request).
+		// $item_name = $item_for_pp_order->get_item_name();
+		// $item_name = substr($item_name, 0, 127);//Limit the item name to 127 characters (PayPal limit)
+
+		// //$shipping_preference = $item_for_pp_order->is_digital_product() ? 'NO_SHIPPING' : 'SET_PROVIDED_ADDRESS';
+		// $shipping_preference = $order_data_array['payment_source']['paypal']['experience_context']['shipping_preference'];
+
+		// //Get the item quantity and amount from the order data.
+		// $quantity = $order_data_array['purchase_units'][0]['items'][0]['quantity'];
+		// $item_amount = $order_data_array['purchase_units'][0]['items'][0]['unit_amount']['value'];
+
+		// $currency_code = $order_data_array['purchase_units'][0]['amount']['currency_code'];
+		// $grand_total = $order_data_array['purchase_units'][0]['amount']['value'];
+		// $sub_total = $order_data_array['purchase_units'][0]['amount']['breakdown']['item_total']['value']; //This should be equal to (item_amount * quantity)
+		// //Transaction specific amounts for purchase_units breakdowns (may or may not be available in the order data array depending on the product configuration).
+		// $shipping_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['shipping']['value'])? $order_data_array['purchase_units'][0]['amount']['breakdown']['shipping']['value'] : 0;
+		// $tax_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['tax_total']['value']) ? $order_data_array['purchase_units'][0]['amount']['breakdown']['tax_total']['value'] : 0;
+		// $discount_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['discount']['value']) ? $order_data_array['purchase_units'][0]['amount']['breakdown']['discount']['value'] : 0;
+
+		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
+		// $pp_api_order_data = [
+		// 	"intent" => "CAPTURE",
+		// 	"payment_source" => [
+		// 		"paypal" => [
+		// 			"experience_context" => [
+		// 				"payment_method_preference" => "IMMEDIATE_PAYMENT_REQUIRED",
+		// 				"shipping_preference" => $shipping_preference,
+		// 				"user_action" => "PAY_NOW",
+		// 			]
+		// 		]
+		// 	],
+		// 	"purchase_units" => [
+		// 		[
+		// 			"amount" => [
+		// 				"value" => (string) $grand_total, /* The grand total that will be charged for the transaction. Cast to string to make sure there is no precision issue */
+		// 				"currency_code" => $currency_code,
+		// 				"breakdown" => [
+		// 					"item_total" => [
+		// 						"currency_code" => $currency_code,
+		// 						"value" => (string) $sub_total, /* We can break down the total amount into item_total, tax_total, shipping etc */
+		// 					]
+		// 				]
+		// 			],
+		// 			"items" => [
+		// 				[
+		// 					"name" => $item_name,
+		// 					"quantity" => $quantity,
+		// 					"unit_amount" => [
+		// 						"value" => (string) $item_amount, /* Cast to string to make sure there is no precision issue */
+		// 						"currency_code" => $currency_code,
+		// 					]
+		// 				]
+		// 			],
+		// 		]
+		// 	]
+		// ];
+
+		// //Add the shipping amount if available.
+		// if( isset($shipping_amt) && $shipping_amt > 0){
+		// 	$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['shipping'] = [
+		// 		"currency_code" => $currency_code,
+		// 		"value" => (string) $shipping_amt, /* Cast to string to make sure there is no precision issue */
+		// 	];
+		// }
+
+		// //Add the tax amount if available.
+		// if( isset($tax_amt) && $tax_amt > 0){
+		// 	$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['tax_total'] = [
+		// 		"currency_code" => $currency_code,
+		// 		"value" => (string) $tax_amt, /* Cast to string to make sure there is no precision issue */
+		// 	];
+		// }
+
+		// //Add the discount amount if available.
+		// if( isset($discount_amt) && $discount_amt > 0){
+		// 	$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['discount'] = [
+		// 		"currency_code" => $currency_code,
+		// 		"value" => (string) $discount_amt, /* Cast to string to make sure there is no precision issue */
+		// 	];
+		// }
+
+
+		//A simple order data for testing
+		$currency_code = isset($order_data_array['purchase_units'][0]['amount']['currency_code']) ? $order_data_array['purchase_units'][0]['amount']['currency_code'] : 'USD';
+		$woo_order_grand_total = $order_data_array['purchase_units'][0]['amount']['breakdown']['item_total']['value'];
+		$pp_api_order_data = [
+			"intent" => "CAPTURE",
+			"purchase_units" => [
+				[
+					"amount" => [
+						"currency_code" => $currency_code,
+						"value" => (string)$woo_order_grand_total,
+					],
+				],
+			],
+		];
+
+		//Debug purposes.
+		Logger::log_array_data($pp_api_order_data, true);
+
+		return $pp_api_order_data;
+	}
+
+
+	/**
+	 * Create a woo order.
+	 */
+	public function create_woocommerce_order() {
+		logger::log('Retrieving cart contents to create woocommerce order...', true);
+
+		global $woocommerce;
+
+		// Get cart contents to create order with.
+		$cart_contents = $woocommerce->cart->get_cart();
+
+		// logger::log_array_data($cart_contents); // Debug purpose.
+
+		$wc_order_id = $woocommerce->checkout->create_order($cart_contents);
+
+		return $wc_order_id;
+	}
+
 
 	/**
 	 * Handles the order capture for standard 'Buy Now' type buttons.
@@ -264,158 +383,6 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 		/* Everything is processed successfully, the previous function call will also send the response back to the client. */
 	}
 
-	/**
-	 * Create the order using the PayPal API call.
-	 * return the PayPal order ID if successful, or a WP_Error object if there is an error.
-	 */
-    public static function create_order_pp_api_call($order_data_array, $array_wpec_data)
-    {
-		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
-
-		//Create the order-data for the PayPal API call.
-		$pp_api_order_data = self::create_order_data_for_pp_api($order_data_array, $array_wpec_data);
-
-		$json_encoded_pp_api_order_data = wp_json_encode($pp_api_order_data);
-		Logger::log_array_data($json_encoded_pp_api_order_data, true);
-		
-		//Create the request for the PayPal API call.
-		$request = new Request( '/v2/checkout/orders', 'POST' );
-		//The order data already in JSON format so we don't need to json_encode it again.
-		$request->body = $json_encoded_pp_api_order_data;
-
-		//Execute the request.
-		$client = Client::client();
-
-		try{
-        	$response = $client->execute($request);
-		}
-		catch( \Exception $e ) {
-			//If there is an error, log the error and return the error message.
-			$exception_msg = json_decode($e->getMessage());
-			if(is_array($exception_msg->details) && sizeof($exception_msg->details)>0){
-				$error_string = $exception_msg->details[0]->issue.". ".$exception_msg->details[0]->description;							
-				Logger::log( 'Error creating PayPal order via API call: ' . $error_string, true );
-				return new \WP_Error(2002,$error_string);
-			}
-			Logger::log( 'Error creating PayPal order: ' . $e->getMessage(), true );
-			return new \WP_Error(2002,__( 'Something went wrong, the PayPal create-order API call failed!', 'wp-express-checkout' ));
-		}
-
-		//The paypal debug ID if available (useful for debugging purposes)
-		//$paypal_debug_Id = isset($response->headers['Paypal-Debug-Id']) ? $response->headers['Paypal-Debug-Id'] : '';
-		//Logger::log( 'PayPal Debug ID: ' . $paypal_debug_Id, true );
-		
-		$paypal_order_id = isset($response->result->id) ? $response->result->id : '';
-		// Logger::log( 'PayPal Order ID: ' . $paypal_order_id, true );
-
-        return $paypal_order_id;
-    }
-
-	public static function create_order_data_for_pp_api($order_data_array, $array_wpec_data){
-		Logger::log( 'Creating PayPal order data for Woocommerce Checkout', true );
-
-		//We need to use the item name from the database to retain the original name (without any special characters creating issues with data coming from ajax request).
-		// $item_name = $item_for_pp_order->get_item_name();
-		// $item_name = substr($item_name, 0, 127);//Limit the item name to 127 characters (PayPal limit)
-
-		// //$shipping_preference = $item_for_pp_order->is_digital_product() ? 'NO_SHIPPING' : 'SET_PROVIDED_ADDRESS';
-		// $shipping_preference = $order_data_array['payment_source']['paypal']['experience_context']['shipping_preference'];
-
-		// //Get the item quantity and amount from the order data.
-		// $quantity = $order_data_array['purchase_units'][0]['items'][0]['quantity'];
-		// $item_amount = $order_data_array['purchase_units'][0]['items'][0]['unit_amount']['value'];
-
-		// $currency_code = $order_data_array['purchase_units'][0]['amount']['currency_code'];
-		// $grand_total = $order_data_array['purchase_units'][0]['amount']['value'];
-		// $sub_total = $order_data_array['purchase_units'][0]['amount']['breakdown']['item_total']['value']; //This should be equal to (item_amount * quantity)
-		// //Transaction specific amounts for purchase_units breakdowns (may or may not be available in the order data array depending on the product configuration).
-		// $shipping_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['shipping']['value'])? $order_data_array['purchase_units'][0]['amount']['breakdown']['shipping']['value'] : 0;
-		// $tax_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['tax_total']['value']) ? $order_data_array['purchase_units'][0]['amount']['breakdown']['tax_total']['value'] : 0;
-		// $discount_amt = isset($order_data_array['purchase_units'][0]['amount']['breakdown']['discount']['value']) ? $order_data_array['purchase_units'][0]['amount']['breakdown']['discount']['value'] : 0;		
-
-		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
-		// $pp_api_order_data = [
-		// 	"intent" => "CAPTURE",
-		// 	"payment_source" => [
-		// 		"paypal" => [
-		// 			"experience_context" => [
-		// 				"payment_method_preference" => "IMMEDIATE_PAYMENT_REQUIRED",
-		// 				"shipping_preference" => $shipping_preference,
-		// 				"user_action" => "PAY_NOW",
-		// 			]
-		// 		]
-		// 	], 			
-		// 	"purchase_units" => [
-		// 		[
-		// 			"amount" => [
-		// 				"value" => (string) $grand_total, /* The grand total that will be charged for the transaction. Cast to string to make sure there is no precision issue */
-		// 				"currency_code" => $currency_code,
-		// 				"breakdown" => [
-		// 					"item_total" => [
-		// 						"currency_code" => $currency_code,
-		// 						"value" => (string) $sub_total, /* We can break down the total amount into item_total, tax_total, shipping etc */
-		// 					]
-		// 				]
-		// 			],
-		// 			"items" => [
-		// 				[
-		// 					"name" => $item_name,
-		// 					"quantity" => $quantity,
-		// 					"unit_amount" => [
-		// 						"value" => (string) $item_amount, /* Cast to string to make sure there is no precision issue */
-		// 						"currency_code" => $currency_code,
-		// 					]
-		// 				]
-		// 			],
-		// 		]
-		// 	]
-		// ];
-
-		// //Add the shipping amount if available.
-		// if( isset($shipping_amt) && $shipping_amt > 0){
-		// 	$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['shipping'] = [
-		// 		"currency_code" => $currency_code,
-		// 		"value" => (string) $shipping_amt, /* Cast to string to make sure there is no precision issue */
-		// 	];
-		// }
-
-		// //Add the tax amount if available.
-		// if( isset($tax_amt) && $tax_amt > 0){
-		// 	$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['tax_total'] = [
-		// 		"currency_code" => $currency_code,
-		// 		"value" => (string) $tax_amt, /* Cast to string to make sure there is no precision issue */
-		// 	];
-		// }
-
-		// //Add the discount amount if available.
-		// if( isset($discount_amt) && $discount_amt > 0){
-		// 	$pp_api_order_data['purchase_units'][0]['amount']['breakdown']['discount'] = [
-		// 		"currency_code" => $currency_code,
-		// 		"value" => (string) $discount_amt, /* Cast to string to make sure there is no precision issue */
-		// 	];
-		// }
-
-
-		//A simple order data for testing
-		$currency_code = isset($order_data_array['purchase_units'][0]['amount']['currency_code']) ? $order_data_array['purchase_units'][0]['amount']['currency_code'] : 'USD';
-		$woo_order_grand_total = $order_data_array['purchase_units'][0]['amount']['breakdown']['item_total']['value'];
-		$pp_api_order_data = [
-		    "intent" => "CAPTURE",
-		    "purchase_units" => [
-		        [
-		            "amount" => [
-		            "currency_code" => $currency_code,
-		            "value" => (string)$woo_order_grand_total,
-		            ],
-		        ],
-		    ],
-		];
-
-		//Debug purposes.
-		Logger::log_array_data($pp_api_order_data, true);
-
-		return $pp_api_order_data;
-	}
 
 	/**
 	 * Capture the order using the PayPal API call.
@@ -471,4 +438,32 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 
         return $txn_data_array;
     }
+
+
+	public function handle_order_transients($paypal_order_id, $wc_order_id) {
+		$trans_name = 'wpec-pp-create-wc-order'; // Create key using the item name.
+
+		$old_transient = get_transient($trans_name);
+		if (!empty($old_transient)){// TODO: Need to delete old wc order.
+			Logger::log('Old transient exists!', true);
+			Logger::log_array_data( $old_transient, true ); // Debug purpose.
+			if (!empty($old_transient['wc_order_id'])){
+				wp_delete_post(intval($old_transient['wc_order_id']), true);
+			}
+			delete_transient($trans_name);
+		}
+
+		$order = new \WC_Order( $wc_order_id );
+		$trans_data = array(
+			'wc_order_id'     => $wc_order_id,
+			'paypal_order_id' => $paypal_order_id,
+			'currency'        => $order->get_currency(),
+			'thank_you_url'   => $order->get_checkout_order_received_url(),
+		);
+
+		Logger::log('Transient name: ' . $trans_name, true);
+		Logger::log_array_data( $trans_data, true ); // Debug purpose.
+
+		set_transient( $trans_name, $trans_data, 2 * 3600 );
+	}
 }

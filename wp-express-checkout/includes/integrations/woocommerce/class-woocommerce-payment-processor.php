@@ -31,16 +31,13 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 	 * Processes the payment on AJAX call.
 	 */
 	public function wpec_woocommerce_process_payment($txn_data, $order_data) {
-		Logger::log( 'Code came here: wpec_process_payment' );
-//		$payment = $this->get_payment_data(); // wp_ppdg_payment
-//		$data    = $this->get_order_data(); // data
 		$payment = $txn_data; // wp_ppdg_payment
 		$data    = $order_data; // data
 
-		Logger::log('on wpec_woocommerce_process_payment: $txn_data', true);
-		Logger::log_array_data( $txn_data, true ); // Debug purpose.
-		Logger::log('on wpec_woocommerce_process_payment: $order_data', true);
-		Logger::log_array_data( $order_data, true ); // Debug purpose.
+		// Logger::log('On wpec_woocommerce_process_payment: $txn_data', true);
+		// Logger::log_array_data( $txn_data, true ); // Debug purpose.
+		// Logger::log('On wpec_woocommerce_process_payment: $order_data', true);
+		// Logger::log_array_data( $order_data, true ); // Debug purpose.
 
 		if ( empty( $payment ) ) {
 			// no payment data provided.
@@ -75,7 +72,8 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 		Logger::log( 'Payment Captured. Doing post payment processing tasks ...' );
 
 		// get item name.
-		$trans_name  = 'wp-ppdg-' . sanitize_title_with_dashes( $order_data['name'] );
+//		$trans_name  = 'wp-ppdg-' . sanitize_title_with_dashes( $order_data['name'] );
+		$trans_name  = 'wpec-pp-create-wc-order';
 		$trans = get_transient($trans_name);
 
 		// let's check if the payment matches transient data.
@@ -87,7 +85,7 @@ class WooCommerce_Payment_Processor extends Payment_Processor {
 		}
 		$currency = $trans['currency'];
 
-		$order = new \WC_Order( $trans['wc_id'] );
+		$order = new \WC_Order( $trans['wc_order_id'] );
 
 		// Get received amount.
 		$received_amount = Utils::round_price( floatval( $payment['purchase_units'][0]['payments']['captures'][0]['amount']['value'] ) );
