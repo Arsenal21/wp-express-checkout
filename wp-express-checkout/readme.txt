@@ -164,6 +164,9 @@ None
 
 == Changelog ==
 
+= WIP = 
+- WooCommerce integration updated to make it compatible with the latest WooCommerce version.
+
 = 2.3.11 =
 - Product variation feature related: Negative price variation issue fixed for the pre-api submission check.
 - Reorganized some of the product data that is submitted to the PayPal API.
