@@ -50,7 +50,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 		}
 		//add_action( 'woocommerce_api_' . strtolower( __CLASS__ ), array( $this, 'check_response' ) );
 		//add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
-		//add_filter( 'wpec_modal_window_title', array( $this, 'modal_window_title' ), 10, 2 ); // TODO: Code reduced
+
 	}
 
 	/**
@@ -129,79 +129,20 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	}
 
 	public function payment_fields() {
-		Logger::log( 'payment_fields() function triggered' );
-		
-		$popup_title = $this->get_option( 'popup_title' );
-
-		echo $this->get_option( 'description' );
+		Logger::log( 'payment_fields() function triggered. Is triggered by ajax: '. is_ajax() );
 
 		if ( ! is_ajax() ) {
-			add_filter( 'wpec_paypal_sdk_args', array( $this, 'paypal_sdk_args' ), 10 );
-			$this->wpec->load_paypal_sdk();
 			return;
 		}
 
-		?>
-		<style>
-			.wpec-modal-open {
-				display: none;
-			}
-		</style>
-		<div class="wpec-wc-button-container"></div>
-		<script>
-		jQuery( function( $ ) {
+        add_filter( 'wpec_paypal_sdk_args', array( $this, 'paypal_sdk_args' ), 10 );
+        $this->wpec->load_paypal_sdk();
 
-			$( '.checkout.woocommerce-checkout' ).on( 'checkout_place_order_success', function( e, result ) {
-				console.log( 'Woocommerce checkout_place_order_success event triggered.' );
-				console.log( 'Check if our gateway is being used.');
+		$wc_payment_button = new WooCommerce_Payment_Button($this->wpec);
+		$wc_payment_button->generate_wpec_payment_button();
 
-				var get_payment_method = function() {
-					return $( '#payment input[name="payment_method"]:checked' ).val();
-				};
-				if ( 'success' !== result.result || 'wp-express-checkout' !== get_payment_method() ) {
-					return result;
-				}
-
-				var order_id = result.order_id;
-
-				console.log( 'Going to send ajax request to generate the PPCP checkout button. WC Order ID: ' + order_id );
-				$.ajax( {
-					type: 'POST',
-					url: ppecFrontVars.ajaxUrl,
-					async: false,
-					data: {
-						action: 'wpec_wc_generate_button',
-						order_id: order_id,
-						nonce: "<?php echo esc_js( wp_create_nonce( 'wpec-wc-render-button-nonce' ) ); ?>"
-					},
-					dataType: 'json',
-					success: function( data ) {
-						if ( true !== data.success ) {
-							result.result = 'failure';
-							result.messages = '<div class="woocommerce-error">' + data.data + '</div>';
-							return false;
-						}
-						//$( '#place_order' ).before( data.data );
-						$( '.wpec-wc-button-container' ).html( data.data );
-						//$( 'form.processing' ).unblock();
-						new ppecWoocommerceHandler( wpec_paypal_button_0_data );
-						new wpecModal( $ ); // TODO: This need to be replaced.
-
-						$( '.wpec-modal-open' ).trigger( 'click' );
-						$( 'form.processing' ).removeClass( 'processing' ).unblock();
-					}
-				} );
-
-				// Do not redirect, just focus on popup window.
-				result.redirect = '#';
-
-				if ( 'failure' === result.result ) {
-					throw 'Result failure';
-				}
-			} );
-		} );
-		</script>
-		<?php
+		echo wpautop($this->get_option( 'description' ));
+		// echo "<pre>" . print_r(get_transient('wpec-pp-create-wc-order'), true) . "</pre>>";
 	}
 
 	/**
@@ -221,19 +162,4 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 			'redirect' => $order->get_checkout_payment_url( true ),
 		);
 	}
-
-	/**
-	 * Changes the WPEC popup window title.
-	 *
-	 * @param string $title
-	 * @param array $args
-	 * @return string
-	 */
-//	public function modal_window_title( $title, $args ) {
-//		if ( empty( $args['product_id'] ) ) {
-//			$title = $this->get_option( 'popup_title' );
-//		}
-//		return $title;
-//	}
-
 }
