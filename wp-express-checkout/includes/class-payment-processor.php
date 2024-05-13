@@ -152,7 +152,7 @@ class Payment_Processor {
 		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
 		if ( $amount < $order->get_total() ) {
 			// payment amount mismatch. Amount paid is less.
-			Logger::log( 'Error! Payment amount mismatch. Original: ' . $order->get_total() . ', Received: ' . $amount, false );
+			Logger::log( 'Error! Payment amount mismatch. Expected: ' . $order->get_total() . ', Received: ' . $amount, false );
 			$this->send_error( __( 'Payment amount mismatch with the original price.', 'wp-express-checkout' ), 3005 );
 		}
 
@@ -307,7 +307,7 @@ class Payment_Processor {
 		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
 		if ( $amount < $order->get_total() ) {
 			// payment amount mismatch. Amount paid is less.
-			Logger::log( 'Error! Payment amount mismatch. Original: ' . $order->get_total() . ', Received: ' . $amount, false );
+			Logger::log( 'Error! Payment amount mismatch. Expected: ' . $order->get_total() . ', Received: ' . $amount, false );
 			$this->send_error( __( 'Payment amount mismatch with the original price.', 'wp-express-checkout' ), 3005 );
 		}
 

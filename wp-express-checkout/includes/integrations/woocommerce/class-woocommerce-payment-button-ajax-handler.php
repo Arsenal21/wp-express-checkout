@@ -474,20 +474,22 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 
 		// Get received amount.
 		$received_amount = Utils::round_price( floatval( $wpec_txn_data['purchase_units'][0]['payments']['captures'][0]['amount']['value'] ) );
-		Logger::log( 'Check received amount: '. $received_amount, true );
+		$wc_expected_amt = $order->get_total();
+		Logger::log( 'We will check the received amount: '. $received_amount, true );
 		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
-		if ( $received_amount < $order->get_total() ) {
+		if ( $received_amount < $wc_expected_amt ) {
 			// payment amount mismatch. Amount paid is less.
-			Logger::log( 'Error! Payment amount mismatch. Original: ' . $order->get_total() . ', Received: ' . $received_amount, false );
-			self::send_response(__( 'Payment amount mismatch with the original price.', 'wp-express-checkout' ), false );
+			Logger::log( 'Error! Woocommerce checkout amount mismatch. Expected: ' . $wc_expected_amt . ', Received: ' . $received_amount, false );
+			self::send_response(__( 'Payment amount mismatch with the expected amount.', 'wp-express-checkout' ), false );
 		}
 
 		// Check if payment currency matches.
 		$received_currency = $wpec_txn_data['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'];
-		Logger::log( 'Check received currency: '. $received_currency, true );
-		if ( $received_currency !== $order->get_currency() ) {
+		$expected_currency = $order->get_currency();
+		Logger::log( 'We will check the received currency: '. $received_currency, true );
+		if ( $received_currency !== $expected_currency ) {
 			// payment currency mismatch.
-			Logger::log( 'Error! Payment currency mismatch. Original: ' . $order->get_currency() . ', Received: ' . $received_currency, false );
+			Logger::log( 'Error! Payment currency mismatch. Exepcted: ' . $expected_currency . ', Received: ' . $received_currency, false );
 			self::send_response(__( 'Payment currency mismatch.', 'wp-express-checkout' ), false);
 		}
 
