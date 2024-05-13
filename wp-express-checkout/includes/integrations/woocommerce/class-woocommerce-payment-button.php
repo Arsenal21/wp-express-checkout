@@ -40,12 +40,20 @@ class WooCommerce_Payment_Button {
                 'xlarge' => 55
         );
 	    $nonce = wp_create_nonce( 'wpec-woocommerce-payment-ajax-nonce' );
+
+        // Get woocommerce cart grand total. This is the total amount that will be sent to PayPal.
+        // Note: the $this->cart->get_cart_contents_total() function returns the total amount of the cart items without tax.
+        // The $this->cart->get_total( '') function returns the total amount of the cart items with tax. 
+        // The empty string is used to get the total amount without formatting.
+        $wc_cart_total = $this->cart->get_total('');
+        Logger::log( 'WooCommerce total cart amount (this will be used in the button): '. $wc_cart_total );
+
 	    $paypal_btn_data = array(
 		    'id'                    => $button_id,
 		    'nonce'                 => $nonce,
 		    'env'                   => $env,
 		    'client_id'             => $client_id,
-		    'price'                 => $this->cart->get_cart_contents_total(),
+		    'price'                 => $wc_cart_total,
 		    'quantity'              => 1,
 		    'tax'                   => 0,
 		    'shipping'              => 0,

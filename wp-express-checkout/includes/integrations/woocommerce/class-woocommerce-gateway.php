@@ -129,9 +129,8 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	}
 
 	public function payment_fields() {
-		Logger::log( 'payment_fields() function triggered. Is triggered by ajax: '. is_ajax() );
-
 		if ( ! is_ajax() ) {
+			//Logger::log( 'payment_fields() hook triggered via non-ajax');
 			return;
 		}
 
@@ -142,7 +141,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 		$wc_payment_button->generate_wpec_payment_button();
 
 		echo wpautop($this->get_option( 'description' ));
-		// echo "<pre>" . print_r(get_transient('wpec-pp-create-wc-order'), true) . "</pre>>";
+		// echo "<pre>" . print_r(get_transient('wpec-pp-create-wc-order'), true) . "</pre>";
 	}
 
 	/**

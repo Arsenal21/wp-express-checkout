@@ -496,7 +496,7 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 		// If code execution got this far, it means everything is ok with payment
 
 		// Now prepare to hand over order data to WooCommerce.
-		$paypal_capture_id = isset($txn_data['purchase_units'][0]['payments']['captures'][0]['id']) ? $txn_data['purchase_units'][0]['payments']['captures'][0]['id'] : '';
+		$paypal_capture_id = isset($wpec_txn_data['purchase_units'][0]['payments']['captures'][0]['id']) ? $wpec_txn_data['purchase_units'][0]['payments']['captures'][0]['id'] : '';
 		Logger::log( 'PayPal transaction id is: '. $paypal_capture_id, true );
 
 		// Handle updating order status after payment is complete.
@@ -529,18 +529,17 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 	public function wpec_wc_complete_order($order_id) {
 		$order = wc_get_order($order_id);
 
+		$order_status = $order->get_status();
 		// Check if the order is not already completed
-		if ($order && $order->get_status() !== 'completed') {
+		if ( isset($order_status) && strtoupper($order_status) != 'COMPLETED') {
 			// Mark the order as completed
+			Logger::log( "Updating order status from '" . $order_status . "' to 'completed'.", true );
 			$order->update_status('completed');
-
-			Logger::log( "Updating order status from '" . $order->get_status() . "' to 'completed'.", true );
+			
 			// Optionally, send order completion email to the customer
 			// WC()->mailer()->emails['WC_Email_Customer_Completed_Order']->trigger($order_id); // TODO: Need to use or remove.
 			return;
 		}
-
-		Logger::log( "Order status could not be updated!", false );
 	}
 
 
