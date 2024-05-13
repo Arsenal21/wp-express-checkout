@@ -6,6 +6,7 @@ use WP_Express_Checkout\Debug\Logger;
 use WP_Express_Checkout\PayPal\Request;
 use WP_Express_Checkout\PayPal\Client;
 use WP_Express_Checkout\Main;
+use WP_Express_Checkout\Utils;
 
 
 class WooCommerce_Payment_Button_Ajax_Handler {
@@ -41,12 +42,7 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 
 		//If the data is empty, send the error response.
 		if ( empty( $json_order_data ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Empty data received.', 'wp-express-checkout' ),
-				)
-			);
+			self::send_response(__( 'Empty data received.', 'wp-express-checkout' ), false);
 		}
 
 		//Get the WPEC plugin specific data from the request
@@ -56,23 +52,12 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 		//Logger::log_array_data($array_wpec_data, true);
 
 		if ( empty( $array_wpec_data ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Error! Empty WPEC plugin data received from the create-order AJAX call.', 'wp-express-checkout' ),
-				)
-			);
+			self::send_response(__( 'Error! Empty WPEC plugin data received from the create-order AJAX call.', 'wp-express-checkout' ), false);
 		}		
 
 		// Verify nonce.
-		if ( ! check_ajax_referer( 'wpec-woocommerce-create-order-js-ajax-nonce', '_wpnonce', false ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'wp-express-checkout' ),
-				)
-			);
-			exit;
+		if ( ! check_ajax_referer( 'wpec-woocommerce-payment-ajax-nonce', '_wpnonce', false ) ) {
+			self::send_response(__( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'wp-express-checkout' ), false);
 		}
 
 		// Create the order using the PayPal API call (pass the order data so we can use it in the API call)
@@ -80,20 +65,14 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 
 		if(is_wp_error($result) ){
 			//Failed to create the order.
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Failed to create the order using PayPal API. Enable the debug logging feature to get more details.', 'wp-express-checkout' ),
-				)
-			);
-			exit;
+			self::send_response(__( 'Failed to create the order using PayPal API. Enable the debug logging feature to get more details.', 'wp-express-checkout' ), false);
 		}
 
 		//The PayPal order ID returned by the API call.
 		$paypal_order_id = isset($result) ? $result : '';
 		Logger::log( 'PayPal Order ID: ' . $paypal_order_id, true );
 
-		// TODO: PayPal Create order complete. Now create woocommerce order as well.
+		// PayPal Create order complete. Now create a woocommerce order as well.
 		try {
 			$wc_order_id = $this->create_woocommerce_order();
 
@@ -103,20 +82,15 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 			$this->handle_order_transients($paypal_order_id, $wc_order_id);
 		} catch (\Exception $exception){
 			Logger::log( $exception->getMessage(), false );
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Error occurred on create_woocommerce_order(). ', 'wp-express-checkout' ) . $exception->getMessage(),
-				)
-			);
+			self::send_response(__( 'Error occurred on create_woocommerce_order(). ', 'wp-express-checkout' ) . $exception->getMessage(), false);
 		}
 
 		//If everything is processed successfully, send the success response.
-		wp_send_json( 
-			array( 
-				'success' => true,
+		self::send_response(
+			__('Create-order API call to PayPal completed successfully.', 'wp-express-checkout'),
+			true,
+			array(
 				'order_id' => $paypal_order_id,
-				'additional_data' => array(),
 			)
 		);
 		exit;
@@ -135,7 +109,7 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 		$pp_api_order_data = self::create_order_data_for_pp_api($order_data_array, $array_wpec_data);
 
 		$json_encoded_pp_api_order_data = wp_json_encode($pp_api_order_data);
-		Logger::log_array_data($json_encoded_pp_api_order_data, true);
+		// Logger::log_array_data($json_encoded_pp_api_order_data, true); // Debug purpose.
 
 		//Create the request for the PayPal API call.
 		$request = new Request( '/v2/checkout/orders', 'POST' );
@@ -279,7 +253,9 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 
 
 	/**
-	 * Create a woo order.
+	 * Creates a WooCommerce order using cart data.
+	 *
+	 * @return int|WP_ERROR
 	 */
 	public function create_woocommerce_order() {
 		logger::log('Retrieving cart contents to create woocommerce order...', true);
@@ -302,96 +278,67 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 	 */
 	public function pp_capture_order(){
 		//Get the data from the request
-		$json_pp_bn_data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : '{}';
+		$wpec_pp_data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : '{}';
 		//We need the data in an array format so lets convert it.
-		$array_pp_bn_data = json_decode( $json_pp_bn_data, true );
-		//Logger::log_array_data($array_pp_bn_data, true);	
+		$wpec_pp_data_array = json_decode( $wpec_pp_data, true );
+		//Logger::log_array_data($wpec_pp_data_array, true);
 
 		//Get the PayPal order_id from the data
-		$order_id = isset( $array_pp_bn_data['order_id'] ) ? sanitize_text_field($array_pp_bn_data['order_id']) : '';
+		$order_id = isset( $wpec_pp_data_array['order_id'] ) ? sanitize_text_field($wpec_pp_data_array['order_id']) : '';
 		Logger::log( 'PayPal capture order request received - PayPal order ID: ' . $order_id, true );
 
 		if ( empty( $order_id ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Error! Empty order ID received for PayPal capture order request.', 'wp-express-checkout' ),
-				)
-			);
+			self::send_response(__( 'Error! Empty order ID received for PayPal capture order request.', 'wp-express-checkout' ), false);
 		}
 
 		//Get the WPEC plugin specific data from the request
 		$json_wpec_data = isset( $_POST['wpec_data'] ) ? stripslashes_deep( $_POST['wpec_data'] ) : '{}';
 		//We need the data in an array format so lets convert it.
 		$array_wpec_data = json_decode( $json_wpec_data, true );		
-		//Logger::log_array_data($array_wpec_data, true);
+		//Logger::log_array_data($array_wpec_data, true); // Debugging purpose.
 
 		if ( empty( $array_wpec_data ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Error! Empty WPEC plugin data received.', 'wp-express-checkout' ),
-				)
-			);
+			self::send_response(__( 'Error! Empty WPEC plugin data received.', 'wp-express-checkout' ), false);
 		}
 
 		// Check nonce.
-		if ( ! check_ajax_referer( 'wpec-woocommerce-create-order-js-ajax-nonce', '_wpnonce', false ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'wp-express-checkout' ),
-				)
-			);
-			exit;
+		if ( ! check_ajax_referer( 'wpec-woocommerce-payment-ajax-nonce', '_wpnonce', false ) ) {
+			self::send_response(__( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'wp-express-checkout' ), false);
 		}
 
 		// Capture the order using the PayPal API. (https://developer.paypal.com/docs/api/orders/v2/#orders_capture)
 		$pp_capture_response_data = $this->capture_order_pp_api_call( $order_id, $array_wpec_data );
 		if ( is_wp_error( $pp_capture_response_data ) ) {
 			//Failed to capture the order.
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __('Error! PayPal capture-order API call failed.', 'wp-express-checkout'),
-				)
-			);
-			exit;
+			self::send_response(__('Error! PayPal capture-order API call failed.', 'wp-express-checkout'), false);
 		}
 
 		Logger::log( 'PayPal capture order API call success! ' . $order_id, true );
 
-		logger::log('PayPal capture order data for Woocommerce Checkout: ');
-		logger::log_array_data($pp_capture_response_data);
+		// logger::log('PayPal capture order data for Woocommerce Checkout: '); // Debugging purpose.
+		// logger::log_array_data($pp_capture_response_data); // Debugging purpose.
 
-		$payment_data_array = $pp_capture_response_data;
+		$wpec_txn_data_array = $pp_capture_response_data;
 
-		//Logger::log_array_data($payment_data_array, true); // Debugging purpose.
+		//Logger::log_array_data($wpec_txn_data_array, true); // Debugging purpose.
 		//Logger::log_array_data($array_wpec_data, true); // Debugging purpose.
 		
-		//The transaction has been finalized. Now we can tell woocomemrce to process the order.
+		// The transaction by wpec has been finalized. Now process the order with this transaction data for woocommerce.
 
-		$wc_payment_processor = new WooCommerce_Payment_Processor();
-		$wc_payment_processor->wpec_woocommerce_process_payment($payment_data_array, $array_wpec_data);
+		$this->wpec_woocommerce_process_payment($wpec_txn_data_array);
 
-//		wp_send_json(
-//			array(
-//				'success' => true,
-//				'data' => $payment_data_array
-//			)
-//		);
-		/* Everything is processed successfully, the previous function call will also send the response back to the client. */
+		// Everything is processed successfully, the previous function call will also send the response back to the client.
 	}
 
 
 	/**
 	 * Capture the order using the PayPal API call.
-	 * return the transaction data if successful, or a WP_Error object if there is an error.
+	 * https://developer.paypal.com/docs/api/orders/v2/#orders_capture
+	 *
+	 * Return the transaction data if successful, or a WP_Error object if there is an error.
 	 */
     public static function capture_order_pp_api_call( $order_id, $array_wpec_data )
     {
-		//https://developer.paypal.com/docs/api/orders/v2/#orders_capture
-
 		Logger::log( 'Capturing the PayPal order using the PayPal API call...', true);
 
 		$api_params = array( 'order_id' => $order_id );
@@ -440,8 +387,22 @@ class WooCommerce_Payment_Button_Ajax_Handler {
     }
 
 
+	/**
+	 * Handles necessary transient data for order processing.
+	 * First it check if any transient related to order processing exists or not.
+	 * Old transient may exist if payment is canceled before completing.
+	 * If so, remove that transient as well as the wc order before creating a new one.
+	 *
+	 * TODO: This method could be improved.
+	 *
+	 * @param $paypal_order_id string Order ID generated by PayPal.
+	 * @param $wc_order_id string Order ID generated by WooCommerce.
+	 *
+	 * @return void
+	 */
 	public function handle_order_transients($paypal_order_id, $wc_order_id) {
-		$trans_name = 'wpec-pp-create-wc-order'; // Create key using the item name.
+		// Create transient using the item name.
+		$trans_name = 'wpec-pp-create-wc-order';
 
 		$old_transient = get_transient($trans_name);
 		if (!empty($old_transient)){// TODO: Need to delete old wc order.
@@ -453,17 +414,153 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 			delete_transient($trans_name);
 		}
 
-		$order = new \WC_Order( $wc_order_id );
 		$trans_data = array(
 			'wc_order_id'     => $wc_order_id,
 			'paypal_order_id' => $paypal_order_id,
-			'currency'        => $order->get_currency(),
-			'thank_you_url'   => $order->get_checkout_order_received_url(),
 		);
 
-		Logger::log('Transient name: ' . $trans_name, true);
-		Logger::log_array_data( $trans_data, true ); // Debug purpose.
+		// Logger::log('Transient name: ' . $trans_name, true); // Debug purpose.
+		// Logger::log_array_data( $trans_data, true ); // Debug purpose.
 
 		set_transient( $trans_name, $trans_data, 2 * 3600 );
 	}
-}
+
+	/**
+	 * Processes payment information for WooCommerce.
+	 *
+	 * @param $txn_data
+	 * @param $order_data
+	 *
+	 * @return void
+	 */
+	public function wpec_woocommerce_process_payment($wpec_txn_data) {
+		// Logger::log('On wpec_woocommerce_process_payment: $txn_data', true);
+		// Logger::log_array_data( $txn_data, true ); // Debug purpose.
+		// Logger::log('On wpec_woocommerce_process_payment: $order_data', true);
+		// Logger::log_array_data( $order_data, true ); // Debug purpose.
+
+		if ( empty( $wpec_txn_data ) ) {
+			// no payment data provided.
+			$msg = __( 'No payment data received.', 'wp-express-checkout' );
+			Logger::log( $msg, false );
+			self::send_response($msg, false);
+		}
+
+		$status =  $wpec_txn_data['status'];
+		if ( strtoupper( $status ) !== 'COMPLETED' ) {
+			// payment is not successful.
+			$msg =  sprintf( __( 'Payment status is not completed. Status: %s', 'wp-express-checkout' ), $status );
+			Logger::log( $msg, false );
+			self::send_response($msg, false);
+		}
+
+		// Log debug (if enabled).
+		Logger::log( 'Payment Captured. Doing post payment processing tasks ...' );
+
+		// Retrieve transient data.
+		$trans_name  = 'wpec-pp-create-wc-order';
+		$trans = get_transient($trans_name);
+
+		// Let's check if the payment matches transient data.
+		if ( ! $trans ) {
+			// no price set.
+			$msg =  __( 'No transaction info found in transient.', 'wp-express-checkout' );
+			Logger::log( $msg, false );
+			self::send_response($msg, false);
+		}
+
+		// Retrieve woocommerce order object form order id.
+		$order = new \WC_Order( $trans['wc_order_id'] );
+
+		// Get received amount.
+		$received_amount = Utils::round_price( floatval( $wpec_txn_data['purchase_units'][0]['payments']['captures'][0]['amount']['value'] ) );
+		Logger::log( 'Check received amount: '. $received_amount, true );
+		// check if amount paid is less than original price x quantity. This has better fault tolerant than checking for equal (=).
+		if ( $received_amount < $order->get_total() ) {
+			// payment amount mismatch. Amount paid is less.
+			Logger::log( 'Error! Payment amount mismatch. Original: ' . $order->get_total() . ', Received: ' . $received_amount, false );
+			self::send_response(__( 'Payment amount mismatch with the original price.', 'wp-express-checkout' ), false );
+		}
+
+		// Check if payment currency matches.
+		$received_currency = $wpec_txn_data['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'];
+		Logger::log( 'Check received currency: '. $received_currency, true );
+		if ( $received_currency !== $order->get_currency() ) {
+			// payment currency mismatch.
+			Logger::log( 'Error! Payment currency mismatch. Original: ' . $order->get_currency() . ', Received: ' . $received_currency, false );
+			self::send_response(__( 'Payment currency mismatch.', 'wp-express-checkout' ), false);
+		}
+
+		// If code execution got this far, it means everything is ok with payment
+
+		// Now prepare to hand over order data to WooCommerce.
+		$paypal_capture_id = isset($txn_data['purchase_units'][0]['payments']['captures'][0]['id']) ? $txn_data['purchase_units'][0]['payments']['captures'][0]['id'] : '';
+		Logger::log( 'PayPal transaction id is: '. $paypal_capture_id, true );
+
+		// Handle updating order status after payment is complete.
+		add_action('woocommerce_payment_complete', array($this, 'wpec_wc_complete_order'));
+
+		// Hand over to woocommerce for processing the payment and complete the checkout process after wards.
+		$order->payment_complete( $paypal_capture_id );
+
+		// Clear woocommerce cart.
+		WC()->cart->empty_cart();
+
+		$res = array(
+			'redirect_url' => $order->get_checkout_order_received_url()
+		);
+
+		Logger::log( "Process order completed successfully", true );
+
+		delete_transient($trans_name);
+
+		self::send_response(__('Process order completed successfully', 'wp-express-checkout'), true, $res);
+	}
+
+	/**
+	 * Callback for 'woocommerce_payment_complete' action hook. Triggers when $order->payment_complete() method is called.
+	 *
+	 * @param $order_id string The ID of WC_Order.
+	 *
+	 * @return void
+	 */
+	public function wpec_wc_complete_order($order_id) {
+		$order = wc_get_order($order_id);
+
+		// Check if the order is not already completed
+		if ($order && $order->get_status() !== 'completed') {
+			// Mark the order as completed
+			$order->update_status('completed');
+
+			Logger::log( "Updating order status from '" . $order->get_status() . "' to 'completed'.", true );
+			// Optionally, send order completion email to the customer
+			// WC()->mailer()->emails['WC_Email_Customer_Completed_Order']->trigger($order_id); // TODO: Need to use or remove.
+			return;
+		}
+
+		Logger::log( "Order status could not be updated!", false );
+	}
+
+
+	/**
+	 * Send JSON response back to ajax api call.
+	 *
+	 * @param $message string The message to send.
+	 * @param $success bool Is it a success response or not.
+	 * @param $data null|array Additional data to send back.
+	 * @param $status_code int HTTP status code.
+	 *
+	 * @return void
+	 */
+	public static function send_response($message, $success = true, $data = null, $status_code = 200) {
+		$payload = 	array(
+			'success' => $success,
+			'message' => $message,
+		);
+
+		if (!empty($data)){
+			$payload['data'] = $data;
+		}
+
+		wp_send_json($payload, $status_code);
+	}}

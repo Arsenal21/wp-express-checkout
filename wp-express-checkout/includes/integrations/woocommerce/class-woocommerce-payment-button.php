@@ -3,27 +3,20 @@
 namespace WP_Express_Checkout\Integrations;
 
 use WP_Express_Checkout\Debug\Logger;
-use WP_Express_Checkout\Shortcodes;
 
 class WooCommerce_Payment_Button {
 
 	public $wpec;
 
-	public $gateway;
-
 	public $cart;
 
-	public $button_id;
-
-	public function __construct(  $wpec, $cart, $gateway ) {
+	public function __construct(  $wpec ) {
 		$this->wpec      = $wpec;
-		$this->cart      = $cart;
-		$this->gateway     = $gateway;
-		$this->button_id = 'paypal_button_0';
+		$this->cart      = WC()->cart;
 	}
 
     public function generate_wpec_payment_button() {
-	    $button_id = $this->button_id;
+	    $button_id = 'paypal_button_0';
 	    $is_live = $this->wpec->get_setting( 'is_live' );
 	    if ( $is_live ) {
 		    $env       = 'production';
@@ -46,7 +39,7 @@ class WooCommerce_Payment_Button {
                 'large' => 45,
                 'xlarge' => 55
         );
-	    $nonce = wp_create_nonce( 'wpec-woocommerce-create-order-js-ajax-nonce' );
+	    $nonce = wp_create_nonce( 'wpec-woocommerce-payment-ajax-nonce' );
 	    $paypal_btn_data = array(
 		    'id'                    => $button_id,
 		    'nonce'                 => $nonce,
@@ -92,26 +85,24 @@ class WooCommerce_Payment_Button {
 
         <script type="text/javascript">
             jQuery(function ($){
-                const pp_btn_data = <?php echo json_encode($paypal_btn_data); ?>;
-                console.log(pp_btn_data);
+                const wpec_pp_btn_data = <?php echo json_encode($paypal_btn_data); ?>;
+
+                // console.log(wpec_pp_btn_data); // Debug purpose.
+
                 $(document).on('wpec_paypal_sdk_loaded', function (){
                     console.log('WPEC PayPal SDK Loaded');
-                    new ppecWoocommerceHandler(
-                        pp_btn_data
-                    );
+
+                    new wpecWoocommercePaymentBtnHandler( wpec_pp_btn_data );
                 });
 
-                class ppecWoocommerceHandler {
+                class wpecWoocommercePaymentBtnHandler {
                     constructor(data) {
                         this.data = data;
                         this.renderIn = '#' + data.id;
-                        // document.addEventListener( "wpec_paypal_sdk_loaded", this.generate_ppec_woocommerce_button);
                         this.generate_ppec_woocommerce_button();
                     }
 
                     generate_ppec_woocommerce_button() {
-                        //Anything that goes here will only be executed after the PayPal SDK is loaded.
-                        // console.log('PayPal JS SDK is loaded. WooCommerce');
                         let parent = this;
 
                         paypal.Buttons({
@@ -197,10 +188,9 @@ class WooCommerce_Payment_Button {
 
                                 const wpec_data = parent.data;
 
-                                // console.log("Ispect order_data: ", order_data);
-                                // console.log("Ispect wpec_data: ", wpec_data);
+                                // console.log("Ispect order_data: ", order_data); // Debug Purpose.
+                                // console.log("Ispect wpec_data: ", wpec_data); // Debug Purpose.
 
-                                // let post_data = 'action=wpec_woocommerce_pp_create_order&data=' + encodeURIComponent(JSON.stringify(order_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data)) + '&_wpnonce=' + parent.data.nonce;
                                 let post_data = new URLSearchParams({
                                     action: 'wpec_woocommerce_pp_create_order',
                                     data: JSON.stringify(order_data),
@@ -208,27 +198,24 @@ class WooCommerce_Payment_Button {
                                     _wpnonce: parent.data.nonce,
                                 }).toString();
                                 try {
-                                    const response = await fetch("<?php echo admin_url( 'admin-ajax.php' ); ?>", {
+                                    let response = await fetch("<?php echo admin_url( 'admin-ajax.php' ); ?>", {
                                         method: "post",
                                         headers: {
                                             'Content-Type': 'application/x-www-form-urlencoded'
                                         },
                                         body: post_data
                                     });
-                                    console.log('Code came here, after ajax request') //TODO: Need to remove
-                                    const response_data = await response.json();
 
-                                    if (response_data.order_id) {
-                                        console.log('Create-order API call to PayPal completed successfully.');
-                                        //If we need to see the order details, uncomment the following line.
-                                        //const order_data = response_data.order_data;
-                                        //console.log('Order data: ' + JSON.stringify(order_data));
-                                        return response_data.order_id;
-                                    } else {
-                                        const error_message = response_data.err_msg;
-                                        console.error('Error occurred during create-order call to PayPal. ', error_message);
-                                        throw new Error(error_message);
+                                    response = await response.json();
+
+                                    if (!response.data.order_id) {
+                                        throw new Error(response.message);
                                     }
+
+                                    // Create order api call successful.
+                                    console.log(response.message);
+                                    return response.data.order_id;
+
                                 } catch (error) {
                                     console.error(error.message);
                                     alert('Could not initiate PayPal Checkout...\n\n' + error.message);
@@ -242,12 +229,8 @@ class WooCommerce_Payment_Button {
                              * See documentation: https://developer.paypal.com/sdk/js/reference/#link-onapprove
                              */
                             onApprove: async function (data, actions) {
-                                // TODO: Need to wonk on.
                                 console.log('Successfully created a transaction.');
-                                // console.log(data, actions);
-
-                                // const ppec_overlay = document.querySelector('div.wp-ppec-overlay[data-ppec-button-id="' + handler.data.id + '"]');
-                                // ppec_overlay.style.display = 'flex';
+                                // console.log(data, actions); // Debug Purpose.
 
                                 // Create the data object to be sent to the server.
                                 let pp_bn_data = {};
@@ -256,7 +239,6 @@ class WooCommerce_Payment_Button {
                                 // parent.data is the data object that was passed to the constructor.
                                 const wpec_data = parent.data;
 
-                                // const post_data = 'action=wpec_woocommerce_pp_capture_order&data=' + encodeURIComponent(JSON.stringify(pp_bn_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data)) + '&_wpnonce=' + parent.data.nonce;
                                 let post_data = new URLSearchParams({
                                     action: 'wpec_woocommerce_pp_capture_order',
                                     data: JSON.stringify(pp_bn_data),
@@ -264,7 +246,7 @@ class WooCommerce_Payment_Button {
                                     _wpnonce: parent.data.nonce,
                                 }).toString();
                                 try {
-                                    let capture_order_response = await fetch( "<?php echo admin_url( 'admin-ajax.php' ); ?>", {
+                                    let response = await fetch( "<?php echo admin_url( 'admin-ajax.php' ); ?>", {
                                         method: "post",
                                         headers: {
                                             'Content-Type': 'application/x-www-form-urlencoded'
@@ -272,17 +254,18 @@ class WooCommerce_Payment_Button {
                                         body: post_data
                                     });
 
-                                    capture_order_response = await capture_order_response.json();
-                                    if (capture_order_response.success){
+                                    response = await response.json();
 
-                                        console.log('Capture-order API call to PayPal completed successfully.');
-                                        console.log('Capture order response data: ', capture_order_response);
-
-                                        window.location.href = capture_order_response.data.redirect_url;
-
-                                        // Call the completePayment method to do any redirection or display a message to the user.
-                                        // parent.completePayment(response_data);
+                                    if (!response.success){
+                                        throw new Error(response.message);
                                     }
+
+                                    // Capture Order successful.
+                                    console.log('Capture-order API call to PayPal completed successfully.');
+                                    // console.log('Capture order response data: ', response); // Debug purpose.
+
+                                    // Do after capture order successful code if needed.
+                                    window.location.href = response.data.redirect_url;
 
                                 } catch (error) {
                                     console.error(error.message);
@@ -309,6 +292,8 @@ class WooCommerce_Payment_Button {
                             onCancel: function (data) {
                                 console.log('Checkout operation cancelled by the customer.');
                                 //Return to the parent page which the button does by default.
+
+                                // TODO: Maybe handle deleting woocommerce order later if needed.
                             },
 
                         }).render(this.renderIn)
@@ -321,19 +306,34 @@ class WooCommerce_Payment_Button {
                 const wcPaymentMethodsRadioInputs = document.querySelectorAll('ul.wc_payment_methods input.input-radio');
                 // Add onChange event listener to each radio input
                 wcPaymentMethodsRadioInputs.forEach(function(input) {
+                    // Get the woocommerce default place_order button
+                    const placeOrderBtn = document.getElementById("place_order");
+
+                    // Check if wp-express-checkout payment method is selected. If so, disable and hide default place order button.
+                    if(input.value === 'wp-express-checkout' && input.checked){
+                        wpec_wc_place_order_btn_disable(placeOrderBtn);
+                    }
+
+                    // Check if payment method in changed. Disable and hide place_order button if wp-express-checkout is selected.
                     input.addEventListener('change', function(event) {
                         // Your code to execute when the radio input changes
-                        console.log("Selected Payment Method is:", event.target.value);
-                        const placeOrderBtn = document.getElementById("place_order")
                         if (event.target.value === 'wp-express-checkout'){
-                            placeOrderBtn.setAttribute('disabled', 'true');
-                            placeOrderBtn.style.display = 'none';
+                            wpec_wc_place_order_btn_disable(placeOrderBtn);
                         }else{
-                            placeOrderBtn.removeAttribute('disabled');
-                            placeOrderBtn.style.display = '';
+                            wpec_wc_place_order_btn_enable(placeOrderBtn);
                         }
                     });
                 });
+
+                function wpec_wc_place_order_btn_disable(btn){
+                    btn.setAttribute('disabled', 'true');
+                    btn.style.display = 'none';
+                }
+
+                function wpec_wc_place_order_btn_enable(btn){
+                    btn.removeAttribute('disabled');
+                    btn.style.display = '';
+                }
             })
         </script>
 	    <?php

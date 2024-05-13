@@ -50,7 +50,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 		}
 		//add_action( 'woocommerce_api_' . strtolower( __CLASS__ ), array( $this, 'check_response' ) );
 		//add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
-        add_filter('woocommerce_order_button_html', array($this, 'wpec_woocommerce_override_order_button_html'));
+
 	}
 
 	/**
@@ -138,12 +138,11 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
         add_filter( 'wpec_paypal_sdk_args', array( $this, 'paypal_sdk_args' ), 10 );
         $this->wpec->load_paypal_sdk();
 
-        $cart = WC()->cart;
-
-		$wc_payment_button = new WooCommerce_Payment_Button($this->wpec, $cart, $this);
+		$wc_payment_button = new WooCommerce_Payment_Button($this->wpec);
 		$wc_payment_button->generate_wpec_payment_button();
 
-		echo $this->get_option( 'description' );
+		echo wpautop($this->get_option( 'description' ));
+		// echo "<pre>" . print_r(get_transient('wpec-pp-create-wc-order'), true) . "</pre>>";
 	}
 
 	/**
@@ -162,29 +161,5 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 			'result'   => 'success',
 			'redirect' => $order->get_checkout_payment_url( true ),
 		);
-	}
-
-
-	public function wpec_woocommerce_override_order_button_html($button_html) {
-		ob_start();
-		?>
-        <script type="text/javascript">
-            wpec_place_order_button_onDomReady(function (){
-                document.getElementById("place_order").setAttribute('disabled', 'true')
-                console.log("place_order button disabled ran");
-            })
-            function wpec_place_order_button_onDomReady(callback) {
-                // If the document is already loaded, execute the callback immediately
-                if (document.readyState !== 'loading') {
-                    callback();
-                } else {
-                    // Otherwise, wait for the DOMContentLoaded event
-                    document.addEventListener('DOMContentLoaded', callback);
-                }
-            }
-        </script>
-		<?php
-		$po_btn_script = ob_get_clean();
-		return $button_html . $po_btn_script;
 	}
 }
