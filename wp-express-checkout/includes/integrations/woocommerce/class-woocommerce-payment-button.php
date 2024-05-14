@@ -3,351 +3,182 @@
 namespace WP_Express_Checkout\Integrations;
 
 use WP_Express_Checkout\Debug\Logger;
+use WP_Express_Checkout\Main;
+use WP_Express_Checkout\Shortcodes;
 
 class WooCommerce_Payment_Button {
 
 	public $wpec;
 
-	public $cart;
+	public $order;
 
-	public function __construct(  $wpec ) {
-		$this->wpec      = $wpec;
-		$this->cart      = WC()->cart;
+	public $button_id;
+
+	public function __construct( $wc_order_id ) {
+		$this->order = new \WC_Order( $wc_order_id );
+		$this->button_id = 'paypal_button_0';
+		$this->wpec      = Main::get_instance();
 	}
 
-    public function generate_wpec_payment_button() {
-	    $button_id = 'paypal_button_0';
-	    $is_live = $this->wpec->get_setting( 'is_live' );
-	    if ( $is_live ) {
-		    $env       = 'production';
-		    $client_id = $this->wpec->get_setting( 'live_client_id' );
-	    } else {
-		    $env       = 'sandbox';
-		    $client_id = $this->wpec->get_setting( 'sandbox_client_id' );
-	    }
+	public function wpec_generate_woo_payment_button() {
+		$modal_title = isset($_POST['modal_title']) ? sanitize_text_field( $_POST['modal_title'] ) : '';
+		$btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
+		$nonce = wp_create_nonce( 'wpec-wc-pp-payment-ajax-nonce' );
+		$is_live = $this->wpec->get_setting( 'is_live' );
+		if ( $is_live ) {
+			$env       = 'production';
+			$client_id = $this->wpec->get_setting( 'live_client_id' );
+		} else {
+			$env       = 'sandbox';
+			$client_id = $this->wpec->get_setting( 'sandbox_client_id' );
+		}
 
-	    if ( empty( $client_id ) ) {
-		    $err_msg = sprintf( __( "Please enter %s Client ID in the settings.", 'wp-express-checkout' ), $env );
-		    $err     = $this->show_err_msg( $err_msg, 'client-id' );
+		if ( empty( $client_id ) ) {
+			$err_msg = sprintf( __( "Please enter %s Client ID in the settings.", 'wp-express-checkout' ), $env );
+			$err     = $this->show_err_msg( $err_msg, 'client-id' );
 
-		    return $err;
-	    }
-	    $currency = get_woocommerce_currency();
-	    $btn_sizes = array(
-                'small' => 25,
-                'medium' => 35,
-                'large' => 45,
-                'xlarge' => 55
-        );
-	    $nonce = wp_create_nonce( 'wpec-woocommerce-payment-ajax-nonce' );
+			return $err;
+		}
 
-        // Get woocommerce cart grand total. This is the total amount that will be sent to PayPal.
-        // Note: the $this->cart->get_cart_contents_total() function returns the total amount of the cart items without tax.
-        // The $this->cart->get_total( '') function returns the total amount of the cart items with tax. 
-        // The empty string is used to get the total amount without formatting.
-        $wc_cart_total = $this->cart->get_total('');
-        Logger::log( 'WooCommerce total cart amount (this will be used in the button): '. $wc_cart_total );
+		$data = array(
+			'id'                    => $this->button_id,
+			'nonce'                 => $nonce,
+			'env'                   => $env,
+			'client_id'             => $client_id,
+			'price'                 => $this->order->get_total(),
+			'quantity'              => 1,
+			'tax'                   => 0,
+			'shipping'              => 0,
+			'shipping_per_quantity' => 0,
+			'shipping_enable'       => 0,
+			'dec_num'               => intval( $this->wpec->get_setting( 'price_decimals_num' ) ),
+			'thousand_sep'          => $this->wpec->get_setting( 'price_thousand_sep' ),
+			'dec_sep'               => $this->wpec->get_setting( 'price_decimal_sep' ),
+			'curr_pos'              => $this->wpec->get_setting( 'price_currency_pos' ),
+			'tos_enabled'           => $this->wpec->get_setting( 'tos_enabled' ),
+			'custom_quantity'       => 0,
+			'custom_amount'         => 0,
+			'currency'              => $this->order->get_currency(),
+			'currency_symbol'       => ! empty( $this->wpec->get_setting( 'currency_symbol' ) ) ? $this->wpec->get_setting( 'currency_symbol' ) : $this->order->get_currency(),
+			'coupons_enabled'       => false,
+			'product_id'            => 0,
+			'name'                  => '#' . $this->order->get_id(),
+			'stock_enabled'         => 0, // TODO: Line remove
+			'stock_items'           => 100, // TODO: Line remove
+			'variations'            => array(), // TODO: Line remove
+			'btnStyle'              => array(
+				'height' => ! empty( $btn_sizes[ $this->wpec->get_setting( 'btn_height' ) ] ) ? $btn_sizes[ $this->wpec->get_setting( 'btn_height' ) ] : 25,
+				'shape'  => $this->wpec->get_setting( 'btn_shape' ),
+				'label'  => $this->wpec->get_setting( 'btn_type' ),
+				'color'  => $this->wpec->get_setting( 'btn_color' ),
+				'layout' => $this->wpec->get_setting( 'btn_layout' ),
+			),
+			'thank_you_url'   => $this->order->get_checkout_order_received_url(),
+			'modal_title'     => $modal_title,
+			'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
+		);
 
-	    $paypal_btn_data = array(
-		    'id'                    => $button_id,
-		    'nonce'                 => $nonce,
-		    'env'                   => $env,
-		    'client_id'             => $client_id,
-		    'price'                 => $wc_cart_total,
-		    'quantity'              => 1,
-		    'tax'                   => 0,
-		    'shipping'              => 0,
-		    'shipping_enable'       => 0,
-		    'shipping_per_quantity' => 0,
-		    'dec_num'               => intval( $this->wpec->get_setting( 'price_decimals_num' ) ),
-		    'thousand_sep'          => $this->wpec->get_setting( 'price_thousand_sep' ),
-		    'dec_sep'               => $this->wpec->get_setting( 'price_decimal_sep' ),
-		    'curr_pos'              => $this->wpec->get_setting( 'price_currency_pos' ),
-		    'tos_enabled'           => $this->wpec->get_setting( 'tos_enabled' ),
-		    'custom_quantity'       => 0,
-		    'custom_amount'         => 0,
-		    'currency'              => $currency,
-		    'currency_symbol'       => ! empty( $this->wpec->get_setting( 'currency_symbol' ) ) ? $this->wpec->get_setting( 'currency_symbol' ) : $currency,
-		    'coupons_enabled'       => false,
-		    'product_id'            => 0,
-		    'name'                  => $button_id, // TODO: Need TO FIX it; This property is used to create transient.
-		    'stock_enabled'         => 0, // TODO: Line remove
-		    'stock_items'           => 100, // TODO: Line remove
-		    'variations'            => array(), // TODO: Line remove
-		    'btnStyle'              => array(
-			    'height'    => ! empty( $btn_sizes[ $this->wpec->get_setting( 'btn_height' ) ] ) ? $btn_sizes[ $this->wpec->get_setting( 'btn_height' ) ] : 25,
-			    'shape'     => $this->wpec->get_setting( 'btn_shape' ),
-			    'label'     => $this->wpec->get_setting( 'btn_type' ),
-			    'color'     => $this->wpec->get_setting( 'btn_color' ),
-			    'layout'    => $this->wpec->get_setting( 'btn_layout' ),
-		    ),
-	    );
+		// Logger::log( 'PayPal button generation data: ', true ); // Debug purpose.
+		// Logger::log_array_data( $data, true ); // Debug purpose.
 
-	    ?>
+		$trans_name = 'wp-ppdg-' . $this->order->get_id(); // Create key using the item name.
 
-        <div class="wpec-wc-button-container">
-            <div id="paypal_button_0">
-                <!-- PayPal Button Will Render here -->
-            </div>
-        </div>
+		$trans_data = array(
+			'price'           => $data['price'],
+			'currency'        => $data['currency'],
+			'thank_you_url'   => $data['thank_you_url'],
+			'wc_id'           => $this->order->get_id(),
+		);
 
+		set_transient( $trans_name, $trans_data, 2 * 3600 );
+
+		$output = $this->get_wpec_payment_modal_html( $data );
+
+		ob_start();
+		?>
         <script type="text/javascript">
-            jQuery(function ($){
-                const wpec_pp_btn_data = <?php echo json_encode($paypal_btn_data); ?>;
-
-                // console.log(wpec_pp_btn_data); // Debug purpose.
-
-                $(document).on('wpec_paypal_sdk_loaded', function (){
-                    console.log('WPEC PayPal SDK Loaded');
-
-                    new wpecWoocommercePaymentBtnHandler( wpec_pp_btn_data );
-                });
-
-                class wpecWoocommercePaymentBtnHandler {
-                    constructor(data) {
-                        this.data = data;
-                        this.renderIn = '#' + data.id;
-                        this.generate_ppec_woocommerce_button();
-                    }
-
-                    generate_ppec_woocommerce_button() {
-                        let parent = this;
-
-                        paypal.Buttons({
-                            /**
-                             * Optional styling for buttons.
-                             *
-                             * See documentation: https://developer.paypal.com/sdk/js/reference/#link-style
-                             */
-                            style: {
-                                color: parent.data.btnStyle.color,
-                                shape: parent.data.btnStyle.shape,
-                                height: parent.data.btnStyle.height,
-                                label: parent.data.btnStyle.type,
-                                layout: parent.data.btnStyle.layout,
-                            },
-
-                            /**
-                             * OnInit is called when the button first renders.
-                             *
-                             * See documentation: https://developer.paypal.com/sdk/js/reference/#link-oninitonclick
-                             */
-                            onInit: function (data, actions)  {
-                                actions.enable();
-                            },
-
-                            /**
-                             * OnClick is called when the button is clicked
-                             *
-                             * See documentation: https://developer.paypal.com/sdk/js/reference/#link-oninitonclick
-                             */
-                            onClick: function (){},
-
-                            /**
-                             * This is called when the buyer clicks the PayPal button, which launches the PayPal Checkout
-                             * window where the buyer logs in and approves the transaction on the paypal.com website.
-                             *
-                             * The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.
-                             *
-                             * See documentation: https://developer.paypal.com/sdk/js/reference/#link-createorder
-                             */
-                            createOrder: async function () {
-                                console.log('Setting up the AJAX request for create-order call.');
-
-                                // Create order_data object to be sent to the server.
-                                let price_amount = parseFloat( parent.data.price );
-                                //round to 2 decimal places, to make sure that the API call dont fail.
-                                price_amount = parseFloat(price_amount.toFixed(2));
-
-                                let itemTotalValueRoundedAsNumber = price_amount;
-
-                                const order_data = {
-                                    intent: 'CAPTURE',
-                                    payment_source: {
-                                        paypal: {
-                                            experience_context: {
-                                                payment_method_preference: 'IMMEDIATE_PAYMENT_REQUIRED',
-                                                shipping_preference: 'NO_SHIPPING',
-                                                user_action: 'PAY_NOW',
-                                            }
-                                        }
-                                    },
-                                    purchase_units: [ {
-                                        amount: {
-                                            value: price_amount,
-                                            currency_code: parent.data.currency,
-                                            breakdown: {
-                                                item_total: {
-                                                    currency_code: parent.data.currency,
-                                                    value: itemTotalValueRoundedAsNumber
-                                                }
-                                            }
-                                        },
-                                        items: [ {
-                                            name: parent.data.name,
-                                            quantity: parent.data.quantity,
-                                            unit_amount: {
-                                                value: price_amount,
-                                                currency_code: parent.data.currency
-                                            }
-                                        } ]
-                                    } ]
-                                };
-
-                                const wpec_data = parent.data;
-
-                                // console.log("Ispect order_data: ", order_data); // Debug Purpose.
-                                // console.log("Ispect wpec_data: ", wpec_data); // Debug Purpose.
-
-                                let post_data = new URLSearchParams({
-                                    action: 'wpec_woocommerce_pp_create_order',
-                                    data: JSON.stringify(order_data),
-                                    wpec_data: JSON.stringify(wpec_data),
-                                    _wpnonce: parent.data.nonce,
-                                }).toString();
-                                try {
-                                    let response = await fetch("<?php echo admin_url( 'admin-ajax.php' ); ?>", {
-                                        method: "post",
-                                        headers: {
-                                            'Content-Type': 'application/x-www-form-urlencoded'
-                                        },
-                                        body: post_data
-                                    });
-
-                                    response = await response.json();
-
-                                    if (!response.data.order_id) {
-                                        throw new Error(response.message);
-                                    }
-
-                                    // Create order api call successful.
-                                    console.log(response.message);
-                                    return response.data.order_id;
-
-                                } catch (error) {
-                                    console.error(error.message);
-                                    alert('Could not initiate PayPal Checkout...\n\n' + error.message);
-                                }
-                            },
-
-                            /**
-                             * Captures the funds from the transaction and shows a message to the buyer to let them know the
-                             * transaction is successful. The method is called after the buyer approves the transaction on paypal.com.
-                             *
-                             * See documentation: https://developer.paypal.com/sdk/js/reference/#link-onapprove
-                             */
-                            onApprove: async function (data, actions) {
-                                console.log('Successfully created a transaction.');
-                                // console.log(data, actions); // Debug Purpose.
-
-                                // Create the data object to be sent to the server.
-                                let pp_bn_data = {};
-                                // The orderID is the ID of the order that was created in the createOrder method.
-                                pp_bn_data.order_id = data.orderID;
-                                // parent.data is the data object that was passed to the constructor.
-                                const wpec_data = parent.data;
-
-                                let post_data = new URLSearchParams({
-                                    action: 'wpec_woocommerce_pp_capture_order',
-                                    data: JSON.stringify(pp_bn_data),
-                                    wpec_data: JSON.stringify(wpec_data),
-                                    _wpnonce: parent.data.nonce,
-                                }).toString();
-                                try {
-                                    let response = await fetch( "<?php echo admin_url( 'admin-ajax.php' ); ?>", {
-                                        method: "post",
-                                        headers: {
-                                            'Content-Type': 'application/x-www-form-urlencoded'
-                                        },
-                                        body: post_data
-                                    });
-
-                                    response = await response.json();
-
-                                    if (!response.success){
-                                        throw new Error(response.message);
-                                    }
-
-                                    // Capture Order successful.
-                                    console.log('Capture-order API call to PayPal completed successfully.');
-                                    // console.log('Capture order response data: ', response); // Debug purpose.
-
-                                    // Do after capture order successful code if needed.
-                                    window.location.href = response.data.redirect_url;
-
-                                } catch (error) {
-                                    console.error(error.message);
-                                    alert('PayPal returned an error! Transaction could not be processed.\n\n' + error.message);
-                                }
-                            },
-
-                            /**
-                             * If an error prevents buyer checkout, alert the user that an error has occurred with the buttons using this callback.
-                             *
-                             * See documentation: https://developer.paypal.com/sdk/js/reference/#link-onerror
-                             */
-                            onError: function (err) {
-                                // TODO: Need to extract the proper error message.
-                                console.error('An error prevented the user from checking out with PayPal. ' + JSON.stringify(err));
-                                alert( '<?php _e("Error occurred during PayPal checkout process.", "wp-express-checkout"); ?>\n\n' + JSON.stringify(err) );
-                            },
-
-                            /**
-                             * Handles onCancel event.
-                             *
-                             * See documentation: https://developer.paypal.com/sdk/js/reference/#link-oncancel
-                             */
-                            onCancel: function (data) {
-                                console.log('Checkout operation cancelled by the customer.');
-                                //Return to the parent page which the button does by default.
-
-                                // TODO: Maybe handle deleting woocommerce order later if needed.
-                            },
-
-                        }).render(this.renderIn)
-                            .catch((err) => {
-                                console.error('PayPal Buttons failed to render');
-                            });
-                    }
-                }
-
-                const wcPaymentMethodsRadioInputs = document.querySelectorAll('ul.wc_payment_methods input.input-radio');
-                // Add onChange event listener to each radio input
-                wcPaymentMethodsRadioInputs.forEach(function(input) {
-                    // Get the woocommerce default place_order button
-                    const placeOrderBtn = document.getElementById("place_order");
-
-                    // Check if wp-express-checkout payment method is selected. If so, disable and hide default place order button.
-                    if(input.value === 'wp-express-checkout' && input.checked){
-                        wpec_wc_place_order_btn_disable(placeOrderBtn);
-                    }
-
-                    // Check if payment method in changed. Disable and hide place_order button if wp-express-checkout is selected.
-                    input.addEventListener('change', function(event) {
-                        // Your code to execute when the radio input changes
-                        if (event.target.value === 'wp-express-checkout'){
-                            wpec_wc_place_order_btn_disable(placeOrderBtn);
-                        }else{
-                            wpec_wc_place_order_btn_enable(placeOrderBtn);
-                        }
-                    });
-                });
-
-                function wpec_wc_place_order_btn_disable(btn){
-                    btn.setAttribute('disabled', 'true');
-                    btn.style.display = 'none';
-                }
-
-                function wpec_wc_place_order_btn_enable(btn){
-                    btn.removeAttribute('disabled');
-                    btn.style.display = '';
-                }
-            })
+            var wpec_paypal_button_0_data = <?php echo json_encode( $data )?>;
         </script>
-	    <?php
-    }
+		<?php
+		$output .= ob_get_clean();
+
+		return $output;
+	}
 
 	private function show_err_msg( $msg, $code = 0 ) {
 		return sprintf( '<div class="wpec-error-message wpec-error-message-' . esc_attr( $code ) . '">%s</div>', $msg );
+	}
+
+	public function get_wpec_payment_modal_html( $args ) {
+		ob_start();
+		?>
+
+        <!--Modal-->
+        <div id="wpec-modal-<?php echo esc_attr( $args['id'] ); ?>"
+             class="wpec-modal wpec-opacity-0 wpec-pointer-events-none wpec-modal-product-<?php echo esc_attr( $args['product_id'] ); ?>">
+
+            <div class="wpec-modal-overlay"></div>
+
+            <div class="wpec-modal-container">
+                <div class="wpec-modal-content">
+                    <!--Title-->
+                    <div class="wpec-modal-content-title">
+                        <p><?php echo esc_html( $args['modal_title'] ); ?></p>
+                        <div class="wpec-modal-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div style="position: relative;"
+                         class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $args['product_id'] ); ?>"
+                         data-ppec-button-id="<?php echo esc_attr( $args['id'] ); ?>"
+                         data-price-class="<?php echo esc_attr( $args['price_class'] ); ?>">
+
+                        <div class="wp-ppec-overlay" data-ppec-button-id="<?php echo esc_attr( $args['id'] ); ?>">
+                            <div class="wp-ppec-spinner">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+
+                        <div class="wp-ppec-button-container">
+
+                            <div class="wpec-price-container <?php echo esc_attr( $args['price_class'] ); ?>">
+                                <?php echo Shortcodes::get_instance()->generate_price_tag( $args ); ?>
+                            </div>
+
+                            <div id="place-order-<?php echo esc_attr( $args['id'] );?>" style="display:none;">
+                                <button class="wpec-place-order-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+					                <?php esc_html_e( 'Place Order', 'wp-express-checkout' ); ?>
+                                </button>
+                            </div>
+
+                            <div id="<?php echo esc_attr( $args['id'] ); ?>" style="max-width:<?php echo esc_attr( $args['btnStyle']['width'] ); ?>"></div>
+
+                            <div class="wpec-button-placeholder" style="display: none; border: 1px solid #E7E9EB; padding:1rem;">
+                                <i><?php esc_html_e( 'This is where the Express Checkout Button will show. View it on the front-end to see how it will look to your visitors', 'wp-express-checkout' ); ?></i>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <button data-wpec-modal="wpec-modal-<?php echo esc_attr( $args['id'] ); ?>" class="wpec-modal-open wpec-modal-open-product-<?php echo esc_attr( $args['product_id'] ); ?>"></button>
+
+        <?php
+		return ob_get_clean();
 	}
 }
