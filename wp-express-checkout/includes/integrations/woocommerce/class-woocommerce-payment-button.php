@@ -63,9 +63,9 @@ class WooCommerce_Payment_Button {
 			'coupons_enabled'       => false,
 			'product_id'            => 0,
 			'name'                  => '#' . $this->order->get_id(),
-			'stock_enabled'         => 0, // TODO: Line remove
-			'stock_items'           => 100, // TODO: Line remove
-			'variations'            => array(), // TODO: Line remove
+			'stock_enabled'         => 0, // TODO: Maybe unnecessary data.
+			'stock_items'           => 0, // TODO: Maybe unnecessary data.
+			'variations'            => array(), // TODO: Maybe unnecessary data.
 			'btnStyle'              => array(
 				'height' => ! empty( $btn_sizes[ $this->wpec->get_setting( 'btn_height' ) ] ) ? $btn_sizes[ $this->wpec->get_setting( 'btn_height' ) ] : 25,
 				'shape'  => $this->wpec->get_setting( 'btn_shape' ),
