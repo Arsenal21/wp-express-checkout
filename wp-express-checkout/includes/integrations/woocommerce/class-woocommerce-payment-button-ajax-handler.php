@@ -16,6 +16,10 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 		add_action( 'wp_ajax_wpec_wc_generate_button', array( $this, 'handle_wpec_wc_generate_button' ) );
 		add_action( 'wp_ajax_nopriv_wpec_wc_generate_button', array( $this, 'handle_wpec_wc_generate_button' ) );
 
+        // For WooCommerce checkout block.
+        add_action( 'wp_ajax_wpec_wc_block_payment_button_data', array( $this, 'handle_wpec_wc_block_payment_button_data' ) );
+		add_action( 'wp_ajax_nopriv_wpec_wc_block_payment_button_data', array( $this, 'handle_wpec_wc_block_payment_button_data' ) );
+
 		//Handle the create-order ajax request for woocommerce checkout.
 		add_action( 'wp_ajax_wpec_woocommerce_pp_create_order', array(&$this, 'pp_create_order' ) );
 		add_action( 'wp_ajax_nopriv_wpec_woocommerce_pp_create_order', array(&$this, 'pp_create_order' ) );
@@ -56,6 +60,50 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 
 		wp_send_json_success( $output );
 	}
+
+    public function handle_wpec_wc_block_payment_button_data() {
+        if ( ! check_ajax_referer( 'wpec-wc-render-button-nonce', 'nonce', false ) ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'wp-express-checkout' )
+                )
+            );
+        }
+
+        if ( empty( $_POST['order_id'] ) ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'No order data received.', 'wp-express-checkout' )
+                )
+            );
+        }
+
+        $wc_order_id = intval( $_POST['order_id'] );
+
+        $woo_button_sc = new WooCommerce_Payment_Button($wc_order_id);
+
+        $button_data = $woo_button_sc->wpec_prepare_woo_payment_button_data();
+
+        $trans_name = 'wp-ppdg-' . $button_data['order_id']; // Create key using the item name.
+        $trans_data = array(
+            'price'           => $button_data['price'],
+            'currency'        => $button_data['currency'],
+            'thank_you_url'   => $button_data['thank_you_url'],
+            'wc_id'           => $button_data['order_id'],
+        );
+
+        set_transient( $trans_name, $trans_data, 2 * 3600 );
+
+        wp_send_json(
+            array(
+                'success' => true,
+                'message' => __("Button Generated", 'wp-express-checkout'),
+                'data' => $button_data
+            )
+        );
+    }
 
 
 	/**

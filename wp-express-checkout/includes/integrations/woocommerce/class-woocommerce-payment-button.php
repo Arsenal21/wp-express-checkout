@@ -105,6 +105,69 @@ class WooCommerce_Payment_Button {
 		return $output;
 	}
 
+    public function wpec_prepare_woo_payment_button_data() {
+        $modal_title = isset($_POST['modal_title']) ? sanitize_text_field( $_POST['modal_title'] ) : '';
+        $btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
+        $nonce = wp_create_nonce( 'wpec-wc-pp-payment-ajax-nonce' );
+        $is_live = $this->wpec->get_setting( 'is_live' );
+        if ( $is_live ) {
+            $env       = 'production';
+            $client_id = $this->wpec->get_setting( 'live_client_id' );
+        } else {
+            $env       = 'sandbox';
+            $client_id = $this->wpec->get_setting( 'sandbox_client_id' );
+        }
+
+        if ( empty( $client_id ) ) {
+            $err_msg = sprintf( __( "Please enter %s Client ID in the settings.", 'wp-express-checkout' ), $env );
+            $err     = $this->show_err_msg( $err_msg, 'client-id' );
+
+            return $err;
+        }
+
+        $data = array(
+            'id'                    => $this->button_id,
+            'order_id'              => $this->order->get_id(),
+            'nonce'                 => $nonce,
+            'env'                   => $env,
+            'client_id'             => $client_id,
+            'price'                 => $this->order->get_total(),
+            'price_tag'             => WC()->cart->get_total(),
+            'quantity'              => 1,
+            'tax'                   => 0,
+            'shipping'              => 0,
+            'shipping_per_quantity' => 0,
+            'shipping_enable'       => 0,
+            'dec_num'               => intval( $this->wpec->get_setting( 'price_decimals_num' ) ),
+            'thousand_sep'          => $this->wpec->get_setting( 'price_thousand_sep' ),
+            'dec_sep'               => $this->wpec->get_setting( 'price_decimal_sep' ),
+            'curr_pos'              => $this->wpec->get_setting( 'price_currency_pos' ),
+            'tos_enabled'           => $this->wpec->get_setting( 'tos_enabled' ),
+            'custom_quantity'       => 0,
+            'custom_amount'         => 0,
+            'currency'              => $this->order->get_currency(),
+            'currency_symbol'       => ! empty( $this->wpec->get_setting( 'currency_symbol' ) ) ? $this->wpec->get_setting( 'currency_symbol' ) : $this->order->get_currency(),
+            'coupons_enabled'       => false,
+            'product_id'            => 0,
+            'name'                  => '#' . $this->order->get_id(),
+            'stock_enabled'         => 0, // TODO: Maybe unnecessary data.
+            'stock_items'           => 0, // TODO: Maybe unnecessary data.
+            'variations'            => array(), // TODO: Maybe unnecessary data.
+            'btnStyle'              => array(
+                'height' => ! empty( $btn_sizes[ $this->wpec->get_setting( 'btn_height' ) ] ) ? $btn_sizes[ $this->wpec->get_setting( 'btn_height' ) ] : 25,
+                'shape'  => $this->wpec->get_setting( 'btn_shape' ),
+                'label'  => $this->wpec->get_setting( 'btn_type' ),
+                'color'  => $this->wpec->get_setting( 'btn_color' ),
+                'layout' => $this->wpec->get_setting( 'btn_layout' ),
+            ),
+            'thank_you_url'   => $this->order->get_checkout_order_received_url(),
+            'modal_title'     => $modal_title,
+            'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
+        );
+
+        return $data;
+    }
+
 	private function show_err_msg( $msg, $code = 0 ) {
 		return sprintf( '<div class="wpec-error-message wpec-error-message-' . esc_attr( $code ) . '">%s</div>', $msg );
 	}

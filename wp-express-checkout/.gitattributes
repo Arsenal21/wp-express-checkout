@@ -32,6 +32,9 @@ docs/ export-ignore
 grunt/ export-ignore
 tests/ export-ignore
 bin/ export-ignore
+src/ export-ignore
+
+webpack.config.js export-ignore
 
 #paypal sdk
 samples/ export-ignore
