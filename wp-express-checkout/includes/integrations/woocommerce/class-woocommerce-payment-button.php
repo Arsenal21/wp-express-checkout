@@ -165,9 +165,6 @@ class WooCommerce_Payment_Button {
             'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
         );
 
-        // Logger::log( 'PayPal button generation data: ', true ); // Debug purpose.
-        // Logger::log_array_data( $data, true ); // Debug purpose.
-
         return $data;
     }
 

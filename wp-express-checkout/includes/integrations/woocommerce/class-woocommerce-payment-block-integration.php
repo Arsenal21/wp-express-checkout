@@ -58,8 +58,8 @@ class WooCommerce_Gateway_Block_Support extends AbstractPaymentMethodType {
             'title'        => $this->get_setting( 'title' ),
             'description'  => $this->get_setting( 'description' ),
             'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
-            'popup_title' => $this->gateway->get_option( 'popup_title' ), // TODO: Fix
-            'renderButtonNonce' => wp_create_nonce( 'wpec-wc-render-button-nonce' ), // TODO: Fix
+            'popup_title' => $this->gateway->get_option( 'popup_title' ),
+            'renderButtonNonce' => wp_create_nonce( 'wpec-wc-render-button-nonce' ),
             'supports' => $this->gateway->supports,
             'pp_sdk_args' => array(
                 'intent' => 'capture',
