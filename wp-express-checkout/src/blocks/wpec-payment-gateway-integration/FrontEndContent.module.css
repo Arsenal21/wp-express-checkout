@@ -1,0 +1,67 @@
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modalHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modalHeader h4{
+    margin: 1.2rem 0 !important;
+}
+
+.modalShow {
+    display: block;
+}
+
+.modalContent {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    width: 80%;
+    position: relative;
+}
+
+.modalCloseIcon {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.modalCloseBtn {
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    cursor: pointer;
+}
+
+.modalCloseBtn:hover .modalCloseIcon,
+.modalCloseBtn:focus .modalCloseIcon {
+    color: black;
+    text-decoration: none;
+}
+
+
+/* Tablets (min-width: 600px) */
+@media (min-width: 600px) {
+    .modalContent {
+        width: 65%;
+    }
+}
+
+/* Computers (min-width: 992px) */
+@media (min-width: 992px) {
+    .modalContent {
+        width: 50%;
+    }
+}

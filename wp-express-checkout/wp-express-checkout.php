@@ -84,3 +84,10 @@ function wpec_manage_admin_feedback(){
 	$user_feedback->init();
 }
 add_action( 'admin_init', 'wpec_manage_admin_feedback' );
+
+/**
+ * Do WooCommerce-related initialization if needed.
+ *
+ * Codes defined here needs to run before plugin loaded hook.
+ */
+new WP_Express_Checkout\Integrations\WPEC_WooCommerce_Init_handler();

@@ -1,7 +1,7 @@
 {
   "name": "wp-express-checkout",
   "title": "WP Express Checkout",
-  "version": "2.1.5",
+  "version": "2.3.11",
   "description": "This plugin allows you to generate a customizable PayPal payment button that lets the customers pay quickly in a popup via PayPal.",
   "homepage": "https://wp-express-checkout.com/",
   "repository": {
@@ -13,35 +13,22 @@
     "url": "https://www.tipsandtricks-hq.com/"
   },
   "main": "Gruntfile.js",
+  "scripts": {
+    "start": "wp-scripts start",
+    "build": "wp-scripts build"
+  },
   "devDependencies": {
-    "@tailwindcss/forms": "^0.2.1",
-    "@tailwindcss/postcss7-compat": "^2.0.3",
-    "autoprefixer": "^9.8.6",
-    "grunt": "^1.0.3",
-    "grunt-banner": "^0.6.0",
-    "grunt-changelog": "^0.3.2",
-    "grunt-checktextdomain": "^1.0.0",
-    "grunt-contrib-csslint": "^2.0.0",
-    "grunt-contrib-imagemin": "^4.0.0",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-sass": "^1.0.0",
-    "grunt-contrib-uglify": "^1.0.0",
-    "grunt-contrib-watch": "^1.1.0",
-    "grunt-csscomb": "^3.1.1",
-    "grunt-fixindent": "^0.1.3",
-    "grunt-jsbeautifier": "^0.2.10",
-    "grunt-postcss": "^0.9.0",
-    "grunt-rtlcss": "^2.0.1",
-    "grunt-wp-i18n": "^1.0.3",
-    "node-bourbon": "^4.2.3",
-    "postcss": "^7.0.35",
-    "postcss-css-variables": "^0.17.0",
-    "postcss-nested": "^4.2.1",
-    "postcss-rem-to-pixel": "^4.1.2",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3"
+    "@woocommerce/dependency-extraction-webpack-plugin": "^3.0.1",
+    "@wordpress/scripts": "^27.9.0",
+    "jquery": "^3.7.1"
   },
   "browserslist": [
     "last 2 versions",
     "> 10%"
-  ]
+  ],
+  "dependencies": {
+    "@wordpress/components": "^27.6.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38"
+  }
 }

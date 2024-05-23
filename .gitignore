@@ -50,7 +50,7 @@ tests/unit.suite.yml
 # Netbeans #
 ##############
 /nbproject/private/
-
+wp-express-checkout/*_debug_log.txt
 wp-express-checkout.zip
 other-helpful-files/temp/
 .idea

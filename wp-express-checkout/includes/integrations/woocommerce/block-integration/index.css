@@ -1,0 +1,78 @@
+/*!****************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/blocks/wpec-payment-gateway-integration/FrontEndContent.module.css ***!
+  \****************************************************************************************************************************************************************************************************************************/
+.irAUBTLdCxpkOtz5gVXW {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.tDOXF0SmLibBXak_A8Gj{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+}
+
+.tDOXF0SmLibBXak_A8Gj h4{
+    margin: 1.2rem 0 !important;
+}
+
+.X7BzTCTMwFKliO7DVzWa {
+    display: block;
+}
+
+.n8m9Whu76Vh1l6wKzK7f {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    width: 80%;
+    position: relative;
+}
+
+.hZ_W3LPfn7tpNQcoesTc {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.hVa5HE2OdRlut0YLHMi6 {
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    cursor: pointer;
+}
+
+.hVa5HE2OdRlut0YLHMi6:hover .hZ_W3LPfn7tpNQcoesTc,
+.hVa5HE2OdRlut0YLHMi6:focus .hZ_W3LPfn7tpNQcoesTc {
+    color: black;
+    text-decoration: none;
+}
+
+
+/* Tablets (min-width: 600px) */
+@media (min-width: 600px) {
+    .n8m9Whu76Vh1l6wKzK7f {
+        width: 65%;
+    }
+}
+
+/* Computers (min-width: 992px) */
+@media (min-width: 992px) {
+    .n8m9Whu76Vh1l6wKzK7f {
+        width: 50%;
+    }
+}
+
+/*# sourceMappingURL=index.css.map*/
