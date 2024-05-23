@@ -34,7 +34,7 @@ tests/ export-ignore
 bin/ export-ignore
 src/ export-ignore
 
-webpack.config.js
+webpack.config.js export-ignore
 
 #paypal sdk
 samples/ export-ignore
