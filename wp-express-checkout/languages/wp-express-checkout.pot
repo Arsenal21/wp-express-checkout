@@ -3332,7 +3332,7 @@ msgid "WP Express Checkout Gateway"
 msgstr ""
 
 #: includes/integrations/woocommerce/class-woocommerce-gateway.php:31
-msgid "Use the WP Express Checkout plugin to process payments via PayPal Express Checkout API."
+msgid "Use the WP Express Checkout plugin to process payments via PayPal Checkout API."
 msgstr ""
 
 #: includes/integrations/woocommerce/class-woocommerce-gateway.php:95

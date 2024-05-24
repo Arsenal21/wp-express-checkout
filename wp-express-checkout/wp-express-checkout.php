@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       WP Express Checkout
  * Description:       This plugin allows you to create a customizable PayPal payment button that lets the customers pay quickly in a popup via PayPal.
- * Version:           2.3.11
+ * Version:           2.3.12
  * Author:            Tips and Tricks HQ
  * Author URI:        https://www.tipsandtricks-hq.com/
  * Plugin URI:        https://wp-express-checkout.com/
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //Define constants
-define( 'WPEC_PLUGIN_VER', '2.3.11' );
+define( 'WPEC_PLUGIN_VER', '2.3.12' );
 define( 'WPEC_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 define( 'WPEC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPEC_PLUGIN_FILE', __FILE__ );
@@ -35,7 +35,9 @@ require WPEC_PLUGIN_PATH . '/vendor/autoload.php';
 // Create aliases for old class names and autoload them on a request
 require WPEC_PLUGIN_PATH . '/vendor/autoload-deprecated.php';
 
-// Load classes.
+/*
+ * Load the classes.
+ */
 function wpec_load_classes() {
 	WP_Express_Checkout\Main::get_instance();
 	WP_Express_Checkout\Shortcodes::get_instance();
@@ -60,12 +62,14 @@ function wpec_load_classes() {
 add_action( 'plugins_loaded', 'wpec_load_classes' );
 
 /*
- * Register hooks that are fired when the plugin is activated or deactivated.
+ * Register hooks that are triggered when the plugin is activated or deactivated.
  */
 register_activation_hook( __FILE__, array( 'WP_Express_Checkout\Main', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WP_Express_Checkout\Main', 'deactivate' ) );
 
-//Add settings link in plugins listing page
+/*
+ * Add settings link in plugins listing page
+ */
 function wpec_add_settings_link($links, $file) {
     if ($file == plugin_basename(__FILE__)) {
         $settings_link = '<a href="edit.php?post_type=ppec-products&page=ppec-settings-page">Settings</a>';
@@ -75,7 +79,9 @@ function wpec_add_settings_link($links, $file) {
 }
 add_filter('plugin_action_links', 'wpec_add_settings_link', 10, 2);
 
-//Manage admin user feedback
+/*
+ * Manage admin user feedback
+ */
 function wpec_manage_admin_feedback(){
 	if( !class_exists( 'WPEC_Admin_User_Feedback' ) ) {
 		include_once WPEC_PLUGIN_PATH . 'admin/includes/class-admin-user-feedback.php';
@@ -86,8 +92,7 @@ function wpec_manage_admin_feedback(){
 add_action( 'admin_init', 'wpec_manage_admin_feedback' );
 
 /**
- * Do WooCommerce-related initialization if needed.
- *
- * Codes defined here needs to run before plugin loaded hook.
+ * Do any WooCommerce-related initialization (if needed for the woo integration).
+ * Codes defined in this class needs to run before the plugins_loaded hook.
  */
 new WP_Express_Checkout\Integrations\WPEC_WooCommerce_Init_handler();

@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.5
-Stable tag: 2.3.11
+Stable tag: 2.3.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,7 +86,7 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 * Option to test it on PayPal Sandbox mode before going Live.
 * Option to [Integrate it with WooCommerce](https://wp-express-checkout.com/woocommerce-paypal-express-checkout/) to offer product checkout via PayPal's express checkout system.
 
-The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Express Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
+The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
 
 You can also accept payment using [PayPal's Pay in 4](https://www.paypal.com/us/webapps/mpp/pay-in-4) feature (buy now pay later offering). Read the [Buy Now, Pay Later Tutorial](https://wp-express-checkout.com/paypal-pay-in-4-wp-express-checkout-plugin/) to learn more.
 
@@ -164,8 +164,8 @@ None
 
 == Changelog ==
 
-= WIP = 
-- WooCommerce integration updated to make it compatible with the latest WooCommerce version.
+= 2.3.12 = 
+- The WooCommerce integration has been updated to make it compatible with the latest version.
 - Added Support for WP Express Checkout payment gateway WooCommerce checkout block.
 
 = 2.3.11 =
