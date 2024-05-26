@@ -510,4 +510,20 @@ class Utils {
 		return $countries;
 	}
 
+	/**
+	 * Get order data as an associative array.
+	 *
+	 * @param int $order_id Order ID.
+	 * 
+	 * @return array Order data as array.
+	 */
+	public static function get_order_data_in_array($order_id){
+		try {
+			$order = Orders::retrieve( $order_id );
+		} catch ( Exception $exc ) {
+			return array();
+		}
+
+		return $order->get_order_data_in_array();
+	}
 }
