@@ -517,7 +517,7 @@ class Utils {
 	 * 
 	 * @return array Order data as array.
 	 */
-	public static function get_order_data_in_array($order_id){
+	public static function get_order_data_in_array_format($order_id){
 		try {
 			$order = Orders::retrieve( $order_id );
 		} catch ( Exception $exc ) {
