@@ -672,4 +672,31 @@ class Order {
 		}
 	}
 
+	/**
+	 * Get order data as an associative array.
+	 *
+	 * @return array Order data.
+	 */
+	public function get_order_data_in_array(){
+		return array(
+			'id' => $this->get_id(),
+			'description' => $this->get_description(),
+			'resource_id' => $this->get_resource_id(),
+			'capture_id' => $this->get_capture_id(),
+			'state' => $this->get_status(),
+			'display_status' => $this->get_display_status(),
+			'items' => $this->get_item('ppec-products'),
+			'quantity' => $this->get_quantity_ordered(),
+			'variations' => $this->get_selected_variations(),
+			'tax' => !empty($this->get_item('tax')) ? $this->get_item('tax')['price'] : 0,
+			'shipping' => !empty($this->get_item('shipping')) ? $this->get_item('shipping')['price'] : 0,
+			'currency' => $this->get_currency(),
+			'total' => $this->get_total(),
+			'ip_address' => $this->get_ip_address(),
+			'email' => $this->get_email_address(),
+			'return_url' => $this->get_return_url(),
+			'cancel_url' => $this->get_cancel_url(),
+			'refund_date' => $this->get_refund_date(),
+		);
+	}
 }

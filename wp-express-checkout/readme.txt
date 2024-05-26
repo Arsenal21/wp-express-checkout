@@ -164,6 +164,9 @@ None
 
 == Changelog ==
 
+= WIP =
+- New utility function 'get_order_data_in_array' added to get order data as array.
+
 = 2.3.12 = 
 - The WooCommerce integration has been updated to make it compatible with the latest version.
 - Added Support for WP Express Checkout payment gateway WooCommerce checkout block.
