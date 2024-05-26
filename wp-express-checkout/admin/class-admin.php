@@ -398,6 +398,19 @@ class Admin {
 			. __( 'This is the body of the email that will be sent to the seller for record. Do not change the text within the braces {}. You can use the following email tags in this email body field:', 'wp-express-checkout' )
 			. $tags_desc,
 		) );
+		
+		add_settings_field(
+			'enable_per_product_email_customization',
+			__( 'Enable Per Product Email Customization', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-emails',
+			'ppdg-emails-section',
+				array(
+						'field' => 'enable_per_product_email_customization', 
+						'type' => 'checkbox', 
+						'desc' => __( 'Check this to customize buyer and seller email for individual products.', 'wp-express-checkout' ) 
+					)
+		);
 
 		/******************************/
 		/* Advanced Settings Menu Tab */

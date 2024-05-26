@@ -375,6 +375,7 @@ class Main {
 									. "\n{product_details}"
 									. "\n\nThe sale was made to {first_name} {last_name} ({payer_email})"
 									. "\n\nThanks",
+			'enable_per_product_email_customization' => 0,						
 			'coupons_enabled'      => 0,
 			'tos_enabled'          => 0,
 			'tos_text'             => __( 'I accept the <a href="https://example.com/terms-and-conditions/" target="_blank">Terms and Conditions</a>', 'wp-express-checkout' ),

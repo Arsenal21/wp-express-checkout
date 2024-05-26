@@ -34,6 +34,7 @@ class Products_Meta_Boxes {
 		add_meta_box( 'ppec_link_meta_box', __( 'Link URL', 'wp-express-checkout' ), array( $this, 'display_link_meta_box' ), Products::$products_slug, 'side', 'default' );
 		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance Related', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), Products::$products_slug, 'normal', 'high' );
 		add_meta_box( 'wpec_coupons_meta_box', __( 'Coupons Settings', 'wp-express-checkout' ), array( $this, 'display_coupons_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_custom_email_meta_box', __( 'Custom Email', 'wp-express-checkout' ), array( $this, 'display_custom_email_meta_box' ), Products::$products_slug, 'normal', 'high' );
 	}
 
 	function display_description_meta_box( $post ) {
@@ -513,6 +514,146 @@ jQuery(document).ready(function($) {
 		<?php
 	}
 
+	public function display_custom_email_meta_box ($post) {
+		$wpec = Main::get_instance();
+		if ( $wpec->get_setting( 'enable_per_product_email_customization' ) !== 1 ) {
+			_e( 'Product based custom email is disabled. It must be enabled <a href="edit.php?post_type=ppec-products&page=ppec-settings-page&action=email-settings#wp-ppdg-enable_per_product_email_customization" target="_blank">in the settings</a> before you can configure it for this product.', 'wp-express-checkout' );
+			return false;
+		}
+
+		$email_tags = \WP_Express_Checkout\Utils::get_dynamic_tags_white_list();
+		$email_tags_desc = '';
+		foreach ( $email_tags as $tag => $desc ) {
+			$email_tags_desc .= "<br /><code>{{$tag}}</code> - {$desc}";
+		}
+
+		$email_enabled = get_post_meta( $post->ID, 'custom_buyer_email_enabled', true );
+
+		$buyer_email_subj    = get_post_meta( $post->ID, 'custom_buyer_email_subj', true );
+		$buyer_email_from    = get_post_meta( $post->ID, 'custom_buyer_email_from', true );
+		$buyer_email_body    = get_post_meta( $post->ID, 'custom_buyer_email_body', true );
+
+		$buyer_email_subj = empty( $buyer_email_subj ) ? $wpec->get_setting( 'buyer_email_subj' ) : $buyer_email_subj;
+		$buyer_email_from = empty( $buyer_email_from ) ? $wpec->get_setting( 'buyer_from_email' ) : $buyer_email_from;
+		$buyer_email_body = empty( $buyer_email_body ) ? $wpec->get_setting( 'buyer_email_body' ) : $buyer_email_body;
+		?>
+		<div class="nav-tab-wrapper">
+			<a href="#" data-tab-name="buyer-email" class="wpec-custom-email-nav nav-tab nav-tab-active">Buyer email</a>
+			<a href="#" data-tab-name="seller-email" class="wpec-custom-email-nav nav-tab">Seller email</a>
+		</div>
+		<div data-tab-name="buyer-email" style="padding-top: 10px;">
+			<fieldset>
+				<label><input type="checkbox" name="custom_buyer_email_enabled" value="1"<?php echo ! empty( $email_enabled ) ? ' checked' : ''; ?>>Send customized email to buyers of this product</label>
+				<br>
+				<p class="description"><?php _e( 'Enable this to send email which you can configure below to buyers of this product.', 'wp-express-checkout' ); ?></p>
+				
+				<label>
+					<?php _e( 'From Email', 'wp-express-checkout' ); ?>
+					<br>
+					<input type="text" name="custom_buyer_email_from" size="50" value="<?php echo $buyer_email_from; ?>">
+				</label>
+				<p class="description"><?php _e( 'Enter from email address.', 'wp-express-checkout' ); ?></p>
+
+				<label>
+					<?php _e( 'Email Subject', 'wp-express-checkout' ); ?>
+					<br>
+					<input type="text" name="custom_buyer_email_subj" size="50" value="<?php echo $buyer_email_subj; ?>">
+				</label>
+				<p class="description"><?php _e( 'Enter subject of the email.', 'wp-express-checkout' ); ?></p>
+
+				<label>
+					<?php _e( 'Email Body', 'wp-express-checkout' ); ?>
+					<br>
+					<textarea cols="70" rows="7" name="custom_buyer_email_body"><?php echo $buyer_email_body; ?></textarea>
+				</label>
+				<p class="description">
+					<?php _e( 'This is the body of the email that will be sent to the buyer. Do not change the text within the braces {}.', 'wp-express-checkout' ); ?>
+				</p>
+			</fieldset>
+		</div>
+
+		<?php
+			$seller_email_enabled = get_post_meta( $post->ID, 'custom_seller_email_enabled', true );
+
+			$seller_email_subj    = get_post_meta( $post->ID, 'custom_seller_email_subj', true );
+			$seller_notification_email  = get_post_meta( $post->ID, 'custom_seller_notification_email', true );
+			$seller_email_body    = get_post_meta( $post->ID, 'custom_seller_email_body', true );
+
+			$seller_email_subj = empty( $seller_email_subj ) ? $wpec->get_setting( 'seller_email_subj' ) : $seller_email_subj;
+			$seller_notification_email = empty( $seller_notification_email ) ? $wpec->get_setting( 'notify_email_address' ) : $seller_notification_email;
+			$seller_email_body = empty( $seller_email_body ) ? $wpec->get_setting( 'seller_email_body' ) : $seller_email_body;
+		?>
+		<div data-tab-name="seller-email" style="padding-top: 10px; display: none;">
+			<fieldset>
+				<label><input type="checkbox" name="custom_seller_email_enabled" value="1"<?php echo ! empty( $seller_email_enabled ) ? ' checked' : ''; ?>>Send a customized notification email to the seller</label>
+				<br>
+				<p class="description"><?php _e( 'Enable this to send an email which you can configure below to the seller of this product.', 'wp-express-checkout' ); ?></p>
+				
+				<label>
+					<?php _e( 'Notification Email Address', 'wp-express-checkout' ); ?>
+					<br>
+					<input type="text" name="custom_seller_notification_email" size="50" value="<?php echo $seller_notification_email; ?>">
+				</label>
+				<p class="description"><?php _e( 'Enter notification email address.', 'wp-express-checkout' ); ?></p>
+				
+				<label>
+					<?php _e( 'Email Subject', 'wp-express-checkout' ); ?>
+					<br>
+					<input type="text" name="custom_seller_email_subj" size="50" value="<?php echo $seller_email_subj; ?>">
+				</label>
+				<p class="description"><?php _e( 'Enter subject of the email.', 'wp-express-checkout' ); ?></p>
+
+				<label>
+					<?php _e( 'Email Body', 'wp-express-checkout' ); ?>
+					<br>
+					<textarea cols="70" rows="7" name="custom_seller_email_body"><?php echo $seller_email_body; ?></textarea>
+				</label>
+				<p class="description">
+					<?php _e( 'This is the body of the email that will be sent to the seller. Do not change the text within the braces {}.', 'wp-express-checkout' ); ?>
+				</p>
+			</fieldset>
+		</div>
+		<div>
+			<a class="custom-email-merge-tag-toggler" href="javascript:void(0)"><?php _e('Click here to toggle tags hint', 'wp-express-checkout')?></a>
+			<div class="custom-email-merge-tags" style="display: none">
+				<?php echo $email_tags_desc; ?>
+			</div>
+		</div>
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+				let wpec_custom_email_tab = "buyer-email";
+				document.querySelectorAll('a.wpec-custom-email-nav').forEach(function(navLink) {
+					navLink.addEventListener('click', function(e) {
+						e.preventDefault();
+						if (this.getAttribute('data-tab-name') !== wpec_custom_email_tab) {
+							const currentTab = document.querySelector('div[data-tab-name="' + wpec_custom_email_tab + '"]');
+							currentTab.style.display = 'none';
+
+							const nextTab = document.querySelector('div[data-tab-name="' + this.getAttribute('data-tab-name') + '"]');
+							nextTab.style.display = 'block';
+
+							document.querySelector('a.nav-tab[data-tab-name="' + wpec_custom_email_tab + '"]').classList.remove('nav-tab-active');
+							wpec_custom_email_tab = this.getAttribute('data-tab-name');
+							this.classList.add('nav-tab-active');
+						}
+					});
+				});
+
+				document.querySelector('a.custom-email-merge-tag-toggler').addEventListener('click', function(e){
+					e.preventDefault();
+					const mergeTagDiv = document.querySelector('div.custom-email-merge-tags')
+					if(mergeTagDiv.style.display == 'none'){
+						mergeTagDiv.style.display = 'block';
+					}else{
+						mergeTagDiv.style.display = 'none';
+					}
+				})
+			});
+
+		</script>
+		<?php
+	}
+
 	function save_product_handler( $post_id, $post, $update ) {
 		if ( ! isset( $_POST['action'] ) ) {
 			// this is probably not edit or new post creation event.
@@ -639,7 +780,37 @@ jQuery(document).ready(function($) {
 
 		update_post_meta( $post_id, 'wpec_product_coupons_setting', isset( $_POST['wpec_product_coupons_setting'] ) ? sanitize_text_field( $_POST['wpec_product_coupons_setting'] ) : '0' );
 
+		$this->save_custom_email_data($post_id, $post, $update);
+
 		do_action( 'wpec_save_product_handler', $post_id, $post, $update );
+	}
+
+	private function save_custom_email_data( $post_id, $post, $update ) {
+		// Buyer data
+		$buyer_email_enabled = isset( $_POST['custom_buyer_email_enabled'] ) && sanitize_text_field($_POST['custom_buyer_email_enabled']) == 1 ? '1' : 0;
+		update_post_meta( $post_id, 'custom_buyer_email_enabled', $buyer_email_enabled );
+
+		$buyer_email_subj = isset( $_POST['custom_buyer_email_subj'] ) ? sanitize_text_field( stripslashes ( $_POST['custom_buyer_email_subj'] ) ) : '';
+		update_post_meta( $post_id, 'custom_buyer_email_subj', $buyer_email_subj );
+
+		$buyer_email_from = isset( $_POST['custom_buyer_email_from'] ) ? sanitize_text_field($_POST['custom_buyer_email_from']) : '';
+		update_post_meta( $post_id, 'custom_buyer_email_from', $buyer_email_from );
+
+		$buyer_email_body = isset($_POST['custom_buyer_email_body']) ? sanitize_textarea_field($_POST['custom_buyer_email_body']) : '';
+		update_post_meta( $post_id, 'custom_buyer_email_body', $buyer_email_body );
+
+		// Seller data
+		$seller_email_enabled = isset( $_POST['custom_seller_email_enabled'] ) && sanitize_text_field($_POST['custom_seller_email_enabled']) == 1 ? '1' : 0;
+		update_post_meta( $post_id, 'custom_seller_email_enabled', $seller_email_enabled );
+
+		$seller_email_subj = isset( $_POST['custom_seller_email_subj'] ) ? sanitize_text_field( stripslashes ( $_POST['custom_seller_email_subj'] ) ) : '';
+		update_post_meta( $post_id, 'custom_seller_email_subj', $seller_email_subj );
+
+		$seller_notification_email = isset( $_POST['custom_seller_notification_email'] ) ? sanitize_text_field($_POST['custom_seller_notification_email']) : '';
+		update_post_meta( $post_id, 'custom_seller_notification_email', $seller_notification_email );
+
+		$seller_email_body = isset($_POST['custom_seller_email_body']) ? sanitize_textarea_field($_POST['custom_seller_email_body']) : '';
+		update_post_meta( $post_id, 'custom_seller_email_body', $seller_email_body );
 	}
 
 	public function post_updated_messages( $messages ) {
