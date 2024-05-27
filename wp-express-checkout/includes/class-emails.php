@@ -30,10 +30,20 @@ class Emails {
 		$buyer_email = $renderer->payer_email();
 		Logger::log( 'Sending buyer notification email.' );
 
-		$from_email = $wpec_plugin->get_setting( 'buyer_from_email' );
-		$subject    = $wpec_plugin->get_setting( 'buyer_email_subj' );
+		// Check if custom email is configured or not.
+		$is_product_custom_email_enabled = $wpec_plugin->get_setting( 'enable_per_product_email_customization' ) == 1;
+		$ordered_item_post_id = $order->get_item('ppec-products')['post_id'];
+		$is_product_custom_buyer_email_enabled = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_enabled', true ) == 1;
+		if ($is_product_custom_email_enabled && $is_product_custom_buyer_email_enabled) {
+			$from_email = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_from', true );
+			$subject    = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_subj', true );
+			$body       = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_body', true );
+		}else{
+			$from_email = $wpec_plugin->get_setting( 'buyer_from_email' );
+			$subject    = $wpec_plugin->get_setting( 'buyer_email_subj' );
+			$body       = $wpec_plugin->get_setting( 'buyer_email_body' );
+		}
 		$subject    = Utils::apply_dynamic_tags( $subject, $args );
-		$body       = $wpec_plugin->get_setting( 'buyer_email_body' );
 
 		$args['email_body'] = $body;
 
@@ -76,12 +86,22 @@ class Emails {
 
 		Logger::log( 'Sending seller notification email.' );
 
-		$notify_email = $wpec_plugin->get_setting( 'notify_email_address' );
+		// Check if custom email is configured or not.
+		$is_product_custom_email_enabled = $wpec_plugin->get_setting( 'enable_per_product_email_customization' ) == 1;
+		$ordered_item_post_id = $order->get_item('ppec-products')['post_id'];
+		$is_product_custom_seller_email_enabled = get_post_meta( $ordered_item_post_id, 'custom_seller_email_enabled', true ) == 1;
+		if ($is_product_custom_email_enabled && $is_product_custom_seller_email_enabled) {
+			$notify_email = get_post_meta( $ordered_item_post_id, 'custom_seller_notification_email', true );
+			$seller_email_subject = get_post_meta( $ordered_item_post_id, 'custom_seller_email_subj', true );
+			$seller_email_body = get_post_meta( $ordered_item_post_id, 'custom_seller_email_body', true );
+		}else{
+			$notify_email = $wpec_plugin->get_setting( 'notify_email_address' );
+			$seller_email_subject = $wpec_plugin->get_setting( 'seller_email_subj' );
+			$seller_email_body = $wpec_plugin->get_setting( 'seller_email_body' );
+		}
 
-		$seller_email_subject = $wpec_plugin->get_setting( 'seller_email_subj' );
 		$seller_email_subject = Utils::apply_dynamic_tags( $seller_email_subject, $args );
 
-		$seller_email_body = $wpec_plugin->get_setting( 'seller_email_body' );
 		$seller_email_body = Utils::apply_dynamic_tags( $seller_email_body, $args );
 		$seller_email_body = apply_filters( 'wpec_seller_notification_email_body', $seller_email_body, $order, $args );
 

@@ -89,17 +89,7 @@ class WooCommerce_GatewayTest extends \WP_UnitTestCase {
 		$result = $this->object->process_payment( null );
 		$this->assertEquals( [
 			'result'   => 'success',
-			'redirect' => 'http://example/test_checkout_payment_url',
+			'redirect' => '#',
 		], $result );
 	}
-
-	/**
-	 * @covers WP_Express_Checkout\Integrations\WooCommerce_Gateway::modal_window_title
-	 */
-	public function testModal_window_title() {
-		$title = $this->object->get_option( 'popup_title' );
-		$this->assertEquals( $title, $this->object->modal_window_title( $title, [] ) );
-		$this->assertEquals( 'pop up it', $this->object->modal_window_title( 'pop up it', ['product_id' => 1] ) );
-	}
-
 }

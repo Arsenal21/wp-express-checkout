@@ -685,7 +685,7 @@ class Order {
 			'capture_id' => $this->get_capture_id(),
 			'state' => $this->get_status(),
 			'display_status' => $this->get_display_status(),
-			'items' => $this->get_item('ppec-products'),
+			'item' => $this->get_item('ppec-products'),
 			'quantity' => $this->get_quantity_ordered(),
 			'variations' => $this->get_selected_variations(),
 			'tax' => !empty($this->get_item('tax')) ? $this->get_item('tax')['price'] : 0,
