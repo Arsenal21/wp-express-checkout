@@ -35,7 +35,7 @@ class Products_Meta_Boxes {
 		add_meta_box( 'ppec_link_meta_box', __( 'Link URL', 'wp-express-checkout' ), array( $this, 'display_link_meta_box' ), Products::$products_slug, 'side', 'default' );
 		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance Related', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), Products::$products_slug, 'normal', 'high' );
 		add_meta_box( 'wpec_coupons_meta_box', __( 'Coupons Settings', 'wp-express-checkout' ), array( $this, 'display_coupons_meta_box' ), Products::$products_slug, 'normal', 'high' );
-		add_meta_box( 'wpec_custom_email_meta_box', __( 'Custom Email', 'wp-express-checkout' ), array( $this, 'display_custom_email_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_custom_email_meta_box', __( 'Per-Product Email Customization', 'wp-express-checkout' ), array( $this, 'display_custom_email_meta_box' ), Products::$products_slug, 'normal', 'high' );
 	}
 
 	function display_description_meta_box( $post ) {
@@ -522,7 +522,7 @@ jQuery(document).ready(function($) {
 	public function display_custom_email_meta_box ($post) {
 		$wpec = Main::get_instance();
 		if ( $wpec->get_setting( 'enable_per_product_email_customization' ) != 1 ) {
-			_e( 'Product based custom email is disabled. It must be enabled <a href="edit.php?post_type=ppec-products&page=ppec-settings-page&action=email-settings#wp-ppdg-enable_per_product_email_customization" target="_blank">in the settings</a> before you can configure it for this product.', 'wp-express-checkout' );
+			_e( 'Product specific email customization is disabled. It must be enabled <a href="edit.php?post_type=ppec-products&page=ppec-settings-page&action=email-settings#wp-ppdg-enable_per_product_email_customization" target="_blank">in the settings</a> before you can configure it for this product.', 'wp-express-checkout' );
 			return false;
 		}
 
