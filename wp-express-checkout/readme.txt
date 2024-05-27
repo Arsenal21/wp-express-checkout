@@ -167,6 +167,7 @@ None
 = WIP =
 - New utility function 'get_order_data_in_array' added to get order data as array.
 - Added new feature to send custom notification email for specific product.
+- Now product thumbnail will be shown in order details page.
 
 = 2.3.12 = 
 - The WooCommerce integration has been updated to make it compatible with the latest version.
