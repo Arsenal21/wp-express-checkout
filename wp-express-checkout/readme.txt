@@ -30,12 +30,6 @@ https://www.youtube.com/watch?v=KF32ZOgsb2U
 
 If you want to sell digital products using PayPal then you will love the simplicity of this plugin. You can configure it to expire the download links after it has been used a few times or after a certain period of time.
 
-= Optional WooCommerce Integration =
-
-There is also an option for WooCommerce. So you can use this plugin to add the new PayPal Express Checkout gateway to WooCommerce. 
-
-Please note that the integration with WooCommerce is entirely optional. It is important to highlight that this plugin is primarily designed for standalone use and does not depend on WooCommerce.
-
 = Works with PayPal's Buy Now Pay Later Feature =
 
 This plugin works with PayPal's Pay in 4 (Buy Now, Pay Later) feature also. It lets your customers pay later in 4 installments.
@@ -89,6 +83,12 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
 
 You can also accept payment using [PayPal's Pay in 4](https://www.paypal.com/us/webapps/mpp/pay-in-4) feature (buy now pay later offering). Read the [Buy Now, Pay Later Tutorial](https://wp-express-checkout.com/paypal-pay-in-4-wp-express-checkout-plugin/) to learn more.
+
+= Optional WooCommerce Integration =
+
+There is also an option for WooCommerce. So you can use this plugin to add the new PayPal Express Checkout gateway to WooCommerce. 
+
+Please note that the integration with WooCommerce is entirely optional. It is important to highlight that this plugin is primarily designed for standalone use and does not depend on WooCommerce.
 
 = Shortcode =
 
