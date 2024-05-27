@@ -35,7 +35,7 @@ class Products_Meta_Boxes {
 		add_meta_box( 'ppec_link_meta_box', __( 'Link URL', 'wp-express-checkout' ), array( $this, 'display_link_meta_box' ), Products::$products_slug, 'side', 'default' );
 		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance Related', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), Products::$products_slug, 'normal', 'high' );
 		add_meta_box( 'wpec_coupons_meta_box', __( 'Coupons Settings', 'wp-express-checkout' ), array( $this, 'display_coupons_meta_box' ), Products::$products_slug, 'normal', 'high' );
-		add_meta_box( 'wpec_custom_email_meta_box', __( 'Custom Email', 'wp-express-checkout' ), array( $this, 'display_custom_email_meta_box' ), Products::$products_slug, 'normal', 'high' );
+		add_meta_box( 'wpec_custom_email_meta_box', __( 'Custom Email', 'wp-express-checkout' ), array( $this, 'display_custom_email_meta_box' ), Products::$products_slug, 'normal', 'default' );
 	}
 
 	function display_description_meta_box( $post ) {
@@ -618,12 +618,9 @@ jQuery(document).ready(function($) {
 				</p>
 			</fieldset>
 		</div>
-		<div>
-			<a class="custom-email-merge-tag-toggler" href="javascript:void(0)"><?php _e('Click here to toggle hint for email merge tags', 'wp-express-checkout')?></a>
-			<div class="custom-email-merge-tags" style="display: none">
-				<?php echo $email_tags_desc; ?>
-			</div>
-		</div>
+		<p>
+			<a href="https://wp-express-checkout.com/per-product-email-customization-feature/" target="_blank"><?php _e('Click here to see the complete documentation.', 'wp-express-checkout')?></a>
+		</p>
 		<script>
 			document.addEventListener("DOMContentLoaded", function() {
 				let wpec_custom_email_tab = "buyer-email";
@@ -643,16 +640,6 @@ jQuery(document).ready(function($) {
 						}
 					});
 				});
-
-				document.querySelector('a.custom-email-merge-tag-toggler').addEventListener('click', function(e){
-					e.preventDefault();
-					const mergeTagDiv = document.querySelector('div.custom-email-merge-tags')
-					if(mergeTagDiv.style.display == 'none'){
-						mergeTagDiv.style.display = 'block';
-					}else{
-						mergeTagDiv.style.display = 'none';
-					}
-				})
 			});
 
 		</script>
