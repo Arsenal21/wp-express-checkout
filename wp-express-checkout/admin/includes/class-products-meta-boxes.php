@@ -4,6 +4,7 @@ namespace WP_Express_Checkout\Admin;
 
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Products;
+use WP_Express_Checkout\Utils;
 
 class Products_Meta_Boxes {
 
@@ -516,12 +517,12 @@ jQuery(document).ready(function($) {
 
 	public function display_custom_email_meta_box ($post) {
 		$wpec = Main::get_instance();
-		if ( $wpec->get_setting( 'enable_per_product_email_customization' ) !== 1 ) {
+		if ( $wpec->get_setting( 'enable_per_product_email_customization' ) != 1 ) {
 			_e( 'Product based custom email is disabled. It must be enabled <a href="edit.php?post_type=ppec-products&page=ppec-settings-page&action=email-settings#wp-ppdg-enable_per_product_email_customization" target="_blank">in the settings</a> before you can configure it for this product.', 'wp-express-checkout' );
 			return false;
 		}
 
-		$email_tags = \WP_Express_Checkout\Utils::get_dynamic_tags_white_list();
+		$email_tags = Utils::get_dynamic_tags_white_list();
 		$email_tags_desc = '';
 		foreach ( $email_tags as $tag => $desc ) {
 			$email_tags_desc .= "<br /><code>{{$tag}}</code> - {$desc}";
@@ -538,33 +539,33 @@ jQuery(document).ready(function($) {
 		$buyer_email_body = empty( $buyer_email_body ) ? $wpec->get_setting( 'buyer_email_body' ) : $buyer_email_body;
 		?>
 		<div class="nav-tab-wrapper">
-			<a href="#" data-tab-name="buyer-email" class="wpec-custom-email-nav nav-tab nav-tab-active">Buyer email</a>
-			<a href="#" data-tab-name="seller-email" class="wpec-custom-email-nav nav-tab">Seller email</a>
+			<a href="#" data-tab-name="buyer-email" class="wpec-custom-email-nav nav-tab nav-tab-active"><?php _e('Buyer email', 'wp-express-checkout') ?></a>
+			<a href="#" data-tab-name="seller-email" class="wpec-custom-email-nav nav-tab"><?php _e('Seller email', 'wp-express-checkout') ?></a>
 		</div>
 		<div data-tab-name="buyer-email" style="padding-top: 10px;">
 			<fieldset>
-				<label><input type="checkbox" name="custom_buyer_email_enabled" value="1"<?php echo ! empty( $email_enabled ) ? ' checked' : ''; ?>>Send customized email to buyers of this product</label>
+				<label><input type="checkbox" name="custom_buyer_email_enabled" value="1"<?php echo ! empty( $email_enabled ) ? ' checked' : ''; ?>><?php _e('Send customized email to buyers of this product', 'wp-express-checkout')?></label>
 				<br>
 				<p class="description"><?php _e( 'Enable this to send email which you can configure below to buyers of this product.', 'wp-express-checkout' ); ?></p>
 				
 				<label>
 					<?php _e( 'From Email', 'wp-express-checkout' ); ?>
 					<br>
-					<input type="text" name="custom_buyer_email_from" size="50" value="<?php echo $buyer_email_from; ?>">
+					<input type="text" name="custom_buyer_email_from" size="50" value="<?php echo esc_attr($buyer_email_from); ?>">
 				</label>
 				<p class="description"><?php _e( 'Enter from email address.', 'wp-express-checkout' ); ?></p>
 
 				<label>
 					<?php _e( 'Email Subject', 'wp-express-checkout' ); ?>
 					<br>
-					<input type="text" name="custom_buyer_email_subj" size="50" value="<?php echo $buyer_email_subj; ?>">
+					<input type="text" name="custom_buyer_email_subj" size="50" value="<?php echo esc_attr($buyer_email_subj); ?>">
 				</label>
 				<p class="description"><?php _e( 'Enter subject of the email.', 'wp-express-checkout' ); ?></p>
 
 				<label>
 					<?php _e( 'Email Body', 'wp-express-checkout' ); ?>
 					<br>
-					<textarea cols="70" rows="7" name="custom_buyer_email_body"><?php echo $buyer_email_body; ?></textarea>
+					<textarea cols="70" rows="7" name="custom_buyer_email_body"><?php echo esc_attr($buyer_email_body); ?></textarea>
 				</label>
 				<p class="description">
 					<?php _e( 'This is the body of the email that will be sent to the buyer. Do not change the text within the braces {}.', 'wp-express-checkout' ); ?>
@@ -585,7 +586,7 @@ jQuery(document).ready(function($) {
 		?>
 		<div data-tab-name="seller-email" style="padding-top: 10px; display: none;">
 			<fieldset>
-				<label><input type="checkbox" name="custom_seller_email_enabled" value="1"<?php echo ! empty( $seller_email_enabled ) ? ' checked' : ''; ?>>Send a customized notification email to the seller</label>
+				<label><input type="checkbox" name="custom_seller_email_enabled" value="1"<?php echo ! empty( $seller_email_enabled ) ? ' checked' : ''; ?>><?php _e('Send a customized notification email to the seller', 'wp-express-checkout') ?></label>
 				<br>
 				<p class="description"><?php _e( 'Enable this to send an email which you can configure below to the seller of this product.', 'wp-express-checkout' ); ?></p>
 				
