@@ -721,7 +721,7 @@ msgid "Admins, Editors, Authors"
 msgstr ""
 
 #: admin/class-admin.php:578
-msgid "The following options affect the emails that gets sent to your buyers after a purchase."
+msgid "The following options affect the notification emails sent after a purchase."
 msgstr ""
 
 #: admin/class-admin.php:586

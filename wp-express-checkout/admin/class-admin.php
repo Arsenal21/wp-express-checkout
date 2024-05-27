@@ -212,6 +212,7 @@ class Admin {
 		add_settings_section( 'ppdg-shipping-tax-section', __( 'Shipping & Tax', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-debug-logging-section', __( 'Debug Logging', 'wp-express-checkout' ), array( $this, 'debug_logging_note' ), $this->plugin_slug );
 
+		add_settings_section( 'ppdg-emails-general-section', __( 'General Email Settings', 'wp-express-checkout' ), array( $this, 'emails_general_note' ), $this->plugin_slug . '-emails' );
 		add_settings_section( 'ppdg-emails-section', __( 'Purchase Confirmation Email Settings', 'wp-express-checkout' ), array( $this, 'emails_note' ), $this->plugin_slug . '-emails' );
 
 		add_settings_section( 'ppdg-price-display-section', __( 'Price Display Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
@@ -358,14 +359,13 @@ class Admin {
 		/* Email Settings Menu Tab */
 		/***********************/
 
-		// emails section.
-		add_settings_field( 'send_buyer_email', __( 'Send Emails to Buyer After Purchase', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'send_buyer_email', 'type' => 'checkbox', 'desc' => __( 'If checked the plugin will send an email to the buyer with the sale details. If digital goods are purchased then the email will contain the download links for the purchased products.', 'wp-express-checkout' ) ) );
+		// General email settings section.
 		add_settings_field(
 			'buyer_email_type',
 			__( 'Email Content Type', 'wp-express-checkout' ),
 			array( $this, 'settings_field_callback' ),
 			$this->plugin_slug . '-emails',
-			'ppdg-emails-section',
+			'ppdg-emails-general-section',
 			array(
 				'field' => 'buyer_email_type',
 				'type'  => 'select',
@@ -377,7 +377,24 @@ class Admin {
 				),
 			)
 		);
-		add_settings_field( 'buyer_from_email', __( 'From Email Address', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_from_email', 'type' => 'text', 'desc' => __( 'Example: Your Name &lt;sales@your-domain.com&gt; This is the email address that will be used to send the email to the buyer. This name and email address will appear in the from field of the email.', 'wp-express-checkout' ) ) );
+
+		add_settings_field( 'buyer_from_email', __( 'From Email Address', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-general-section', array( 'field' => 'buyer_from_email', 'type' => 'text', 'desc' => __( 'Example: Your Name &lt;sales@your-domain.com&gt; This is the email address that will be used to send the email to the buyer. This name and email address will appear in the from field of the email.', 'wp-express-checkout' ) ) );
+		
+		add_settings_field(
+			'enable_per_product_email_customization',
+			__( 'Enable Per Product Email Customization', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-emails',
+			'ppdg-emails-general-section',
+				array(
+						'field' => 'enable_per_product_email_customization', 
+						'type' => 'checkbox', 
+						'desc' => __( 'Check this option to customize and override buyer and seller notification emails for individual products. Read <a href="https://wp-express-checkout.com/per-product-email-customization-feature/" target="_blank">this documentation</a> to learn how to configure this feature.', 'wp-express-checkout' ) 
+					)
+		);		
+
+		// Notification emails section.
+		add_settings_field( 'send_buyer_email', __( 'Send Emails to Buyer After Purchase', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'send_buyer_email', 'type' => 'checkbox', 'desc' => __( 'If checked the plugin will send an email to the buyer with the sale details. If digital goods are purchased then the email will contain the download links for the purchased products.', 'wp-express-checkout' ) ) );
 		add_settings_field( 'buyer_email_subj', __( 'Buyer Email Subject', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_subj', 'type' => 'text', 'desc' => __( 'This is the subject of the email that will be sent to the buyer.', 'wp-express-checkout' ) ) );
 
 		$tags = Utils::get_dynamic_tags_white_list();
@@ -398,19 +415,6 @@ class Admin {
 			. __( 'This is the body of the email that will be sent to the seller for record. Do not change the text within the braces {}. You can use the following email tags in this email body field:', 'wp-express-checkout' )
 			. $tags_desc,
 		) );
-		
-		add_settings_field(
-			'enable_per_product_email_customization',
-			__( 'Enable Per Product Email Customization', 'wp-express-checkout' ),
-			array( $this, 'settings_field_callback' ),
-			$this->plugin_slug . '-emails',
-			'ppdg-emails-section',
-				array(
-						'field' => 'enable_per_product_email_customization', 
-						'type' => 'checkbox', 
-						'desc' => __( 'Check this to customize buyer and seller email for individual products.', 'wp-express-checkout' ) 
-					)
-		);
 
 		/******************************/
 		/* Advanced Settings Menu Tab */
@@ -585,10 +589,17 @@ class Admin {
 	}
 
 	/**
+	 * The section `ppdg-emails-general-section` callback.
+	 */
+	public function emails_general_note() {
+		printf( '<p><i>%s</p></i>', esc_html__( 'This section allows you to configure general email-related settings.', 'wp-express-checkout' ) );
+	}
+
+	/**
 	 * The section `ppdg-emails-section` callback.
 	 */
 	public function emails_note() {
-		printf( '<p><i>%s</p></i>', esc_html__( 'The following options affect the emails that gets sent to your buyers after a purchase.', 'wp-express-checkout' ) );
+		printf( '<p><i>%s</p></i>', esc_html__( 'The following options affect the notification emails sent after a purchase.', 'wp-express-checkout' ) );
 	}
 
 	/**

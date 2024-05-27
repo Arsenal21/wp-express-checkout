@@ -539,8 +539,8 @@ jQuery(document).ready(function($) {
 		$buyer_email_body = empty( $buyer_email_body ) ? $wpec->get_setting( 'buyer_email_body' ) : $buyer_email_body;
 		?>
 		<div class="nav-tab-wrapper">
-			<a href="#" data-tab-name="buyer-email" class="wpec-custom-email-nav nav-tab nav-tab-active"><?php _e('Buyer email', 'wp-express-checkout') ?></a>
-			<a href="#" data-tab-name="seller-email" class="wpec-custom-email-nav nav-tab"><?php _e('Seller email', 'wp-express-checkout') ?></a>
+			<a href="#" data-tab-name="buyer-email" class="wpec-custom-email-nav nav-tab nav-tab-active"><?php _e('Buyer Email', 'wp-express-checkout') ?></a>
+			<a href="#" data-tab-name="seller-email" class="wpec-custom-email-nav nav-tab"><?php _e('Seller Email', 'wp-express-checkout') ?></a>
 		</div>
 		<div data-tab-name="buyer-email" style="padding-top: 10px;">
 			<fieldset>
@@ -568,21 +568,21 @@ jQuery(document).ready(function($) {
 					<textarea cols="70" rows="7" name="custom_buyer_email_body"><?php echo esc_attr($buyer_email_body); ?></textarea>
 				</label>
 				<p class="description">
-					<?php _e( 'This is the body of the email that will be sent to the buyer. Do not change the text within the braces {}.', 'wp-express-checkout' ); ?>
+					<?php _e( 'This is the body of the email that will be sent to the buyer.', 'wp-express-checkout' ); ?>
 				</p>
 			</fieldset>
 		</div>
 
 		<?php
-			$seller_email_enabled = get_post_meta( $post->ID, 'custom_seller_email_enabled', true );
+		$seller_email_enabled = get_post_meta( $post->ID, 'custom_seller_email_enabled', true );
 
-			$seller_email_subj    = get_post_meta( $post->ID, 'custom_seller_email_subj', true );
-			$seller_notification_email  = get_post_meta( $post->ID, 'custom_seller_notification_email', true );
-			$seller_email_body    = get_post_meta( $post->ID, 'custom_seller_email_body', true );
+		$seller_email_subj = get_post_meta( $post->ID, 'custom_seller_email_subj', true );
+		$seller_notification_email  = get_post_meta( $post->ID, 'custom_seller_notification_email', true );
+		$seller_email_body = get_post_meta( $post->ID, 'custom_seller_email_body', true );
 
-			$seller_email_subj = empty( $seller_email_subj ) ? $wpec->get_setting( 'seller_email_subj' ) : $seller_email_subj;
-			$seller_notification_email = empty( $seller_notification_email ) ? $wpec->get_setting( 'notify_email_address' ) : $seller_notification_email;
-			$seller_email_body = empty( $seller_email_body ) ? $wpec->get_setting( 'seller_email_body' ) : $seller_email_body;
+		$seller_email_subj = empty( $seller_email_subj ) ? $wpec->get_setting( 'seller_email_subj' ) : $seller_email_subj;
+		$seller_notification_email = empty( $seller_notification_email ) ? $wpec->get_setting( 'notify_email_address' ) : $seller_notification_email;
+		$seller_email_body = empty( $seller_email_body ) ? $wpec->get_setting( 'seller_email_body' ) : $seller_email_body;
 		?>
 		<div data-tab-name="seller-email" style="padding-top: 10px; display: none;">
 			<fieldset>
@@ -610,12 +610,12 @@ jQuery(document).ready(function($) {
 					<textarea cols="70" rows="7" name="custom_seller_email_body"><?php echo $seller_email_body; ?></textarea>
 				</label>
 				<p class="description">
-					<?php _e( 'This is the body of the email that will be sent to the seller. Do not change the text within the braces {}.', 'wp-express-checkout' ); ?>
+					<?php _e( 'This is the body of the email that will be sent to the seller.', 'wp-express-checkout' ); ?>
 				</p>
 			</fieldset>
 		</div>
 		<div>
-			<a class="custom-email-merge-tag-toggler" href="javascript:void(0)"><?php _e('Click here to toggle tags hint', 'wp-express-checkout')?></a>
+			<a class="custom-email-merge-tag-toggler" href="javascript:void(0)"><?php _e('Click here to toggle hint for email merge tags', 'wp-express-checkout')?></a>
 			<div class="custom-email-merge-tags" style="display: none">
 				<?php echo $email_tags_desc; ?>
 			</div>
