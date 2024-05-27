@@ -1,0 +1,117 @@
+<wpml-config>
+    <custom-fields>
+        <!-- <custom-field action="translate">wpec_product_type</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_custom_amount</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_min_amount</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_hide_amount_input</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_enable_stock</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_stock_items</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_shipping</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_shipping_per_quantity</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_tax</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_shipping_enable</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_thumbnail</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_thankyou_page</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_button_type</custom-field> -->
+        <custom-field action="translate">wpec_product_button_text</custom-field>
+        <!-- <custom-field action="translate">wpec_product_coupons_setting</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_emember_level</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_swpm_level</custom-field> -->
+        <!-- <custom-field action="translate">wpec_product_emember_level</custom-field> -->
+
+        <!-- <custom-field action="translate">wpec_coupon_active</custom-field> -->
+        <!-- <custom-field action="translate">wpec_coupon_exp_date</custom-field> -->
+        <!-- <custom-field action="translate">wpec_coupon_red_limit</custom-field> -->
+        <!-- <custom-field action="translate">wpec_coupon_discount</custom-field> -->
+        <!-- <custom-field action="translate">wpec_coupon_discount_type</custom-field> -->
+        <!-- <custom-field action="translate">wpec_coupon_only_for_allowed_products</custom-field> -->
+        <!-- <custom-field action="translate">wpec_coupon_allowed_products</custom-field> -->
+        <!-- <custom-field action="translate">wpec_coupon_code</custom-field> -->
+        <!-- <custom-field action="translate">wpec_coupon_start_date</custom-field> -->
+        <!-- <custom-field action="translate">wpec_coupon_red_count</custom-field> -->
+
+        <!-- <custom-field action="translate">wpec_variations_groups</custom-field> -->
+        <!-- <custom-field action="translate">wpec_variations_names</custom-field> -->
+        <!-- <custom-field action="translate">wpec_variations_prices</custom-field> -->
+        <!-- <custom-field action="translate">wpec_variations_urls</custom-field> -->
+        <!-- <custom-field action="translate">wpec_variations_opts</custom-field> -->
+
+        <!-- <custom-field action="translate">wpec_order_items</custom-field> -->
+        <!-- <custom-field action="translate">wpec_order_data</custom-field> -->
+        <!-- <custom-field action="translate">wpec_order_customer_email</custom-field> -->
+
+        <!-- <custom-field action="translate">wpec_total_price</custom-field> -->
+
+        <!-- <custom-field action="translate">wpec_slm_license_enabled</custom-field> -->
+        <!-- <custom-field action="translate">wpec_slm_max_allowed_domains</custom-field> -->
+        <!-- <custom-field action="translate">wpec_slm_date_of_expiry</custom-field> -->
+
+        <!-- <custom-field action="translate">ppec_product_price</custom-field> -->
+        <!-- <custom-field action="translate">ppec_product_quantity</custom-field> -->
+        <!-- <custom-field action="translate">ppec_product_custom_quantity</custom-field> -->
+        <!-- <custom-field action="translate">ppec_product_upload</custom-field> -->
+
+        <!-- <custom-field action="translate">ppec_payment_details</custom-field> -->
+        <!-- <custom-field action="translate">ppec_payer_details</custom-field> -->
+    </custom-fields>
+    
+    <options>
+        <option type="plugin" name="ppdg-settings">
+            <!-- <key name="access_permission" /> -->
+            <!-- <key name="currency_symbol" /> -->
+            <!-- <key name="coupons_enabled" /> -->
+            <!-- <key name="currency_code" /> -->
+            <!-- <key name="buyer_email_type" /> -->
+            <!-- <key name="buyer_from_email" /> -->
+            <key name="buyer_email_subj" />
+            <key name="buyer_email_body" />
+            <!-- <key name="send_buyer_email" /> -->
+            <!-- <key name="send_seller_email" /> -->
+            <key name="seller_email_subj" />
+            <key name="seller_email_body" />
+            <!-- <key name="notify_email_address" /> -->
+            <!-- <key name="disabled_funding" /> -->
+            <!-- <key name="disabled_cards" /> -->
+            <!-- <key name="enable_debug_logging" /> -->
+            <!-- <key name="download_method" /> -->
+            <!-- <key name="download_duration" /> -->
+            <!-- <key name="download_count" /> -->
+            <!-- <key name="download_url_conversion_preference" /> -->
+            <!-- <key name="enable_debug_logging" /> -->
+            <!-- <key name="btn_color" /> -->
+            <!-- <key name="btn_height" /> -->
+            <!-- <key name="btn_layout" /> -->
+            <!-- <key name="btn_shape" /> -->
+            <!-- <key name="btn_type" /> -->
+            <!-- <key name="use_modal" /> -->
+            <!-- <key name="price_currency_pos" /> -->
+            <!-- <key name="price_decimals_num" /> -->
+            <!-- <key name="price_decimal_sep" /> -->
+            <!-- <key name="price_thousand_sep" /> -->
+            <!-- <key name="tos_enabled" /> -->
+            <!-- <key name="is_live" /> -->
+            <!-- <key name="live_client_id" /> -->
+            <!-- <key name="live_secret_key" /> -->
+            <!-- <key name="sandbox_client_id" /> -->
+            <!-- <key name="sandbox_secret_key" /> -->
+            <!-- <key name="shipping" /> -->
+            <!-- <key name="tax" /> -->
+            <!-- <key name="thank_you_url" /> -->
+            <key name="tos_text" />
+            <!-- <key name="tos_enabled" /> -->
+        </option>
+		<!-- <option type="plugin" name="wpec_plugin_activated_time"></option> -->
+		<!-- <option type="plugin" name="wpec_log_file_name"></option> -->
+    </options>
+    
+    <custom-types>
+		<custom-type translate="1">wpec_coupons</custom-type>
+        <custom-type translate="1">ppdgorder</custom-type>
+        <custom-type translate="1">ppec-products</custom-type>
+    </custom-types>
+    
+    <custom-taxonomies>
+		<custom-taxonomy translate="1">wpec_categories</custom-taxonomy>
+        <custom-taxonomy translate="1">wpec_tags</custom-taxonomy>
+    </custom-taxonomies>
+</wpml-config>
