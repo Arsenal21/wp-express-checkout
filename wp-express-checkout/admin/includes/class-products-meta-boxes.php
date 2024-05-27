@@ -369,12 +369,16 @@ class Products_Meta_Boxes {
 		<hr />
 		<strong><?php esc_html_e( 'Force Download', 'wp-express-checkout' ); ?></strong>
 		<br />		
-		<p>Read the <a href="https://wp-express-checkout.com/force-download-option-for-digital-products/" target="_blank">force download tutorial</a> to learn how this feature works.</p>
+		<p>
+			<?php _e('Read the', 'wp-express-checkout') ?> <a href="https://wp-express-checkout.com/force-download-option-for-digital-products/" target="_blank"><?php _e('force download tutorial', 'wp-express-checkout') ?></a> <?php _e('to learn how this feature works.', 'wp-express-checkout') ?>
+		</p>
 		<input type="checkbox" value="1" name="wpec_force_download" <?php echo ($post->wpec_force_download == 1) ? "checked":""; ?> ><span><?php esc_html_e( 'Enable Force Download', 'wp-express-checkout' ); ?></span>
 		<hr />
 		<strong><?php esc_html_e( 'Download Link Expiry Settings (Optional)', 'wp-express-checkout' ); ?></strong>
 		<br />
-		<p>Read the <a href="https://wp-express-checkout.com/limiting-product-download-links/" target="_blank">download link expiry tutorial</a> to learn how the feature works.</p>
+		<p>
+			<?php _e('Read the', 'wp-express-checkout') ?> <a href="https://wp-express-checkout.com/limiting-product-download-links/" target="_blank"><?php _e('download link expiry tutorial', 'wp-express-checkout') ?></a> <?php _e('to learn how the feature works.', 'wp-express-checkout') ?>
+		</p>
 		<label><?php esc_html_e( 'Duration of Download Link', 'wp-express-checkout' ); ?></label>
 		<br/>
 		<input type="number" name="wpec_download_duration" value="<?php echo esc_attr( $post->wpec_download_duration ); ?>"> <span><?php esc_html_e( 'Hours', 'wp-express-checkout' ); ?></span>
