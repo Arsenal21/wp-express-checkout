@@ -35,7 +35,7 @@ class Products_Meta_Boxes {
 		add_meta_box( 'ppec_link_meta_box', __( 'Link URL', 'wp-express-checkout' ), array( $this, 'display_link_meta_box' ), Products::$products_slug, 'side', 'default' );
 		add_meta_box( 'wpec_appearance_meta_box', __( 'Appearance Related', 'wp-express-checkout' ), array( $this, 'display_appearance_meta_box' ), Products::$products_slug, 'normal', 'high' );
 		add_meta_box( 'wpec_coupons_meta_box', __( 'Coupons Settings', 'wp-express-checkout' ), array( $this, 'display_coupons_meta_box' ), Products::$products_slug, 'normal', 'high' );
-		add_meta_box( 'wpec_custom_email_meta_box', __( 'Custom Email', 'wp-express-checkout' ), array( $this, 'display_custom_email_meta_box' ), Products::$products_slug, 'normal', 'default' );
+		add_meta_box( 'wpec_custom_email_meta_box', __( 'Per-Product Email Customization', 'wp-express-checkout' ), array( $this, 'display_custom_email_meta_box' ), Products::$products_slug, 'normal', 'high' );
 	}
 
 	function display_description_meta_box( $post ) {
