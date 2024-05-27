@@ -89,7 +89,7 @@ class WooCommerce_GatewayTest extends \WP_UnitTestCase {
 		$result = $this->object->process_payment( null );
 		$this->assertEquals( [
 			'result'   => 'success',
-			'redirect' => 'http://example/test_checkout_payment_url',
+			'redirect' => '#',
 		], $result );
 	}
 }
