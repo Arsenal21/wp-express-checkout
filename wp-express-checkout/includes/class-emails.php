@@ -36,7 +36,7 @@ class Emails {
 		$is_product_custom_buyer_email_enabled = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_enabled', true ) == 1;
 		if ($is_product_custom_email_enabled && $is_product_custom_buyer_email_enabled) {
 			Logger::log( 'Per-product customized buyer email notification is enabled for this product.' );
-			$from_email = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_from', true );
+			$from_email = html_entity_decode(get_post_meta( $ordered_item_post_id, 'custom_buyer_email_from', true ));
 			$subject    = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_subj', true );
 			$body       = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_body', true );
 		}else{
