@@ -786,6 +786,7 @@ jQuery(document).ready(function($) {
 		$buyer_email_subj = isset( $_POST['custom_buyer_email_subj'] ) ? sanitize_text_field( stripslashes ( $_POST['custom_buyer_email_subj'] ) ) : '';
 		update_post_meta( $post_id, 'custom_buyer_email_subj', $buyer_email_subj );
 
+		//Need to use 'htmlentities' on the from email address to allow the format: 'Your Name <hello@yourdomain.com>'
 		$buyer_email_from = isset( $_POST['custom_buyer_email_from'] ) ? sanitize_text_field(htmlentities($_POST['custom_buyer_email_from'])) : '';
 		update_post_meta( $post_id, 'custom_buyer_email_from', $buyer_email_from );
 
