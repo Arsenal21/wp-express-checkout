@@ -732,12 +732,7 @@ class Admin {
 				break;
 			case 'checkboxes':
 				foreach ( $vals as $key => $value ) {
-					// echo '<label><input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>' . $texts[ $key ] . '</label> ';
-
-					echo '<label style="margin: 5px 0px; display: inline-block">';
-					echo '<input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>';
-					echo $texts[ $key ];
-					echo '</label><br>';
+					echo '<label><input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>' . $texts[ $key ] . '</label> ';
 				}
 				break;
 			case 'select':
