@@ -786,7 +786,7 @@ jQuery(document).ready(function($) {
 		$buyer_email_subj = isset( $_POST['custom_buyer_email_subj'] ) ? sanitize_text_field( stripslashes ( $_POST['custom_buyer_email_subj'] ) ) : '';
 		update_post_meta( $post_id, 'custom_buyer_email_subj', $buyer_email_subj );
 
-		$buyer_email_from = isset( $_POST['custom_buyer_email_from'] ) ? sanitize_text_field($_POST['custom_buyer_email_from']) : '';
+		$buyer_email_from = isset( $_POST['custom_buyer_email_from'] ) ? sanitize_text_field(htmlentities($_POST['custom_buyer_email_from'])) : '';
 		update_post_meta( $post_id, 'custom_buyer_email_from', $buyer_email_from );
 
 		$buyer_email_body = isset($_POST['custom_buyer_email_body']) ? sanitize_textarea_field($_POST['custom_buyer_email_body']) : '';
@@ -799,7 +799,7 @@ jQuery(document).ready(function($) {
 		$seller_email_subj = isset( $_POST['custom_seller_email_subj'] ) ? sanitize_text_field( stripslashes ( $_POST['custom_seller_email_subj'] ) ) : '';
 		update_post_meta( $post_id, 'custom_seller_email_subj', $seller_email_subj );
 
-		$seller_notification_email = isset( $_POST['custom_seller_notification_email'] ) ? sanitize_text_field($_POST['custom_seller_notification_email']) : '';
+		$seller_notification_email = isset( $_POST['custom_seller_notification_email'] ) ? sanitize_email($_POST['custom_seller_notification_email']) : '';
 		update_post_meta( $post_id, 'custom_seller_notification_email', $seller_notification_email );
 
 		$seller_email_body = isset($_POST['custom_seller_email_body']) ? sanitize_textarea_field($_POST['custom_seller_email_body']) : '';
