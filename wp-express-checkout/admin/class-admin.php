@@ -338,13 +338,13 @@ class Admin {
 					'card',
 					'credit',
 					'venmo',
-					'sepa',
 					'bancontact',
 					'blik',
 					'ideal',
 					'mercadopago',
 					'mybank',
 					'p24',
+					'sepa',
 					'sofort',
 					'eps',
 					'giropay',
@@ -353,13 +353,13 @@ class Admin {
 					__( 'Credit or debit cards', 'wp-express-checkout' ), 
 					__( 'PayPal Credit', 'wp-express-checkout' ), 
 					'Venmo',
-					'SEPA-Lastschrift',
 					'Bancontact',
 					'BLIK',
 					'iDEAL',
 					'Mercado Pago',
 					'MyBank',
 					'Przelewy24',
+					'SEPA-Lastschrift',
 					'Sofort',
 					'eps',
 					'giropay',
@@ -648,7 +648,7 @@ class Admin {
 	 */
 	public function disable_funding_note() {
 		echo '<p><i>';
-		_e( 'By default, funding source eligibility is smartly decided based on a variety of factors. You can force disable funding options by selecting them below.', 'wp-express-checkout' );
+		_e( 'By default, funding source eligibility is smartly decided based on a variety of factors by PayPal. You can force disable funding options by selecting them below.', 'wp-express-checkout' );
 		echo '</p></i>';
 		echo '<p><i>';
 		_e( 'Note: disabled options will disappear from button preview once you save changes.', 'wp-express-checkout' );
@@ -732,9 +732,24 @@ class Admin {
 				echo "<input type='checkbox' id='wp-ppdg-{$field}' name='{$this->option_name}[{$field}]' {$_class} value='1' " . ( $field_value ? 'checked=checked' : '' ) . ' />';
 				break;
 			case 'checkboxes':
-				foreach ( $vals as $key => $value ) {
-					echo '<label><input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>' . $texts[ $key ] . '</label> ';
+				if( isset($field) && $field == 'disabled_funding' ) {
+					// Handle the 'Disabled Funding Options' checkboxes
+					$counter = 0;
+					foreach ( $vals as $key => $value ) {
+						echo '<label><input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>' . $texts[ $key ] . '</label> ';
+						$counter++;
+						if ($counter % 7 == 0) {
+							// Add a line break after every 7 checkboxes to group them in two rows.
+							echo '<br />';
+						}
+					}
+				} else {
+					// Handle any other gereic checkboxes field.
+					foreach ( $vals as $key => $value ) {
+						echo '<label><input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>' . $texts[ $key ] . '</label> ';
+					}
 				}
+
 				break;
 			case 'select':
 				echo '<select id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . ']">';
