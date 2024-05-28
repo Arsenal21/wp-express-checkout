@@ -512,10 +512,10 @@ jQuery(document).ready(function($) {
 	public function display_coupons_meta_box( $post ) {
 		$current_val = get_post_meta( $post->ID, 'wpec_product_coupons_setting', true );
 		?>
-<p><?php _e( 'Select how Coupons should be handled for this product.', 'wp-express-checkout' ); ?></p>
-<label><input type="radio" name="wpec_product_coupons_setting" value="2" <?php echo ( $current_val === '2' || $current_val === '' ) ? ' checked' : ''; ?>><?php echo __( 'Use Global Setting', 'wp-express-checkout' ); ?> </label>
-<label><input type="radio" name="wpec_product_coupons_setting" value="1" <?php echo ( $current_val === '1' ) ? ' checked' : ''; ?>><?php echo __( 'Enabled', 'wp-express-checkout' ); ?> </label>
-<label><input type="radio" name="wpec_product_coupons_setting" value="0" <?php echo ( $current_val === '0' ) ? ' checked' : ''; ?>><?php echo __( 'Disabled', 'wp-express-checkout' ); ?> </label>
+		<p><?php _e( 'Select how Coupons should be handled for this product.', 'wp-express-checkout' ); ?></p>
+		<label><input type="radio" name="wpec_product_coupons_setting" value="2" <?php echo ( $current_val === '2' || $current_val === '' ) ? ' checked' : ''; ?>><?php echo __( 'Use Global Setting', 'wp-express-checkout' ); ?> </label>
+		<label><input type="radio" name="wpec_product_coupons_setting" value="1" <?php echo ( $current_val === '1' ) ? ' checked' : ''; ?>><?php echo __( 'Enabled', 'wp-express-checkout' ); ?> </label>
+		<label><input type="radio" name="wpec_product_coupons_setting" value="0" <?php echo ( $current_val === '0' ) ? ' checked' : ''; ?>><?php echo __( 'Disabled', 'wp-express-checkout' ); ?> </label>
 		<?php
 	}
 
@@ -542,6 +542,10 @@ jQuery(document).ready(function($) {
 		$buyer_email_from = empty( $buyer_email_from ) ? $wpec->get_setting( 'buyer_from_email' ) : $buyer_email_from;
 		$buyer_email_body = empty( $buyer_email_body ) ? $wpec->get_setting( 'buyer_email_body' ) : $buyer_email_body;
 		?>
+		<p class="description">
+			<a href="https://wp-express-checkout.com/per-product-email-customization-feature/" target="_blank"><?php _e('Read the documentation', 'wp-express-checkout')?></a>
+			<?php _e(' to learn how to use the per-product email customization feature.', 'wp-express-checkout')?>
+		</p>		
 		<div class="nav-tab-wrapper">
 			<a href="#" data-tab-name="buyer-email" class="wpec-custom-email-nav nav-tab nav-tab-active"><?php _e('Buyer Email', 'wp-express-checkout') ?></a>
 			<a href="#" data-tab-name="seller-email" class="wpec-custom-email-nav nav-tab"><?php _e('Seller Email', 'wp-express-checkout') ?></a>
@@ -618,9 +622,6 @@ jQuery(document).ready(function($) {
 				</p>
 			</fieldset>
 		</div>
-		<p>
-			<a href="https://wp-express-checkout.com/per-product-email-customization-feature/" target="_blank"><?php _e('Click here to see the complete documentation.', 'wp-express-checkout')?></a>
-		</p>
 		<script>
 			document.addEventListener("DOMContentLoaded", function() {
 				let wpec_custom_email_tab = "buyer-email";

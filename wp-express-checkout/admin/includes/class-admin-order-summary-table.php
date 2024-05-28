@@ -58,10 +58,10 @@ class Admin_Order_Summary_Table extends Order_Summary_Table {
 			}
 			
 			$item_column_data = '';
-			$item_column_data .= '<div style="display: flex; align-items: start;">';
+			$item_column_data .= '<div class="wpec-admin-order-summary-item-thumbnail" style="display: flex; align-items: start;">';
 			$item_column_data .= '<img src="'. $item_thumb_url .'" alt="'.__('Product thumbnail', 'wp-express-checkout').'" style="margin-right: 6px; height: 2.5rem; width: auto"/>';
 			$item_column_data .= '<div>';
-			$item_column_data .= '<div>';
+			$item_column_data .= '<div class="wpec-admin-order-summary-item">';
 			$item_column_data .= $item['name'];
 			$item_column_data .= '&nbsp;' . $quantity;
 			$item_column_data .= '</div>';
