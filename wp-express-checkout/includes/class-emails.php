@@ -35,6 +35,7 @@ class Emails {
 		$ordered_item_post_id = $order->get_item('ppec-products')['post_id'];
 		$is_product_custom_buyer_email_enabled = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_enabled', true ) == 1;
 		if ($is_product_custom_email_enabled && $is_product_custom_buyer_email_enabled) {
+			Logger::log( 'Per-product customized buyer email notification is enabled for this product.' );
 			$from_email = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_from', true );
 			$subject    = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_subj', true );
 			$body       = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_body', true );
@@ -91,6 +92,7 @@ class Emails {
 		$ordered_item_post_id = $order->get_item('ppec-products')['post_id'];
 		$is_product_custom_seller_email_enabled = get_post_meta( $ordered_item_post_id, 'custom_seller_email_enabled', true ) == 1;
 		if ($is_product_custom_email_enabled && $is_product_custom_seller_email_enabled) {
+			Logger::log( 'Per-product customized seller email notification is enabled for this product.' );
 			$notify_email = get_post_meta( $ordered_item_post_id, 'custom_seller_notification_email', true );
 			$seller_email_subject = get_post_meta( $ordered_item_post_id, 'custom_seller_email_subj', true );
 			$seller_email_body = get_post_meta( $ordered_item_post_id, 'custom_seller_email_body', true );
