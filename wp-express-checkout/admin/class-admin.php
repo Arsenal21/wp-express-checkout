@@ -325,7 +325,47 @@ class Admin {
 		add_settings_field( 'btn_color', __( 'Button Color', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_color', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '<div id="wp-ppdg-preview-container"><p>' . __( 'Button preview:', 'wp-express-checkout' ) . '</p><br /><div id="paypal-button-container"></div><div id="wp-ppdg-preview-protect"></div></div>', 'vals' => array( 'gold', 'blue', 'silver', 'white', 'black' ), 'texts' => array( __( 'Gold', 'wp-express-checkout' ), __( 'Blue', 'wp-express-checkout' ), __( 'Silver', 'wp-express-checkout' ), __( 'White', 'wp-express-checkout' ), __( 'Black', 'wp-express-checkout' ) ) ) );
 
 		// disable funding section.
-		add_settings_field( 'disabled_funding', __( 'Disabled Funding Options', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_funding', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'card', 'credit', 'venmo'/*, 'sepa'*/ ), 'texts' => array( __( 'Credit or debit cards', 'wp-express-checkout' ), __( 'PayPal Credit', 'wp-express-checkout' ), 'Venmo'/*, __( 'SEPA-Lastschrift', 'wp-express-checkout' )*/ ) ) );
+		add_settings_field( 
+			'disabled_funding',
+		__( 'Disabled Funding Options', 'wp-express-checkout' ),
+		array( $this, 'settings_field_callback' ),
+			$this->plugin_slug, 'ppdg-disable-funding-section',
+		array( 
+				'field' => 'disabled_funding', 
+				'type' => 'checkboxes', 
+				'desc' => '', 
+				'vals' => array( 
+					'card',
+					'credit',
+					'venmo',
+					// 'sepa',
+					'bancontact',
+					'blik',
+					'ideal',
+					'mercadopago',
+					'mybank',
+					'p24',
+					'sofort',
+					'eps',
+					'giropay',
+				),
+				'texts' => array( 
+					__( 'Credit or debit cards', 'wp-express-checkout' ), 
+					__( 'PayPal Credit', 'wp-express-checkout' ), 
+					'Venmo',
+					// __( 'SEPA-Lastschrift', 'wp-express-checkout' ),
+					'Bancontact',
+					'BLIK',
+					'iDEAL',
+					'Mercado Pago',
+					'MyBank',
+					'Przelewy24',
+					'Sofort',
+					'eps',
+					'giropay',
+				)
+			) 
+		);
 		//add_settings_field( 'disabled_cards', __( 'Disabled Cards', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_cards', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'visa', 'mastercard', 'amex', 'discover', 'jcb', 'elo', 'hiper' ), 'texts' => array( __( 'Visa', 'wp-express-checkout' ), __( 'Mastercard', 'wp-express-checkout' ), __( 'American Express', 'wp-express-checkout' ), __( 'Discover', 'wp-express-checkout' ), __( 'JCB', 'wp-express-checkout' ), __( 'Elo', 'wp-express-checkout' ), __( 'Hiper', 'wp-express-checkout' ) ) ) );
 
 		// Shipping & Tax section.
@@ -692,7 +732,12 @@ class Admin {
 				break;
 			case 'checkboxes':
 				foreach ( $vals as $key => $value ) {
-					echo '<label><input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>' . $texts[ $key ] . '</label> ';
+					// echo '<label><input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>' . $texts[ $key ] . '</label> ';
+
+					echo '<label style="margin: 5px 0px; display: inline-block">';
+					echo '<input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>';
+					echo $texts[ $key ];
+					echo '</label><br>';
 				}
 				break;
 			case 'select':
