@@ -165,7 +165,7 @@ None
 == Changelog ==
 
 = WIP =
-- Added a new feature to enable per-product customized email notifications.
+- Added a new feature to enable per-product customized email notifications. [Documentation](https://wp-express-checkout.com/per-product-email-customization-feature/)
 - The order summary (in the orders menu) now shows the product thumbnail (if available).
 - Added a new utility function 'get_order_data_in_array_format' that can be used to retrieve an order data in array format.
 
