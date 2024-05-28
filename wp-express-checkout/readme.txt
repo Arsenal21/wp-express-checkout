@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 5.6
 Tested up to: 6.5
-Stable tag: 2.3.12
+Stable tag: 2.3.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,6 +56,7 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 * Accept Payments via Venmo easily. Your customers can pay using the Venmo option.
 * View the transactions from your WordPress admin dashboard.
 * Option to configure a notification email to be sent to the buyer and the seller after the purchase.
+* Option to customize the purchase notification email on a per-product basis.
 * Ability to set a product thumbnail for a product.
 * Use a simple shortcode to add a payment button anywhere on your site.
 * Create a PayPal payment button widget and add it to your site's sidebar.
@@ -164,11 +165,11 @@ None
 
 == Changelog ==
 
-= WIP =
+= WIP 2.3.13 =
 - Added a new feature to enable per-product customized email notifications. [Documentation](https://wp-express-checkout.com/per-product-email-customization-feature/)
 - The order summary (in the orders menu) now shows the product thumbnail (if available).
 - Added a new utility function 'get_order_data_in_array_format' that can be used to retrieve an order data in array format.
-- More disable funding options added in admin settings.
+- Added more 'disable funding' options in the settings menu.
 
 = 2.3.12 = 
 - The WooCommerce integration has been updated to make it compatible with the latest version.

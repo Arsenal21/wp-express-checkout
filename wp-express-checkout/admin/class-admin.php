@@ -338,7 +338,7 @@ class Admin {
 					'card',
 					'credit',
 					'venmo',
-					// 'sepa',
+					'sepa',
 					'bancontact',
 					'blik',
 					'ideal',
@@ -353,7 +353,7 @@ class Admin {
 					__( 'Credit or debit cards', 'wp-express-checkout' ), 
 					__( 'PayPal Credit', 'wp-express-checkout' ), 
 					'Venmo',
-					// __( 'SEPA-Lastschrift', 'wp-express-checkout' ),
+					'SEPA-Lastschrift',
 					'Bancontact',
 					'BLIK',
 					'iDEAL',
@@ -366,6 +366,7 @@ class Admin {
 				)
 			) 
 		);
+
 		//add_settings_field( 'disabled_cards', __( 'Disabled Cards', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_cards', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'visa', 'mastercard', 'amex', 'discover', 'jcb', 'elo', 'hiper' ), 'texts' => array( __( 'Visa', 'wp-express-checkout' ), __( 'Mastercard', 'wp-express-checkout' ), __( 'American Express', 'wp-express-checkout' ), __( 'Discover', 'wp-express-checkout' ), __( 'JCB', 'wp-express-checkout' ), __( 'Elo', 'wp-express-checkout' ), __( 'Hiper', 'wp-express-checkout' ) ) ) );
 
 		// Shipping & Tax section.
