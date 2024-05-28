@@ -340,14 +340,14 @@ class Admin {
 					'venmo',
 					'bancontact',
 					'blik',
+					'eps',
+					'giropay',					
 					'ideal',
 					'mercadopago',
 					'mybank',
 					'p24',
 					'sepa',
 					'sofort',
-					'eps',
-					'giropay',
 				),
 				'texts' => array( 
 					__( 'Credit or debit cards', 'wp-express-checkout' ), 
@@ -355,14 +355,14 @@ class Admin {
 					'Venmo',
 					'Bancontact',
 					'BLIK',
+					'eps',
+					'giropay',					
 					'iDEAL',
 					'Mercado Pago',
 					'MyBank',
 					'Przelewy24',
 					'SEPA-Lastschrift',
 					'Sofort',
-					'eps',
-					'giropay',
 				)
 			) 
 		);

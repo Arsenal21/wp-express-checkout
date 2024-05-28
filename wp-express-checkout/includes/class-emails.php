@@ -93,10 +93,14 @@ class Emails {
 		$is_product_custom_seller_email_enabled = get_post_meta( $ordered_item_post_id, 'custom_seller_email_enabled', true ) == 1;
 		if ($is_product_custom_email_enabled && $is_product_custom_seller_email_enabled) {
 			Logger::log( 'Per-product customized seller email notification is enabled for this product.' );
+			//From email address value is common for both buyer and seller emails. Need to html_entity_decode to get the correct email address format when custom email is used.
+			$from_email = html_entity_decode(get_post_meta( $ordered_item_post_id, 'custom_buyer_email_from', true ));
+
 			$notify_email = get_post_meta( $ordered_item_post_id, 'custom_seller_notification_email', true );
 			$seller_email_subject = get_post_meta( $ordered_item_post_id, 'custom_seller_email_subj', true );
 			$seller_email_body = get_post_meta( $ordered_item_post_id, 'custom_seller_email_body', true );
 		}else{
+			$from_email = $wpec_plugin->get_setting( 'buyer_from_email' );
 			$notify_email = $wpec_plugin->get_setting( 'notify_email_address' );
 			$seller_email_subject = $wpec_plugin->get_setting( 'seller_email_subj' );
 			$seller_email_body = $wpec_plugin->get_setting( 'seller_email_body' );
@@ -107,10 +111,10 @@ class Emails {
 		$seller_email_body = Utils::apply_dynamic_tags( $seller_email_body, $args );
 		$seller_email_body = apply_filters( 'wpec_seller_notification_email_body', $seller_email_body, $order, $args );
 
-		$result = self::send( $notify_email, null, $seller_email_subject, $seller_email_body );
+		$result = self::send( $notify_email, $from_email, $seller_email_subject, $seller_email_body );
 
 		if ( $result ) {
-			Logger::log( 'Seller email notification sent to: ' . $notify_email );
+			Logger::log( 'Seller email notification sent to: ' . $notify_email . '. From email address value used: ' . $from_email);
 		} else {
 			Logger::log( 'Seller email notification sending failed to: ' . $notify_email );
 		}
