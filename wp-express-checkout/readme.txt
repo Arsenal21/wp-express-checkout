@@ -165,6 +165,9 @@ None
 
 == Changelog ==
 
+= WIP =
+- Added Italian language translation file. Thanks to @Dorian for the translation.
+
 = 2.3.13 =
 - Added a new feature to enable per-product customized email notifications. [Documentation](https://wp-express-checkout.com/per-product-email-customization-feature/)
 - The order summary (in the orders menu) now shows the product thumbnail (if available).
