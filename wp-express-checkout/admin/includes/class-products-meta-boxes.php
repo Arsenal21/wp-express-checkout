@@ -532,6 +532,8 @@ jQuery(document).ready(function($) {
 			$email_tags_desc .= "<br /><code>{{$tag}}</code> - {$desc}";
 		}
 
+        $is_html_email_type = $wpec->get_setting( 'buyer_email_type' ) == 'html';
+
 		$email_enabled = get_post_meta( $post->ID, 'custom_buyer_email_enabled', true );
 
 		$buyer_email_subj    = get_post_meta( $post->ID, 'custom_buyer_email_subj', true );
@@ -573,7 +575,20 @@ jQuery(document).ready(function($) {
 				<label>
 					<?php _e( 'Email Body', 'wp-express-checkout' ); ?>
 					<br>
-					<textarea cols="70" rows="7" name="custom_buyer_email_body"><?php echo esc_attr($buyer_email_body); ?></textarea>
+                    <?php if ($is_html_email_type) {
+                        add_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
+                        wp_editor(
+                            html_entity_decode( $buyer_email_body ),
+                            'custom_buyer_email_body',
+                            array(
+                                'textarea_name' => "custom_buyer_email_body",
+                                'teeny'         => true,
+                            )
+                        );
+                        remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
+                    } else { ?>
+					    <textarea cols="70" rows="7" name="custom_buyer_email_body"><?php echo esc_attr($buyer_email_body); ?></textarea>
+                    <?php } ?>
 				</label>
 				<p class="description">
 					<?php _e( 'This is the body of the email that will be sent to the buyer.', 'wp-express-checkout' ); ?>
@@ -615,7 +630,20 @@ jQuery(document).ready(function($) {
 				<label>
 					<?php _e( 'Email Body', 'wp-express-checkout' ); ?>
 					<br>
-					<textarea cols="70" rows="7" name="custom_seller_email_body"><?php echo $seller_email_body; ?></textarea>
+                    <?php if ($is_html_email_type) {
+                        add_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
+                        wp_editor(
+                            html_entity_decode( $seller_email_body ),
+                            'custom_seller_email_body',
+                            array(
+                                'textarea_name' => "custom_seller_email_body",
+                                'teeny'         => true,
+                            )
+                        );
+                        remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
+                    } else { ?>
+					    <textarea cols="70" rows="7" name="custom_seller_email_body"><?php echo $seller_email_body; ?></textarea>
+                    <?php } ?>
 				</label>
 				<p class="description">
 					<?php _e( 'This is the body of the email that will be sent to the seller.', 'wp-express-checkout' ); ?>
@@ -647,7 +675,12 @@ jQuery(document).ready(function($) {
 		<?php
 	}
 
-	function save_product_handler( $post_id, $post, $update ) {
+    public function set_default_editor( $r ) {
+        $r = 'html';
+        return $r;
+    }
+
+    function save_product_handler( $post_id, $post, $update ) {
 		if ( ! isset( $_POST['action'] ) ) {
 			// this is probably not edit or new post creation event.
 			return;
@@ -790,7 +823,7 @@ jQuery(document).ready(function($) {
 		$buyer_email_from = isset( $_POST['custom_buyer_email_from'] ) ? sanitize_text_field(htmlentities($_POST['custom_buyer_email_from'])) : '';
 		update_post_meta( $post_id, 'custom_buyer_email_from', $buyer_email_from );
 
-		$buyer_email_body = isset($_POST['custom_buyer_email_body']) ? sanitize_textarea_field($_POST['custom_buyer_email_body']) : '';
+		$buyer_email_body = isset($_POST['custom_buyer_email_body']) ? wp_kses_post($_POST['custom_buyer_email_body']) : '';
 		update_post_meta( $post_id, 'custom_buyer_email_body', $buyer_email_body );
 
 		// Seller data
@@ -803,7 +836,7 @@ jQuery(document).ready(function($) {
 		$seller_notification_email = isset( $_POST['custom_seller_notification_email'] ) ? sanitize_email($_POST['custom_seller_notification_email']) : '';
 		update_post_meta( $post_id, 'custom_seller_notification_email', $seller_notification_email );
 
-		$seller_email_body = isset($_POST['custom_seller_email_body']) ? sanitize_textarea_field($_POST['custom_seller_email_body']) : '';
+		$seller_email_body = isset($_POST['custom_seller_email_body']) ? wp_kses_post($_POST['custom_seller_email_body']) : '';
 		update_post_meta( $post_id, 'custom_seller_email_body', $seller_email_body );
 	}
 
