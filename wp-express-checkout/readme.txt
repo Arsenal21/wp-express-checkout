@@ -167,6 +167,7 @@ None
 
 = WIP =
 - Added Italian language translation file. Thanks to @Dorian for the translation.
+- Multiple email address issue fixed for per product seller notification email fixed.
 
 = 2.3.13 =
 - Added a new feature to enable per-product customized email notifications. [Documentation](https://wp-express-checkout.com/per-product-email-customization-feature/)

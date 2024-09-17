@@ -833,8 +833,12 @@ jQuery(document).ready(function($) {
 		$seller_email_subj = isset( $_POST['custom_seller_email_subj'] ) ? sanitize_text_field( stripslashes ( $_POST['custom_seller_email_subj'] ) ) : '';
 		update_post_meta( $post_id, 'custom_seller_email_subj', $seller_email_subj );
 
-		$seller_notification_email = isset( $_POST['custom_seller_notification_email'] ) ? sanitize_email($_POST['custom_seller_notification_email']) : '';
-		update_post_meta( $post_id, 'custom_seller_notification_email', $seller_notification_email );
+		$seller_notification_emails = isset( $_POST['custom_seller_notification_email'] ) ? sanitize_text_field($_POST['custom_seller_notification_email']) : '';
+        $seller_notification_emails_array = array_map('sanitize_email', explode(',' , $seller_notification_emails)); // Sanitize each email separated by comma.
+        $seller_notification_emails_array = array_filter($seller_notification_emails_array); // Remove empty value.
+        $seller_notification_emails_sanitized = implode(', ', $seller_notification_emails_array);
+
+		update_post_meta( $post_id, 'custom_seller_notification_email', $seller_notification_emails_sanitized );
 
 		$seller_email_body = isset($_POST['custom_seller_email_body']) ? wp_kses_post($_POST['custom_seller_email_body']) : '';
 		update_post_meta( $post_id, 'custom_seller_email_body', $seller_email_body );
