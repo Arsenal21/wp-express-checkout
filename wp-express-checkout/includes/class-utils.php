@@ -6,6 +6,26 @@ use Exception;
 use WP_Express_Checkout\Debug\Logger;
 class Utils {
 
+	public static function get_user_ip_address() {
+		//This is a good WP recommended way to get the IP address.
+		$user_ip = '';
+		if (isset($_SERVER['HTTP_CLIENT_IP']) && !empty($_SERVER['HTTP_CLIENT_IP'])) {
+			$user_ip = $_SERVER['HTTP_CLIENT_IP'];
+		} else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$user_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} else {
+			$user_ip = $_SERVER['REMOTE_ADDR'];
+		}
+
+		if (strstr($user_ip, ',')) {
+			// Return first IP if X-Forwarded-For contains multiple IPs.
+			$ip_values = explode(',', $user_ip);
+			$user_ip = $ip_values['0'];
+		}
+
+		return apply_filters('wpec_get_user_ip_address', $user_ip);
+	}
+
 	/**
 	 * Returns the price given the arguments in settings
 	 *
