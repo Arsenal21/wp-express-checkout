@@ -123,36 +123,44 @@ class Orders_Meta_Boxes {
 			#admin-order-status th{
 				padding-right: 10px;
 				text-align: right;
+				vertical-align: top;
 				width: 40%;
+			}
+			#admin-order-status td{
+				vertical-align: top;
 			}
 		</style>
 		<table id="admin-order-status">
 			<tbody>
 				<tr>
 					<th><?php _e( 'ID', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo $order->get_id(); ?></td>
+					<td><?php echo esc_attr($order->get_id()); ?></td>
 				</tr>
 				<tr>
-					<th><?php _e( 'Status', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo $order->get_display_status(); ?></td>
+					<th style="vertical-align: middle;"><?php _e( 'Status', 'wp-express-checkout' ); ?>: </th>
+					<td><?php echo wp_kses_post($order->get_display_status()); ?></td>
 				</tr>
 				<tr>
 					<th><?php _e( 'Currency', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo $order->get_currency(); ?></td>
+					<td><?php echo esc_attr($order->get_currency()); ?></td>
 				</tr>
 				<tr>
 					<th><?php _e( 'Order Time', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo get_post_time( 'F j, Y, g:i a', false, $order->get_id() ); ?></td>
+					<td><?php echo esc_attr(get_post_time( 'F j, Y, g:i a', false, $order->get_id() )); ?></td>
 				</tr>
 				<?php if($order->get_refund_date()):?>
 				<tr>
 					<th><?php _e( 'Refund Time', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo $order->get_refund_date('F j, Y, g:i a'); ?></td>
+					<td><?php echo esc_attr($order->get_refund_date('F j, Y, g:i a')); ?></td>
 				</tr>
 				<?php endif;?>
 				<tr>
 					<th><?php _e( 'Transaction ID', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo $order->get_capture_id(); ?></td>
+					<td><?php echo esc_attr($order->get_capture_id()); ?></td>
+				</tr>
+				<tr>
+					<th><?php _e( 'Order ID', 'wp-express-checkout' ); ?>: </th>
+					<td><?php echo esc_attr($order->get_resource_id()); ?></td>
 				</tr>
 			</tbody>
 		</table>
