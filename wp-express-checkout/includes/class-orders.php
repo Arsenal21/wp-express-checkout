@@ -120,20 +120,20 @@ class Orders {
 	/**
 	 * Retrieves an existing order by ID.
 	 *
-	 * @param int $order_id Order ID
+	 * @param int $order_post_id The Order CPT ID.
 	 *
 	 * @return Order Object representing the order. Boolean False on failure.
 	 * @throws Exception
 	 */
-	static public function retrieve( $order_id ) {
+	static public function retrieve( $order_post_id ) {
 
-		if ( ! is_numeric( $order_id ) ) {
+		if ( ! is_numeric( $order_post_id ) ) {
 			throw new Exception( __( 'Invalid order id given. Must be an integer', 'wp-express-checkout' ), 2002 );
 		}
 
-		$order_data = get_post( $order_id );
+		$order_data = get_post( $order_post_id );
 		if ( ! $order_data || $order_data->post_type !== self::PTYPE ) {
-			throw new Exception( sprintf( __( "Can't find order with ID %s", 'wp-express-checkout' ), $order_id ), 2003 );
+			throw new Exception( sprintf( __( "Can't find order with ID %s", 'wp-express-checkout' ), $order_post_id ), 2003 );
 		}
 
 		$order = new Order( $order_data );
