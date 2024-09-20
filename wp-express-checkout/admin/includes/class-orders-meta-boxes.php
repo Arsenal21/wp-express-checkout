@@ -133,7 +133,7 @@ class Orders_Meta_Boxes {
 		<table id="admin-order-status">
 			<tbody>
 				<tr>
-					<th><?php _e( 'ID', 'wp-express-checkout' ); ?>: </th>
+					<th><?php _e( 'Order ID', 'wp-express-checkout' ); ?>: </th>
 					<td><?php echo esc_attr($order->get_id()); ?></td>
 				</tr>
 				<tr>
@@ -157,10 +157,6 @@ class Orders_Meta_Boxes {
 				<tr>
 					<th><?php _e( 'Transaction ID', 'wp-express-checkout' ); ?>: </th>
 					<td><?php echo esc_attr($order->get_capture_id()); ?></td>
-				</tr>
-				<tr>
-					<th><?php _e( 'Order ID', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo esc_attr($order->get_resource_id()); ?></td>
 				</tr>
 			</tbody>
 		</table>

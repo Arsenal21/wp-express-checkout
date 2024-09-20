@@ -170,7 +170,6 @@ None
 - Multiple email address issue fixed for per product seller notification email fixed.
 - PHP 8.3 compatibility related changes.
 - Added utility function to get the user IP address.
-- Order details page now shows order ID.
 
 = 2.3.13 =
 - Added a new feature to enable per-product customized email notifications. [Documentation](https://wp-express-checkout.com/per-product-email-customization-feature/)
