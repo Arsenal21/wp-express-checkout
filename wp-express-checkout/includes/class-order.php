@@ -702,7 +702,7 @@ class Order {
 
 	/**
 	 * Get the shipping address.
-	 * First check if the 'shipping_address' index exists. If not fallback to 'address'.
+	 * First check if the 'shipping_address' index exists. If not check for 'shipping_address' inside 'payer' index.
 	 *
 	 * @return string Shipping address as comma separated string.
 	 */
