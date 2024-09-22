@@ -101,8 +101,9 @@ class Orders {
 			throw new Exception( $id->get_error_message(), 2001 );
 		}
 
-		if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
-			add_post_meta( $id, 'wpec_ip_address', $_SERVER['REMOTE_ADDR'], true );
+		$user_ip_address = Utils::get_user_ip_address();
+		if ( !empty( $user_ip_address ) ) {
+			add_post_meta( $id, 'wpec_ip_address', $user_ip_address, true );
 		}
 
 		wp_update_post( array(
