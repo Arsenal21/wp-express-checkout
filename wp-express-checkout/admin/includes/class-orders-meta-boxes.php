@@ -242,8 +242,10 @@ class Orders_Meta_Boxes {
 		$payer     = $order->get_data( 'payer' );
 		$username  = '';
 		$useremail = '';
+		
+		$ip_address = !empty($order->get_ip_address()) ? $order->get_ip_address() : __( 'N/A', 'wp-express-checkout' );
 		$billing   = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : __( 'N/A', 'wp-express-checkout' );
-		$shipping  = $order->get_data( 'shipping_address' );
+		$shipping  = isset($payer['shipping_address']['address']) && ! empty( $payer['shipping_address']['address'] ) ? implode( ', ', $payer['shipping_address']['address'] ) : __( 'N/A', 'wp-express-checkout' );;
 		if ( $payer ) {
 			$username = implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
 			$useremail = $payer['email_address'];
@@ -256,28 +258,36 @@ class Orders_Meta_Boxes {
 		<table id="admin-order-author">
 			<tbody>
 				<tr>
-					<td><?php echo $username; ?></td>
+					<td><?php echo esc_attr($username); ?></td>
 				</tr>
 				<tr>
-					<td><?php echo $useremail; ?></td>
+					<td><?php echo esc_attr($useremail); ?></td>
 				</tr>
-				<tr>
-					<td><?php echo $order->get_ip_address(); ?></td>
-				</tr>
-				<?php if ( $billing ) { ?>
+
+				<?php if ( !empty($ip_address) ) { ?>
+					<tr>
+						<td><strong><?php esc_html_e( 'IP Address:', 'wp-express-checkout' ); ?></strong></td>
+					</tr>
+					<tr>
+						<td><?php echo esc_attr($order->get_ip_address()); ?></td>
+					</tr>
+				<?php } ?>
+
+				<?php if ( !empty($billing) ) { ?>
 					<tr>
 						<td><strong><?php esc_html_e( 'Billing Address:', 'wp-express-checkout' ); ?></strong></td>
 					</tr>
 					<tr>
-						<td><?php echo $billing; ?></td>
+						<td><?php echo esc_attr($billing); ?></td>
 					</tr>
 				<?php } ?>
-				<?php if ( $shipping ) { ?>
+				
+				<?php if ( !empty($shipping) ) { ?>
 				<tr>
 					<td><strong><?php esc_html_e( 'Shipping Address:', 'wp-express-checkout' ); ?></strong></td>
 				</tr>
 				<tr>
-					<td><?php echo $shipping; ?></td>
+					<td><?php echo esc_attr($shipping); ?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
