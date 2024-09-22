@@ -243,9 +243,9 @@ class Orders_Meta_Boxes {
 		$username  = '';
 		$useremail = '';
 		
-		$ip_address = !empty($order->get_ip_address()) ? $order->get_ip_address() : __( 'N/A', 'wp-express-checkout' );
-		$billing   = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : __( 'N/A', 'wp-express-checkout' );
-		$shipping  = isset($payer['shipping_address']['address']) && ! empty( $payer['shipping_address']['address'] ) ? implode( ', ', $payer['shipping_address']['address'] ) : __( 'N/A', 'wp-express-checkout' );;
+		$ip_address = ! empty($order->get_ip_address()) ? $order->get_ip_address() : __( 'N/A', 'wp-express-checkout' );
+		$billing_address   = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : __( 'N/A', 'wp-express-checkout' );
+		$shipping_address  = ! empty( $order->get_shipping_address() ) ? $order->get_shipping_address() : __( 'N/A', 'wp-express-checkout' );;
 		if ( $payer ) {
 			$username = implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
 			$useremail = $payer['email_address'];
@@ -273,21 +273,21 @@ class Orders_Meta_Boxes {
 					</tr>
 				<?php } ?>
 
-				<?php if ( !empty($billing) ) { ?>
+				<?php if ( !empty($billing_address) ) { ?>
 					<tr>
 						<td><strong><?php esc_html_e( 'Billing Address:', 'wp-express-checkout' ); ?></strong></td>
 					</tr>
 					<tr>
-						<td><?php echo esc_attr($billing); ?></td>
+						<td><?php echo esc_attr($billing_address); ?></td>
 					</tr>
 				<?php } ?>
-				
-				<?php if ( !empty($shipping) ) { ?>
+
+				<?php if ( !empty($shipping_address) ) { ?>
 				<tr>
 					<td><strong><?php esc_html_e( 'Shipping Address:', 'wp-express-checkout' ); ?></strong></td>
 				</tr>
 				<tr>
-					<td><?php echo esc_attr($shipping); ?></td>
+					<td><?php echo esc_attr($shipping_address); ?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
