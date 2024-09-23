@@ -2,9 +2,9 @@
 Contributors: Tips and Tricks HQ, dikiy_forester, mbrsolution, Ivy2120, chanelstone
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
-Requires at least: 5.6
-Tested up to: 6.5
-Stable tag: 2.3.13
+Requires at least: 6.0
+Tested up to: 6.6
+Stable tag: 2.3.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,7 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 * Allow the customers to automatically download the file once the purchase is completed via PayPal.
 * You can deliver the digital downloads using encrypted download links that expire automatically.
 * Ability to enable force download option on your digital products.
+* Option to offer downloads via a non-web accessible local file path, instead of a URL, to enhance download security.
 * Offer Buy Now Pay Later payment option to your customers.
 * Accept Payments via Venmo easily. Your customers can pay using the Venmo option.
 * View the transactions from your WordPress admin dashboard.
@@ -165,13 +166,13 @@ None
 
 == Changelog ==
 
-= WIP =
+= 2.3.14 =
+- For File Download Feature: updated the feature so file download using local path is now possible. [Documentation](https://wp-express-checkout.com/force-download-option-for-digital-products/)
 - Added Italian language translation file. Thanks to @Dorian for the translation.
 - Multiple email address issue fixed for per product seller notification email fixed.
 - PHP 8.3 compatibility related changes.
 - Added utility function to get the user IP address.
-- Bug fixed for shipping address not showing in order details page.
-- File download using path feature fixed.
+- Bug fix for shipping address not showing in order details page.
 
 = 2.3.13 =
 - Added a new feature to enable per-product customized email notifications. [Documentation](https://wp-express-checkout.com/per-product-email-customization-feature/)

@@ -36,9 +36,9 @@ class Utils_Downloads
     }
 
 	public static function is_local_file_path($src_file_path){
-		Logger::log('['.__METHOD__.']['.__LINE__.']'.' src_file_url : ' . $src_file_path, true);
-		//Logger::log('Determining if the file is local or remote.');
+		//Logger::log('Determining if this is a local file path or not.');
 		if (preg_match("/^http/i", $src_file_path) == 1) {
+            //This is a URL, not a local file path.
 			return false;
 		}
 

@@ -334,45 +334,52 @@ class View_Downloads {
 	}
 
 	/**
-	 * Download file using default process. Assumed that the following procedure will work most of 
-	 * the cases, so user don't need to change default settings.
+	 * Download the file using our default process, which is designed to work in most cases. 
+	 * Users typically do not need to modify or adjust the settings.
 	 *
 	 * @param string $file_uri This could be a file URL or file path.
 	 * 
 	 * @return string|bool Error messages if any.
 	 */
 	public static function handle_download_method_default($file_uri) {
+		//Note: This default method is good for most cases (no need to tweak and try other options). 
+		//It will try to download the file using the following logic.
 		if( Utils_Downloads::is_local_file_path($file_uri) ) {
-			// If the file is locally available, use the default file download method.
+			//#1) If this is using a local file path, use the fopen option as the default.
 			return Utils_Downloads::download_using_fopen($file_uri);
 		} else if( Utils_Downloads::is_local_file_url($file_uri) ) {
-			// If the file is locally available, use the default file download method.
+			//#2) If it is using a URL that is on the local server, convert it to absolute path then try the foepn as the default.
 			$file_path = Utils_Downloads::absolute_path_from_url($file_uri);
 			return Utils_Downloads::download_using_fopen($file_path);
 		} else {
-			// The file URI is not local, so use the curl method as default.
+			//#3) The file URL is not on the local server, so try the curl method as the default.
 			return Utils_Downloads::download_using_curl( $file_uri );
 		}
 	}
 
 	/**
-	 * Download file according to the user preferences. If any server have special config, user can
-	 * change the settings however they want.
+	 * Download the file based on the user's preferences set in the settings. 
+	 * If a server has specific configuration requirements, the user can adjust the settings to test different download methods and determine which one works best.
 	 * 
 	 * * NOTE: If url to path conversion fails, the download url will remain unchanged.
 	 *
-	 * @param string $file_uri The file URI. This could be url of path.
+	 * @param string $file_uri The file URI. This could be file url or path.
 	 * @param string $download_method The preferred download method.
-	 * @param string $path_type The preferred file path type.
+	 * @param string $conversion_type The preferred conversion type.
 	 * 
 	 * @return string|bool Error messages if any.
 	 */
-	public static function handle_download_method($file_uri, $download_method, $path_type){
-		// Try to convert to target path type. If conversion fails, keep the url unchanged.
-		if (!wp_http_validate_url($file_uri) && Utils_Downloads::is_local_file_path($file_uri)){
+	public static function handle_download_method($file_uri, $download_method, $conversion_type){
+		// This function is used on sites where the default method is failing. The user is able to change the download method in the settings.
+		// This function will try to download the file based on the user preferences set in the settings.
+		if ( !wp_http_validate_url($file_uri) && Utils_Downloads::is_local_file_path($file_uri) ){
+			//#1) If this is using a local file path, we will use the path as it is.
 			$file_path_or_url = $file_uri;
 		} else {
-			$file_path_or_url = Utils_Downloads::url_to_path_converter($file_uri, $path_type);
+			//#2) This could be a file URL located on the local server or a remote server.
+			//##2.1) We will convert the file URL based on the conversion preference set in the settings. 
+			//##2.2) Then attemp the download based on the download preference set in settings.			
+			$file_path_or_url = Utils_Downloads::url_to_path_converter($file_uri, $conversion_type);
 			Logger::log("Download file path/url after conversion: $file_path_or_url");
 		}
 
