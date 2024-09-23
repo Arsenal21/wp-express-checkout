@@ -337,20 +337,22 @@ class View_Downloads {
 	 * Download file using default process. Assumed that the following procedure will work most of 
 	 * the cases, so user don't need to change default settings.
 	 *
-	 * @param string $file_url
+	 * @param string $file_uri This could be a file URL or file path.
 	 * 
 	 * @return string|bool Error messages if any.
 	 */
-	public static function handle_download_method_default($file_url) {
-		$is_local_file = Utils_Downloads::is_local_file($file_url);
-		if( $is_local_file ) {
+	public static function handle_download_method_default($file_uri) {
+		if( Utils_Downloads::is_local_file_path($file_uri) ) {
 			// If the file is locally available, use the default file download method.
-			$file_path = Utils_Downloads::absolute_path_from_url($file_url);
+			return Utils_Downloads::download_using_fopen($file_uri);
+		} else if( Utils_Downloads::is_local_file_url($file_uri) ) {
+			// If the file is locally available, use the default file download method.
+			$file_path = Utils_Downloads::absolute_path_from_url($file_uri);
 			return Utils_Downloads::download_using_fopen($file_path);
+		} else {
+			// The file URI is not local, so use the curl method as default.
+			return Utils_Downloads::download_using_curl( $file_uri );
 		}
-
-		// The file URI is not local, so use the curl method as default.
-		return Utils_Downloads::download_using_curl( $file_url );
 	}
 
 	/**
@@ -359,32 +361,37 @@ class View_Downloads {
 	 * 
 	 * * NOTE: If url to path conversion fails, the download url will remain unchanged.
 	 *
-	 * @param string $file_url The file URL
+	 * @param string $file_uri The file URI. This could be url of path.
 	 * @param string $download_method The preferred download method.
 	 * @param string $path_type The preferred file path type.
 	 * 
 	 * @return string|bool Error messages if any.
 	 */
-	public static function handle_download_method($file_url, $download_method, $path_type){
-		// Try to convert to target path type. If conversion fails, keep the url unchanged. 
-		$file_url = Utils_Downloads::url_to_path_converter($file_url, $path_type);
-		Logger::log("Download file path/url after conversion: $file_url");
+	public static function handle_download_method($file_uri, $download_method, $path_type){
+		// Try to convert to target path type. If conversion fails, keep the url unchanged.
+		if (!wp_http_validate_url($file_uri) && Utils_Downloads::is_local_file_path($file_uri)){
+			$file_path_or_url = $file_uri;
+		} else {
+			$file_path_or_url = Utils_Downloads::url_to_path_converter($file_uri, $path_type);
+			Logger::log("Download file path/url after conversion: $file_path_or_url");
+		}
+
 		switch($download_method) {
 			case 2:
 				// Method 2, Fopen-1M.
-				return Utils_Downloads::download_using_fopen($file_url, 1024);
+				return Utils_Downloads::download_using_fopen($file_path_or_url, 1024);
 			case 3:
 				// Method 3, Readfile-1M-SessionWriteClose.
-				return Utils_Downloads::download_using_fopen($file_url, 1024, TRUE);
+				return Utils_Downloads::download_using_fopen($file_path_or_url, 1024, TRUE);
 			case 4:
 				// Method 4, cURL.
-				return Utils_Downloads::download_using_curl($file_url);
+				return Utils_Downloads::download_using_curl($file_path_or_url);
 			case 5:
 				// Method 5, Mod X-Sendfile (only if your server have this library installed)
-				return Utils_Downloads::download_using_xsend_file($file_url);       			
+				return Utils_Downloads::download_using_xsend_file($file_path_or_url);
 			default:	
 				// (Default) Method 1, Fopen-8K.
-				return Utils_Downloads::download_using_fopen($file_url);
+				return Utils_Downloads::download_using_fopen($file_path_or_url);
 		}
 	}
 

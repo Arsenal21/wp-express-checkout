@@ -14,7 +14,7 @@ class Utils_Downloads
      * @param string $src_file_url
      * @return boolean
      */
-    public static function is_local_file($src_file_url)
+    public static function is_local_file_url($src_file_url)
     {
         //Logger::log('Determining if the file is local or remote.');
         if (preg_match("/^http/i", $src_file_url) != 1) {
@@ -27,13 +27,29 @@ class Utils_Downloads
         $wp_root_pos = stripos($src_file_url, $wpurl);
 
         if ($wp_root_pos !== false && file_exists(self::absolute_path_from_url($src_file_url))) {
-            //Logger::log('Target download file is a local file.');
+            //Logger::log('Target download file is a local file url.');
             return true;
         }
 
-        Logger::log('Target download file is not a local file.');
+        Logger::log('Target download file is not a local file url.');
         return false;
     }
+
+	public static function is_local_file_path($src_file_path){
+		Logger::log('['.__METHOD__.']['.__LINE__.']'.' src_file_url : ' . $src_file_path, true);
+		//Logger::log('Determining if the file is local or remote.');
+		if (preg_match("/^http/i", $src_file_path) == 1) {
+			return false;
+		}
+
+		if (file_exists($src_file_path)){
+			Logger::log('Target download file is a local file path.');
+			return true;
+		}
+
+		Logger::log('Target download file is not a local file path.');
+		return false;
+	}
 
     /**
      * Converts $src_file_url into an absolute file path, starting at the server's root directory.
