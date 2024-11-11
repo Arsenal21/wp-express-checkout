@@ -165,6 +165,8 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+= WIP =
+- Some jquery code was converted to vanilla js.
 
 = 2.3.14 =
 - For File Download Feature: updated the feature so file download using local path is now possible. [Documentation](https://wp-express-checkout.com/force-download-option-for-digital-products/)
