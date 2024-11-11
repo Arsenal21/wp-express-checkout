@@ -717,7 +717,6 @@ var ppecHandler = function( data ) {
 		if (condition === null) {
 			// No specific condition provided.
 			// The content will only visible/invisible if its currently invisible/visible respectively.
-			// condition = element.style.display === 'none';
 			condition = !parent.isElementVisible(element);
 		}
 
