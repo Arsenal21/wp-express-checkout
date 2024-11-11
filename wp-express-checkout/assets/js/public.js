@@ -731,7 +731,6 @@ var ppecHandler = function( data ) {
 	this.isElementVisible = function (element) {
 		// Check if element exists in the DOM and is an Element node
 		if (!(element instanceof Element)) {
-			// throw new Error("Expected an Element as argument");
 			return false;
 		}
 
