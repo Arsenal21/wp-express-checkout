@@ -2,8 +2,9 @@ var ppecHandler = function( data ) {
 	this.data = data;
 	this.actions = {};
 
-	var parent = this;
+	const parent = this;
 
+	// TODO: Need to convert this to vanilla js
 	this.processPayment = function( payment, action ) {
 		jQuery.post( ppecFrontVars.ajaxUrl, {
 				'action': action,
@@ -17,19 +18,37 @@ var ppecHandler = function( data ) {
 	};
 
 	this.completePayment = function( data ) {
-		var ret = true;
-		var dlgTitle = ppecFrontVars.str.paymentCompleted;
-		var dlgMsg = ppecFrontVars.str.redirectMsg;
+		let ret = true;
+		let dlgTitle = ppecFrontVars.str.paymentCompleted;
+		let dlgMsg = ppecFrontVars.str.redirectMsg;
+		let redirect_url;
 		if ( data.redirect_url ) {
-			var redirect_url = data.redirect_url;
+			redirect_url = data.redirect_url;
 		} else {
 			dlgTitle = ppecFrontVars.str.errorOccurred;
 			dlgMsg = data;
 			ret = false;
 		}
-		jQuery( '.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).hide();
-		var dialog = jQuery( '<div id="wp-ppdg-dialog-message" title="' + dlgTitle + '"><p id="wp-ppdg-dialog-msg">' + dlgMsg + '</p></div>' );
-		jQuery( '#' + parent.data.id ).before( dialog ).fadeIn();
+		document.querySelector( '.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).style.display = 'none';
+
+		const dialogMsgParagraph = document.createElement('p');
+		dialogMsgParagraph.id = 'wp-ppdg-dialog-msg';
+		dialogMsgParagraph.textContent = dlgMsg;
+		const dialog = document.createElement('div');
+		dialog.id = 'wp-ppdg-dialog-message';
+		dialog.title = dlgTitle;
+		dialog.appendChild(dialogMsgParagraph);
+
+		document.getElementById(parent.data.id)?.insertAdjacentElement('beforebegin', dialog);
+		// Fade in dialog
+		dialog.style.display = 'none';
+		dialog.style.opacity = 0;
+		dialog.style.transition = 'opacity 0.5s';
+		dialog.style.display = 'block';
+		setTimeout(() => {
+			dialog.style.opacity = 1;
+		}, 10);
+
 		if ( redirect_url ) {
 			location.href = redirect_url;
 		}
@@ -37,12 +56,18 @@ var ppecHandler = function( data ) {
 	};
 
 	this.ValidatorTos = function( input ) {
-		return input.prop( 'checked' ) !== true ? ppecFrontVars.str.acceptTos : null;
+		return input.checked !== true ? ppecFrontVars.str.acceptTos : '';
 	};
 
 	this.ValidatorBilling = function( input ) {
-		var val = input.attr( 'type' ) === 'checkbox' ? input.prop( 'checked' ) === true : input.val();
-		return input.is( ':visible' ) && !val ? ppecFrontVars.str.required : null;
+		let val;
+		if (input.type === 'checkbox'){
+			val = input.checked;
+		} else {
+			val = Boolean(input.value.trim())
+		}
+
+		return parent.isElementVisible(input) && !val ? ppecFrontVars.str.required : null;
 	};
 
 	this.isValidTotal = function() {
@@ -51,9 +76,9 @@ var ppecHandler = function( data ) {
 	};
 
 	this.ValidatorQuantity = function( input ) {
-		var val_orig = input.val();
-		var val = parseInt( val_orig );
-		var error = false;
+		const val_orig = input.value;
+		const val = parseInt( val_orig );
+		let error = false;
 		if ( isNaN( val ) || ( val_orig % 1 !== 0 ) || val <= 0 ) {
 			error = ppecFrontVars.str.enterQuantity;
 		} else if ( parent.data.stock_enabled && val > parent.data.stock_items ) {
@@ -65,11 +90,11 @@ var ppecHandler = function( data ) {
 	};
 
 	this.ValidatorAmount = function( input ) {
-		var val_orig = input.val();
-		var val = parseFloat( val_orig );
-		var min_val = input.attr( 'min' );
-		var error = false;
-		var errMsg = ppecFrontVars.str.enterAmount;
+		const val_orig = input.value;
+		const val = parseFloat( val_orig );
+		const min_val = input.getAttribute( 'min' );
+		let error = false;
+		const errMsg = ppecFrontVars.str.enterAmount;
 		if ( !isNaN( val ) && min_val <= val ) {
 			parent.data.orig_price = val;
 			parent.data.price = parent.applyVariations( val );
@@ -90,27 +115,34 @@ var ppecHandler = function( data ) {
 	this.inputs = [];
 
 	this.validateInput = function( input, validator ) {
-		if ( 1 > input.length ) {
+		if ( !input ) {
 			return false;
 		}
 
 		this.inputs.push( [ input, validator ] );
 
-		input.change( function() {
-			parent.displayInputError( jQuery( this ), validator );
+		input.addEventListener('change', function(e) {
+			parent.displayInputError( this, validator );
 			parent.validateOrder();
-		} );
+		})
 	};
 
 	this.validateOrder = function() {
-		var enable_actions = true;
+		let enable_actions = true;
 
-		jQuery( '#wpec_billing_' + parent.data.id + ', #place-order-' + parent.data.id ).toggle( !parent.isValidTotal() );
-		jQuery( '#' + parent.data.id ).toggle( !jQuery( '#place-order-' + parent.data.id ).is( ':visible' ) );
+		document.querySelectorAll('#wpec_billing_' + parent.data.id + ', #place-order-' + parent.data.id ).forEach(el => {
+			parent.toggleVisibility(el, 'block', !parent.isValidTotal());
+		})
+
+		parent.toggleVisibility(
+			document.getElementById( parent.data.id ),
+			'block',
+			!parent.isElementVisible(document.getElementById( 'place-order-' + parent.data.id ))
+		);
 
 		parent.inputs.forEach( function( inputArr ) {
-			var input = inputArr[ 0 ];
-			var validator = inputArr[ 1 ];
+			const input = inputArr[ 0 ];
+			const validator = inputArr[ 1 ];
 			if ( validator( input ) ) {
 				enable_actions = false;
 			}
@@ -127,18 +159,23 @@ var ppecHandler = function( data ) {
 		}
 
 		parent.updateAllAmounts();
+
+		// TODO: Need to convert this to vanilla js
 		jQuery( document ).trigger( 'wpec_validate_order', [ parent ] );
 	};
 
 	this.displayInputError = function( input, validator ) {
-		var error = validator( input );
-		var errMsgCont = input.is( ':checkbox' ) || input.attr( 'type' ) === 'number' ? input.parent().siblings( '.wp-ppec-form-error-msg' ) : input.siblings( '.wp-ppec-form-error-msg' );
-		input.toggleClass( 'hasError', !!error );
-		errMsgCont.html( error );
-		if ( error && errMsgCont.length ) {
-			errMsgCont.fadeIn( 'slow' );
-		} else {
-			errMsgCont.fadeOut( 'fast' );
+		const error = validator( input );
+		const errMsgCont = input.type === 'checkbox' || input.type === 'number' ? input.parentNode.parentNode.querySelector( '.wp-ppec-form-error-msg' ) : input.parentNode.querySelector( '.wp-ppec-form-error-msg' );
+
+		if (error && error.length){
+			input.classList.add('hasError');
+			errMsgCont.style.display = 'block';
+			errMsgCont.innerText = error;
+		}else {
+			input.classList.remove('hasError');
+			errMsgCont.style.display = 'none';
+			errMsgCont.innerText = '';
 		}
 	};
 
@@ -148,7 +185,7 @@ var ppecHandler = function( data ) {
 		} );
 	};
 
-	this.scCont = jQuery( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' );
+	this.scCont = document.querySelector( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' );
 
 	this.buttonArgs = {
 		env: parent.data.env,
@@ -157,47 +194,54 @@ var ppecHandler = function( data ) {
 		commit: true,
 		onInit: function( data, actions ) {
 			parent.actions = actions;
-			parent.validateInput( jQuery( '#wpec-tos-' + parent.data.id ), parent.ValidatorTos );
-			parent.validateInput( jQuery( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorQuantity );
-			parent.validateInput( jQuery( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorAmount );
-			jQuery( '#wpec_billing_' + parent.data.id + ' .wpec_required' ).each( function() {
-				parent.validateInput( jQuery( this ), parent.ValidatorBilling );
+			parent.validateInput( document.getElementById( 'wpec-tos-' + parent.data.id ), parent.ValidatorTos );
+			parent.validateInput( document.querySelector( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorQuantity );
+			parent.validateInput( document.querySelector( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorAmount );
+			document.querySelectorAll( '#wpec_billing_' + parent.data.id + ' .wpec_required' ).forEach( function(element) {
+				parent.validateInput( element, parent.ValidatorBilling );
 			} );
 			parent.data.orig_price = parseFloat( parent.data.price );
-			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio' ).change( function() {
-				var grpId = jQuery( this ).data( 'wpec-variations-group-id' );
-				var varId = jQuery( this ).val();
-				if ( Object.getOwnPropertyNames( parent.data.variations ).length !== 0 ) {
-					if ( !parent.data.variations.applied ) {
-						parent.data.variations.applied = [];
+			parent.scCont.querySelectorAll( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio' )?.forEach(function (item){
+				item.addEventListener('change', function (e){
+					const grpId = e.currentTarget.getAttribute( 'data-wpec-variations-group-id' );
+					const varId = e.currentTarget.value;
+					if ( Object.getOwnPropertyNames( parent.data.variations ).length !== 0 ) {
+						if ( !parent.data.variations.applied ) {
+							parent.data.variations.applied = [];
+						}
+						parent.data.variations.applied[ grpId ] = varId;
+						parent.data.price = parent.applyVariations( parent.data.orig_price );
+						parent.validateOrder();
 					}
-					parent.data.variations.applied[ grpId ] = varId;
-					parent.data.price = parent.applyVariations( parent.data.orig_price );
-					parent.validateOrder();
-				}
-			} );
-			parent.scCont.find( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio:checked' ).change();
+				})
+			});
+			parent.scCont.querySelectorAll( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio:checked' )?.forEach(el => {
+				// Dispatch change event to trigger any 'change' event listeners on this element
+				el.dispatchEvent( new Event('change') );
+			})
 
-			parent.scCont.find( '.wpec_product_shipping_enable' ).change( function() {
-				parent.scCont.find( '.wpec_shipping_address_container' ).toggle();
-				parent.scCont.find( '.wpec_address_wrap' ).toggleClass( 'shipping_enabled' );
+			parent.scCont.querySelector( '.wpec_product_shipping_enable' )?.addEventListener( 'change', function() {
+				parent.toggleVisibility(parent.scCont.querySelector( '.wpec_shipping_address_container' ), 'inherit');
+				parent.scCont.querySelector( '.wpec_address_wrap' )?.classList.toggle('shipping_enabled');
 			} );
 
-			jQuery( '#place-order-' + parent.data.id ).click( function() {				
+			document.getElementById( 'place-order-' + parent.data.id )?.addEventListener('click', function() {
 				parent.buttonArgs.onClick();
 			} );
 
-			jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).click( function( e ) {
+			document.getElementById( 'wpec-redeem-coupon-btn-' + parent.data.id )?.addEventListener('click', async function (e) {
 				e.preventDefault();
-				var couponCode = jQuery( this ).siblings( '#wpec-coupon-field-' + parent.data.id ).val();
-				if ( couponCode === '' ) {
+				const wpecCouponBtn = e.currentTarget;
+				const wpecCouponInputField = document.getElementById('wpec-coupon-field-' + parent.data.id)
+				const couponCode = wpecCouponInputField?.value;
+				if (couponCode.trim() === '') {
 					return false;
 				}
-				var wpecCouponBtn = jQuery( this );
-				var wpecCouponSpinner = wpecCouponBtn.find( 'svg' );
-				wpecCouponBtn.prop( 'disabled', true );
-				wpecCouponSpinner.show();
-				var ajaxData = {
+				const wpecCouponSpinner = wpecCouponBtn.querySelector('svg');
+				wpecCouponBtn.setAttribute('disabled', true);
+				wpecCouponSpinner.style.display = 'inline';
+
+				const ajaxData = new URLSearchParams({
 					'action': 'wpec_check_coupon',
 					'product_id': parent.data.product_id,
 					'coupon_code': couponCode,
@@ -205,60 +249,82 @@ var ppecHandler = function( data ) {
 					/*'amount': parent.data.item_price,
 					'tax': parent.data.tax,
 					'shipping': parent.data.shipping*/
-				};
-				jQuery.post( ppecFrontVars.ajaxUrl, ajaxData, function( response ) {
-					if ( response.success ) {
-						parent.data.discount = response.discount;
-						parent.data.discountType = response.discountType;
-						parent.data.couponCode = response.code;
+				});
+				try {
+					const response = await fetch(ppecFrontVars.ajaxUrl, {
+						method: "post",
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						},
+						body: ajaxData
+					});
 
-						jQuery( '#wpec-coupon-info-' + parent.data.id ).html( '<span class="wpec_coupon_code">' + response.discountStr + '</span> <button class="wpec_coupon_apply_btn" id="wpec-remove-coupon-' + parent.data.id + '" title="' + ppecFrontVars.str.strRemoveCoupon + '">' + ppecFrontVars.str.strRemove + '</button>' );
-						jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).hide();
-						jQuery( '#wpec-coupon-field-' + parent.data.id ).hide();
-						var totalCont = parent.getPriceContainer();
-						var totCurr;
-						var totNew;
-						var priceCurr;
-						var priceNew;
-						if ( totalCont.find( '.wpec_price_full_total' ).length !== 0 ) {
-							totCurr = totalCont.children().find( 'span.wpec_tot_current_price' ).addClass( 'wpec_line_through' );
-							totNew = totalCont.children().find( 'span.wpec_tot_new_price' );
-						} else {
-							totCurr = totalCont.find( 'span.wpec_price_amount' ).addClass( 'wpec_line_through' );
-							totNew = totalCont.find( 'span.wpec_new_price_amount' );
-						}
-						priceCurr = totalCont.find( 'span.wpec-price-amount' ).addClass( 'wpec_line_through' );
-						priceNew = totalCont.find( 'span.wpec-new-price-amount' );
-						parent.validateOrder();
-						jQuery( '#wpec-remove-coupon-' + parent.data.id ).on( 'click', function( e ) {
-							e.preventDefault();
-							jQuery( '#wpec-coupon-info-' + parent.data.id ).html( '' );
-							jQuery( '#wpec-coupon-field-' + parent.data.id ).val( '' );
-							jQuery( '#wpec-coupon-field-' + parent.data.id ).show();
-							jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).show();
-							totCurr.removeClass( 'wpec_line_through' );
-							priceCurr.removeClass( 'wpec_line_through' );
-							totNew.html( '' );
-							priceNew.html( '' );
-							delete parent.data.discount;
-							delete parent.data.discountType;
-							delete parent.data.couponCode;
-							delete parent.data.discountAmount;
-							delete parent.data.newPrice;
+					const response_data = await response.json();
+
+					if (response_data.success) {
+						parent.data.discount = response_data.discount;
+						parent.data.discountType = response_data.discountType;
+						parent.data.couponCode = response_data.code;
+
+						document.getElementById('wpec-coupon-info-' + parent.data.id).innerHTML = '<span class="wpec_coupon_code">' + response_data.discountStr + '</span><button class="wpec_coupon_apply_btn" id="wpec-remove-coupon-' + parent.data.id + '" title="' + ppecFrontVars.str.strRemoveCoupon + '">' + ppecFrontVars.str.strRemove + '</button>'
+						document.getElementById('wpec-redeem-coupon-btn-' + parent.data.id).style.display = 'none';
+						document.getElementById('wpec-coupon-field-' + parent.data.id).style.display = 'none';
+
+						const totalContainers = parent.getPriceContainer();
+						// Note: there is more than one price container in a single product shortcode.
+						totalContainers.forEach(function (totalCont){
+							let totCurr;
+							let totNew;
+							if (totalCont.querySelector('.wpec_price_full_total')) {
+								totCurr = totalCont.querySelector('span.wpec_tot_current_price')
+								totCurr?.classList.add('wpec_line_through');
+								totNew = totalCont.querySelector('span.wpec_tot_new_price');
+							} else {
+								totCurr = totalCont.querySelector('span.wpec_price_amount')
+								totCurr?.classList.add('wpec_line_through');
+								totNew = totalCont.querySelector('span.wpec_new_price_amount');
+							}
+
+							const priceCurr = totalCont.querySelector('span.wpec-price-amount')
+							priceCurr?.classList.add('wpec_line_through');
+
+							const priceNew = totalCont.querySelector('span.wpec-new-price-amount');
 							parent.validateOrder();
-						} );
-					} else {
-						jQuery( '#wpec-coupon-info-' + parent.data.id ).html( response.msg );
-					}
-					wpecCouponSpinner.hide();
-					wpecCouponBtn.prop( 'disabled', false );
-				} );
-			} );
 
-			jQuery( '#wpec-coupon-field-' + parent.data.id ).keydown( function( e ) {
-				if ( e.keyCode === 13 ) {
-					e.preventDefault();
-					jQuery( '#wpec-redeem-coupon-btn-' + parent.data.id ).click();
+							document.getElementById('wpec-remove-coupon-' + parent.data.id)?.addEventListener('click', function (e) {
+								e.preventDefault();
+								document.getElementById('wpec-coupon-info-' + parent.data.id).innerHTML = '';
+								document.getElementById('wpec-coupon-field-' + parent.data.id).value = '';
+								document.getElementById('wpec-coupon-field-' + parent.data.id).style.display = 'block';
+								document.getElementById('wpec-redeem-coupon-btn-' + parent.data.id).style.display = 'block';
+								totCurr.classList.remove('wpec_line_through');
+								priceCurr.classList.remove('wpec_line_through');
+								totNew.innerHTML = '';
+								priceNew.innerHTML = '';
+								delete parent.data.discount;
+								delete parent.data.discountType;
+								delete parent.data.couponCode;
+								delete parent.data.discountAmount;
+								delete parent.data.newPrice;
+								parent.validateOrder();
+							});
+						})
+					} else {
+						document.getElementById('wpec-coupon-info-' + parent.data.id).innerHTML = response_data.msg
+					}
+					wpecCouponSpinner.style.display = 'none';
+					wpecCouponBtn.removeAttribute('disabled');
+
+				} catch (err) {
+					alert(err.message);
+				}
+			})
+
+			const couponField = document.getElementById( 'wpec-coupon-field-' + parent.data.id );
+			couponField?.addEventListener( 'keydown', function( keyboardEvent ) {
+				if ( keyboardEvent.code === 13 ) {
+					keyboardEvent.preventDefault();
+					document.getElementById( 'wpec-redeem-coupon-btn-' + parent.data.id ).click();
 					return false;
 				}
 			} );
@@ -266,49 +332,57 @@ var ppecHandler = function( data ) {
 			parent.validateOrder();
 
 			if ( parent.data.errors ) {
-				var errorEl = jQuery( '<div class="wp-ppec-form-error-msg">' + parent.data.errors + '</div>' );
-				parent.scCont.append( errorEl );
-				errorEl.show();
+				const errorEl = document.createElement('div');
+				errorEl.className = 'wp-ppec-form-error-msg';
+				errorEl.innerHTML = parent.data.errors;
+
+				parent.scCont.appendChild( errorEl );
+				errorEl.style.display = 'block';
 			}
 
-			jQuery( '.wpec-button-placeholder' ).remove();
+			document.querySelectorAll( '.wpec-button-placeholder' ).forEach( function (el) {
+				el.remove()
+			})
 		},
 		onClick: function() {
-			jQuery("#place-order-"+parent.data.id).find("button>svg").show();
-			jQuery("#place-order-"+parent.data.id).find("button").attr("disabled",true);
-			
+			const wpecPlaceOrderButtonSection = document.getElementById("place-order-"+parent.data.id);
+			if (wpecPlaceOrderButtonSection){
+				wpecPlaceOrderButtonSection.querySelector("button>svg").style.display = 'inline';
+				wpecPlaceOrderButtonSection.querySelector("button").setAttribute("disabled", true);
+			}
+
 			parent.displayErrors();
-			var errInput = parent.scCont.find( '.hasError' ).first();
-			if ( errInput.length > 0 ) {
-
-				
+			// Get first error input if there is any.
+			const errInput = parent.scCont.querySelector( '.hasError' );
+			if ( errInput ) {
 				errInput.focus();
-				errInput.trigger( 'change' );
+				errInput.dispatchEvent( new Event('change') );
 
-				jQuery("#place-order-"+parent.data.id).find("button>svg").hide();
-				jQuery("#place-order-"+parent.data.id).find("button").attr("disabled",false);
+				if (wpecPlaceOrderButtonSection) {
+					wpecPlaceOrderButtonSection.querySelector("button>svg").style.display = 'none';
+					wpecPlaceOrderButtonSection.querySelector("button").removeAttribute("disabled");
+				}
 			} else if ( !parent.data.total ) {
-			
 				parent.processPayment( {
 					payer: {
 						name: {
-							given_name: jQuery( '#wpec_billing_first_name-' + parent.data.id ).val(),
-							surname: jQuery( '#wpec_billing_last_name-' + parent.data.id ).val()
+							given_name: document.getElementById( 'wpec_billing_first_name-' + parent.data.id ).value,
+							surname: document.getElementById( 'wpec_billing_last_name-' + parent.data.id ).value,
 						},
-						email_address: jQuery( '#wpec_billing_email-' + parent.data.id ).val(),
+						email_address: document.getElementById( 'wpec_billing_email-' + parent.data.id ).value,
 						address: {
-							address_line_1: jQuery( '#wpec_billing_address-' + parent.data.id ).val(),
-							admin_area_1: jQuery( '#wpec_billing_state-' + parent.data.id ).val(),
-							admin_area_2: jQuery( '#wpec_billing_city-' + parent.data.id ).val(),
-							postal_code: jQuery( '#wpec_billing_postal_code-' + parent.data.id ).val(),
-							country_code: jQuery( '#wpec_billing_country-' + parent.data.id ).val()
+							address_line_1: document.getElementById( 'wpec_billing_address-' + parent.data.id ).value,
+							admin_area_1: document.getElementById( 'wpec_billing_state-' + parent.data.id ).value,
+							admin_area_2: document.getElementById( 'wpec_billing_city-' + parent.data.id ).value,
+							postal_code: document.getElementById( 'wpec_billing_postal_code-' + parent.data.id ).value,
+							country_code: document.getElementById( 'wpec_billing_country-' + parent.data.id ).value,
 						},
 						shipping_address: {
-							address_line_1: jQuery( '#wpec_shipping_address-' + parent.data.id ).val(),
-							admin_area_1: jQuery( '#wpec_shipping_state-' + parent.data.id ).val(),
-							admin_area_2: jQuery( '#wpec_shipping_city-' + parent.data.id ).val(),
-							postal_code: jQuery( '#wpec_shipping_postal_code-' + parent.data.id ).val(),
-							country_code: jQuery( '#wpec_shipping_country-' + parent.data.id ).val()
+							address_line_1: document.getElementById( 'wpec_shipping_address-' + parent.data.id ).value,
+							admin_area_1: document.getElementById( 'wpec_shipping_state-' + parent.data.id ).value,
+							admin_area_2: document.getElementById( 'wpec_shipping_city-' + parent.data.id ).value,
+							postal_code: document.getElementById( 'wpec_shipping_postal_code-' + parent.data.id ).value,
+							country_code: document.getElementById( 'wpec_shipping_country-' + parent.data.id ).value,
 						}
 					}
 				}, 'wpec_process_empty_payment' );
@@ -331,7 +405,7 @@ var ppecHandler = function( data ) {
 			}
 
 			// Create order_data object to be sent to the server.
-			var order_data = {
+			const order_data = {
 				intent: 'CAPTURE',
 				payment_source: {
 					paypal: {
@@ -386,13 +460,13 @@ var ppecHandler = function( data ) {
 					value: parseFloat( parent.data.discountAmount )
 				};
 			}
-			console.log('Order data: ' + JSON.stringify(order_data));
 			//End of create order_data object.
+			console.log('Order data: ', order_data);
 
 			let nonce = wpec_create_order_vars.nonce;
 
 			let wpec_data_for_create = parent.data;//parent.data is the data object that was passed to the ppecHandler constructor.
-			console.log('WPEC data for create-order: ' + JSON.stringify(wpec_data_for_create));
+			console.log('WPEC data for create-order: ', wpec_data_for_create);
 
 			let post_data = 'action=wpec_pp_create_order&data=' + encodeURIComponent(JSON.stringify(order_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data_for_create)) + '&_wpnonce=' + nonce;
 			try {
@@ -412,7 +486,7 @@ var ppecHandler = function( data ) {
 					return response_data.order_id;
 				} else {
 					const error_message = response_data.err_msg
-					console.error('Error occurred during create-order call to PayPal. ' + error_message);
+					console.error('Error occurred during create-order call to PayPal. ', error_message);
 					throw new Error(error_message);//This will trigger the alert in the "catch" block below.
 				}
 			} catch (error) {
@@ -421,7 +495,7 @@ var ppecHandler = function( data ) {
 			}
 		},
 		onApprove: async function( data, actions ) {
-			jQuery( 'div.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).css( 'display', 'flex' );
+			document.querySelector( 'div.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).style.display = 'flex';
 
 			console.log('Setting up the AJAX request for capture-order call.');
 			
@@ -456,98 +530,122 @@ var ppecHandler = function( data ) {
 
 		},
 		onError: function( err ) {
-
-			jQuery("#place-order-"+parent.data.id).find("button>svg").hide();
-			jQuery("#place-order-"+parent.data.id).find("button").attr("disabled",false);
-
+			document.getElementById("place-order-"+parent.data.id).querySelector("button>svg").style.display = 'none';
+			document.getElementById("place-order-"+parent.data.id).querySelector("button").removeAttribute("disabled");
 			alert( err );
 		}
 	};
 
+	// TODO: Need to convert this to vanilla js
 	this.formatMoney = function( n ) {
-	var decimalPlaces = isNaN(decimalPlaces = Math.abs(parent.data.dec_num)) ? 2 : parent.data.dec_num;
-    var decimalSeparator = parent.data.dec_sep || ".";
-    var thousandSeparator = parent.data.thousand_sep || ",";
-    var sign = n < 0 ? "-" : "";
-    var integerPart = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(decimalPlaces)));
-    var integerPartLength = integerPart.length;
-    var remainderLength = integerPartLength > 3 ? integerPartLength % 3 : 0;
+		var decimalPlaces = isNaN(decimalPlaces = Math.abs(parent.data.dec_num)) ? 2 : parent.data.dec_num;
+		var decimalSeparator = parent.data.dec_sep || ".";
+		var thousandSeparator = parent.data.thousand_sep || ",";
+		var sign = n < 0 ? "-" : "";
+		var integerPart = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(decimalPlaces)));
+		var integerPartLength = integerPart.length;
+		var remainderLength = integerPartLength > 3 ? integerPartLength % 3 : 0;
 
-    var formattedIntegerPart = sign +
-        (remainderLength ? integerPart.substr(0, remainderLength) + thousandSeparator : "") +
-        integerPart.substr(remainderLength).replace(/(\d{3})(?=\d)/g, "$1" + thousandSeparator) +
-        (decimalPlaces ? decimalSeparator + Math.abs(n - integerPart).toFixed(decimalPlaces).slice(2) : "");
+		var formattedIntegerPart = sign +
+			(remainderLength ? integerPart.substr(0, remainderLength) + thousandSeparator : "") +
+			integerPart.substr(remainderLength).replace(/(\d{3})(?=\d)/g, "$1" + thousandSeparator) +
+			(decimalPlaces ? decimalSeparator + Math.abs(n - integerPart).toFixed(decimalPlaces).slice(2) : "");
 
-    var formats = {
-        left: '{symbol}{price}',
-        left_space: '{symbol} {price}',
-        right: '{price}{symbol}',
-        right_space: '{price} {symbol}'
-    };
+		var formats = {
+			left: '{symbol}{price}',
+			left_space: '{symbol} {price}',
+			right: '{price}{symbol}',
+			right_space: '{price} {symbol}'
+		};
 
-	var formattedPrice = formats[parent.data.curr_pos]
-        .replace('{symbol}', parent.data.currency_symbol)
-        .replace('{price}', formattedIntegerPart);
+		var formattedPrice = formats[parent.data.curr_pos]
+			.replace('{symbol}', parent.data.currency_symbol)
+			.replace('{price}', formattedIntegerPart);
 
-    return formattedPrice;
+		return formattedPrice;
 	};
 
 	this.getPriceContainer = function() {
-		return jQuery( '.' + parent.scCont.data( 'price-class' ) );
+		// Here, we're using 'querySelectorAll' instead of 'querySelector', because there is more than one element.
+		return document.querySelectorAll( '.' + parent.scCont.getAttribute( 'data-price-class' ) );
+	};
+
+	this.getProductItemContainer = function() {
+		// Get the product item container using the price container, so that we don't select other product item container when more than one same product shortcode in a page.
+		const priceContainer = document.querySelector( '.' + parent.scCont.getAttribute( 'data-price-class' ) );
+
+		// Selector of the container may vary across different templates. Select the one it can find.
+
+		// For template 1,3
+		let productItemContainer = parent.closestParent(priceContainer, '.wpec-product-item-' + parent.data.product_id );
+
+		// For template 2
+		if (!productItemContainer){
+			productItemContainer = parent.closestParent(priceContainer, '.wpec-post-item-' + parent.data.product_id );
+		}
+
+		// For url payment form
+		if (!productItemContainer){
+			productItemContainer = parent.closestParent(priceContainer, '.wpec-modal-product-' + parent.data.product_id );
+		}
+
+		return productItemContainer;
 	};
 
 	this.updateAllAmounts = function() {
 		parent.calcTotal();
-		var price_cont = parent.getPriceContainer();
-		if ( price_cont.length > 0 ) {
-			var price = price_cont.find( '.wpec-price-amount' );
-			if ( price.length > 0 ) {
-				price.html( parent.formatMoney( parent.data.price ) );
-			}
+
+		const productItemContainer = parent.getProductItemContainer();
+
+		if ( productItemContainer ){
+			productItemContainer.querySelectorAll( '.wpec-price-amount' ).forEach(el => el.textContent = parent.formatMoney( parent.data.price ))
+
 			if ( parent.data.quantity > 1 ) {
-				price_cont.find( '.wpec-quantity' ).show();
-				price_cont.find( '.wpec-quantity-val' ).html( parent.data.quantity );
+				productItemContainer.querySelectorAll( '.wpec-quantity' ).forEach(el => el.style.display = 'inline')
+				productItemContainer.querySelectorAll( '.wpec-quantity-val' ).forEach(el => el.textContent = parent.data.quantity)
 			} else {
-				price_cont.find( '.wpec-quantity' ).hide();
+				productItemContainer.querySelectorAll( '.wpec-quantity' ).forEach(el => el.style.display = 'none');
 			}
-			var total = price_cont.find( '.wpec_tot_current_price' );
-			var tot_new = price_cont.find( '.wpec_tot_new_price' );
-			var price_new = price_cont.find( '.wpec-new-price-amount' );
-			var shipping_new = price_cont.find( '.wpec_price_shipping_amount' );
+
+			const total = productItemContainer.querySelectorAll( '.wpec_tot_current_price' );
+			const tot_new = productItemContainer.querySelectorAll( '.wpec_tot_new_price' );
+			const price_new = productItemContainer.querySelectorAll( '.wpec-new-price-amount' );
+
 			if ( typeof parent.data.discountAmount !== "undefined" ) {
-				price_new.html( parent.formatMoney( parent.data.newPrice ) );
-				tot_new.html( parent.formatMoney( parent.data.total ) );
-				total.html( parent.formatMoney( parent.data.subtotal ) );
+				price_new.forEach(el => el.textContent = parent.formatMoney( parent.data.newPrice ) );
+				tot_new.forEach(el => el.textContent = parent.formatMoney( parent.data.total ) );
+				total.forEach(el => el.textContent = parent.formatMoney( parent.data.subtotal ));
 			} else if ( total.length > 0 ) {
-				total.html( parent.formatMoney( parent.data.total ) );
+				total.forEach(el => el.textContent = parent.formatMoney( parent.data.total ));
 			}
-	
+
 			// Update the total shipping cost.
-			shipping_new.html(parent.formatMoney(parent.getTotalShippingCost()));
-			
-			var tax_val = price_cont.find( '.wpec-tax-val' );
-			if ( tax_val.length > 0 ) {
-				tax_val.html( parent.formatMoney( parent.data.tax_amount * parent.data.quantity ) );
-			}
+			const shipping_new = productItemContainer.querySelectorAll( '.wpec_price_shipping_amount' );
+			shipping_new.forEach(el => el.textContent = parent.formatMoney(parent.getTotalShippingCost()));
+
+			// Update the total tax cost.
+			const tax_val = productItemContainer.querySelectorAll( '.wpec-tax-val' );
+			tax_val.forEach(el => el.textContent = parent.formatMoney( parent.data.tax_amount * parent.data.quantity ) );
 		}
 
+		// TODO: Need to convert this to vanilla js
 		jQuery( document ).trigger( 'wpec_after_update_all_amounts', [ parent ] );
 	};
 
 	this.calcTotal = function() {
-		var itemSubt = parseFloat( parent.data.price );
-		var quantity = parseInt( parent.data.quantity );
-		var tAmount = itemSubt * quantity;
+		let itemSubt = parseFloat( parent.data.price );
+		let quantity = parseInt( parent.data.quantity );
+		let tAmount = itemSubt * quantity;
 		//We need to round to 2 decimal places to make sure that the API call will not fail.
 		let roundedTotal = tAmount.toFixed(2);//round to 2 decimal places
 		let roundedTotalAsNumber = parseFloat(roundedTotal);//convert to number
 		tAmount = roundedTotalAsNumber;
-		var subtotal = tAmount;
+		let subtotal = tAmount;
 
 		parent.data.newPrice = itemSubt;
 
 		if ( typeof parent.data.discount !== "undefined" ) {
-			var discountAmount = 0;
+			let discountAmount = 0;
 			if ( parent.data.discountType === 'perc' ) {
 				discountAmount = parent.PHP_round( tAmount * parent.data.discount / 100, parent.data.dec_num );
 			} else {
@@ -562,7 +660,7 @@ var ppecHandler = function( data ) {
 		}
 
 		if ( parent.data.tax ) {
-			var tax = parent.PHP_round( tAmount / quantity * parent.data.tax / 100, parent.data.dec_num );
+			let tax = parent.PHP_round( tAmount / quantity * parent.data.tax / 100, parent.data.dec_num );
 			parent.data.tax_amount = tax;
 			tAmount += tax * parent.data.quantity;
 			subtotal += parent.PHP_round( subtotal / quantity * parent.data.tax / 100, parent.data.dec_num ) * parent.data.quantity;
@@ -582,10 +680,10 @@ var ppecHandler = function( data ) {
 	};
 
 	this.applyVariations = function( amount ) {
-		var grpId;
+		let grpId;
 		if ( parent.data.variations.applied ) {
 			for ( grpId = 0; grpId < parent.data.variations.applied.length; ++grpId ) {
-				var variation = parent.data.variations[ grpId ];
+				let variation = parent.data.variations[ grpId ];
 				amount = amount + parseFloat( variation.prices[ parent.data.variations.applied[ grpId ] ] );
 			}
 		}
@@ -610,18 +708,70 @@ var ppecHandler = function( data ) {
 		return total;
 	}
 
+	this.toggleVisibility = function (element, displayVisibilityType = 'block', condition = null) {
+		if (!element){
+			return;
+		}
+
+		// if no condition provided, then the condition will be based on whether the element is visible or not.
+		if (condition === null) {
+			// No specific condition provided.
+			// The content will only visible/invisible if its currently invisible/visible respectively.
+			condition = !parent.isElementVisible(element);
+		}
+
+		// Show / hide the element based on condition.
+		if (condition === true) {
+			element.style.display = displayVisibilityType;
+		} else {
+			element.style.display = 'none';
+		}
+	}
+
+	this.isElementVisible = function (element) {
+		// Check if element exists in the DOM and is an Element node
+		if (!(element instanceof Element)) {
+			return false;
+		}
+
+		// Check if the element has a non-zero bounding box (displayed and has size)
+		const style = getComputedStyle(element);
+		const hasVisibleDisplay = style.display !== 'none';
+		const hasVisibleVisibility = style.visibility !== 'hidden';
+		const hasNonZeroSize = element.offsetWidth > 0 && element.offsetHeight > 0;
+
+		return hasVisibleDisplay && hasVisibleVisibility && hasNonZeroSize;
+	}
+
+	this.closestParent = function (element, selector) {
+		// Traverse up the DOM tree
+		while (element) {
+			// Check if the current element matches the selector
+			if (element.matches(selector)) {
+				return element;
+			}
+			// Move to the parent element
+			element = element.parentElement;
+		}
+		// Return null if no matching parent is found
+		return null;
+	}
+
+	// TODO: Need to convert this to vanilla js
 	jQuery( document ).trigger( 'wpec_before_render_button', [ this ] );
 
 	paypal.Buttons( this.buttonArgs ).render( '#' + parent.data.id );
 };
 
-var wpecModal = function( $ ) {
-	var openModalId = false;
+const wpecModal = function( $ ) {
+	let openModalId = false;
 
-	$( '.wpec-modal-open, .wpec-modal-overlay, .wpec-modal-close' ).on( 'click', function( e ) {
-		e.preventDefault();
-		toggleModal( $( this ).data( 'wpec-modal' ) );
-	} );
+	document.querySelectorAll( '.wpec-modal-open, .wpec-modal-overlay, .wpec-modal-close' ).forEach(function (el){
+		el.addEventListener( 'click', function( e ) {
+			e.preventDefault();
+			toggleModal( this.getAttribute( 'data-wpec-modal' ) );
+		} )
+	});
 
 	document.onkeydown = function( evt ) {
 		evt = evt || window.event;
@@ -644,13 +794,17 @@ var wpecModal = function( $ ) {
 		modal.classList.toggle( 'wpec-pointer-events-none' );
 	}
 
-	$( '.wpec-custom-number-input button' ).on( 'click', function() {
-		var increment = $( this ).data( 'action' ) === 'increment' ? 1 : -1;
-		var input = $( this ).parent().find( 'input' );
-		var step = input.attr( 'step' ) ? Number( input.attr( 'step' ) ) : 1;
-		input.val( Number( input.val() ) + increment * step ).change();
-	} );
+	document.querySelectorAll('.wpec-custom-number-input button').forEach(button => {
+		button.addEventListener('click', function() {
+			const increment = this.getAttribute('data-action') === 'increment' ? 1 : -1;
+			const customQuantityInput = this.parentElement.querySelector('input');
+			const step = customQuantityInput.getAttribute('step') ? Number(customQuantityInput.getAttribute('step')) : 1;
+			customQuantityInput.value = Number(customQuantityInput.value) + increment * step;
+			customQuantityInput.dispatchEvent(new Event('change'));
+		});
+	});
 
+	// TODO: Need to convert this to vanilla js
 	//shortcode_wpec_show_all_products
 	$("#wpec-sort-by").change(function(){
 		$("#wpec-sort-by-form").submit();
