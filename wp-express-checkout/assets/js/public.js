@@ -363,6 +363,22 @@ var ppecHandler = function( data ) {
 					wpecPlaceOrderButtonSection.querySelector("button").removeAttribute("disabled");
 				}
 			} else if ( !parent.data.total ) {
+				const same_shipping_billing_address_enabled = parent.scCont.querySelector( '.wpec_product_shipping_enable' )?.checked;
+				const billing_address = {
+					address_line_1: document.getElementById( 'wpec_billing_address-' + parent.data.id ).value,
+					admin_area_1: document.getElementById( 'wpec_billing_state-' + parent.data.id ).value,
+					admin_area_2: document.getElementById( 'wpec_billing_city-' + parent.data.id ).value,
+					postal_code: document.getElementById( 'wpec_billing_postal_code-' + parent.data.id ).value,
+					country_code: document.getElementById( 'wpec_billing_country-' + parent.data.id ).value,
+				};
+				const shipping_address = same_shipping_billing_address_enabled ? billing_address : {
+					address_line_1: document.getElementById( 'wpec_shipping_address-' + parent.data.id ).value,
+					admin_area_1: document.getElementById( 'wpec_shipping_state-' + parent.data.id ).value,
+					admin_area_2: document.getElementById( 'wpec_shipping_city-' + parent.data.id ).value,
+					postal_code: document.getElementById( 'wpec_shipping_postal_code-' + parent.data.id ).value,
+					country_code: document.getElementById( 'wpec_shipping_country-' + parent.data.id ).value,
+				};
+
 				parent.processPayment( {
 					payer: {
 						name: {
@@ -370,20 +386,8 @@ var ppecHandler = function( data ) {
 							surname: document.getElementById( 'wpec_billing_last_name-' + parent.data.id ).value,
 						},
 						email_address: document.getElementById( 'wpec_billing_email-' + parent.data.id ).value,
-						address: {
-							address_line_1: document.getElementById( 'wpec_billing_address-' + parent.data.id ).value,
-							admin_area_1: document.getElementById( 'wpec_billing_state-' + parent.data.id ).value,
-							admin_area_2: document.getElementById( 'wpec_billing_city-' + parent.data.id ).value,
-							postal_code: document.getElementById( 'wpec_billing_postal_code-' + parent.data.id ).value,
-							country_code: document.getElementById( 'wpec_billing_country-' + parent.data.id ).value,
-						},
-						shipping_address: {
-							address_line_1: document.getElementById( 'wpec_shipping_address-' + parent.data.id ).value,
-							admin_area_1: document.getElementById( 'wpec_shipping_state-' + parent.data.id ).value,
-							admin_area_2: document.getElementById( 'wpec_shipping_city-' + parent.data.id ).value,
-							postal_code: document.getElementById( 'wpec_shipping_postal_code-' + parent.data.id ).value,
-							country_code: document.getElementById( 'wpec_shipping_country-' + parent.data.id ).value,
-						}
+						address: billing_address,
+						shipping_address: shipping_address,
 					}
 				}, 'wpec_process_empty_payment' );
 			}

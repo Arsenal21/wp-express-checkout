@@ -167,6 +167,7 @@ None
 == Changelog ==
 = WIP =
 - Some jquery code was converted to vanilla js.
+- Shipping address collection problem for 100% discount has fixed
 
 = 2.3.14 =
 - For File Download Feature: updated the feature so file download using local path is now possible. [Documentation](https://wp-express-checkout.com/force-download-option-for-digital-products/)
