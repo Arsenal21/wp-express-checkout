@@ -712,11 +712,21 @@ class Order {
 			return $this->data['shipping_address'];
 		}
 
-		// Check if the shipping_address is present inside 'payer' data. (Usually for the case of subscription payment)
 		$payer_data = $this->get_data( 'payer' );
-		if ( isset( $payer_data['shipping_address']['address'] ) && ! empty( $payer_data['shipping_address']['address'] )) {
-			// The 'address' index usually in array formant. If so, convert it to string.
-			$payer_shipping_data = $payer_data['shipping_address']['address'];
+
+		// Check if the shipping_address is present inside 'payer' data. (Usually for the case of subscription/100% discount payment)
+		if ( isset( $payer_data['shipping_address'] ) && ! empty( $payer_data['shipping_address'] )) {
+			// For subscription payment, shipping address is inside $payer_data['shipping_address']['address'])
+			if ( isset( $payer_data['shipping_address']['address'] ) && ! empty( $payer_data['shipping_address']['address'] )) {
+				// The 'address' index usually in array formant. If so, convert it to string.
+				$payer_shipping_data = $payer_data['shipping_address']['address'];
+				return is_array($payer_shipping_data) ? implode( ', ', $payer_shipping_data ) : $payer_shipping_data;
+			}
+
+			// For 100% discount payment, shipping address is directly inside $payer_data['shipping_address'])
+
+			// The 'shipping_address' index usually in array formant. If so, convert it to string.
+			$payer_shipping_data = $payer_data['shipping_address'];
 			return is_array($payer_shipping_data) ? implode( ', ', $payer_shipping_data ) : $payer_shipping_data;
 		}
 
