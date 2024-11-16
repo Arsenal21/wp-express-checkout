@@ -714,7 +714,7 @@ class Order {
 
 		$payer_data = $this->get_data( 'payer' );
 
-		// Check if the shipping_address is present inside 'payer' data. (Usually for the case of subscription payment)
+		// Check if the shipping_address is present inside 'payer' data. (Usually for the case of subscription/100% discount payment)
 		if ( isset( $payer_data['shipping_address'] ) && ! empty( $payer_data['shipping_address'] )) {
 			// For subscription payment, shipping address is inside $payer_data['shipping_address']['address'])
 			if ( isset( $payer_data['shipping_address']['address'] ) && ! empty( $payer_data['shipping_address']['address'] )) {
