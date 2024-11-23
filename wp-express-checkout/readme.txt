@@ -3,8 +3,8 @@ Contributors: Tips and Tricks HQ, dikiy_forester, mbrsolution, Ivy2120, chanelst
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 6.0
-Tested up to: 6.6
-Stable tag: 2.3.14
+Tested up to: 6.7
+Stable tag: 2.3.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -165,9 +165,11 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
-= WIP =
-- Some jquery code was converted to vanilla js.
-- Shipping address collection problem for 100% discount has fixed
+
+= 2.3.15 =
+- Some jQuery code has been converted to use vanilla JavaScript to reduce dependency on jQuery.
+- Shipping address collection issue with the 100% discount feature has been fixed.
+- Optimization improvements for the URL payment feature.
 
 = 2.3.14 =
 - For File Download Feature: updated the feature so file download using local path is now possible. [Documentation](https://wp-express-checkout.com/force-download-option-for-digital-products/)

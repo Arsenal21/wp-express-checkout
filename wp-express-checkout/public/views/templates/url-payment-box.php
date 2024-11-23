@@ -130,6 +130,7 @@
 			'shipping' => 0,
 			'shipping_per_quantity' => 0,
 			'shipping_enable' => 0,
+			'is_digital_product' => $product->is_digital_product(),
 			'tax' => 0,
 			'quantity' => 1,
 			'url' => '',
@@ -227,7 +228,6 @@
 					<?php } ?>
 					<?php 
 					/* ---Load the template for the main payment form --- */
-					$this->ppdg = $class_main_inst;
 					$located = WP_Express_Checkout\Shortcodes::locate_template( 'payment-form.php' );
 					if ( $located ) {
 						require $located;

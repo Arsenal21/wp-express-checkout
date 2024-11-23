@@ -1,9 +1,10 @@
 <?php
 /**
- * Payment form template
- *
- * @package wp-express-checkout
+ * Manual checkout (100% discount) Payment form template. This template is used to display the 100% discount checkout scenario.
  */
+
+//Get the main instance of the plugin so we can access the settings.
+$class_main_inst = WP_Express_Checkout\Main::get_instance();
 ?>
 
 <div style="position: relative;" class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $product_id ); ?>" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" data-price-class="<?php echo esc_attr( $price_class ); ?>">
@@ -19,7 +20,7 @@
 
 	<?php if ( $custom_amount ) { ?>
 		<?php
-		$step = pow( 10, -intval( $this->ppdg->get_setting( 'price_decimals_num' ) ) );
+		$step = pow( 10, -intval( $class_main_inst->get_setting( 'price_decimals_num' ) ) );
 		$min  = get_post_meta( $product_id, 'wpec_product_min_amount', true );
 		?>
 		<div class="wpec-custom-amount-section">
@@ -261,10 +262,10 @@
 
 	<div class = "wp-ppec-button-container">
 
-		<?php if ( $this->ppdg->get_setting( 'tos_enabled' ) ) { ?>
+		<?php if ( $class_main_inst->get_setting( 'tos_enabled' ) ) { ?>
 			<div class="wpec_product_tos_input_container">
 				<label class="wpec_product_tos_label">
-					<input id="wpec-tos-<?php echo esc_attr( $button_id ); ?>" class="wpec_product_tos_input" type="checkbox"> <?php echo html_entity_decode( $this->ppdg->get_setting( 'tos_text' ) ); ?>
+					<input id="wpec-tos-<?php echo esc_attr( $button_id ); ?>" class="wpec_product_tos_input" type="checkbox"> <?php echo html_entity_decode( $class_main_inst->get_setting( 'tos_text' ) ); ?>
 				</label>
 				<div class="wp-ppec-form-error-msg"></div>
 			</div>
