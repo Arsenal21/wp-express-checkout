@@ -280,8 +280,7 @@ class Shortcodes {
 			),
 		) );
 
-
-		$output .= '<script type="text/javascript">var wpec_' . $button_id . '_data=' . json_encode( $data ) . ';jQuery( function( $ ) {$( document ).on( "wpec_paypal_sdk_loaded", function() { new ppecHandler(wpec_' . $button_id . '_data) } );} );</script>';
+		$output .= '<script type="text/javascript">var wpec_' . esc_attr( $button_id ) . '_data=' . json_encode( $data ) . ';document.addEventListener( "wpec_paypal_sdk_loaded", function() { new ppecHandler(wpec_' . esc_attr( $button_id ) . '_data); } );</script>';
 
 		add_action( 'wp_footer', array( $this->ppdg, 'load_paypal_sdk' ) );
 

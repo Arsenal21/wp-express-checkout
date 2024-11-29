@@ -275,7 +275,7 @@
 			),
 		) );
 
-		echo '<script type="text/javascript">var wpec_' . esc_attr( $button_id ) . '_data=' . json_encode( $data ) . ';jQuery( function( $ ) {$( document ).on( "wpec_paypal_sdk_loaded", function() { new ppecHandler(wpec_' . esc_attr( $button_id ) . '_data) } );} );</script>';
+		echo '<script type="text/javascript">var wpec_' . esc_attr( $button_id ) . '_data=' . json_encode( $data ) . ';document.addEventListener( "wpec_paypal_sdk_loaded", function() { new ppecHandler(wpec_' . esc_attr( $button_id ) . '_data); } );</script>';
 
 		WP_Express_Checkout\Main::get_instance()->load_paypal_sdk();
 

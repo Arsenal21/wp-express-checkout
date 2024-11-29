@@ -161,15 +161,27 @@ class Main {
 		$script_url = add_query_arg( $args, 'https://www.paypal.com/sdk/js' );
 		?>
 		<script type="text/javascript">
-			var script = document.createElement( 'script' );
-			script.type = 'text/javascript';
-			script.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP' );
-			script.async = true;
-			script.src = '<?php echo esc_url_raw( $script_url ); ?>';
-			script.onload = function() {
-				jQuery( function( $ ) { $( document ).trigger( 'wpec_paypal_sdk_loaded' ) } );
-			};
-			document.getElementsByTagName( 'head' )[0].appendChild( script );
+			wpec_onDocumentReady(function(){
+				var script = document.createElement( 'script' );
+				script.type = 'text/javascript';
+				script.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP' );
+				script.async = true;
+				script.src = '<?php echo esc_url_raw( $script_url ); ?>';	
+				script.onload = function () {
+					document.dispatchEvent(new Event('wpec_paypal_sdk_loaded'));
+				};
+				document.getElementsByTagName( 'head' )[0].appendChild( script );
+			})
+
+			function wpec_onDocumentReady(callback) {
+            	// If the document is already loaded, execute the callback immediately
+				if (document.readyState !== 'loading') {
+					callback();
+				} else {
+					// Otherwise, wait for the DOMContentLoaded event
+					document.addEventListener('DOMContentLoaded', callback);
+				}
+			}
 		</script>
 		<?php
 	}
