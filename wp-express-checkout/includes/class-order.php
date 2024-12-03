@@ -491,6 +491,22 @@ class Order {
 	}
 
 	/**
+	 * Returns the username used to create the order
+	 */
+	public function get_username(){
+		$username  = '';
+		$payer     = $this->get_data( 'payer' );
+		$user      = get_userdata( $this->get_author() );
+		if ( $payer ) {
+			$username = implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
+		} else if ( $user ) {
+			$username  = $user->user_login !== $user->display_name ? $user->display_name . ' (' . $user->user_login . ') ' : $user->user_login;
+		}
+
+		return $username;
+	}
+
+	/**
 	 * Returns the URL to redirect to for processing the order
 	 * @return string URL
 	 */

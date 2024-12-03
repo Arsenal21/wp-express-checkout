@@ -168,6 +168,7 @@ None
 
 = WIP =
 - Converted the 'wpec_paypal_sdk_loaded' event triggering and handling from jQuery to use vanilla JavaScript.
+- Customer name is now included in order data export CSV file.
 
 = 2.3.15 =
 - Some jQuery code has been converted to use vanilla JavaScript to reduce dependency on jQuery.
