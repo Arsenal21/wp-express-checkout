@@ -9,7 +9,12 @@ use WP_Express_Checkout\Utils;
 use WP_Express_Checkout\View_Downloads;
 
 $payer            = $order->get_data( 'payer' );
-$billing_address  = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : '';
+
+$billing_address = '';
+if ( is_array( $payer['address'] ) && ! empty( $payer['address'] ) && count( $payer['address'] ) > 1 ) {
+	$billing_address = implode( ', ', (array) $payer['address'] );
+}
+
 $shipping_address = $order->get_data( 'shipping_address' );
 $subtotal         = 0;
 $product          = $order->get_item( 'ppec-products' );
