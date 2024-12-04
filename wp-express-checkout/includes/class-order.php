@@ -498,7 +498,14 @@ class Order {
 		$payer     = $this->get_data( 'payer' );
 		$user      = get_userdata( $this->get_author() );
 		if ( $payer ) {
-			$username = implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
+			$username_parts = array();
+			if (isset($payer['name']['given_name'])){
+				$username_parts[] = $payer['name']['given_name'];
+			}
+			if (isset($payer['name']['surname'])){
+				$username_parts[] = $payer['name']['surname'];
+			}
+			$username = implode( ' ', $username_parts );
 		} else if ( $user ) {
 			$username  = $user->user_login !== $user->display_name ? $user->display_name . ' (' . $user->user_login . ') ' : $user->user_login;
 		}

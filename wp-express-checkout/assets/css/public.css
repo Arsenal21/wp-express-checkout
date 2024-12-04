@@ -917,3 +917,58 @@
 	color: #ffffff;
 	cursor: pointer;
 }
+
+
+/* Start of 'Thank You' page shortcode related CSS */
+.wpec-order-data-box {
+ display: flex;
+ border-style: solid;
+ border-color: lightgrey;
+ border-width: 1px 0 0 1px;
+ width: 100%;
+}
+
+.wpec-order-data-box-col {
+	border-style: solid;
+	border-color: lightgrey;
+	border-width: 0 1px 1px 0;
+	word-break: break-all;
+	flex-grow: 1;
+	padding: 15px;
+}
+
+.wpec-order-data-box-col :first-child {
+	font-weight: bold;
+	margin-bottom: 10px;
+	margin-right: 10px;
+}
+
+@media screen and (max-width: 768px) {
+	.wpec-order-data-box {
+		flex-direction: column;
+	}
+}
+
+.wpec-order-details-table,
+.wpec-order-downloads-table {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid lightgray;
+}
+
+.wpec-order-details-table td,
+.wpec-order-details-table th,
+.wpec-order-downloads-table td,
+.wpec-order-downloads-table th {
+	padding: 15px;
+	border-top: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+}
+
+.wpec-order-shipping-address,
+.wpec-order-billing-address {
+	padding: 15px;
+	border: 1px solid lightgray;
+	white-space: pre-line;
+}
+/* End of 'Thank You' page shortcode related CSS */
