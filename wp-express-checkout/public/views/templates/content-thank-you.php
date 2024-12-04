@@ -11,7 +11,7 @@ use WP_Express_Checkout\View_Downloads;
 $payer            = $order->get_data( 'payer' );
 
 $billing_address = '';
-if ( is_array( $payer['address'] ) && ! empty( $payer['address'] ) && count( $payer['address'] ) > 1 ) {
+if ( isset( $payer['address'] ) && is_array( $payer['address'] ) && count( $payer['address'] ) > 1 ) {
 	$billing_address = implode( ', ', (array) $payer['address'] );
 }
 
