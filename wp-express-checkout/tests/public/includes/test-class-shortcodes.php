@@ -286,8 +286,8 @@ class ShortcodesTest extends \WP_UnitTestCase {
 
 		$output = $this->object->shortcode_wpec_thank_you();
 		$this->assertStringContainsString( "test-capture-id-{$product_id}-{$order->get_id()}", $output );
-		$this->assertStringContainsString( 'wpec_thank_you_message', $output );
-		$this->assertStringContainsString( 'wpec-thank-you-page-download-link', $output );
+		$this->assertStringContainsString( 'wpec-order-details-wrap', $output );
+		$this->assertStringContainsString( 'wpec-order-downloads-table', $output );
 	}
 
 	/**
