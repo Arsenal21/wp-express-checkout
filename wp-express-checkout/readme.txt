@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 2.3.15
+Stable tag: 2.3.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -166,10 +166,10 @@ None
 
 == Changelog ==
 
-= WIP =
+= 2.3.16 =
 - Converted the 'wpec_paypal_sdk_loaded' event triggering and handling from jQuery to use vanilla JavaScript.
-- Customer name is now included in order data export CSV file.
-- Thank you page shortcode appearance updated.
+- Customer name is now included in the order data export CSV file.
+- The default 'Thank You' page shortcode appearance has been updated.
 
 = 2.3.15 =
 - Some jQuery code has been converted to use vanilla JavaScript to reduce dependency on jQuery.
