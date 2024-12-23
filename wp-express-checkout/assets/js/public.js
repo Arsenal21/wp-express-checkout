@@ -297,10 +297,14 @@ var ppecHandler = function( data ) {
 								document.getElementById('wpec-coupon-field-' + parent.data.id).value = '';
 								document.getElementById('wpec-coupon-field-' + parent.data.id).style.display = 'block';
 								document.getElementById('wpec-redeem-coupon-btn-' + parent.data.id).style.display = 'block';
-								totCurr.classList.remove('wpec_line_through');
-								priceCurr.classList.remove('wpec_line_through');
-								totNew.innerHTML = '';
-								priceNew.innerHTML = '';
+								totCurr?.classList.remove('wpec_line_through');
+								priceCurr?.classList.remove('wpec_line_through');
+								if (totNew) {
+									totNew.innerHTML = '';
+								}
+								if (priceNew) {
+									priceNew.innerHTML = '';
+								}
 								delete parent.data.discount;
 								delete parent.data.discountType;
 								delete parent.data.couponCode;
@@ -365,27 +369,27 @@ var ppecHandler = function( data ) {
 			} else if ( !parent.data.total ) {
 				const same_shipping_billing_address_enabled = parent.scCont.querySelector( '.wpec_product_shipping_enable' )?.checked;
 				const billing_address = {
-					address_line_1: document.getElementById( 'wpec_billing_address-' + parent.data.id ).value,
-					admin_area_1: document.getElementById( 'wpec_billing_state-' + parent.data.id ).value,
-					admin_area_2: document.getElementById( 'wpec_billing_city-' + parent.data.id ).value,
-					postal_code: document.getElementById( 'wpec_billing_postal_code-' + parent.data.id ).value,
-					country_code: document.getElementById( 'wpec_billing_country-' + parent.data.id ).value,
+					address_line_1: document.getElementById( 'wpec_billing_address-' + parent.data.id )?.value,
+					admin_area_1: document.getElementById( 'wpec_billing_state-' + parent.data.id )?.value,
+					admin_area_2: document.getElementById( 'wpec_billing_city-' + parent.data.id )?.value,
+					postal_code: document.getElementById( 'wpec_billing_postal_code-' + parent.data.id )?.value,
+					country_code: document.getElementById( 'wpec_billing_country-' + parent.data.id )?.value,
 				};
 				const shipping_address = same_shipping_billing_address_enabled ? billing_address : {
-					address_line_1: document.getElementById( 'wpec_shipping_address-' + parent.data.id ).value,
-					admin_area_1: document.getElementById( 'wpec_shipping_state-' + parent.data.id ).value,
-					admin_area_2: document.getElementById( 'wpec_shipping_city-' + parent.data.id ).value,
-					postal_code: document.getElementById( 'wpec_shipping_postal_code-' + parent.data.id ).value,
-					country_code: document.getElementById( 'wpec_shipping_country-' + parent.data.id ).value,
+					address_line_1: document.getElementById( 'wpec_shipping_address-' + parent.data.id )?.value,
+					admin_area_1: document.getElementById( 'wpec_shipping_state-' + parent.data.id )?.value,
+					admin_area_2: document.getElementById( 'wpec_shipping_city-' + parent.data.id )?.value,
+					postal_code: document.getElementById( 'wpec_shipping_postal_code-' + parent.data.id )?.value,
+					country_code: document.getElementById( 'wpec_shipping_country-' + parent.data.id )?.value,
 				};
 
 				parent.processPayment( {
 					payer: {
 						name: {
-							given_name: document.getElementById( 'wpec_billing_first_name-' + parent.data.id ).value,
-							surname: document.getElementById( 'wpec_billing_last_name-' + parent.data.id ).value,
+							given_name: document.getElementById( 'wpec_billing_first_name-' + parent.data.id )?.value,
+							surname: document.getElementById( 'wpec_billing_last_name-' + parent.data.id )?.value,
 						},
-						email_address: document.getElementById( 'wpec_billing_email-' + parent.data.id ).value,
+						email_address: document.getElementById( 'wpec_billing_email-' + parent.data.id )?.value,
 						address: billing_address,
 						shipping_address: shipping_address,
 					}
