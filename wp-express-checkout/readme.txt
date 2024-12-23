@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 2.3.16
+Stable tag: 2.3.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -165,8 +165,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
-= WIP =
-- Some javascript issues fixed.
+
+= 2.3.17 =
+- The variation with a negative price can now also be used to offer a free product, similar to the functionality of a 100% discount coupon.
+- 100% Discount coupon feature's JavaScript code updated to address an issue.
 
 = 2.3.16 =
 - Converted the 'wpec_paypal_sdk_loaded' event triggering and handling from jQuery to use vanilla JavaScript.
