@@ -165,6 +165,8 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+= WIP =
+- Some javascript issues fixed.
 
 = 2.3.16 =
 - Converted the 'wpec_paypal_sdk_loaded' event triggering and handling from jQuery to use vanilla JavaScript.
