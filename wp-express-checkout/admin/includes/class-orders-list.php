@@ -227,7 +227,7 @@ class Orders_List {
 		$columns['order']        = __( 'Order', 'wp-express-checkout' );
 		$columns['trans_id']     = __( 'PayPal Transaction ID', 'wp-express-checkout' );
 		$columns['title']        = __( 'Description', 'wp-express-checkout' );
-		$columns['order_author'] = __( 'Author', 'wp-express-checkout' );
+		$columns['customer'] = __( 'Customer', 'wp-express-checkout' );
 		$columns['total']        = __( 'Total', 'wp-express-checkout' );
 		$columns['order_date']   = __( 'Date', 'wp-express-checkout' );
 		$columns['status']       = __( 'Status', 'wp-express-checkout' );
@@ -284,16 +284,17 @@ class Orders_List {
 				echo $order->get_capture_id();
 				break;
 
-			case 'order_author':
-				$user = get_userdata( $order->get_author() );
-				if ( $user ) {
-					echo $user->display_name;
-				} else {
-					$payer = $order->get_data( 'payer' );
-					if ( $payer ) {
-						echo implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
-					}
-				}
+			case 'customer':
+                $output = '';
+                $payer = $order->get_data( 'payer' );
+                if ( $payer ) {
+	                $output .= implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
+                }
+				// $user = get_userdata( $order->get_author() );
+				// if ( $user ) {
+				// 	$output .= ' (' . $user->display_name . ')';
+				// }
+                echo $output;
 				echo '<br>';
 				echo $order->get_ip_address();
 				break;
