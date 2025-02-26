@@ -47,6 +47,7 @@ class Orders_List {
 					}
 
 					$('#wpec_order_export_button').insertAfter('#post-query-submit');
+					$('#wpec_before_export_orders_submit').insertAfter('#wpec_order_export_button');
 
 				});
 			</script>
@@ -65,12 +66,16 @@ class Orders_List {
 				}
 			</style>
 
-			<div class="alignleft actions">				
+			<div class="alignleft actions">
 				<input type="text" autocomplete="off" id="order_date_from" name="order_date_from" class="" value="<?php echo isset($_GET['order_date_from']) ? esc_attr($_GET['order_date_from']) : ''; ?>" placeholder="<?php _e('From Date'); ?>" />
 				<label for="order_date_to" class="screen-reader-text"><?php _e('Filter orders by date to'); ?></label>
 				<input type="text" autocomplete="off" id="order_date_to" name="order_date_to" class="" value="<?php echo isset($_GET['order_date_to']) ? esc_attr($_GET['order_date_to']) : ''; ?>" placeholder="<?php _e('To Date'); ?>" />
 				<input type="hidden" name="wpec_order_export_nonce" value="<?php echo wp_create_nonce( 'wpec_order_export_nonce' ); ?>">
 				<input type="submit" id="wpec_order_export_button" name="wpec_order_export_button" class="button button-primary" value="<?php _e('Export Orders'); ?>">
+
+                <div id="wpec_before_export_orders_submit">
+                    <?php do_action('wpec_before_export_orders_submit'); ?>
+                </div>
 			</div>
 		<?php
 		}
@@ -132,6 +137,9 @@ class Orders_List {
 				'Billing Address',
 				'Shipping Address',
 			);
+
+			$headers = apply_filters('wpec_export_order_headers', $headers);
+
 			fputcsv($fp, $headers);
 			
 			// Loop through the orders and add them to the CSV
@@ -184,7 +192,10 @@ class Orders_List {
 						$ip,
 						$billing_address,
 						$shipping_address,
-					);					
+					);
+
+				    $data = apply_filters('wpec_export_order_data', $data, $order_obj);
+
 					fputcsv($fp, $data);
 			}
 
