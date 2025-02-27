@@ -47,6 +47,7 @@ class Orders_List {
 					}
 
 					$('#wpec_order_export_button').insertAfter('#post-query-submit');
+					$('#wpec_before_export_orders_submit').insertAfter('#wpec_order_export_button');
 
 				});
 			</script>
@@ -65,12 +66,16 @@ class Orders_List {
 				}
 			</style>
 
-			<div class="alignleft actions">				
+			<div class="alignleft actions">
 				<input type="text" autocomplete="off" id="order_date_from" name="order_date_from" class="" value="<?php echo isset($_GET['order_date_from']) ? esc_attr($_GET['order_date_from']) : ''; ?>" placeholder="<?php _e('From Date'); ?>" />
 				<label for="order_date_to" class="screen-reader-text"><?php _e('Filter orders by date to'); ?></label>
 				<input type="text" autocomplete="off" id="order_date_to" name="order_date_to" class="" value="<?php echo isset($_GET['order_date_to']) ? esc_attr($_GET['order_date_to']) : ''; ?>" placeholder="<?php _e('To Date'); ?>" />
 				<input type="hidden" name="wpec_order_export_nonce" value="<?php echo wp_create_nonce( 'wpec_order_export_nonce' ); ?>">
 				<input type="submit" id="wpec_order_export_button" name="wpec_order_export_button" class="button button-primary" value="<?php _e('Export Orders'); ?>">
+
+                <div id="wpec_before_export_orders_submit">
+                    <?php do_action('wpec_before_export_orders_submit'); ?>
+                </div>
 			</div>
 		<?php
 		}
@@ -132,6 +137,9 @@ class Orders_List {
 				'Billing Address',
 				'Shipping Address',
 			);
+
+			$headers = apply_filters('wpec_export_order_headers', $headers);
+
 			fputcsv($fp, $headers);
 			
 			// Loop through the orders and add them to the CSV
@@ -184,7 +192,10 @@ class Orders_List {
 						$ip,
 						$billing_address,
 						$shipping_address,
-					);					
+					);
+
+				    $data = apply_filters('wpec_export_order_data', $data, $order_obj);
+
 					fputcsv($fp, $data);
 			}
 
@@ -227,7 +238,7 @@ class Orders_List {
 		$columns['order']        = __( 'Order', 'wp-express-checkout' );
 		$columns['trans_id']     = __( 'PayPal Transaction ID', 'wp-express-checkout' );
 		$columns['title']        = __( 'Description', 'wp-express-checkout' );
-		$columns['order_author'] = __( 'Author', 'wp-express-checkout' );
+		$columns['customer'] = __( 'Customer', 'wp-express-checkout' );
 		$columns['total']        = __( 'Total', 'wp-express-checkout' );
 		$columns['order_date']   = __( 'Date', 'wp-express-checkout' );
 		$columns['status']       = __( 'Status', 'wp-express-checkout' );
@@ -284,16 +295,17 @@ class Orders_List {
 				echo $order->get_capture_id();
 				break;
 
-			case 'order_author':
-				$user = get_userdata( $order->get_author() );
-				if ( $user ) {
-					echo $user->display_name;
-				} else {
-					$payer = $order->get_data( 'payer' );
-					if ( $payer ) {
-						echo implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
-					}
-				}
+			case 'customer':
+                $output = '';
+                $payer = $order->get_data( 'payer' );
+                if ( $payer ) {
+	                $output .= implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
+                }
+				// $user = get_userdata( $order->get_author() );
+				// if ( $user ) {
+				// 	$output .= ' (' . $user->display_name . ')';
+				// }
+                echo $output;
 				echo '<br>';
 				echo $order->get_ip_address();
 				break;

@@ -165,6 +165,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+= WIP =
+- Order author section update in order menu.
+- Thank you page info updated.
+- Export custom fields data feature added.
 
 = 2.3.17 =
 - The variation with a negative price can now also be used to offer a free product, similar to the functionality of a 100% discount coupon.

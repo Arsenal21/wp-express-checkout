@@ -24,18 +24,8 @@ $tax_amount       = ! empty( $order->get_item( 'tax' ) ) ? $order->get_item( 'ta
 $shipping_amount  = ! empty( $order->get_item( 'shipping' ) ) ? $order->get_item( 'shipping' )['price'] : 0;
 $downloads = View_Downloads::get_order_downloads_list( $order->get_id() );
 
-$trials = array();
-
 $trial_payment_discount = $order->get_item( 'trial_discount' );
-if (!empty($trial_payment_discount)){
-	$trials[] = $trial_payment_discount;
-}
-
 $trial_payment = $order->get_item( 'trial' );
-if (!empty($trial_payment)){
-	$trials[] = $trial_payment;
-}
-
 ?>
 
 <div class="wpec-order-details-wrap">
@@ -66,49 +56,50 @@ if (!empty($trial_payment)){
         </thead>
         <tbody>
             <?php if ( is_array( $product ) && ! empty( $product ) ) {
-                $price_amount           = $product['price'] * $product['quantity'];
-                $formatted_price_amount = Utils::price_format( $price_amount, $order->get_currency() );
+                $formatted_price_amount = Utils::price_format( $product['price'], $order->get_currency() );
                 $product_name_str = $product['name'];
-                if (intval($product['quantity']) > 1){
-                    $product_name_str = $product_name_str  . ' x' . $product['quantity'];
-                }
-
                 echo '<tr><td style="text-align: start">' . esc_attr( $product_name_str ) . '</td><td style="text-align: end">' . esc_attr( $formatted_price_amount ) . '</td></tr>';
 
-                $subtotal += $price_amount;
+                $subtotal += $product['price'] * $product['quantity'];
             } ?>
 
             <?php if ( is_array( $variations ) && ! empty( $variations ) ) {
                 foreach ( $variations as $variation ) {
-                    $price_amount           = $variation['price'] * $variation['quantity'];
-                    $formatted_price_amount = Utils::price_format( $price_amount, $order->get_currency() );
+                    $formatted_price_amount = Utils::price_format( $variation['price'], $order->get_currency() );
 	                $variation_name_str = $variation['name'];
-	                if (intval($variation['quantity']) > 1){
-		                $variation_name_str = $variation_name_str  . ' x' . $variation['quantity'];
-	                }
                     echo '<tr><td style="text-align: start">' . esc_attr( $variation_name_str ) .'</td><td style="text-align: end">' . esc_attr( $formatted_price_amount ) . '</td></tr>';
 
-                    $subtotal += $price_amount;
+                    $subtotal += $variation['price'] * $variation['quantity'];
                 }
             } ?>
 
+            <?php if ( ! empty( $trial_payment ) ) {
+                    $price_amount           = $trial_payment['price'] * $trial_payment['quantity'];
+                    $formatted_price_amount = Utils::price_format( $trial_payment['price'], $order->get_currency() );
+	                $trial_payment_name_str = $trial_payment['name'];
+
+                    echo '<tr><td style="text-align: start">' . esc_attr( $trial_payment_name_str ) .'</td><td style="text-align: end">' . esc_attr( $formatted_price_amount ) . '</td></tr>';
+
+                    $subtotal += $price_amount;
+            } ?>
+
+            <tr>
+                <th style="text-align: start"><?php _e( "Quantity: ", "wp-express-checkout" ); ?></th>
+                <th style="text-align: end">x<?php esc_attr_e($product['quantity']); ?></th>
+            </tr>
             <tr>
                 <th style="text-align: start"><?php _e( "Subtotal: ", "wp-express-checkout" ); ?></th>
                 <th style="text-align: end"><?php echo Utils::price_format( $subtotal, $order->get_currency() ) ?></th>
             </tr>
 
-            <?php if ( is_array( $trials ) && ! empty( $trials ) ) {
-                foreach ( $trials as $trial ) {
-                    $price_amount           = $trial['price'] * $trial['quantity'];
-                    $formatted_price_amount = Utils::price_format( $price_amount, $order->get_currency() );
-	                $trial_name_str = $trial['name'];
-	                if (intval($trial['quantity']) > 1){
-		                $trial_name_str = $trial_name_str  . ' x' . $trial['quantity'];
-	                }
-                    echo '<tr><td style="text-align: start">' . esc_attr( $trial_name_str ) .'</td><td style="text-align: end">' . esc_attr( $formatted_price_amount ) . '</td></tr>';
+            <?php if ( ! empty( $trial_payment_discount ) ) {
+	            $price_amount           = $trial_payment_discount['price'] * $trial_payment_discount['quantity'];
+	            $formatted_price_amount = Utils::price_format( $trial_payment_discount['price'], $order->get_currency() );
+	            $trial_payment_discount_name_str = $trial_payment_discount['name'];
 
-                    $subtotal += $price_amount;
-                }
+	            echo '<tr><td style="text-align: start">' . esc_attr( $trial_payment_discount_name_str ) .'</td><td style="text-align: end">' . esc_attr( $formatted_price_amount ) . '</td></tr>';
+
+	            $subtotal += $price_amount;
             } ?>
 
             <?php if ( is_array( $coupon ) && ! empty( $coupon ) ) {
