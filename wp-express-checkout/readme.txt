@@ -165,10 +165,11 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
 = WIP =
-- Order author section update in order menu.
-- Thank you page info updated.
-- Export custom fields data feature added.
+- Thank you page shortcode now outputs the quantity purchased.
+- Updated the label "Order Author" to "Customer" in the order item to make it more user-friendly.
+- Added new filter hooks to the export orders data feature.
 
 = 2.3.17 =
 - The variation with a negative price can now also be used to offer a free product, similar to the functionality of a 100% discount coupon.

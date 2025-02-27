@@ -230,11 +230,11 @@ class Orders_Meta_Boxes {
 		?>
 		<style type="text/css">
 			#admin-order-author{
-				padding-left: 10px;
 				text-align: left;
 			}
 			.avatar{
 				float: left;
+				margin-right: 10px;
 			}
 		</style>
 		<?php
@@ -257,22 +257,29 @@ class Orders_Meta_Boxes {
 			$useremail = $wp_user->user_email;
 		}
 		?>
-		<?php echo get_avatar( $useremail, 72 ); ?>
+		<?php 
+		//WP might be sunsetting Gravatar, so let's not use it anymore. It isn't necessary for this customer box.
+		//echo get_avatar( $useremail, 72 ); 
+		?>
 		<table id="admin-order-author">
 			<tbody>
                 <?php if (!empty($payer_username)) {?>
 				<tr>
 					<td><?php echo esc_attr($payer_username); ?></td>
 				</tr>
+				<tr>
+					<td><?php echo esc_attr($useremail); ?></td>
+				</tr>				
                 <?php } ?>
                 <?php if (!empty($wp_username)) {?>
                     <tr>
-                        <td><?php echo __('WP Username: ', 'wp-express-checkout') . esc_attr($wp_username); ?></td>
+					<td>
+						<strong><?php esc_html_e( 'WP Username:', 'wp-express-checkout' ); ?></strong></td>
                     </tr>
+					<tr>
+						<td><?php echo esc_attr($wp_username); ?></td>
+					</tr>					
                 <?php } ?>
-				<tr>
-					<td><?php echo esc_attr($useremail); ?></td>
-				</tr>
 
 				<?php if ( !empty($ip_address) ) { ?>
 					<tr>
