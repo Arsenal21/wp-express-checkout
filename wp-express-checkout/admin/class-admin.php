@@ -204,13 +204,19 @@ class Admin {
 
 		/* Add the sections */
 		add_settings_section( 'ppdg-global-section', __( 'Global Settings', 'wp-express-checkout' ), null, $this->plugin_slug );
-		add_settings_section( 'ppdg-credentials-section', __( 'PayPal Credentials', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-form-section', __( 'Checkout Form', 'wp-express-checkout' ), null, $this->plugin_slug );
-		add_settings_section( 'ppdg-button-style-section', __( 'PayPal Button Style', 'wp-express-checkout' ), null, $this->plugin_slug );
-		add_settings_section( 'ppdg-disable-funding-section', __( 'Disable Funding', 'wp-express-checkout' ), array( $this, 'disable_funding_note' ), $this->plugin_slug );
 
 		add_settings_section( 'ppdg-shipping-tax-section', __( 'Shipping & Tax', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-debug-logging-section', __( 'Debug Logging', 'wp-express-checkout' ), array( $this, 'debug_logging_note' ), $this->plugin_slug );
+
+		add_settings_section( 'ppdg-live-sandbox-mode-section', __( 'Live Mode or Sandbox', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-api-connection' );
+		add_settings_section( 'ppdg-pp-account-connection-section', __( 'PayPal Account Connection', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-api-connection'  );
+		add_settings_section( 'ppdg-delete-cache-section', __( 'Delete Cache', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-api-connection'  );
+
+		add_settings_section( 'ppdg-credentials-section', __( 'PayPal Credentials', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-api-credentials');
+
+		add_settings_section( 'ppdg-button-style-section', __( 'PayPal Button Appearance Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-btn-appearance' );
+		add_settings_section( 'ppdg-disable-funding-section', __( 'Disable Funding', 'wp-express-checkout' ), array( $this, 'disable_funding_note' ), $this->plugin_slug . '-pp-btn-appearance');
 
 		add_settings_section( 'ppdg-emails-general-section', __( 'General Email Settings', 'wp-express-checkout' ), array( $this, 'emails_general_note' ), $this->plugin_slug . '-emails' );
 		add_settings_section( 'ppdg-emails-section', __( 'Purchase Confirmation Email Settings', 'wp-express-checkout' ), array( $this, 'emails_note' ), $this->plugin_slug . '-emails' );
@@ -262,41 +268,6 @@ class Admin {
 				'size'  => 100,
 			)
 		);
-		
-		// API details.
-		add_settings_field( 'is_live', __( 'Live Mode', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section', array( 'field' => 'is_live', 'type' => 'checkbox', 'desc' => __( 'Check this to run the transaction in live mode. When unchecked it will run in sandbox mode.', 'wp-express-checkout' ) ) );
-		add_settings_field( 'live_client_id', __( 'Live Client ID', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section',
-			array(
-				'field' => 'live_client_id',
-				'type'  => 'text',
-				'desc'  => sprintf( __( 'Enter your PayPal Client ID for live mode. <a href="%s" target="_blank">Read this documentation</a> to learn how to locate your Client ID.', 'wp-express-checkout' ), 'https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/' ),
-				'size'  => 100,
-			)
-		);
-		add_settings_field( 'live_secret_key', __( 'Live Secret key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section',
-			array(
-				'field' => 'live_secret_key',
-				'type'  => 'text',
-				'desc'  => __( 'Enter your PayPal Secret Key for live mode.', 'wp-express-checkout' ),
-				'size'  => 100,
-			)
-		);
-		add_settings_field( 'sandbox_client_id', __( 'Sandbox Client ID', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section',
-			array(
-				'field' => 'sandbox_client_id',
-				'type'  => 'text',
-				'desc'  => __( 'Enter your PayPal Client ID for sandbox mode.', 'wp-express-checkout' ),
-				'size'  => 100,
-			)
-		);
-		add_settings_field( 'sandbox_secret_key', __( 'Sandbox Secret key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-credentials-section',
-			array(
-				'field' => 'sandbox_secret_key',
-				'type'  => 'text',
-				'desc'  => __( 'Enter your PayPal Secret Key for sandbox mode.', 'wp-express-checkout' ),
-				'size'  => 100,
-			)
-		);
 
 		// checkout form section
 		add_settings_field( 'use_modal', __( 'Show in a Popup/Modal Window', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-form-section',
@@ -314,57 +285,6 @@ class Admin {
 				'size'  => 20,
 				'desc'  => __( 'The button text for the button that will trigger the popup/modal window.', 'wp-express-checkout' ),
 			)
-		);
-
-		// button style section.
-		add_settings_field( 'btn_type', __( 'Button Type', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_type', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'checkout', 'pay', 'paypal', 'buynow' ), 'texts' => array( __( 'Checkout', 'wp-express-checkout' ), __( 'Pay', 'wp-express-checkout' ), __( 'PayPal', 'wp-express-checkout' ), __( 'Buy Now', 'wp-express-checkout' ) ) ) );
-		add_settings_field( 'btn_shape', __( 'Button Shape', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_shape', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'pill', 'rect' ), 'texts' => array( __( 'Pill', 'wp-express-checkout' ), __( 'Rectangle', 'wp-express-checkout' ) ) ) );
-		add_settings_field( 'btn_layout', __( 'Button Layout', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_layout', 'type' => 'radio', 'class' => 'wp-ppdg-button-style', 'desc' => __( '', 'wp-express-checkout' ), 'vals' => array( 'vertical', 'horizontal' ), 'texts' => array( __( 'Vertical', 'wp-express-checkout' ), __( 'Horizontal', 'wp-express-checkout' ) ) ) );
-		add_settings_field( 'btn_height', __( 'Button Height', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_height', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'small', 'medium', 'large', 'xlarge' ), 'texts' => array( __( 'Small', 'wp-express-checkout' ), __( 'Medium', 'wp-express-checkout' ), __( 'Large', 'wp-express-checkout' ), __( 'Extra Large', 'wp-express-checkout' ) ) ) );
-		add_settings_field( 'btn_width', __( 'Button Width', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_width', 'type' => 'number', 'class' => 'wp-ppdg-button-style', 'placeholder' => __( 'Auto', 'wp-express-checkout' ), 'desc' => __( 'Button width in pixels. Minimum width is 150px. Leave it blank for auto width.', 'wp-express-checkout' ), 'size' => 10 ) );
-		add_settings_field( 'btn_color', __( 'Button Color', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-button-style-section', array( 'field' => 'btn_color', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '<div id="wp-ppdg-preview-container"><p>' . __( 'Button preview:', 'wp-express-checkout' ) . '</p><br /><div id="paypal-button-container"></div><div id="wp-ppdg-preview-protect"></div></div>', 'vals' => array( 'gold', 'blue', 'silver', 'white', 'black' ), 'texts' => array( __( 'Gold', 'wp-express-checkout' ), __( 'Blue', 'wp-express-checkout' ), __( 'Silver', 'wp-express-checkout' ), __( 'White', 'wp-express-checkout' ), __( 'Black', 'wp-express-checkout' ) ) ) );
-
-		// disable funding section.
-		add_settings_field( 
-			'disabled_funding',
-		__( 'Disabled Funding Options', 'wp-express-checkout' ),
-		array( $this, 'settings_field_callback' ),
-			$this->plugin_slug, 'ppdg-disable-funding-section',
-		array( 
-				'field' => 'disabled_funding', 
-				'type' => 'checkboxes', 
-				'desc' => '', 
-				'vals' => array( 
-					'card',
-					'credit',
-					'venmo',
-					'bancontact',
-					'blik',
-					'eps',
-					'giropay',					
-					'ideal',
-					'mercadopago',
-					'mybank',
-					'p24',
-					'sepa',
-					'sofort',
-				),
-				'texts' => array( 
-					__( 'Credit or debit cards', 'wp-express-checkout' ), 
-					__( 'PayPal Credit', 'wp-express-checkout' ), 
-					'Venmo',
-					'Bancontact',
-					'BLIK',
-					'eps',
-					'giropay',					
-					'iDEAL',
-					'Mercado Pago',
-					'MyBank',
-					'Przelewy24',
-					'SEPA-Lastschrift',
-					'Sofort',
-				)
-			) 
 		);
 
 		//add_settings_field( 'disabled_cards', __( 'Disabled Cards', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-disable-funding-section', array( 'field' => 'disabled_cards', 'type' => 'checkboxes', 'desc' => '', 'vals' => array( 'visa', 'mastercard', 'amex', 'discover', 'jcb', 'elo', 'hiper' ), 'texts' => array( __( 'Visa', 'wp-express-checkout' ), __( 'Mastercard', 'wp-express-checkout' ), __( 'American Express', 'wp-express-checkout' ), __( 'Discover', 'wp-express-checkout' ), __( 'JCB', 'wp-express-checkout' ), __( 'Elo', 'wp-express-checkout' ), __( 'Hiper', 'wp-express-checkout' ) ) ) );
@@ -393,6 +313,97 @@ class Admin {
 							__( ' to view log file.', 'wp-express-checkout' ) . '<br>' .
 							'<a id="wpec-reset-log" href="#0" style="color: red">' . __( 'Click here', 'wp-express-checkout' ) . '</a>' .
 							__( ' to reset log file.', 'wp-express-checkout' ) . '</p>',
+			)
+		);
+
+		/****************************/
+		/* PayPal Settings Menu Tab */
+		/****************************/
+
+		add_settings_field( 'is_live', __( 'Live Mode', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-api-connection', 'ppdg-live-sandbox-mode-section', array( 'field' => 'is_live', 'type' => 'checkbox', 'desc' => __( 'Check this to run the transaction in live mode. When unchecked it will run in sandbox mode.', 'wp-express-checkout' ) ) );
+		// API details.
+		add_settings_field( 'live_client_id', __( 'Live Client ID', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug. '-pp-api-credentials', 'ppdg-credentials-section',
+			array(
+				'field' => 'live_client_id',
+				'type'  => 'text',
+				'desc'  => sprintf( __( 'Enter your PayPal Client ID for live mode. <a href="%s" target="_blank">Read this documentation</a> to learn how to locate your Client ID.', 'wp-express-checkout' ), 'https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/' ),
+				'size'  => 100,
+			)
+		);
+		add_settings_field( 'live_secret_key', __( 'Live Secret key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug .'-pp-api-credentials', 'ppdg-credentials-section',
+			array(
+				'field' => 'live_secret_key',
+				'type'  => 'text',
+				'desc'  => __( 'Enter your PayPal Secret Key for live mode.', 'wp-express-checkout' ),
+				'size'  => 100,
+			)
+		);
+		add_settings_field( 'sandbox_client_id', __( 'Sandbox Client ID', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug .'-pp-api-credentials', 'ppdg-credentials-section',
+			array(
+				'field' => 'sandbox_client_id',
+				'type'  => 'text',
+				'desc'  => __( 'Enter your PayPal Client ID for sandbox mode.', 'wp-express-checkout' ),
+				'size'  => 100,
+			)
+		);
+		add_settings_field( 'sandbox_secret_key', __( 'Sandbox Secret key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug .'-pp-api-credentials', 'ppdg-credentials-section',
+			array(
+				'field' => 'sandbox_secret_key',
+				'type'  => 'text',
+				'desc'  => __( 'Enter your PayPal Secret Key for sandbox mode.', 'wp-express-checkout' ),
+				'size'  => 100,
+			)
+		);
+
+		// button style section.
+		add_settings_field( 'btn_type', __( 'Button Type', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_type', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'checkout', 'pay', 'paypal', 'buynow' ), 'texts' => array( __( 'Checkout', 'wp-express-checkout' ), __( 'Pay', 'wp-express-checkout' ), __( 'PayPal', 'wp-express-checkout' ), __( 'Buy Now', 'wp-express-checkout' ) ) ) );
+		add_settings_field( 'btn_shape', __( 'Button Shape', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_shape', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'pill', 'rect' ), 'texts' => array( __( 'Pill', 'wp-express-checkout' ), __( 'Rectangle', 'wp-express-checkout' ) ) ) );
+		add_settings_field( 'btn_layout', __( 'Button Layout', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_layout', 'type' => 'radio', 'class' => 'wp-ppdg-button-style', 'desc' => __( '', 'wp-express-checkout' ), 'vals' => array( 'vertical', 'horizontal' ), 'texts' => array( __( 'Vertical', 'wp-express-checkout' ), __( 'Horizontal', 'wp-express-checkout' ) ) ) );
+		add_settings_field( 'btn_height', __( 'Button Height', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_height', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'small', 'medium', 'large', 'xlarge' ), 'texts' => array( __( 'Small', 'wp-express-checkout' ), __( 'Medium', 'wp-express-checkout' ), __( 'Large', 'wp-express-checkout' ), __( 'Extra Large', 'wp-express-checkout' ) ) ) );
+		add_settings_field( 'btn_width', __( 'Button Width', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_width', 'type' => 'number', 'class' => 'wp-ppdg-button-style', 'placeholder' => __( 'Auto', 'wp-express-checkout' ), 'desc' => __( 'Button width in pixels. Minimum width is 150px. Leave it blank for auto width.', 'wp-express-checkout' ), 'size' => 10 ) );
+		add_settings_field( 'btn_color', __( 'Button Color', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_color', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '<div id="wp-ppdg-preview-container"><p>' . __( 'Button preview:', 'wp-express-checkout' ) . '</p><br /><div id="paypal-button-container"></div><div id="wp-ppdg-preview-protect"></div></div>', 'vals' => array( 'gold', 'blue', 'silver', 'white', 'black' ), 'texts' => array( __( 'Gold', 'wp-express-checkout' ), __( 'Blue', 'wp-express-checkout' ), __( 'Silver', 'wp-express-checkout' ), __( 'White', 'wp-express-checkout' ), __( 'Black', 'wp-express-checkout' ) ) ) );
+
+		// disable funding section.
+		add_settings_field(
+			'disabled_funding',
+			__( 'Disabled Funding Options', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug. '-pp-btn-appearance',
+			'ppdg-disable-funding-section',
+			array(
+				'field' => 'disabled_funding',
+				'type' => 'checkboxes',
+				'desc' => '',
+				'vals' => array(
+					'card',
+					'credit',
+					'venmo',
+					'bancontact',
+					'blik',
+					'eps',
+					'giropay',
+					'ideal',
+					'mercadopago',
+					'mybank',
+					'p24',
+					'sepa',
+					'sofort',
+				),
+				'texts' => array(
+					__( 'Credit or debit cards', 'wp-express-checkout' ),
+					__( 'PayPal Credit', 'wp-express-checkout' ),
+					'Venmo',
+					'Bancontact',
+					'BLIK',
+					'eps',
+					'giropay',
+					'iDEAL',
+					'Mercado Pago',
+					'MyBank',
+					'Przelewy24',
+					'SEPA-Lastschrift',
+					'Sofort',
+				)
 			)
 		);
 
