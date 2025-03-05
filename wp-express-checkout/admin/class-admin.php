@@ -321,6 +321,30 @@ class Admin {
 		/****************************/
 
 		add_settings_field( 'is_live', __( 'Live Mode', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-api-connection', 'ppdg-live-sandbox-mode-section', array( 'field' => 'is_live', 'type' => 'checkbox', 'desc' => __( 'Check this to run the transaction in live mode. When unchecked it will run in sandbox mode.', 'wp-express-checkout' ) ) );
+
+		add_settings_field(
+			'live-account-connection-status',
+			__( 'Live Account Connnection Status', 'wp-express-checkout' ),
+			array( $this, 'live_account_connection_status_callback' ),
+			$this->plugin_slug .'-pp-api-connection',
+			'ppdg-pp-account-connection-section'
+		);
+		add_settings_field(
+			'sandbox-account-connection-status',
+			__( 'Sandbox Account Connection Status', 'wp-express-checkout' ),
+			array( $this, 'sandbox_account_connection_status_callback' ),
+			$this->plugin_slug .'-pp-api-connection',
+			'ppdg-pp-account-connection-section'
+		);
+
+		add_settings_field(
+			'delete-cache',
+			__( 'Delete Access Token Cache', 'wp-express-checkout' ),
+			array( $this, 'delete_cache_field_callback' ),
+			$this->plugin_slug .'-pp-api-connection',
+			'ppdg-delete-cache-section'
+		);
+
 		// API details.
 		add_settings_field( 'live_client_id', __( 'Live Client ID', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug. '-pp-api-credentials', 'ppdg-credentials-section',
 			array(
@@ -804,6 +828,76 @@ class Admin {
 		if ( $desc ) {
 			echo "<p class='description'>". wp_kses_post($desc) ."</p>";
 		}
+	}
+
+	public function live_account_connection_status_callback(){
+		$global_settings = get_option('ppdg-settings', array());
+
+		// Check if the live account is connected
+		$live_account_connection_status = 'connected';
+		if ( empty( $global_settings['live_client_id'] ) || empty( $global_settings['live_secret_key'] ) ) {
+			//Live API keys are missing. Account is not connected.
+			$live_account_connection_status = 'not-connected';
+		}
+
+		$ppcp_onboarding_instance = \TTHQ\WPEC\Lib\PayPal\Onboarding\PayPal_PPCP_Onboarding::get_instance();
+
+		if ($live_account_connection_status == 'connected') {
+			//Production account connected
+			echo '<div class="wpec-paypal-live-account-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
+			_e("Live account is connected. If you experience any issues, please disconnect and reconnect.", "wp-express-checkout");
+			echo '</div>';
+
+			// Show disconnect option for live account.
+			$ppcp_onboarding_instance->output_production_ac_disconnect_link();
+		} else {
+			//Production account is NOT connected.
+			echo '<div class="wpec-paypal-live-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
+			_e("Live PayPal account is not connected. Click the button below to authorize the app and acquire API credentials from your PayPal account.", "wp-express-checkout");
+			echo '</div>';
+
+			// Show the onboarding link
+			$ppcp_onboarding_instance->output_production_onboarding_link_code();
+		}
+	}
+
+	public function sandbox_account_connection_status_callback(){
+		$global_settings = get_option('ppdg-settings', array());
+
+		// Check if the live account is connected
+		$sandbox_account_connection_status = 'connected';
+		if ( empty( $global_settings['sandbox_client_id'] ) || empty( $global_settings['sandbox_secret_key'] ) ) {
+			//Sandbox API keys are missing. Account is not connected.
+			$sandbox_account_connection_status = 'not-connected';
+		}
+
+		$ppcp_onboarding_instance = \TTHQ\WPEC\Lib\PayPal\Onboarding\PayPal_PPCP_Onboarding::get_instance();
+
+		if ($sandbox_account_connection_status == 'connected') {
+			//Production account connected
+			echo '<div class="wpec-paypal-sandbox-account-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
+			_e("Sandbox account is connected. If you experience any issues, please disconnect and reconnect.", "wp-express-checkout");
+			echo '</div>';
+
+			// Show disconnect option for live account.
+			$ppcp_onboarding_instance->output_sandbox_ac_disconnect_link();
+		} else {
+			//Production account is NOT connected.
+			echo '<div class="wpec-paypal-sandbox-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
+			_e("Sandbox PayPal account is not connected. Click the button below to authorize the app and acquire API credentials from your PayPal account.", "wp-express-checkout");
+			echo '</div>';
+
+			// Show the onboarding link
+			$ppcp_onboarding_instance->output_sandbox_onboarding_link_code();
+		}
+	}
+
+	public function delete_cache_field_callback() {
+		$delete_cache_url = admin_url(\TTHQ\WPEC\Lib\PayPal\PayPal_Main::$pp_api_connection_settings_menu_page);
+		$delete_cache_url = add_query_arg('wpec_ppcp_delete_cache', 1, $delete_cache_url);
+		$delete_cache_url_nonced = add_query_arg('_wpnonce', wp_create_nonce('wpec_ppcp_delete_cache'), $delete_cache_url);
+		echo '<a class="button wpsc-paypal-delete-cache-btn" href="' . esc_url_raw($delete_cache_url_nonced) . '">' . __('Delete Token Cache', 'wp-express-checkout') . '</a>';
+		echo '<p class="description">' . __( 'This will delete the PayPal API access token cache. This is useful if you are having issues with the PayPal API after changing/updating the API credentials.', 'wp-express-checkout' ).'</p>';
 	}
 
 	protected function wrap_label( $input, $label = '', $label_pos = 'before' ) {

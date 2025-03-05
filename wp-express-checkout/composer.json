@@ -6,7 +6,8 @@
 		"classmap": [
 			"includes**",
 			"public**",
-			"admin**"
+			"admin**",
+			"lib**"
 		]
 	}
 }

@@ -35,6 +35,14 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'TTHQ\\WPEC\\Lib\\PayPal\\Onboarding\\PayPal_PPCP_Onboarding' => __DIR__ . '/../..' . '/lib/paypal/onboarding-related/class-tthq-paypal-onboarding.php',
+        'TTHQ\\WPEC\\Lib\\PayPal\\Onboarding\\PayPal_PPCP_Onboarding_Serverside' => __DIR__ . '/../..' . '/lib/paypal/onboarding-related/class-tthq-paypal-onboarding-serverside.php',
+        'TTHQ\\WPEC\\Lib\\PayPal\\PayPal_Bearer' => __DIR__ . '/../..' . '/lib/paypal/class-tthq-paypal-bearer.php',
+        'TTHQ\\WPEC\\Lib\\PayPal\\PayPal_Cache' => __DIR__ . '/../..' . '/lib/paypal/class-tthq-paypal-cache.php',
+        'TTHQ\\WPEC\\Lib\\PayPal\\PayPal_Main' => __DIR__ . '/../..' . '/lib/paypal/class-tthq-paypal-main.php',
+        'TTHQ\\WPEC\\Lib\\PayPal\\PayPal_PPCP_Config' => __DIR__ . '/../..' . '/lib/paypal/class-tthq-paypal-config.php',
+        'TTHQ\\WPEC\\Lib\\PayPal\\PayPal_Request_API' => __DIR__ . '/../..' . '/lib/paypal/class-tthq-paypal-request-api.php',
+        'TTHQ\\WPEC\\Lib\\PayPal\\PayPal_Utility_Functions' => __DIR__ . '/../..' . '/lib/paypal/class-tthq-paypal-utility-functions.php',
         'WPEC_Admin_User_Feedback' => __DIR__ . '/../..' . '/admin/includes/class-admin-user-feedback.php',
         'WP_Express_Checkout\\Admin\\Admin' => __DIR__ . '/../..' . '/admin/class-admin.php',
         'WP_Express_Checkout\\Admin\\Admin_Order_Summary_Table' => __DIR__ . '/../..' . '/admin/includes/class-admin-order-summary-table.php',

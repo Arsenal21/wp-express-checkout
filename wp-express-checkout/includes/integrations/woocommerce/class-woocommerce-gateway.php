@@ -377,7 +377,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
                              */
                             onError: function (err) {
                                 console.error('An error prevented the user from checking out with PayPal. ' + JSON.stringify(err));
-                                alert( '<?php echo esc_js(__("Error occurred during PayPal checkout process.", "wordpress-simple-paypal-shopping-cart")); ?>\n\n' + JSON.stringify(err) );
+                                alert( '<?php echo esc_js(__("Error occurred during PayPal checkout process.", "wp-express-checkout")); ?>\n\n' + JSON.stringify(err) );
                             },
 
                             /**

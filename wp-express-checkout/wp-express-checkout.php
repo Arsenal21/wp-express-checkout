@@ -58,6 +58,17 @@ function wpec_load_classes() {
 		new WP_Express_Checkout\Coupons();
 		new WP_Express_Checkout\Admin\Orders_Meta_Boxes();
 	}
+
+	new TTHQ\WPEC\Lib\PayPal\PayPal_Main(
+		array(
+			'plugin_shortname' => 'wpec',
+			'api_connection_settings_page' => 'edit.php?post_type=ppec-products&page=ppec-settings-page&action=paypal-settings',
+			'log_text_method' => '\WP_Express_Checkout\Debug\Logger::log',
+			'log_array_method' => '\WP_Express_Checkout\Debug\Logger::log_array_data',
+			'ppcp_settings_key' => 'ppdg-settings',
+			'enable_sandbox_settings_key' => 'is_live',
+		)
+	);
 }
 add_action( 'plugins_loaded', 'wpec_load_classes' );
 

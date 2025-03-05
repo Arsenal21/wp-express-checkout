@@ -48,6 +48,7 @@ class Init {
 			 */
 
 			$this->handle_view_log_action();
+			$this->handle_paypal_onboarding_action();
 			Orders_List::init();
 			Products_List::init();
 			new Products_Meta_Boxes();
@@ -93,6 +94,39 @@ class Init {
 					die;
 				}
 			}
+		}
+	}
+
+	public function handle_paypal_onboarding_action() {
+		if (isset($_GET['wpec_ppcp_after_onboarding'])){
+			$environment_mode = isset($_GET['environment_mode']) ? sanitize_text_field($_GET['environment_mode']) : '';
+			$onboarding_action_result = __("PayPal merchant account connection setup completed for environment mode: ", "wp-express-checkout") . esc_attr($environment_mode);
+			echo '<div class="notice notice-success"><p>' . $onboarding_action_result . '</p></div>';
+		}
+
+		if (isset($_GET['wpec_ppcp_disconnect_production'])){
+			//Verify nonce
+			check_admin_referer( 'wpec_ac_disconnect_nonce_production' );
+
+			\TTHQ\WPEC\Lib\PayPal\Onboarding\PayPal_PPCP_Onboarding_Serverside::reset_seller_api_credentials('production');
+			$disconnect_action_result = __('PayPal account disconnected.', 'wp-express-checkout');
+			echo '<div class="notice notice-success"><p>' . $disconnect_action_result . '</p></div>';
+		}
+
+		if (isset($_GET['wpec_ppcp_disconnect_sandbox'])){
+			//Verify nonce
+			check_admin_referer( 'wpec_ac_disconnect_nonce_sandbox' );
+
+			\TTHQ\WPEC\Lib\PayPal\Onboarding\PayPal_PPCP_Onboarding_Serverside::reset_seller_api_credentials('sandbox');
+			$disconnect_action_result = __('PayPal sandbox account disconnected.', 'wp-express-checkout');
+			echo '<div class="notice notice-success"><p>' . $disconnect_action_result . '</p></div>';
+		}
+
+		// Handle delete token cache form submit
+		if (isset($_GET['wpec_ppcp_delete_cache'])) {
+			check_admin_referer('wpec_ppcp_delete_cache');
+			delete_transient( \TTHQ\WPEC\Lib\PayPal\PayPal_Bearer::BEARER_CACHE_KEY );
+			echo '<div class="notice notice-success"><p>' . __('PayPal API access token cache deleted successfully.', 'wp-express-checkout') . '</p></div>';
 		}
 	}
 
