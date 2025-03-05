@@ -47,7 +47,6 @@ class Emember {
 	}
 
 	public function handle_subscription_webhook_event_for_emember( $event ){
-        Logger::log_array_data($event);
 
 		/*
 		Note: the Payment_Handler() function has a summary of the type of events we can handle for a subscription webhook. Check function Factory::create for more details.

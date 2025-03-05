@@ -10,9 +10,6 @@ use TTHQ\WPEC\Lib\PayPal\PayPal_Utility_Functions;
  */
 class PayPal_PPCP_Onboarding {
 	protected static $instance;
-	/**
-	* REPLACE: plugin prefix across different plugins.
-	*/
 	public static $account_connect_string = 'wpec_ppcp_account_connect';
 
 	public function __construct() {
@@ -47,10 +44,8 @@ class PayPal_PPCP_Onboarding {
 	public static function generate_return_url_after_onboarding( $environment_mode = 'production' ){
 		$pp_settings_base_path = PayPal_Main::$pp_api_connection_settings_menu_page;
 		$base_url = admin_url($pp_settings_base_path);
+
 		$query_args = array();
-		/**
-		* REPLACE: plugin prefix across different plugins.
-		*/
 		$query_args['wpec_ppcp_after_onboarding'] = '1';
 		$query_args['environment_mode'] = $environment_mode;
 		$return_url = add_query_arg( $query_args, $base_url );
@@ -68,7 +63,7 @@ class PayPal_PPCP_Onboarding {
 		$query_args['partnerId'] = PayPal_Utility_Functions::get_partner_id_by_environment_mode( $environment_mode );
 		$query_args['product'] = 'EXPRESS_CHECKOUT';// 'PPCP' or 'EXPRESS_CHECKOUT';
 		$query_args['integrationType'] = 'FO';
-		$query_args['features'] = 'PAYMENT,REFUND'; //BILLING_AGREEMENT
+		$query_args['features'] = 'PAYMENT,REFUND,BILLING_AGREEMENT'; //BILLING_AGREEMENT
 		$query_args['partnerClientId'] = PayPal_Utility_Functions::get_partner_client_id_by_environment_mode( $environment_mode );
 		$query_args['returnToPartnerUrl'] = self::generate_return_url_after_onboarding($environment_mode);
 		//$query_args['partnerLogoUrl'] = '';
@@ -85,9 +80,6 @@ class PayPal_PPCP_Onboarding {
 		return $singup_link;
 	}
 
-	/**
-	* REPLACE: plugin prefix across different plugins.
-	*/
 	public function output_sandbox_onboarding_link_code() {
 		$sandbox_singup_link = self::get_signup_link('sandbox');
 		$wp_nonce = wp_create_nonce( self::$account_connect_string );
@@ -145,9 +137,6 @@ class PayPal_PPCP_Onboarding {
         ));
 	}
 
-	/**
-	* REPLACE: plugin prefix across different plugins.
-	*/
 	public function output_sandbox_ac_disconnect_link(){
 		$disonnect_link_path = PayPal_Main::$pp_api_connection_settings_menu_page . '&wpec_ppcp_disconnect_sandbox=1';
 		$sandbox_disconnect_url = admin_url($disonnect_link_path);
@@ -156,9 +145,6 @@ class PayPal_PPCP_Onboarding {
 		echo '<a class="button" href="' . $sandbox_disconnect_url_nonced . '" onclick="return confirm(\'Are you sure you want to disconnect the PayPal sandbox account?\')">'.__('Disconnect Sandbox Account', 'wp-express-checkout').'</a>';
 	}
 
-	/**
-	* REPLACE: plugin prefix across different plugins.
-	*/
 	public function output_production_onboarding_link_code() {
 		//We need to separate JavaScript functions to handle the after onbarding callback. So we are using different function names.
 		$singup_link = self::get_signup_link('production');
@@ -215,9 +201,6 @@ class PayPal_PPCP_Onboarding {
 		));
 	}
 
-	/**
-	* REPLACE: plugin prefix across different plugins.
-	*/
 	public function output_production_ac_disconnect_link(){
 		$disonnect_link_path = PayPal_Main::$pp_api_connection_settings_menu_page . '&wpec_ppcp_disconnect_production=1';
 		$disconnect_url = admin_url($disonnect_link_path);
