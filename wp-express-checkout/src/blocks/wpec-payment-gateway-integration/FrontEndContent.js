@@ -71,7 +71,7 @@ const FrontEndContent = ({eventRegistration}) => {
 
             const script = document.createElement('script');
             script.src = `https://www.paypal.com/sdk/js?${sdk_args_query_param}`;
-            script.setAttribute('data-partner-attribution-id', 'TipsandTricks_SP')
+            script.setAttribute('data-partner-attribution-id', 'TipsandTricks_SP_PPCP')
             script.async = true;
             script.onload = () => {
                 console.log('WPEC PayPal SDK For WooCommerce Blocks loaded!');

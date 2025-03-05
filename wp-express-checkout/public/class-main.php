@@ -164,7 +164,7 @@ class Main {
 			wpec_onDocumentReady(function(){
 				var script = document.createElement( 'script' );
 				script.type = 'text/javascript';
-				script.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP' );
+				script.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP_PPCP' );
 				script.async = true;
 				script.src = '<?php echo esc_url_raw( $script_url ); ?>';	
 				script.onload = function () {

@@ -24,7 +24,7 @@ class Request extends HttpRequest {
 	public function __construct( $path, $verb ) {
 		parent::__construct( $path, $verb );
 		$this->headers['Content-Type']                  = 'application/json';
-		$this->headers['PayPal-Partner-Attribution-Id'] = 'TipsandTricks_SP';
+		$this->headers['PayPal-Partner-Attribution-Id'] = 'TipsandTricks_SP_PPCP';
 	}
 
 	/**

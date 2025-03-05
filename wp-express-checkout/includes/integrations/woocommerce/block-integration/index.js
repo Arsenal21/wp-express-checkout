@@ -96,7 +96,7 @@ var FrontEndContent = function FrontEndContent(_ref) {
       var sdk_args_query_param = new URLSearchParams(sdk_args).toString();
       var script = document.createElement('script');
       script.src = "https://www.paypal.com/sdk/js?".concat(sdk_args_query_param);
-      script.setAttribute('data-partner-attribution-id', 'TipsandTricks_SP');
+      script.setAttribute('data-partner-attribution-id', 'TipsandTricks_SP_PPCP');
       script.async = true;
       script.onload = function () {
         console.log('WPEC PayPal SDK For WooCommerce Blocks loaded!');
