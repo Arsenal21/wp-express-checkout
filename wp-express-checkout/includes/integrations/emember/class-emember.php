@@ -47,12 +47,20 @@ class Emember {
 	}
 
 	public function handle_subscription_webhook_event_for_emember( $event ){
+        Logger::log_array_data($event);
+
 		/*
 		Note: the Payment_Handler() function has a summary of the type of events we can handle for a subscription webhook. Check function Factory::create for more details.
 		*/
 
 		// Get the subscr_id from the event
-		$sub_id = isset($event['resource']['billing_agreement_id'])? $event['resource']['billing_agreement_id'] : '';
+		$sub_id = '';
+        if ( isset($event['resource']['billing_agreement_id']) ){
+	        $sub_id = $event['resource']['billing_agreement_id'];
+        } else if ( isset($event['resource']['id'])) {
+            $sub_id = $event['resource']['id'];
+        }
+
 		if(empty($sub_id)){
 			Logger::log( 'handle_subscription_webhook_event: no subscription ID found in the event', false );
 			return;
