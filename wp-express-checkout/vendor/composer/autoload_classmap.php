@@ -7,6 +7,14 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'TTHQ\\WPEC\\Lib\\PayPal\\Onboarding\\PayPal_PPCP_Onboarding' => $baseDir . '/lib/paypal/onboarding-related/class-tthq-paypal-onboarding.php',
+    'TTHQ\\WPEC\\Lib\\PayPal\\Onboarding\\PayPal_PPCP_Onboarding_Serverside' => $baseDir . '/lib/paypal/onboarding-related/class-tthq-paypal-onboarding-serverside.php',
+    'TTHQ\\WPEC\\Lib\\PayPal\\PayPal_Bearer' => $baseDir . '/lib/paypal/class-tthq-paypal-bearer.php',
+    'TTHQ\\WPEC\\Lib\\PayPal\\PayPal_Cache' => $baseDir . '/lib/paypal/class-tthq-paypal-cache.php',
+    'TTHQ\\WPEC\\Lib\\PayPal\\PayPal_Main' => $baseDir . '/lib/paypal/class-tthq-paypal-main.php',
+    'TTHQ\\WPEC\\Lib\\PayPal\\PayPal_PPCP_Config' => $baseDir . '/lib/paypal/class-tthq-paypal-config.php',
+    'TTHQ\\WPEC\\Lib\\PayPal\\PayPal_Request_API' => $baseDir . '/lib/paypal/class-tthq-paypal-request-api.php',
+    'TTHQ\\WPEC\\Lib\\PayPal\\PayPal_Utility_Functions' => $baseDir . '/lib/paypal/class-tthq-paypal-utility-functions.php',
     'WPEC_Admin_User_Feedback' => $baseDir . '/admin/includes/class-admin-user-feedback.php',
     'WP_Express_Checkout\\Admin\\Admin' => $baseDir . '/admin/class-admin.php',
     'WP_Express_Checkout\\Admin\\Admin_Order_Summary_Table' => $baseDir . '/admin/includes/class-admin-order-summary-table.php',

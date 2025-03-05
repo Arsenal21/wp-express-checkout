@@ -314,3 +314,11 @@ input[name="ppec_product_shortcode"] {
 }
 
 /* END Hover over help hint */
+
+/* paypal settings related */
+.wpec-paypal-sandbox-account-status,
+.wpec-paypal-live-account-status{
+	margin-bottom: 8px;
+}
+
+/* end of paypal settings related */
