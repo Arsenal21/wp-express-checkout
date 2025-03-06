@@ -78,6 +78,7 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 					$action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : '';
 					switch ( $action ) {
 						case 'paypal-settings':
+                            $wpec_admin->do_settings_sections_no_wrap( 'paypal-for-digital-goods-pp-settings' );
 							require WPEC_PLUGIN_PATH . '/admin/views/settings-tabs/paypal-settings.php';
 							break;
 						case 'email-settings':
