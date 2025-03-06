@@ -204,6 +204,8 @@ class Admin {
 
 		/* Add the sections */
 		// General Settings Tab Sections
+		add_settings_section( 'ppdg-general-settings-arbitrary-section', __( '', 'wp-express-checkout' ), array( $this, 'handle_general_settings_arbitrary_section' ), $this->plugin_slug );
+
 		add_settings_section( 'ppdg-global-section', __( 'Global Settings', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-form-section', __( 'Checkout Form', 'wp-express-checkout' ), null, $this->plugin_slug );
 
@@ -1092,8 +1094,16 @@ class Admin {
 		return '<div class="wpec-help"><i class="dashicons dashicons-editor-help"></i><div class="wpec-help-text">' . $contents . '</div></div>';
 	}
 
+	public function handle_general_settings_arbitrary_section() {
+		echo '<p>';
+		echo __('Refer to the ', 'wp-express-checkout');
+		echo '<a href="https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/" target="_blank">'.__('plugin documentation', 'wp-express-checkout').'</a>';
+		echo __(' for a detailed guide on configuration and usage.', 'wp-express-checkout');
+		echo '</p>';
+	}
+
 	public function handle_paypal_settings_arbitrary_section() {
-		echo '<div class="wpec-grey-box">';
+		echo '<div class="wpec-white-box">';
 		echo __('Check the ', 'wp-express-checkout');
 		echo '<a href="https://wp-express-checkout.com/paypal-settings-configuration-api-credentials-setup/" target="_blank">'.__('PayPal Settings documentation', 'wp-express-checkout').'</a>';
 		echo __(' for a step-by-step guide on configuring these settings.', 'wp-express-checkout');
