@@ -203,11 +203,15 @@ class Admin {
 		register_setting( 'ppdg-settings-group', $this->option_name, array( $this, 'settings_sanitize_field_callback' ) );
 
 		/* Add the sections */
+		// General Settings Tab Sections
 		add_settings_section( 'ppdg-global-section', __( 'Global Settings', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-form-section', __( 'Checkout Form', 'wp-express-checkout' ), null, $this->plugin_slug );
 
 		add_settings_section( 'ppdg-shipping-tax-section', __( 'Shipping & Tax', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-debug-logging-section', __( 'Debug Logging', 'wp-express-checkout' ), array( $this, 'debug_logging_note' ), $this->plugin_slug );
+
+		// PayPal Settings Tab Sections
+		add_settings_section( 'ppdg-paypal-settings-arbitrary-section', __( '', 'wp-express-checkout' ), array( $this, 'handle_paypal_settings_arbitrary_section' ), $this->plugin_slug . '-pp-settings' );
 
 		add_settings_section( 'ppdg-live-sandbox-mode-section', __( 'Live Mode or Sandbox', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-api-connection' );
 		add_settings_section( 'ppdg-pp-account-connection-section', __( 'PayPal Account Connection', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-api-connection'  );
@@ -218,9 +222,11 @@ class Admin {
 		add_settings_section( 'ppdg-button-style-section', __( 'PayPal Button Appearance Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-btn-appearance' );
 		add_settings_section( 'ppdg-disable-funding-section', __( 'Disable Funding', 'wp-express-checkout' ), array( $this, 'disable_funding_note' ), $this->plugin_slug . '-pp-btn-appearance');
 
+		// Email Settings Tab Sections
 		add_settings_section( 'ppdg-emails-general-section', __( 'General Email Settings', 'wp-express-checkout' ), array( $this, 'emails_general_note' ), $this->plugin_slug . '-emails' );
 		add_settings_section( 'ppdg-emails-section', __( 'Purchase Confirmation Email Settings', 'wp-express-checkout' ), array( $this, 'emails_note' ), $this->plugin_slug . '-emails' );
 
+		// Advanced Settings Tab Sections
 		add_settings_section( 'ppdg-price-display-section', __( 'Price Display Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-advanced' );
 		add_settings_section( 'ppdg-tos-section', __( 'Terms and Conditions', 'wp-express-checkout' ), array( $this, 'tos_description' ), $this->plugin_slug . '-advanced' );
 
@@ -1051,6 +1057,32 @@ class Admin {
 		}
 	}
 
+	/**
+	 * Prints out all settings sections added to a particular settings page.
+	 *
+	 * Same as "do_settings_sections" but without any HTML.
+	 */
+	public function do_settings_sections_no_wrap( $page ) {
+		global $wp_settings_sections, $wp_settings_fields;
+
+		if ( ! isset( $wp_settings_sections[ $page ] ) ) {
+			return;
+		}
+
+		foreach ( (array) $wp_settings_sections[ $page ] as $section ) {
+
+			if ( isset($section['callback']) ) {
+				call_user_func( $section['callback'], $section );
+			}
+
+			if ( ! isset( $wp_settings_fields ) || ! isset( $wp_settings_fields[ $page ] ) || ! isset( $wp_settings_fields[ $page ][ $section['id'] ] ) ) {
+				continue;
+			}
+
+			do_settings_fields( $page, $section['id'] );
+		}
+	}
+
 	public function set_default_editor( $r ) {
 		$r = 'html';
 		return $r;
@@ -1058,6 +1090,57 @@ class Admin {
 
 	public static function gen_help_popup( $contents ) {
 		return '<div class="wpec-help"><i class="dashicons dashicons-editor-help"></i><div class="wpec-help-text">' . $contents . '</div></div>';
+	}
+
+	public function handle_paypal_settings_arbitrary_section() {
+		echo '<div class="wpec-yellow-box">';
+		echo __('Documentation link: ', 'wp-express-checkout');
+		echo '<a href="#">'.__('Link', 'wp-express-checkout').'</a>';
+		echo '</div>';
+
+		// Show PayPal's onboarding related messages.
+		self::paypal_onboard_actions_messages_handler();
+	}
+
+	public static function paypal_onboard_actions_handler() {
+		if (isset($_GET['wpec_ppcp_disconnect_production'])){
+			//Verify nonce
+			check_admin_referer( 'wpec_ac_disconnect_nonce_production' );
+
+			\TTHQ\WPEC\Lib\PayPal\Onboarding\PayPal_PPCP_Onboarding_Serverside::reset_seller_api_credentials('production');
+		}
+
+		if (isset($_GET['wpec_ppcp_disconnect_sandbox'])){
+			//Verify nonce
+			check_admin_referer( 'wpec_ac_disconnect_nonce_sandbox' );
+
+			\TTHQ\WPEC\Lib\PayPal\Onboarding\PayPal_PPCP_Onboarding_Serverside::reset_seller_api_credentials('sandbox');
+		}
+
+		if (isset($_GET['wpec_ppcp_delete_cache'])) {
+			check_admin_referer('wpec_ppcp_delete_cache');
+			delete_transient( \TTHQ\WPEC\Lib\PayPal\PayPal_Bearer::BEARER_CACHE_KEY );
+		}
+	}
+
+	public static function paypal_onboard_actions_messages_handler() {
+		if (isset($_GET['wpec_ppcp_after_onboarding'])){
+			$environment_mode = isset($_GET['environment_mode']) ? sanitize_text_field($_GET['environment_mode']) : '';
+			$message = __("PayPal merchant account connection setup completed for environment mode: ", "wp-express-checkout") . esc_attr($environment_mode);
+			echo '<div class="notice notice-success"><p>' . $message . '</p></div>';
+		}
+
+		if (isset($_GET['wpec_ppcp_disconnect_production'])){
+			echo '<div class="notice notice-success"><p>' . __('PayPal account disconnected.', 'wp-express-checkout') . '</p></div>';
+		}
+
+		if (isset($_GET['wpec_ppcp_disconnect_sandbox'])){
+			echo '<div class="notice notice-success"><p>' . __('PayPal sandbox account disconnected.', 'wp-express-checkout') . '</p></div>';
+		}
+
+		if (isset($_GET['wpec_ppcp_delete_cache'])) {
+			echo '<div class="notice notice-success"><p>' . __('PayPal API access token cache deleted successfully.', 'wp-express-checkout') . '</p></div>';
+		}
 	}
 
 }

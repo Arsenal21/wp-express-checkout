@@ -51,14 +51,6 @@ function wpec_load_classes() {
 	new WP_Express_Checkout\PayPal_Payment_Button_Ajax_Handler();
 	new WP_Express_Checkout\Integrations\WooCommerce_Payment_Button_Ajax_Handler();
 
-	// Load admin side class
-	if ( is_admin() ) {
-		WP_Express_Checkout\Admin\Admin::get_instance();
-		WP_Express_Checkout\Admin\Tools::get_instance();
-		new WP_Express_Checkout\Coupons();
-		new WP_Express_Checkout\Admin\Orders_Meta_Boxes();
-	}
-
 	new TTHQ\WPEC\Lib\PayPal\PayPal_Main(
 		array(
 			'plugin_shortname' => 'wpec',
@@ -69,6 +61,14 @@ function wpec_load_classes() {
 			'enable_sandbox_settings_key' => 'is_live',
 		)
 	);
+
+	// Load admin side class
+	if ( is_admin() ) {
+		WP_Express_Checkout\Admin\Admin::get_instance();
+		WP_Express_Checkout\Admin\Tools::get_instance();
+		new WP_Express_Checkout\Coupons();
+		new WP_Express_Checkout\Admin\Orders_Meta_Boxes();
+	}
 }
 add_action( 'plugins_loaded', 'wpec_load_classes' );
 
