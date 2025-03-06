@@ -34,6 +34,15 @@
 
 /* Pre-made CSS boxes */
 /* Wrap directly with this class (not to be used with a paragraph tag) */
+.wpec-white-box{
+    margin: 10px 0px;
+    padding: 15px 10px;
+    background-color: #FFFFFF;
+    border-color: #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    border-style: solid;
+    border-width: 1px;
+}
 .wpec-grey-box{
     margin: 10px 0px;
     padding: 15px 10px;

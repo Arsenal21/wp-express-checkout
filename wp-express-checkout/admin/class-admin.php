@@ -326,7 +326,7 @@ class Admin {
 		/* PayPal Settings Menu Tab */
 		/****************************/
 
-		add_settings_field( 'is_live', __( 'Live Mode', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-api-connection', 'ppdg-live-sandbox-mode-section', array( 'field' => 'is_live', 'type' => 'checkbox', 'desc' => __( 'Check this to run the transaction in live mode. When unchecked it will run in sandbox mode.', 'wp-express-checkout' ) ) );
+		add_settings_field( 'is_live', __( 'Live Mode', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-api-connection', 'ppdg-live-sandbox-mode-section', array( 'field' => 'is_live', 'type' => 'checkbox', 'desc' => __( 'Enable this to run transactions in live mode. When unchecked, transactions will be processed in sandbox mode.', 'wp-express-checkout' ) ) );
 
 		add_settings_field(
 			'live-account-connection-status',
@@ -1093,12 +1093,15 @@ class Admin {
 	}
 
 	public function handle_paypal_settings_arbitrary_section() {
-		echo '<div class="wpec-yellow-box">';
-		echo __('Documentation link: ', 'wp-express-checkout');
-		echo '<a href="#">'.__('Link', 'wp-express-checkout').'</a>';
+		echo '<div class="wpec-grey-box">';
+		echo __('Check the ', 'wp-express-checkout');
+		echo '<a href="https://wp-express-checkout.com/paypal-settings-configuration-api-credentials-setup/" target="_blank">'.__('PayPal Settings documentation', 'wp-express-checkout').'</a>';
+		echo __(' for a step-by-step guide on configuring these settings.', 'wp-express-checkout');
 		echo '</div>';
 
-		// Show PayPal's onboarding related messages.
+		//NOTE: We can't update/save the reset API settings keys here as WP locks the settings fields for the current page.
+		//So the reset it done at 'admin_init' hook. Then the success message is shown here.
+		//Show any messages related to PayPal onboarding.
 		self::paypal_onboard_actions_messages_handler();
 	}
 

@@ -25,7 +25,7 @@ use WP_Express_Checkout\Products;
 
 <?php
 $wpec_pp_settings_subtab = array(
-	'api-connection'  => __( 'PapPal API Connection', 'wp-express-checkout' ),
+	'api-connection'  => __( 'PayPal API Connection', 'wp-express-checkout' ),
 	'api-credentials' => __( 'API Credentials', 'wp-express-checkout' ),
 	'btn-appearance'  => __( 'Button Appearance', 'wp-express-checkout' ),
 );

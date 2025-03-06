@@ -261,7 +261,7 @@ msgid "Live Mode"
 msgstr ""
 
 #: admin/class-admin.php:266
-msgid "Check this to run the transaction in live mode. When unchecked it will run in sandbox mode."
+msgid "Enable this to run transactions in live mode. When unchecked, transactions will be processed in sandbox mode."
 msgstr ""
 
 #: admin/class-admin.php:267
