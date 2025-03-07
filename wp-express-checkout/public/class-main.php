@@ -344,7 +344,7 @@ class Main {
 	 */
 	public static function get_defaults() {
 		$defaults = array(
-			'is_live'              => 0,
+			'is_live'              => 1,
 			'live_client_id'       => '',
 			'sandbox_client_id'    => '',
 			'live_secret_key'      => '',

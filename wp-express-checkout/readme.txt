@@ -167,11 +167,12 @@ None
 == Changelog ==
 
 = WIP =
+- Added a dedicated settings tab for PayPal, consolidating all PayPal-related settings in one place for easier management.
 - Thank you page shortcode now outputs the quantity purchased.
 - Updated the label "Order Author" to "Customer" in the order item to make it more user-friendly.
 - Added new filter hooks to the export orders data feature.
-- New settings tab added for PayPal related settings.
-- Subscription webhook event related issue fixed.
+- Fixed a minor Subscription webhook event related issue.
+- The 'Live Mode' transaction for PayPal will is enabled by default for new installations.
 
 = 2.3.17 =
 - The variation with a negative price can now also be used to offer a free product, similar to the functionality of a 100% discount coupon.

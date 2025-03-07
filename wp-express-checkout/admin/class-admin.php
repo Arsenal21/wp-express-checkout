@@ -219,7 +219,7 @@ class Admin {
 		add_settings_section( 'ppdg-pp-account-connection-section', __( 'PayPal Account Connection', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-api-connection'  );
 		add_settings_section( 'ppdg-delete-cache-section', __( 'Delete Cache', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-api-connection'  );
 
-		add_settings_section( 'ppdg-credentials-section', __( 'PayPal Credentials', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-api-credentials');
+		add_settings_section( 'ppdg-credentials-section', __( 'PayPal API Credentials', 'wp-express-checkout' ), array( $this, 'paypal_api_credentials_section_note' ), $this->plugin_slug . '-pp-api-credentials');
 
 		add_settings_section( 'ppdg-button-style-section', __( 'PayPal Button Appearance Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-btn-appearance' );
 		add_settings_section( 'ppdg-disable-funding-section', __( 'Disable Funding', 'wp-express-checkout' ), array( $this, 'disable_funding_note' ), $this->plugin_slug . '-pp-btn-appearance');
@@ -358,7 +358,7 @@ class Admin {
 			array(
 				'field' => 'live_client_id',
 				'type'  => 'text',
-				'desc'  => sprintf( __( 'Enter your PayPal Client ID for live mode. <a href="%s" target="_blank">Read this documentation</a> to learn how to locate your Client ID.', 'wp-express-checkout' ), 'https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/' ),
+				'desc'  => __( 'Enter your PayPal Client ID for live mode.', 'wp-express-checkout' ),
 				'size'  => 100,
 			)
 		);
@@ -684,6 +684,18 @@ class Admin {
 	 */
 	public function emails_note() {
 		printf( '<p><i>%s</p></i>', esc_html__( 'The following options affect the notification emails sent after a purchase.', 'wp-express-checkout' ) );
+	}
+
+
+	/**
+	 * The section `ppdg-credentials-section` callback.
+	 */
+	public function paypal_api_credentials_section_note() {
+		echo '<p class="description">';
+		$manual_pp_api_documentation_link = "https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/";
+		_e("If you have used the automatic option to connect and get your PayPal API credentials from the 'PayPal API Connection' tab, they will be displayed below. The following section also allows for manual entry of your PayPal API credentials in case the automatic option is non-functional for your PayPal account.", "wp-express-checkout");
+		echo '&nbsp;' . '<a href="' . $manual_pp_api_documentation_link . '" target="_blank">' . __('Read this documentation', 'wp-express-checkout') . '</a> ' . __('to learn how to manually set up the API credentials.', 'wp-express-checkout');
+		echo '</p>';
 	}
 
 	/**
@@ -1105,7 +1117,7 @@ class Admin {
 	public function handle_paypal_settings_arbitrary_section() {
 		echo '<div class="wpec-white-box">';
 		echo __('Check the ', 'wp-express-checkout');
-		echo '<a href="https://wp-express-checkout.com/paypal-settings-configuration-api-credentials-setup/" target="_blank">'.__('PayPal Settings documentation', 'wp-express-checkout').'</a>';
+		echo '<a href="https://wp-express-checkout.com/paypal-settings-configuration-api-credentials-setup/" target="_blank">'.__('PayPal settings documentation', 'wp-express-checkout').'</a>';
 		echo __(' for a step-by-step guide on configuring these settings.', 'wp-express-checkout');
 		echo '</div>';
 
