@@ -51,7 +51,7 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 		foreach ( $wpec_plugin_tabs as $location => $tabname ) {
 			$class = ( $current == $location ) ? ' nav-tab-active' : '';
 			?>
-			<a class="nav-tab<?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( 'edit.php?post_type=' . Products::$products_slug . '&page=' . $location ); ?>"><?php echo esc_html( $tabname ); ?></a>
+			<a class="nav-tab<?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( WPEC_MENU_PARENT_SLUG . '&page=' . $location ); ?>"><?php echo esc_html( $tabname ); ?></a>
 			<?php
 		}
 		?>

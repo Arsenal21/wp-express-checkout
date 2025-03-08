@@ -154,7 +154,7 @@ class Coupons {
 	}
 
 	function add_menu() {
-		add_submenu_page( 'edit.php?post_type=' . Products::$products_slug, __( 'Coupons', 'wp-express-checkout' ), __( 'Coupons', 'wp-express-checkout' ), Main::get_instance()->get_setting( 'access_permission' ), 'wpec-coupons', array( $this, 'display_coupons_menu_page' ) );
+		add_submenu_page( WPEC_MENU_PARENT_SLUG, __( 'Coupons', 'wp-express-checkout' ), __( 'Coupons', 'wp-express-checkout' ), Main::get_instance()->get_setting( 'access_permission' ), 'wpec-coupons', array( $this, 'display_coupons_menu_page' ) );
 	}
 
 	function save_settings() {
@@ -489,7 +489,7 @@ class Coupons {
 		// translators: %s is coupon code
 		set_transient( 'wpec_coupons_admin_notice', sprintf( $is_edit ? __( 'Coupon "%s" has been updated.', 'wp-express-checkout' ) : __( 'Coupon "%s" has been created.', 'wp-express-checkout' ), esc_attr($coupon['code']) ), 60 * 60 );
 
-		wp_safe_redirect( 'edit.php?post_type=' . Products::$products_slug . '&page=wpec-coupons' );
+		wp_safe_redirect( WPEC_MENU_PARENT_SLUG . '&page=wpec-coupons' );
 		exit;
 	}
 

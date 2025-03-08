@@ -10,7 +10,7 @@ use WP_Post;
 
 class Products {
 
-	static $products_slug = "ppec-products";
+	static $products_slug = WPEC_PRODUCT_POST_TYPE_SLUG;
 
 	public static function register_post_type() {
 

@@ -522,7 +522,7 @@ jQuery(document).ready(function($) {
 	public function display_custom_email_meta_box ($post) {
 		$wpec = Main::get_instance();
 		if ( $wpec->get_setting( 'enable_per_product_email_customization' ) != 1 ) {
-			_e( 'Product specific email customization is disabled. It must be enabled <a href="edit.php?post_type=ppec-products&page=ppec-settings-page&action=email-settings#wp-ppdg-enable_per_product_email_customization" target="_blank">in the settings</a> before you can configure it for this product.', 'wp-express-checkout' );
+			_e( 'Product specific email customization is disabled. It must be enabled <a href="'.WPEC_MENU_PARENT_SLUG.'&page=ppec-settings-page&action=email-settings#wp-ppdg-enable_per_product_email_customization" target="_blank">in the settings</a> before you can configure it for this product.', 'wp-express-checkout' );
 			return false;
 		}
 

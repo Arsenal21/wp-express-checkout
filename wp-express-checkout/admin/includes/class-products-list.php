@@ -118,7 +118,7 @@ class Products_List {
 	 * Set the first column as primary
 	 */
 	public static function primary_column( $default, $screen ) {
-		if ( 'edit-ppec-products' === $screen ) {
+		if ( 'edit-' . WPEC_PRODUCT_POST_TYPE_SLUG === $screen ) {
 			$default = 'thumbnail';
 		}
 		return $default;

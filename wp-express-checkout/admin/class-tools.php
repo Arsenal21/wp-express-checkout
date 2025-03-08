@@ -77,7 +77,7 @@ class Tools extends Admin {
 		 * Add a tools page for this plugin to the Settings menu.
 		 */
 		$this->plugin_screen_hook_suffix = add_submenu_page(
-			'edit.php?post_type=' . Products::$products_slug,
+			WPEC_MENU_PARENT_SLUG,
 			__( 'WP Express Checkout Tools', 'wp-express-checkout' ),
 			__( 'Tools', 'wp-express-checkout' ),
 			Main::get_instance()->get_setting( 'access_permission' ),

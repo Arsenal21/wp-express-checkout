@@ -166,7 +166,7 @@ class Orders_List {
 					else if($item["type"]=="shipping"){
 						$shipping_amount = $item["price"];
 					}		
-					else if($item["type"]=="ppec-products"){
+					else if($item["type"] == WPEC_PRODUCT_POST_TYPE_SLUG){
 						$item_name = $item["name"];
 						$item_quantity = $item["quantity"];
 						$unit_price = $item["price"];

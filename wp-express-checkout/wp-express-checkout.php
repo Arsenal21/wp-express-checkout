@@ -22,6 +22,7 @@ define( 'WPEC_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 define( 'WPEC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPEC_PLUGIN_FILE', __FILE__ );
 define( 'WPEC_PRODUCT_POST_TYPE_SLUG', 'ppec-products' );//Slowy use this constant instead of hardcoding the slug in the code.
+define( 'WPEC_MENU_PARENT_SLUG', 'edit.php?post_type=' . WPEC_PRODUCT_POST_TYPE_SLUG );
 define( 'WPEC_LOAD_NON_MINIFIED', true );//Set to true to load the non-minified version.
 
 /* ----------------------------------------------------------------------------*
@@ -54,7 +55,7 @@ function wpec_load_classes() {
 	new TTHQ\WPEC\Lib\PayPal\PayPal_Main(
 		array(
 			'plugin_shortname' => 'wpec',
-			'api_connection_settings_page' => 'edit.php?post_type=ppec-products&page=ppec-settings-page&action=paypal-settings',
+			'api_connection_settings_page' => WPEC_MENU_PARENT_SLUG . '&page=ppec-settings-page&action=paypal-settings',
 			'log_text_method' => '\WP_Express_Checkout\Debug\Logger::log',
 			'log_array_method' => '\WP_Express_Checkout\Debug\Logger::log_array_data',
 			'ppcp_settings_key' => 'ppdg-settings',
@@ -83,7 +84,7 @@ register_deactivation_hook( __FILE__, array( 'WP_Express_Checkout\Main', 'deacti
  */
 function wpec_add_settings_link($links, $file) {
     if ($file == plugin_basename(__FILE__)) {
-        $settings_link = '<a href="edit.php?post_type=ppec-products&page=ppec-settings-page">Settings</a>';
+        $settings_link = '<a href="'.WPEC_MENU_PARENT_SLUG.'&page=ppec-settings-page">Settings</a>';
         array_unshift($links, $settings_link);
     }
     return $links;

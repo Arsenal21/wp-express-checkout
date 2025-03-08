@@ -167,25 +167,19 @@ class Admin {
 		/**
 		 * Add a settings page for this plugin to the Settings menu.
 		 *
-		 * NOTE:  Alternative menu locations are available via WordPress administration menu functions.
-		 *
-		 *        Administration Menus: http://codex.wordpress.org/Administration_Menus
-		 *
-		 * @TODO:
-		 *
-		 * - Change 'Page Title' to the title of your plugin admin page
-		 * - Change 'Menu Text' to the text for menu item for the plugin settings page
-		 * - Change 'manage_options' to the capability you see fit
-		 *   For reference: http://codex.wordpress.org/Roles_and_Capabilities
+		 * NOTE: Alternative menu locations are available via WordPress administration menu functions.
+		 * Administration Menus: http://codex.wordpress.org/Administration_Menus
 		 */
 		$this->plugin_screen_hook_suffix = add_submenu_page(
-			'edit.php?post_type=' . Products::$products_slug,
-			__( 'WP Express Checkout Settings', 'wp-express-checkout' ),
-			__( 'Settings', 'wp-express-checkout' ),
-			Main::get_instance()->get_setting( 'access_permission' ),
-			'ppec-settings-page',
-			array( $this, 'display_plugin_admin_page' )
+			WPEC_MENU_PARENT_SLUG, /* parent slug */
+			__( 'WP Express Checkout Settings', 'wp-express-checkout' ),/* page title */
+			__( 'Settings', 'wp-express-checkout' ),/* menu text */
+			Main::get_instance()->get_setting( 'access_permission' ),/* capability */
+			'ppec-settings-page',/* menu slug */
+			array( $this, 'display_plugin_admin_page' )/* callback function */
 		);
+
+		// Register the settings sections and fields at admin init.
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 	}
 
@@ -1027,7 +1021,7 @@ class Admin {
 	public function add_action_links( $links ) {
 
 		return array_merge(
-			array( 'settings' => '<a href="' . admin_url( 'edit.php?post_type=' . Products::$products_slug . '&page=ppec-settings-page' ) . '">' . __( 'Settings', 'wp-express-checkout' ) . '</a>' ),
+			array( 'settings' => '<a href="' . admin_url( WPEC_MENU_PARENT_SLUG . '&page=ppec-settings-page' ) . '">' . __( 'Settings', 'wp-express-checkout' ) . '</a>' ),
 			$links
 		);
 	}

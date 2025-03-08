@@ -41,7 +41,7 @@ $wpec_pp_settings_subtab = array(
         ?>
         <a
             class="nav-tab<?php echo esc_attr( $class ); ?>"
-            href="<?php echo esc_url( 'edit.php?post_type=' . Products::$products_slug . '&page=ppec-settings-page&action='.$_GET['action']. '&subtab=' . $subtab ); ?>"
+            href="<?php echo esc_url( WPEC_MENU_PARENT_SLUG . '&page=ppec-settings-page&action='.$_GET['action']. '&subtab=' . $subtab ); ?>"
         >
             <?php echo esc_html( $subtab_name ); ?>
         </a>

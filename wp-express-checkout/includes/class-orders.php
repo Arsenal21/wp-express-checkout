@@ -59,7 +59,7 @@ class Orders {
 			'hierarchical' => false,
 			'public' => false,
 			'show_ui' => true,
-			'show_in_menu' => 'edit.php?post_type=' . Products::$products_slug,
+			'show_in_menu' => WPEC_MENU_PARENT_SLUG,
 			'show_in_nav_menus' => true,
 			'show_in_admin_bar' => true,
 			'menu_position' => 80,

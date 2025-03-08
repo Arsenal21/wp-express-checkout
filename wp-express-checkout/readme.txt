@@ -173,6 +173,7 @@ None
 - Added new filter hooks to the export orders data feature.
 - Fixed a minor Subscription webhook event related issue.
 - The 'Live Mode' transaction for PayPal will is enabled by default for new installations.
+- Added a new constant 'WPEC_MENU_PARENT_SLUG' to simplify the menu parent slug.
 
 = 2.3.17 =
 - The variation with a negative price can now also be used to offer a free product, similar to the functionality of a 100% discount coupon.

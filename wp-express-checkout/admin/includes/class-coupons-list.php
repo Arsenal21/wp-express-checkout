@@ -78,13 +78,13 @@ class Coupons_List extends WP_List_Table {
 				$confirm_coupon_delete_msg = sprintf( __( 'Are you sure you want to delete "%s" coupon? This can\'t be undone.', 'wp-express-checkout' ), esc_attr($item['coupon']) );
 				ob_start();
 				?>
-<a href="edit.php?post_type=<?php echo esc_attr( Products::$products_slug ); ?>&page=wpec-coupons&action=wpec_add_edit_coupon&wpec_coupon_id=<?php echo esc_attr( $item['id'] ); ?>" aria-label="<?php echo esc_attr( __( 'Edit coupon', 'wp-express-checkout' ) ); ?>"><?php echo esc_html( $item[ $column_name ] ); ?></a>
+<a href="<?php echo WPEC_MENU_PARENT_SLUG; ?>&page=wpec-coupons&action=wpec_add_edit_coupon&wpec_coupon_id=<?php echo esc_attr( $item['id'] ); ?>" aria-label="<?php echo esc_attr( __( 'Edit coupon', 'wp-express-checkout' ) ); ?>"><?php echo esc_html( $item[ $column_name ] ); ?></a>
 <div class="row-actions">
 	<span class="edit">
-		<a href="edit.php?post_type=<?php echo esc_attr( Products::$products_slug ); ?>&page=wpec-coupons&action=wpec_add_edit_coupon&wpec_coupon_id=<?php echo esc_attr( $item['id'] ); ?>" aria-label="<?php echo esc_attr( __( 'Edit coupon', 'wp-express-checkout' ) ); ?>"><?php echo esc_html( __( 'Edit', 'wp-express-checkout' ) ); ?></a> |
+		<a href="<?php echo WPEC_MENU_PARENT_SLUG; ?>&page=wpec-coupons&action=wpec_add_edit_coupon&wpec_coupon_id=<?php echo esc_attr( $item['id'] ); ?>" aria-label="<?php echo esc_attr( __( 'Edit coupon', 'wp-express-checkout' ) ); ?>"><?php echo esc_html( __( 'Edit', 'wp-express-checkout' ) ); ?></a> |
 	</span>
 	<span class="trash">
-		<a href="<?php echo esc_attr( wp_nonce_url( 'edit.php?post_type=' . Products::$products_slug . '&page=wpec-coupons&action=wpec_delete_coupon&wpec_coupon_id=' . $item['id'], 'delete-coupon_' . $item['id'] ) ); ?>" class="submitdelete" aria-label="<?php echo esc_attr( __( 'Delete coupon', 'wp-express-checkout' ) ); ?>" onclick="return confirm('<?php echo esc_js( $confirm_coupon_delete_msg ); ?>');"><?php echo esc_attr( __( 'Delete', 'wp-express-checkout' ) ); ?></a>
+		<a href="<?php echo esc_attr( wp_nonce_url( WPEC_MENU_PARENT_SLUG . '&page=wpec-coupons&action=wpec_delete_coupon&wpec_coupon_id=' . $item['id'], 'delete-coupon_' . $item['id'] ) ); ?>" class="submitdelete" aria-label="<?php echo esc_attr( __( 'Delete coupon', 'wp-express-checkout' ) ); ?>" onclick="return confirm('<?php echo esc_js( $confirm_coupon_delete_msg ); ?>');"><?php echo esc_attr( __( 'Delete', 'wp-express-checkout' ) ); ?></a>
 	</span>
 </div>
 				<?php
