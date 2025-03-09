@@ -86,8 +86,8 @@ class ShortcodesTest extends \WP_UnitTestCase {
 		];
 		
 		// Create new mock settings object
-		$mock_settings = array( 'sandbox_client_id' => 'dummy_sandbox_client_id' ) ;
-				
+		$mock_settings = array( 'sandbox_client_id' => 'dummy_sandbox_client_id', 'is_live' => 1 ) ;
+
 		// Set the mock settings object as the current active settings
 		update_option( 'ppdg-settings', $mock_settings );
 
