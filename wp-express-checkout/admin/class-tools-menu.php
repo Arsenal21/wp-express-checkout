@@ -63,20 +63,27 @@ class Tools_Admin_Menu {
 
 						switch ( $tab ) {
 							default:
-								$this->send_email_tools_postbox();
+								//General tab
+								$this->render_general_tools_tab();
 								break;
 						}
 						?>
 					</div>
 
 					<div id="postbox-container-1" class="postbox-container">
-						<?php include 'sidebar.php'; ?>
+						<?php include WPEC_PLUGIN_PATH . 'admin/views/sidebar.php'; ?>
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<?php
+	}
+
+	function render_general_tools_tab() {
+		//General tab
+		//At the moment, we only have one tool in the general tab.
+		$this->send_email_tools_postbox();
 	}
 
 	function send_email_tools_postbox() {
