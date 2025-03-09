@@ -164,6 +164,9 @@ class Admin {
 	 */
 	public function add_plugin_admin_menu() {
 
+		//Trigger an action hook to allow custom code to add menu items before this plugin's settings menu item.
+		do_action ( 'wpec_before_settings_admin_menu_link' );
+
 		/**
 		 * Add a settings page for this plugin to the Settings menu.
 		 *

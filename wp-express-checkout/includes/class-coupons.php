@@ -15,7 +15,10 @@ class Coupons {
 		add_action( 'wpec_create_order', array( $this, 'add_discount_to_order' ), 30, 3 );
 		add_action( 'wpec_payment_completed', array( $this, 'redeem_coupon' ), 10, 3 );
 		if ( is_admin() ) {
-			add_action( 'admin_menu', array( $this, 'add_menu' ) );
+			//We will use this hook to add coupons menu before the settings menu link.
+			add_action( 'wpec_before_settings_admin_menu_link', array( $this, 'add_coupons_menu' ) );
+
+			//Ajax requests for coupon check
 			if ( wp_doing_ajax() ) {
 				add_action( 'wp_ajax_wpec_check_coupon', array( $this, 'frontend_check_coupon' ) );
 				add_action( 'wp_ajax_nopriv_wpec_check_coupon', array( $this, 'frontend_check_coupon' ) );
@@ -153,7 +156,7 @@ class Coupons {
 		}
 	}
 
-	function add_menu() {
+	function add_coupons_menu() {
 		add_submenu_page( WPEC_MENU_PARENT_SLUG, __( 'Coupons', 'wp-express-checkout' ), __( 'Coupons', 'wp-express-checkout' ), Main::get_instance()->get_setting( 'access_permission' ), 'wpec-coupons', array( $this, 'display_coupons_menu_page' ) );
 	}
 
