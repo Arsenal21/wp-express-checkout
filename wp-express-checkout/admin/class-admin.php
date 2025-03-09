@@ -183,7 +183,7 @@ class Admin {
 		);
 
 		/**
-		 * Add a tools page link to the menu of this plugin.
+		 * Add tools page link to the menu of this plugin.
 		 */
 		add_submenu_page(
 			WPEC_MENU_PARENT_SLUG,
@@ -191,7 +191,19 @@ class Admin {
 			__( 'Tools', 'wp-express-checkout' ),
 			Main::get_instance()->get_setting( 'access_permission' ),
 			'wpec-tools',
-			array( Tools_Admin_Menu::get_instance(), 'display_tools_menu_page' )
+			array( Tools_Admin_Menu::get_instance(), 'render_tools_menu_page' )
+		);
+
+		/**
+		 * Add the Addons/Extensions page link to the menu of this plugin.
+		 */
+		add_submenu_page(
+			WPEC_MENU_PARENT_SLUG,
+			__( 'WP Express Checkout Extensions', 'wp-express-checkout' ),
+			__( 'Extensions', 'wp-express-checkout' ),
+			Main::get_instance()->get_setting( 'access_permission' ),
+			'wpec-extensions',
+			array( Addons_Admin_Menu::get_instance(), 'render_addons_menu_page' )
 		);
 
 		// Register the settings sections and fields at admin init.

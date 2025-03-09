@@ -19,7 +19,7 @@ class Tools_Admin_Menu {
 		return self::$instance;
 	}
 
-	public function display_tools_menu_page() {
+	public function render_tools_menu_page() {
 		?>
 
 		<div class="wrap">
