@@ -179,6 +179,18 @@ class Admin {
 			array( $this, 'display_plugin_admin_page' )/* callback function */
 		);
 
+		/**
+		 * Add a tools page link to the menu of this plugin.
+		 */
+		add_submenu_page(
+			'edit.php?post_type=' . Products::$products_slug,
+			__( 'WP Express Checkout Tools', 'wp-express-checkout' ),
+			__( 'Tools', 'wp-express-checkout' ),
+			Main::get_instance()->get_setting( 'access_permission' ),
+			'wpec-tools',
+			array( Tools_Admin_Menu::get_instance(), 'display_tools_menu_page' )
+		);
+
 		// Register the settings sections and fields at admin init.
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 	}
