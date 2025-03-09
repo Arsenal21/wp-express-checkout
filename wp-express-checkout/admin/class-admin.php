@@ -183,7 +183,7 @@ class Admin {
 		 * Add a tools page link to the menu of this plugin.
 		 */
 		add_submenu_page(
-			'edit.php?post_type=' . Products::$products_slug,
+			WPEC_MENU_PARENT_SLUG,
 			__( 'WP Express Checkout Tools', 'wp-express-checkout' ),
 			__( 'Tools', 'wp-express-checkout' ),
 			Main::get_instance()->get_setting( 'access_permission' ),
