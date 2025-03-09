@@ -52,7 +52,7 @@ class MainTest extends \WP_UnitTestCase {
 		$this->assertFalse( $dummy );
 
 		$is_live = $this->object->get_setting( 'is_live' );
-		$this->assertEquals( 0, $is_live );
+		$this->assertEquals( '', $is_live );
 
 		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'is_live' => 42 ] ) );
 

@@ -189,11 +189,5 @@ function wpec_send_email_tools_postbox() {
             </form>
         </div>
     </div>
-<!--    <pre>-->
-<!--        --><?php //print_r($tools_settings) ?>
-<!--    </pre>-->
-<!--    <pre>-->
-<!--        --><?php //print_r($main_settings) ?>
-<!--    </pre>-->
 	<?php
 }
