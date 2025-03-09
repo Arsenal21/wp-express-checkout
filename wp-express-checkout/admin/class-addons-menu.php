@@ -81,25 +81,25 @@ class Addons_Admin_Menu {
 	
 		/* Show the addons list */
 		foreach ( $addons_data as $addon ) {
-			$output .= '<div class="wspsc_addon_item_canvas">';
+			$output .= '<div class="wpec_addon_item_canvas">';
 	
-			$output .= '<div class="wspsc_addon_item_thumb">';
+			$output .= '<div class="wpec_addon_item_thumb">';
 	
 			$img_src = $addon[ 'thumbnail' ];
 			$output	 .= '<img src="' . $img_src . '" alt="' . $addon[ 'name' ] . '">';
 			$output	 .= '</div>'; //end thumbnail
 	
-			$output	 .= '<div class="wspsc_addon_item_body">';
-			$output	 .= '<div class="wspsc_addon_item_name">';
+			$output	 .= '<div class="wpec_addon_item_body">';
+			$output	 .= '<div class="wpec_addon_item_name">';
 			$output	 .= '<a href="' . $addon[ 'page_url' ] . '" target="_blank">' . $addon[ 'name' ] . '</a>';
 			$output	 .= '</div>'; //end name
 	
-			$output	 .= '<div class="wspsc_addon_item_description">';
+			$output	 .= '<div class="wpec_addon_item_description">';
 			$output	 .= $addon[ 'description' ];
 			$output	 .= '</div>'; //end description
 	
-			$output	 .= '<div class="wspsc_addon_item_details_link">';
-			$output	 .= '<a href="' . $addon[ 'page_url' ] . '" class="wspsc_addon_view_details" target="_blank">' . __( 'View Details', 'wp-express-checkout' ) . '</a>';
+			$output	 .= '<div class="wpec_addon_item_details_link">';
+			$output	 .= '<a href="' . $addon[ 'page_url' ] . '" class="wpec_addon_view_details" target="_blank">' . __( 'View Details', 'wp-express-checkout' ) . '</a>';
 	
 			$output	 .= '</div>'; //end detils link
 			$output	 .= '</div>'; //end body
