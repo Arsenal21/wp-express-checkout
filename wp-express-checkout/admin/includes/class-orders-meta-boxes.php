@@ -248,10 +248,11 @@ class Orders_Meta_Boxes {
 		$billing_address   = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : __( 'N/A', 'wp-express-checkout' );
 		$shipping_address  = ! empty( $order->get_shipping_address() ) ? $order->get_shipping_address() : __( 'N/A', 'wp-express-checkout' );;
 		if ( $payer ) {
-            $payer_name = array();
-			$payer_name[] = isset($payer['name']['given_name']) ? sanitize_text_field($payer['name']['given_name']) : '';
-			$payer_name[] = isset($payer['name']['surname']) ? sanitize_text_field($payer['name']['surname']) : '';
-			$payer_name = implode( ' ', array_filter($payer_name) ); // Filters empty value and implode the remaining.
+            $payer_name_array = array();
+			$payer_name_array[] = isset($payer['name']['given_name']) ? sanitize_text_field($payer['name']['given_name']) : '';
+			$payer_name_array[] = isset($payer['name']['surname']) ? sanitize_text_field($payer['name']['surname']) : '';
+
+            $payer_name = implode( ' ', array_filter($payer_name_array) ); // Filters empty value and implode the remaining.
 
             $payer_email = isset($payer['email_address']) ? sanitize_email($payer['email_address']) : '';
 		}
