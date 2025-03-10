@@ -1,5 +1,5 @@
 === WP Express Checkout (Accept PayPal Payments Easily) ===
-Contributors: Tips and Tricks HQ, dikiy_forester, mbrsolution, Ivy2120, chanelstone
+Contributors: Tips and Tricks HQ, mra13, dikiy_forester, mbrsolution, Ivy2120, chanelstone
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 6.0

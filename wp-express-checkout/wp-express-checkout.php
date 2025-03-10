@@ -3,7 +3,7 @@
  * Plugin Name:       WP Express Checkout
  * Description:       This plugin allows you to create a customizable PayPal payment button that lets the customers pay quickly in a popup via PayPal.
  * Version:           2.4.0
- * Author:            Tips and Tricks HQ
+ * Author:            Tips and Tricks HQ, mra13
  * Author URI:        https://www.tipsandtricks-hq.com/
  * Plugin URI:        https://wp-express-checkout.com/
  * License:           GPL2
