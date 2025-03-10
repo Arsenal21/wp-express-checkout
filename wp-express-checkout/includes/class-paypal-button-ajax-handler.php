@@ -450,8 +450,8 @@ class PayPal_Payment_Button_Ajax_Handler {
 
 				$variations = (new Variations( $this->item_for_validation->get_id() ))->variations;
 				$variation_price_total = 0; 
-				$price_variations_applied = $array_wpec_data['variations']['applied'];
-				if (is_array($variations)) {
+				$price_variations_applied = isset($array_wpec_data['variations']['applied']) ? $array_wpec_data['variations']['applied'] : array();
+				if (is_array($variations) && !empty($price_variations_applied)) {
 					foreach ($variations as $index => $variation) {
 						$applied_var_index = (int) $price_variations_applied[$index];
 						$variation_price = Utils::round_price($variation['prices'][$applied_var_index]);

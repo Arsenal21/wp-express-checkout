@@ -177,6 +177,7 @@ None
 - Tools admin menu related code has been refactored to be more organized.
 - The Coupons menu has been repositioned to be above the Settings menu.
 - Added a new filter 'wpec_before_settings_admin_menu_link'.
+- A small variation related issue fixed for new site.
 
 = 2.3.17 =
 - The variation with a negative price can now also be used to offer a free product, similar to the functionality of a 100% discount coupon.
