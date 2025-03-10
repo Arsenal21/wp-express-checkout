@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, woocommerce, digital store, e-commerce, checkout
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 2.3.17
+Stable tag: 2.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -166,7 +166,7 @@ None
 
 == Changelog ==
 
-= WIP =
+= 2.4.0 =
 - Added a dedicated settings tab for PayPal, consolidating all PayPal-related settings in one place for easier management.
 - Thank you page shortcode now outputs the quantity purchased.
 - Updated the label "Order Author" to "Customer" in the order item to make it more user-friendly.
@@ -178,6 +178,7 @@ None
 - The Coupons menu has been repositioned to be above the Settings menu.
 - Added a new filter 'wpec_before_settings_admin_menu_link'.
 - A small variation related issue fixed for new site.
+- Updated the translation POT file.
 
 = 2.3.17 =
 - The variation with a negative price can now also be used to offer a free product, similar to the functionality of a 100% discount coupon.
