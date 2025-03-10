@@ -242,19 +242,18 @@ class Orders_Meta_Boxes {
 		$payer     = $order->get_data( 'payer' );
 		$payer_username  = '';
 		$wp_username  = '';
-		$useremail = '';
+		$payer_email = '';
 		
 		$ip_address = ! empty($order->get_ip_address()) ? $order->get_ip_address() : __( 'N/A', 'wp-express-checkout' );
 		$billing_address   = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : __( 'N/A', 'wp-express-checkout' );
 		$shipping_address  = ! empty( $order->get_shipping_address() ) ? $order->get_shipping_address() : __( 'N/A', 'wp-express-checkout' );;
 		if ( $payer ) {
 			$payer_username = implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
-            $useremail = $payer['email_address'];
+            $payer_email = isset($payer['email_address']) ? sanitize_email($payer['email_address']) : '';
 		}
         if ( $wp_user ) {
 			// $wp_username  = $wp_user->user_login !== $wp_user->display_name ? $wp_user->display_name . ' (' . $wp_user->user_login . ') ' : $wp_user->user_login;
 			$wp_username  = $wp_user->user_login;
-			$useremail = $wp_user->user_email;
 		}
 		?>
 		<?php 
@@ -268,7 +267,7 @@ class Orders_Meta_Boxes {
 					<td><?php echo esc_attr($payer_username); ?></td>
 				</tr>
 				<tr>
-					<td><?php echo esc_attr($useremail); ?></td>
+					<td><?php echo esc_attr($payer_email); ?></td>
 				</tr>				
                 <?php } ?>
                 <?php if (!empty($wp_username)) {?>
