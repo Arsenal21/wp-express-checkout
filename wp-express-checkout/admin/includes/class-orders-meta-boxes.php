@@ -240,7 +240,7 @@ class Orders_Meta_Boxes {
 		<?php
 		$wp_user      = get_userdata( $order->get_author() );
 		$payer     = $order->get_data( 'payer' );
-		$payer_username  = '';
+		$payer_name  = '';
 		$wp_username  = '';
 		$payer_email = '';
 		
@@ -248,7 +248,11 @@ class Orders_Meta_Boxes {
 		$billing_address   = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : __( 'N/A', 'wp-express-checkout' );
 		$shipping_address  = ! empty( $order->get_shipping_address() ) ? $order->get_shipping_address() : __( 'N/A', 'wp-express-checkout' );;
 		if ( $payer ) {
-			$payer_username = implode( ' ', array( $payer['name']['given_name'], $payer['name']['surname'] ) );
+            $payer_name = array();
+			$payer_name[] = isset($payer['name']['given_name']) ? $payer['name']['given_name'] : '';
+			$payer_name[] = isset($payer['name']['surname']) ? $payer['name']['surname'] : '';
+			$payer_name = implode( ' ', array_filter($payer_name) ); // Filters empty value and implode the remaining.
+
             $payer_email = isset($payer['email_address']) ? sanitize_email($payer['email_address']) : '';
 		}
         if ( $wp_user ) {
@@ -262,9 +266,9 @@ class Orders_Meta_Boxes {
 		?>
 		<table id="admin-order-author">
 			<tbody>
-                <?php if (!empty($payer_username)) {?>
+                <?php if (!empty($payer_name)) {?>
 				<tr>
-					<td><?php echo esc_attr($payer_username); ?></td>
+					<td><?php echo esc_attr($payer_name); ?></td>
 				</tr>
 				<tr>
 					<td><?php echo esc_attr($payer_email); ?></td>
