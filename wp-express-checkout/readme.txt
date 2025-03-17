@@ -166,6 +166,9 @@ None
 
 == Changelog ==
 
+= WIP =
+* Added a 5px padding-bottom to the template1 product shortcode's description field.
+
 = 2.4.0 =
 * Added a dedicated settings tab for PayPal, consolidating all PayPal-related settings in one place for easier management.
 * Thank you page shortcode now outputs the quantity purchased.
