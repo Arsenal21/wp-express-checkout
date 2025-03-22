@@ -36,7 +36,9 @@ This plugin works with PayPal's Pay in 4 (Buy Now, Pay Later) feature also. It l
 
 = Basic Setup and Usage Video =
 
-https://www.youtube.com/watch?v=RHVgGQWhCT0
+https://www.youtube.com/watch?v=UIUvpYGYuiU
+
+https://www.youtube.com/watch?v=YP9E12KDo1A
 
 = Usage Documentation =
 
@@ -165,6 +167,9 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= WIP =
+* Added the new video tutorial link to the readme file.
 
 = 2.4.0 =
 * Added a dedicated settings tab for PayPal, consolidating all PayPal-related settings in one place for easier management.
