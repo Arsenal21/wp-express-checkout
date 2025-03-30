@@ -361,11 +361,11 @@ class Main {
 			'tax'                  => '',
 			'button_text'          => __( 'Pay', 'wp-express-checkout' ),
 			'use_modal'            => 1,
-			'btn_shape'            => 'pill',
-			'btn_color'            => 'gold',
+			'btn_shape'            => 'rect',
+			'btn_color'            => 'blue',
 			'btn_type'             => 'checkout',
-			'btn_height'           => 'xlarge',
-			'btn_width'            => 0,
+			'btn_height'           => 'medium', /* use a default height of medium for best results */
+			'btn_width'            => 300, /* use a default width of 300px for best results */
 			'btn_layout'           => 'vertical',
 			'disabled_funding'     => array( 'card' ),
 			'disabled_cards'       => array(),
