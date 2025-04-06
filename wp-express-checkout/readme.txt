@@ -172,6 +172,7 @@ None
 * Added the new video tutorial link to the readme file.
 * For new installations, the default button height is set to medium for optimal results.
 * For new installations, the default button width is set to 300px for optimal results.
+* Updated the Spanish translation file.
 
 = 2.4.0 =
 * Added a dedicated settings tab for PayPal, consolidating all PayPal-related settings in one place for easier management.
