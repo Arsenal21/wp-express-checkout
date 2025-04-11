@@ -280,21 +280,22 @@ class Admin {
 				'size'  => 10,
 			)
 		);
+
+		//Thank you page URL. We will style the size of the field using CSS
 		add_settings_field( 'thank_you_url', __( 'Thank You Page URL', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section',
 			array(
 				'field' => 'thank_you_url',
 				'type'  => 'text',
 				'desc'  => sprintf( __( 'This is the thank you page. This page is automatically created for you when you install the plugin. Do not delete this page from the pages menu of your site. The plugin will send the customers to this page after the payment. If you have accidentally deleted this page, then re-create it using <a href="https://wp-express-checkout.com/recreating-the-required-express-checkout-plugin-pages/" target="_blank">this documentation</a>.', 'wp-express-checkout' ) ),
-				'size'  => 100,
 			)
 		);
 
+		//Shop page URL. We will style the size of the field using CSS
 		add_settings_field( 'shop_page_url', __( 'Shop Page URL', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section',
 			array(
 				'field' => 'shop_page_url',
 				'type'  => 'text',
 				'desc'  => sprintf( __( 'All your products will be listed here in a grid display. When you create new products, they will show up in this page. This page is automatically created for you when you install the plugin. You can add this page to your navigation menu if you want the site visitors to find it easily. Do not delete this page. If you have accidentally deleted this page, then re-create it using <a href="https://wp-express-checkout.com/recreating-the-required-express-checkout-plugin-pages/" target="_blank">this documentation</a>.', 'wp-express-checkout' ) ),
-				'size'  => 100,
 			)
 		);
 
@@ -374,13 +375,12 @@ class Admin {
 			'ppdg-delete-cache-section'
 		);
 
-		// API details.
+		// API details. We will style the size of the field using CSS
 		add_settings_field( 'live_client_id', __( 'Live Client ID', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug. '-pp-api-credentials', 'ppdg-credentials-section',
 			array(
 				'field' => 'live_client_id',
 				'type'  => 'text',
 				'desc'  => __( 'Enter your PayPal Client ID for live mode.', 'wp-express-checkout' ),
-				'size'  => 100,
 			)
 		);
 		add_settings_field( 'live_secret_key', __( 'Live Secret key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug .'-pp-api-credentials', 'ppdg-credentials-section',
@@ -388,7 +388,6 @@ class Admin {
 				'field' => 'live_secret_key',
 				'type'  => 'text',
 				'desc'  => __( 'Enter your PayPal Secret Key for live mode.', 'wp-express-checkout' ),
-				'size'  => 100,
 			)
 		);
 		add_settings_field( 'sandbox_client_id', __( 'Sandbox Client ID', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug .'-pp-api-credentials', 'ppdg-credentials-section',
@@ -396,7 +395,6 @@ class Admin {
 				'field' => 'sandbox_client_id',
 				'type'  => 'text',
 				'desc'  => __( 'Enter your PayPal Client ID for sandbox mode.', 'wp-express-checkout' ),
-				'size'  => 100,
 			)
 		);
 		add_settings_field( 'sandbox_secret_key', __( 'Sandbox Secret key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug .'-pp-api-credentials', 'ppdg-credentials-section',
@@ -404,7 +402,6 @@ class Admin {
 				'field' => 'sandbox_secret_key',
 				'type'  => 'text',
 				'desc'  => __( 'Enter your PayPal Secret Key for sandbox mode.', 'wp-express-checkout' ),
-				'size'  => 100,
 			)
 		);
 

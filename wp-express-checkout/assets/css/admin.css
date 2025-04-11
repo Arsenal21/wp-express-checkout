@@ -95,6 +95,15 @@
 }
 /* End CSS boxes */
 
+/* Misc admin interface styles */
+#wp-ppdg-thank_you_url, #wp-ppdg-shop_page_url{
+	width: 90%;
+}
+#wp-ppdg-live_client_id, #wp-ppdg-live_secret_key, #wp-ppdg-sandbox_client_id, #wp-ppdg-sandbox_secret_key {
+	width: 90%;
+}
+/* end of misc admin interface styles */
+
 .wpec_status_paid{
 	padding: 7px 15px;
 	width: auto;
