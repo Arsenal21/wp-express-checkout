@@ -97,10 +97,18 @@
 
 /* Misc admin interface styles */
 #wp-ppdg-thank_you_url, #wp-ppdg-shop_page_url{
-	width: 90%;
+	width: 400px;
 }
 #wp-ppdg-live_client_id, #wp-ppdg-live_secret_key, #wp-ppdg-sandbox_client_id, #wp-ppdg-sandbox_secret_key {
 	width: 90%;
+}
+@media only screen and (max-width: 782px){
+	#wp-ppdg-thank_you_url, #wp-ppdg-shop_page_url{
+		width: 100%;
+	}
+	#wp-ppdg-live_client_id, #wp-ppdg-live_secret_key, #wp-ppdg-sandbox_client_id, #wp-ppdg-sandbox_secret_key {
+		width: 100%;
+	}
 }
 /* end of misc admin interface styles */
 
