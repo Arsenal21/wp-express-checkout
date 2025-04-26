@@ -40,6 +40,8 @@ https://www.youtube.com/watch?v=UIUvpYGYuiU
 
 https://www.youtube.com/watch?v=YP9E12KDo1A
 
+https://www.youtube.com/watch?v=n9YDFVFHDf8
+
 = Usage Documentation =
 
 View configuration and usage details on the [WP Express Checkout](https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/) plugin's documentation page.
