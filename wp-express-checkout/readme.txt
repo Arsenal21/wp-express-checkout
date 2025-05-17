@@ -176,6 +176,7 @@ None
 * For new installations, the default button width is set to 300px for optimal results.
 * Updated the Spanish translation file.
 * Settings menu UI improvements for the 'Thank you' and 'Shop' page URL fields.
+* Updated the help text of the 'Thank You' page settings field.
 
 = 2.4.0 =
 * Added a dedicated settings tab for PayPal, consolidating all PayPal-related settings in one place for easier management.
