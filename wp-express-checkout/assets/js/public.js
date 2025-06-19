@@ -160,8 +160,13 @@ var ppecHandler = function( data ) {
 
 		parent.updateAllAmounts();
 
-		// TODO: Need to convert this to vanilla js
-		jQuery( document ).trigger( 'wpec_validate_order', [ parent ] );
+		// Dispatch a custom event for addons to listen on 'validateOrder' function run.
+		document.dispatchEvent(new CustomEvent('wpec_validate_order', {
+			detail: {
+				ppecHandler: parent
+			}
+		}))
+		jQuery( document ).trigger( 'wpec_validate_order', [ parent ] ); // TODO: Need to remove this jquery version after all addon code is updated to the vanilla version.
 	};
 
 	this.displayInputError = function( input, validator ) {
@@ -383,7 +388,7 @@ var ppecHandler = function( data ) {
 					country_code: document.getElementById( 'wpec_shipping_country-' + parent.data.id )?.value,
 				};
 
-				parent.processPayment( {
+				const paymentData = {
 					payer: {
 						name: {
 							given_name: document.getElementById( 'wpec_billing_first_name-' + parent.data.id )?.value,
@@ -393,7 +398,16 @@ var ppecHandler = function( data ) {
 						address: billing_address,
 						shipping_address: shipping_address,
 					}
-				}, 'wpec_process_empty_payment' );
+				}
+
+				document.dispatchEvent(new CustomEvent('wpec_process_free_payment', {
+					detail: {
+						paymentData,
+						data: parent.data,
+					}
+				}));
+
+				parent.processPayment(paymentData, 'wpec_process_empty_payment' );
 			}
 		},
 		createOrder: async function( data, actions ) {
