@@ -178,6 +178,7 @@ None
 * Settings menu UI improvements for the 'Thank you' and 'Shop' page URL fields.
 * Updated the help text of the 'Thank You' page settings field.
 * Two new action hook 'wpec_before_full_discount_checkout_button' and 'wpec_process_payment' added.
+* Now order data can be edited form order details page.
 
 = 2.4.0 =
 * Added a dedicated settings tab for PayPal, consolidating all PayPal-related settings in one place for easier management.

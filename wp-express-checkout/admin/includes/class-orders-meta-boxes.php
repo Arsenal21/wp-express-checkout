@@ -36,10 +36,9 @@ class Orders_Meta_Boxes {
 
 	public function add_meta_boxes() {
 		add_meta_box( 'wpec_order_items', __( 'Order Summary', 'wp-express-checkout' ), array( $this, 'display_summary_meta_box' ), Orders::PTYPE, 'normal', 'high' );
+		add_meta_box( 'wpec_order_details', __( 'Order Details', 'wp-express-checkout' ), array( $this, 'display_order_details_meta_box' ), Orders::PTYPE, 'normal', 'default' );
 		add_meta_box( 'wpec_order_downloads', __( 'Order Downloads', 'wp-express-checkout' ), array( $this, 'display_downloads_meta_box' ), Orders::PTYPE, 'normal', 'default' );
 		add_meta_box( 'wpec_order_actions', __( 'Order Actions', 'wp-express-checkout' ), array( $this, 'display_actions_meta_box' ), Orders::PTYPE, 'side', 'high' );
-		add_meta_box( 'wpec_order_status', __( 'Order Status', 'wp-express-checkout' ), array( $this, 'display_status_meta_box' ), Orders::PTYPE, 'side', 'high' );
-		add_meta_box( 'wpec_customer', __( 'Customer', 'wp-express-checkout' ), array( $this, 'display_customer_meta_box' ), Orders::PTYPE, 'side', 'low' );
 		add_meta_box( 'wpec_order_notes', __( 'Order Notes', 'wp-express-checkout' ), array( $this, 'display_notes_meta_box' ), Orders::PTYPE, 'side', 'low' );
 
 		wp_enqueue_script( 'wpec-admin-scripts', WPEC_PLUGIN_URL . '/assets/js/admin.js', array(), WPEC_PLUGIN_VER, true );
@@ -81,6 +80,132 @@ class Orders_Meta_Boxes {
 		) );
 	}
 
+    public function display_order_details_meta_box( $post ) {
+	    try {
+		    $order = Orders::retrieve( $post->ID );
+	    } catch ( Exception $exc ) {
+		    return;
+	    }
+
+	    $payer = $order->get_data('payer');
+
+	    $payer_first_name = '';
+	    $payer_last_name  = '';
+	    $payer_email      = '';
+	    if ( $payer ) {
+		    $payer_first_name = isset( $payer['name']['given_name'] ) ? sanitize_text_field( $payer['name']['given_name'] ) : '';
+		    $payer_last_name  = isset( $payer['name']['surname'] ) ? sanitize_text_field( $payer['name']['surname'] ) : '';
+		    $payer_email      = isset( $payer['email_address'] ) ? sanitize_email( $payer['email_address'] ) : '';
+	    }
+
+	    $wp_username = '';
+	    $wp_user = get_userdata( $order->get_author() );
+	    if ( $wp_user ) {
+		    $wp_username = $wp_user->user_login;
+	    }
+
+	    $ip_address       = ! empty( $order->get_ip_address() ) ? $order->get_ip_address() : __( 'N/A', 'wp-express-checkout' );
+
+	    $billing_address  = $order->get_billing_address();
+	    $shipping_address = $order->get_shipping_address();
+
+	    $buyer_email_sent = get_post_meta( $order->get_id(), 'wpec_buyer_email_sent', true );
+	    $buyer_email_sent = !empty($buyer_email_sent) ? $buyer_email_sent : __('No', 'wp-express-checkout');
+
+	    ?>
+        <table class="widefat" style="border: none">
+            <tbody>
+                <tr>
+                    <td><?php esc_html_e( 'Order ID', 'wp-express-checkout' ); ?>: </td>
+                    <td><?php echo esc_attr($order->get_id()); ?></td>
+                </tr>
+                <tr>
+                    <td><?php esc_html_e( 'Transaction ID', 'wp-express-checkout' ); ?>: </td>
+                    <td><?php echo esc_attr($order->get_capture_id()); ?></td>
+                </tr>
+                <tr>
+                    <td><?php esc_html_e( 'Order Time', 'wp-express-checkout' ); ?>: </td>
+                    <td><?php echo esc_attr(get_post_time( 'F j, Y, g:i a', false, $order->get_id() )); ?></td>
+                </tr>
+                <tr>
+                    <td><?php esc_html_e( 'Currency', 'wp-express-checkout' ); ?>: </td>
+                    <td><?php echo esc_attr($order->get_currency()); ?></td>
+                </tr>
+                <?php if($order->get_refund_date()):?>
+                <tr>
+                    <th><?php esc_html_e( 'Refund Time', 'wp-express-checkout' ); ?>: </th>
+                    <td><?php echo esc_attr($order->get_refund_date('F j, Y, g:i a')); ?></td>
+                </tr>
+                <?php endif;?>
+                <tr>
+                    <td><?php esc_html_e( 'Status', 'wp-express-checkout' ); ?>: </td>
+                    <td><?php echo wp_kses_post($order->get_display_status()); ?></td>
+                </tr>
+                <tr>
+                    <td><?php esc_html_e('First Name', 'wp-express-checkout'); ?></td>
+                    <td>
+                        <input type="text" name="wpec_order_customer_first_name" value="<?php echo esc_attr($payer_first_name); ?>" size="40">
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php esc_html_e('Last Name', 'wp-express-checkout'); ?></td>
+                    <td>
+                        <input type="text" name="wpec_order_customer_last_name" value="<?php echo esc_attr($payer_last_name); ?>" size="40">
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php esc_html_e('Email Address', 'wp-express-checkout'); ?></td>
+                    <td>
+                        <input type="email" name="wpec_order_customer_email" value="<?php echo esc_attr($payer_email); ?>" size="40" required>
+                    </td>
+                </tr>
+                <?php if (!empty($wp_username)) {?>
+                    <tr>
+                        <td>
+                            <?php esc_html_e( 'WP Username', 'wp-express-checkout' ); ?>
+                        </td>
+                        <td><?php echo esc_attr($wp_username); ?></td>
+                    </tr>
+                <?php } ?>
+
+                <?php if ( !empty($ip_address) ) { ?>
+                    <tr>
+                        <td><?php esc_html_e( 'IP Address', 'wp-express-checkout' ); ?></td>
+                        <td><?php echo esc_attr($order->get_ip_address()); ?></td>
+                    </tr>
+                <?php } ?>
+
+                <tr>
+                    <td><?php esc_html_e( 'Buyer Email Sent?', 'wp-express-checkout' ); ?></td>
+                    <td><?php echo esc_attr($buyer_email_sent); ?></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <?php esc_html_e( 'Billing Address:', 'wp-express-checkout' ); ?>
+                    </td>
+                    <td>
+                        <textarea name="wpec_order_customer_billing_address" rows="2" style="width: 100%"><?php echo esc_attr($billing_address); ?></textarea>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <?php esc_html_e( 'Shipping Address:', 'wp-express-checkout' ); ?>
+                    </td>
+                    <td>
+                        <textarea name="wpec_order_customer_shipping_address" rows="2" style="width: 100%"><?php echo esc_attr($shipping_address); ?></textarea>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            <input type="submit" class="button button-primary" id="wpec_admin_update_order_details_submit" value="<?php esc_html_e( 'Update', 'wp-express-checkout' ); ?>" />
+        </p>
+
+	    <?php
+    }
+
 	public function display_downloads_meta_box( $post ) {
 		global $post;
 
@@ -102,66 +227,6 @@ class Orders_Meta_Boxes {
 		$output = ! empty( $output ) ? $output : $error_msg;
 
 		echo $output;
-	}
-
-	/**
-	 * Displays the order status summary
-	 *
-	 * @param  WP_Post $post Post object
-	 *
-	 * @return void
-	 */
-	public function display_status_meta_box( $post ){
-
-		try {
-			$order = Orders::retrieve( $post->ID );
-		} catch ( Exception $exc ) {
-			return;
-		}
-		?>
-		<style type="text/css">
-			#admin-order-status th{
-				padding-right: 10px;
-				text-align: right;
-				vertical-align: top;
-				width: 40%;
-			}
-			#admin-order-status td{
-				vertical-align: top;
-			}
-		</style>
-		<table id="admin-order-status">
-			<tbody>
-				<tr>
-					<th><?php _e( 'Order ID', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo esc_attr($order->get_id()); ?></td>
-				</tr>
-				<tr>
-					<th style="vertical-align: middle;"><?php _e( 'Status', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo wp_kses_post($order->get_display_status()); ?></td>
-				</tr>
-				<tr>
-					<th><?php _e( 'Currency', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo esc_attr($order->get_currency()); ?></td>
-				</tr>
-				<tr>
-					<th><?php _e( 'Order Time', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo esc_attr(get_post_time( 'F j, Y, g:i a', false, $order->get_id() )); ?></td>
-				</tr>
-				<?php if($order->get_refund_date()):?>
-				<tr>
-					<th><?php _e( 'Refund Time', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo esc_attr($order->get_refund_date('F j, Y, g:i a')); ?></td>
-				</tr>
-				<?php endif;?>
-				<tr>
-					<th><?php _e( 'Transaction ID', 'wp-express-checkout' ); ?>: </th>
-					<td><?php echo esc_attr($order->get_capture_id()); ?></td>
-				</tr>
-			</tbody>
-		</table>
-		<?php
-
 	}
 
 	/**
@@ -211,109 +276,6 @@ class Orders_Meta_Boxes {
 				<?php } ?>
 			</li>
 		</ul>
-		<?php
-
-	}
-
-	/**
-	 * Displays the order author box
-	 * @param  object $post Wordpress Post object
-	 * @return void
-	 */
-	function display_customer_meta_box ( $post ){
-
-		try {
-			$order = Orders::retrieve( $post->ID );
-		} catch ( Exception $exc ) {
-			return;
-		}
-		?>
-		<style type="text/css">
-			#admin-order-author{
-				text-align: left;
-			}
-			.avatar{
-				float: left;
-				margin-right: 10px;
-			}
-		</style>
-		<?php
-		$wp_user      = get_userdata( $order->get_author() );
-		$payer     = $order->get_data( 'payer' );
-		$payer_name  = '';
-		$wp_username  = '';
-		$payer_email = '';
-		
-		$ip_address = ! empty($order->get_ip_address()) ? $order->get_ip_address() : __( 'N/A', 'wp-express-checkout' );
-		$billing_address   = ! empty( $payer['address'] ) ? implode( ', ', (array) $payer['address'] ) : __( 'N/A', 'wp-express-checkout' );
-		$shipping_address  = ! empty( $order->get_shipping_address() ) ? $order->get_shipping_address() : __( 'N/A', 'wp-express-checkout' );;
-		if ( $payer ) {
-            $payer_name_array = array();
-			$payer_name_array[] = isset($payer['name']['given_name']) ? sanitize_text_field($payer['name']['given_name']) : '';
-			$payer_name_array[] = isset($payer['name']['surname']) ? sanitize_text_field($payer['name']['surname']) : '';
-
-            $payer_name = implode( ' ', array_filter($payer_name_array) ); // Filters empty value and implode the remaining.
-
-            $payer_email = isset($payer['email_address']) ? sanitize_email($payer['email_address']) : '';
-		}
-        if ( $wp_user ) {
-			// $wp_username  = $wp_user->user_login !== $wp_user->display_name ? $wp_user->display_name . ' (' . $wp_user->user_login . ') ' : $wp_user->user_login;
-			$wp_username  = $wp_user->user_login;
-		}
-		?>
-		<?php 
-		//WP might be sunsetting Gravatar, so let's not use it anymore. It isn't necessary for this customer box.
-		//echo get_avatar( $useremail, 72 ); 
-		?>
-		<table id="admin-order-author">
-			<tbody>
-                <?php if (!empty($payer_name)) {?>
-				<tr>
-					<td><?php echo esc_attr($payer_name); ?></td>
-				</tr>
-				<tr>
-					<td><?php echo esc_attr($payer_email); ?></td>
-				</tr>				
-                <?php } ?>
-                <?php if (!empty($wp_username)) {?>
-                    <tr>
-					<td>
-						<strong><?php esc_html_e( 'WP Username:', 'wp-express-checkout' ); ?></strong></td>
-                    </tr>
-					<tr>
-						<td><?php echo esc_attr($wp_username); ?></td>
-					</tr>					
-                <?php } ?>
-
-				<?php if ( !empty($ip_address) ) { ?>
-					<tr>
-						<td><strong><?php esc_html_e( 'IP Address:', 'wp-express-checkout' ); ?></strong></td>
-					</tr>
-					<tr>
-						<td><?php echo esc_attr($order->get_ip_address()); ?></td>
-					</tr>
-				<?php } ?>
-
-				<?php if ( !empty($billing_address) ) { ?>
-					<tr>
-						<td><strong><?php esc_html_e( 'Billing Address:', 'wp-express-checkout' ); ?></strong></td>
-					</tr>
-					<tr>
-						<td><?php echo esc_attr($billing_address); ?></td>
-					</tr>
-				<?php } ?>
-
-				<?php if ( !empty($shipping_address) ) { ?>
-				<tr>
-					<td><strong><?php esc_html_e( 'Shipping Address:', 'wp-express-checkout' ); ?></strong></td>
-				</tr>
-				<tr>
-					<td><?php echo esc_attr($shipping_address); ?></td>
-				</tr>
-				<?php } ?>
-			</tbody>
-		</table>
-		<div class="clear"></div>
 		<?php
 
 	}
@@ -403,6 +365,49 @@ class Orders_Meta_Boxes {
 		}
 
 		if ( ! isset( $post_id ) ) {
+			return;
+		}
+
+		try {
+			$order = Orders::retrieve( $post->ID );
+            $order_data = $order->get_data();
+			$payer = $order->get_data('payer');
+
+			if ( isset( $_POST['wpec_order_customer_email'] ) ) {
+                $email_address = sanitize_email( $_POST['wpec_order_customer_email'] );
+
+                $payer['email_address'] = $email_address;
+
+				update_post_meta( $post_id, 'wpec_order_customer_email', $email_address );
+			}
+
+            if ( isset($_POST['wpec_order_customer_first_name']) && isset( $payer['name'] )){
+                $payer['name']['given_name'] = sanitize_text_field( $_POST['wpec_order_customer_first_name'] );
+            }
+
+			if ( isset($_POST['wpec_order_customer_last_name']) && isset( $payer['name'] )){
+				$payer['name']['surname'] = sanitize_text_field( $_POST['wpec_order_customer_last_name'] );
+			}
+
+            if (isset($_POST['wpec_order_customer_billing_address'])){
+                $billing_address = sanitize_text_field($_POST['wpec_order_customer_billing_address']);
+
+                $order_data['billing_address'] = $billing_address;
+            }
+
+			if (isset($_POST['wpec_order_customer_shipping_address'])){
+				$shipping_address = sanitize_text_field($_POST['wpec_order_customer_shipping_address']);
+
+				$order_data['shipping_address'] = $shipping_address;
+			}
+
+			$order_data['payer'] = $payer;
+
+            update_post_meta( $post_id, 'wpec_order_data', $order_data );
+
+            do_action('wpec_order_details_update', $post_id, $order_data);
+
+		} catch ( Exception $exc ) {
 			return;
 		}
 
