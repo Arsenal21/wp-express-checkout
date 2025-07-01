@@ -755,4 +755,21 @@ class Order {
 
 		return '';
 	}
+
+	public function get_billing_address() {
+		// Check if 'billing_address' is present inside payment data array.
+		if(array_key_exists('billing_address', $this->data)){
+			return $this->data['billing_address'];
+		}
+
+		$payer_data = $this->get_data( 'payer' );
+
+		// Check if the shipping_address is present inside 'payer' data. (Usually for the case of subscription/100% discount payment)
+		if ( isset( $payer_data['address'] ) && ! empty( $payer_data['address'] )) {
+			// The 'address' index usually in array formant. If so, convert it to string.
+			return is_array($payer_data['address']) ? implode( ', ', $payer_data['address'] ) : $payer_data['address'];
+		}
+
+		return '';
+	}
 }
