@@ -546,4 +546,14 @@ class Utils {
 
 		return $order->get_order_data_in_array();
 	}
+
+	public static function get_paypal_checkout_locale_code( $default = '' ) {
+		$locale = Main::get_instance()->get_setting( 'default_locale' );
+		$locale = str_replace( '-', '_',  sanitize_text_field( $locale ) );
+		if ( empty( $locale ) ) {
+			return $default;
+		}
+
+		return $locale;
+	}
 }

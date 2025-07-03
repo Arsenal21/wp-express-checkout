@@ -243,6 +243,7 @@ class Admin {
 		add_settings_section( 'ppdg-credentials-section', __( 'PayPal API Credentials', 'wp-express-checkout' ), array( $this, 'paypal_api_credentials_section_note' ), $this->plugin_slug . '-pp-api-credentials');
 
 		add_settings_section( 'ppdg-button-style-section', __( 'PayPal Button Appearance Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-btn-appearance' );
+		add_settings_section( 'ppdg-paypal-language', __( 'PayPal Language', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-btn-appearance' );
 		add_settings_section( 'ppdg-disable-funding-section', __( 'Disable Funding', 'wp-express-checkout' ), array( $this, 'disable_funding_note' ), $this->plugin_slug . '-pp-btn-appearance');
 
 		// Email Settings Tab Sections
@@ -415,6 +416,22 @@ class Admin {
 		add_settings_field( 'btn_height', __( 'Button Height', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_height', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'small', 'medium', 'large', 'xlarge' ), 'texts' => array( __( 'Small', 'wp-express-checkout' ), __( 'Medium', 'wp-express-checkout' ), __( 'Large', 'wp-express-checkout' ), __( 'Extra Large', 'wp-express-checkout' ) ) ) );
 		add_settings_field( 'btn_width', __( 'Button Width', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_width', 'type' => 'number', 'class' => 'wp-ppdg-button-style', 'placeholder' => __( 'Auto', 'wp-express-checkout' ), 'desc' => __( 'Button width in pixels. Minimum width is 150px. Leave it blank for auto width.', 'wp-express-checkout' ), 'size' => 10 ) );
 		add_settings_field( 'btn_color', __( 'Button Color', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_color', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '<div id="wp-ppdg-preview-container"><p>' . __( 'Button preview:', 'wp-express-checkout' ) . '</p><br /><div id="paypal-button-container"></div><div id="wp-ppdg-preview-protect"></div></div>', 'vals' => array( 'gold', 'blue', 'silver', 'white', 'black' ), 'texts' => array( __( 'Gold', 'wp-express-checkout' ), __( 'Blue', 'wp-express-checkout' ), __( 'Silver', 'wp-express-checkout' ), __( 'White', 'wp-express-checkout' ), __( 'Black', 'wp-express-checkout' ) ) ) );
+
+		// Language section.
+		add_settings_field( 'default_locale',
+			__( 'Default Locale', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-pp-btn-appearance', 'ppdg-paypal-language', array(
+			'field' => 'default_locale',
+			'type'  => 'text',
+			'class' => '',
+			'size' => 20,
+			'desc'  => '<div>
+							<p>'. esc_html__("Pass a locale code (e.g., en_US, de_DE, es_ES, ja_JP, pt_BR, ar_EG) to PayPal to customize the locale of the buyer's checkout experience. Leave empty to let PayPal automatically detect the locale.", 'wp-express-checkout').'</p>
+							<p>'. esc_html__("See the list of supported codes: ", 'wp-express-checkout').'
+							<a href="https://developer.paypal.com/api/rest/reference/locale-codes/#link-supportedlocalecodes">'.esc_html__('here', 'wp-express-checkout').'</a></p>
+						</div>',
+		) );
 
 		// disable funding section.
 		add_settings_field(

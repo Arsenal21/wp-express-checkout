@@ -151,6 +151,11 @@ class Main {
 			}
 		}
 
+        $locale = \WP_Express_Checkout\Utils::get_paypal_checkout_locale_code();
+        if (!empty($locale)){
+            $args['locale'] = $locale;
+        }
+
 		/**
 		 * Filters arguments to be passed to PayPal SDK.
 		 *
@@ -367,6 +372,7 @@ class Main {
 			'btn_height'           => 'medium', /* use a default height of medium for best results */
 			'btn_width'            => 300, /* use a default width of 300px for best results */
 			'btn_layout'           => 'vertical',
+			'default_locale'       => '',
 			'disabled_funding'     => array( 'card' ),
 			'disabled_cards'       => array(),
 			'enable_debug_logging' => 0,
