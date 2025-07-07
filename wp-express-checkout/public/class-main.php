@@ -402,6 +402,9 @@ class Main {
 			'download_method'       => '1',
 			'download_url_conversion_preference' => 'absolute',
 			'access_permission'    => 'manage_options',
+			'enable_manual_checkout' => '',
+			'manual_checkout_btn_text' => '',
+			'manual_checkout_instructions' => '',
 		);
 
 		return apply_filters( 'wpec_settings_defaults', $defaults );

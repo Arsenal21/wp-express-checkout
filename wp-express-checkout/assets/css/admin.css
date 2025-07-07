@@ -112,6 +112,16 @@
 }
 /* end of misc admin interface styles */
 
+.wpec_status_pending{
+	padding: 7px 15px;
+	width: auto;
+	display: inline-block;
+	text-align: center;
+	min-width: 80px;
+	border-radius: 5px;
+	background-color: #FFF6D5;
+}
+
 .wpec_status_paid{
 	padding: 7px 15px;
 	width: auto;

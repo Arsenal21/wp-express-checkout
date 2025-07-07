@@ -822,6 +822,10 @@
 	grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
+.wpec_product_shipping_handle{
+	margin-bottom: 22px;
+}
+
 .wpec_address_wrap.shipping_enabled {
 	gap: 24px;
 }
@@ -847,6 +851,7 @@
 @media (min-width: 640px) {
 	.wpec_address_wrap.shipping_enabled .wpec_product_shipping_handle {
 		grid-column: span 2 / span 2;
+		margin-bottom: 0;
 	}
 }
 

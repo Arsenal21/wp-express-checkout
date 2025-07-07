@@ -298,6 +298,13 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 			<i><?php esc_html_e( 'This is where the Express Checkout Button will show. View it on the front-end to see how it will look to your visitors', 'wp-express-checkout' ); ?></i>
 		</div>
 
+        <?php
+        // Show manual checkout section if enabled.
+        if (!empty($class_main_inst->get_setting('enable_manual_checkout'))) {
+            require \WP_Express_Checkout\Shortcodes::get_instance()::locate_template('template-parts/manual-checkout-section.php');
+        }
+        ?>
+
 	</div>
 
 </div>
