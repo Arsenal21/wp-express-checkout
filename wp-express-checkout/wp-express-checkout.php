@@ -47,6 +47,7 @@ function wpec_load_classes() {
 	WP_Express_Checkout\Variations::init();
 
 	new WP_Express_Checkout\Payment_Processor_Free();
+	new WP_Express_Checkout\Payment_Processor_Manual();
 	new WP_Express_Checkout\Init();
 	new WP_Express_Checkout\Integrations();
 	new WP_Express_Checkout\PayPal_Payment_Button_Ajax_Handler();

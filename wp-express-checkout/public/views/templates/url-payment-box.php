@@ -273,6 +273,7 @@
 				'color' => $btn_color,
 				'layout' => $btn_layout,
 			),
+			'is_manual_checkout_enabled' => !empty($class_main_inst->get_setting('enable_manual_checkout')),
 		) );
 
 		echo '<script type="text/javascript">var wpec_' . esc_attr( $button_id ) . '_data=' . json_encode( $data ) . ';document.addEventListener( "wpec_paypal_sdk_loaded", function() { new ppecHandler(wpec_' . esc_attr( $button_id ) . '_data); } );</script>';

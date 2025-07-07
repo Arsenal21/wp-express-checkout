@@ -258,6 +258,9 @@ class Admin {
 		add_settings_section( 'ppdg-dl-manager-section', __( 'Download Manager (Force Download)', 'wp-express-checkout' ), array( $this, 'dl_manager_description' ), $this->plugin_slug . '-advanced' );
 		add_settings_section( 'wpec-access-section', __( 'Admin Dashboard Access Permission', 'wp-express-checkout' ), array( $this, 'access_description' ), $this->plugin_slug . '-advanced' );
 
+		// Manual Checkout Tab Sections
+		add_settings_section( 'wpec-manual-checkout-section', __( 'Manual/Offline Checkout Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-manual-checkout' );
+
 		/* Add the settings fields */
 
 		// Global settings fields.
@@ -537,6 +540,39 @@ class Admin {
 			. __( 'This is the body of the email that will be sent to the seller for record. Do not change the text within the braces {}. You can use the following email tags in this email body field:', 'wp-express-checkout' )
 			. $tags_desc,
 		) );
+
+		/****************************/
+		/* Manual Checkout Menu Tab */
+		/****************************/
+
+		add_settings_field( 'enable_manual_checkout',
+			__( 'Enable Manual Checkout', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
+				'field' => 'enable_manual_checkout',
+				'type'  => 'checkbox',
+				'class' => '',
+				'desc'  => '<p>'. esc_html__("Select this option to enable manual or offline checkout beside PayPal checkout.", 'wp-express-checkout').'</p>',
+			) );
+
+		add_settings_field( 'manual_checkout_btn_text',
+			__( 'Enable Manual Checkout', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
+				'field' => 'manual_checkout_btn_text',
+				'type'  => 'text',
+				'class' => '',
+				'desc'  => '<p>'. esc_html__("Customize the manual checkout button text. The default text is 'Proceed to Manual Checkout'.", 'wp-express-checkout').'</p>',
+			) );
+
+		add_settings_field( 'manual_checkout_instructions',
+			__( 'Manual Checkout Instructions on Checkout Form', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
+				'field' => 'manual_checkout_instructions',
+				'type'  => 'editor',
+				'desc'  => '<p>'. esc_html__("Add manual checkout instructions here to display them above the form.", 'wp-express-checkout').'</p>',
+			) );
 
 		/******************************/
 		/* Advanced Settings Menu Tab */

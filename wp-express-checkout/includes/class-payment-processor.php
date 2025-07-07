@@ -332,7 +332,9 @@ class Payment_Processor {
 
 		// If code execution got this far, it means everything is ok with payment
 		// let's insert order.
-		$order->set_status( 'paid' );
+		$order_status = apply_filters( 'wpec_create_order_final_status', 'paid');
+
+		$order->set_status( $order_status );
 
 		$product->update_stock_items( $quantity );
 

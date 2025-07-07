@@ -112,6 +112,13 @@ class Orders_Meta_Boxes {
 	    $buyer_email_sent = get_post_meta( $order->get_id(), 'wpec_buyer_email_sent', true );
 	    $buyer_email_sent = !empty($buyer_email_sent) ? $buyer_email_sent : __('No', 'wp-express-checkout');
 
+	    $order_status_options = array(
+		    'pending' => __('Pending', 'wp-express-checkout'),
+		    'incomplete' => __('Incomplete', 'wp-express-checkout'),
+		    'paid' => __('Paid', 'wp-express-checkout'),
+            'refunded' => __('Refunded', 'wp-express-checkout'),
+	    )
+
 	    ?>
         <table class="widefat" style="border: none">
             <tbody>
@@ -139,7 +146,13 @@ class Orders_Meta_Boxes {
                 <?php endif;?>
                 <tr>
                     <td><?php esc_html_e( 'Status', 'wp-express-checkout' ); ?>: </td>
-                    <td><?php echo wp_kses_post($order->get_display_status()); ?></td>
+                    <td>
+                        <select name="wpec_order_state">
+                        <?php foreach ($order_status_options as $status_value => $status_text) { ?>
+                            <option value="<?php echo esc_attr($status_value); ?>" <?php echo ($status_value == $order->get_status() ? 'selected' : ''); ?> ><?php esc_html_e($status_text); ?></option>
+                        <?php } ?>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td><?php esc_html_e('First Name', 'wp-express-checkout'); ?></td>
@@ -240,6 +253,7 @@ class Orders_Meta_Boxes {
 
 		try {
 			$order = Orders::retrieve( $post->ID );
+			$is_manual_payment = strpos($order->get_capture_id(), 'manual');
 		} catch ( Exception $exc ) {
 			return;
 		}
@@ -261,6 +275,7 @@ class Orders_Meta_Boxes {
 					</span>
 				</a>
 			</li>
+            <?php if ($is_manual_payment === false) { // Don't show refund action button for manual payment ?>
 			<li>
 				<?php if( $order->get_status()=="refunded" ){ ?>
 					<div class="wpec-grey-box">
@@ -275,6 +290,7 @@ class Orders_Meta_Boxes {
 				</a>
 				<?php } ?>
 			</li>
+            <?php } ?>
 		</ul>
 		<?php
 
@@ -380,6 +396,10 @@ class Orders_Meta_Boxes {
 
 				update_post_meta( $post_id, 'wpec_order_customer_email', $email_address );
 			}
+
+            if ( isset($_POST['wpec_order_state']) ){
+				update_post_meta( $post_id, 'wpec_order_state', sanitize_text_field( $_POST['wpec_order_state'] ) );
+            }
 
             if ( isset($_POST['wpec_order_customer_first_name']) && isset( $payer['name'] )){
                 $payer['name']['given_name'] = sanitize_text_field( $_POST['wpec_order_customer_first_name'] );

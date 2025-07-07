@@ -35,6 +35,7 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 		'ppec-settings-page&action=paypal-settings' => __( 'PayPal Settings', 'wp-express-checkout' ),
 		'ppec-settings-page&action=email-settings'    => __( 'Email Settings', 'wp-express-checkout' ),
 		'ppec-settings-page&action=advanced-settings' => __( 'Advanced Settings', 'wp-express-checkout' ),
+		'ppec-settings-page&action=manual-checkout' => __( 'Manual/Offline Checkout', 'wp-express-checkout' ),
 	) );
 
 	$current = "";
@@ -88,6 +89,10 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 						case 'advanced-settings':
 							$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-advanced' );
 							echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-advanced' ) . "' />";
+							break;
+						case 'manual-checkout':
+							$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-manual-checkout' );
+							echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-manual-checkout' ) . "' />";
 							break;
 						default:
 							/**
