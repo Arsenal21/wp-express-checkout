@@ -1,18 +1,9 @@
 <?php
-/**
- * This class is used to process the payments with 0 total.
- *
- * Sends notification emails.
- * Triggers after payment processed hook: wpec_payment_completed
- * Sends to Thank You page.
- */
 
 namespace WP_Express_Checkout;
 
-use WP_Express_Checkout\Debug\Logger;
-
 /**
- * Process Free payment class
+ * Process Manual Checkout class
  */
 class Payment_Processor_Manual extends Payment_Processor {
 
@@ -22,16 +13,19 @@ class Payment_Processor_Manual extends Payment_Processor {
 	 * Construct the instance.
 	 */
 	public function __construct() {
-		if ( ! empty( Main::get_instance()->get_setting( 'enable_manual_checkout' ) ) ) {
-			add_action( 'wp_ajax_wpec_process_manual_checkout', array( $this, 'wpec_process_manual_checkout' ) );
-			add_action( 'wp_ajax_nopriv_wpec_process_manual_checkout', array( $this, 'wpec_process_manual_checkout' ) );
-		}
+		add_action( 'wp_ajax_wpec_process_manual_checkout', array( $this, 'wpec_process_manual_checkout' ) );
+		add_action( 'wp_ajax_nopriv_wpec_process_manual_checkout', array( $this, 'wpec_process_manual_checkout' ) );
 	}
 
 	/**
 	 * Processes the payment on AJAX call.
 	 */
 	public function wpec_process_manual_checkout() {
+		if ( empty( Main::get_instance()->get_setting( 'enable_manual_checkout' ) ) ) {
+			// Manual checkout is not enabled.
+			return;
+		}
+
 		add_filter( 'wpec_create_order_final_status', array( $this, 'set_order_status' ) );
 
 		$this->order_data = $this->get_order_data();
@@ -64,7 +58,7 @@ class Payment_Processor_Manual extends Payment_Processor {
 	}
 
 	/**
-	 * Retrieves peoduct queantity from transaction data.
+	 * Retrieves product quantity from transaction data.
 	 */
 	protected function get_quantity( $payment ) {
 		return isset($this->order_data['quantity']) ? $this->order_data['quantity'] : '';
