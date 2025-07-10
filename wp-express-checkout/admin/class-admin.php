@@ -556,7 +556,7 @@ class Admin {
 			) );
 
 		add_settings_field( 'manual_checkout_btn_text',
-			__( 'Enable Manual Checkout', 'wp-express-checkout' ),
+			__( 'Manual Checkout Button Text', 'wp-express-checkout' ),
 			array( $this, 'settings_field_callback' ),
 			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
 				'field' => 'manual_checkout_btn_text',

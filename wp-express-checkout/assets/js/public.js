@@ -933,7 +933,7 @@ class WpecManualCheckout {
 			document.dispatchEvent(new CustomEvent('wpec_process_manual_checkout', {
 				detail: {
 					paymentData,
-					data: parent.data,
+					data: this.parent.data,
 				}
 			}));
 
@@ -941,13 +941,13 @@ class WpecManualCheckout {
 		} );
 
 		this.mcForm?.addEventListener('reset', (e)=>{
-			// const form = e.target;
-			// form.removeAttribute("disabled");
-			// const mcFormSubmitBtn = form.querySelector('button.wpec-place-order-btn');
-			// if (mcFormSubmitBtn){
-			// 	mcFormSubmitBtn.querySelector("svg").style.display = 'none';
-			// 	mcFormSubmitBtn.removeAttribute("disabled");
-			// }
+			const form = e.target;
+			form.removeAttribute("disabled");
+			const mcFormSubmitBtn = form.querySelector('button.wpec-place-order-btn');
+			if (mcFormSubmitBtn){
+				mcFormSubmitBtn.querySelector("svg").style.display = 'none';
+				mcFormSubmitBtn.removeAttribute("disabled");
+			}
 
 			this.toggleManualCheckout();
 		})
@@ -967,5 +967,11 @@ class WpecManualCheckout {
 		// 	'inherit',
 		// 	!this.parent.isElementVisible(this.mcForm)
 		// );
+
+		document.dispatchEvent(new CustomEvent('wpec_toggle_manual_checkout_form', {
+			detail: {
+				wpecManualCheckout: this
+			}
+		}));
 	}
 }

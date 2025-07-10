@@ -5,6 +5,7 @@
  * @var string $button_id
  * @var bool $is_digital_product
  * @var bool $shipping_enable
+ * @var array $args
  */
 
 $manual_checkout_instructions = \WP_Express_Checkout\Main::get_instance()->get_setting( 'manual_checkout_instructions' );
@@ -178,6 +179,9 @@ $manual_checkout_btn_text     = \WP_Express_Checkout\Main::get_instance()->get_s
 			?>
         </div><!-- end of billing info fields container -->
         <br>
+
+        <?php do_action('wpec_before_manual_checkout_submit_button', $args, $button_id) ?>
+
         <div class="wpec-place-order-btn-section">
             <button class="wpec-place-order-btn" type="submit">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
