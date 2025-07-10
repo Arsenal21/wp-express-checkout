@@ -401,7 +401,7 @@ var WpecPaypalButtonHandler = /*#__PURE__*/function () {
          * See documentation: https://developer.paypal.com/sdk/js/reference/#link-oncancel
          */
         onCancel: function onCancel(data) {
-          console.log('Checkout operation cancelled by the customer.');
+          console.log('Checkout operation canceled by the customer.');
         }
       }).render(this.renderTo).catch(function (err) {
         console.log('PayPal Buttons failed to render!', err.message);
