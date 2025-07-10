@@ -84,6 +84,7 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 * Ability to configure the download links to expire after X number of hours.
 * Ability to configure the download links to expire after X number of clicks.
 * Option to test it on PayPal Sandbox mode before going Live.
+* Option to use manual/offline checkout.
 * Option to [Integrate it with WooCommerce](https://wp-express-checkout.com/woocommerce-paypal-express-checkout/) to offer product checkout via PayPal's express checkout system.
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
@@ -171,6 +172,7 @@ None
 == Changelog ==
 
 = WIP =
+* New manual/offline checkout feature added.
 * Added the new video tutorial link to the readme file.
 * For new installations, the default button height is set to medium for optimal results.
 * For new installations, the default button width is set to 300px for optimal results.
@@ -180,7 +182,6 @@ None
 * Two new action hook 'wpec_before_full_discount_checkout_button' and 'wpec_process_payment' added.
 * Now order data can be edited form order details page.
 * New settings added to set default locale for paypal checkout popup.
-* New manual checkout feature added.
 
 = 2.4.0 =
 * Added a dedicated settings tab for PayPal, consolidating all PayPal-related settings in one place for easier management.
