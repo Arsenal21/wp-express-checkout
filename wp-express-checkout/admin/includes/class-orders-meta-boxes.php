@@ -36,8 +36,8 @@ class Orders_Meta_Boxes {
 
 	public function add_meta_boxes() {
 		add_meta_box( 'wpec_order_items', __( 'Order Summary', 'wp-express-checkout' ), array( $this, 'display_summary_meta_box' ), Orders::PTYPE, 'normal', 'high' );
-		add_meta_box( 'wpec_order_details', __( 'Order Details', 'wp-express-checkout' ), array( $this, 'display_order_details_meta_box' ), Orders::PTYPE, 'normal', 'default' );
-		add_meta_box( 'wpec_order_downloads', __( 'Order Downloads', 'wp-express-checkout' ), array( $this, 'display_downloads_meta_box' ), Orders::PTYPE, 'normal', 'default' );
+		add_meta_box( 'wpec_order_details', __( 'Order Details', 'wp-express-checkout' ), array( $this, 'display_order_details_meta_box' ), Orders::PTYPE, 'normal', 'high' );
+		add_meta_box( 'wpec_order_downloads', __( 'Order Downloads', 'wp-express-checkout' ), array( $this, 'display_downloads_meta_box' ), Orders::PTYPE, 'normal', 'high' );
 		add_meta_box( 'wpec_order_actions', __( 'Order Actions', 'wp-express-checkout' ), array( $this, 'display_actions_meta_box' ), Orders::PTYPE, 'side', 'high' );
 		add_meta_box( 'wpec_order_notes', __( 'Order Notes', 'wp-express-checkout' ), array( $this, 'display_notes_meta_box' ), Orders::PTYPE, 'side', 'low' );
 
