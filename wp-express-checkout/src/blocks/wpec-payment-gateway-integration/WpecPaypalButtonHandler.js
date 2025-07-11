@@ -175,7 +175,7 @@ export default class WpecPaypalButtonHandler {
              * See documentation: https://developer.paypal.com/sdk/js/reference/#link-oncancel
              */
             onCancel: function (data) {
-                console.log('Checkout operation cancelled by the customer.');
+                console.log('Checkout operation canceled by the customer.');
             },
 
         }).render(this.renderTo)

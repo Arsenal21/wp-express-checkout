@@ -97,7 +97,7 @@ class Emember {
 				eMember_handle_subsc_cancel_stand_alone($ipn_data);
 				break;
 			case 'BILLING.SUBSCRIPTION.CANCELLED':
-				// A subscription is cancelled.
+				// A subscription is canceled.
 				eMember_handle_subsc_cancel_stand_alone($ipn_data);
 				break;
 			case 'BILLING.SUBSCRIPTION.SUSPENDED':
