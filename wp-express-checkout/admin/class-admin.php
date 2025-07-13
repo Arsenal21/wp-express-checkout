@@ -574,6 +574,75 @@ class Admin {
 				'desc'  => '<p>'. esc_html__("Add manual checkout instructions here to display them above the form.", 'wp-express-checkout').'</p>',
 			) );
 
+		add_settings_field( 'enable_manual_checkout_buyer_instruction_email',
+			__( 'Send Manual Checkout Payment Instructions to Buyer via Email', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
+				'field' => 'enable_manual_checkout_buyer_instruction_email',
+				'type'  => 'checkbox',
+				'class' => '',
+				'desc'  => '<p>'. esc_html__("If enabled, the plugin will send an email to the buyer after completing a manual checkout.", 'wp-express-checkout').'</p>',
+			) );
+
+		add_settings_field( 'manual_checkout_buyer_instruction_email_subject',
+			__( 'Payment Instruction Email Subject', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
+				'field' => 'manual_checkout_buyer_instruction_email_subject',
+				'type'  => 'text',
+				'class' => '',
+				'desc'  => '<p>'. esc_html__("This is the subject line for the email sent to the buyer.", 'wp-express-checkout').'</p>',
+			) );
+
+		add_settings_field( 'manual_checkout_buyer_instruction_email_body',
+			__( 'Payment Instruction Email Body', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
+				'field' => 'manual_checkout_buyer_instruction_email_body',
+				'type'  => 'editor',
+				'desc'  => '<p>'. esc_html__("This is the body of the email that will be sent. Do not change the text within the braces {}. You can use the following email tags in this email body field:", 'wp-express-checkout'). $tags_desc .'</p>',
+			) );
+
+
+		add_settings_field( 'enable_manual_checkout_seller_notification_email',
+			__( 'Send Manual Checkout Notification to Seller via Email', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
+				'field' => 'enable_manual_checkout_seller_notification_email',
+				'type'  => 'checkbox',
+				'class' => '',
+				'desc'  => '<p>'. esc_html__("If checked, the plugin will send an email to the seller after a manual checkout.", 'wp-express-checkout').'</p>',
+			) );
+
+		add_settings_field( 'manual_checkout_seller_notification_email_address',
+			__( 'Manual Checkout Notification Email Address', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
+				'field' => 'manual_checkout_seller_notification_email_address',
+				'type'  => 'email',
+				'class' => '',
+				'desc'  => '<p>'. esc_html__("The email address for receiving manual checkout notifications. If left empty, the email address from the 'Email Settings' menu will be used.", 'wp-express-checkout').'</p>',
+			) );
+
+		add_settings_field( 'manual_checkout_seller_notification_email_subject',
+			__( 'Notification Email Subject', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
+				'field' => 'manual_checkout_seller_notification_email_subject',
+				'type'  => 'text',
+				'class' => '',
+				'desc'  => '<p>'. esc_html__("This is the subject of the email that will be sent to the seller.", 'wp-express-checkout').'</p>',
+			) );
+
+		add_settings_field( 'manual_checkout_seller_notification_email_body',
+			__( 'Payment Instruction Email Body', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
+				'field' => 'manual_checkout_seller_notification_email_body',
+				'type'  => 'editor',
+				'desc'  => '<p>'. esc_html__("This is the body of the email that will be sent. Do not change the text within the braces {}. You can use the following email tags in this email body field:", 'wp-express-checkout'). $tags_desc .'</p>',
+			) );
+
 		/******************************/
 		/* Advanced Settings Menu Tab */
 		/******************************/
