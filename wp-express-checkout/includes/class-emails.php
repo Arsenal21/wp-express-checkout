@@ -154,4 +154,103 @@ class Emails {
 		return wp_mail( $to, wp_specialchars_decode( $subject, ENT_QUOTES ), $body, $headers );
 	}
 
+	/**
+	 * Send manual payment instruction email to buyer if enabled.
+	 */
+	public static function send_manual_checkout_buyer_instruction_email( $order ) {
+		$wpec_plugin = Main::get_instance();
+
+		// Send email to buyer if enabled.
+		if ( empty($wpec_plugin->get_setting( 'enable_manual_checkout_buyer_instruction_email' )) ) {
+			return;
+		}
+
+		$renderer = new Order_Tags_Plain( $order );
+		$tags     = array_keys( Utils::get_dynamic_tags_white_list() );
+
+		foreach ( $tags as $tag ) {
+			$args[ $tag ] = $renderer->$tag();
+		}
+
+		$buyer_email = $renderer->payer_email();
+		Logger::log( 'Sending manual payment buyer instruction email.' );
+
+		$from_email = $wpec_plugin->get_setting( 'buyer_from_email' );
+		if (empty($from_email)){
+			$from_email = get_bloginfo( 'name' ) . ' <sales@your-domain.com>';
+		}
+
+		$subject    = $wpec_plugin->get_setting( 'manual_checkout_buyer_instruction_email_subject' );
+		$body       = $wpec_plugin->get_setting( 'manual_checkout_buyer_instruction_email_body' );
+
+		$subject    = Utils::apply_dynamic_tags( $subject, $args );
+
+		$args['email_body'] = $body;
+
+		$body = Utils::apply_dynamic_tags( $body, $args );
+		$body = apply_filters( 'wpec_manual_payment_instruction_email_body', $body, $order, $args );
+
+		$result = self::send( $buyer_email, $from_email, $subject, $body );
+
+		if ( $result ) {
+			Logger::log( 'Manual payment buyer instruction email sent to: ' . $buyer_email . '. From email address value used: ' . $from_email );
+			update_post_meta( $order->get_id(), 'wpec_manual_payment_instruction_email_sent', 'Email sent to: ' . $buyer_email );
+		} else {
+			Logger::log( 'Manual payment buyer instruction email sending failed to: ' . $buyer_email . '. From email address value used: ' . $from_email );
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Send manual checkout notification email to seller if enabled.
+	 */
+	public static function send_manual_checkout_seller_notification_email($order) {
+		$wpec_plugin = Main::get_instance();
+
+		// Send email to seller if enabled.
+		if ( ! $wpec_plugin->get_setting( 'enable_manual_checkout_seller_notification_email' ) ) {
+			return;
+		}
+
+		$renderer = new Order_Tags_Plain( $order );
+		$tags     = array_keys( Utils::get_dynamic_tags_white_list() );
+
+		foreach ( $tags as $tag ) {
+			$args[ $tag ] = $renderer->$tag();
+		}
+
+		Logger::log( 'Sending manual checkout notification email.' );
+
+		$seller_email    = $wpec_plugin->get_setting( 'manual_checkout_seller_notification_email_address' );
+		if (empty($seller_email) || !is_email($seller_email)){
+			$seller_email = $wpec_plugin->get_setting( 'notify_email_address' );
+		}
+
+		$from_email = $wpec_plugin->get_setting( 'buyer_from_email' );
+		if (empty($from_email)){
+			$from_email = get_bloginfo( 'name' ) . ' <sales@your-domain.com>';
+		}
+
+		$subject    = $wpec_plugin->get_setting( 'manual_checkout_seller_notification_email_subject' );
+		$body       = $wpec_plugin->get_setting( 'manual_checkout_seller_notification_email_body' );
+
+		$subject = Utils::apply_dynamic_tags( $subject, $args );
+
+		$args['email_body'] = $body;
+
+		$body = Utils::apply_dynamic_tags( $body, $args );
+		$body = apply_filters( 'wpec_manual_checkout_notification_email_body', $body, $order, $args );
+
+		$result = self::send( $seller_email, $from_email, $subject, $body );
+
+		if ( $result ) {
+			Logger::log( 'Manual payment buyer instruction email sent to: ' . $seller_email . '. From email address value used: ' . $from_email );
+			update_post_meta( $order->get_id(), 'wpec_manual_payment_instruction_email_sent', 'Email sent to: ' . $seller_email );
+		} else {
+			Logger::log( 'Manual payment buyer instruction email sending failed to: ' . $seller_email . '. From email address value used: ' . $from_email );
+		}
+
+		return $result;
+	}
 }

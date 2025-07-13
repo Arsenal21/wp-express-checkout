@@ -2,6 +2,8 @@
 
 namespace WP_Express_Checkout;
 
+use WP_Express_Checkout\Debug\Logger;
+
 /**
  * Process Manual Checkout class
  */
@@ -15,6 +17,8 @@ class Payment_Processor_Manual extends Payment_Processor {
 	public function __construct() {
 		add_action( 'wp_ajax_wpec_process_manual_checkout', array( $this, 'wpec_process_manual_checkout' ) );
 		add_action( 'wp_ajax_nopriv_wpec_process_manual_checkout', array( $this, 'wpec_process_manual_checkout' ) );
+
+		add_action('wpec_payment_completed', array($this, 'send_manual_payment_instructions_email'), 10, 3);
 	}
 
 	/**
@@ -110,5 +114,17 @@ class Payment_Processor_Manual extends Payment_Processor {
 	 */
 	protected function get_transaction_status( $payment ) {
 		return 'COMPLETED';
+	}
+
+	public function send_manual_payment_instructions_email($payment, $order_id, $item_id) {
+		try {
+			$order = Orders::retrieve($order_id);
+		} catch (\Exception $e){
+			Logger::log('Filed to retrieve the order of order id: ' . $order_id, false);
+			Logger::log($e->getMessage(), false);
+		}
+
+		Emails::send_manual_checkout_buyer_instruction_email($order);
+		Emails::send_manual_checkout_seller_notification_email($order);
 	}
 }
