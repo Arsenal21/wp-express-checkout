@@ -849,6 +849,10 @@ class WpecManualCheckout {
 		this.mcProceedBtn = document.getElementById('wpec-proceed-manual-checkout-'+ this.buttonId);
 		this.mcForm = document.getElementById( 'wpec-manual-checkout-form-' + this.buttonId );
 
+		this.tosCheckbox = document.getElementById( 'wpec-tos-' + this.buttonId );
+		this.customQuantityInput = document.querySelector( '#wp-ppec-custom-quantity[data-ppec-button-id="' + this.buttonId + '"]' );
+		this.customAmountInput = document.querySelector( '#wp-ppec-custom-amount[data-ppec-button-id="' + this.buttonId + '"]' );
+
 		document.addEventListener('wpec_validate_order', (e) => {
 			this.parent.toggleVisibility(
 				document.getElementById( 'wpec-manual-checkout-section-'+ this.buttonId ),
@@ -867,6 +871,9 @@ class WpecManualCheckout {
 			this.mcForm?.querySelector( '.wpec_address_wrap' )?.classList.toggle('shipping_enabled');
 		} );
 
+		this.parent.validateInput( this.tosCheckbox, this.parent.ValidatorTos );
+		this.parent.validateInput( this.customQuantityInput, this.parent.ValidatorQuantity );
+		this.parent.validateInput( this.customAmountInput, this.parent.ValidatorAmount );
 		this.mcForm?.querySelectorAll( '.wpec_required' ).forEach( (element) => {
 			this.parent.validateInput( element, this.parent.ValidatorBilling );
 		} );
@@ -888,7 +895,8 @@ class WpecManualCheckout {
 			}
 
 			// Get first error input if there is any.
-			const errInput = this.mcForm?.querySelector( '.hasError' );
+			const errInput = this.getErrorInput();
+
 			if ( errInput ) {
 				errInput.focus();
 				errInput.dispatchEvent( new Event('change') );
@@ -955,6 +963,18 @@ class WpecManualCheckout {
 		this.mcProceedBtn?.addEventListener('click',  (e) =>{
 			this.toggleManualCheckout();
 		});
+	}
+
+	getErrorInput(){
+		if (this.tosCheckbox?.classList.contains('hasError')){
+			return this.tosCheckbox;
+		} else if (this.customQuantityInput?.classList.contains('hasError')){
+			return this.customQuantityInput;
+		} else if (this.customAmountInput?.classList.contains('hasError')){
+			return this.customAmountInput;
+		} else {
+			return this.mcForm?.querySelector( '.hasError' );
+		}
 	}
 
 	toggleManualCheckout(){

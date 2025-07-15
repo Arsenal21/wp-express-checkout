@@ -522,12 +522,7 @@ class Admin {
 		add_settings_field( 'send_buyer_email', __( 'Send Emails to Buyer After Purchase', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'send_buyer_email', 'type' => 'checkbox', 'desc' => __( 'If checked the plugin will send an email to the buyer with the sale details. If digital goods are purchased then the email will contain the download links for the purchased products.', 'wp-express-checkout' ) ) );
 		add_settings_field( 'buyer_email_subj', __( 'Buyer Email Subject', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_subj', 'type' => 'text', 'desc' => __( 'This is the subject of the email that will be sent to the buyer.', 'wp-express-checkout' ) ) );
 
-		$tags = Utils::get_dynamic_tags_white_list();
-		$tags_desc = '';
-
-		foreach ( $tags as $tag => $desc ) {
-			$tags_desc .= "<br /><code>{{$tag}}</code> - {$desc}";
-		}
+		$tags_desc = Utils::get_tags_desc(Utils::get_dynamic_tags_white_list());
 
 		add_settings_field( 'buyer_email_body', __( 'Buyer Email Body', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-emails', 'ppdg-emails-section', array( 'field' => 'buyer_email_body', 'type' => 'html' === $wpec->get_setting( 'buyer_email_type' ) ? 'editor' : 'textarea', 'desc' => ''
 			. __( 'This is the body of the email that will be sent to the buyer. Do not change the text within the braces {}. You can use the following email tags in this email body field:', 'wp-express-checkout' )
@@ -544,6 +539,8 @@ class Admin {
 		/****************************/
 		/* Manual Checkout Menu Tab */
 		/****************************/
+
+		$mc_tags_desc = Utils::get_tags_desc(Utils::get_dynamic_tags_white_list_for_manual_checkout());
 
 		add_settings_field( 'enable_manual_checkout',
 			__( 'Enable Manual Checkout', 'wp-express-checkout' ),
@@ -600,7 +597,7 @@ class Admin {
 			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
 				'field' => 'manual_checkout_buyer_instruction_email_body',
 				'type'  => 'editor',
-				'desc'  => '<p>'. esc_html__("This is the body of the email that will be sent. Do not change the text within the braces {}. You can use the following email tags in this email body field:", 'wp-express-checkout'). $tags_desc .'</p>',
+				'desc'  => '<p>'. esc_html__("This is the body of the email that will be sent. Do not change the text within the braces {}. You can use the following email tags in this email body field:", 'wp-express-checkout'). $mc_tags_desc .'</p>',
 			) );
 
 
@@ -640,7 +637,7 @@ class Admin {
 			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
 				'field' => 'manual_checkout_seller_notification_email_body',
 				'type'  => 'editor',
-				'desc'  => '<p>'. esc_html__("This is the body of the email that will be sent. Do not change the text within the braces {}. You can use the following email tags in this email body field:", 'wp-express-checkout'). $tags_desc .'</p>',
+				'desc'  => '<p>'. esc_html__("This is the body of the email that will be sent. Do not change the text within the braces {}. You can use the following email tags in this email body field:", 'wp-express-checkout'). $mc_tags_desc .'</p>',
 			) );
 
 		/******************************/
