@@ -166,14 +166,14 @@ class Emails {
 		}
 
 		$renderer = new Order_Tags_Plain( $order );
-		$tags     = array_keys( Utils::get_dynamic_tags_white_list() );
+		$tags     = array_keys( Utils::get_dynamic_tags_white_list_for_manual_checkout() );
 
 		foreach ( $tags as $tag ) {
 			$args[ $tag ] = $renderer->$tag();
 		}
 
 		$buyer_email = $renderer->payer_email();
-		Logger::log( 'Sending manual payment buyer instruction email.' );
+		Logger::log( 'Sending manual checkout buyer instruction email.' );
 
 		$from_email = $wpec_plugin->get_setting( 'buyer_from_email' );
 		if (empty($from_email)){
@@ -214,13 +214,13 @@ class Emails {
 		}
 
 		$renderer = new Order_Tags_Plain( $order );
-		$tags     = array_keys( Utils::get_dynamic_tags_white_list() );
+		$tags     = array_keys( Utils::get_dynamic_tags_white_list_for_manual_checkout() );
 
 		foreach ( $tags as $tag ) {
 			$args[ $tag ] = $renderer->$tag();
 		}
 
-		Logger::log( 'Sending manual checkout notification email.' );
+		Logger::log( 'Sending manual checkout seller notification email.' );
 
 		$seller_email    = $wpec_plugin->get_setting( 'manual_checkout_seller_notification_email_address' );
 		if (empty($seller_email) || !is_email($seller_email)){
@@ -245,10 +245,9 @@ class Emails {
 		$result = self::send( $seller_email, $from_email, $subject, $body );
 
 		if ( $result ) {
-			Logger::log( 'Manual payment buyer instruction email sent to: ' . $seller_email . '. From email address value used: ' . $from_email );
-			update_post_meta( $order->get_id(), 'wpec_manual_payment_instruction_email_sent', 'Email sent to: ' . $seller_email );
+			Logger::log( 'Manual payment seller notification email sent to: ' . $seller_email . '. From email address value used: ' . $from_email );
 		} else {
-			Logger::log( 'Manual payment buyer instruction email sending failed to: ' . $seller_email . '. From email address value used: ' . $from_email );
+			Logger::log( 'Manual payment seller notification email sending failed to: ' . $seller_email . '. From email address value used: ' . $from_email );
 		}
 
 		return $result;
