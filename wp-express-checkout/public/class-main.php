@@ -405,6 +405,7 @@ class Main {
 			'enable_manual_checkout' => '',
 			'manual_checkout_btn_text' => '',
 			'manual_checkout_instructions' => '',
+			'manual_checkout_hide_country_field' => '',
             'enable_manual_checkout_buyer_instruction_email' => '',
             'manual_checkout_buyer_instruction_email_subject' => 'Manual payment instruction',
             'manual_checkout_buyer_instruction_email_body' => "Dear {first_name}\n"

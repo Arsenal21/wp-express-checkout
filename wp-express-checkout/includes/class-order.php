@@ -773,4 +773,10 @@ class Order {
 
 		return '';
 	}
+
+	public function get_phone(){
+		$payer = $this->get_data( 'payer' );
+
+		return isset($payer['phone']) && !empty($payer['phone']) ? $payer['phone'] : '';
+	}
 }

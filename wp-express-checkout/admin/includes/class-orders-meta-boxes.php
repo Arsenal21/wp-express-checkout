@@ -98,6 +98,8 @@ class Orders_Meta_Boxes {
 		    $payer_email      = isset( $payer['email_address'] ) ? sanitize_email( $payer['email_address'] ) : '';
 	    }
 
+        $payer_phone = $order->get_phone();
+
 	    $wp_username = '';
 	    $wp_user = get_userdata( $order->get_author() );
 	    if ( $wp_user ) {
@@ -170,6 +172,12 @@ class Orders_Meta_Boxes {
                     <td><?php esc_html_e('Email Address', 'wp-express-checkout'); ?></td>
                     <td>
                         <input type="email" name="wpec_order_customer_email" value="<?php echo esc_attr($payer_email); ?>" size="40" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php esc_html_e('Phone no.', 'wp-express-checkout'); ?></td>
+                    <td>
+                        <input type="text" name="wpec_order_customer_phone" value="<?php echo esc_attr($payer_phone); ?>" size="40" required>
                     </td>
                 </tr>
                 <?php if (!empty($wp_username)) {?>
@@ -395,6 +403,10 @@ class Orders_Meta_Boxes {
                 $payer['email_address'] = $email_address;
 
 				update_post_meta( $post_id, 'wpec_order_customer_email', $email_address );
+			}
+
+			if ( isset( $_POST['wpec_order_customer_phone'] ) ) {
+				$payer['phone'] = sanitize_text_field( $_POST['wpec_order_customer_phone'] );
 			}
 
             if ( isset($_POST['wpec_order_state']) ){

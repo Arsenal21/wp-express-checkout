@@ -67,6 +67,15 @@ class Order_Tags_Html {
 	}
 
 	/**
+	 * Order author email
+	 *
+	 * @return string
+	 */
+	public function payer_phone() {
+		return $this->order->get_phone();
+	}
+
+	/**
 	 * Transaction id.
 	 *
 	 * @return string
@@ -126,7 +135,7 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function address() {
-		return $this->order->get_data( 'shipping_address' );
+		return $this->order->get_shipping_address();
 	}
 
 	/**

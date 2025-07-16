@@ -458,20 +458,21 @@
 .wpec-pointer-events-all{
 	pointer-events: all !important;
 }
-.wpec_billing_address_container, .wpec_shipping_address_container, .wpec_billing_user_info, .wpec-product-variations-wrapper {
+
+.wpec-product-variations-wrapper {
 	display: grid;
 	gap: 24px;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
 @media (min-width: 640px) {
-	.wpec_billing_address_container, .wpec_shipping_address_container, .wpec_billing_user_info, .wpec-product-variations-wrapper {
+	.wpec-product-variations-wrapper {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
 
 @media (min-width: 640px) {
-	.wpec_billing_address_container label, .wpec_billing_address_container > div:last-child:nth-child(odd), .wpec_shipping_address_container label, .wpec_shipping_address_container > div:last-child:nth-child(odd), .wpec_billing_user_info label, .wpec_billing_user_info > div:last-child:nth-child(odd), .wpec-product-variations-wrapper label, .wpec-product-variations-wrapper > div:last-child:nth-child(odd) {
+	 .wpec-product-variations-wrapper label, .wpec-product-variations-wrapper > div:last-child:nth-child(odd) {
 		grid-column: span 2 / span 2;
 	}
 }
@@ -830,25 +831,57 @@
 	gap: 24px;
 }
 
+.wpec_billing_address_container,
+.wpec_shipping_address_container,
+.wpec_billing_user_info {
+	display: grid;
+	gap: 24px;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
 @media (min-width: 640px) {
+	.wpec_billing_user_info,
+	.wpec_billing_address_container,
+	.wpec_shipping_address_container
+	{
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.wpec_billing_user_info > div:last-child:nth-of-type(odd),
+	.wpec_billing_address_container > div:last-child:nth-of-type(odd),
+	.wpec_shipping_address_container > div:last-child:nth-of-type(odd)
+	{
+		grid-column: span 2 / span 2;
+	}
+
+	.wpec_billing_user_info label,
+	.wpec_address_wrap .wpec_billing_address_container label,
+	.wpec_address_wrap .wpec_shipping_address_container label
+	{
+		grid-column: span 2 / span 2;
+	}
+
 	.wpec_address_wrap.shipping_enabled {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
-}
 
-@media (min-width: 640px) {
-	.wpec_address_wrap.shipping_enabled .wpec_billing_address_container, .wpec_address_wrap.shipping_enabled .wpec_shipping_address_container {
+	.wpec_address_wrap.shipping_enabled .wpec_billing_address_container,
+	.wpec_address_wrap.shipping_enabled .wpec_shipping_address_container {
 		grid-template-columns: repeat(1, minmax(0, 1fr));
 	}
-}
 
-@media (min-width: 640px) {
-	.wpec_address_wrap.shipping_enabled .wpec_billing_address_container label, .wpec_address_wrap.shipping_enabled .wpec_shipping_address_container label {
+	.wpec_address_wrap.shipping_enabled .wpec_billing_address_container label,
+	.wpec_address_wrap.shipping_enabled .wpec_shipping_address_container label {
 		grid-column: span 1 / span 1;
 	}
-}
 
-@media (min-width: 640px) {
+	.wpec_address_wrap.shipping_enabled .wpec_billing_user_info > div:last-child:nth-of-type(odd),
+	.wpec_address_wrap.shipping_enabled .wpec_billing_address_container > div:last-child:nth-of-type(odd),
+	.wpec_address_wrap.shipping_enabled .wpec_shipping_address_container > div:last-child:nth-of-type(odd)
+	{
+		grid-column: span 1 / span 1;
+	}
+
 	.wpec_address_wrap.shipping_enabled .wpec_product_shipping_handle {
 		grid-column: span 2 / span 2;
 		margin-bottom: 0;

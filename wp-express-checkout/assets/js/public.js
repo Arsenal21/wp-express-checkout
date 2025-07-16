@@ -933,6 +933,7 @@ class WpecManualCheckout {
 						surname: formData.get('wpec_billing_last_name'),
 					},
 					email_address: formData.get('wpec_billing_email'),
+					phone: formData.get('wpec_billing_phone'),
 					address: billing_address,
 					shipping_address: shipping_address,
 				}

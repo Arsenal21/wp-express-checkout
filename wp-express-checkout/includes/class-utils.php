@@ -255,6 +255,7 @@ class Utils {
 			'first_name' => __( 'First name of the buyer', 'wp-express-checkout' ),
 			'last_name' => __( 'Last name of the buyer', 'wp-express-checkout' ),
 			'payer_email' => __( 'Email Address of the buyer', 'wp-express-checkout' ),
+			'payer_phone' => __( 'Phone no. of the buyer', 'wp-express-checkout' ),
 			'address' => __( 'Address of the buyer', 'wp-express-checkout' ),
 			'transaction_id' => __( 'The unique transaction ID of the purchase', 'wp-express-checkout' ),
 			'order_id' => __( 'The order ID reference of this transaction in the cart orders menu', 'wp-express-checkout' ),
