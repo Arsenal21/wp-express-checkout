@@ -183,6 +183,8 @@ None
 * Now order data can be edited form order details page.
 * New settings added to set default locale for paypal checkout popup.
 * Some spelling updates.
+* New option added to hide country field in the address section of manual checkout form.
+* New phone field added in the address section of manual checkout form.
 
 = 2.4.0 =
 * Added a dedicated settings tab for PayPal, consolidating all PayPal-related settings in one place for easier management.

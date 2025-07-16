@@ -10,6 +10,9 @@
 
 $manual_checkout_instructions = \WP_Express_Checkout\Main::get_instance()->get_setting( 'manual_checkout_instructions' );
 $manual_checkout_btn_text     = \WP_Express_Checkout\Main::get_instance()->get_setting( 'manual_checkout_btn_text' );
+
+$manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()->get_setting( 'manual_checkout_hide_country_field' );
+
 ?>
 <div id="wpec-manual-checkout-section-<?php echo esc_attr( $button_id ); ?>">
     <form class="wpec-manual-checkout-form" id="wpec-manual-checkout-form-<?php echo esc_attr( $button_id ); ?>" style="display:none;">
@@ -43,6 +46,14 @@ $manual_checkout_btn_text     = \WP_Express_Checkout\Main::get_instance()->get_s
                            name="wpec_billing_email"/>
                     <div class="wp-ppec-form-error-msg"></div>
                 </div>
+                <div class="wpec_billing_phone">
+                    <label class="wpec_billing_phone_label"><?php esc_html_e( 'Phone', 'wp-express-checkout' ); ?></label>
+                    <input class="wpec_billing_phone_field_input"
+                           type="text"
+                           name="wpec_billing_phone"/>
+                    <div class="wp-ppec-form-error-msg"></div>
+                </div>
+
             </div>
 			<?php
 			// Check if the product is digital or not. If it is not digital, then show the address fields. By default, hide the address fields for digital products.
@@ -82,6 +93,7 @@ $manual_checkout_btn_text     = \WP_Express_Checkout\Main::get_instance()->get_s
                             <div class="wp-ppec-form-error-msg"></div>
                         </div>
 
+                        <?php if(empty($manual_checkout_hide_country_field)){ ?>
                         <div class="wpec_billing_country">
                             <label class="wpec_billing_country_label"><?php esc_html_e( 'Country', 'wp-express-checkout' ); ?></label>
                             <select id="wpec_billing_country-<?php echo esc_attr( $button_id ); ?>"
@@ -97,6 +109,7 @@ $manual_checkout_btn_text     = \WP_Express_Checkout\Main::get_instance()->get_s
                             </select>
                             <div class="wp-ppec-form-error-msg"></div>
                         </div>
+                        <?php } ?>
 
                         <div class="wpec_billing_state">
                             <label class="wpec_billing_state_label"><?php esc_html_e( 'State', 'wp-express-checkout' ); ?></label>
@@ -137,6 +150,7 @@ $manual_checkout_btn_text     = \WP_Express_Checkout\Main::get_instance()->get_s
                                 <div class="wp-ppec-form-error-msg"></div>
                             </div>
 
+	                        <?php if(empty($manual_checkout_hide_country_field)){ ?>
                             <div class="wpec_shipping_country">
                                 <label class="wpec_shipping_country_label"><?php esc_html_e( 'Country', 'wp-express-checkout' ); ?></label>
                                 <select id="wpec_shipping_country-<?php echo esc_attr( $button_id ); ?>"
@@ -153,6 +167,7 @@ $manual_checkout_btn_text     = \WP_Express_Checkout\Main::get_instance()->get_s
                                 </select>
                                 <div class="wp-ppec-form-error-msg"></div>
                             </div>
+	                        <?php } ?>
 
                             <div class="wpec_shipping_state">
                                 <label class="wpec_shipping_state_label"><?php esc_html_e( 'State', 'wp-express-checkout' ); ?></label>

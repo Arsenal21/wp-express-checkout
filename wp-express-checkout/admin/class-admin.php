@@ -571,6 +571,16 @@ class Admin {
 				'desc'  => '<p>'. esc_html__("Add manual checkout instructions here to display them above the form.", 'wp-express-checkout').'</p>',
 			) );
 
+		add_settings_field( 'manual_checkout_hide_country_field',
+			__( 'Hide Country Field', 'wp-express-checkout' ),
+			array( $this, 'settings_field_callback' ),
+			$this->plugin_slug . '-manual-checkout', 'wpec-manual-checkout-section', array(
+				'field' => 'manual_checkout_hide_country_field',
+				'type'  => 'checkbox',
+				'class' => '',
+				'desc'  => '<p>'. esc_html__("Check this if you don't want to show the country field in the address section of manual checkout form..", 'wp-express-checkout').'</p>',
+			) );
+
 		add_settings_field( 'enable_manual_checkout_buyer_instruction_email',
 			__( 'Send Manual Checkout Payment Instructions to Buyer via Email', 'wp-express-checkout' ),
 			array( $this, 'settings_field_callback' ),
