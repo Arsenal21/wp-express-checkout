@@ -578,7 +578,7 @@ class Admin {
 				'field' => 'manual_checkout_hide_country_field',
 				'type'  => 'checkbox',
 				'class' => '',
-				'desc'  => '<p>'. esc_html__("Check this if you don't want to show the country field in the address section of manual checkout form..", 'wp-express-checkout').'</p>',
+				'desc'  => '<p>'. esc_html__("Check this if you don't want to show the country field in the address section of manual checkout form.", 'wp-express-checkout').'</p>',
 			) );
 
 		add_settings_field( 'enable_manual_checkout_buyer_instruction_email',
