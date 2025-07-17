@@ -254,8 +254,8 @@ class Utils {
 		$tags = apply_filters( 'wpec_dynamic_tags_white_list', array(
 			'first_name' => __( 'First name of the buyer', 'wp-express-checkout' ),
 			'last_name' => __( 'Last name of the buyer', 'wp-express-checkout' ),
-			'payer_email' => __( 'Email Address of the buyer', 'wp-express-checkout' ),
-			'payer_phone' => __( 'Phone no. of the buyer', 'wp-express-checkout' ),
+			'payer_email' => __( 'Email address of the buyer', 'wp-express-checkout' ),
+			'payer_phone' => __( 'Phone number of the buyer', 'wp-express-checkout' ),
 			'address' => __( 'Address of the buyer', 'wp-express-checkout' ),
 			'transaction_id' => __( 'The unique transaction ID of the purchase', 'wp-express-checkout' ),
 			'order_id' => __( 'The order ID reference of this transaction in the cart orders menu', 'wp-express-checkout' ),
@@ -264,7 +264,7 @@ class Utils {
 			'coupon_code' => __( 'Coupon code applied to the purchase', 'wp-express-checkout' ),
 			'currency_code' => __( 'Order currency code', 'wp-express-checkout' ),
 			'product_id' => __( 'Product ID', 'wp-express-checkout' ),
-			'product_name' => __( 'Product Name', 'wp-express-checkout' ),
+			'product_name' => __( 'Product name', 'wp-express-checkout' ),
 			'quantity_ordered' => __( 'Quantity ordered', 'wp-express-checkout' ),
 			'selected_variations' => __( 'Selected variations of the order', 'wp-express-checkout' ),
 		) );

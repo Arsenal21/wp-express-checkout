@@ -3,8 +3,8 @@ Contributors: Tips and Tricks HQ, mra13, dikiy_forester, mbrsolution, Ivy2120, c
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, digital store, ecommerce, sell
 Requires at least: 6.0
-Tested up to: 6.7
-Stable tag: 2.4.0
+Tested up to: 6.8
+Stable tag: 2.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -171,8 +171,10 @@ None
 
 == Changelog ==
 
-= WIP =
+= 2.4.1 =
 * New manual/offline checkout feature added.
+* Added option to hide the country field in manual checkout form address section.
+* Added phone field to manual checkout form address section.
 * Added the new video tutorial link to the readme file.
 * For new installations, the default button height is set to medium for optimal results.
 * For new installations, the default button width is set to 300px for optimal results.
@@ -183,8 +185,6 @@ None
 * Now order data can be edited form order details page.
 * New settings added to set default locale for paypal checkout popup.
 * Spelling corrections and improvements.
-* Added option to hide the country field in manual checkout form address section.
-* Added phone field to manual checkout form address section.
 
 = 2.4.0 =
 * Added a dedicated settings tab for PayPal, consolidating all PayPal-related settings in one place for easier management.

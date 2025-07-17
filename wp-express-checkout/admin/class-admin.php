@@ -542,6 +542,8 @@ class Admin {
 
 		$mc_tags_desc = Utils::get_tags_desc(Utils::get_dynamic_tags_white_list_for_manual_checkout());
 
+		$manual_checkout_description = '<p>' . __( 'Select this option to enable manual or offline checkout.', 'wp-express-checkout' );
+		$manual_checkout_description .= ' ' . '<a href="https://wp-express-checkout.com/how-to-use-manual-offline-checkout-in-wp-express-checkout/" target="_blank">'. __('Read the documentation', 'wp-express-checkout') . '</a>.' . '</p>';
 		add_settings_field( 'enable_manual_checkout',
 			__( 'Enable Manual Checkout', 'wp-express-checkout' ),
 			array( $this, 'settings_field_callback' ),
@@ -549,7 +551,7 @@ class Admin {
 				'field' => 'enable_manual_checkout',
 				'type'  => 'checkbox',
 				'class' => '',
-				'desc'  => '<p>'. esc_html__("Select this option to enable manual or offline checkout.", 'wp-express-checkout').'</p>',
+				'desc'  => sprintf( $manual_checkout_description ),
 			) );
 
 		add_settings_field( 'manual_checkout_btn_text',
