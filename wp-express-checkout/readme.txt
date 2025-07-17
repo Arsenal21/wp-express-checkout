@@ -84,7 +84,7 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 * Ability to configure the download links to expire after X number of hours.
 * Ability to configure the download links to expire after X number of clicks.
 * Option to test it on PayPal Sandbox mode before going Live.
-* Option to use manual/offline checkout.
+* Option to use [manual/offline checkout](https://wp-express-checkout.com/how-to-use-manual-offline-checkout-in-wp-express-checkout/)
 * Option to [Integrate it with WooCommerce](https://wp-express-checkout.com/woocommerce-paypal-express-checkout/) to offer product checkout via PayPal's express checkout system.
 
 The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
