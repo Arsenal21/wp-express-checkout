@@ -208,7 +208,7 @@ class Products {
 			if ( $search === false ) {
 				//that wasn't search query. That means there is no products configured
 				wp_reset_postdata();
-				throw new Exception(__( "'No products have been configured yet", 'wp-express-checkout' ) , 1004 );
+				throw new Exception(__( "No products have been configured yet", 'wp-express-checkout' ) , 1004 );
 			}
 		}		
 		
