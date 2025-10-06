@@ -543,8 +543,11 @@ class Shortcodes {
 			$q['s'] = $search;
 		}
 
-		$products = Products::retrieve_all_active_products($q,$search);
-
+		try {
+			$products = Products::retrieve_all_active_products($q,$search);
+		} catch (\Exception $e) {
+			return '<p class="wpec-error-message">' . esc_html($e->getMessage()) . '</p>';
+		}
 
 		$search_box = ! empty( $params['search_box'] ) ? $params['search_box'] : false;
 
@@ -758,7 +761,11 @@ class Shortcodes {
 			$q['s'] = $search;
 		}
 
-		$products = Products::retrieve_all_active_products($q, $search);
+		try {
+			$products = Products::retrieve_all_active_products($q, $search);
+		} catch (\Exception $e) {
+			return '<p class="wpec-error-message">' . esc_html($e->getMessage()) . '</p>';
+		}
 
 		$search_box = !empty($params['search_box']) ? $params['search_box'] : false;
 

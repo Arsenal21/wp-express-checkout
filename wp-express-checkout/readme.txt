@@ -171,6 +171,9 @@ None
 
 == Changelog ==
 
+= WIP =
+* A small bug fixed for 'wpec_show_products_from_category' and 'wpec_show_all_products' shortcode when no product configured.
+
 = 2.4.1 =
 * New manual/offline checkout feature added.
 * Added option to hide the country field in manual checkout form address section.
