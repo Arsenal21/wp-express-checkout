@@ -172,7 +172,7 @@ None
 == Changelog ==
 
 = WIP =
-* A small bug fixed for 'wpec_show_products_from_category' shortcode when no product configured.
+* A small bug fixed for 'wpec_show_products_from_category' and 'wpec_show_all_products' shortcode when no product configured.
 
 = 2.4.1 =
 * New manual/offline checkout feature added.
