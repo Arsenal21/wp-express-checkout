@@ -514,6 +514,8 @@ class PayPal_Payment_Button_Ajax_Handler {
 				// Logger::log("Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, false);
 				
 				// Check if the expected total amount matches the given amount.
+				// We mainly check for underpayment (customer paying less than expected).
+				// Allow a small tolerance for floating-point rounding differences.
 				if ( $amount < $expected_total_amount && !self::almost_equal($amount, $expected_total_amount)) {
 					Logger::log("API pre-submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, false);
 					
@@ -561,7 +563,14 @@ class PayPal_Payment_Button_Ajax_Handler {
 		//Validation is successful, return nothing.
 	}
 
+	/**
+	 * Compare two monetary amounts for equality within a reasonable tolerance.
+	 * Uses a tolerance of 0.01 (1 cent) to account for floating-point rounding differences.
+	 * This is particularly important when percentage-based discounts are applied (e.g., 50% off $49.99).
+	 */
 	public static function almost_equal($a, $b) {
-		return abs($a - $b) <= PHP_FLOAT_EPSILON * max(1, abs($a), abs($b));
+		// Use 0.01 tolerance for currency (acceptable rounding difference of 1 cent)
+		$tolerance = 0.01;
+		return abs($a - $b) < $tolerance;
 	}
 }

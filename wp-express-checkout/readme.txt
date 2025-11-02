@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, payment, digital store, ecommerce, sell
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 2.4.1
+Stable tag: 2.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -171,9 +171,9 @@ None
 
 == Changelog ==
 
-= WIP =
+= 2.4.2 =
 * A small bug fixed for 'wpec_show_products_from_category' and 'wpec_show_all_products' shortcode when no product configured.
-* An amount validation issue has fixed.
+* Updated the amount validation to ensure proper handling of floating-point precision issues.
 
 = 2.4.1 =
 * New manual/offline checkout feature added.
