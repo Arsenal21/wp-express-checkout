@@ -514,7 +514,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 				// Logger::log("Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, false);
 				
 				// Check if the expected total amount matches the given amount.
-				if ( $amount < $expected_total_amount ) {
+				if ( $amount < $expected_total_amount && !self::almost_equal($amount, $expected_total_amount)) {
 					Logger::log("API pre-submission validation amount mismatch. Expected amount: ". $expected_total_amount . ", Submitted amount: " . $amount, false);
 					
 					// Set the last error message that will be displayed to the user.
@@ -561,4 +561,7 @@ class PayPal_Payment_Button_Ajax_Handler {
 		//Validation is successful, return nothing.
 	}
 
+	public static function almost_equal($a, $b) {
+		return abs($a - $b) <= PHP_FLOAT_EPSILON * max(1, abs($a), abs($b));
+	}
 }
