@@ -25,6 +25,7 @@ use WP_Express_Checkout\Products;
 
 <?php
 $wpec_pp_settings_subtab = array(
+	'general'  => __( 'General Settings', 'wp-express-checkout' ),
 	'api-connection'  => __( 'PayPal API Connection', 'wp-express-checkout' ),
 	'api-credentials' => __( 'API Credentials', 'wp-express-checkout' ),
 	'btn-appearance'  => __( 'Button Appearance', 'wp-express-checkout' ),
@@ -34,7 +35,7 @@ $wpec_pp_settings_subtab = array(
     <?php
     $current_subtab = isset( $_GET['subtab'] ) ? sanitize_text_field( $_GET['subtab'] ) : '';
     if (empty($current_subtab)){
-        $current_subtab = 'api-connection';
+        $current_subtab = 'general';
     }
     foreach ( $wpec_pp_settings_subtab as $subtab => $subtab_name ) {
         $class = ( $current_subtab == $subtab ) ? ' nav-tab-active' : '';
@@ -60,9 +61,14 @@ switch ( $current_subtab ){
 		$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-pp-btn-appearance' );
         echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-pp-btn-appearance' ) . "' />";
 		break;
-	default:
+    case 'api-connection':
 		$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-pp-api-connection' );
         echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-pp-api-connection' ) . "' />";
+		break;
+	case 'general':
+	default:
+		$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-pp-settings' );
+		echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-pp-settings' ) . "' />";
 		break;
 }
 

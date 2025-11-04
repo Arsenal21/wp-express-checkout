@@ -567,6 +567,13 @@ class Utils {
 		return $countries;
 	}
 
+	public static function get_country_name_by_country_code( $country_code ) {
+		$countries = self::get_countries();
+		$country_code = isset( $country_code ) ? strtoupper( $country_code ) : '';
+		$country = isset($countries[$country_code]) ? $countries[$country_code] : $country_code;
+		return $country;
+	}
+
 	/**
 	 * Get order data as an associative array.
 	 *
@@ -592,5 +599,89 @@ class Utils {
 		}
 
 		return $locale;
+	}
+
+	/**
+	 * Compare two monetary amounts for equality within a reasonable tolerance.
+	 * Uses a tolerance of 0.01 (1 cent) to account for floating-point rounding differences.
+	 * This is particularly important when percentage-based discounts are applied (e.g., 50% off $49.99).
+	 */
+	public static function almost_equal($a, $b) {
+		// Use 0.01 tolerance for currency (acceptable rounding difference of 1 cent)
+		$tolerance = 0.01;
+		return abs($a - $b) < $tolerance;
+	}
+
+	/**
+	 * Converts price amount to cents.
+	 *
+	 * It uses round and then number_format to ensure that there is always 2 decimal places (even if the trailing zero is dropped by the round function).
+	 * This is to avoid issues with Stripe's zero decimal currencies.
+	 *
+	 * @param int|float $amount The price amount to convert.
+	 *
+	 * @return int Price in cents
+	 */
+	public static function amount_in_cents($amount) {
+		$amountFormatted = round( $amount, 2 );
+		$amountFormatted = number_format( $amountFormatted, 2 );
+
+		$centsAmount = $amountFormatted;
+
+		//if amount is not decimal. multiply by 100
+		if (strpos($amountFormatted, '.') === false) {
+			$amountUnformatted = str_replace(['.', ','], '', $amountFormatted);
+			$centsAmount = intval($amountUnformatted) * 100;
+		}
+		else{
+			//if amount is decimal, remove the period and comma.
+			$amountUnformatted = str_replace(['.', ','], '', $amountFormatted);
+			$centsAmount = intval($amountUnformatted);
+		}
+		return $centsAmount;
+	}
+
+	/**
+	 * Covert amount to normal value form cents value.
+	 *
+	 * @param $amount
+	 * @param $currency string Currency code.
+	 *
+	 * @return float|int|mixed
+	 */
+	public static function amount_from_cents($amount, $currency){
+		if (self::is_zero_cents_currency($currency)){
+			return $amount;
+		}
+
+		return self::round_price($amount / 100, 2);
+	}
+
+	public static function is_zero_cents_currency($payment_currency){
+		$zero_cents_currencies = array( 'JPY', 'MGA', 'VND', 'KRW' ) ;
+		return in_array( strtoupper($payment_currency), $zero_cents_currencies ) ;
+	}
+
+	public static function is_completed_status($status) {
+		return in_array(strtoupper($status), array('COMPLETED', 'COMPLETE'));
+	}
+
+	public static function get_saved_stripe_tax_rate_id($tax_percentage){
+		$tax_rate_option_key = sanitize_text_field("tax_rate_" .$tax_percentage);
+		$saved_tax_rates = get_option('wpec_saved_stripe_tax_rates', array());
+		if (isset($saved_tax_rates[$tax_rate_option_key])){
+			return $saved_tax_rates[$tax_rate_option_key];
+		}
+
+		return '';
+	}
+
+	public static function save_stripe_tax_rate_id($tax_percentage, $tax_rate_id){
+		$tax_rate_option_key = sanitize_text_field("tax_rate_" .$tax_percentage);
+		$saved_tax_rates = get_option('wpec_saved_stripe_tax_rates', array());
+
+		$saved_tax_rates[$tax_rate_option_key] = $tax_rate_id;
+
+		update_option('wpec_saved_stripe_tax_rates', $saved_tax_rates);
 	}
 }

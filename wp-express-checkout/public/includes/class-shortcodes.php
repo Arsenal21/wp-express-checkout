@@ -20,6 +20,8 @@ class Shortcodes {
 	protected static $instance        = null;
 	protected static $payment_buttons = array();
 
+    protected static $shortcode_count = 0;
+
 	function __construct() {
 		$this->ppdg = Main::get_instance();
 
@@ -59,7 +61,7 @@ class Shortcodes {
 	 *
 	 * @since     1.0.0
 	 *
-	 * @return    object    A single instance of this class.
+	 * @return    Shortcodes    A single instance of this class.
 	 */
 	public static function get_instance() {
 
@@ -161,7 +163,7 @@ class Shortcodes {
 		$GLOBALS['post'] = $post;
 		setup_postdata( $post );
 		$post->post_content = strip_shortcodes( $post->post_content );
-		$wp_query->set( 'wpec_button_args', $args );
+		$wp_query->set( 'wpec_sc_args', $args );
 		if ( $located ) {
 			ob_start();
 			load_template( $located, false );
@@ -175,22 +177,22 @@ class Shortcodes {
 		}
 		wp_reset_postdata();
 
+		self::$shortcode_count++;
+
 		return $output;
 	}
 
-	function generate_pp_express_checkout_button( $args ) {
+	public function generate_express_checkout_buttons( $sc_args ) {
 
-		extract( $args );
+		extract( $sc_args );
 
 		if ( $stock_enabled && empty( $stock_items ) ) {
 			return '<div class="wpec-out-of-stock">' . esc_html( 'Out of stock', 'wp-express-checkout' ) . '</div>';
 		}
 
+		$shortcode_count = self::$shortcode_count;
+
 		// The button ID.
-		$button_id = 'paypal_button_' . count( self::$payment_buttons );
-
-		self::$payment_buttons[] = $button_id;
-
 		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $name ); // Create key using the item name.
 
 		$trans_data = array(
@@ -211,45 +213,18 @@ class Shortcodes {
 
 		set_transient( $trans_name, $trans_data, WEEK_IN_SECONDS );
 
-		$is_live = $this->ppdg->get_setting( 'is_live' );
+		/**
+         * This is used for certain DOM elements referencing for uniquely targeting them in javascript.
+         *
+		 * In the previous when there was only the PayPal as the gateway, the PayPal button id were used for various dom element unique ids
+		 * as well as for the actual PayPal buttons. Now this shortcode id is being used for referencing unique dom elements and the payment
+		 * gateway buttons has their own ids as well.
+		 */
+        $shortcode_id = 'wp_express_checkout_' . $shortcode_count;
 
-		if ( $is_live ) {
-			$env       = 'production';
-			$client_id = $this->ppdg->get_setting( 'live_client_id' );
-		} else {
-			$env       = 'sandbox';
-			$client_id = $this->ppdg->get_setting( 'sandbox_client_id' );
-		}
-
-		if ( empty( $client_id ) ) {
-			$err_msg = sprintf( __( "Please enter %s Client ID in the settings.", 'wp-express-checkout' ), $env );
-			$err     = $this->show_err_msg( $err_msg, 'client-id' );
-			return $err;
-		}
-
-		$output  = '';
-		$located = self::locate_template( 'payment-form.php' );
-
-		if ( $located ) {
-			ob_start();
-			require $located;
-			$output = ob_get_clean();
-		}
-
-		$modal = self::locate_template( 'modal.php' );
-
-		if ( $modal && $use_modal ) {
-			$modal_title = apply_filters( 'wpec_modal_window_title', get_the_title( $product_id ), $args );
-			ob_start();
-			require $modal;
-			$output = ob_get_clean();
-		}
-
-		$data = apply_filters( 'wpec_button_js_data', array(
-			'id'              => $button_id,
-			'nonce'           => wp_create_nonce( $button_id . $product_id ),
-			'env'             => $env,
-			'client_id'       => $client_id,
+		$wpec_js_data = array(
+			'id'              => $shortcode_id,
+            'nonce'           => wp_create_nonce($shortcode_id . $product_id),
 			'price'           => $price,
 			'quantity'        => $quantity,
 			'tax'             => $tax,
@@ -271,6 +246,109 @@ class Shortcodes {
 			'stock_enabled'   => $stock_enabled,
 			'stock_items'     => $stock_items,
 			'variations'      => $variations,
+		);
+        $wpec_js_data = apply_filters('wpec_js_data', $wpec_js_data);
+
+
+        $buttons_script = '';
+
+		/**
+		 * For PayPal
+		 */
+        $is_paypal_checkout_enabled = Main::get_instance()->get_setting('enable_paypal_checkout');
+        if (!empty($is_paypal_checkout_enabled)){
+            $paypal_button_id = 'paypal_button_' . $shortcode_count;
+            // $sc_args['paypal_button_id'] = $paypal_button_id;
+	        $buttons_script .= $this->generate_pp_express_checkout_button($paypal_button_id, $sc_args, $shortcode_id);
+        }
+
+		/**
+		 * For Stripe
+		 */
+		$is_stripe_checkout_enabled = Main::get_instance()->get_setting('enable_stripe_checkout');
+        if (!empty($is_stripe_checkout_enabled)){
+	        $product = Products::retrieve($product_id);
+	        $product_type = $product->get_type();
+            if ($product_type != 'subscription'){ // We currently don't support subscription type product.
+                $stripe_button_id = 'stripe_button_' . $shortcode_count;
+                // $sc_args['stripe_button_id'] = $stripe_button_id;
+                $buttons_script .= $this->generate_stripe_express_checkout_button($stripe_button_id, $sc_args, $shortcode_id);
+            }
+        }
+
+		/**
+		 * For Manual Checkout
+		 */
+        $is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_checkout');
+        if (!empty($is_manual_checkout_enabled)){
+            $manual_checkout_button_id = 'manual_checkout_button_' . $shortcode_count;
+            // $sc_args['manual_checkout_button_id'] = $manual_checkout_button_id;
+	        $buttons_script .= $this->generate_manual_checkout_button($manual_checkout_button_id, $sc_args, $shortcode_id);
+        }
+
+
+		$output  = '';
+
+		$located = self::locate_template( 'payment-form.php' );
+		if ( $located ) {
+			ob_start();
+			require $located;
+			$output = ob_get_clean();
+		}
+
+		$modal = self::locate_template( 'modal.php' );
+
+		if ( $modal && $use_modal ) {
+			$modal_title = apply_filters( 'wpec_modal_window_title', get_the_title( $product_id ), $sc_args );
+			ob_start();
+			require $modal;
+			$output = ob_get_clean();
+		}
+
+		ob_start();
+		?>
+        <script type="text/javascript">
+            document.addEventListener( "DOMContentLoaded", function() {
+                window['<?php echo esc_js($shortcode_id) ?>'] = new ppecHandler(<?php echo json_encode($wpec_js_data) ?>);
+            });
+        </script>
+		<?php
+		$output .= ob_get_clean();
+
+        $output .= $buttons_script;
+
+		return $output;
+	}
+
+	public function generate_pp_express_checkout_button($button_id, $sc_args, $sc_id ) {
+		$btn_height = isset($sc_args['btn_height']) ? $sc_args['btn_height'] : '';
+		$btn_shape = isset($sc_args['btn_shape']) ? $sc_args['btn_shape'] : '';
+		$btn_type = isset($sc_args['btn_type']) ? $sc_args['btn_type'] : '';
+		$btn_color = isset($sc_args['btn_color']) ? $sc_args['btn_color'] : '';
+		$btn_layout = isset($sc_args['btn_layout']) ? $sc_args['btn_layout'] : '';
+
+		$is_live = Main::get_instance()->get_setting( 'is_live' );
+
+		if ( $is_live ) {
+			$env       = 'production';
+			$client_id = Main::get_instance()->get_setting( 'live_client_id' );
+		} else {
+			$env       = 'sandbox';
+			$client_id = Main::get_instance()->get_setting( 'sandbox_client_id' );
+		}
+
+		if ( empty( $client_id ) ) {
+			$err_msg = sprintf( __( "Please enter %s Client ID in the settings.", 'wp-express-checkout' ), $env );
+			$err     = $this->show_err_msg( $err_msg, 'client-id' );
+			return $err;
+		}
+
+		$output  = '';
+
+		$data = apply_filters( 'wpec_button_js_data', array(
+			'id'              => $button_id,
+			'env'             => $env,
+			'client_id'       => $client_id,
 			'btnStyle'        => array(
 				'height' => $btn_height,
 				'shape'  => $btn_shape,
@@ -278,15 +356,88 @@ class Shortcodes {
 				'color'  => $btn_color,
 				'layout' => $btn_layout,
 			),
-			'is_manual_checkout_enabled' => !empty($this->ppdg->get_setting('enable_manual_checkout')),
 		) );
 
-		$output .= '<script type="text/javascript">var wpec_' . esc_attr( $button_id ) . '_data=' . json_encode( $data ) . ';document.addEventListener( "wpec_paypal_sdk_loaded", function() { new ppecHandler(wpec_' . esc_attr( $button_id ) . '_data); } );</script>';
+        ob_start();
+        ?>
+        <script type="text/javascript">
+            document.addEventListener( "wpec_paypal_sdk_loaded", function() {
+                new WpecPayPalHandler(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
+            });
+        </script>
+        <?php
+        $output .= ob_get_clean();
 
-		add_action( 'wp_footer', array( $this->ppdg, 'load_paypal_sdk' ) );
+		add_action( 'wp_footer', array( Main::get_instance(), 'load_paypal_sdk' ) );
 
 		return $output;
 	}
+
+	public function generate_stripe_express_checkout_button($button_id, $sc_args, $sc_id ) {
+		$btn_shape = Main::get_instance()->get_setting( 'stripe_btn_shape' );
+		$btn_height = Main::get_instance()->get_setting( 'stripe_btn_height' );
+		$btn_width = Main::get_instance()->get_setting( 'stripe_btn_width' );
+		$btn_color = Main::get_instance()->get_setting( 'stripe_btn_color' );
+		$btn_text = Main::get_instance()->get_setting( 'stripe_btn_text' );
+
+		$btn_classes_array = array('wpec-stripe-btn');
+		$btn_classes_array[] = 'wpec-stripe-btn-' . $btn_shape;
+		$btn_classes_array[] = 'wpec-stripe-btn-color-' . $btn_color;
+		$btn_classes_array[] = 'wpec-stripe-btn-height-' . $btn_height;
+
+		$data = array(
+			'id'        => $button_id,
+			'btnStyle'    => array(
+				'shape'  => $btn_shape,
+				'height' => $btn_height,
+				'width'  => $btn_width,
+				'color'  => $btn_color,
+				'label'  => $btn_text,
+			),
+			'btn_classes' => apply_filters( 'wpec-stripe-btn-classes', $btn_classes_array ),
+		);
+        $data = apply_filters( 'wpec_stripe_button_js_data', $data);
+
+		$output = '';
+
+		ob_start();
+		?>
+        <script type="text/javascript">
+            document.addEventListener( "DOMContentLoaded", function() {
+                new WpecStripeHandler(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
+            });
+        </script>
+		<?php
+		$output .= ob_get_clean();
+
+		return $output;
+	}
+
+    public function generate_manual_checkout_button($button_id, $sc_args, $sc_id ) {
+	    $btn_text = Main::get_instance()->get_setting( 'manual_checkout_btn_text' );
+
+	    $data = array(
+		    'id'        => $button_id,
+		    'btnStyle'    => array(
+			    'label'  => $btn_text,
+		    ),
+	    );
+	    $data = apply_filters( 'wpec_manual_checkout_button_js_data', $data);
+
+	    $output = '';
+
+	    ob_start();
+	    ?>
+        <script type="text/javascript">
+            document.addEventListener( "DOMContentLoaded", function() {
+                new WpecManualCheckout(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
+            });
+        </script>
+	    <?php
+	    $output .= ob_get_clean();
+
+	    return $output;
+    }
 
 	public function generate_price_tag( $args ) {		
 		$args['price']	= floatval($args['price']);
@@ -371,7 +522,9 @@ class Shortcodes {
 			return $this->show_err_msg( $exc->getMessage(), $exc->getCode() );
 		}
 
-		if ( 'COMPLETED' !== $order->get_data( 'state' ) ) {
+        $status = $order->get_data( 'state' );
+
+		if ( ! Utils::is_completed_status($status) ) {
 			return $this->show_err_msg( sprintf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $order->get_data( 'state' ) ), 'order-state' );
 		}
 

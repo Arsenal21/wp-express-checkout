@@ -105,13 +105,13 @@ var ppecHandler = function( data ) {
 		return error;
 	};
 
-	if ( this.data.btnStyle.layout === 'horizontal' ) {
-		this.data.btnStyle.tagline = false;
-	}
-
-	this.clientVars = {};
-
-	this.clientVars[ this.data.env ] = this.data.client_id;
+	// if ( this.data.btnStyle.layout === 'horizontal' ) {
+	// 	this.data.btnStyle.tagline = false;
+	// }
+	//
+	// this.clientVars = {};
+	//
+	// this.clientVars[ this.data.env ] = this.data.client_id;
 
 	this.inputs = [];
 
@@ -129,7 +129,7 @@ var ppecHandler = function( data ) {
 	};
 
 	this.validateOrder = function() {
-		let enable_actions = true;
+		let isValid = true;
 
 		document.querySelectorAll('#wpec_billing_' + parent.data.id + ', #place-order-' + parent.data.id ).forEach(el => {
 			parent.toggleVisibility(el, 'block', !parent.isValidTotal());
@@ -145,29 +145,33 @@ var ppecHandler = function( data ) {
 			const input = inputArr[ 0 ];
 			const validator = inputArr[ 1 ];
 			if ( validator( input ) ) {
-				enable_actions = false;
+				isValid = false;
 			}
 		} );
 
 		if ( !parent.isValidTotal() ) {
-			enable_actions = false;
+			isValid = false;
 		}
 
-		if ( enable_actions ) {
-			parent.actions.enable();
-		} else {
-			parent.actions.disable();
-		}
+		// TODO: this may not needed any more.
+		// if ( isValid ) {
+		// 	parent.actions?.enable();
+		// } else {
+		// 	parent.actions?.disable();
+		// }
 
 		parent.updateAllAmounts();
 
 		// Dispatch a custom event for addons to listen on 'validateOrder' function run.
 		document.dispatchEvent(new CustomEvent('wpec_validate_order', {
 			detail: {
-				ppecHandler: parent
+				ppecHandler: parent,
+				isValid: isValid,
 			}
 		}))
 		jQuery( document ).trigger( 'wpec_validate_order', [ parent ] ); // TODO: Need to remove this jquery version after all addon code is updated to the vanilla version.
+
+		return isValid;
 	};
 
 	this.displayInputError = function( input, validator ) {
@@ -191,373 +195,14 @@ var ppecHandler = function( data ) {
 		} );
 	};
 
+	/**
+	 * @deprecated Use `getScCont()` instead.
+	 */
 	this.scCont = document.querySelector( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' );
 
-	this.buttonArgs = {
-		env: parent.data.env,
-		client: parent.clientVars,
-		style: parent.data.btnStyle,
-		commit: true,
-		onInit: function( data, actions ) {
-			parent.actions = actions;
-			parent.validateInput( document.getElementById( 'wpec-tos-' + parent.data.id ), parent.ValidatorTos );
-			parent.validateInput( document.querySelector( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorQuantity );
-			parent.validateInput( document.querySelector( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorAmount );
-			document.querySelectorAll( '#wpec_billing_' + parent.data.id + ' .wpec_required' ).forEach( function(element) {
-				parent.validateInput( element, parent.ValidatorBilling );
-			} );
-			parent.data.orig_price = parseFloat( parent.data.price );
-			parent.scCont.querySelectorAll( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio' )?.forEach(function (item){
-				item.addEventListener('change', function (e){
-					const grpId = e.currentTarget.getAttribute( 'data-wpec-variations-group-id' );
-					const varId = e.currentTarget.value;
-					if ( Object.getOwnPropertyNames( parent.data.variations ).length !== 0 ) {
-						if ( !parent.data.variations.applied ) {
-							parent.data.variations.applied = [];
-						}
-						parent.data.variations.applied[ grpId ] = varId;
-						parent.data.price = parent.applyVariations( parent.data.orig_price );
-						parent.validateOrder();
-					}
-				})
-			});
-			parent.scCont.querySelectorAll( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio:checked' )?.forEach(el => {
-				// Dispatch change event to trigger any 'change' event listeners on this element
-				el.dispatchEvent( new Event('change') );
-			})
-
-			parent.scCont.querySelector( '.wpec_product_shipping_enable' )?.addEventListener( 'change', function() {
-				parent.toggleVisibility(parent.scCont.querySelector( '.wpec_shipping_address_container' ), 'inherit');
-				parent.scCont.querySelector( '.wpec_address_wrap' )?.classList.toggle('shipping_enabled');
-			} );
-
-			document.getElementById( 'place-order-' + parent.data.id )?.addEventListener('click', function() {
-				parent.buttonArgs.onClick();
-			} );
-
-			document.getElementById( 'wpec-redeem-coupon-btn-' + parent.data.id )?.addEventListener('click', async function (e) {
-				e.preventDefault();
-				const wpecCouponBtn = e.currentTarget;
-				const wpecCouponInputField = document.getElementById('wpec-coupon-field-' + parent.data.id)
-				const couponCode = wpecCouponInputField?.value;
-				if (couponCode.trim() === '') {
-					return false;
-				}
-				const wpecCouponSpinner = wpecCouponBtn.querySelector('svg');
-				wpecCouponBtn.setAttribute('disabled', true);
-				wpecCouponSpinner.style.display = 'inline';
-
-				const ajaxData = new URLSearchParams({
-					'action': 'wpec_check_coupon',
-					'product_id': parent.data.product_id,
-					'coupon_code': couponCode,
-					'curr': parent.data.currency,
-					/*'amount': parent.data.item_price,
-					'tax': parent.data.tax,
-					'shipping': parent.data.shipping*/
-				});
-				try {
-					const response = await fetch(ppecFrontVars.ajaxUrl, {
-						method: "post",
-						headers: {
-							'Content-Type': 'application/x-www-form-urlencoded'
-						},
-						body: ajaxData
-					});
-
-					const response_data = await response.json();
-
-					if (response_data.success) {
-						parent.data.discount = response_data.discount;
-						parent.data.discountType = response_data.discountType;
-						parent.data.couponCode = response_data.code;
-
-						document.getElementById('wpec-coupon-info-' + parent.data.id).innerHTML = '<span class="wpec_coupon_code">' + response_data.discountStr + '</span><button class="wpec_coupon_apply_btn" id="wpec-remove-coupon-' + parent.data.id + '" title="' + ppecFrontVars.str.strRemoveCoupon + '">' + ppecFrontVars.str.strRemove + '</button>'
-						document.getElementById('wpec-redeem-coupon-btn-' + parent.data.id).style.display = 'none';
-						document.getElementById('wpec-coupon-field-' + parent.data.id).style.display = 'none';
-
-						const totalContainers = parent.getPriceContainer();
-						// Note: there is more than one price container in a single product shortcode.
-						totalContainers.forEach(function (totalCont){
-							let totCurr;
-							let totNew;
-							if (totalCont.querySelector('.wpec_price_full_total')) {
-								totCurr = totalCont.querySelector('span.wpec_tot_current_price')
-								totCurr?.classList.add('wpec_line_through');
-								totNew = totalCont.querySelector('span.wpec_tot_new_price');
-							} else {
-								totCurr = totalCont.querySelector('span.wpec_price_amount')
-								totCurr?.classList.add('wpec_line_through');
-								totNew = totalCont.querySelector('span.wpec_new_price_amount');
-							}
-
-							const priceCurr = totalCont.querySelector('span.wpec-price-amount')
-							priceCurr?.classList.add('wpec_line_through');
-
-							const priceNew = totalCont.querySelector('span.wpec-new-price-amount');
-							parent.validateOrder();
-
-							document.getElementById('wpec-remove-coupon-' + parent.data.id)?.addEventListener('click', function (e) {
-								e.preventDefault();
-								document.getElementById('wpec-coupon-info-' + parent.data.id).innerHTML = '';
-								document.getElementById('wpec-coupon-field-' + parent.data.id).value = '';
-								document.getElementById('wpec-coupon-field-' + parent.data.id).style.display = 'block';
-								document.getElementById('wpec-redeem-coupon-btn-' + parent.data.id).style.display = 'block';
-								totCurr?.classList.remove('wpec_line_through');
-								priceCurr?.classList.remove('wpec_line_through');
-								if (totNew) {
-									totNew.innerHTML = '';
-								}
-								if (priceNew) {
-									priceNew.innerHTML = '';
-								}
-								delete parent.data.discount;
-								delete parent.data.discountType;
-								delete parent.data.couponCode;
-								delete parent.data.discountAmount;
-								delete parent.data.newPrice;
-								parent.validateOrder();
-							});
-						})
-					} else {
-						document.getElementById('wpec-coupon-info-' + parent.data.id).innerHTML = response_data.msg
-					}
-					wpecCouponSpinner.style.display = 'none';
-					wpecCouponBtn.removeAttribute('disabled');
-
-				} catch (err) {
-					alert(err.message);
-				}
-			})
-
-			const couponField = document.getElementById( 'wpec-coupon-field-' + parent.data.id );
-			couponField?.addEventListener( 'keydown', function( keyboardEvent ) {
-				if ( keyboardEvent.code === 13 ) {
-					keyboardEvent.preventDefault();
-					document.getElementById( 'wpec-redeem-coupon-btn-' + parent.data.id ).click();
-					return false;
-				}
-			} );
-
-			parent.validateOrder();
-
-			if ( parent.data.errors ) {
-				const errorEl = document.createElement('div');
-				errorEl.className = 'wp-ppec-form-error-msg';
-				errorEl.innerHTML = parent.data.errors;
-
-				parent.scCont.appendChild( errorEl );
-				errorEl.style.display = 'block';
-			}
-
-			document.querySelectorAll( '.wpec-button-placeholder' ).forEach( function (el) {
-				el.remove()
-			})
-		},
-		onClick: function() {
-			const wpecPlaceOrderButtonSection = document.getElementById("place-order-"+parent.data.id);
-			if (wpecPlaceOrderButtonSection){
-				wpecPlaceOrderButtonSection.querySelector("button>svg").style.display = 'inline';
-				wpecPlaceOrderButtonSection.querySelector("button").setAttribute("disabled", true);
-			}
-
-			parent.displayErrors();
-			// Get first error input if there is any.
-			const errInput = parent.scCont.querySelector( '.hasError' );
-			if ( errInput ) {
-				errInput.focus();
-				errInput.dispatchEvent( new Event('change') );
-
-				if (wpecPlaceOrderButtonSection) {
-					wpecPlaceOrderButtonSection.querySelector("button>svg").style.display = 'none';
-					wpecPlaceOrderButtonSection.querySelector("button").removeAttribute("disabled");
-				}
-			} else if ( !parent.data.total ) {
-				const same_shipping_billing_address_enabled = parent.scCont.querySelector( '.wpec_product_shipping_enable' )?.checked;
-				const billing_address = {
-					address_line_1: document.getElementById( 'wpec_billing_address-' + parent.data.id )?.value,
-					admin_area_1: document.getElementById( 'wpec_billing_state-' + parent.data.id )?.value,
-					admin_area_2: document.getElementById( 'wpec_billing_city-' + parent.data.id )?.value,
-					postal_code: document.getElementById( 'wpec_billing_postal_code-' + parent.data.id )?.value,
-					country_code: document.getElementById( 'wpec_billing_country-' + parent.data.id )?.value,
-				};
-				const shipping_address = same_shipping_billing_address_enabled ? billing_address : {
-					address_line_1: document.getElementById( 'wpec_shipping_address-' + parent.data.id )?.value,
-					admin_area_1: document.getElementById( 'wpec_shipping_state-' + parent.data.id )?.value,
-					admin_area_2: document.getElementById( 'wpec_shipping_city-' + parent.data.id )?.value,
-					postal_code: document.getElementById( 'wpec_shipping_postal_code-' + parent.data.id )?.value,
-					country_code: document.getElementById( 'wpec_shipping_country-' + parent.data.id )?.value,
-				};
-
-				const paymentData = {
-					payer: {
-						name: {
-							given_name: document.getElementById( 'wpec_billing_first_name-' + parent.data.id )?.value,
-							surname: document.getElementById( 'wpec_billing_last_name-' + parent.data.id )?.value,
-						},
-						email_address: document.getElementById( 'wpec_billing_email-' + parent.data.id )?.value,
-						address: billing_address,
-						shipping_address: shipping_address,
-					}
-				}
-
-				document.dispatchEvent(new CustomEvent('wpec_process_free_payment', {
-					detail: {
-						paymentData,
-						data: parent.data,
-					}
-				}));
-
-				parent.processPayment(paymentData, 'wpec_process_empty_payment' );
-			}
-		},
-		createOrder: async function( data, actions ) {
-			parent.calcTotal();
-
-			//We need to round to 2 decimal places to make sure that the API call will not fail.
-			let itemTotalValueRounded = (parent.data.price * parent.data.quantity).toFixed(2);
-			let itemTotalValueRoundedAsNumber = parseFloat(itemTotalValueRounded);
-			//console.log('Item total value rounded: ' + itemTotalValueRoundedAsNumber);
-			//console.log(parent.data);
-
-			// Checking if shipping will be required
-			let shipping_pref = 'NO_SHIPPING'; // Default value
-			if (parent.data.shipping !== "" || parent.data.shipping_enable === true) {
-				console.log("The physical product checkbox is enabled or there is shipping value has been configured. Setting the shipping preference to collect shipping.");
-				shipping_pref = 'GET_FROM_FILE';
-			}
-
-			// Create order_data object to be sent to the server.
-			const order_data = {
-				intent: 'CAPTURE',
-				payment_source: {
-					paypal: {
-						experience_context: {
-							payment_method_preference: 'IMMEDIATE_PAYMENT_REQUIRED',
-							shipping_preference: shipping_pref,
-							user_action: 'PAY_NOW',
-						}
-					}
-				},
-				purchase_units: [ {
-					amount: {
-						value: parent.data.total,
-						currency_code: parent.data.currency,
-						breakdown: {
-							item_total: {
-								currency_code: parent.data.currency,
-								value: itemTotalValueRoundedAsNumber
-							}
-						}
-					},
-					items: [ {
-						name: parent.data.name,
-						quantity: parent.data.quantity,
-						unit_amount: {
-							value: parent.data.price,
-							currency_code: parent.data.currency
-						}
-					} ]
-				} ]
-			};
-
-			if ( parent.data.tax ) {
-				order_data.purchase_units[ 0 ].amount.breakdown.tax_total = {
-					currency_code: parent.data.currency,
-					value: parent.PHP_round( parent.data.tax_amount * parent.data.quantity, parent.data.dec_num )
-				};
-				order_data.purchase_units[ 0 ].items[ 0 ].tax = {
-					currency_code: parent.data.currency,
-					value: parent.data.tax_amount
-				};
-			}
-			if ( parent.data.shipping ) {
-				order_data.purchase_units[ 0 ].amount.breakdown.shipping = {
-					currency_code: parent.data.currency,
-					value: parent.getTotalShippingCost(),
-				};
-			}
-			if ( parent.data.discount ) {
-				order_data.purchase_units[ 0 ].amount.breakdown.discount = {
-					currency_code: parent.data.currency,
-					value: parseFloat( parent.data.discountAmount )
-				};
-			}
-			//End of create order_data object.
-			console.log('Order data: ', order_data);
-
-			let nonce = wpec_create_order_vars.nonce;
-
-			let wpec_data_for_create = parent.data;//parent.data is the data object that was passed to the ppecHandler constructor.
-			console.log('WPEC data for create-order: ', wpec_data_for_create);
-
-			let post_data = 'action=wpec_pp_create_order&data=' + encodeURIComponent(JSON.stringify(order_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data_for_create)) + '&_wpnonce=' + nonce;
-			try {
-				// Using fetch for AJAX request. This is supported in all modern browsers.
-				const response = await fetch( ppecFrontVars.ajaxUrl, {
-					method: "post",
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					},
-					body: post_data
-				});
-
-				const response_data = await response.json();
-
-				if (response_data.order_id) {
-					console.log('Create-order API call to PayPal completed successfully.');
-					return response_data.order_id;
-				} else {
-					const error_message = response_data.err_msg
-					console.error('Error occurred during create-order call to PayPal. ', error_message);
-					throw new Error(error_message);//This will trigger the alert in the "catch" block below.
-				}
-			} catch (error) {
-				console.error(error.message);
-				alert('Could not initiate PayPal Checkout...\n\n' + error.message);
-			}
-		},
-		onApprove: async function( data, actions ) {
-			document.querySelector( 'div.wp-ppec-overlay[data-ppec-button-id="' + parent.data.id + '"]' ).style.display = 'flex';
-
-			console.log('Setting up the AJAX request for capture-order call.');
-			
-			// Create the data object to be sent to the server.
-			let pp_bn_data = {};
-			pp_bn_data.order_id = data.orderID;//The orderID is the ID of the order that was created in the createOrder method.
-			let wpec_data = parent.data;//parent.data is the data object that was passed to the ppecHandler constructor.
-			//console.log('WPEC data (JSON): ' + JSON.stringify(wpec_data));
-
-			let nonce = wpec_on_approve_vars.nonce;
-			let post_data = 'action=wpec_pp_capture_order&data=' + encodeURIComponent(JSON.stringify(pp_bn_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data)) + '&_wpnonce=' + nonce;
-			try {
-				const response = await fetch( ppecFrontVars.ajaxUrl, {
-					method: "post",
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					},
-					body: post_data
-				});
-
-				const response_data = await response.json();
-
-				console.log('Capture-order API call to PayPal completed successfully.');
-
-				// Call the completePayment method to do any redirection or display a message to the user.
-				parent.completePayment(response_data); 
-
-			} catch (error) {
-				console.error(error);
-				alert('PayPal returned an error! Transaction could not be processed. Enable the debug logging feature to get more details...\n\n' + JSON.stringify(error));
-			}
-
-		},
-		onError: function( err ) {
-			document.getElementById("place-order-"+parent.data.id).querySelector("button>svg").style.display = 'none';
-			document.getElementById("place-order-"+parent.data.id).querySelector("button").removeAttribute("disabled");
-			alert( err );
-		}
-	};
+	this.getScCont = function(){
+		return document.querySelector( '.wp-ppec-shortcode-container[data-ppec-button-id="' + parent.data.id + '"]' );
+	}
 
 	// TODO: Need to convert this to vanilla js
 	this.formatMoney = function( n ) {
@@ -780,14 +425,231 @@ var ppecHandler = function( data ) {
 		return null;
 	}
 
-	// TODO: Need to convert this to vanilla js
-	jQuery( document ).trigger( 'wpec_before_render_button', [ this ] );
+	this.construct = function(){
+		parent.validateInput( document.getElementById( 'wpec-tos-' + parent.data.id ), parent.ValidatorTos );
+		parent.validateInput( document.querySelector( '#wp-ppec-custom-quantity[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorQuantity );
+		parent.validateInput( document.querySelector( '#wp-ppec-custom-amount[data-ppec-button-id="' + parent.data.id + '"]' ), parent.ValidatorAmount );
+		document.querySelectorAll( '#wpec_billing_' + parent.data.id + ' .wpec_required' ).forEach( function(element) {
+			parent.validateInput( element, parent.ValidatorBilling );
+		} );
+		parent.data.orig_price = parseFloat( parent.data.price );
+		parent.scCont.querySelectorAll( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio' )?.forEach(function (item){
+			item.addEventListener('change', function (e){
+				const grpId = e.currentTarget.getAttribute( 'data-wpec-variations-group-id' );
+				const varId = e.currentTarget.value;
+				if ( Object.getOwnPropertyNames( parent.data.variations ).length !== 0 ) {
+					if ( !parent.data.variations.applied ) {
+						parent.data.variations.applied = [];
+					}
+					parent.data.variations.applied[ grpId ] = varId;
+					parent.data.price = parent.applyVariations( parent.data.orig_price );
+					parent.validateOrder();
+				}
+			})
+		});
+		parent.scCont.querySelectorAll( 'select.wpec-product-variations-select, input.wpec-product-variations-select-radio:checked' )?.forEach(el => {
+			// Dispatch change event to trigger any 'change' event listeners on this element
+			el.dispatchEvent( new Event('change') );
+		})
 
-	paypal.Buttons( this.buttonArgs ).render( '#' + parent.data.id );
+		parent.scCont.querySelector( '.wpec_product_shipping_enable' )?.addEventListener( 'change', function() {
+			parent.toggleVisibility(parent.scCont.querySelector( '.wpec_shipping_address_container' ), 'inherit');
+			parent.scCont.querySelector( '.wpec_address_wrap' )?.classList.toggle('shipping_enabled');
+		} );
 
-	// Handle manual checkout functionality if enabled.
-	if (Boolean(parent.data.is_manual_checkout_enabled)){
-		new WpecManualCheckout(parent);
+		document.getElementById('place-order-' + parent.data.id)?.addEventListener('click', () => {
+			const hasInputErrors = this.checkAndShowInputErrors();
+			if (hasInputErrors){
+				return;
+			}
+
+			if ( !parent.data.total ) {
+				const same_shipping_billing_address_enabled = parent.scCont.querySelector( '.wpec_product_shipping_enable' )?.checked;
+				const billing_address = {
+					address_line_1: document.getElementById( 'wpec_billing_address-' + parent.data.id )?.value,
+					admin_area_1: document.getElementById( 'wpec_billing_state-' + parent.data.id )?.value,
+					admin_area_2: document.getElementById( 'wpec_billing_city-' + parent.data.id )?.value,
+					postal_code: document.getElementById( 'wpec_billing_postal_code-' + parent.data.id )?.value,
+					country_code: document.getElementById( 'wpec_billing_country-' + parent.data.id )?.value,
+				};
+				const shipping_address = same_shipping_billing_address_enabled ? billing_address : {
+					address_line_1: document.getElementById( 'wpec_shipping_address-' + parent.data.id )?.value,
+					admin_area_1: document.getElementById( 'wpec_shipping_state-' + parent.data.id )?.value,
+					admin_area_2: document.getElementById( 'wpec_shipping_city-' + parent.data.id )?.value,
+					postal_code: document.getElementById( 'wpec_shipping_postal_code-' + parent.data.id )?.value,
+					country_code: document.getElementById( 'wpec_shipping_country-' + parent.data.id )?.value,
+				};
+
+				const paymentData = {
+					payer: {
+						name: {
+							given_name: document.getElementById( 'wpec_billing_first_name-' + parent.data.id )?.value,
+							surname: document.getElementById( 'wpec_billing_last_name-' + parent.data.id )?.value,
+						},
+						email_address: document.getElementById( 'wpec_billing_email-' + parent.data.id )?.value,
+						address: billing_address,
+						shipping_address: shipping_address,
+					}
+				}
+
+				document.dispatchEvent(new CustomEvent('wpec_process_free_payment', {
+					detail: {
+						paymentData,
+						data: parent.data,
+					}
+				}));
+
+				parent.processPayment(paymentData, 'wpec_process_empty_payment' );
+			}
+		});
+
+		document.getElementById( 'wpec-redeem-coupon-btn-' + parent.data.id )?.addEventListener('click', async function (e) {
+			e.preventDefault();
+			const wpecCouponBtn = e.currentTarget;
+			const wpecCouponInputField = document.getElementById('wpec-coupon-field-' + parent.data.id)
+			const couponCode = wpecCouponInputField?.value;
+			if (couponCode.trim() === '') {
+				return false;
+			}
+			const wpecCouponSpinner = wpecCouponBtn.querySelector('svg');
+			wpecCouponBtn.setAttribute('disabled', true);
+			wpecCouponSpinner.style.display = 'inline';
+
+			const ajaxData = new URLSearchParams({
+				'action': 'wpec_check_coupon',
+				'product_id': parent.data.product_id,
+				'coupon_code': couponCode,
+				'curr': parent.data.currency,
+				/*'amount': parent.data.item_price,
+				'tax': parent.data.tax,
+				'shipping': parent.data.shipping*/
+			});
+			try {
+				const response = await fetch(ppecFrontVars.ajaxUrl, {
+					method: "post",
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body: ajaxData
+				});
+
+				const response_data = await response.json();
+
+				if (response_data.success) {
+					parent.data.discount = response_data.discount;
+					parent.data.discountType = response_data.discountType;
+					parent.data.couponCode = response_data.code;
+
+					document.getElementById('wpec-coupon-info-' + parent.data.id).innerHTML = '<span class="wpec_coupon_code">' + response_data.discountStr + '</span><button class="wpec_coupon_apply_btn" id="wpec-remove-coupon-' + parent.data.id + '" title="' + ppecFrontVars.str.strRemoveCoupon + '">' + ppecFrontVars.str.strRemove + '</button>'
+					document.getElementById('wpec-redeem-coupon-btn-' + parent.data.id).style.display = 'none';
+					document.getElementById('wpec-coupon-field-' + parent.data.id).style.display = 'none';
+
+					const totalContainers = parent.getPriceContainer();
+					// Note: there is more than one price container in a single product shortcode.
+					totalContainers.forEach(function (totalCont){
+						let totCurr;
+						let totNew;
+						if (totalCont.querySelector('.wpec_price_full_total')) {
+							totCurr = totalCont.querySelector('span.wpec_tot_current_price')
+							totCurr?.classList.add('wpec_line_through');
+							totNew = totalCont.querySelector('span.wpec_tot_new_price');
+						} else {
+							totCurr = totalCont.querySelector('span.wpec_price_amount')
+							totCurr?.classList.add('wpec_line_through');
+							totNew = totalCont.querySelector('span.wpec_new_price_amount');
+						}
+
+						const priceCurr = totalCont.querySelector('span.wpec-price-amount')
+						priceCurr?.classList.add('wpec_line_through');
+
+						const priceNew = totalCont.querySelector('span.wpec-new-price-amount');
+						parent.validateOrder();
+
+						document.getElementById('wpec-remove-coupon-' + parent.data.id)?.addEventListener('click', function (e) {
+							e.preventDefault();
+							document.getElementById('wpec-coupon-info-' + parent.data.id).innerHTML = '';
+							document.getElementById('wpec-coupon-field-' + parent.data.id).value = '';
+							document.getElementById('wpec-coupon-field-' + parent.data.id).style.display = 'block';
+							document.getElementById('wpec-redeem-coupon-btn-' + parent.data.id).style.display = 'block';
+							totCurr?.classList.remove('wpec_line_through');
+							priceCurr?.classList.remove('wpec_line_through');
+							if (totNew) {
+								totNew.innerHTML = '';
+							}
+							if (priceNew) {
+								priceNew.innerHTML = '';
+							}
+							delete parent.data.discount;
+							delete parent.data.discountType;
+							delete parent.data.couponCode;
+							delete parent.data.discountAmount;
+							delete parent.data.newPrice;
+							parent.validateOrder();
+						});
+					})
+				} else {
+					document.getElementById('wpec-coupon-info-' + parent.data.id).innerHTML = response_data.msg
+				}
+				wpecCouponSpinner.style.display = 'none';
+				wpecCouponBtn.removeAttribute('disabled');
+
+			} catch (err) {
+				alert(err.message);
+			}
+		})
+
+		const couponField = document.getElementById( 'wpec-coupon-field-' + parent.data.id );
+		couponField?.addEventListener( 'keydown', function( keyboardEvent ) {
+			if ( keyboardEvent.code === 13 ) {
+				keyboardEvent.preventDefault();
+				document.getElementById( 'wpec-redeem-coupon-btn-' + parent.data.id ).click();
+				return false;
+			}
+		} );
+
+		parent.validateOrder();
+
+		if ( parent.data.errors ) {
+			const errorEl = document.createElement('div');
+			errorEl.className = 'wp-ppec-form-error-msg';
+			errorEl.innerHTML = parent.data.errors;
+
+			parent.getScCont().appendChild( errorEl );
+			errorEl.style.display = 'block';
+		}
+
+		document.querySelectorAll( '.wpec-button-placeholder' ).forEach( function (el) {
+			el.remove()
+		})
+
+	}
+	this.construct(); // TODO: Need to move it to class constructor.
+
+
+	this.checkAndShowInputErrors = () => {
+		let result = false;
+
+		const wpecPlaceOrderButtonSection = document.getElementById("place-order-" + parent.data.id);
+		if (wpecPlaceOrderButtonSection) {
+			wpecPlaceOrderButtonSection.querySelector("button>svg").style.display = 'inline';
+			wpecPlaceOrderButtonSection.querySelector("button").setAttribute("disabled", true);
+		}
+		parent.displayErrors();
+		// Get first error input if there is any.
+		const errInput = parent.getScCont().querySelector('.hasError');
+		if (errInput) {
+			errInput.focus();
+			errInput.dispatchEvent(new Event('change'));
+
+			if (wpecPlaceOrderButtonSection) {
+				wpecPlaceOrderButtonSection.querySelector("button>svg").style.display = 'none';
+				wpecPlaceOrderButtonSection.querySelector("button").removeAttribute("disabled");
+			}
+
+			result = true;
+		}
+
+		return result;
 	}
 };
 
@@ -840,159 +702,3 @@ const wpecModal = function( $ ) {
 };
 
 jQuery( wpecModal );
-
-class WpecManualCheckout {
-
-	constructor(parent) {
-		this.parent = parent;
-		this.buttonId = parent.data.id;
-		this.mcProceedBtn = document.getElementById('wpec-proceed-manual-checkout-'+ this.buttonId);
-		this.mcForm = document.getElementById( 'wpec-manual-checkout-form-' + this.buttonId );
-
-		this.tosCheckbox = document.getElementById( 'wpec-tos-' + this.buttonId );
-		this.customQuantityInput = document.querySelector( '#wp-ppec-custom-quantity[data-ppec-button-id="' + this.buttonId + '"]' );
-		this.customAmountInput = document.querySelector( '#wp-ppec-custom-amount[data-ppec-button-id="' + this.buttonId + '"]' );
-
-		document.addEventListener('wpec_validate_order', (e) => {
-			this.parent.toggleVisibility(
-				document.getElementById( 'wpec-manual-checkout-section-'+ this.buttonId ),
-				'block',
-				!this.parent.isElementVisible(document.getElementById( 'place-order-' + parent.data.id ))
-			);
-		})
-
-		this.init();
-	}
-
-	init(){
-		this.mcForm?.querySelector( '.wpec_same_billing_shipping_enable' )?.addEventListener( 'change', () => {
-			const wpec_address_wrap = this.mcForm?.querySelector( '.wpec_address_wrap' );
-			this.parent.toggleVisibility(wpec_address_wrap?.querySelector( '.wpec_shipping_address_container' ), 'inherit');
-			this.mcForm?.querySelector( '.wpec_address_wrap' )?.classList.toggle('shipping_enabled');
-		} );
-
-		this.parent.validateInput( this.tosCheckbox, this.parent.ValidatorTos );
-		this.parent.validateInput( this.customQuantityInput, this.parent.ValidatorQuantity );
-		this.parent.validateInput( this.customAmountInput, this.parent.ValidatorAmount );
-		this.mcForm?.querySelectorAll( '.wpec_required' ).forEach( (element) => {
-			this.parent.validateInput( element, this.parent.ValidatorBilling );
-		} );
-
-		this.mcForm?.addEventListener('submit', (e) => {
-			e.preventDefault();
-
-			const form = e.target;
-			form.setAttribute("disabled", true);
-
-			const formData = new FormData(form);
-
-			this.parent.displayErrors();
-
-			const mcFormSubmitBtn = form.querySelector('button.wpec-place-order-btn');
-			if (mcFormSubmitBtn){
-				mcFormSubmitBtn.querySelector("svg").style.display = 'inline';
-				mcFormSubmitBtn.setAttribute("disabled", true);
-			}
-
-			// Get first error input if there is any.
-			const errInput = this.getErrorInput();
-
-			if ( errInput ) {
-				errInput.focus();
-				errInput.dispatchEvent( new Event('change') );
-
-				form.removeAttribute("disabled");
-				if (mcFormSubmitBtn) {
-					mcFormSubmitBtn.querySelector("svg").style.display = 'none';
-					mcFormSubmitBtn.removeAttribute("disabled");
-				}
-
-				// Don't continue form submission.
-				return;
-			}
-
-			const billing_address = {
-				address_line_1: formData.get('wpec_billing_address'),
-				admin_area_1: formData.get('wpec_billing_city'),
-				admin_area_2: formData.get('wpec_billing_country'),
-				postal_code: formData.get('wpec_billing_state'),
-				country_code: formData.get('wpec_billing_postal_code'),
-			};
-			const shipping_address = formData.get('wpec_same_billing_shipping_enable') ? billing_address : {
-				address_line_1: formData.get('wpec_shipping_address'),
-				admin_area_1: formData.get('wpec_shipping_city'),
-				admin_area_2: formData.get('wpec_shipping_country'),
-				postal_code: formData.get('wpec_shipping_state'),
-				country_code: formData.get('wpec_shipping_postal_code'),
-			};
-
-			const paymentData = {
-				payer: {
-					name: {
-						given_name: formData.get('wpec_billing_first_name'),
-						surname: formData.get('wpec_billing_last_name'),
-					},
-					email_address: formData.get('wpec_billing_email'),
-					phone: formData.get('wpec_billing_phone'),
-					address: billing_address,
-					shipping_address: shipping_address,
-				}
-			}
-
-			document.dispatchEvent(new CustomEvent('wpec_process_manual_checkout', {
-				detail: {
-					paymentData,
-					data: this.parent.data,
-				}
-			}));
-
-			this.parent.processPayment(paymentData, 'wpec_process_manual_checkout' );
-		} );
-
-		this.mcForm?.addEventListener('reset', (e)=>{
-			const form = e.target;
-			form.removeAttribute("disabled");
-			const mcFormSubmitBtn = form.querySelector('button.wpec-place-order-btn');
-			if (mcFormSubmitBtn){
-				mcFormSubmitBtn.querySelector("svg").style.display = 'none';
-				mcFormSubmitBtn.removeAttribute("disabled");
-			}
-
-			this.toggleManualCheckout();
-		})
-
-		this.mcProceedBtn?.addEventListener('click',  (e) =>{
-			this.toggleManualCheckout();
-		});
-	}
-
-	getErrorInput(){
-		if (this.tosCheckbox?.classList.contains('hasError')){
-			return this.tosCheckbox;
-		} else if (this.customQuantityInput?.classList.contains('hasError')){
-			return this.customQuantityInput;
-		} else if (this.customAmountInput?.classList.contains('hasError')){
-			return this.customAmountInput;
-		} else {
-			return this.mcForm?.querySelector( '.hasError' );
-		}
-	}
-
-	toggleManualCheckout(){
-		this.parent.toggleVisibility(this.mcForm, 'inherit');
-		this.parent.toggleVisibility(this.mcProceedBtn, 'inherit');
-
-		// Toggle paypal btn
-		// this.parent.toggleVisibility(
-		// 	document.getElementById(this.buttonId),
-		// 	'inherit',
-		// 	!this.parent.isElementVisible(this.mcForm)
-		// );
-
-		document.dispatchEvent(new CustomEvent('wpec_toggle_manual_checkout_form', {
-			detail: {
-				wpecManualCheckout: this
-			}
-		}));
-	}
-}
