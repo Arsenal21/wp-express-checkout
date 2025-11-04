@@ -9,6 +9,7 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
+            'Stripe\\' => 7,
             'Sample\\' => 7,
         ),
         'P' => 
@@ -19,6 +20,10 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
     );
 
     public static $prefixDirsPsr4 = array (
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
+        ),
         'Sample\\' => 
         array (
             0 => __DIR__ . '/..' . '/paypal/paypal-checkout-sdk/samples',
@@ -83,6 +88,7 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WP_Express_Checkout\\Payment_Processor' => __DIR__ . '/../..' . '/includes/class-payment-processor.php',
         'WP_Express_Checkout\\Payment_Processor_Free' => __DIR__ . '/../..' . '/includes/class-payment-processor-free.php',
         'WP_Express_Checkout\\Payment_Processor_Manual' => __DIR__ . '/../..' . '/includes/class-payment-processor-manual.php',
+        'WP_Express_Checkout\\Payment_Processor_Stripe' => __DIR__ . '/../..' . '/includes/class-payment-processor-stripe.php',
         'WP_Express_Checkout\\Post_Type_Content_Handler' => __DIR__ . '/../..' . '/includes/class-post-type-content-handler.php',
         'WP_Express_Checkout\\Products' => __DIR__ . '/../..' . '/includes/class-products.php',
         'WP_Express_Checkout\\Products\\Donation_Product' => __DIR__ . '/../..' . '/includes/products/class-donation-product.php',
@@ -90,6 +96,8 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WP_Express_Checkout\\Products\\Product' => __DIR__ . '/../..' . '/includes/products/class-product.php',
         'WP_Express_Checkout\\Products\\Stub_Product' => __DIR__ . '/../..' . '/includes/products/class-stub-product.php',
         'WP_Express_Checkout\\Shortcodes' => __DIR__ . '/../..' . '/public/includes/class-shortcodes.php',
+        'WP_Express_Checkout\\Stripe_IPN_Handler' => __DIR__ . '/../..' . '/lib/stripe/class-tthq-stripe-ipn-handler.php',
+        'WP_Express_Checkout\\Stripe_Payment_Button_Ajax_Handler' => __DIR__ . '/../..' . '/includes/class-stripe-button-ajax-handler.php',
         'WP_Express_Checkout\\Tags' => __DIR__ . '/../..' . '/includes/class-tags.php',
         'WP_Express_Checkout\\Utils' => __DIR__ . '/../..' . '/includes/class-utils.php',
         'WP_Express_Checkout\\Utils_Downloads' => __DIR__ . '/../..' . '/includes/class-utils-downloads.php',

@@ -2,10 +2,10 @@
 /**
  * Variables from parent scope:
  *
- * @var string $button_id
+ * @var string $manual_checkout_button_id
  * @var bool $is_digital_product
  * @var bool $shipping_enable
- * @var array $args
+ * @var array $sc_args
  */
 
 $manual_checkout_instructions = \WP_Express_Checkout\Main::get_instance()->get_setting( 'manual_checkout_instructions' );
@@ -14,8 +14,8 @@ $manual_checkout_btn_text     = \WP_Express_Checkout\Main::get_instance()->get_s
 $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()->get_setting( 'manual_checkout_hide_country_field' );
 
 ?>
-<div id="wpec-manual-checkout-section-<?php echo esc_attr( $button_id ); ?>">
-    <form class="wpec-manual-checkout-form" id="wpec-manual-checkout-form-<?php echo esc_attr( $button_id ); ?>" style="display:none;">
+<div id="wpec-manual-checkout-section-<?php echo esc_attr( $manual_checkout_button_id ); ?>">
+    <form class="wpec-manual-checkout-form" id="wpec-manual-checkout-form-<?php echo esc_attr( $manual_checkout_button_id ); ?>" style="display:none;">
         <?php if ( ! empty( $manual_checkout_instructions ) ) {
             echo wpautop(wp_kses_post( $manual_checkout_instructions ));
         } ?>
@@ -24,7 +24,7 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
             <div class="wpec_billing_user_info">
                 <div class="wpec_billing_first_name">
                     <label class="wpec_billing_first_name_label"><?php esc_html_e( 'First Name', 'wp-express-checkout' ); ?></label>
-                    <input id="wpec_billing_first_name-<?php echo esc_attr( $button_id ); ?>"
+                    <input id="wpec_billing_first_name-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                            class="wpec_billing_first_name_field_input wpec_required" type="text"
                            name="wpec_billing_first_name"/>
                     <div class="wp-ppec-form-error-msg"></div>
@@ -32,7 +32,7 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
 
                 <div class="wpec_billing_last_name">
                     <label class="wpec_billing_last_name_label"><?php esc_html_e( 'Last Name', 'wp-express-checkout' ); ?></label>
-                    <input id="wpec_billing_last_name-<?php echo esc_attr( $button_id ); ?>"
+                    <input id="wpec_billing_last_name-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                            class="wpec_billing_last_name_field_input wpec_required" type="text"
                            name="wpec_billing_last_name"/>
                     <div class="wp-ppec-form-error-msg"></div>
@@ -40,7 +40,7 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
 
                 <div class="wpec_billing_email">
                     <label class="wpec_billing_email_label"><?php esc_html_e( 'Email', 'wp-express-checkout' ); ?></label>
-                    <input id="wpec_billing_email-<?php echo esc_attr( $button_id ); ?>"
+                    <input id="wpec_billing_email-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                            class="wpec_billing_email_field_input wpec_required"
                            type="email"
                            name="wpec_billing_email"/>
@@ -79,7 +79,7 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
 
                         <div class="wpec_billing_address">
                             <label class="wpec_billing_address_label"><?php esc_html_e( 'Address', 'wp-express-checkout' ); ?></label>
-                            <input id="wpec_billing_address-<?php echo esc_attr( $button_id ); ?>"
+                            <input id="wpec_billing_address-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                                    class="wpec_billing_address_field_input wpec_required" type="text"
                                    name="wpec_billing_address"/>
                             <div class="wp-ppec-form-error-msg"></div>
@@ -87,7 +87,7 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
 
                         <div class="wpec_billing_city">
                             <label class="wpec_billing_city_label"><?php esc_html_e( 'City', 'wp-express-checkout' ); ?></label>
-                            <input id="wpec_billing_city-<?php echo esc_attr( $button_id ); ?>"
+                            <input id="wpec_billing_city-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                                    class="wpec_billing_city_field_input wpec_required" type="text"
                                    name="wpec_billing_city"/>
                             <div class="wp-ppec-form-error-msg"></div>
@@ -96,7 +96,7 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
                         <?php if(empty($manual_checkout_hide_country_field)){ ?>
                         <div class="wpec_billing_country">
                             <label class="wpec_billing_country_label"><?php esc_html_e( 'Country', 'wp-express-checkout' ); ?></label>
-                            <select id="wpec_billing_country-<?php echo esc_attr( $button_id ); ?>"
+                            <select id="wpec_billing_country-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                                     class="wpec_billing_country_field_input wpec_required" name="wpec_billing_country">
 								<?php
 								$countries = \WP_Express_Checkout\Utils::get_countries();
@@ -113,14 +113,14 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
 
                         <div class="wpec_billing_state">
                             <label class="wpec_billing_state_label"><?php esc_html_e( 'State', 'wp-express-checkout' ); ?></label>
-                            <input id="wpec_billing_state-<?php echo esc_attr( $button_id ); ?>"
+                            <input id="wpec_billing_state-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                                    class="wpec_billing_state_field_input" type="text" name="wpec_billing_state"/>
                             <div class="wp-ppec-form-error-msg"></div>
                         </div>
 
                         <div class="wpec_billing_postal_code">
                             <label class="wpec_billing_postal_code_label"><?php esc_html_e( 'Postal Code', 'wp-express-checkout' ); ?></label>
-                            <input id="wpec_billing_postal_code-<?php echo esc_attr( $button_id ); ?>"
+                            <input id="wpec_billing_postal_code-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                                    class="wpec_billing_postal_code_field_input" type="text"
                                    name="wpec_billing_postal_code"/>
                             <div class="wp-ppec-form-error-msg"></div>
@@ -136,7 +136,7 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
 
                             <div class="wpec_shipping_address">
                                 <label class="wpec_shipping_address_label"><?php esc_html_e( 'Address', 'wp-express-checkout' ); ?></label>
-                                <input id="wpec_shipping_address-<?php echo esc_attr( $button_id ); ?>"
+                                <input id="wpec_shipping_address-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                                        class="wpec_shipping_address_field_input wpec_required" type="text"
                                        name="wpec_shipping_address"/>
                                 <div class="wp-ppec-form-error-msg"></div>
@@ -144,7 +144,7 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
 
                             <div class="wpec_shipping_city">
                                 <label class="wpec_shipping_city_label"><?php esc_html_e( 'City', 'wp-express-checkout' ); ?></label>
-                                <input id="wpec_shipping_city-<?php echo esc_attr( $button_id ); ?>"
+                                <input id="wpec_shipping_city-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                                        class="wpec_shipping_city_field_input wpec_required" type="text"
                                        name="wpec_shipping_city"/>
                                 <div class="wp-ppec-form-error-msg"></div>
@@ -153,7 +153,7 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
 	                        <?php if(empty($manual_checkout_hide_country_field)){ ?>
                             <div class="wpec_shipping_country">
                                 <label class="wpec_shipping_country_label"><?php esc_html_e( 'Country', 'wp-express-checkout' ); ?></label>
-                                <select id="wpec_shipping_country-<?php echo esc_attr( $button_id ); ?>"
+                                <select id="wpec_shipping_country-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                                         class="wpec_shipping_country_field_input wpec_required"
                                         name="wpec_shipping_country">
 									<?php
@@ -171,14 +171,14 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
 
                             <div class="wpec_shipping_state">
                                 <label class="wpec_shipping_state_label"><?php esc_html_e( 'State', 'wp-express-checkout' ); ?></label>
-                                <input id="wpec_shipping_state-<?php echo esc_attr( $button_id ); ?>"
+                                <input id="wpec_shipping_state-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                                        class="wpec_shipping_state_field_input" type="text" name="wpec_shipping_state"/>
                                 <div class="wp-ppec-form-error-msg"></div>
                             </div>
 
                             <div class="wpec_shipping_postal_code">
                                 <label class="wpec_shipping_postal_code_label"><?php esc_html_e( 'Postal Code', 'wp-express-checkout' ); ?></label>
-                                <input id="wpec_shipping_postal_code-<?php echo esc_attr( $button_id ); ?>"
+                                <input id="wpec_shipping_postal_code-<?php echo esc_attr( $manual_checkout_button_id ); ?>"
                                        class="wpec_shipping_postal_code_field_input" type="text"
                                        name="wpec_shipping_postal_code"/>
                                 <div class="wp-ppec-form-error-msg"></div>
@@ -195,7 +195,7 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
         </div><!-- end of billing info fields container -->
         <br>
 
-        <?php do_action('wpec_before_manual_checkout_submit_button', $args, $button_id) ?>
+        <?php do_action('wpec_before_manual_checkout_submit_button', $sc_args, $manual_checkout_button_id) ?>
 
         <div class="wpec-place-order-btn-section">
             <button class="wpec-place-order-btn" type="submit">
@@ -207,7 +207,7 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
             <button class="wpec-place-order-btn" type="reset" style="background-color: #e8e4e3; color: black"><?php esc_html_e( 'Cancel', 'wp-express-checkout' ); ?></button>
         </div>
     </form>
-    <button class="wpec-place-order-btn" id="wpec-proceed-manual-checkout-<?php echo esc_attr( $button_id ) ?>">
+    <button class="wpec-place-order-btn" id="wpec-proceed-manual-checkout-<?php echo esc_attr( $manual_checkout_button_id ) ?>">
         <?php esc_html_e( ! empty( $manual_checkout_btn_text ) ? $manual_checkout_btn_text : __( 'Proceed to Manual Checkout', 'wp-express-checkout' ) ); ?>
     </button>
 </div>

@@ -4,6 +4,14 @@
  *
  * @package wp-express-checkout
  */
+
+use WP_Express_Checkout\Main;
+use WP_Express_Checkout\Shortcodes;
+
+$is_paypal_checkout_enabled = Main::get_instance()->get_setting('enable_paypal_checkout');
+$is_stripe_checkout_enabled = Main::get_instance()->get_setting('enable_stripe_checkout');
+$is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_checkout');
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -42,26 +50,47 @@
 		);
 		//Allow other plugins to add their own local vars
 		$localVars = apply_filters('wpec_url_payment_box_script_local_vars', $localVars );
-
-		$wpec_create_order_vars = array(
-			'nonce' => wp_create_nonce('wpec-create-order-js-ajax-nonce'),
-		);
-		$wpec_on_approve_vars = array(
-			'nonce' => wp_create_nonce('wpec-onapprove-js-ajax-nonce'),
-			'return_url' => $this->get_setting( 'thank_you_url' ),
-			'txn_success_message' => __('Transaction completed successfully!', 'wp-express-checkout'),
-			'txn_success_extra_msg' => __('Feel free to browse our site further for your next purchase.', 'wp-express-checkout'),
-		);
-
 		?>
         <link rel="stylesheet" href="<?php echo $styleFrontEnd ?>" />
 
         <script type="text/javascript">
 			var ppecFrontVars = <?php echo json_encode( $localVars ) ?>;
-			const wpec_create_order_vars = <?php echo json_encode( $wpec_create_order_vars ) ?>;
-			const wpec_on_approve_vars = <?php echo json_encode( $wpec_on_approve_vars ) ?>;
         </script>
         <script src="<?php echo $scriptFrontEnd ?>"></script>
+
+        <?php if (!empty($is_paypal_checkout_enabled)) {
+	        $wpec_create_order_vars = array(
+		        'nonce' => wp_create_nonce('wpec-create-order-js-ajax-nonce'),
+	        );
+	        $wpec_on_approve_vars = array(
+		        'nonce' => wp_create_nonce('wpec-onapprove-js-ajax-nonce'),
+		        'return_url' => Main::get_instance()->get_setting( 'thank_you_url' ),
+		        'txn_success_message' => __('Transaction completed successfully!', 'wp-express-checkout'),
+		        'txn_success_extra_msg' => __('Feel free to browse our site further for your next purchase.', 'wp-express-checkout'),
+	        );
+        ?>
+        <script type="text/javascript">
+            const wpec_create_order_vars = <?php echo json_encode( $wpec_create_order_vars ) ?>;
+            const wpec_on_approve_vars = <?php echo json_encode( $wpec_on_approve_vars ) ?>;
+        </script>
+        <script src="<?php echo WPEC_PLUGIN_URL . "/assets/js/wpec-paypal.js" ?>"></script>
+        <?php } ?>
+
+		<?php if (!empty($is_stripe_checkout_enabled)) {
+            $wpec_stripe_frontend_vars = array(
+	            'nonce' => wp_create_nonce('wpec-stripe-create-order-ajax-nonce'),
+            );
+        ?>
+        <link rel="stylesheet" href="<?php echo WPEC_PLUGIN_URL . "/assets/css/wpec-stripe-related.css" ?>" />
+        <script type="text/javascript">
+            const wpec_stripe_frontend_vars = <?php echo json_encode( $wpec_stripe_frontend_vars ) ?>;
+        </script>
+        <script src="<?php echo WPEC_PLUGIN_URL . "/assets/js/wpec-stripe.js" ?>"></script>
+        <?php } ?>
+
+		<?php if (!empty($is_manual_checkout_enabled)) { ?>
+        <script src="<?php echo WPEC_PLUGIN_URL . "/assets/js/wpec-manual-checkout.js" ?>"></script>
+        <?php } ?>
 
         <style>
 			.wpec-modal-overlay {
@@ -106,7 +135,7 @@
 		$btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
 		$btn_height = $class_main_inst->get_setting( 'btn_height' );
 
-		$args = array(
+		$sc_args = array(
 			'name' => get_the_title( $post_id ),
 			'price' => $product->get_price(),
 			'shipping' => $product->get_shipping(),
@@ -123,7 +152,7 @@
 			'variations' => $product->get_variations()
 		);
 
-		$args = shortcode_atts(
+		$sc_args = shortcode_atts(
 			array(
 			'name' => 'Item Name',
 			'price' => 0,
@@ -153,17 +182,16 @@
 			'stock_enabled' => $product->is_stock_control_enabled(),
 			'stock_items' => $product->get_stock_items(),
 			'price_class' => isset( $atts['price_class'] ) ? $atts['price_class'] : 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
-				), $args
+				), $sc_args
 		);
 
-		extract( $args );
+		extract( $sc_args );
 
 		if ( $stock_enabled && empty( $stock_items ) ) {
 			wp_die( '<div class="wpec-out-of-stock">' . esc_html( 'Out of stock', 'wp-express-checkout' ) . '</div>' );
 		}
 
-		// The button ID.
-		$button_id = 'paypal_button_0';
+		$shortcode_id = 'wp_express_checkout_0';
 
 		$trans_name = 'wp-ppdg-' . sanitize_title_with_dashes( $name ); // Create key using the item name.
 
@@ -185,25 +213,65 @@
 
 		set_transient( $trans_name, $trans_data, WEEK_IN_SECONDS );
 
-		$is_live = $class_main_inst->get_setting( 'is_live' );
+		$data = apply_filters( 'wpec_js_data', array(
+			'id' => $shortcode_id,
+			'nonce' => wp_create_nonce($shortcode_id . $product_id),
+			'price' => $price,
+			'quantity' => $quantity,
+			'tax' => $tax,
+			'shipping' => $shipping,
+			'shipping_enable' => $shipping_enable,
+			'shipping_per_quantity' => $shipping_per_quantity,
+			'dec_num' => intval( $class_main_inst->get_setting( 'price_decimals_num' ) ),
+			'thousand_sep' => $class_main_inst->get_setting( 'price_thousand_sep' ),
+			'dec_sep' => $class_main_inst->get_setting( 'price_decimal_sep' ),
+			'curr_pos' => $class_main_inst->get_setting( 'price_currency_pos' ),
+			'tos_enabled' => $class_main_inst->get_setting( 'tos_enabled' ),
+			'custom_quantity' => $custom_quantity,
+			'custom_amount' => $custom_amount,
+			'currency' => $currency,
+			'currency_symbol' => !empty( $class_main_inst->get_setting( 'currency_symbol' ) ) ? $class_main_inst->get_setting( 'currency_symbol' ) : $currency,
+			'coupons_enabled' => $coupons_enabled,
+			'product_id' => $product_id,
+			'name' => $name,
+			'stock_enabled' => $stock_enabled,
+			'stock_items' => $stock_items,
+			'variations' => $variations,
+        ) );
 
-		if ( $is_live ) {
-			$env = 'production';
-			$client_id = $class_main_inst->get_setting( 'live_client_id' );
-		} else {
-			$env = 'sandbox';
-			$client_id = $class_main_inst->get_setting( 'sandbox_client_id' );
+		?>
+        <script type="text/javascript">
+            document.addEventListener( "DOMContentLoaded", function() {
+                window['<?php echo esc_js($shortcode_id) ?>'] = new ppecHandler(<?php echo json_encode($data) ?>);
+            });
+        </script>
+		<?php
+
+        // for paypal
+		if (!empty($is_paypal_checkout_enabled)){
+			$paypal_button_id = 'paypal_button_0';
+			// $args['paypal_button_id'] = $paypal_button_id;
+			echo Shortcodes::get_instance()->generate_pp_express_checkout_button($paypal_button_id, $sc_args, $shortcode_id);
+			WP_Express_Checkout\Main::get_instance()->load_paypal_sdk();
 		}
 
-		if ( empty( $client_id ) ) {
-			$err_msg = sprintf( __( "Please enter %s Client ID in the settings.", 'wp-express-checkout' ), $env );
-			$err = $this->show_err_msg( $err_msg, 'client-id' );
-			wp_die( $err );
+        // for stripe
+		if (!empty($is_stripe_checkout_enabled)){
+			$stripe_button_id = 'stripe_button_0';
+			// $args['stripe_button_id'] = $stripe_button_id;
+			echo Shortcodes::get_instance()->generate_stripe_express_checkout_button($stripe_button_id, $sc_args, $shortcode_id);
+		}
+
+        // for manual checkout
+		if (!empty($is_manual_checkout_enabled)){
+			$manual_checkout_button_id = 'manual_checkout_button_0';
+			// $args['manual_checkout_button_id'] = $manual_checkout_button_id;
+			echo Shortcodes::get_instance()->generate_manual_checkout_button($manual_checkout_button_id, $sc_args, $shortcode_id);
 		}
 
 		?>
 		<!-- Render the payment box with the payment form -->
-		<div id="wpec-modal-<?php echo esc_attr( $button_id ); ?>" class="wpec-modal wpec-pointer-events-none wpec-modal-product-<?php echo esc_attr( $product_id ); ?>">
+		<div id="wpec-modal-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec-modal wpec-pointer-events-none wpec-modal-product-<?php echo esc_attr( $product_id ); ?>">
 
 			<div class="wpec-modal-overlay"></div>
 
@@ -240,45 +308,6 @@
 		<!-- End of payment box rendering -->
 		
 		<?php
-		$data = apply_filters( 'wpec_button_js_data', array(
-			'id' => $button_id,
-			'nonce' => wp_create_nonce( $button_id . $product_id ),
-			'env' => $env,
-			'client_id' => $client_id,
-			'price' => $price,
-			'quantity' => $quantity,
-			'tax' => $tax,
-			'shipping' => $shipping,
-			'shipping_enable' => $shipping_enable,
-			'shipping_per_quantity' => $shipping_per_quantity,
-			'dec_num' => intval( $class_main_inst->get_setting( 'price_decimals_num' ) ),
-			'thousand_sep' => $class_main_inst->get_setting( 'price_thousand_sep' ),
-			'dec_sep' => $class_main_inst->get_setting( 'price_decimal_sep' ),
-			'curr_pos' => $class_main_inst->get_setting( 'price_currency_pos' ),
-			'tos_enabled' => $class_main_inst->get_setting( 'tos_enabled' ),
-			'custom_quantity' => $custom_quantity,
-			'custom_amount' => $custom_amount,
-			'currency' => $currency,
-			'currency_symbol' => !empty( $class_main_inst->get_setting( 'currency_symbol' ) ) ? $class_main_inst->get_setting( 'currency_symbol' ) : $currency,
-			'coupons_enabled' => $coupons_enabled,
-			'product_id' => $product_id,
-			'name' => $name,
-			'stock_enabled' => $stock_enabled,
-			'stock_items' => $stock_items,
-			'variations' => $variations,
-			'btnStyle' => array(
-				'height' => $btn_height,
-				'shape' => $btn_shape,
-				'label' => $btn_type,
-				'color' => $btn_color,
-				'layout' => $btn_layout,
-			),
-			'is_manual_checkout_enabled' => !empty($class_main_inst->get_setting('enable_manual_checkout')),
-		) );
-
-		echo '<script type="text/javascript">var wpec_' . esc_attr( $button_id ) . '_data=' . json_encode( $data ) . ';document.addEventListener( "wpec_paypal_sdk_loaded", function() { new ppecHandler(wpec_' . esc_attr( $button_id ) . '_data); } );</script>';
-
-		WP_Express_Checkout\Main::get_instance()->load_paypal_sdk();
 
 		//Trigger action hook
 		do_action( 'wpec_url_payment_box_before_body_close', $product_id );

@@ -170,6 +170,9 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+= WIP =
+* Stripe checkout feature added.
+* Some code architecture updated.
 
 = 2.4.2 =
 * A small bug fixed for 'wpec_show_products_from_category' and 'wpec_show_all_products' shortcode when no product configured.

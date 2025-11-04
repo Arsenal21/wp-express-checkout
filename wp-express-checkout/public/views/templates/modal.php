@@ -7,7 +7,7 @@
 ?>
 
 <!--Modal-->
-<div id="wpec-modal-<?php echo esc_attr( $button_id ); ?>" class="wpec-modal wpec-opacity-0 wpec-pointer-events-none wpec-modal-product-<?php echo esc_attr( $product_id ); ?>">
+<div id="wpec-modal-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec-modal wpec-opacity-0 wpec-pointer-events-none wpec-modal-product-<?php echo esc_attr( $product_id ); ?>">
 
 	<div class="wpec-modal-overlay"></div>
 
@@ -37,6 +37,6 @@
 	</div>
 </div>
 
-<button data-wpec-modal="wpec-modal-<?php echo esc_attr( $button_id ); ?>" class="wpec-modal-open wpec-modal-open-product-<?php echo esc_attr( $product_id ); ?>">
+<button data-wpec-modal="wpec-modal-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec-modal-open wpec-modal-open-product-<?php echo esc_attr( $product_id ); ?>">
 	<?php echo esc_html( $button_text ); ?>
 </button>

@@ -48,9 +48,11 @@ function wpec_load_classes() {
 
 	new WP_Express_Checkout\Payment_Processor_Free();
 	new WP_Express_Checkout\Payment_Processor_Manual();
+	new WP_Express_Checkout\Payment_Processor_Stripe();
 	new WP_Express_Checkout\Init();
 	new WP_Express_Checkout\Integrations();
 	new WP_Express_Checkout\PayPal_Payment_Button_Ajax_Handler();
+	new WP_Express_Checkout\Stripe_Payment_Button_Ajax_Handler();
 	new WP_Express_Checkout\Integrations\WooCommerce_Payment_Button_Ajax_Handler();
 
 	new TTHQ\WPEC\Lib\PayPal\PayPal_Main(
@@ -64,10 +66,11 @@ function wpec_load_classes() {
 		)
 	);
 
+	new WP_Express_Checkout\Coupons();
+
 	// Load admin side class
 	if ( is_admin() ) {
 		WP_Express_Checkout\Admin\Admin::get_instance();
-		new WP_Express_Checkout\Coupons();
 		new WP_Express_Checkout\Admin\Orders_Meta_Boxes();
 	}
 }

@@ -7,9 +7,9 @@
 $class_main_inst = WP_Express_Checkout\Main::get_instance();
 ?>
 
-<div style="position: relative;" class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $product_id ); ?>" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" data-price-class="<?php echo esc_attr( $price_class ); ?>">
+<div style="position: relative;" class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $product_id ); ?>" data-ppec-button-id="<?php echo esc_attr( $shortcode_id ); ?>" data-price-class="<?php echo esc_attr( $price_class ); ?>">
 
-	<div class="wp-ppec-overlay" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>">
+	<div class="wp-ppec-overlay" data-ppec-button-id="<?php echo esc_attr( $shortcode_id ); ?>">
 		<div class="wp-ppec-spinner">
 			<div></div>
 			<div></div>
@@ -28,7 +28,7 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 				<label><?php echo esc_html(  sprintf( __( 'Enter Amount (%s): ', 'wp-express-checkout' ), $currency ) ); ?></label>
 			</span>
 			<span class="wpec-custom-amount-input-field">
-				<input id="wp-ppec-custom-amount" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" type="number" step="<?php echo esc_attr( $step ); ?>" name="custom-amount" class="wp-ppec-input wp-ppec-custom-amount" min="<?php echo esc_attr( $min ); ?>" value="<?php echo esc_attr( max( $price, $min ) ); ?>">
+				<input id="wp-ppec-custom-amount" data-ppec-button-id="<?php echo esc_attr( $shortcode_id ); ?>" type="number" step="<?php echo esc_attr( $step ); ?>" name="custom-amount" class="wp-ppec-input wp-ppec-custom-amount" min="<?php echo esc_attr( $min ); ?>" value="<?php echo esc_attr( max( $price, $min ) ); ?>">
 				<div class="wp-ppec-form-error-msg"></div>
 			</span>
 		</div>
@@ -41,7 +41,7 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 				<button data-action="decrement">
 					<span>&minus;</span>
 				</button>
-				<input id="wp-ppec-custom-quantity" data-ppec-button-id="<?php echo esc_attr( $button_id ); ?>" type="number" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-quantity" min="1" value="<?php echo esc_attr( $quantity ); ?>">
+				<input id="wp-ppec-custom-quantity" data-ppec-button-id="<?php echo esc_attr( $shortcode_id ); ?>" type="number" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-quantity" min="1" value="<?php echo esc_attr( $quantity ); ?>">
 				<button data-action="increment">
 					<span>+</span>
 				</button>
@@ -50,7 +50,7 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 		</div>
 	<?php } ?>
 
-	<?php do_action( 'wpec_payment_form_before_variations', $args, $button_id ); ?>
+	<?php do_action( 'wpec_payment_form_before_variations', $sc_args, $shortcode_id ); ?>
 
 	<?php
 	// Variations.
@@ -69,7 +69,7 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 					foreach ( $variations[ $grp_id ]['names'] as $var_id => $var_name ) {
 						?>
 						<label class="wpec-product-variations-select-radio-label">
-							<input class="wpec-product-variations-select-radio" data-wpec-variations-group-id="<?php echo esc_attr( $grp_id ); ?>" name="wpecVariations[<?php echo esc_attr( $button_id ); ?>][<?php echo esc_attr( $grp_id ); ?>][]" type="radio" value="<?php echo esc_attr( $var_id ); ?>" <?php checked( $var_id === 0 ); ?>>
+							<input class="wpec-product-variations-select-radio" data-wpec-variations-group-id="<?php echo esc_attr( $grp_id ); ?>" name="wpecVariations[<?php echo esc_attr( $shortcode_id ); ?>][<?php echo esc_attr( $grp_id ); ?>][]" type="radio" value="<?php echo esc_attr( $var_id ); ?>" <?php checked( $var_id === 0 ); ?>>
 							<?php echo esc_html( $var_name ); ?>
 							<?php echo esc_html( WP_Express_Checkout\Utils::price_modifier( $variations[ $grp_id ]['prices'][ $var_id ], $currency ) ); ?>
 						</label>
@@ -79,7 +79,7 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 				} else {
 					// drop-down output.
 					?>
-					<select class="wpec-product-variations-select" data-wpec-variations-group-id="<?php echo esc_attr( $grp_id ); ?>" name="wpecVariations[<?php echo esc_attr( $button_id ); ?>][<?php echo esc_attr( $grp_id ); ?>][]">
+					<select class="wpec-product-variations-select" data-wpec-variations-group-id="<?php echo esc_attr( $grp_id ); ?>" name="wpecVariations[<?php echo esc_attr( $shortcode_id ); ?>][<?php echo esc_attr( $grp_id ); ?>][]">
 					<?php
 					foreach ( $variations[ $grp_id ]['names'] as $var_id => $var_name ) {
 						?>
@@ -104,8 +104,8 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 		<div class="wpec_product_coupon_input_container">
 			<label class="wpec_product_coupon_field_label"><?php esc_html_e( 'Coupon Code:', 'wp-express-checkout' ); ?> </label>
 			<div class="wpec_product_coupon_input_wrap">
-				<input id="wpec-coupon-field-<?php echo esc_attr( $button_id ); ?>" class="wpec_product_coupon_field_input" type="text" name="wpec_coupon">
-				<button id="wpec-redeem-coupon-btn-<?php echo esc_attr( $button_id ); ?>" type="button" class="wpec_coupon_apply_btn">
+				<input id="wpec-coupon-field-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_product_coupon_field_input" type="text" name="wpec_coupon">
+				<button id="wpec-redeem-coupon-btn-<?php echo esc_attr( $shortcode_id ); ?>" type="button" class="wpec_coupon_apply_btn">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
 						<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
 						<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -113,7 +113,7 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 					<?php esc_html_e( 'Apply', 'wp-express-checkout' ); ?>
 				</button>
 			</div>
-			<div id="wpec-coupon-info-<?php echo esc_attr( $button_id ); ?>" class="wpec_product_coupon_info"></div>
+			<div id="wpec-coupon-info-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_product_coupon_info"></div>
 		</div>
 	<?php } ?>
 	<?php
@@ -121,24 +121,24 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 	//Trigger a filter that can be used to hide the billing info fields.
 	$hide_billing_info = apply_filters( 'wpec_hide_billing_info_fields', $custom_amount );
 	?>
-	<div id="wpec_billing_<?php echo esc_attr( $button_id ); echo $hide_billing_info ? '_hide' : ''; ?>" class="wpec_billing_container" style="display: none;">
+	<div id="wpec_billing_<?php echo esc_attr( $shortcode_id ); echo $hide_billing_info ? '_hide' : ''; ?>" class="wpec_billing_container" style="display: none;">
 
 		<div class="wpec_billing_user_info">
 			<div class="wpec_billing_first_name">
 				<label class="wpec_billing_first_name_label"><?php esc_html_e( 'First Name', 'wp-express-checkout' ); ?></label>
-				<input id="wpec_billing_first_name-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_first_name_field_input wpec_required" type="text" name="wpec_billing_first_name"/>
+				<input id="wpec_billing_first_name-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_billing_first_name_field_input wpec_required" type="text" name="wpec_billing_first_name"/>
 				<div class="wp-ppec-form-error-msg"></div>
 			</div>
 
 			<div class="wpec_billing_last_name">
 				<label class="wpec_billing_last_name_label"><?php esc_html_e( 'Last Name', 'wp-express-checkout' ); ?></label>
-				<input id="wpec_billing_last_name-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_last_name_field_input wpec_required" type="text" name="wpec_billing_last_name"/>
+				<input id="wpec_billing_last_name-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_billing_last_name_field_input wpec_required" type="text" name="wpec_billing_last_name"/>
 				<div class="wp-ppec-form-error-msg"></div>
 			</div>
 
 			<div class="wpec_billing_email">
 				<label class="wpec_billing_email_label"><?php esc_html_e( 'Email', 'wp-express-checkout' ); ?></label>
-				<input id="wpec_billing_email-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_email_field_input wpec_required" type="email" name="wpec_billing_email"/>
+				<input id="wpec_billing_email-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_billing_email_field_input wpec_required" type="email" name="wpec_billing_email"/>
 				<div class="wp-ppec-form-error-msg"></div>
 			</div>
 		</div>
@@ -166,19 +166,19 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 
 				<div class="wpec_billing_address">
 					<label class="wpec_billing_address_label"><?php esc_html_e( 'Address', 'wp-express-checkout' ); ?></label>
-					<input id="wpec_billing_address-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_address_field_input wpec_required" type="text" name="wpec_billing_address"/>
+					<input id="wpec_billing_address-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_billing_address_field_input wpec_required" type="text" name="wpec_billing_address"/>
 					<div class="wp-ppec-form-error-msg"></div>
 				</div>
 
 				<div class="wpec_billing_city">
 					<label class="wpec_billing_city_label"><?php esc_html_e( 'City', 'wp-express-checkout' ); ?></label>
-					<input id="wpec_billing_city-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_city_field_input wpec_required" type="text" name="wpec_billing_city"/>
+					<input id="wpec_billing_city-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_billing_city_field_input wpec_required" type="text" name="wpec_billing_city"/>
 					<div class="wp-ppec-form-error-msg"></div>
 				</div>
 
 				<div class="wpec_billing_country">
 					<label class="wpec_billing_country_label"><?php esc_html_e( 'Country', 'wp-express-checkout' ); ?></label>
-					<select id="wpec_billing_country-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_country_field_input wpec_required" name="wpec_billing_country">
+					<select id="wpec_billing_country-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_billing_country_field_input wpec_required" name="wpec_billing_country">
 					<?php
 					$countries = \WP_Express_Checkout\Utils::get_countries();
 					foreach ( $countries as $code => $country ) {
@@ -193,13 +193,13 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 
 				<div class="wpec_billing_state">
 					<label class="wpec_billing_state_label"><?php esc_html_e( 'State', 'wp-express-checkout' ); ?></label>
-					<input id="wpec_billing_state-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_state_field_input" type="text" name="wpec_billing_state"/>
+					<input id="wpec_billing_state-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_billing_state_field_input" type="text" name="wpec_billing_state"/>
 					<div class="wp-ppec-form-error-msg"></div>
 				</div>
 
 				<div class="wpec_billing_postal_code">
 					<label class="wpec_billing_postal_code_label"><?php esc_html_e( 'Postal Code', 'wp-express-checkout' ); ?></label>
-					<input id="wpec_billing_postal_code-<?php echo esc_attr( $button_id ); ?>" class="wpec_billing_postal_code_field_input" type="text" name="wpec_billing_postal_code"/>
+					<input id="wpec_billing_postal_code-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_billing_postal_code_field_input" type="text" name="wpec_billing_postal_code"/>
 					<div class="wp-ppec-form-error-msg"></div>
 				</div>
 
@@ -213,19 +213,19 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 
 					<div class="wpec_shipping_address">
 						<label class="wpec_shipping_address_label"><?php esc_html_e( 'Address', 'wp-express-checkout' ); ?></label>
-						<input id="wpec_shipping_address-<?php echo esc_attr( $button_id ); ?>" class="wpec_shipping_address_field_input wpec_required" type="text" name="wpec_shipping_address"/>
+						<input id="wpec_shipping_address-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_shipping_address_field_input wpec_required" type="text" name="wpec_shipping_address"/>
 						<div class="wp-ppec-form-error-msg"></div>
 					</div>
 
 					<div class="wpec_shipping_city">
 						<label class="wpec_shipping_city_label"><?php esc_html_e( 'City', 'wp-express-checkout' ); ?></label>
-						<input id="wpec_shipping_city-<?php echo esc_attr( $button_id ); ?>" class="wpec_shipping_city_field_input wpec_required" type="text" name="wpec_shipping_city"/>
+						<input id="wpec_shipping_city-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_shipping_city_field_input wpec_required" type="text" name="wpec_shipping_city"/>
 						<div class="wp-ppec-form-error-msg"></div>
 					</div>
 
 					<div class="wpec_shipping_country">
 						<label class="wpec_shipping_country_label"><?php esc_html_e( 'Country', 'wp-express-checkout' ); ?></label>
-						<select id="wpec_shipping_country-<?php echo esc_attr( $button_id ); ?>" class="wpec_shipping_country_field_input wpec_required" name="wpec_shipping_country">
+						<select id="wpec_shipping_country-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_shipping_country_field_input wpec_required" name="wpec_shipping_country">
 						<?php
 						$countries = \WP_Express_Checkout\Utils::get_countries();
 						foreach ( $countries as $code => $country ) {
@@ -240,13 +240,13 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 
 					<div class="wpec_shipping_state">
 						<label class="wpec_shipping_state_label"><?php esc_html_e( 'State', 'wp-express-checkout' ); ?></label>
-						<input id="wpec_shipping_state-<?php echo esc_attr( $button_id ); ?>" class="wpec_shipping_state_field_input" type="text" name="wpec_shipping_state"/>
+						<input id="wpec_shipping_state-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_shipping_state_field_input" type="text" name="wpec_shipping_state"/>
 						<div class="wp-ppec-form-error-msg"></div>
 					</div>
 
 					<div class="wpec_shipping_postal_code">
 						<label class="wpec_shipping_postal_code_label"><?php esc_html_e( 'Postal Code', 'wp-express-checkout' ); ?></label>
-						<input id="wpec_shipping_postal_code-<?php echo esc_attr( $button_id ); ?>" class="wpec_shipping_postal_code_field_input" type="text" name="wpec_shipping_postal_code"/>
+						<input id="wpec_shipping_postal_code-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_shipping_postal_code_field_input" type="text" name="wpec_shipping_postal_code"/>
 						<div class="wp-ppec-form-error-msg"></div>
 					</div>
 
@@ -260,12 +260,12 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 		?>
 	</div><!-- end of billing info fields container -->
 
-	<div class = "wp-ppec-button-container">
+	<div class="wp-ppec-button-container">
 
 		<?php if ( $class_main_inst->get_setting( 'tos_enabled' ) ) { ?>
 			<div class="wpec_product_tos_input_container">
 				<label class="wpec_product_tos_label">
-					<input id="wpec-tos-<?php echo esc_attr( $button_id ); ?>" class="wpec_product_tos_input" type="checkbox"> <?php echo html_entity_decode( $class_main_inst->get_setting( 'tos_text' ) ); ?>
+					<input id="wpec-tos-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_product_tos_input" type="checkbox"> <?php echo html_entity_decode( $class_main_inst->get_setting( 'tos_text' ) ); ?>
 				</label>
 				<div class="wp-ppec-form-error-msg"></div>
 			</div>
@@ -277,12 +277,12 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 
 		<?php if ( $use_modal ) { ?>
 			<div class="wpec-price-container <?php echo esc_attr( $price_class );?>">
-				<?php echo WP_Express_Checkout\Shortcodes::get_instance()->generate_price_tag( $args ); ?>
+				<?php echo WP_Express_Checkout\Shortcodes::get_instance()->generate_price_tag( $sc_args ); ?>
 			</div>
 		<?php } ?>
 
-		<div id="place-order-<?php echo esc_attr( $button_id ); echo $hide_billing_info ? '_hide' : ''; ?>" style="display:none;">
-			<?php do_action('wpec_before_full_discount_checkout_button', $args, $button_id) ?>
+		<div id="place-order-<?php echo esc_attr( $shortcode_id ); echo $hide_billing_info ? '_hide' : ''; ?>" style="display:none;">
+			<?php do_action('wpec_before_full_discount_checkout_button', $sc_args, $shortcode_id) ?>
 			<button class="wpec-place-order-btn">				
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
 						<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -292,19 +292,26 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 			</button>
 		</div>
 
-		<div id="<?php echo esc_attr( $button_id ); ?>" style="max-width:<?php echo esc_attr( $btn_width ? $btn_width . 'px;' : '' ); ?>"></div>
+        <!-- TODO: Test container -->
+        <div id="<?php echo esc_attr($shortcode_id) ?>" class="wpec-payment-buttons-container">
+            <?php if (isset($paypal_button_id)) { ?>
+            <div id="<?php echo esc_attr( $paypal_button_id ); ?>" style="max-width:<?php echo esc_attr( $btn_width ? $btn_width . 'px;' : '' ); ?>; margin-bottom: 12px"></div>
+            <?php } ?>
 
-		<div class="wpec-button-placeholder" style="display: none; border: 1px solid #E7E9EB; padding:1rem;">
-			<i><?php esc_html_e( 'This is where the Express Checkout Button will show. View it on the front-end to see how it will look to your visitors', 'wp-express-checkout' ); ?></i>
-		</div>
+            <?php if (isset($stripe_button_id)) { ?>
+            <div id="<?php echo esc_attr( $stripe_button_id ); ?>" style="margin-bottom: 16px"></div>
+            <?php } ?>
 
-        <?php
-        // Show manual checkout section if enabled.
-        if (!empty($class_main_inst->get_setting('enable_manual_checkout'))) {
-            require \WP_Express_Checkout\Shortcodes::get_instance()::locate_template('template-parts/manual-checkout-section.php');
-        }
-        ?>
-
+            <?php
+            // Show manual checkout section if enabled.
+            if (!empty($class_main_inst->get_setting('enable_manual_checkout'))) {
+                require \WP_Express_Checkout\Shortcodes::get_instance()::locate_template('template-parts/manual-checkout-section.php');
+            }
+            ?>
+        </div>
+        <div class="wpec-button-placeholder" style="display: none; border: 1px solid #E7E9EB; padding:1rem;">
+            <i><?php esc_html_e( 'This is where the Express Checkout Button will show. View it on the front-end to see how it will look to your visitors', 'wp-express-checkout' ); ?></i>
+        </div>
 	</div>
 
 </div>

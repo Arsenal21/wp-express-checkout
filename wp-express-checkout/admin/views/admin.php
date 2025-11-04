@@ -35,6 +35,7 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 		'ppec-settings-page&action=paypal-settings' => __( 'PayPal Settings', 'wp-express-checkout' ),
 		'ppec-settings-page&action=email-settings'    => __( 'Email Settings', 'wp-express-checkout' ),
 		'ppec-settings-page&action=advanced-settings' => __( 'Advanced Settings', 'wp-express-checkout' ),
+		'ppec-settings-page&action=stripe-settings' => __( 'Stripe Settings', 'wp-express-checkout' ),
 		'ppec-settings-page&action=manual-checkout' => __( 'Manual/Offline Checkout', 'wp-express-checkout' ),
 	) );
 
@@ -79,7 +80,7 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 					$action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : '';
 					switch ( $action ) {
 						case 'paypal-settings':
-                            $wpec_admin->do_settings_sections_no_wrap( 'paypal-for-digital-goods-pp-settings' );
+                            $wpec_admin->do_settings_sections_no_wrap( 'paypal-for-digital-goods-pp-arbitrary-settings' );
 							require WPEC_PLUGIN_PATH . '/admin/views/settings-tabs/paypal-settings.php';
 							break;
 						case 'email-settings':
@@ -89,6 +90,10 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 						case 'advanced-settings':
 							$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-advanced' );
 							echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-advanced' ) . "' />";
+							break;
+						case 'stripe-settings':
+							$wpec_admin->do_settings_sections_no_wrap( 'paypal-for-digital-goods-stripe-arbitrary-settings' );
+							require WPEC_PLUGIN_PATH . '/admin/views/settings-tabs/stripe-settings.php';
 							break;
 						case 'manual-checkout':
 							$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-manual-checkout' );
