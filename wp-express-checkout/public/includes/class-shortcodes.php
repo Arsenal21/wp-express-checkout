@@ -362,7 +362,7 @@ class Shortcodes {
         ?>
         <script type="text/javascript">
             document.addEventListener( "wpec_paypal_sdk_loaded", function() {
-                new WpecPayPalHandler(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
+                new WPECPayPalHandler(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
             });
         </script>
         <?php
@@ -404,7 +404,7 @@ class Shortcodes {
 		?>
         <script type="text/javascript">
             document.addEventListener( "DOMContentLoaded", function() {
-                new WpecStripeHandler(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
+                new WPECStripeHandler(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
             });
         </script>
 		<?php
@@ -430,7 +430,7 @@ class Shortcodes {
 	    ?>
         <script type="text/javascript">
             document.addEventListener( "DOMContentLoaded", function() {
-                new WpecManualCheckout(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
+                new WPECManualCheckout(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
             });
         </script>
 	    <?php

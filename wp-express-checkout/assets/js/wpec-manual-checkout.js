@@ -1,6 +1,6 @@
 /* global ppecFrontVars, wpec_manual_checkout_frontend_vars */
 
-class WpecManualCheckout {
+class WPECManualCheckout {
 
     constructor(btnData, wpecHandler) {
         this.wpecHandler = wpecHandler;

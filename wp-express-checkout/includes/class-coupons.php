@@ -12,7 +12,6 @@ class Coupons {
 
 	function __construct() {
 		add_action( 'init', array( $this, 'init_handler' ) );
-		add_action( 'admin_init', array( $this, 'admin_init_handler' ) );
 		add_action( 'wpec_create_order', array( $this, 'add_discount_to_order' ), 30, 3 );
 		add_action( 'wpec_payment_completed', array( $this, 'redeem_coupon' ), 10, 3 );
 		if ( is_admin() ) {
@@ -151,13 +150,13 @@ class Coupons {
 			'capability_type'     => 'post',
 		);
 		register_post_type( $this->POST_SLUG, $args );
-	}
 
-    public function admin_init_handler() {
-	    if ( isset( $_POST['wpec_coupon'] ) ) {
-		    $this->save_coupon();
-	    }
-    }
+        if(is_admin()){
+	        if ( isset( $_POST['wpec_coupon'] ) ) {
+		        $this->save_coupon();
+	        }
+        }
+	}
 
 	function add_coupons_menu() {
 		add_submenu_page( WPEC_MENU_PARENT_SLUG, __( 'Coupons', 'wp-express-checkout' ), __( 'Coupons', 'wp-express-checkout' ), Main::get_instance()->get_setting( 'access_permission' ), 'wpec-coupons', array( $this, 'display_coupons_menu_page' ) );

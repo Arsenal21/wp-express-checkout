@@ -78,7 +78,7 @@ class Main {
 		$min = ( defined( 'WPEC_LOAD_NON_MINIFIED' ) && WPEC_LOAD_NON_MINIFIED ) ? '' : '.min';
 
 		// Enqueue public.js
-		wp_enqueue_script( 'wp-ppec-frontend-script', WPEC_PLUGIN_URL . "/assets/js/public{$min}.js", array( 'jquery' ), WPEC_PLUGIN_VER, false );
+		wp_enqueue_script( 'wp-ppec-frontend-script', WPEC_PLUGIN_URL . "/assets/js/public{$min}.js", array( 'jquery' ), WPEC_PLUGIN_VER, true );
 		wp_localize_script( 'wp-ppec-frontend-script', 'wpec_create_order_vars', array(
 			'nonce' => wp_create_nonce('wpec-create-order-js-ajax-nonce'),
 		));
@@ -430,12 +430,11 @@ class Main {
 			'stripe_live_secret_key'      => '',
 			'stripe_test_publishable_key'    => '',
 			'stripe_test_secret_key'   => '',
-			'stripe_btn_text'            => 'Stripe',
+			'stripe_btn_text'            => 'Stripe Checkout',
 			'stripe_btn_shape'            => 'rect',
-			'stripe_btn_color'            => 'purple',
-			'stripe_btn_type'             => 'checkout',
 			'stripe_btn_height'           => 'medium', /* use a default height of medium for best results */
-			'stripe_btn_width'            => 150, /* use a default width of 150px for best results */
+			'stripe_btn_width'            => 300, /* use a default width of 300px for best results */
+			'stripe_btn_color'            => 'purple',
 
 			'enable_manual_checkout' => '',
 			'manual_checkout_btn_text' => '',

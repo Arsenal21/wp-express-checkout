@@ -6,7 +6,6 @@ wp_enqueue_style( 'wpec-stripe-styles', WPEC_PLUGIN_URL . "/assets/css/wpec-stri
 
 $wpec_pp_settings_subtab = array(
 	'general'  => __( 'General Settings', 'wp-express-checkout' ),
-	'api-connection'  => __( 'Stripe API Connection', 'wp-express-checkout' ),
 	'api-credentials' => __( 'API Credentials', 'wp-express-checkout' ),
 	'btn-appearance'  => __( 'Button Appearance', 'wp-express-checkout' ),
 );
@@ -21,8 +20,8 @@ $wpec_pp_settings_subtab = array(
 		$class = ( $current_subtab == $subtab ) ? ' nav-tab-active' : '';
 		?>
         <a
-                class="nav-tab<?php echo esc_attr( $class ); ?>"
-                href="<?php echo esc_url( WPEC_MENU_PARENT_SLUG . '&page=ppec-settings-page&action=' . $_GET['action'] . '&subtab=' . $subtab ); ?>"
+            class="nav-tab<?php echo esc_attr( $class ); ?>"
+            href="<?php echo esc_url( WPEC_MENU_PARENT_SLUG . '&page=ppec-settings-page&action=' . $_GET['action'] . '&subtab=' . $subtab ); ?>"
         >
 			<?php echo esc_html( $subtab_name ); ?>
         </a>
@@ -34,21 +33,17 @@ $wpec_pp_settings_subtab = array(
 <?php
 switch ( $current_subtab ) {
 	case 'api-credentials':
-		$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-stripe-api-credentials' );
-		echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-stripe-api-credentials' ) . "' />";
+		$wpec_admin->do_settings_sections( 'wpec-stripe-api-credentials' );
+		echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'wpec-stripe-api-credentials' ) . "' />";
 		break;
 	case 'btn-appearance':
-		$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-stripe-btn-appearance' );
-		echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-stripe-btn-appearance' ) . "' />";
-		break;
-	case 'api-connection':
-		$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-stripe-api-connection' );
-		echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-stripe-api-connection' ) . "' />";
+		$wpec_admin->do_settings_sections( 'wpec-stripe-btn-appearance' );
+		echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'wpec-stripe-btn-appearance' ) . "' />";
 		break;
     case 'general':
     default:
-		$wpec_admin->do_settings_sections( 'paypal-for-digital-goods-stripe-settings' );
-		echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-stripe-settings' ) . "' />";
+		$wpec_admin->do_settings_sections( 'wpec-stripe-settings' );
+		echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'wpec-stripe-settings' ) . "' />";
 		break;
 }
 ?>

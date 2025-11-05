@@ -1,6 +1,6 @@
 /* global ppecFrontVars, wpec_stripe_frontend_vars */
 
-class WpecStripeHandler {
+class WPECStripeHandler {
 
     constructor(btnData, wpecHandler) {
         this.btnData = btnData;
