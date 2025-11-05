@@ -92,7 +92,7 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 							echo "<input type='hidden' name='ppdg_page_tab' value='" . esc_attr( 'paypal-for-digital-goods-advanced' ) . "' />";
 							break;
 						case 'stripe-settings':
-							$wpec_admin->do_settings_sections_no_wrap( 'paypal-for-digital-goods-stripe-arbitrary-settings' );
+							$wpec_admin->do_settings_sections_no_wrap( 'wpec-stripe-arbitrary-settings' );
 							require WPEC_PLUGIN_PATH . '/admin/views/settings-tabs/stripe-settings.php';
 							break;
 						case 'manual-checkout':

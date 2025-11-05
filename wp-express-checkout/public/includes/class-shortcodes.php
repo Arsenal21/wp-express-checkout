@@ -362,7 +362,7 @@ class Shortcodes {
         ?>
         <script type="text/javascript">
             document.addEventListener( "wpec_paypal_sdk_loaded", function() {
-                new WpecPayPalHandler(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
+                new WPECPayPalHandler(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
             });
         </script>
         <?php
@@ -404,7 +404,7 @@ class Shortcodes {
 		?>
         <script type="text/javascript">
             document.addEventListener( "DOMContentLoaded", function() {
-                new WpecStripeHandler(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
+                new WPECStripeHandler(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
             });
         </script>
 		<?php
@@ -430,7 +430,7 @@ class Shortcodes {
 	    ?>
         <script type="text/javascript">
             document.addEventListener( "DOMContentLoaded", function() {
-                new WpecManualCheckout(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
+                new WPECManualCheckout(<?php echo json_encode($data) ?>, window['<?php echo esc_js($sc_id) ?>']);
             });
         </script>
 	    <?php
@@ -659,6 +659,21 @@ class Shortcodes {
 		//if user has changed sort by from UI
 		$sort_by = isset( $_GET['wpec-sortby'] ) ? sanitize_text_field( stripslashes ( $_GET['wpec-sortby'] ) ) : '';
 
+        $tpl = array(
+                'page' => '',
+                'search_box' => '',
+                'clear_search_button' => '',
+                'products_item' => '',
+                'products_list' => '',
+                'products_per_row' => 3,
+                'products_row_start' => '',
+                'products_row_end' => '',
+                'pagination' => '',
+                'pagination_item' => '',
+                'pagination_item_current' => '',
+                'view_product_btn' => '',
+        );
+
 		include_once WPEC_PLUGIN_PATH . 'public/views/templates/all-products/all-products.php';
 
 		$page = filter_input( INPUT_GET, 'wpec_page', FILTER_SANITIZE_NUMBER_INT );
@@ -719,14 +734,14 @@ class Shortcodes {
 			$tpl['search_box'] = '';
 		}
 
-		
+
 
 		$tpl['products_list'] .= $tpl['products_row_start'];
 		$i                     = $tpl['products_per_row']; //items per row
 
 		while ( $products->have_posts() ) {
 			$products->the_post();	
-			$product;		
+			// $product;
 			
 			$i --;
 			if ( $i < 0 ) { //new row

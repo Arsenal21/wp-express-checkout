@@ -261,15 +261,11 @@ class Admin {
 		add_settings_section( 'wpec-access-section', __( 'Admin Dashboard Access Permission', 'wp-express-checkout' ), array( $this, 'access_description' ), $this->plugin_slug . '-advanced' );
 
 		// Stripe Settings Tab Sections
-		add_settings_section( 'ppdg-stripe-settings-arbitrary-section', __( '', 'wp-express-checkout' ), array( $this, 'handle_stripe_settings_arbitrary_section' ), $this->plugin_slug . '-stripe-arbitrary-settings' );
-
-		add_settings_section( 'ppdg-stripe-settings-section', __( 'Stripe General Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-stripe-settings' );
-
-		add_settings_section( 'ppdg-stripe-live-sandbox-mode-section', __( 'Live Mode or Sandbox', 'wp-express-checkout' ), null, $this->plugin_slug . '-stripe-api-connection' );
-
-		add_settings_section( 'ppdg-stripe-credentials-section', __( 'Stripe API Credentials', 'wp-express-checkout' ), null, $this->plugin_slug . '-stripe-api-credentials');
-
-		add_settings_section( 'ppdg-stripe-button-style-section', __( 'Stripe Button Appearance Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-stripe-btn-appearance' );
+		add_settings_section( 'wpec-stripe-settings-arbitrary-section', __( '', 'wp-express-checkout' ), array( $this, 'handle_stripe_settings_arbitrary_section' ), 'wpec-stripe-arbitrary-settings' );
+		add_settings_section( 'wpec-stripe-settings-section', __( 'Stripe General Settings', 'wp-express-checkout' ), null, 'wpec-stripe-settings' );
+		add_settings_section( 'wpec-stripe-live-sandbox-mode-section', __( 'Live Mode or Sandbox', 'wp-express-checkout' ), null, 'wpec-stripe-settings' );
+		add_settings_section( 'wpec-stripe-credentials-section', __( 'Stripe API Credentials', 'wp-express-checkout' ), null, 'wpec-stripe-api-credentials');
+		add_settings_section( 'wpec-stripe-button-style-section', __( 'Stripe Button Appearance Settings', 'wp-express-checkout' ), null, 'wpec-stripe-btn-appearance' );
 
 		// Manual Checkout Tab Sections
 		add_settings_section( 'wpec-manual-checkout-section', __( 'Manual/Offline Checkout Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-manual-checkout' );
@@ -563,7 +559,7 @@ class Admin {
 		/****************************/
 		$stripe_checkout_description = '<p>' . __( 'Select this option to enable stripe checkout.', 'wp-express-checkout' );
 		$stripe_checkout_description .= ' ' . '<a href="#" target="_blank">'. __('Read the documentation', 'wp-express-checkout') . '</a>.' . '</p>';
-		add_settings_field( 'enable_stripe_checkout', __( 'Enable Stripe Checkout', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-stripe-settings', 'ppdg-stripe-settings-section',
+		add_settings_field( 'enable_stripe_checkout', __( 'Enable Stripe Checkout', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), 'wpec-stripe-settings', 'wpec-stripe-settings-section',
 			array(
 				'field' => 'enable_stripe_checkout',
 				'type'  => 'checkbox',
@@ -572,7 +568,7 @@ class Admin {
 			) );
 
 		// stripe api connection section.
-		add_settings_field( 'stripe_allowed_countries', __( 'Allowed Countries For Shipping', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-stripe-settings', 'ppdg-stripe-settings-section',
+		add_settings_field( 'stripe_allowed_countries', __( 'Allowed Countries For Shipping', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), 'wpec-stripe-settings', 'wpec-stripe-settings-section',
 			array(
 				'field' => 'stripe_allowed_countries',
 				'type'  => 'text',
@@ -581,7 +577,7 @@ class Admin {
 		);
 
 		// stripe api connection section.
-		add_settings_field( 'stripe_is_live', __( 'Live Mode', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-stripe-api-connection', 'ppdg-stripe-live-sandbox-mode-section',
+		add_settings_field( 'stripe_is_live', __( 'Live Mode', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), 'wpec-stripe-settings', 'wpec-stripe-live-sandbox-mode-section',
 			array(
 				'field' => 'stripe_is_live',
 				'type'  => 'checkbox',
@@ -590,61 +586,62 @@ class Admin {
 		);
 
 		// stripe api credentials section.
-		add_settings_field( 'stripe_live_publishable_key', __( 'Live Publishable Key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug. '-stripe-api-credentials', 'ppdg-stripe-credentials-section',
+		add_settings_field( 'stripe_live_publishable_key', __( 'Live Publishable Key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), 'wpec-stripe-api-credentials', 'wpec-stripe-credentials-section',
 			array(
 				'field' => 'stripe_live_publishable_key',
 				'type'  => 'text',
 				'desc'  => __( 'Enter your Stripe Publishable Key for live mode.', 'wp-express-checkout' ),
 			)
 		);
-		add_settings_field( 'stripe_live_secret_key', __( 'Live Secret key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug .'-stripe-api-credentials', 'ppdg-stripe-credentials-section',
+		add_settings_field( 'stripe_live_secret_key', __( 'Live Secret key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), 'wpec-stripe-api-credentials', 'wpec-stripe-credentials-section',
 			array(
 				'field' => 'stripe_live_secret_key',
 				'type'  => 'text',
 				'desc'  => __( 'Enter your Stripe Secret Key for live mode.', 'wp-express-checkout' ),
 			)
 		);
-		add_settings_field( 'stripe_test_publishable_key', __( 'Test Publishable Key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug .'-stripe-api-credentials', 'ppdg-stripe-credentials-section',
+		add_settings_field( 'stripe_test_publishable_key', __( 'Test Publishable Key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), 'wpec-stripe-api-credentials', 'wpec-stripe-credentials-section',
 			array(
 				'field' => 'stripe_test_publishable_key',
 				'type'  => 'text',
 				'desc'  => __( 'Enter your Stripe Publishable Key for test mode.', 'wp-express-checkout' ),
 			)
 		);
-		add_settings_field( 'stripe_test_secret_key', __( 'Test Secret key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug .'-stripe-api-credentials', 'ppdg-stripe-credentials-section',
+		add_settings_field( 'stripe_test_secret_key', __( 'Test Secret key', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), 'wpec-stripe-api-credentials', 'wpec-stripe-credentials-section',
 			array(
 				'field' => 'stripe_test_secret_key',
 				'type'  => 'text',
+				'class' => 'wpec-button-style-input',
 				'desc'  => __( 'Enter your Stripe Secret Key for test mode.', 'wp-express-checkout' ),
 			)
 		);
 
 		// stripe button style section.
-		add_settings_field( 'stripe_btn_text', __( 'Button Text', 'wp-express-checkout' ), array( $this,'settings_field_callback'), $this->plugin_slug . '-stripe-btn-appearance', 'ppdg-stripe-button-style-section',
+		add_settings_field( 'stripe_btn_text', __( 'Button Text', 'wp-express-checkout' ), array( $this,'settings_field_callback'), 'wpec-stripe-btn-appearance', 'wpec-stripe-button-style-section',
 			array(
 				'field' => 'stripe_btn_text',
 				'type' => 'text',
-				'class' => 'wp-ppdg-button-style',
+				'class' => 'wpec-button-style-input',
 				'placeholder' => __( 'Stripe', 'wp-express-checkout' ),
 				'desc' => __( 'The text that appear on the button', 'wp-express-checkout' ),
 				'size' => 10
 			) );
 
-		add_settings_field( 'stripe_btn_shape', __( 'Button Shape', 'wp-express-checkout' ), array( $this,'settings_field_callback'), $this->plugin_slug . '-stripe-btn-appearance', 'ppdg-stripe-button-style-section',
+		add_settings_field( 'stripe_btn_shape', __( 'Button Shape', 'wp-express-checkout' ), array( $this,'settings_field_callback'), 'wpec-stripe-btn-appearance', 'wpec-stripe-button-style-section',
 			array(
 				'field' => 'stripe_btn_shape',
 				'type'  => 'select',
-				'class' => 'wp-ppdg-button-style',
+				'class' => 'wpec-button-style-input',
 				'desc'  => '',
 				'vals'  => array( 'pill', 'rect' ),
 				'texts' => array( __( 'Pill', 'wp-express-checkout' ), __( 'Rectangle', 'wp-express-checkout' ) )
 			) );
 
-		add_settings_field( 'stripe_btn_height', __( 'Button Size', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-stripe-btn-appearance', 'ppdg-stripe-button-style-section',
+		add_settings_field( 'stripe_btn_height', __( 'Button Size', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), 'wpec-stripe-btn-appearance', 'wpec-stripe-button-style-section',
 			array(
 				'field' => 'stripe_btn_height',
 				'type'  => 'select',
-				'class' => 'wp-ppdg-button-style',
+				'class' => 'wpec-button-style-input',
 				'desc'  => '',
 				'vals'  => array( 'small', 'medium', 'large', 'xlarge' ),
 				'texts' => array(
@@ -654,20 +651,19 @@ class Admin {
 					__( 'Extra Large', 'wp-express-checkout' )
 				)
 			) );
-		add_settings_field( 'stripe_btn_width', __( 'Button Width', 'wp-express-checkout' ), array( $this,'settings_field_callback'), $this->plugin_slug . '-stripe-btn-appearance', 'ppdg-stripe-button-style-section',
+		add_settings_field( 'stripe_btn_width', __( 'Button Width', 'wp-express-checkout' ), array( $this,'settings_field_callback'), 'wpec-stripe-btn-appearance', 'wpec-stripe-button-style-section',
 			array(
 				'field' => 'stripe_btn_width',
 				'type' => 'number',
-				'class' => 'wp-ppdg-button-style',
+				'class' => 'wpec-button-style-input',
 				'placeholder' => __( 'Auto', 'wp-express-checkout' ),
 				'desc' => __( 'Button width in pixels. Minimum width is 150px. Leave it blank for auto width.', 'wp-express-checkout' ),
-				'size' => 10
 			) );
-		add_settings_field( 'stripe_btn_color', __( 'Button Color', 'wp-express-checkout' ), array( $this,'settings_field_callback'), $this->plugin_slug . '-stripe-btn-appearance', 'ppdg-stripe-button-style-section',
+		add_settings_field( 'stripe_btn_color', __( 'Button Color', 'wp-express-checkout' ), array( $this,'settings_field_callback'), 'wpec-stripe-btn-appearance', 'wpec-stripe-button-style-section',
 			array(
 				'field' => 'stripe_btn_color',
 				'type'  => 'select',
-				'class' => 'wp-ppdg-button-style',
+				'class' => 'wpec-button-style-input',
 				'desc'  => '<div id="wp-ppdg-preview-container"><p style="margin-bottom: 10px">' . __( 'Button preview:', 'wp-express-checkout' ) . '</p><div id="stripe-button-container"><button id="stripe-preview-button" class="wpec-stripe-btn">Stripe</button></div></div>',
 				'vals'  => array( 'purple', 'gold', 'blue', 'silver', 'white', 'black' ),
 				'texts' => array(

@@ -1,6 +1,6 @@
 /* global ppecFrontVars, wpec_create_order_vars, wpec_on_approve_vars */
 
-class WpecPayPalHandler {
+class WPECPayPalHandler {
 
     constructor(btnData, wpecHandler) {
         this.btnData = btnData;
