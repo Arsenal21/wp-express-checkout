@@ -23,6 +23,11 @@ class WPECStripeHandler {
     render() {
         const checkoutBtnCont = document.getElementById(this.buttonId);
 
+        if (!checkoutBtnCont){
+            console.log("Unable to render stripe checkout button.");
+            return;
+        }
+
         const checkoutBtn = document.createElement('button');
 
         const btnWidth = this.btnData?.btnStyle?.width ? this.btnData.btnStyle.width + 'px' : '150px';
