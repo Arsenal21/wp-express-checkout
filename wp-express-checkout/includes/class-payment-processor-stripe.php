@@ -36,13 +36,8 @@ class Payment_Processor_Stripe {
 
 		$session_id = $ref_id;
 
-		$is_live = Main::get_instance()->get_setting( 'stripe_is_live' );
-		if ( $is_live ) {
-			$secret_key = Main::get_instance()->get_setting( 'stripe_live_secret_key' );
-		} else {
-			$secret_key = Main::get_instance()->get_setting( 'stripe_test_secret_key' );
-		}
-
+		$secret_key = Utils::get_stripe_secret_key();
+		
 		try {
 			Stripe::setApiKey( $secret_key );
 
