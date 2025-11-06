@@ -300,8 +300,8 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 
             <?php if (isset($stripe_button_id)) { ?>
                 <?php if (empty(\WP_Express_Checkout\Utils::get_stripe_secret_key())) { ?>
-                    <p style="color: #cc0000"><?php esc_html_e('Please configure stripe api key in the settings first to checkout with stripe!'); ?></p>
-                <?php } else {?>
+                    <p style="color: #cc0000"><?php esc_html_e('You have enabled the Stripe payment method, but the API key is missing. Please configure your Stripe API key in the Settings menu to proceed.'); ?></p>
+                <?php } else { ?>
                     <div id="<?php echo esc_attr( $stripe_button_id ); ?>" style="margin-bottom: 16px"></div>
                 <?php } ?>
             <?php } ?>
