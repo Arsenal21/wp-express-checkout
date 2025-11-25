@@ -25,8 +25,7 @@ class WPECManualCheckout {
         document.dispatchEvent(
             new CustomEvent('wpec_before_render_manual_checkout_button', {
                 detail: {
-                    wpecManualCheckout: this,
-                    wpecHandler: this.wpecHandler,
+                    handler: this,
                 }
             })
         );
@@ -104,8 +103,7 @@ class WPECManualCheckout {
             document.dispatchEvent(new CustomEvent('wpec_process_manual_checkout', {
                 detail: {
                     paymentData,
-                    wpecManualCheckout: this,
-                    wpecHandler: this.wpecHandler,
+                    handler: this,
                 }
             }));
 
@@ -148,8 +146,7 @@ class WPECManualCheckout {
         // this.parent = this.wpecHandler; // TODO: For BPCFT support, need to fix this later
         document.dispatchEvent(new CustomEvent('wpec_toggle_manual_checkout_form', {
             detail: {
-                wpecManualCheckout: this,
-                wpecHandler: this.wpecHandler,
+                handler: this,
             }
         }));
     }

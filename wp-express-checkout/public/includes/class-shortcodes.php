@@ -247,8 +247,10 @@ class Shortcodes {
 			'stock_items'     => $stock_items,
 			'variations'      => $variations,
 		);
-        $wpec_js_data = apply_filters('wpec_js_data', $wpec_js_data);
+        $wpec_js_data = apply_filters('wpec_js_data', $wpec_js_data, $sc_args);
 
+		$product = Products::retrieve($product_id);
+		$product_type = $product->get_type();
 
         $buttons_script = '';
 
@@ -258,7 +260,6 @@ class Shortcodes {
         $is_paypal_checkout_enabled = Main::get_instance()->get_setting('enable_paypal_checkout');
         if (!empty($is_paypal_checkout_enabled)){
             $paypal_button_id = 'paypal_button_' . $shortcode_count;
-            // $sc_args['paypal_button_id'] = $paypal_button_id;
 	        $buttons_script .= $this->generate_pp_express_checkout_button($paypal_button_id, $sc_args, $shortcode_id);
         }
 
@@ -266,23 +267,18 @@ class Shortcodes {
 		 * For Stripe
 		 */
 		$is_stripe_checkout_enabled = Main::get_instance()->get_setting('enable_stripe_checkout');
+		$is_stripe_checkout_enabled = apply_filters('wpec_show_stripe_checkout_option_backward_compatible', $is_stripe_checkout_enabled, $product_type);  // TODO: For addon backward compatibility.
         if (!empty($is_stripe_checkout_enabled)){
-	        $product = Products::retrieve($product_id);
-	        $product_type = $product->get_type();
-            if ($product_type != 'subscription'){ // We currently don't support subscription type product.
-                $stripe_button_id = 'stripe_button_' . $shortcode_count;
-                // $sc_args['stripe_button_id'] = $stripe_button_id;
-                $buttons_script .= $this->generate_stripe_express_checkout_button($stripe_button_id, $sc_args, $shortcode_id);
-            }
+            $stripe_button_id = 'stripe_button_' . $shortcode_count;
+            $buttons_script .= $this->generate_stripe_express_checkout_button($stripe_button_id, $sc_args, $shortcode_id);
         }
 
 		/**
 		 * For Manual Checkout
 		 */
         $is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_checkout');
-        if (!empty($is_manual_checkout_enabled)){
+        if (!empty($is_manual_checkout_enabled) && $product_type != 'subscription'){
             $manual_checkout_button_id = 'manual_checkout_button_' . $shortcode_count;
-            // $sc_args['manual_checkout_button_id'] = $manual_checkout_button_id;
 	        $buttons_script .= $this->generate_manual_checkout_button($manual_checkout_button_id, $sc_args, $shortcode_id);
         }
 
@@ -356,6 +352,8 @@ class Shortcodes {
 				'color'  => $btn_color,
 				'layout' => $btn_layout,
 			),
+
+            'product_id' => $sc_args['product_id'], // TODO: For addon backward compatibility.
 		) );
 
         ob_start();

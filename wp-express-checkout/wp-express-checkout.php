@@ -73,6 +73,8 @@ function wpec_load_classes() {
 		WP_Express_Checkout\Admin\Admin::get_instance();
 		new WP_Express_Checkout\Admin\Orders_Meta_Boxes();
 	}
+
+	new WP_Express_Checkout\Self_Hooks_Handler();
 }
 add_action( 'plugins_loaded', 'wpec_load_classes' );
 

@@ -21,6 +21,12 @@ class Emember {
 	}
 
 	public function handle_signup( $payment, $order_id, $product_id ) {
+        // TODO: Need to add support for stripe later.
+        $payment_gateway = get_post_meta($order_id, 'wpec_order_payment_gateway', true);
+        if (!empty($payment_gateway) && $payment_gateway == 'stripe'){
+            Logger::log('WP eMember signup on wpec stripe checkout is not currently supported!');
+            return;
+        }
 
 		// let's check if Membership Level is set for this product.
 		$level_id = get_post_meta( $product_id, 'wpec_product_emember_level', true );

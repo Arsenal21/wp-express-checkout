@@ -101,6 +101,7 @@ class Payment_Processor_Manual extends Payment_Processor {
 			$this->send_error( $exc->getMessage(), $exc->getCode() );
 		}
 
+		$order->set_payment_gateway( 'manual_checkout' );
 		/* translators: Order title: {Quantity} {Item name} - {Status} */
 		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $this->transaction_status ) );
 		$order->set_currency( $currency );

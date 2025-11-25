@@ -559,6 +559,8 @@ class Admin {
 		/****************************/
 		$stripe_checkout_description = '<p>' . __( 'Select this option to enable stripe checkout.', 'wp-express-checkout' );
 		$stripe_checkout_description .= ' ' . '<a href="#" target="_blank">'. __('Read the documentation', 'wp-express-checkout') . '</a>.' . '</p>';
+
+		// stripe general settings section fields.
 		add_settings_field( 'enable_stripe_checkout', __( 'Enable Stripe Checkout', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), 'wpec-stripe-settings', 'wpec-stripe-settings-section',
 			array(
 				'field' => 'enable_stripe_checkout',
@@ -567,16 +569,15 @@ class Admin {
 				'desc'  => sprintf( $stripe_checkout_description ),
 			) );
 
-		// stripe api connection section.
 		add_settings_field( 'stripe_allowed_countries', __( 'Allowed Countries For Shipping', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), 'wpec-stripe-settings', 'wpec-stripe-settings-section',
 			array(
 				'field' => 'stripe_allowed_countries',
 				'type'  => 'text',
+				'class' => 'wpec_input_width_full',
 				'desc'  => sprintf(__( 'Enter the countries that are allowed for shipping by specifying their two-letter ISO country codes separated by comma. For example: US, CA, AU, GE, ES etc. %s', 'wp-express-checkout' ), ' <a href="https://www.nationsonline.org/oneworld/country_code_list.htm">'.__('See the list of ISO country codes here.', 'wp-express-checkout').'</a>')
 			)
 		);
 
-		// stripe api connection section.
 		add_settings_field( 'stripe_is_live', __( 'Live Mode', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), 'wpec-stripe-settings', 'wpec-stripe-live-sandbox-mode-section',
 			array(
 				'field' => 'stripe_is_live',
@@ -590,6 +591,7 @@ class Admin {
 			array(
 				'field' => 'stripe_live_publishable_key',
 				'type'  => 'text',
+				'class' => 'wpec_input_width_three_fourth',
 				'desc'  => __( 'Enter your Stripe Publishable Key for live mode.', 'wp-express-checkout' ),
 			)
 		);
@@ -597,6 +599,7 @@ class Admin {
 			array(
 				'field' => 'stripe_live_secret_key',
 				'type'  => 'text',
+				'class' => 'wpec_input_width_three_fourth',
 				'desc'  => __( 'Enter your Stripe Secret Key for live mode.', 'wp-express-checkout' ),
 			)
 		);
@@ -604,6 +607,7 @@ class Admin {
 			array(
 				'field' => 'stripe_test_publishable_key',
 				'type'  => 'text',
+				'class' => 'wpec_input_width_three_fourth',
 				'desc'  => __( 'Enter your Stripe Publishable Key for test mode.', 'wp-express-checkout' ),
 			)
 		);
@@ -611,7 +615,7 @@ class Admin {
 			array(
 				'field' => 'stripe_test_secret_key',
 				'type'  => 'text',
-				'class' => 'wpec-button-style-input',
+				'class' => 'wpec_input_width_three_fourth',
 				'desc'  => __( 'Enter your Stripe Secret Key for test mode.', 'wp-express-checkout' ),
 			)
 		);
@@ -621,7 +625,7 @@ class Admin {
 			array(
 				'field' => 'stripe_btn_text',
 				'type' => 'text',
-				'class' => 'wpec-button-style-input',
+				'class' => 'wpec-button-style-input wpec_input_width_one_fourth',
 				'placeholder' => __( 'Stripe', 'wp-express-checkout' ),
 				'desc' => __( 'The text that appear on the button', 'wp-express-checkout' ),
 				'size' => 10

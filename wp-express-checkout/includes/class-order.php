@@ -73,6 +73,8 @@ class Order {
 
 	protected $refund_date = '';
 
+	protected $payment_gateway = '';
+
 	/**
 	 * Sets up the order objects
 	 *
@@ -99,6 +101,8 @@ class Order {
 		$this->resource_id = $this->get_meta_field( 'wpec_order_resource_id', '', $meta_fields );
 		$this->capture_id = $this->get_meta_field( 'wpec_order_capture_id', '', $meta_fields );
 		$this->refund_date = $this->get_meta_field( 'wpec_order_refund_date', '', $meta_fields );
+
+		$this->payment_gateway = $this->get_meta_field( 'wpec_order_payment_gateway', '', $meta_fields );
 
 		$this->refresh_total();
 
@@ -778,5 +782,17 @@ class Order {
 		$payer = $this->get_data( 'payer' );
 
 		return isset($payer['phone']) && !empty($payer['phone']) ? $payer['phone'] : '';
+	}
+
+	public function set_payment_gateway(string $gateway) {
+		$gateway = strtolower($gateway);
+
+		$this->payment_gateway = $gateway;
+
+		$this->update_meta( 'wpec_order_payment_gateway', $this->payment_gateway );
+	}
+
+	public function get_payment_gateway() {
+		return $this->payment_gateway;
 	}
 }
