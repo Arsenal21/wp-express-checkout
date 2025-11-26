@@ -315,4 +315,12 @@ abstract class Product {
 		return $variations;
 	}
 
+	/**
+	 * @param string $meta_key
+	 *
+	 * @return mixed
+	 */
+	public function get_meta( $meta_key ) {
+		return get_post_meta($this->get_id(), $meta_key, true);
+	}
 }

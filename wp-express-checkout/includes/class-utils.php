@@ -695,4 +695,43 @@ class Utils {
 
 		return $secret_key;
 	}
+
+	public static function get_stripe_api_version() {
+		return "2025-09-30.clover";
+	}
+
+	/**
+	 * Constructs and returns a stripe client object for doing api calls.
+	 *
+	 * @return \Stripe\StripeClient
+	 */
+	public static function get_stripe_client() {
+		$secret_key = self::get_stripe_secret_key();
+		$api_version = self::get_stripe_api_version();
+
+		return new \Stripe\StripeClient(array(
+			'api_key' => $secret_key,
+			'stripe_version' => $api_version,
+		));
+	}
+
+	public static function get_stripe_address_str_from_array( $address ) {
+		$city        = isset( $address['city'] ) ? $address['city'] : '';
+		$state       = isset( $address['state'] ) ? $address['state'] : '';
+		$postal_code = isset( $address['postal_code'] ) ? $address['postal_code'] : '';
+		$country     = isset( $address['country'] ) ? Utils::get_country_name_by_country_code( $address['country'] ) : '';
+		$line1       = isset( $address['line1'] ) ? $address['line1'] : '';
+		$line2       = isset( $address['line2'] ) ? $address['line2'] : '';
+
+		$address_array = array_filter( array(
+			$line1,
+			$line2,
+			$city,
+			$state,
+			$postal_code,
+			$country
+		) );
+
+		return implode( ', ', $address_array );
+	}
 }

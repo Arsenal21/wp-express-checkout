@@ -2,10 +2,6 @@
 
 namespace WP_Express_Checkout;
 
-use Stripe\Checkout\Session;
-use Stripe\Exception\ApiErrorException;
-use Stripe\Stripe;
-use Stripe\TaxRate;
 use WP_Express_Checkout\Debug\Logger;
 
 class Stripe_Payment_Button_Ajax_Handler {
@@ -45,13 +41,8 @@ class Stripe_Payment_Button_Ajax_Handler {
 
 		// Get the shortcode data transient.
 		$sc_data_transient = get_transient( 'wp-ppdg-' . sanitize_title_with_dashes( $product_name ) );
-		// Logger::log( 'The $sc_data_transient' );
-		// Logger::log_array_data( $sc_data_transient );
-		// wp_send_json_success( array( 'message' => 'Test Response', 'post_data' => $_POST, 'wpec_data' => $wpec_data, 'order_data' => $order_data ) ); // TODO: For debug purpose only.
 
 		$this->do_api_pre_submission_validation( $order_data, $wpec_data );
-
-		$thank_you_url = isset( $sc_data_transient['thank_you_url'] ) ? $sc_data_transient['thank_you_url'] : '';
 
 		$stripe_ipn_url = add_query_arg( array(
 			'wpec_process_stripe_ipn' => '1',
@@ -63,11 +54,8 @@ class Stripe_Payment_Button_Ajax_Handler {
 
 		$stripe_locale = explode( '_', get_locale() )[0];
 
-		$secret_key = Utils::get_stripe_secret_key();
-
 		try {
-			Stripe::setApiKey( $secret_key );
-			Stripe::setApiVersion( "2025-09-30.clover" );
+			$stripe_client = Utils::get_stripe_client();
 
 			if ( ! Utils::is_zero_cents_currency( $currency ) ) {
 				$item_price = Utils::amount_in_cents( $item_price );
@@ -82,7 +70,10 @@ class Stripe_Payment_Button_Ajax_Handler {
 					'currency'     => $currency,
 					'product_data' => array(
 						'name'     => $product_name,
-						'metadata' => array(),
+						'metadata' => array(
+							'wpec_product_id' => $product_id,
+							'wpec_item_key' => 'main',
+						),
 					),
 					'unit_amount'  => $item_price,
 				),
@@ -108,7 +99,7 @@ class Stripe_Payment_Button_Ajax_Handler {
 				$existing_tax_rate_id = Utils::get_saved_stripe_tax_rate_id( $tax_percentage );
 				if ( ! empty( $existing_tax_rate_id ) ) {
 					try {
-						$existing_tax_rate = TaxRate::retrieve( $existing_tax_rate_id );
+						$existing_tax_rate = $stripe_client->taxRates->retrieve( $existing_tax_rate_id );
 
 						if ( $existing_tax_rate->active ) {
 							$tax_rate = $existing_tax_rate;
@@ -122,7 +113,7 @@ class Stripe_Payment_Button_Ajax_Handler {
 				}
 
 				if ( empty( $tax_rate ) ) {
-					$tax_rate = TaxRate::create( [
+					$tax_rate = $stripe_client->taxRates->create( [
 						'display_name' => 'Tax',
 						'percentage'   => $tax_percentage,
 						'inclusive'    => false,
@@ -194,15 +185,15 @@ class Stripe_Payment_Button_Ajax_Handler {
 				$opts['locale'] = $stripe_locale;
 			}
 
-			$opts = apply_filters( 'wpec_stripe_checkout_session_opts', $opts, $product_id );
+			$opts = apply_filters( 'wpec_stripe_checkout_session_opts', $opts, $wpec_data, $order_data );
 
-			$session = Session::create( $opts );
+			$session = $stripe_client->checkout->sessions->create( $opts );
 
 			$session_id = $session->id;
 
 			$checkout_session_trans_data = array(
-				'wpec_data'     => $wpec_data,
-				'thank_you_url' => $thank_you_url,
+				'wpec_data' => $wpec_data,
+				...$sc_data_transient
 			);
 
 			set_transient( 'wpec_checkout_session_' . $session_id, $checkout_session_trans_data );
@@ -213,7 +204,7 @@ class Stripe_Payment_Button_Ajax_Handler {
 					'redirect_url' => $session->url,
 				)
 			);
-		} catch ( ApiErrorException $e ) {
+		} catch ( \Exception $e ) {
 			wp_send_json_error(
 				array(
 					'message' => $e->getMessage(),

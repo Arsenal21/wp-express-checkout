@@ -396,3 +396,31 @@ input[name="ppec_product_shortcode"] {
     color: #FFF;
 }
 /*----- END Addons Listing ----- */
+
+/*----- Utility Classes ----- */
+.wpec_input_width_full{
+	width: 100%;
+}
+
+.wpec_input_width_three_fourth{
+	width: 75%;
+}
+
+.wpec_input_width_half{
+	width: 50%;
+}
+
+.wpec_input_width_one_fourth{
+	width: 25%;
+}
+
+@media screen and (max-width: 782px) {
+	.wpec_input_width_full,
+	.wpec_input_width_three_fourth,
+	.wpec_input_width_half,
+	.wpec_input_width_one_fourth{
+		width: 100%;
+	}
+}
+
+/*----- End Of Utility Classes ----- */

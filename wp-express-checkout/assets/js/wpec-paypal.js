@@ -27,10 +27,32 @@ class WPECPayPalHandler {
             onError: this.onErrorCallback,
         };
 
-        // console.log(this.buttonArgs);
+        // TODO: For addon backward compatibility. A vanilla js version has been added.
+        jQuery( document ).trigger( 'wpec_before_render_button', [
+            new Proxy(this, {
+                get(target, prop, receiver) {
+                    // 1. If prop exists on this 'WPECStripeHandler' class, return that
+                    if (prop in target) {
+                        return Reflect.get(target, prop, receiver);
+                    }
+                    // 2. If prop exists on the 'ppecHandler' (i.e. wpecHandler), return that
+                    if (prop in target.wpecHandler) {
+                        const value = target.wpecHandler[prop];
+                        return typeof value === "function" ? value.bind(target.wpecHandler) : value;
+                    }
 
-        // TODO: Need to convert this to vanilla js
-        jQuery( document ).trigger( 'wpec_before_render_button', [ this.wpecHandler ] );
+                    return undefined;
+                },
+            })
+        ] );
+
+        document.dispatchEvent(
+            new CustomEvent('wpec_before_render_paypal_button', {
+                detail: {
+                    handler: this,
+                }
+            })
+        );
 
         try {
             paypal.Buttons( this.buttonArgs ).render( '#' + this.btnData.id );
@@ -131,12 +153,12 @@ class WPECPayPalHandler {
         }
 
         //End of create order_data object.
-        console.log('Order data: ', order_data);
+        //console.log('Order data: ', order_data);
 
         let nonce = wpec_create_order_vars.nonce;
 
         let wpec_data_for_create = this.wpecHandler.data;//this.wpecHandler.data is the data object that was passed to the ppecHandler constructor.
-        console.log('WPEC data for create-order: ', wpec_data_for_create);
+        //console.log('WPEC data for create-order: ', wpec_data_for_create);
 
         let post_data = 'action=wpec_pp_create_order&data=' + encodeURIComponent(JSON.stringify(order_data)) + '&wpec_data=' + encodeURIComponent(JSON.stringify(wpec_data_for_create)) + '&_wpnonce=' + nonce;
         try {

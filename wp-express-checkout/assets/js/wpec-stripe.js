@@ -11,8 +11,7 @@ class WPECStripeHandler {
         document.dispatchEvent(
             new CustomEvent('wpec_before_render_stripe_button', {
                 detail: {
-                    wpecStripeHandler: this,
-                    wpecHandler: this.wpecHandler,
+                    handler: this,
                 }
             })
         );
@@ -64,17 +63,17 @@ class WPECStripeHandler {
             currency_code: this.wpecHandler.data.currency,
         };
 
-        const payload = new URLSearchParams({
+        const payload = {
             action: 'wpec_stripe_create_checkout_session',
             wpec_data: JSON.stringify(this.wpecHandler.data),
             data: JSON.stringify(order_data),
             nonce: wpec_stripe_frontend_vars?.nonce,
-        });
+        };
 
         document.dispatchEvent(new CustomEvent('wpec_process_stripe_checkout', {
             detail: {
+                handler: this,
                 paymentData: payload,
-                data: this.wpecHandler.data,
             }
         }));
 
@@ -84,7 +83,7 @@ class WPECStripeHandler {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: payload,
+                body: new URLSearchParams(payload),
             });
 
             if (!response.ok) {

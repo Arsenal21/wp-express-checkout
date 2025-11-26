@@ -114,6 +114,7 @@ class Payment_Processor {
 			$this->send_error( $exc->getMessage(), $exc->getCode() );
 		}
 
+		$order->set_payment_gateway( 'paypal' );
 		/* translators: Order title: {Quantity} {Item name} - {Status} */
 		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $this->get_transaction_status( $payment ) ) );
 		$order->set_currency( $currency );
@@ -280,6 +281,7 @@ class Payment_Processor {
 			$this->send_error( $exc->getMessage(), $exc->getCode() );
 		}
 
+		$order->set_payment_gateway( 'paypal' );
 		/* translators: Order title: {Quantity} {Item name} - {Status} */
 		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $this->get_transaction_status( $payment ) ) );
 		$order->set_currency( $currency );

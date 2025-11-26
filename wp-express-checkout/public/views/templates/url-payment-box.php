@@ -237,7 +237,7 @@ $is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_c
 			'stock_enabled' => $stock_enabled,
 			'stock_items' => $stock_items,
 			'variations' => $variations,
-        ) );
+        ) , $sc_args);
 
 		?>
         <script type="text/javascript">
@@ -250,22 +250,20 @@ $is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_c
         // for paypal
 		if (!empty($is_paypal_checkout_enabled)){
 			$paypal_button_id = 'paypal_button_0';
-			// $args['paypal_button_id'] = $paypal_button_id;
 			echo Shortcodes::get_instance()->generate_pp_express_checkout_button($paypal_button_id, $sc_args, $shortcode_id);
 			WP_Express_Checkout\Main::get_instance()->load_paypal_sdk();
 		}
 
         // for stripe
+		$is_stripe_checkout_enabled = apply_filters('wpec_show_stripe_checkout_option_backward_compatible', $is_stripe_checkout_enabled, $product->get_type());  // TODO: For addon backward compatibility.
 		if (!empty($is_stripe_checkout_enabled)){
 			$stripe_button_id = 'stripe_button_0';
-			// $args['stripe_button_id'] = $stripe_button_id;
 			echo Shortcodes::get_instance()->generate_stripe_express_checkout_button($stripe_button_id, $sc_args, $shortcode_id);
 		}
 
         // for manual checkout
-		if (!empty($is_manual_checkout_enabled)){
+		if (!empty($is_manual_checkout_enabled) && $product->get_type() != 'subscription'){
 			$manual_checkout_button_id = 'manual_checkout_button_0';
-			// $args['manual_checkout_button_id'] = $manual_checkout_button_id;
 			echo Shortcodes::get_instance()->generate_manual_checkout_button($manual_checkout_button_id, $sc_args, $shortcode_id);
 		}
 

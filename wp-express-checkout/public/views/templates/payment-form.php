@@ -5,6 +5,8 @@
 
 //Get the main instance of the plugin so we can access the settings.
 $class_main_inst = WP_Express_Checkout\Main::get_instance();
+
+$product_type = get_post_meta($product_id, 'wpec_product_type',  true);
 ?>
 
 <div style="position: relative;" class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $product_id ); ?>" data-ppec-button-id="<?php echo esc_attr( $shortcode_id ); ?>" data-price-class="<?php echo esc_attr( $price_class ); ?>">
@@ -308,7 +310,7 @@ $class_main_inst = WP_Express_Checkout\Main::get_instance();
 
             <?php
             // Show manual checkout section if enabled.
-            if (!empty($class_main_inst->get_setting('enable_manual_checkout'))) {
+            if (!empty($class_main_inst->get_setting('enable_manual_checkout')) && $product_type != 'subscription') {
                 require \WP_Express_Checkout\Shortcodes::get_instance()::locate_template('template-parts/manual-checkout-section.php');
             }
             ?>

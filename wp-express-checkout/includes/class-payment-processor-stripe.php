@@ -2,26 +2,26 @@
 
 namespace WP_Express_Checkout;
 
-use Stripe\Charge;
 use Stripe\Exception\ApiErrorException;
-use Stripe\PaymentIntent;
-use Stripe\Stripe;
-use Stripe\Checkout\Session;
+use Stripe\StripeClient;
 use WP_Express_Checkout\Debug\Logger;
 
 /**
  * Process Stripe Checkout class
  */
 class Payment_Processor_Stripe {
+
+	/**
+	 * @var array Shortcode transient data.
+	 */
+	private $trans = array();
+
 	/**
 	 * @var array The data came from initial ajax request.
 	 */
 	private $wpec_data = array();
 
-	/**
-	 * @var string Redirect URL after order creation.
-	 */
-	private string $thank_you_url = '';
+	private StripeClient $stripe_client;
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'process_stripe_payment' ), 999 ); // Lower priority is important
@@ -32,24 +32,34 @@ class Payment_Processor_Stripe {
 			return;
 		}
 
+		$this->stripe_client = Utils::get_stripe_client();
+
 		$ref_id = isset( $_GET["ref_id"] ) ? $_GET["ref_id"] : 0;
 
 		$session_id = $ref_id;
 
-		$secret_key = Utils::get_stripe_secret_key();
-		
+		// Make sure fulfillment hasn't already been performed for this Checkout Session
+		if ( $this->check_if_checkout_session_processed( $session_id ) ) {
+			wp_die( __( 'The order has captured already!', 'wp-express-checkout' ) );
+		}
+
+		$this->trans = get_transient( 'wpec_checkout_session_' . $session_id );
+
+		do_action('wpec_process_stripe_payment', $session_id, $this->trans);
+
+		if ( is_array( $this->trans ) && isset( $this->trans['wpec_data'] ) ) {
+			$this->wpec_data = $this->trans['wpec_data'];
+		}
+
 		try {
-			Stripe::setApiKey( $secret_key );
-
 			$order_id = $this->process_checkout_session_and_create_order( $session_id );
-
 		} catch ( \Exception $e ) {
-			Logger::log( 'Stripe payment data could not be processed.', false );
-			wp_die( $e->getMessage(), false );
+			Logger::log( $e->getMessage() , false );
+			wp_die( __('Error: Stripe payment data could not be processed!' , 'wp-express-checkout') );
 		}
 
 		//Everything passed. Redirecting user to thank you page.
-		$thank_you_url = $this->thank_you_url;
+		$thank_you_url = isset($this->trans['thank_you_url']) ? $this->trans['thank_you_url'] : '';
 
 		if ( wp_http_validate_url( $thank_you_url ) ) {
 			$thank_you_url = add_query_arg(
@@ -71,24 +81,27 @@ class Payment_Processor_Stripe {
 	public function process_checkout_session_and_create_order( $session_id ) {
 		Logger::log( 'Processing Stripe Checkout Session.' );
 
-		$checkout_session_trans = get_transient( 'wpec_checkout_session_' . $session_id );
-
-		//		Logger::log( 'wpec_checkout_session_' . $session_id . ' transient data' );
-		//		Logger::log_array_data( $checkout_session_trans );
-
-		if ( is_array( $checkout_session_trans ) && isset( $checkout_session_trans['wpec_data'] ) ) {
-			$this->wpec_data     = $checkout_session_trans['wpec_data'];
-			$this->thank_you_url = $checkout_session_trans['thank_you_url'];
-		}
-
-		// Make sure fulfillment hasn't already been performed for this Checkout Session
-		if ( $this->check_if_checkout_session_processed( $session_id ) ) {
-			wp_die( __( 'The order has captured already!', 'wp-express-checkout' ) );
-		}
-
 		try {
+			$expand_items = apply_filters('wpec_stripe_session_obj_expand_items', array(
+				'payment_intent',
+				'payment_intent.latest_charge',
+				'line_items',
+			));
+
 			// Retrieve the Checkout Session from the API with line_items expanded
-			$sess = Session::retrieve( $session_id );
+			$sess = $this->stripe_client->checkout->sessions->retrieve(
+				$session_id,
+				array(
+					'expand' => $expand_items,
+				)
+			);
+
+			if ( empty($sess) ) {
+				// Can't find session.
+				$error_msg = sprintf( "Error! Payment with ref_id %s (Stripe Session ID) can't be found. This script should be accessed by Stripe's webhook only.", $session_id );
+				Logger::log( $error_msg, false );
+				wp_die( esc_html( $error_msg ) );
+			}
 
 			// Check the Checkout Session's payment_status property
 			// to determine if fulfillment should be performed
@@ -96,81 +109,49 @@ class Payment_Processor_Stripe {
 				wp_die( __( "The payment for this order hasn't been paid already", 'wp-express-checkout' ) );
 			}
 
-			$lineItems = Session::allLineItems( $session_id, array(
-				'limit' => 1, // We check out one product only per transactions.
-			) );
-
-			$sess->line_items = $lineItems;
-
-			if ( $sess === false ) {
-				// Can't find session.
-				$error_msg = sprintf( "Error! Payment with ref_id %s (Stripe Session ID) can't be found. This script should be accessed by Stripe's webhook only.", $session_id );
-				Logger::log( $error_msg, false );
-				wp_die( esc_html( $error_msg ) );
-			}
-
-			//ref_id matched
-			$pi_id = $sess->payment_intent;
-
-			$pi = PaymentIntent::retrieve( $pi_id );
-
-			$charge = null;
-
-			//Get the charge object based on the Stripe API version used in the payment intents object.
-			if ( isset ( $pi->latest_charge ) ) {
-				//Using the new Stripe API version 2022-11-15 or later
-				Logger::log( 'Using the Stripe API version 2022-11-15 or later for Payment Intents object. Need to retrieve the charge object.', true );
-				$charge_id = $pi->latest_charge;
-				//For Stripe API version 2022-11-15 or later, the charge object is not included in the payment intents object. It needs to be retrieved using the charge ID.
-				//Retrieve the charge object using the charge ID
-				$charge = Charge::retrieve( $charge_id );
-			} else {
-				//Using OLD Stripe API version. Log an error and exit.
-				$error_msg = 'Error! You are using the OLD Stripe API version. This version is not supported. Please update the Stripe API version to 2022-11-15 or later from your Stripe account.';
-				Logger::log( $error_msg, false );
-				wp_die( $error_msg );
-			}
-
 		} catch ( ApiErrorException $e ) {
 			throw new \Exception( $e->getMessage() );
 		}
 
-		//formatting ipn_data
-		return $this->create_order( $sess, $pi, $charge );
+		// process and save order details form ipn_data.
+		return $this->create_order( $sess );
 	}
 
-	public function create_order( $session_object, $pi_object, $charge_object ) {
-
-		//converting the payment intent object to array
-		$pi_array = json_decode( json_encode( $pi_object ), true );
-
+	public function create_order( $session_object ) {
 		$session_id                = $session_object->id;
 		$transaction_status        = $session_object->status;
 		$payment_status            = $session_object->payment_status;
-		$checkout_session_metadata = $session_object->metadata;
+		$currency = $session_object->currency;
+		
+		$currency = strtoupper($currency);
 
 		$product_id = $this->wpec_data['product_id'];
 
+		$pi_array = array();
+		$charge_array = array();
+		$pi = $session_object->payment_intent;
+		if (!empty( $pi )){
+			//converting the payment intent object to array
+			$pi_array = json_decode( json_encode( $pi ), true );
+			$charge_array = isset($pi_array['latest_charge']) ? $pi_array['latest_charge'] : array();
+		}
 
-		//Conver the charge object to array
-		$charge_array = json_decode( json_encode( $charge_object ), true );
-
-		// TODO: Remove this, for debug purpose only.
-		//Logger::log( 'Pi data array', true );
-		//Logger::log_array_data( $pi_array, true );
-		//Logger::log( 'Charge data array', true );
-		//Logger::log_array_data( $charge_array, true );
-
-		$charge_id = $charge_array['id'];
+		$charge_id = isset($charge_array['id']) ? $charge_array['id'] : '';
 
 		/**
-		 * Retrieve Customer info from the charge object.
+		 * Retrieve Customer info.
 		 */
-		$stripe_email = isset( $charge_array['billing_details']['email'] ) ? $charge_array['billing_details']['email'] : '';
-		$phone        = isset( $charge_array['billing_details']['phone'] ) ? $charge_array['billing_details']['phone'] : '';
-		$name         = isset( $charge_array['billing_details']['name'] ) ? trim( $charge_array['billing_details']['name'] ) : '';
-		$last_name    = ( strpos( $name, ' ' ) === false ) ? '' : preg_replace( '#.*\s([\w-]*)$#', '$1', $name );
-		$first_name   = trim( preg_replace( '#' . $last_name . '#', '', $name ) );
+		$customer_details = array();
+		if ( !empty($session_object->customer_details) ){
+			$customer_details = json_decode(json_encode($session_object->customer_details), true);
+		}
+
+		$stripe_email = isset($customer_details['email']) ? $customer_details['email'] : '';
+		$name = isset($customer_details['name']) ? $customer_details['name'] : '';
+		$phone = isset($customer_details['phone']) ? $customer_details['phone'] : '';
+
+		$last_name    = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
+		$first_name   = trim(preg_replace('#' . $last_name . '#', '', $name));
 
 		// Construct payer info array similar to PayPal
 		$payer = array(
@@ -182,11 +163,10 @@ class Payment_Processor_Stripe {
 			'phone'         => $phone,
 		);
 
-		$billing_address  = $this->get_billing_address_str( $charge_array );
+		$billing_address  = $this->get_billing_address_str( $customer_details );
 		$shipping_address = $this->get_shipping_address_str( $pi_array );
 
 		// $amount_received_in_cents = floatval( $pi_array['amount_received'] );
-		$currency = isset($pi_array['currency']) ? strtoupper( $pi_array['currency'] ) : '';
 
 		// $total_received_amount = Utils::amount_from_cents( $amount_received_in_cents, $currency );
 		// $create_time = $pi_array['created'];
@@ -223,12 +203,9 @@ class Payment_Processor_Stripe {
 		$txn_id      = $charge_id;
 		$resource_id = $session_id;
 
-		if ( strtolower( $product->get_type() ) == 'donation' ) {
-			$price = $unit_amount;
-		} else {
-			$price = $product->get_price();
-		}
+		$price = $this->get_price($product, $this->trans, $this->wpec_data );
 
+		$order->set_payment_gateway( 'stripe' );
 		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $transaction_status ) );
 		$order->set_currency( $currency );
 		$order->set_resource_id( $resource_id );
@@ -245,10 +222,10 @@ class Payment_Processor_Stripe {
 		 * Runs after draft order created, but before adding items.
 		 *
 		 * @param Order $order     The order object.
-		 * @param array $payment   The raw order data retrieved via API. TODO: Currently expects the structure like paypal, need to adjusted for stripe.
+		 * @param array $payment   The raw order data retrieved via API.
 		 * @param array $wpec_data The purchase data generated on a client side.
 		 */
-		do_action( 'wpec_create_order', $order, $payment = array(), $this->wpec_data );
+		do_action( 'wpec_create_order', $order, $session_object, $this->wpec_data );
 
 		if ( ! empty( $total_tax ) ) {
 			$order->add_item( 'tax', __( 'Tax', 'wp-express-checkout' ), $total_tax );
@@ -271,18 +248,16 @@ class Payment_Processor_Stripe {
 		Emails::send_seller_email( $order );
 
 		/**
-		 * TODO: Need fix the $payment var
-		 *
 		 * This is used for the followings:
 		 * redeem_coupon
 		 * set_download_limits
 		 * handle_signup (wpemember)
 		 *
-		 * @param array $payment  The raw order data retrieved via API. TODO: Currently expects the structure like paypal, need to adjusted for stripe.
+		 * @param array $payment  The raw order data retrieved via API.
 		 * @param int $order_id   The order id.
 		 * @param int $product_id The purchased product id.
 		 */
-		do_action( 'wpec_payment_completed', $payment = array(), $order_id, $product_id );
+		do_action( 'wpec_payment_completed', $session_object, $order_id, $product_id );
 		Logger::log( 'Payment processing completed' );
 
 		return $order_id;
@@ -295,39 +270,27 @@ class Payment_Processor_Stripe {
 
 		$shipping_addr = isset( $pi_data['shipping']['address'] ) ? $pi_data['shipping']['address'] : array();
 
-		$address_array = self::process_address_array( $shipping_addr );
-
-		return implode( ', ', $address_array );
+		return Utils::get_stripe_address_str_from_array( $shipping_addr );
 	}
 
-	public function get_billing_address_str( $charge_array ) {
-		if ( ! isset( $charge_array['billing_details']['address'] ) ) {
+	public function get_billing_address_str( $customer_details ) {
+		if ( ! isset( $customer_details['address'] ) ) {
 			return '';
 		}
 
-		$bd_addr = isset( $charge_array['billing_details']['address'] ) ? $charge_array['billing_details']['address'] : array();
+		$bd_addr = isset( $customer_details['address'] ) ? $customer_details['address'] : array();
 
-		$address_array = self::process_address_array( $bd_addr );
-
-		return implode( ', ', $address_array );
+		return Utils::get_stripe_address_str_from_array( $bd_addr );
 	}
 
-	public static function process_address_array( $address ) {
-		$city        = isset( $address['city'] ) ? $address['city'] : '';
-		$state       = isset( $address['state'] ) ? $address['state'] : '';
-		$postal_code = isset( $address['postal_code'] ) ? $address['postal_code'] : '';
-		$country     = isset( $address['country'] ) ? Utils::get_country_name_by_country_code( $address['country'] ) : '';
-		$line1       = isset( $address['line1'] ) ? $address['line1'] : '';
-		$line2       = isset( $address['line2'] ) ? $address['line2'] : '';
+	protected function get_price( $product, $trans, $data = array() ) {
+		$price = $trans['price'];
+		if ( !empty( $trans['custom_amount'] ) ) {
+			// custom amount enabled. let's take amount from JS data, but not less than allowed.
+			$price = max( $product->get_meta('wpec_product_min_amount'), $data['orig_price'] );
+		}
 
-		return array_filter( array(
-			$line1,
-			$line2,
-			$city,
-			$state,
-			$postal_code,
-			$country
-		) );
+		return apply_filters('wpec_stripe_create_order_product_price', $price, $product);
 	}
 
 	/*	public static function prepare_address_array( $address ) {
