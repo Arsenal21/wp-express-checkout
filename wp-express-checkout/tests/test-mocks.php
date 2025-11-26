@@ -28,7 +28,7 @@ class AddonsMocksTest extends WP_UnitTestCase {
 	 */
 	public function testProducts() {
 		$this->assertTrue( class_exists( 'WP_Express_Checkout\Products' ) );
-		$this->assertClassHasStaticAttribute( 'products_slug', 'WP_Express_Checkout\Products' );
+		$this->assertTrue( property_exists('WP_Express_Checkout\Products', 'products_slug') );
 	}
 
 	/**

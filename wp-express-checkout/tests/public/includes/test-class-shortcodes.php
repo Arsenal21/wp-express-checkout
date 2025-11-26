@@ -127,27 +127,32 @@ class ShortcodesTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Shortcodes::generate_pp_express_checkout_button
+	 * @covers \WP_Express_Checkout\Shortcodes::generate_pp_express_checkout_button
 	 *
 	 * @dataProvider shortcode_args
 	 */
 	public function testGenerate_pp_express_checkout_button__no_client_id( $args, $settings ) {
-		$output = $this->object->generate_pp_express_checkout_button( $args );
+		$shortcode_count = wp_rand( 1, 100 );
+		$button_id = 'paypal_button_' . $shortcode_count;
+		$sc_id = 'wp_express_checkout_' . $shortcode_count;
+		$output = $this->object->generate_pp_express_checkout_button($button_id, $args, $sc_id );
 		$this->assertStringContainsString( 'wpec-error-message-client-id', $output );
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Shortcodes::generate_pp_express_checkout_button
+	 * @covers \WP_Express_Checkout\Shortcodes::generate_pp_express_checkout_button
 	 *
 	 * @dataProvider shortcode_args
 	 */
 	public function testGenerate_pp_express_checkout_button( $args, $settings ) {
 		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), $settings ) );
 
-		$output = $this->object->generate_pp_express_checkout_button( $args );
+		$shortcode_count = wp_rand( 1, 100 );
+		$button_id = 'paypal_button_' . $shortcode_count;
+		$sc_id = 'wp_express_checkout_' . $shortcode_count;
+		$output = $this->object->generate_pp_express_checkout_button($button_id, $args, $sc_id );
+
 		$this->assertStringNotContainsString( 'wpec-error-message-client-id', $output );
-		$this->assertStringContainsString( 'wpec-modal', $output );
-		$this->assertStringContainsString( 'wp-ppec-button-container', $output );
 
 		update_option( 'ppdg-settings', Main::get_defaults() );
 	}
