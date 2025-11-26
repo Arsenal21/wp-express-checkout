@@ -366,7 +366,7 @@ class Admin {
 		/* PayPal Settings Menu Tab */
 		/****************************/
 		$paypal_checkout_description = '<p>' . __( 'Select this option to enable paypal checkout.', 'wp-express-checkout' );
-		$paypal_checkout_description .= ' ' . '<a href="#" target="_blank">'. __('Read the documentation', 'wp-express-checkout') . '</a>.' . '</p>';
+		$paypal_checkout_description .= ' ' . '<a href="https://wp-express-checkout.com/paypal-settings-configuration-api-credentials-setup/" target="_blank">'. __('Read the documentation', 'wp-express-checkout') . '</a>.' . '</p>';
 		add_settings_field( 'enable_paypal_checkout', __( 'Enable PayPal Checkout', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-settings', 'ppdg-paypal-settings-section',
 			array(
 				'field' => 'enable_paypal_checkout',
@@ -558,7 +558,7 @@ class Admin {
 		/* Stripe Checkout Menu Tab */
 		/****************************/
 		$stripe_checkout_description = '<p>' . __( 'Select this option to enable stripe checkout.', 'wp-express-checkout' );
-		$stripe_checkout_description .= ' ' . '<a href="#" target="_blank">'. __('Read the documentation', 'wp-express-checkout') . '</a>.' . '</p>';
+		$stripe_checkout_description .= ' ' . '<a href="https://wp-express-checkout.com/stripe-settings-configuration-stripe-api-credentials-setup/" target="_blank">'. __('Read the documentation', 'wp-express-checkout') . '</a>.' . '</p>';
 
 		// stripe general settings section fields.
 		add_settings_field( 'enable_stripe_checkout', __( 'Enable Stripe Checkout', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), 'wpec-stripe-settings', 'wpec-stripe-settings-section',
@@ -574,7 +574,7 @@ class Admin {
 				'field' => 'stripe_allowed_countries',
 				'type'  => 'text',
 				'class' => 'wpec_input_width_full',
-				'desc'  => sprintf(__( 'Enter the countries that are allowed for shipping by specifying their two-letter ISO country codes separated by comma. For example: US, CA, AU, GE, ES etc. %s', 'wp-express-checkout' ), ' <a href="https://www.nationsonline.org/oneworld/country_code_list.htm">'.__('See the list of ISO country codes here.', 'wp-express-checkout').'</a>')
+				'desc'  => sprintf(__( 'Enter the countries that are allowed for shipping by specifying their two-letter ISO country codes separated by comma. For example: US, CA, AU, GE, ES etc. %s', 'wp-express-checkout' ), ' <a href="https://www.nationsonline.org/oneworld/country_code_list.htm" target="_blank">'.__('See the list of ISO country codes here.', 'wp-express-checkout').'</a>')
 			)
 		);
 
@@ -1467,14 +1467,11 @@ class Admin {
 	public function handle_stripe_settings_arbitrary_section() {
 		echo '<div class="wpec-white-box">';
 		echo __('Check the ', 'wp-express-checkout');
-		echo '<a href="#" target="_blank">'.__('Stripe settings documentation', 'wp-express-checkout').'</a>';
+		echo '<a href="https://wp-express-checkout.com/stripe-settings-configuration-stripe-api-credentials-setup/" target="_blank">'.__('Stripe settings documentation', 'wp-express-checkout').'</a>';
 		echo __(' for a step-by-step guide on configuring these settings.', 'wp-express-checkout');
 		echo '</div>';
 
-		// TODO: Need to fix this for stripe
 		//NOTE: We can't update/save the reset API settings keys here as WP locks the settings fields for the current page.
-		//So the reset it done at 'admin_init' hook. Then the success message is shown here.
-		//Show any messages related to PayPal onboarding.
-		// self::paypal_onboard_actions_messages_handler();
+		//So the reset is done at 'admin_init' hook. Then the success message is shown here.
 	}
 }
