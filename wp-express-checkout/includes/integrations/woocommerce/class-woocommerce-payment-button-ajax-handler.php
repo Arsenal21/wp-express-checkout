@@ -285,10 +285,10 @@ class WooCommerce_Payment_Button_Ajax_Handler {
 			$exception_msg = json_decode($e->getMessage());
 			if(is_array($exception_msg->details) && sizeof($exception_msg->details)>0){
 				$error_string = $exception_msg->details[0]->issue.". ".$exception_msg->details[0]->description;
-				Logger::log( 'Error capturing the PayPal order via API call: ' . $error_string, true );
+				Logger::log( 'Error capturing the PayPal order via API call: ' . $error_string, false );
 				return new \WP_Error(2002,$error_string);
 			}
-			Logger::log( 'Error creating PayPal order: ' . $e->getMessage(), true );
+			Logger::log( 'Error creating PayPal order: ' . $e->getMessage(), false );
 			return new \WP_Error(2002,__( 'Something went wrong, the PayPal capture-order API call failed!', 'wp-express-checkout' ));
 		}
 

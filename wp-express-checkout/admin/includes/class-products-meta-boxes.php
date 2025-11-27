@@ -487,7 +487,7 @@ jQuery(document).ready(function($) {
 			<p class="description"><?php _e( 'Specify the text to be displayed on the button that triggers the payment popup/modal window. Leave it blank to use the text specified in General Settings page.',  'wp-express-checkout' ); ?></p>
 
 			<legend><?php esc_html_e( 'Button Options', 'wp-express-checkout' ); ?></legend>
-			<label><?php _e( 'Button Type', 'wp-express-checkout' ); ?></label>
+			<label><?php _e( 'PayPal Button Type', 'wp-express-checkout' ); ?></label>
 			<br />
 			<select name="wpec_product_button_type" id="wpec_product_button_type">
 				<option value=""><?php esc_html_e( '-- Default --', 'wp-express-checkout' ); ?></option>
