@@ -100,9 +100,6 @@ class Shortcodes {
 		$url             = $product->get_download_url();
 		$button_text     = isset( $atts['button_text'] ) ? $atts['button_text'] : $product->get_button_text();
 		$thank_you_url   = ! empty( $atts['thank_you_url'] ) ? $atts['thank_you_url'] : $product->get_thank_you_url();
-		$btn_type        = $product->get_button_type();
-		$btn_sizes       = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
-		$btn_height      = $this->ppdg->get_setting( 'btn_height' );
 
 		$output = '';
 
@@ -139,14 +136,9 @@ class Shortcodes {
 				'custom_amount'   => 0,
 				'custom_quantity' => 0,
 				'currency'        => $this->ppdg->get_setting( 'currency_code' ), // Maybe useless option, the shortcode doesn't send this parameter.
-				'btn_shape'       => $this->ppdg->get_setting( 'btn_shape' ),
-				'btn_type'        => $btn_type ? $btn_type : $this->ppdg->get_setting( 'btn_type' ),
-				'btn_height'      => ! empty( $btn_sizes[ $btn_height ] ) ? $btn_sizes[ $btn_height ] : 25,
 				'btn_width'       => $this->ppdg->get_setting( 'btn_width' ) !== false ? $this->ppdg->get_setting( 'btn_width' ) : 0,
-				'btn_layout'      => $this->ppdg->get_setting( 'btn_layout' ),
-				'btn_color'       => $this->ppdg->get_setting( 'btn_color' ),
 				'coupons_enabled' => $this->ppdg->get_setting( 'coupons_enabled' ),
-				'button_text'     => $button_text ? $button_text : $this->ppdg->get_setting( 'button_text' ),
+				'button_text'     => $button_text ? $button_text : $this->ppdg->get_setting( 'button_text' ), // modal trigger button text
 				'use_modal'       => ! isset( $atts['modal'] ) ? $this->ppdg->get_setting( 'use_modal' ) : $atts['modal'],
 				'thank_you_url'   => $thank_you_url ? $thank_you_url : $this->ppdg->get_setting( 'thank_you_url' ),
 				'variations'      => array(),
@@ -317,11 +309,15 @@ class Shortcodes {
 	}
 
 	public function generate_pp_express_checkout_button($button_id, $sc_args, $sc_id ) {
-		$btn_height = isset($sc_args['btn_height']) ? $sc_args['btn_height'] : '';
-		$btn_shape = isset($sc_args['btn_shape']) ? $sc_args['btn_shape'] : '';
-		$btn_type = isset($sc_args['btn_type']) ? $sc_args['btn_type'] : '';
-		$btn_color = isset($sc_args['btn_color']) ? $sc_args['btn_color'] : '';
-		$btn_layout = isset($sc_args['btn_layout']) ? $sc_args['btn_layout'] : '';
+		$btn_height = $this->ppdg->get_setting( 'btn_height' );
+		$btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
+        $btn_type = get_post_meta($sc_args['product_id'], 'wpec_product_button_type', true);
+
+		$btn_height = ! empty( $btn_sizes[ $btn_height ] ) ? $btn_sizes[ $btn_height ] : 25;
+		$btn_shape = $this->ppdg->get_setting( 'btn_shape' );
+		$btn_type = !empty($btn_type) ? $btn_type : $this->ppdg->get_setting( 'btn_type' );
+		$btn_color = $this->ppdg->get_setting( 'btn_color' );
+		$btn_layout = $this->ppdg->get_setting( 'btn_layout' );
 
 		$is_live = Main::get_instance()->get_setting( 'is_live' );
 

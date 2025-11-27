@@ -211,6 +211,11 @@ class WPECPayPalHandler {
 
             const response_data = await response.json();
 
+            if (response_data.hasOwnProperty('success') && !response_data.success) {
+                alert(response_data.err_msg);
+                return;
+            }
+
             console.log('Capture-order API call to PayPal completed successfully.');
 
             // Call the completePayment method to do any redirection or display a message to the user.

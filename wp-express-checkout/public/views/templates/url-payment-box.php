@@ -168,14 +168,9 @@ $is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_c
 			'custom_amount' => 0,
 			'custom_quantity' => 0,
 			'currency' => $class_main_inst->get_setting( 'currency_code' ), // Maybe useless option, the shortcode doesn't send this parameter.
-			'btn_shape' => $class_main_inst->get_setting( 'btn_shape' ),
-			'btn_type' => $btn_type ? $btn_type : $class_main_inst->get_setting( 'btn_type' ),
-			'btn_height' => !empty( $btn_sizes[$btn_height] ) ? $btn_sizes[$btn_height] : 25,
 			'btn_width' => $class_main_inst->get_setting( 'btn_width' ) !== false ? $class_main_inst->get_setting( 'btn_width' ) : 0,
-			'btn_layout' => $class_main_inst->get_setting( 'btn_layout' ),
-			'btn_color' => $class_main_inst->get_setting( 'btn_color' ),
-			'coupons_enabled' => $class_main_inst->get_setting( 'coupons_enabled' ),
-			'button_text' => $button_text ? $button_text : $class_main_inst->get_setting( 'button_text' ),
+            'coupons_enabled' => $class_main_inst->get_setting( 'coupons_enabled' ),
+			'button_text' => $button_text ? $button_text : $class_main_inst->get_setting( 'button_text' ), // modal trigger button text
 			'use_modal' => !isset( $atts['modal'] ) ? $class_main_inst->get_setting( 'use_modal' ) : $atts['modal'],
 			'thank_you_url' => $thank_you_url ? $thank_you_url : $class_main_inst->get_setting( 'thank_you_url' ),
 			'variations' => array(),
