@@ -18,7 +18,7 @@ This plugin gives you shortcodes to generate customizable payment buttons that a
 
 Additionally, this plugin provides a product block that seamlessly integrates with the WordPress block editor, enabling you to easily incorporate products into your website.
 
-The full checkout takes place in a payment popup window and the customer never leaves your site. It creates a fast and elegant checkout experience.
+The PayPal checkout takes place in a payment popup window and the customer never leaves your site. It creates a fast and elegant checkout experience.
 
 This is ideal for users who want a lightweight and simple solution for selling products or services via PayPal and Stripe. 
 
