@@ -1,34 +1,33 @@
-=== WP Express Checkout (Accept PayPal Payments Easily) ===
+=== WP Express Checkout (Fast Payments via PayPal & Stripe) ===
 Contributors: Tips and Tricks HQ, mra13, dikiy_forester, mbrsolution, Ivy2120, chanelstone
 Donate link: https://wp-express-checkout.com/
-Tags: paypal, payment, digital store, ecommerce, sell
+Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
-Tested up to: 6.8
-Stable tag: 2.4.2
+Tested up to: 6.9
+Stable tag: 2.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Allows you to accept payments quickly for products and services via a payment popup window. It uses the new PayPal Checkout option.
+Allows you to accept fast and secure payments for products and services via a payment popup window, supporting both the new PayPal and Stripe Checkout options.
 
 == Description ==
 
-The WP Express Checkout plugin allows you to sell any type of products and services from your WordPress powered site easily using the new PayPal Checkout option. Install the plugin, configure some basic settings, create a few products and you are ready to sell products and services from your site. The checkout process is quick and easy.
+The WP Express Checkout plugin allows you to sell any type of products and services from your WordPress powered site easily using **fast checkout options from PayPal and Stripe**. Install the plugin, configure some basic settings, create a few products and you are ready to sell products and services from your site. The checkout process is quick and easy.
 
-This plugin gives you shortcodes to generate customizable PayPal payment buttons that allow customers to pay for items instantly via a payment popup window. Customers can pay using PayPal or a credit card. It uses PayPal's newest/latest Checkout API/Gateway.
+This plugin gives you shortcodes to generate customizable payment buttons that allow customers to pay for items instantly via a payment popup window. Customers can pay using **PayPal, Stripe, or a credit card**. It uses the newest/latest Checkout APIs for both services.
 
 Additionally, this plugin provides a product block that seamlessly integrates with the WordPress block editor, enabling you to easily incorporate products into your website.
 
 The full checkout takes place in a payment popup window and the customer never leaves your site. It creates a fast and elegant checkout experience.
 
-This is ideal for users who want a lightweight and simple solution for selling products or services via PayPal. 
+This is ideal for users who want a lightweight and simple solution for selling products or services via PayPal and Stripe. 
 
 = Checkout Demonstration =
 
 https://www.youtube.com/watch?v=KF32ZOgsb2U
 
 = Great for Selling Digital Downloads =
-
-If you want to sell digital products using PayPal then you will love the simplicity of this plugin. You can configure it to expire the download links after it has been used a few times or after a certain period of time.
+If you want to sell digital products using PayPal or Stripe then you will love the simplicity of this plugin. You can configure it to expire the download links after it has been used a few times or after a certain period of time.
 
 = Works with PayPal's Buy Now Pay Later Feature =
 
@@ -47,24 +46,27 @@ https://www.youtube.com/watch?v=n9YDFVFHDf8
 View configuration and usage details on the [WP Express Checkout](https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/) plugin's documentation page.
 
 = Features =
-
+* Offer fast, secure checkout using both **PayPal Checkout and Stripe Checkout** from the payment popup.
 * Sell products or services using a quick and easy checkout process.
+* Accept payments via PayPal (PayPal account, credit card, debit card, Pay in 4, Venmo etc.).
 * Accept PayPal donations with minimum donation amount limit.
+* Accept payments via Stripe (credit card and other payment methods).
+* Support for Apple Pay, Google Pay, and other Stripe-supported payment methods.
 * Sell downloads, files, or any digital goods.
 * Sell music, video, ebook, PDF or any other digital media files.
 * Shop page that will list all your products in a grid view. Users can browse your products and purchase it.
-* Allow the customers to automatically download the file once the purchase is completed via PayPal.
+* Allow the customers to automatically download the file once the purchase is completed via PayPal or Stripe.
 * You can deliver the digital downloads using encrypted download links that expire automatically.
 * Ability to enable force download option on your digital products.
 * Option to offer downloads via a non-web accessible local file path, instead of a URL, to enhance download security.
-* Offer Buy Now Pay Later payment option to your customers.
-* Accept Payments via Venmo easily. Your customers can pay using the Venmo option.
+* Offer Buy Now Pay Later payment option to your customers (via PayPal).
+* Accept Payments via Venmo (through PayPal) easily.
 * View the transactions from your WordPress admin dashboard.
 * Option to configure a notification email to be sent to the buyer and the seller after the purchase.
 * Option to customize the purchase notification email on a per-product basis.
 * Ability to set a product thumbnail for a product.
 * Use a simple shortcode to add a payment button anywhere on your site.
-* Create a PayPal payment button widget and add it to your site's sidebar.
+* Create a payment button widget and add it to your site's sidebar.
 * Ability for a customer to enter an amount and pay what they want for a product.
 * Ability to configure variable products. You can charge different amount for different options of the product.
 * It can be used to accept donations on your site.
@@ -87,7 +89,7 @@ View configuration and usage details on the [WP Express Checkout](https://wp-exp
 * Option to use [manual/offline checkout](https://wp-express-checkout.com/how-to-use-manual-offline-checkout-in-wp-express-checkout/)
 * Option to [Integrate it with WooCommerce](https://wp-express-checkout.com/woocommerce-paypal-express-checkout/) to offer product checkout via PayPal's express checkout system.
 
-The setup is very easy. Once you have installed the plugin, all you need to do is enter your PayPal Checkout API credentials in the plugin settings and your website will be ready to accept PayPal and credit card payments.
+The setup is very easy. Once you have installed the plugin, all you need to do is enter your **PayPal and/or Stripe API credentials** in the plugin settings and your website will be ready to accept fast payments via both services.
 
 You can also accept payment using [PayPal's Pay in 4](https://www.paypal.com/us/webapps/mpp/pay-in-4) feature (buy now pay later offering). Read the [Buy Now, Pay Later Tutorial](https://wp-express-checkout.com/paypal-pay-in-4-wp-express-checkout-plugin/) to learn more.
 
@@ -101,11 +103,13 @@ Please note that the integration with WooCommerce is entirely optional. It is im
 
 This plugin adds the following shortcode to your site:
 
-[wp_express_checkout id="123"]
+`[wp_express_checkout id="123"]`
+
+Where `123` is the product ID.
 
 Or use the following shortcode to output product details and the express checkout payment button:
 
-[wp_express_checkout id="123" template="1"]
+`[wp_express_checkout id="123" template="1"]`
 
 Additionally, you have the option to utilize the product block for adding a product into the post or page editor.
 
@@ -136,31 +140,32 @@ View [this usage documentation](https://wp-express-checkout.com/basic-installati
 You can find the full documentation for this plugin on the [WP Express Checkout plugin documentation](https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/) page.
 
 = Does it use the newest/latest PayPal checkout option? =
+Yes, this plugin uses the new PayPal checkout APIs.
 
-Yes, this plugin uses the new PayPal checkout API.
+= Does it offer Stripe payment option? =
+Yes, it does. You can accept credit card (or any Stripe supported) payments via Stripe.
+
+= Can I sell digital products with this plugin? =
+Yes, you can sell digital products easily with this plugin. It has options to deliver the digital products securely.
+
+= Can I use both PayPal and Stripe payment options together? =
+Yes, you can enable both payment options together. The customer can choose their preferred payment method.
 
 = Can I have multiple payment buttons on a single page? =
-
 Yes, you can have any number of buttons on a single page.
 
 = Can I use it in a WordPress widget? =
-
 Yes, you can.
 
 = Can I customize the payment button? =
-
 Yes, there are some customization options in the settings menu of this plugin.
 
 = Can I test it using PayPal sandbox? =
-
 Yes, you can enable the sandbox mode from the settings menu of the plugin.
 
 = Can I use WooCommerce with this plugin? =
-
 Yes, there is an option to use this plugin to offer PayPal Express Checkout gateway to WooCommerce.
-
-View the [WooCommerce Integration for PayPal Express Checkout](https://wp-express-checkout.com/woocommerce-paypal-express-checkout/) page for details.
-
+View the [WooCommerce Integration for PayPal Checkout](https://wp-express-checkout.com/woocommerce-paypal-express-checkout/) page for details.
 
 == Screenshots ==
 See the following page for screenshots
