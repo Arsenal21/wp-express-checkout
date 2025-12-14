@@ -211,7 +211,11 @@ class Payment_Processor_Stripe {
 		$order->set_resource_id( $resource_id );
 		$order->set_capture_id( $txn_id );
 		$order->set_author_email( $stripe_email );
-		$order->add_item( Products::$products_slug, $item_name, $price, $quantity, $product_id, true );
+
+		$product_item_meta = array(
+			'product_type' => $product->get_type(),
+		);
+		$order->add_item( Products::$products_slug, $item_name, $price, $quantity, $product_id, true, $product_item_meta );
 		$order->add_data( 'state', $transaction_status );
 
 		$order->add_data( 'payer', $payer );

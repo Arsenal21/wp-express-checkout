@@ -29,7 +29,7 @@ class Orders_Meta_Boxes {
 
 		add_action( 'wp_ajax_wpec_order_action_resend_email', array( $this, 'resend_email_callback' ) );
 		add_action( 'wp_ajax_wpec_order_action_reset_download_counts', array( $this, 'reset_download_counts_callback' ) );
-		add_action( 'wp_ajax_wpec_order_action_paypal_refund', array( $this, 'paypal_refund_callback' ) );
+		add_action( 'wp_ajax_wpec_order_action_payment_refund', array( $this, 'payment_refund_callback' ) );
 		add_action( 'wp_ajax_wpec_add_order_note', array( $this, 'wpec_add_order_note_callback' ) );
 		add_action( 'wp_ajax_wpec_delete_order_note', array( $this, 'wpec_delete_order_note_callback' ) );
 	}
@@ -177,7 +177,7 @@ class Orders_Meta_Boxes {
                 <tr>
                     <td><?php esc_html_e('Phone no.', 'wp-express-checkout'); ?></td>
                     <td>
-                        <input type="text" name="wpec_order_customer_phone" value="<?php echo esc_attr($payer_phone); ?>" size="40" required>
+                        <input type="text" name="wpec_order_customer_phone" value="<?php echo esc_attr($payer_phone); ?>" size="40">
                     </td>
                 </tr>
                 <?php if (!empty($wp_username)) {?>
@@ -289,13 +289,15 @@ class Orders_Meta_Boxes {
 					<div class="wpec-grey-box">
 						<div class="wpec-order-action-txn-refunded-msg"><?php esc_html_e( 'Transaction Refunded', 'wp-express-checkout' ); ?></div>
 					</div>
-				<?php }else{ ?>				
-				<a class="button wpec-order-action" data-action="paypal_refund" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'paypal-refund' ); ?>" href="#">
-					<span class="dashicons dashicons-money" style="line-height:1.8;font-size:16px;"></span>
-					<span class="wpec-order-action-label">
-						<?php esc_html_e( 'Refund Transaction', 'wp-express-checkout' ); ?>
-					</span>
-				</a>
+				<?php }else{ ?>
+                    <?php if ($order->is_refundable()) { ?>
+                    <a class="button wpec-order-action" data-action="payment_refund" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'wpec-payment-refund' ); ?>" href="#">
+                        <span class="dashicons dashicons-money" style="line-height:1.8;font-size:16px;"></span>
+                        <span class="wpec-order-action-label">
+                            <?php esc_html_e( 'Refund Transaction', 'wp-express-checkout' ); ?>
+                        </span>
+                    </a>
+                    <?php } ?>
 				<?php } ?>
 			</li>
             <?php } ?>
@@ -470,9 +472,9 @@ class Orders_Meta_Boxes {
 		wp_send_json_success( __( 'Email successfully sent!', 'wp-express-checkout' ) );
 	}
 
-	public function paypal_refund_callback()
+	public function payment_refund_callback()
 	{
-		check_ajax_referer( 'paypal-refund', 'nonce' );
+		check_ajax_referer( 'wpec-payment-refund', 'nonce' );
 
 		try {
 			$order = Orders::retrieve( $_POST['order'] );						
