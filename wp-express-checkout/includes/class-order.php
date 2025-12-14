@@ -559,6 +559,24 @@ class Order {
 		return $this->capture_id;
 	}
 
+	public function get_product_type() {
+		$product_item = $this->get_item( Products::$products_slug );
+
+		$product_type = isset($product_item['meta']['product_type']) ? sanitize_text_field($product_item['meta']['product_type']) : '';
+		if (!empty($product_type)){
+			return $product_type;
+		}
+
+		$product_id = isset($product_item['post_id']) ? intval($product_item['post_id']) : 0;
+		if (empty($product_id)){
+			return '';
+		}
+
+		$product_type = Products::retrieve($product_id)->get_type();
+
+		return $product_type;
+	}
+
 	public function get_refund_date($date_format = '')
 	{
 		if( $date_format ) {
@@ -575,6 +593,20 @@ class Order {
 
 		$this->refund_date = $date;
 		$this->update_meta( 'wpec_order_refund_date', $date );		
+	}
+
+	/**
+	 * Currently the one_time and donation type payment is refundable only.
+	 *
+	 * @return bool
+	 */
+	public function is_refundable() {
+		$product_type = $this->get_product_type();
+		if (in_array($product_type, array('one_time', 'donation'))){
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

@@ -108,7 +108,11 @@ class Payment_Processor_Manual extends Payment_Processor {
 		$order->set_resource_id( $this->transaction_id );
 		$order->set_capture_id( $this->capture_id );
 		$order->set_author_email( $payment['payer']['email_address'] );
-		$order->add_item( Products::$products_slug, $item_name, $price, $quantity, $item_id, true );
+
+		$product_item_meta = array(
+			'product_type' => $product->get_type(),
+		);
+		$order->add_item( Products::$products_slug, $item_name, $price, $quantity, $item_id, true, $product_item_meta );
 		$order->add_data( 'state', $this->transaction_status );
 		$order->add_data( 'payer', $payment['payer'] );
 

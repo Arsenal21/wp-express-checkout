@@ -133,7 +133,7 @@
 					button.prop( "disabled",false );
 					label.text( original_text );
 					alert( msg );
-					if( button_action == 'paypal_refund'){
+					if( button_action == 'payment_refund'){
 						console.log('Refund successful. Reloading the page.');
 						window.location.reload();
 					}

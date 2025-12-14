@@ -246,40 +246,47 @@ class Orders {
 		return $order;
 	}
 
-	public static function refund($order)
-	{
+	public static function refund(Order $order) {
+		if ($order->get_payment_gateway() == 'stripe'){
+			return self::refund_stripe($order);
+		} else {
+			return self::refund_paypal($order);
+		}
+	}
+
+	private static function refund_paypal(Order $order) {
 		$client = Client::client();
 
 		$body = array(
-            'amount' =>
-                array(
-                    'value' => $order->get_total(),
-                    'currency_code' => $order->get_currency()
-                )
-        );
+			'amount' =>
+				array(
+					'value' => $order->get_total(),
+					'currency_code' => $order->get_currency()
+				)
+		);
 
 		$capture_id = $order->get_capture_id();
 		Logger::log( 'Initiating refund request for capture ID: ' . $capture_id );
 		if( empty( $capture_id )){
 			return new \WP_Error(2002,__( 'The Capture ID value of this transaction is empty. Cannot execute the refund request on this transaction. You can try to refund it from your PayPal account.', 'wp-express-checkout' ));
 		}
-				
+
 		$request = new CapturesRefundRequest( $capture_id );
 		$request->body = $body ;
 
 		try{
 			$response = $client->execute($request);
 		}
-		catch( Exception $e ) {			
+		catch( Exception $e ) {
 			$exception_msg = json_decode($e->getMessage());
 			if(is_array($exception_msg->details) && sizeof($exception_msg->details)>0){
-				$error_string = $exception_msg->details[0]->issue.". ".$exception_msg->details[0]->description;							
+				$error_string = $exception_msg->details[0]->issue.". ".$exception_msg->details[0]->description;
 				return new \WP_Error(2002,$error_string);
 			}
 			return new \WP_Error(2002,__( 'Something went wrong, refund is not completed!', 'wp-express-checkout' ));
 		}
-		
-		if( $response->result->status == "COMPLETED" ){			
+
+		if( $response->result->status == "COMPLETED" ){
 			$order->set_status("refunded");
 			$current_wp_time = current_time('mysql');
 			$order->set_refund_date($current_wp_time);
@@ -290,4 +297,35 @@ class Orders {
 		return new \WP_Error(2002,__( 'Something went wrong, refund is not completed!', 'wp-express-checkout' ));
 	}	
 
+	private static function refund_stripe(Order $order) {
+
+		do_action('wpec_before_stripe_refund', $order);
+
+		$stripe_client = Utils::get_stripe_client();
+
+		try {
+			$charge_id = $order->get_capture_id();
+
+			$refund = $stripe_client->refunds->create(
+				array('charge' => $charge_id),
+			);
+
+			if ($refund->status == 'succeeded'){
+				$order->set_status("refunded");
+				$current_wp_time = current_time('mysql');
+				$order->set_refund_date($current_wp_time);
+
+				do_action('wpec_after_stripe_refund', $order, $refund);
+
+				Logger::log( 'Refund processed successfully!' );
+				return true;
+			} else {
+				Logger::log( "Refund process couldn't been succeeded!", false);
+			}
+		} catch (\Exception $e){
+			return new \WP_Error(2004,__( $e->getMessage(), 'wp-express-checkout' ));
+		}
+
+		return new \WP_Error(2005,__( 'Something went wrong, refund is not completed!', 'wp-express-checkout' ));
+	}
 }
