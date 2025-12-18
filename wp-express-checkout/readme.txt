@@ -177,6 +177,7 @@ None
 == Changelog ==
 = WIP =
 * Payment refund option for one time and donation type product support added for stripe payments.
+* Add new order feature from admin has fixed and updated.
 
 = 2.4.3 =
 * New Feature: users can now use Stripe checkout directly on the same page as PayPal, offering more payment choices.

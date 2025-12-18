@@ -122,7 +122,7 @@ class Orders_List {
 			// Headers
 			$headers = array(
 				'Order ID',
-				'PayPal Transaction ID',
+				'Transaction ID',
 				'Date',
 				'Item Name',
 				'Quantity',
@@ -236,7 +236,7 @@ class Orders_List {
 		unset( $columns['title'] );
 
 		$columns['order']        = __( 'Order', 'wp-express-checkout' );
-		$columns['trans_id']     = __( 'PayPal Transaction ID', 'wp-express-checkout' );
+		$columns['trans_id']     = __( 'Transaction ID', 'wp-express-checkout' );
 		$columns['title']        = __( 'Description', 'wp-express-checkout' );
 		$columns['customer'] = __( 'Customer', 'wp-express-checkout' );
 		$columns['total']        = __( 'Total', 'wp-express-checkout' );

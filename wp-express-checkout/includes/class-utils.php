@@ -734,4 +734,12 @@ class Utils {
 
 		return implode( ', ', $address_array );
 	}
+
+	public static function is_order_edit_screen(){
+		if (isset($_GET['post'])) {
+			return true;
+		}
+
+		return false;
+	}
 }

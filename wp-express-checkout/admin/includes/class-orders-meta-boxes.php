@@ -7,6 +7,9 @@ use WP_Express_Checkout\Emails;
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Order_Tags_Html;
 use WP_Express_Checkout\Orders;
+use WP_Express_Checkout\Products;
+use WP_Express_Checkout\Utils;
+use WP_Express_Checkout\Variations;
 use WP_Post;
 
 /**
@@ -32,19 +35,26 @@ class Orders_Meta_Boxes {
 		add_action( 'wp_ajax_wpec_order_action_payment_refund', array( $this, 'payment_refund_callback' ) );
 		add_action( 'wp_ajax_wpec_add_order_note', array( $this, 'wpec_add_order_note_callback' ) );
 		add_action( 'wp_ajax_wpec_delete_order_note', array( $this, 'wpec_delete_order_note_callback' ) );
+		add_action( 'wp_ajax_wpec_get_order_product_by_id', array( $this, 'wpec_get_order_product_by_id_callback' ) );
 	}
 
 	public function add_meta_boxes() {
-		add_meta_box( 'wpec_order_items', __( 'Order Summary', 'wp-express-checkout' ), array( $this, 'display_summary_meta_box' ), Orders::PTYPE, 'normal', 'high' );
-		add_meta_box( 'wpec_order_details', __( 'Order Details', 'wp-express-checkout' ), array( $this, 'display_order_details_meta_box' ), Orders::PTYPE, 'normal', 'high' );
-		add_meta_box( 'wpec_order_downloads', __( 'Order Downloads', 'wp-express-checkout' ), array( $this, 'display_downloads_meta_box' ), Orders::PTYPE, 'normal', 'high' );
-		add_meta_box( 'wpec_order_actions', __( 'Order Actions', 'wp-express-checkout' ), array( $this, 'display_actions_meta_box' ), Orders::PTYPE, 'side', 'high' );
+		if (Utils::is_order_edit_screen()) {
+			add_meta_box( 'wpec_order_items', __( 'Order Summary', 'wp-express-checkout' ), array( $this, 'display_summary_meta_box' ), Orders::PTYPE, 'normal', 'high' );
+			add_meta_box( 'wpec_order_details', __( 'Order Details', 'wp-express-checkout' ), array( $this, 'display_order_details_meta_box' ), Orders::PTYPE, 'normal', 'high' );
+			add_meta_box( 'wpec_order_downloads', __( 'Order Downloads', 'wp-express-checkout' ), array( $this, 'display_downloads_meta_box' ), Orders::PTYPE, 'normal', 'high' );
+			add_meta_box( 'wpec_order_actions', __( 'Order Actions', 'wp-express-checkout' ), array( $this, 'display_actions_meta_box' ), Orders::PTYPE, 'side', 'high' );
+		} else {
+			add_meta_box( 'wpec_new_order_details', __( 'New Order Details', 'wp-express-checkout' ), array( $this, 'display_new_order_details_meta_box' ), Orders::PTYPE, 'normal', 'high' );
+		}
+
 		add_meta_box( 'wpec_order_notes', __( 'Order Notes', 'wp-express-checkout' ), array( $this, 'display_notes_meta_box' ), Orders::PTYPE, 'side', 'low' );
 
 		wp_enqueue_script( 'wpec-admin-scripts', WPEC_PLUGIN_URL . '/assets/js/admin.js', array(), WPEC_PLUGIN_VER, true );
 		wp_localize_script( 'wpec-admin-scripts', 'wpecAdminSideVars', array(
 			'ajaxurl' => get_admin_url() . 'admin-ajax.php',			
 			'add_order_note_nonance' => wp_create_nonce('wpec_add_order_note_ajax_nonce'),
+			'add_new_order_nonce' => wp_create_nonce('wpec_get_order_product_nonce'),
 			'delete_order_note_nonance' => wp_create_nonce('wpec_delete_order_note_ajax_nonce'),
 		) );
 	}
@@ -79,6 +89,89 @@ class Orders_Meta_Boxes {
 			'id' => 'admin-order-summary'
 		) );
 	}
+
+    public function display_new_order_details_meta_box( $post ) {
+	    $order_status_options = array(
+		    'pending' => __('Pending', 'wp-express-checkout'),
+		    'incomplete' => __('Incomplete', 'wp-express-checkout'),
+		    'paid' => __('Paid', 'wp-express-checkout'),
+            'refunded' => __('Refunded', 'wp-express-checkout'),
+		);
+
+		$transaction_id = 'admin_checkout_' . strtoupper( substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 20 ) );
+
+	    ?>
+        <table class="widefat" style="border: none">
+            <tbody>
+				<tr>
+					<td><?php esc_html_e( 'Product', 'wp-express-checkout' ); ?>: </td>
+					<td>
+						<?php echo $this->get_product_select_html() ?>
+						<div id="wpec_new_order_product_description"></div>
+						<div id="wpec_new_order_product_quantity"></div>
+						<div id="wpec_new_order_product_variations"></div>
+	                </td>
+				</tr>
+				<tr>
+                    <td><?php esc_html_e( 'Transaction ID', 'wp-express-checkout' ); ?>: </td>
+                    <td>
+						<input type="text" name="wpec_order_capture_id" value="<?php echo esc_attr($transaction_id); ?>" size="40" readonly required>
+					</td>
+                </tr>
+                <tr>
+                    <td><?php esc_html_e( 'Status', 'wp-express-checkout' ); ?>: </td>
+                    <td>
+                        <select name="wpec_order_state">
+                        <?php foreach ($order_status_options as $status_value => $status_text) { ?>
+                            <option value="<?php echo esc_attr($status_value); ?>"><?php esc_html_e($status_text); ?></option>
+                        <?php } ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php esc_html_e('First Name', 'wp-express-checkout'); ?></td>
+                    <td>
+                        <input type="text" name="wpec_order_customer_first_name" value="" size="40">
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php esc_html_e('Last Name', 'wp-express-checkout'); ?></td>
+                    <td>
+                        <input type="text" name="wpec_order_customer_last_name" value="" size="40">
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php esc_html_e('Email Address', 'wp-express-checkout'); ?></td>
+                    <td>
+                        <input type="email" name="wpec_order_customer_email" value="" size="40" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php esc_html_e('Phone no.', 'wp-express-checkout'); ?></td>
+                    <td>
+                        <input type="text" name="wpec_order_customer_phone" value="" size="40">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <?php esc_html_e( 'Billing Address:', 'wp-express-checkout' ); ?>
+                    </td>
+                    <td>
+                        <textarea name="wpec_order_customer_billing_address" rows="2" style="width: 100%"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <?php esc_html_e( 'Shipping Address:', 'wp-express-checkout' ); ?>
+                    </td>
+                    <td>
+                        <textarea name="wpec_order_customer_shipping_address" rows="2" style="width: 100%"></textarea>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+	    <?php
+    }
 
     public function display_order_details_meta_box( $post ) {
 	    try {
@@ -262,6 +355,7 @@ class Orders_Meta_Boxes {
 		try {
 			$order = Orders::retrieve( $post->ID );
 			$is_manual_payment = strpos($order->get_capture_id(), 'manual');
+			$is_admin_checkout = strpos($order->get_capture_id(), 'admin');
 		} catch ( Exception $exc ) {
 			return;
 		}
@@ -283,7 +377,7 @@ class Orders_Meta_Boxes {
 					</span>
 				</a>
 			</li>
-            <?php if ($is_manual_payment === false) { // Don't show refund action button for manual payment ?>
+            <?php if ($is_manual_payment === false && $is_admin_checkout === false) { // Don't show refund action button for manual payment or admin checkout?>
 			<li>
 				<?php if( $order->get_status()=="refunded" ){ ?>
 					<div class="wpec-grey-box">
@@ -398,6 +492,11 @@ class Orders_Meta_Boxes {
 			$order = Orders::retrieve( $post->ID );
             $order_data = $order->get_data();
 			$payer = $order->get_data('payer');
+			if (empty($payer)) {
+				$payer = array(
+					'name' => array(),
+				);
+			}
 
 			if ( isset( $_POST['wpec_order_customer_email'] ) ) {
                 $email_address = sanitize_email( $_POST['wpec_order_customer_email'] );
@@ -415,11 +514,11 @@ class Orders_Meta_Boxes {
 				update_post_meta( $post_id, 'wpec_order_state', sanitize_text_field( $_POST['wpec_order_state'] ) );
             }
 
-            if ( isset($_POST['wpec_order_customer_first_name']) && isset( $payer['name'] )){
+            if ( isset($_POST['wpec_order_customer_first_name']) ){
                 $payer['name']['given_name'] = sanitize_text_field( $_POST['wpec_order_customer_first_name'] );
             }
 
-			if ( isset($_POST['wpec_order_customer_last_name']) && isset( $payer['name'] )){
+			if ( isset($_POST['wpec_order_customer_last_name']) ){
 				$payer['name']['surname'] = sanitize_text_field( $_POST['wpec_order_customer_last_name'] );
 			}
 
@@ -439,7 +538,65 @@ class Orders_Meta_Boxes {
 
             update_post_meta( $post_id, 'wpec_order_data', $order_data );
 
-            do_action('wpec_order_details_update', $post_id, $order_data);
+			if(Utils::is_order_edit_screen()){
+				do_action('wpec_order_details_update', $post_id, $order_data);
+			} else {
+				if (isset($_POST['wpec_order_product_id']) && !empty($_POST['wpec_order_product_id'])){
+					$order_product_id = (int) sanitize_text_field($_POST['wpec_order_product_id']);
+					$product = Products::retrieve($order_product_id);
+
+					$quantity = isset($_POST['wpec_order_product_quantity']) ? (int) sanitize_text_field($_POST['wpec_order_product_quantity']) : 1;
+
+					$item_name = $product->get_item_name();
+					$item_price = $product->get_price();
+					$txn_status = isset($_POST['wpec_order_state']) ? sanitize_text_field($_POST['wpec_order_state']) : 'pending';
+
+					$order->set_payment_gateway( 'admin_checkout' );
+
+					remove_action('save_post_' . Orders::PTYPE, array($this, 'save')); // To Prevent the infinite loop.
+					$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $txn_status ) );
+					add_action('save_post_' . Orders::PTYPE, array($this, 'save'));
+
+					$product_item_meta = array(
+						'product_type' => $product->get_type(),
+					);
+					$order->add_item( Products::$products_slug, $item_name, $item_price, $quantity, $order_product_id, true, $product_item_meta );
+				
+					if(isset($_POST['wpec_order_product_var'])){
+						$applied_variations = $_POST['wpec_order_product_var'];
+						Variations::add_variations_to_order($order, array(), array(
+							'variations' => array(
+								'applied' => $applied_variations,
+							)
+						));
+					}
+
+					$current_total = $order->get_total();
+
+					$total_tax = Utils::get_tax_amount($current_total, $product->get_tax());
+					if ( ! empty( $total_tax ) ) {
+						$order->add_item( 'tax', __( 'Tax', 'wp-express-checkout' ), $total_tax );
+					}
+
+					$total_shipping = Utils::get_total_shipping_cost(
+						array(
+							'shipping' => $product->get_shipping(),
+							'shipping_per_quantity' => $product->get_shipping_per_quantity(),
+							'quantity' => $quantity,
+						)
+					);
+					if ( ! empty( $total_shipping ) ) {
+						$order->add_item( 'shipping', __( 'Shipping', 'wp-express-checkout' ), $total_shipping );
+					}
+				}
+
+				if ( isset($_POST['wpec_order_capture_id']) ){
+					$txn_id = sanitize_text_field( $_POST['wpec_order_capture_id'] );
+					$order->set_capture_id($txn_id);
+				}
+
+				do_action('wpec_create_admin_order', $order);
+			}
 
 		} catch ( Exception $exc ) {
 			return;
@@ -448,7 +605,10 @@ class Orders_Meta_Boxes {
 	}
 
 	public function remove_meta_boxes() {
-		remove_meta_box( 'submitdiv', Orders::PTYPE, 'side' );
+		if(Utils::is_order_edit_screen()){
+			remove_meta_box( 'submitdiv', Orders::PTYPE, 'side' );
+		}
+
 		remove_meta_box( 'slugdiv', Orders::PTYPE, 'normal' );
 		remove_meta_box( 'authordiv', Orders::PTYPE, 'normal');
 	}
@@ -578,4 +738,86 @@ class Orders_Meta_Boxes {
 		wp_send_json_success( __( 'Download permissions reset!', 'wp-express-checkout' ) );
 	}
 
+	public function get_product_select_html() {
+		// Query all one time products
+		$posts = get_posts( array(
+			'post_type'      => 'ppec-products',
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+			'orderby'        => 'title',
+			'order'          => 'DESC',
+			'meta_query' => array(
+				array(
+					'key'   => 'wpec_product_type',
+					'value' => 'one_time',
+					'compare' => '=',
+				),
+			)
+		) );
+
+		$html = '';
+		$html .= '<div class="wpec-search-select" data-placeholder="'.__('Select Product', 'wp-express-checkout').'">';
+		$html .= '<select name="wpec_order_product_id" id="wpec_add_new_order_product_id" style="width: 100%" required>';
+
+		// Loop through posts and create options
+		foreach ( $posts as $post ) {
+			$product = Products::retrieve($post->ID);
+
+			$option_text = $product->get_item_name();
+			$option_text .= ' (' . Utils::price_format($product->get_price()) . ')';
+
+			$html .= sprintf(
+				'<option value="%d">%s</option>',
+				esc_attr( $post->ID ),
+				esc_html( $option_text )
+			);
+		}
+
+		$html .= '</select>';
+		$html .= '</div>';
+
+		return $html;
+	}
+
+	public function wpec_get_order_product_by_id_callback(){
+		if ( ! check_ajax_referer( 'wpec_get_order_product_nonce', 'nonce', false ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Nonce Verification Failed!', 'wp-express-checkout' ),
+				)
+			);
+		}
+
+		$product_id = isset($_POST['productId']) && !empty($_POST['productId']) ? intval($_POST['productId']) : null;
+		if (empty($product_id)) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'No product id!', 'wp-express-checkout' ),
+				)
+			);
+		}
+
+		$product = Products::retrieve($product_id);
+
+		$extra_data = apply_filters('wpec_get_order_product_by_id_extra_fields', array(), $product_id);
+
+		wp_send_json_success(
+			array(
+				'message' => __( 'Product retrieved!', 'wp-express-checkout' ),
+				'product' => array(
+					'name' => $product->get_item_name(),
+					'quantity' => $product->get_quantity(),
+					'isCustomQuantity' => $product->is_custom_quantity(),
+					'stockItems' => $product->get_stock_items(),
+					'isStockControl' => $product->is_stock_control_enabled(),
+					'price' => $product->get_price(),
+					'shipping' => $product->get_shipping(),
+					'shippingPerQuantity' => $product->get_shipping_per_quantity(),
+					'tax' => $product->get_tax(),
+					'variations' => $product->get_variations(),
+				),
+				"extra" => $extra_data, 
+			)
+		);
+	}
 }
