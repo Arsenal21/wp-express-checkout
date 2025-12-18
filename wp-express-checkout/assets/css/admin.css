@@ -397,6 +397,53 @@ input[name="ppec_product_shortcode"] {
 }
 /*----- END Addons Listing ----- */
 
+/*----- Add New Order Styles ----- */
+.wpec-admin-product-quantity-div,
+.wpec-admin-product-var-div {
+	margin: 12px 0;
+	width: 100%;
+}
+
+.wpec-search-select {
+    position: relative;
+    width: 100%;
+}
+
+.wpec-search-select.open {
+    border-bottom: none;
+}
+
+.wpec-search-select-dropdown {
+    position: absolute;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-top: none;
+    background: #fff;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 999;
+}
+
+.wpec-search-select-search {
+    width: 100%;
+}
+
+.wpec-search-select-option {
+    padding: 6px 8px;
+    cursor: pointer;
+}
+
+.wpec-search-select-option:hover,
+.wpec-search-select-option.active {
+    background: #007cba;
+    color: #fff;
+}
+
+.wpec-search-select-hidden {
+    display: none;
+}
+/*----- End of Add New Order Styles ----- */
+
 /*----- Utility Classes ----- */
 .wpec_input_width_full{
 	width: 100%;

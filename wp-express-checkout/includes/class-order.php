@@ -601,12 +601,14 @@ class Order {
 	 * @return bool
 	 */
 	public function is_refundable() {
-		$product_type = $this->get_product_type();
-		if (in_array($product_type, array('one_time', 'donation'))){
-			return true;
+		try{
+			$product_type = $this->get_product_type();
+			if (in_array($product_type, array('one_time', 'donation'))){
+				return true;
+			}
+		} catch (\Exception $e) {
+			return false;
 		}
-
-		return false;
 	}
 
 	/**
