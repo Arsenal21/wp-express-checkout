@@ -203,9 +203,9 @@ async function wpecOnAddNewOrderProductSelect(e){
 	quantityInput.value = product?.quantity || 1;
 	quantityInput.setAttribute('type', 'number');
 	quantityInput.setAttribute('min', 1);
-	if (!product?.isCustomQuantity) {
-		quantityInput.setAttribute('readonly', true);
-	}
+	// if (!product?.isCustomQuantity) {
+	// 	quantityInput.setAttribute('readonly', true);
+	// }
 	if (product?.isStockControl) {
 		quantityInput.setAttribute('max', product?.stockItems);
 	}
