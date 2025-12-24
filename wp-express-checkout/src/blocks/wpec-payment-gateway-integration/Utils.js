@@ -1,6 +1,15 @@
 const { getSetting } = window.wc.wcSettings
 
-export function getSettings(key, defaultValue = null){
-    const settings = getSetting( 'wp-express-checkout_data', {} );
+function getSettings(key, settingsGroup, defaultValue = null){
+    const settings = getSetting( settingsGroup, {} );
+
     return settings[key] || defaultValue;
+}
+
+export function getPayPalSettings(key, defaultValue = null){
+    return getSettings(key, "wp-express-checkout_data", defaultValue);
+}
+
+export function getStripeSettings(key, defaultValue = null){
+    return getSettings(key, "wp-express-checkout-stripe_data", defaultValue);
 }

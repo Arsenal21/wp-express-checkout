@@ -21,7 +21,8 @@ class Integrations {
 		// WooCommerce integration.
 		if ( class_exists( 'WC_Payment_Gateway' ) ) {
 			new Integrations\WooCommerce_Payment_Processor();
-			add_filter( 'woocommerce_payment_gateways', array( 'WP_Express_Checkout\Integrations\WooCommerce_Gateway', 'add_wc_gateway_class' ) );
+			add_filter( 'woocommerce_payment_gateways', array( 'WP_Express_Checkout\Integrations\WPEC_WC_Payment_Gateway_PayPal', 'add_wc_gateway_class' ) );
+			add_filter( 'woocommerce_payment_gateways', array( 'WP_Express_Checkout\Integrations\WPEC_WC_Payment_Gateway_Stripe', 'add_wc_gateway_class' ) );
 		}
 
 		// Subscriptions addon integration.

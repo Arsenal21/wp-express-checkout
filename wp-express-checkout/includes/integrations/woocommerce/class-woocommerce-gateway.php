@@ -10,7 +10,7 @@ use WP_Express_Checkout\Main;
 
 defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 
-class WooCommerce_Gateway extends WC_Payment_Gateway {
+class WPEC_WC_Payment_Gateway_PayPal extends WC_Payment_Gateway {
 
 	/** @var bool Whether or not logging is enabled */
 	public static $log_enabled = false;
@@ -28,7 +28,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 
 	public function __construct() {
 		$this->id                 = 'wp-express-checkout';
-		$this->method_title       = __( 'WP Express Checkout Gateway', 'wp-express-checkout' );
+		$this->method_title       = __( 'WP Express Checkout - PayPal', 'wp-express-checkout' );
 		$this->method_description = __( 'Use the WP Express Checkout plugin to process payments via PayPal Checkout API.', 'wp-express-checkout' );
 		$this->notify_url         = WC()->api_request_url( 'wp_express_checkout' );
 
@@ -60,7 +60,7 @@ class WooCommerce_Gateway extends WC_Payment_Gateway {
 	 * @return array
 	 */
 	public static function add_wc_gateway_class( $methods ) {
-		$methods[] = 'WP_Express_Checkout\Integrations\WooCommerce_Gateway';
+		$methods[] = 'WP_Express_Checkout\Integrations\WPEC_WC_Payment_Gateway_PayPal';
 		return $methods;
 	}
 
