@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 2.4.3
+Stable tag: 2.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,9 +175,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
-= WIP =
-* Payment refund option for one time and donation type product support added for stripe payments.
-* Add new order feature from admin has fixed and updated.
+
+= 2.4.4 =
+* Improved robustness of the "Add New Order" feature in the admin dashboard.
+* Added Stripe refund support for one-time and donation products.
 
 = 2.4.3 =
 * New Feature: users can now use Stripe checkout directly on the same page as PayPal, offering more payment choices.
