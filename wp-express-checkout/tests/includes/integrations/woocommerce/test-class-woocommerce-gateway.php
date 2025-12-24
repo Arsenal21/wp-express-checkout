@@ -8,12 +8,12 @@ namespace WP_Express_Checkout\Integrations;
  * @group integrations
  * @group woocommerce
  *
- * @covers WP_Express_Checkout\Integrations\WooCommerce_Gateway
+ * @covers WPEC_WC_Payment_Gateway_PayPal
  */
-class WooCommerce_GatewayTest extends \WP_UnitTestCase {
+class WPEC_WC_Payment_Gateway_PayPalTest extends \WP_UnitTestCase {
 
 	/**
-	 * @var WooCommerce_Gateway
+	 * @var WPEC_WC_Payment_Gateway_PayPal
 	 */
 	protected $object;
 
@@ -29,11 +29,11 @@ class WooCommerce_GatewayTest extends \WP_UnitTestCase {
 			require_once WPEC_TESTS_DIR . '/mocks/mock-wc-order.php';
 		}
 
-		$this->object = new WooCommerce_Gateway;
+		$this->object = new WPEC_WC_Payment_Gateway_PayPal;
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Integrations\WooCommerce_Gateway::add_wc_gateway_class
+	 * @covers WPEC_WC_Payment_Gateway_PayPal::add_wc_gateway_class
 	 */
 	public function testAdd_wc_gateway_class() {
 		$methods = $this->object->add_wc_gateway_class( [] );
@@ -41,7 +41,7 @@ class WooCommerce_GatewayTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Integrations\WooCommerce_Gateway::log
+	 * @covers WPEC_WC_Payment_Gateway_PayPal::log
 	 * @todo   Implement testLog().
 	 */
 	public function testLog() {
@@ -52,7 +52,7 @@ class WooCommerce_GatewayTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Integrations\WooCommerce_Gateway::init_form_fields
+	 * @covers WPEC_WC_Payment_Gateway_PayPal::init_form_fields
 	 */
 	public function testInit_form_fields() {
 		$this->object->init_form_fields();
@@ -61,7 +61,7 @@ class WooCommerce_GatewayTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Integrations\WooCommerce_Gateway::receipt_page
+	 * @covers WPEC_WC_Payment_Gateway_PayPal::receipt_page
 	 * @todo   Implement testReceipt_page().
 	 */
 	public function testReceipt_page() {
@@ -72,7 +72,7 @@ class WooCommerce_GatewayTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Integrations\WooCommerce_Gateway::paypal_sdk_args
+	 * @covers WPEC_WC_Payment_Gateway_PayPal::paypal_sdk_args
 	 * @todo   Implement testPaypal_sdk_args().
 	 */
 	public function testPaypal_sdk_args() {
@@ -83,7 +83,7 @@ class WooCommerce_GatewayTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Integrations\WooCommerce_Gateway::process_payment
+	 * @covers WPEC_WC_Payment_Gateway_PayPal::process_payment
 	 */
 	public function testProcess_payment() {
 		$result = $this->object->process_payment( null );

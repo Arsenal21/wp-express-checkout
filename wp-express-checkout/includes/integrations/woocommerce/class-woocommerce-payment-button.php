@@ -20,6 +20,9 @@ class WooCommerce_Payment_Button {
 		$this->wpec      = Main::get_instance();
 	}
 
+	/**
+	 * This is for classic "woocommerce_checkout" shortcode.
+	 */
 	public function wpec_generate_woo_payment_button() {
 		$modal_title = isset($_POST['modal_title']) ? sanitize_text_field( $_POST['modal_title'] ) : '';
 		$btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
@@ -105,6 +108,82 @@ class WooCommerce_Payment_Button {
 		return $output;
 	}
 
+	/**
+	 * This is for classic "woocommerce_checkout" shortcode.
+	 */
+	public function get_wpec_payment_modal_html( $args ) {
+		ob_start();
+		?>
+
+        <!--Modal-->
+        <div id="wpec-modal-<?php echo esc_attr( $args['id'] ); ?>"
+             class="wpec-modal wpec-opacity-0 wpec-pointer-events-none wpec-modal-product-<?php echo esc_attr( $args['product_id'] ); ?>">
+
+            <div class="wpec-modal-overlay"></div>
+
+            <div class="wpec-modal-container">
+                <div class="wpec-modal-content">
+                    <!--Title-->
+                    <div class="wpec-modal-content-title">
+                        <p><?php echo esc_html( $args['modal_title'] ); ?></p>
+                        <div class="wpec-modal-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div style="position: relative;"
+                         class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $args['product_id'] ); ?>"
+                         data-ppec-button-id="<?php echo esc_attr( $args['id'] ); ?>"
+                         data-price-class="<?php echo esc_attr( $args['price_class'] ); ?>">
+
+                        <div class="wp-ppec-overlay" data-ppec-button-id="<?php echo esc_attr( $args['id'] ); ?>">
+                            <div class="wp-ppec-spinner">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+
+                        <div class="wp-ppec-button-container">
+
+                            <div class="wpec-price-container <?php echo esc_attr( $args['price_class'] ); ?>">
+								<?php echo Shortcodes::get_instance()->generate_price_tag( $args ); ?>
+                            </div>
+
+                            <div id="place-order-<?php echo esc_attr( $args['id'] );?>" style="display:none;">
+                                <button class="wpec-place-order-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+									<?php esc_html_e( 'Place Order', 'wp-express-checkout' ); ?>
+                                </button>
+                            </div>
+
+                            <div id="<?php echo esc_attr( $args['id'] ); ?>" style="max-width:<?php echo esc_attr( $args['btnStyle']['width'] ); ?>"></div>
+
+                            <div class="wpec-button-placeholder" style="display: none; border: 1px solid #E7E9EB; padding:1rem;">
+                                <i><?php esc_html_e( 'This is where the Express Checkout Button will show. View it on the front-end to see how it will look to your visitors', 'wp-express-checkout' ); ?></i>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <button data-wpec-modal="wpec-modal-<?php echo esc_attr( $args['id'] ); ?>" class="wpec-modal-open wpec-modal-open-product-<?php echo esc_attr( $args['product_id'] ); ?>"></button>
+
+		<?php
+		return ob_get_clean();
+	}
+
     public function wpec_prepare_woo_payment_button_data() {
         $modal_title = isset($_POST['modal_title']) ? sanitize_text_field( $_POST['modal_title'] ) : '';
         $btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
@@ -170,78 +249,5 @@ class WooCommerce_Payment_Button {
 
 	private function show_err_msg( $msg, $code = 0 ) {
 		return sprintf( '<div class="wpec-error-message wpec-error-message-' . esc_attr( $code ) . '">%s</div>', $msg );
-	}
-
-	public function get_wpec_payment_modal_html( $args ) {
-		ob_start();
-		?>
-
-        <!--Modal-->
-        <div id="wpec-modal-<?php echo esc_attr( $args['id'] ); ?>"
-             class="wpec-modal wpec-opacity-0 wpec-pointer-events-none wpec-modal-product-<?php echo esc_attr( $args['product_id'] ); ?>">
-
-            <div class="wpec-modal-overlay"></div>
-
-            <div class="wpec-modal-container">
-                <div class="wpec-modal-content">
-                    <!--Title-->
-                    <div class="wpec-modal-content-title">
-                        <p><?php echo esc_html( $args['modal_title'] ); ?></p>
-                        <div class="wpec-modal-close">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                                <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div style="position: relative;"
-                         class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $args['product_id'] ); ?>"
-                         data-ppec-button-id="<?php echo esc_attr( $args['id'] ); ?>"
-                         data-price-class="<?php echo esc_attr( $args['price_class'] ); ?>">
-
-                        <div class="wp-ppec-overlay" data-ppec-button-id="<?php echo esc_attr( $args['id'] ); ?>">
-                            <div class="wp-ppec-spinner">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>
-
-                        <div class="wp-ppec-button-container">
-
-                            <div class="wpec-price-container <?php echo esc_attr( $args['price_class'] ); ?>">
-                                <?php echo Shortcodes::get_instance()->generate_price_tag( $args ); ?>
-                            </div>
-
-                            <div id="place-order-<?php echo esc_attr( $args['id'] );?>" style="display:none;">
-                                <button class="wpec-place-order-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                                stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-					                <?php esc_html_e( 'Place Order', 'wp-express-checkout' ); ?>
-                                </button>
-                            </div>
-
-                            <div id="<?php echo esc_attr( $args['id'] ); ?>" style="max-width:<?php echo esc_attr( $args['btnStyle']['width'] ); ?>"></div>
-
-                            <div class="wpec-button-placeholder" style="display: none; border: 1px solid #E7E9EB; padding:1rem;">
-                                <i><?php esc_html_e( 'This is where the Express Checkout Button will show. View it on the front-end to see how it will look to your visitors', 'wp-express-checkout' ); ?></i>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <button data-wpec-modal="wpec-modal-<?php echo esc_attr( $args['id'] ); ?>" class="wpec-modal-open wpec-modal-open-product-<?php echo esc_attr( $args['product_id'] ); ?>"></button>
-
-        <?php
-		return ob_get_clean();
 	}
 }

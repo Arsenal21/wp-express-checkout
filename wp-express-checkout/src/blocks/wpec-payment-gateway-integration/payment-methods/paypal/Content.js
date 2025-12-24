@@ -1,13 +1,13 @@
 import {decodeEntities} from '@wordpress/html-entities';
 import {useEffect, useState, useRef} from 'react';
-import {getSettings} from './Utils';
+import {getPayPalSettings} from '../../utils';
 import WpecPaypalButtonHandler from "./WpecPaypalButtonHandler";
-import styles from './FrontEndContent.module.css';
+import styles from './Styles.module.css';
 
-const FrontEndContent = ({eventRegistration}) => {
-    const ajaxUrl = getSettings('ajaxUrl');
-    const popup_title = getSettings('popup_title');
-    const renderButtonNonce = getSettings('renderButtonNonce');
+export default ({eventRegistration}) => {
+    const ajaxUrl = getPayPalSettings('ajaxUrl');
+    const popup_title = getPayPalSettings('popup_title');
+    const renderButtonNonce = getPayPalSettings('renderButtonNonce');
 
     const {onCheckoutSuccess} = eventRegistration;
 
@@ -16,7 +16,7 @@ const FrontEndContent = ({eventRegistration}) => {
     const [showModal, setShowModal] = useState(false);
     const [sdkLoaded, setSdkLoaded] = useState(false);
 
-    // console.log('sdk_args', getSettings('pp_sdk_args'));
+    // console.log('sdk_args', getPayPalSettings('pp_sdk_args'));
 
     const toggleModal = () => {
         setShowModal(!showModal)
@@ -66,7 +66,7 @@ const FrontEndContent = ({eventRegistration}) => {
 
     useEffect(() => {
         if (btnData) {
-            const sdk_args = getSettings('pp_sdk_args');
+            const sdk_args = getPayPalSettings('pp_sdk_args');
             const sdk_args_query_param = new URLSearchParams(sdk_args).toString()
 
             const script = document.createElement('script');
@@ -122,9 +122,7 @@ const FrontEndContent = ({eventRegistration}) => {
                 </div>
             </div>
 
-            {decodeEntities(getSettings('description', ''))}
+            {decodeEntities(getPayPalSettings('description', ''))}
         </>
     )
 }
-
-export default FrontEndContent;

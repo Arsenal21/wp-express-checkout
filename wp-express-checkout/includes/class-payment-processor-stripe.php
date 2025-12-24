@@ -39,7 +39,7 @@ class Payment_Processor_Stripe {
 		$session_id = $ref_id;
 
 		// Make sure fulfillment hasn't already been performed for this Checkout Session
-		if ( $this->check_if_checkout_session_processed( $session_id ) ) {
+		if ( self::check_if_checkout_session_processed( $session_id ) ) {
 			wp_die( __( 'The order has captured already!', 'wp-express-checkout' ) );
 		}
 
@@ -331,7 +331,7 @@ class Payment_Processor_Stripe {
 		}*/
 
 
-	public function check_if_checkout_session_processed( $session_id ) {
+	public static function check_if_checkout_session_processed( $session_id ) {
 		$query = new \WP_Query( array(
 			'post_type'      => 'ppdgorder',
 			'posts_per_page' => 1, // Only need to know if it exists

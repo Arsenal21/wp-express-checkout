@@ -10,7 +10,7 @@ export default class WpecPaypalButtonHandler {
     generate_ppec_woocommerce_button() {
         let parent = this;
 
-        return paypal.Buttons({
+        paypal.Buttons({
             /**
              * Optional styling for buttons.
              *
