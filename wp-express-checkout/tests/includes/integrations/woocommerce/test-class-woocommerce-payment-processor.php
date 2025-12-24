@@ -26,7 +26,7 @@ class WooCommerce_Payment_ProcessorTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers WP_Express_Checkout\Integrations\WooCommerce_Payment_Processor::wpec_process_payment
+	 * @covers WooCommerce_Payment_Processor::wpec_process_payment
 	 * @todo   Implement testWpec_process_payment().
 	 */
 	public function testWpec_process_payment() {
