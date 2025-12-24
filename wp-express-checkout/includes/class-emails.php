@@ -32,8 +32,9 @@ class Emails {
 
 		// Check if custom email is configured or not.
 		$is_product_custom_email_enabled = $wpec_plugin->get_setting( 'enable_per_product_email_customization' ) == 1;
-		$ordered_item_post_id = $order->get_item('ppec-products')['post_id'];
-		$is_product_custom_buyer_email_enabled = get_post_meta( $ordered_item_post_id, 'custom_buyer_email_enabled', true ) == 1;
+		$ordered_item = $order->get_item('ppec-products');
+		$ordered_item_post_id = isset($ordered_item['post_id']) ? $ordered_item['post_id'] : 0;
+		$is_product_custom_buyer_email_enabled = !empty($ordered_item_post_id) && get_post_meta( $ordered_item_post_id, 'custom_buyer_email_enabled', true ) == 1;
 		if ($is_product_custom_email_enabled && $is_product_custom_buyer_email_enabled) {
 			Logger::log( 'Per-product customized buyer email notification is enabled for this product.' );
 			$from_email = html_entity_decode(get_post_meta( $ordered_item_post_id, 'custom_buyer_email_from', true ));
@@ -89,8 +90,9 @@ class Emails {
 
 		// Check if custom email is configured or not.
 		$is_product_custom_email_enabled = $wpec_plugin->get_setting( 'enable_per_product_email_customization' ) == 1;
-		$ordered_item_post_id = $order->get_item('ppec-products')['post_id'];
-		$is_product_custom_seller_email_enabled = get_post_meta( $ordered_item_post_id, 'custom_seller_email_enabled', true ) == 1;
+		$ordered_item = $order->get_item('ppec-products');
+		$ordered_item_post_id = isset($ordered_item['post_id']) ? $ordered_item['post_id'] : 0;
+		$is_product_custom_seller_email_enabled = !empty($ordered_item_post_id) && get_post_meta( $ordered_item_post_id, 'custom_seller_email_enabled', true ) == 1;
 		if ($is_product_custom_email_enabled && $is_product_custom_seller_email_enabled) {
 			Logger::log( 'Per-product customized seller email notification is enabled for this product.' );
 			//From email address value is common for both buyer and seller emails. Need to html_entity_decode to get the correct email address format when custom email is used.

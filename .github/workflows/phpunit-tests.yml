@@ -28,25 +28,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '8.0']
+        php: [ '7.4', '8.3']
         wordpress: ['latest']
-        phpunit: ['7.5.*']
-        exclude:
-          # excludes WP5 from latest PHP setups
-          - php: '8.0'
-            phpunit: '5.7.*'
-          - php: 7.4
-            phpunit: '5.7.*'
-          - php: 7.3
-            phpunit: '5.7.*'
-          - php: 7.2
-            phpunit: '5.7.*'
-          - php: 7.1
-            phpunit: '5.7.*'
-          - php: '7.0'
-            phpunit: '7.5.*'
-          - php: 5.6.20
-            phpunit: '7.5.*'
+        phpunit: ['9.*']
+        # exclude:
+        #   # excludes these php + phpunit combination
+        #   - php: '8.0'
+        #     phpunit: '5.7.*'
+        #   - php: 7.4
+        #     phpunit: '5.7.*'
+        #   - php: 7.3
+        #     phpunit: '5.7.*'
+        #   - php: 7.2
+        #     phpunit: '5.7.*'
+        #   - php: 7.1
+        #     phpunit: '5.7.*'
+        #   - php: '7.0'
+        #     phpunit: '7.5.*'
+        #   - php: 5.6.20
+        #     phpunit: '7.5.*'
 
     steps:
       - name: Checkout
