@@ -177,6 +177,7 @@ None
 == Changelog ==
 = WIP =
 * Stripe Checkout Support added for WooCommerce as a payment gateway.
+* Stripe Checkout support added for emember integration.
 
 = 2.4.4 =
 * Improved robustness of the "Add New Order" feature in the admin dashboard.

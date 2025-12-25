@@ -14,6 +14,7 @@ class Emember {
 
 		//Subscription payment related hooks.
 		add_action( 'wpec_sub_webhook_event', array( $this, 'handle_subscription_webhook_event_for_emember' ) );
+		add_action( 'wpec_sub_stripe_webhook_event', array( $this, 'handle_stripe_subscription_webhook_event_for_emember' ) );
 
 		if ( is_admin() ) {
 			$this->admin();
@@ -21,20 +22,21 @@ class Emember {
 	}
 
 	public function handle_signup( $payment, $order_id, $product_id ) {
-        // TODO: Need to add support for stripe later.
-        $payment_gateway = get_post_meta($order_id, 'wpec_order_payment_gateway', true);
-        if (!empty($payment_gateway) && $payment_gateway == 'stripe'){
-            Logger::log('WP eMember signup on wpec stripe checkout is not currently supported!');
-            return;
-        }
-
 		// let's check if Membership Level is set for this product.
 		$level_id = get_post_meta( $product_id, 'wpec_product_emember_level', true );
 		if ( empty( $level_id ) ) {
 			return;
 		}
 
-		$ipn_data = $this->get_member_info_from_api( $payment );
+		$unique_ref = ''; // This must be maximum of 32 characters.
+        $payment_gateway = get_post_meta($order_id, 'wpec_order_payment_gateway', true);
+        if (!empty($payment_gateway) && $payment_gateway == 'stripe'){
+		    $ipn_data = $this->get_member_info_from_stripe_ipn( $payment );
+		    $unique_ref = isset($payment->subscription->id) ? $payment->subscription->id : $ipn_data['txn_id'];
+        } else {
+		    $ipn_data = $this->get_member_info_from_api( $payment );
+		    $unique_ref = $ipn_data['txn_id'];
+        }
 
 		Logger::log( 'Calling eMember_handle_subsc_signup_stand_alone' );
 
@@ -47,7 +49,7 @@ class Emember {
 
 		if ( defined( 'WP_EMEMBER_PATH' ) ) {
 			require_once WP_EMEMBER_PATH . 'ipn/eMember_handle_subsc_ipn_stand_alone.php';
-			eMember_handle_subsc_signup_stand_alone( $ipn_data, $level_id, $payment['id'], $emember_id );
+			eMember_handle_subsc_signup_stand_alone( $ipn_data, $level_id, $unique_ref, $emember_id );
 		}
 
 	}
@@ -118,7 +120,6 @@ class Emember {
 				// NOP
 				break;
 		}
-		
 
 	}
 
@@ -153,6 +154,112 @@ class Emember {
 		);
 
 		return $ipn_data;
+	}
+
+    public function handle_stripe_subscription_webhook_event_for_emember( $event) {
+
+	    /*
+		Note: the Payment_Handler() function has a summary of the type of events we can handle for a subscription webhook. Check function Factory::create for more details.
+		*/
+
+	    // Get the subscr_id from the event
+	    $sub_id = '';
+	    $payer_email = '';
+
+	    if ( $event->data->object->object == 'subscription' ) {
+		    $sub_id = $event->data->object->id;
+	    }
+        else if ( $event->data->object->object == 'invoice' ) {
+		    $sub_id = $event->data->object->parent->subscription_details->subscription;
+	        $payer_email = $event->data->object->customer_email;
+	    }
+
+	    if(empty($sub_id)){
+		    Logger::log( __METHOD__ .': no subscription ID found in the event', false );
+		    return;
+	    }
+
+	    //We can retrieve the Subscription object from the database to get additional info (but it may not be needed here)
+	    //$subscription = Subscriptions::retrieve( $sub_id );
+	    //if ( ! $subscription , false) {
+	    //	return;
+	    //}
+
+	    $webhook_event_type = isset($event->type)? $event->type : '';
+	    if(empty($webhook_event_type)){
+		    Logger::log( __METHOD__ .': no event type found in the webhook.', false );
+		    return;
+	    }
+
+	    if ( !defined( 'WP_EMEMBER_PATH' ) ) {
+		    //This class won't initialize if eMember is not installed. However, we are going to have this check here just in case.
+		    Logger::log( __METHOD__ .': WP eMember plugin is not installed.', false );
+		    return;
+	    }
+
+	    require_once WP_EMEMBER_PATH . 'ipn/eMember_handle_subsc_ipn_stand_alone.php';
+
+	    $ipn_data = array('subscr_id' => $sub_id, 'payer_email' => $payer_email); //The payer_email is not really needed for this function.
+
+	    Logger::log( 'Checking if WP eMember function call is needed to handle the webhook event type: ' .  $webhook_event_type);
+
+	    // Handle the event
+	    switch ($event->type) {
+		    case 'invoice.paid':
+			    // A payment is made on a subscription.
+                Logger::log( sprintf('Code came here %s %d', $event->type, __LINE__) );
+			    eMember_update_member_subscription_start_date_if_applicable($ipn_data);
+			    break;
+		    case 'customer.subscription.deleted':
+			    // A subscription is canceled.
+                Logger::log( sprintf('Code came here %s %d', $event->type, __LINE__) );
+			    eMember_handle_subsc_cancel_stand_alone($ipn_data);
+			    break;
+		    case 'invoice.payment_failed':
+		    case 'invoice.payment_action_required':
+		    case 'customer.subscription.created':
+		    case 'customer.subscription.updated':
+		    default:
+			    // We don't need to do anything here for WP eMember.
+                break;
+	    }
+    }
+
+	public function get_member_info_from_stripe_ipn( $payment ) {
+        $customer_details = isset( $payment->customer_details ) ? $payment->customer_details : array();
+
+        $address = isset($customer_details->address) ? $customer_details->address : array();
+
+		$email = isset($customer_details->email) ? ($customer_details->email) : '';
+		$name = isset($customer_details->name) ? sanitize_text_field($customer_details->name) : '';
+		$phone = isset($customer_details->phone) ? sanitize_text_field($customer_details->phone) : '';
+
+		$last_name    = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
+		$first_name   = trim(preg_replace('#' . $last_name . '#', '', $name));
+
+		$city         = isset( $address->city ) ? sanitize_text_field($address->city) : '';
+		$state        = isset( $address->state ) ? sanitize_text_field($address->state) : '';
+		$postal_code  = isset( $address->postal_code ) ? sanitize_text_field($address->postal_code) : '';
+		$country_code = isset( $address->country ) ? sanitize_text_field($address->country) : '';
+        $country       = Utils::get_country_name_by_country_code( $country_code );
+		$line1 = isset( $address->line1 ) ? sanitize_text_field($address->line1) : '';
+		$line2 = isset( $address->line2 ) ? sanitize_text_field($address->line2) : '';
+
+        $txn_id = isset( $payment->payment_intent->latest_charge->id ) ? $payment->payment_intent->latest_charge->id : ''; ;
+
+		$ipn_data = array(
+			'payer_email'     => $email,
+			'first_name'      => $first_name,
+			'last_name'       => $last_name,
+			'txn_id'          => $txn_id,
+			'address_street'  => implode( ', ', array($line1, $line2) ),
+			'address_city'    => $city,
+			'address_state'   => $state,
+			'address_zip'     => $postal_code,
+			'address_country' => $country,
+		);
+
+        return $ipn_data;
 	}
 
 	public function admin() {
