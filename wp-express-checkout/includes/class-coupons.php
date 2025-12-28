@@ -57,14 +57,14 @@ class Coupons {
 		}
 		//check if coupon start date has come
 		$start_date = get_post_meta( $coupon->ID, 'wpec_coupon_start_date', true );
-		if ( empty( $start_date ) || strtotime( $start_date ) > time() ) {
+		if ( empty( $start_date ) || strtotime( $start_date ) > current_time('timestamp') ) {
 			$out['valid']   = false;
 			$out['err_msg'] = __( 'Coupon is not available yet.', 'wp-express-checkout' );
 			return $out;
 		}
 		//check if coupon has expired
 		$exp_date = get_post_meta( $coupon->ID, 'wpec_coupon_exp_date', true );
-		if ( ! empty( $exp_date ) && strtotime( $exp_date ) < time() ) {
+		if ( ! empty( $exp_date ) && strtotime( $exp_date ) < current_time('timestamp') ) {
 			$out['valid']   = false;
 			$out['err_msg'] = __( 'Coupon has expired.', 'wp-express-checkout' );
 			return $out;
@@ -196,9 +196,9 @@ class Coupons {
 		if ( $msg !== false ) {
 			delete_transient( 'wpec_coupons_admin_notice' );
 			?>
-		<div class="notice notice-success">
-			<p><?php echo $msg; ?></p>
-		</div>
+            <div class="notice notice-success">
+                <p><?php echo $msg; ?></p>
+            </div>
 			<?php
 		}
 
@@ -207,9 +207,9 @@ class Coupons {
 		if ( $msg !== false ) {
 			delete_transient( 'wpec_coupons_admin_error' );
 			?>
-		<div class="notice notice-error">
-			<p><?php echo $msg; ?></p>
-		</div>
+            <div class="notice notice-error">
+                <p><?php echo $msg; ?></p>
+            </div>
 			<?php
 		}
 
@@ -312,7 +312,21 @@ class Coupons {
 			$prod_inputs = __( 'No products created yet.', 'wp-express-checkout' );
 		}
 		wp_reset_postdata();
+
+		$input_errors = get_transient( 'wpec_add_edit_coupon_errors' );
+        if (!empty($input_errors)) {
+            foreach ( $input_errors as $input_error ) {
+                ?>
+                <div class="notice notice-error">
+                    <p><?php echo esc_html($input_error); ?></p>
+                </div>
+                <?php
+            }
+
+	        delete_transient( 'wpec_add_edit_coupon_errors' );
+        }
 		?>
+
 	<div class="wrap">
 		<h2><?php empty( $coupon_id ) ? _e( 'Add Coupon', 'wp-express-checkout' ) : _e( 'Edit Coupon', 'wp-express-checkout' ); ?></h2>
 		<form method="post">
@@ -464,16 +478,12 @@ class Coupons {
 			$err_msg[] = __( 'Please enter discount.', 'wp-express-checkout' );
 		}
 
+        // Return if any input fields error.
 		if ( ! empty( $err_msg ) ) {
-			foreach ( $err_msg as $msg ) {
-				?>
-		<div class="notice notice-error">
-			<p><?php echo $msg; ?></p>
-		</div>
-				<?php
-			}
+            set_transient('wpec_add_edit_coupon_errors', $err_msg, 30 );
 			return false;
 		}
+
 		if ( ! $is_edit ) {
 			$post                = array();
 			$post['post_title']  = '';
