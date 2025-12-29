@@ -89,8 +89,6 @@ class Products {
 			throw new Exception( sprintf( __( "Can't find product with ID %s", 'wp-express-checkout' ), $product_id ), 1002 );
 		}
 
-		
-
 		if ( ! empty( $product_data->wpec_product_type ) ) {
 			$product_type = $product_data->wpec_product_type;			
 		} elseif ( ! empty( $product_data->wpec_product_custom_amount ) ) {
@@ -99,8 +97,6 @@ class Products {
 		} else {
 			$product_type = 'one_time';
 		}
-
-		
 
 		/**
 		 * Filter for setting an extended Product type object .
@@ -114,7 +110,6 @@ class Products {
 		if ( $product instanceof Product ) {
 			return $product;
 		}
-
 
 		switch ( $product_type ) {
 			case 'one_time':
@@ -133,9 +128,7 @@ class Products {
 
 	static public function retrieve_all( $filters,$search ) {
 
-	
 		$products_data = new \WP_Query( $filters );
-				
 
 		if ( ! $products_data->have_posts() ) {
 			//query returned no results. Let's see if that was a search query
@@ -162,9 +155,9 @@ class Products {
 
 		$orderby = "
 		CASE 
-			WHEN  (select wp.meta_value from ".$wpdb->prefix."postmeta wp where wp.meta_key='wpec_product_type' and wp.post_id=wp_posts.ID limit 1) ='one_time' THEN cast((select wp.meta_value from ".$wpdb->prefix."postmeta wp where wp.meta_key='ppec_product_price' and wp.post_id=wp_posts.ID limit 1) as decimal) 
-			WHEN  (select wp.meta_value from ".$wpdb->prefix."postmeta wp where wp.meta_key='wpec_product_type' and wp.post_id=wp_posts.ID limit 1) ='donation' THEN cast((select wp.meta_value from ".$wpdb->prefix."postmeta wp where wp.meta_key='wpec_product_min_amount' and wp.post_id=wp_posts.ID limit 1) as decimal) 			
-			WHEN  (select wp.meta_value from ".$wpdb->prefix."postmeta wp where wp.meta_key='wpec_product_type' and wp.post_id=wp_posts.ID limit 1) ='subscription' THEN cast((select wp.meta_value from ".$wpdb->prefix."postmeta wp where wp.meta_key='wpec_sub_recur_price' and wp.post_id=wp_posts.ID limit 1) as decimal)
+			WHEN (select wp.meta_value from ".$wpdb->postmeta." wp where wp.meta_key='wpec_product_type' and wp.post_id=".$wpdb->posts.".ID limit 1) ='one_time' THEN cast((select wp.meta_value from ".$wpdb->postmeta." wp where wp.meta_key='ppec_product_price' and wp.post_id=".$wpdb->posts.".ID limit 1) as decimal) 
+			WHEN (select wp.meta_value from ".$wpdb->postmeta." wp where wp.meta_key='wpec_product_type' and wp.post_id=".$wpdb->posts.".ID limit 1) ='donation' THEN cast((select wp.meta_value from ".$wpdb->postmeta." wp where wp.meta_key='wpec_product_min_amount' and wp.post_id=".$wpdb->posts.".ID limit 1) as decimal) 			
+			WHEN (select wp.meta_value from ".$wpdb->postmeta." wp where wp.meta_key='wpec_product_type' and wp.post_id=".$wpdb->posts.".ID limit 1) ='subscription' THEN cast((select wp.meta_value from ".$wpdb->postmeta." wp where wp.meta_key='wpec_sub_recur_price' and wp.post_id=".$wpdb->posts.".ID limit 1) as decimal)
 			else 0 
 		END ".$order."
 			";

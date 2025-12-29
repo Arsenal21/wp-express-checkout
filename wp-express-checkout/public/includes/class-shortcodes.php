@@ -635,9 +635,7 @@ class Shortcodes {
 		return $content;
 	}
 
-	public function shortcode_wpec_show_all_products($params=array())
-	{
-		
+	public function shortcode_wpec_show_all_products($params=array()) {
 		$params = shortcode_atts(
 			array(
 				'items_per_page' => '30',
@@ -676,7 +674,6 @@ class Shortcodes {
 
 		$order_by = isset( $params['sort_by'] ) ? ( $params['sort_by'] ) : 'none';
 
-		
 		$sort_direction = isset( $params['sort_order'] ) ? strtoupper( $params['sort_order'] ) : 'DESC';
 
 		if($sort_by)
@@ -684,7 +681,6 @@ class Shortcodes {
 			$order_by=explode("-",$sort_by)[0];
 			$sort_direction=isset(explode("-",$sort_by)[1])?explode("-",$sort_by)[1]:"asc";
 		}
-		
 
 		$q = array(
 			'post_type'      => Products::$products_slug,
@@ -706,7 +702,7 @@ class Shortcodes {
 		}
 
 		try {
-			$products = Products::retrieve_all_active_products($q,$search);
+			$products = Products::retrieve_all_active_products( $q, $search );
 		} catch (\Exception $e) {
 			return '<p class="wpec-error-message">' . esc_html($e->getMessage()) . '</p>';
 		}
@@ -728,8 +724,6 @@ class Shortcodes {
 			$tpl['search_box'] = '';
 		}
 
-
-
 		$tpl['products_list'] .= $tpl['products_row_start'];
 		$i                     = $tpl['products_per_row']; //items per row
 
@@ -745,7 +739,6 @@ class Shortcodes {
 			}
 
 			$id = get_the_ID();
-			
 
 			try {
 				$product = Products::retrieve( $id );				

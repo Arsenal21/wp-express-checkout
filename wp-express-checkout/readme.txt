@@ -179,6 +179,7 @@ None
 * Stripe Checkout Support added for WooCommerce as a payment gateway.
 * Stripe Checkout support added for emember integration.
 * Coupon's expiry time calculation related fix.
+* Order by price issue fixed for "wpec_show_all_products" shortcode has fixed.
 
 = 2.4.4 =
 * Improved robustness of the "Add New Order" feature in the admin dashboard.
