@@ -685,6 +685,12 @@ jQuery(document).ready(function($) {
 			// this is probably not edit or new post creation event.
 			return;
 		}
+
+        if ($_POST['action'] == 'inline-save') {
+            // Don't update post meta when doing quick edit.
+            return;
+        }
+
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
