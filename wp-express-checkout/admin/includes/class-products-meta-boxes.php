@@ -681,7 +681,7 @@ jQuery(document).ready(function($) {
     }
 
     function save_product_handler( $post_id, $post, $update ) {
-		if ( ! isset( $_POST['action'] ) && $_POST['action'] != 'edit' ) {
+		if ( ! isset( $_POST['action'] ) ) {
 			// this is probably not edit or new post creation event.
 			return;
 		}
