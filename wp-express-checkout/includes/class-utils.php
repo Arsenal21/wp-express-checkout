@@ -742,4 +742,42 @@ class Utils {
 
 		return false;
 	}
+
+	public static function wpec_load_template( $template, $args = array(), $load_once = false ) {
+		$template       = strval( $template );
+		$template_name  = $template . '.php';
+		$template_files = array(
+			'wp-express-checkout/'. $template_name,
+		);
+
+		//Filter hook to allow overriding of the template file path
+		$template_files = apply_filters( 'wpec_load_template_files', $template_files, $template_name);
+
+		$located = locate_template($template_files);
+
+		$plugin_template_path = WPEC_PLUGIN_PATH . 'public/views/templates/'. $template_name;
+
+		if ( empty($located) && file_exists( $plugin_template_path ) ) {
+			$located = $plugin_template_path;
+		}
+
+		$tpl_html = '';
+
+		if ( ! empty( $located ) ) {
+			// Template file found in theme. Load it.
+			ob_start();
+
+			if ($load_once) {
+				include_once $located;
+			} else {
+				include $located;
+			}
+
+			$tpl_html = ob_get_clean();
+		} else {
+			$tpl_html = '<p class="wpec-error-message">'.__('Template not found!', 'wp-express-checkout').'</p>';
+		}
+
+		return $tpl_html;
+	}
 }
