@@ -181,6 +181,7 @@ None
 * Coupon's expiry time calculation related fix.
 * Order by price issue fixed for "wpec_show_all_products" shortcode has fixed.
 * Product meta update issue fixed during quick edit.
+* Code architecture update to support templating for 'wpec_show_all_products' and 'wpec_show_products_from_category' shortcodes.
 
 = 2.4.4 =
 * Improved robustness of the "Add New Order" feature in the admin dashboard.

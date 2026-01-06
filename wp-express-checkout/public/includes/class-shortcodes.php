@@ -73,7 +73,7 @@ class Shortcodes {
 		return self::$instance;
 	}
 
-	private function show_err_msg( $msg, $code = 0 ) {
+	public function show_err_msg( $msg, $code = 0 ) {
 		return sprintf( '<div class="wpec-error-message wpec-error-message-' . esc_attr( $code ) . '">%s</div>', $msg );
 	}
 
@@ -641,7 +641,7 @@ class Shortcodes {
 				'items_per_page' => '30',
 				'sort_by'        => 'ID',
 				'sort_order'     => 'DESC',
-				'template'       => '',
+				'template'       => '1',
 				'search_box'     => '1',
 			),
 			$params,
@@ -650,23 +650,6 @@ class Shortcodes {
 
 		//if user has changed sort by from UI
 		$sort_by = isset( $_GET['wpec-sortby'] ) ? sanitize_text_field( stripslashes ( $_GET['wpec-sortby'] ) ) : '';
-
-        $tpl = array(
-                'page' => '',
-                'search_box' => '',
-                'clear_search_button' => '',
-                'products_item' => '',
-                'products_list' => '',
-                'products_per_row' => 3,
-                'products_row_start' => '',
-                'products_row_end' => '',
-                'pagination' => '',
-                'pagination_item' => '',
-                'pagination_item_current' => '',
-                'view_product_btn' => '',
-        );
-
-		include_once WPEC_PLUGIN_PATH . 'public/views/templates/all-products/all-products.php';
 
 		$page = filter_input( INPUT_GET, 'wpec_page', FILTER_SANITIZE_NUMBER_INT );
 
@@ -707,138 +690,25 @@ class Shortcodes {
 			return '<p class="wpec-error-message">' . esc_html($e->getMessage()) . '</p>';
 		}
 
-		$search_box = ! empty( $params['search_box'] ) ? $params['search_box'] : false;
-
-		if ( $search_box ) {
-			if ( $search !== false ) {
-				$tpl['clear_search_url']   = esc_url( remove_query_arg( array( 'wpec_search', 'wpec_page' ) ) );
-				$tpl['search_result_text'] = $products->found_posts === 0 ? __( 'Nothing found for', 'wp-express-checkout' ) . ' "%s".' : __( 'Search results for', 'wp-express-checkout' ) . ' "%s".';
-				$tpl['search_result_text'] = sprintf( $tpl['search_result_text'], htmlentities( $search ) );
-				$tpl['search_term']        = htmlentities( $search );
-			} else {
-				$tpl['search_result_text']  = '';
-				$tpl['clear_search_button'] = '';
-				$tpl['search_term']         = '';
-			}
-		} else {
-			$tpl['search_box'] = '';
-		}
-
-		$tpl['products_list'] .= $tpl['products_row_start'];
-		$i                     = $tpl['products_per_row']; //items per row
-
-		while ( $products->have_posts() ) {
-			$products->the_post();	
-			// $product;
-			
-			$i --;
-			if ( $i < 0 ) { //new row
-				$tpl['products_list'] .= $tpl['products_row_end'];
-				$tpl['products_list'] .= $tpl['products_row_start'];
-				$i                     = $tpl['products_per_row'] - 1;
-			}
-
-			$id = get_the_ID();
-
-			try {
-				$product = Products::retrieve( $id );				
-			} catch ( Exception $exc ) {
-				return $this->show_err_msg( $exc->getMessage() );								
-			}
-
-			$thumb_url = $product->get_thumbnail_url();
-
-
-			if ( ! $thumb_url ) {
-				$thumb_url = WPEC_PLUGIN_URL . '/assets/img/product-thumb-placeholder.png';
-			}
-
-			$view_btn = str_replace( '%[product_url]%', get_permalink(), $tpl['view_product_btn'] );
-
-			$price = $product->get_price();			
-			
-			$price_args = array_merge(
-				array(
-					'price'           => 0,
-					'shipping'        => 0,
-					'tax'             => 0,
-					'quantity'        => 1,
-				),
-				array(
-					'name'            => get_the_title( $id ),
-					'price'           => (float) $product->get_price(),
-					'shipping'        => $product->get_shipping(),
-					'shipping_per_quantity' => $product->get_shipping_per_quantity(),
-					'tax'             => $product->get_tax(),
-					'quantity'        => $product->get_quantity(),
-					'product_id'      => $id,
-				)
-			);
-
-			
-			$price = $this->generate_price_tag( $price_args );
-
-			$item = str_replace(
-				array(
-					'%[product_id]%',
-					'%[product_name]%',
-					'%[product_thumb]%',
-					'%[view_product_btn]%',
-					'%[product_price]%',
-				),
-				array(
-					$id,
-					get_the_title(),
-					$thumb_url,
-					$view_btn,
-					$price,
-				),
-				$tpl['products_item']
-			);
-
-			$tpl['products_list'] .= $item;
-		}
-
-		$tpl['products_list'] .= $tpl['products_row_end'];
-
-		//pagination
-
-		$tpl['pagination_items'] = '';
-
-		$pages = $products->max_num_pages;
-
-		if ( $pages > 1 ) {
-			$i = 1;
-
-			while ( $i <= $pages ) {
-				if ( $i != $page ) {
-					$url = esc_url( add_query_arg( 'wpec_page', $i ) );
-					$str = str_replace( array( '%[url]%', '%[page_num]%' ), array( $url, $i ), $tpl['pagination_item'] );
-				} else {
-					$str = str_replace( '%[page_num]%', $i, $tpl['pagination_item_current'] );
-				}
-				$tpl['pagination_items'] .= $str;
-				$i ++;
-			}
-		}
-
-		if ( empty( $tpl['pagination_items'] ) ) {
-			$tpl['pagination'] = '';
-		}
-
 		wp_reset_postdata();
 
-		//Build template
-		foreach ( $tpl as $key => $value ) {
-			$tpl['page'] = str_replace( '_%' . $key . '%_', $value, $tpl['page'] );
-		}
+        $args = array(
+	        'sc_params' => $params,
+	        'products' => $products,
+	        'page' => $page,
+	        'search' => $search,
+	        'sort_by' => $sort_by,
+        );
 
-		$output = '<div class="wpec_shop_products">'.$tpl['page'].'</div>';
+		$template_no = isset( $params['template'] ) ? absint(sanitize_text_field( $params['template'] )) : 1;
+		$template = 'all-products/all-products-'. $template_no;
+
+        $output = Utils::wpec_load_template($template, $args);
+
 		return $output;
 	}
 
-	public function shortcode_wpec_show_products_from_category($params = array())
-	{
+	public function shortcode_wpec_show_products_from_category($params = array()) {
 		$params=shortcode_atts(
 			array(
 				'items_per_page' => '30',
@@ -853,8 +723,6 @@ class Shortcodes {
 			'wpec_show_products_from_category'
 		);
 
-		include_once WPEC_PLUGIN_PATH . 'public/views/templates/all-products/all-products-from-category.php';
-		
 		$page = filter_input(INPUT_GET, 'wpec_page', FILTER_SANITIZE_NUMBER_INT);
 
 		$page = empty($page) ? 1 : $page;
@@ -895,9 +763,8 @@ class Shortcodes {
 			}
 		}
 
-		
 		$q = array(
-			'post_type'      => Products::$products_slug,			
+			'post_type'      => Products::$products_slug,
 			'post_status'    => 'publish',
 			'posts_per_page' => isset($params['items_per_page']) ? $params['items_per_page'] : 30,
 			'paged'          => $page,
@@ -905,7 +772,6 @@ class Shortcodes {
 			'order'          => isset($params['sort_order']) ? strtoupper($params['sort_order']) : 'DESC',
 			'tax_query' => $wp_tax_query
 		);
-
 
 		//handle search
 		$search = isset( $_GET['wpec_search'] ) ? sanitize_text_field( stripslashes ( $_GET['wpec_search'] ) ) : '';
@@ -922,136 +788,22 @@ class Shortcodes {
 			return '<p class="wpec-error-message">' . esc_html($e->getMessage()) . '</p>';
 		}
 
-		$search_box = !empty($params['search_box']) ? $params['search_box'] : false;
-
-		if ($search_box) {
-			if ($search !== false) {
-				$tpl['clear_search_url']   = esc_url(remove_query_arg(array('wpec_search', 'wpec_page')));
-				$tpl['search_result_text'] = $products->found_posts === 0 ? __('Nothing found for', 'wp-express-checkout') . ' "%s".' : __('Search results for', 'wp-express-checkout') . ' "%s".';
-				$tpl['search_result_text'] = sprintf($tpl['search_result_text'], htmlentities($search));
-				$tpl['search_term']        = htmlentities($search);
-			} else {
-				$tpl['search_result_text']  = '';
-				$tpl['clear_search_button'] = '';
-				$tpl['search_term']         = '';
-			}
-		} else {
-			$tpl['search_box'] = '';
-		}
-
-		$tpl['products_list'] .= $tpl['products_row_start'];
-		$i                     = $tpl['products_per_row']; //items per row
-
-		while ($products->have_posts()) {
-			$products->the_post();
-			$product;
-
-			$i--;
-			if ($i < 0) { //new row
-				$tpl['products_list'] .= $tpl['products_row_end'];
-				$tpl['products_list'] .= $tpl['products_row_start'];
-				$i                     = $tpl['products_per_row'] - 1;
-			}
-
-			$id = get_the_ID();
-
-
-			try {
-				$product = Products::retrieve($id);
-			} catch (Exception $exc) {
-				return $this->show_err_msg($exc->getMessage());
-			}
-
-			$thumb_url = $product->get_thumbnail_url();
-
-
-			if (!$thumb_url) {
-				$thumb_url = WPEC_PLUGIN_URL . '/assets/img/product-thumb-placeholder.png';
-			}
-
-			$view_btn = str_replace('%[product_url]%', get_permalink(), $tpl['view_product_btn']);
-
-			$price = $product->get_price();
-
-			$price_args = array_merge(
-				array(
-					'price'           => 0,
-					'shipping'        => 0,
-					'tax'             => 0,
-					'quantity'        => 1,
-				),
-				array(
-					'name'            => get_the_title( $id ),
-					'price'           => (float) $product->get_price(),
-					'shipping'        => $product->get_shipping(),
-					'shipping_per_quantity' => $product->get_shipping_per_quantity(),
-					'tax'             => $product->get_tax(),
-					'quantity'        => $product->get_quantity(),
-					'product_id'      => $id,
-				)
-			);
-			
-			$price = $this->generate_price_tag( $price_args );
-			
-			$item = str_replace(
-				array(
-					'%[product_id]%',
-					'%[product_name]%',
-					'%[product_thumb]%',
-					'%[view_product_btn]%',
-					'%[product_price]%',
-				),
-				array(
-					$id,
-					get_the_title(),
-					$thumb_url,
-					$view_btn,
-					$price,
-				),
-				$tpl['products_item']
-			);
-
-			$tpl['products_list'] .= $item;
-		}
-
-		$tpl['products_list'] .= $tpl['products_row_end'];
-
-		//pagination
-
-		$tpl['pagination_items'] = '';
-
-		$pages = $products->max_num_pages;
-
-		if ($pages > 1) {
-			$i = 1;
-
-			while ($i <= $pages) {
-				if ($i != $page) {
-					$url = esc_url(add_query_arg('wpec_page', $i));
-					$str = str_replace(array('%[url]%', '%[page_num]%'), array($url, $i), $tpl['pagination_item']);
-				} else {
-					$str = str_replace('%[page_num]%', $i, $tpl['pagination_item_current']);
-				}
-				$tpl['pagination_items'] .= $str;
-				$i++;
-			}
-		}
-
-		if (empty($tpl['pagination_items'])) {
-			$tpl['pagination'] = '';
-		}
-
 		wp_reset_postdata();
 
-		//Build template
-		foreach ($tpl as $key => $value) {
-			$tpl['page'] = str_replace('_%' . $key . '%_', $value, $tpl['page']);
-		}
+		$args = array(
+			'sc_params' => $params,
+			'products' => $products,
+			'page' => $page,
+			'search' => $search,
+		);
 
-		$output = '<div class="wpec_shop_products">'.$tpl['page'].'</div>';
+		$template_no = isset( $params['template'] ) ? absint(sanitize_text_field( $params['template'] )) : 1;
+		$template = 'all-products/all-products-from-category-'. $template_no;
+
+		$output = Utils::wpec_load_template($template, $args);
+
 		return $output;
 	}
-
 
 	/**
 	 * Locate template including plugin folder.
