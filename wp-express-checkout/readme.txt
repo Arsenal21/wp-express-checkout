@@ -175,6 +175,8 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+= WIP =
+* Use of template shortcode param removed for 'wpec_show_all_products' and 'wpec_show_products_from_category' shortcode.
 
 = 2.4.5 =
 * Coupon's expiry time calculation logic updated to use server's local time.

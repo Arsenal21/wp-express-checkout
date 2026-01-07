@@ -636,12 +636,17 @@ class Shortcodes {
 	}
 
 	public function shortcode_wpec_show_all_products($params=array()) {
+		if (isset($params['template'])){
+			$doc_link = '<a href="https://wp-express-checkout.com/view-and-edit-your-shop-products-page/" target="_blank">'.__('documentation', 'wp-express-checkout').'</a>';
+			return $this->show_err_msg(sprintf(__("The 'template' parameter is not supported for this shortcode. Please check the plugin's %s for a list of available parameters and options." , "wp-express-checkout") , $doc_link));
+		}
+
 		$params = shortcode_atts(
 			array(
 				'items_per_page' => '30',
 				'sort_by'        => 'ID',
 				'sort_order'     => 'DESC',
-				'template'       => '1',
+				// 'template'       => '1',
 				'search_box'     => '1',
 			),
 			$params,
@@ -700,8 +705,7 @@ class Shortcodes {
 	        'sort_by' => $sort_by,
         );
 
-		$template_no = isset( $params['template'] ) ? absint(sanitize_text_field( $params['template'] )) : 1;
-		$template = 'all-products/all-products-'. $template_no;
+		$template = 'all-products/all-products-1';
 
         $output = Utils::wpec_load_template($template, $args);
 
@@ -709,12 +713,17 @@ class Shortcodes {
 	}
 
 	public function shortcode_wpec_show_products_from_category($params = array()) {
+		if (isset($params['template'])){
+            $doc_link = '<a href="https://wp-express-checkout.com/using-product-categories-and-tags/" target="_blank">'.__('documentation', 'wp-express-checkout').'</a>';
+			return $this->show_err_msg(sprintf(__("The 'template' parameter is not supported for this shortcode. Please check the plugin's %s for a list of available parameters and options." , "wp-express-checkout") , $doc_link));
+		}
+
 		$params=shortcode_atts(
 			array(
 				'items_per_page' => '30',
 				'sort_by'        => 'ID',
 				'sort_order'     => 'DESC',
-				'template'       => '1',
+				// 'template'       => '1',
 				'search_box'     => '1',
 				'category_slug' => '',
 				'tag_slug'	=> ''
@@ -797,8 +806,7 @@ class Shortcodes {
 			'search' => $search,
 		);
 
-		$template_no = isset( $params['template'] ) ? absint(sanitize_text_field( $params['template'] )) : 1;
-		$template = 'all-products/all-products-from-category-'. $template_no;
+		$template = 'all-products/all-products-from-category-1';
 
 		$output = Utils::wpec_load_template($template, $args);
 
