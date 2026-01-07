@@ -191,9 +191,11 @@ class Stripe_Payment_Button_Ajax_Handler {
 
 			$session_id = $session->id;
 
-			$checkout_session_trans_data = array(
-				'wpec_data' => $wpec_data,
-				...$sc_data_transient
+			$checkout_session_trans_data = wp_parse_args(
+				array(
+					'wpec_data' => $wpec_data,
+				),
+				$sc_data_transient
 			);
 
 			set_transient( 'wpec_checkout_session_' . $session_id, $checkout_session_trans_data );
