@@ -636,10 +636,10 @@ class Shortcodes {
 	}
 
 	public function shortcode_wpec_show_all_products($params=array()) {
-
-        if (isset($params['template'])){
-            return $this->show_err_msg(__("The 'template' parameter is not supported for this shortcode. Please check the plugin's documentation for a list of available parameters and options." , "wp-express-checkout"));
-        }
+		if (isset($params['template'])){
+			$doc_link = '<a href="https://wp-express-checkout.com/view-and-edit-your-shop-products-page/" target="_blank">'.__('documentation', 'wp-express-checkout').'</a>';
+			return $this->show_err_msg(sprintf(__("The 'template' parameter is not supported for this shortcode. Please check the plugin's %s for a list of available parameters and options." , "wp-express-checkout") , $doc_link));
+		}
 
 		$params = shortcode_atts(
 			array(
@@ -714,7 +714,8 @@ class Shortcodes {
 
 	public function shortcode_wpec_show_products_from_category($params = array()) {
 		if (isset($params['template'])){
-			return $this->show_err_msg(__("The 'template' parameter is not supported for this shortcode. Please check the plugin's documentation for a list of available parameters and options." , "wp-express-checkout"));
+            $doc_link = '<a href="https://wp-express-checkout.com/using-product-categories-and-tags/" target="_blank">'.__('documentation', 'wp-express-checkout').'</a>';
+			return $this->show_err_msg(sprintf(__("The 'template' parameter is not supported for this shortcode. Please check the plugin's %s for a list of available parameters and options." , "wp-express-checkout") , $doc_link));
 		}
 
 		$params=shortcode_atts(
