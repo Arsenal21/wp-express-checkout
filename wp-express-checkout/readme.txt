@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 2.4.4
+Stable tag: 2.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,14 +175,15 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
-= WIP =
+
+= 2.4.5 =
+* Coupon's expiry time calculation logic updated to use server's local time.
+* Order by price sorting issue fixed for "wpec_show_all_products" shortcode.
+* Product meta update issue fixed for quick edit option.
+* Code architecture updated to support templating for 'wpec_show_all_products' and 'wpec_show_products_from_category' shortcodes.
+* Fixed a PHP 7.4 compatability issue.
 * Stripe Checkout Support added for WooCommerce as a payment gateway.
-* Stripe Checkout support added for emember integration.
-* Coupon's expiry time calculation related fix.
-* Order by price issue fixed for "wpec_show_all_products" shortcode has fixed.
-* Product meta update issue fixed during quick edit.
-* Code architecture update to support templating for 'wpec_show_all_products' and 'wpec_show_products_from_category' shortcodes.
-* A php 7.4 compatability issue fixed.
+* Stripe Checkout support added for WP eMember plugin integration.
 
 = 2.4.4 =
 * Improved robustness of the "Add New Order" feature in the admin dashboard.
