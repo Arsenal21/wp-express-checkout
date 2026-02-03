@@ -717,6 +717,10 @@ class Utils {
 
 		self::load_stripe_sdk();
 
+		if (! class_exists('\Stripe\Stripe')) {
+			require_once WPEC_PLUGIN_PATH . '/lib/stripe/init.php';
+		}
+
 		return new \Stripe\StripeClient(array(
 			'api_key' => $secret_key,
 			'stripe_version' => $api_version,
