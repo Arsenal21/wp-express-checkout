@@ -1,7 +1,6 @@
 {
 	"require": {
-		"paypal/paypal-checkout-sdk": "1.0.1",
-		"stripe/stripe-php": "^18.0"
+		"paypal/paypal-checkout-sdk": "1.0.1"
 	},
 	"autoload": {
 		"classmap": [

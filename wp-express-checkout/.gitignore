@@ -49,3 +49,5 @@ tests/wp-tests-config.php
 /nbproject/private/
 
 wip-temp.txt
+
+lib/stripe/README.md

@@ -9,7 +9,6 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
-            'Stripe\\' => 7,
             'Sample\\' => 7,
         ),
         'P' => 
@@ -20,10 +19,6 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
     );
 
     public static $prefixDirsPsr4 = array (
-        'Stripe\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
-        ),
         'Sample\\' => 
         array (
             0 => __DIR__ . '/..' . '/paypal/paypal-checkout-sdk/samples',
