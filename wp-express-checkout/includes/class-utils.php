@@ -709,6 +709,10 @@ class Utils {
 		$secret_key = self::get_stripe_secret_key();
 		$api_version = self::get_stripe_api_version();
 
+		if (! class_exists('\Stripe\Stripe')) {
+			require_once WPEC_PLUGIN_PATH . '/lib/stripe/init.php';
+		}
+
 		return new \Stripe\StripeClient(array(
 			'api_key' => $secret_key,
 			'stripe_version' => $api_version,
