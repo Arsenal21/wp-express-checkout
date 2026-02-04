@@ -700,14 +700,26 @@ class Utils {
 		return "2025-09-30.clover";
 	}
 
+	public static function load_stripe_sdk(){
+		if (! class_exists('\Stripe\Stripe') && file_exists(WPEC_PLUGIN_PATH . '/lib/stripe/init.php')) {
+			require_once WPEC_PLUGIN_PATH . '/lib/stripe/init.php';
+		}
+	}
+
 	/**
 	 * Constructs and returns a stripe client object for doing api calls.
 	 *
 	 * @return \Stripe\StripeClient
 	 */
-	public static function get_stripe_client() {
-		$secret_key = self::get_stripe_secret_key();
-		$api_version = self::get_stripe_api_version();
+	public static function get_stripe_client($secret_key = '', $api_version = '') {
+		$secret_key = !empty($secret_key) ? $secret_key : self::get_stripe_secret_key();
+		$api_version = !empty($api_version) ? $api_version : self::get_stripe_api_version();
+
+		self::load_stripe_sdk();
+
+		if (! class_exists('\Stripe\Stripe')) {
+			require_once WPEC_PLUGIN_PATH . '/lib/stripe/init.php';
+		}
 
 		return new \Stripe\StripeClient(array(
 			'api_key' => $secret_key,
