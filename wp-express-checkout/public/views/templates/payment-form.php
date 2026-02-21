@@ -7,6 +7,9 @@
 $class_main_inst = WP_Express_Checkout\Main::get_instance();
 
 $product_type = get_post_meta($product_id, 'wpec_product_type',  true);
+
+//Trigger an action before the payment form template output.
+do_action( 'wpec_payment_form_before_template', $product_id );
 ?>
 
 <div style="position: relative;" class="wp-ppec-shortcode-container wpec-shortcode-container-product-<?php echo esc_attr( $product_id ); ?>" data-ppec-button-id="<?php echo esc_attr( $shortcode_id ); ?>" data-price-class="<?php echo esc_attr( $price_class ); ?>">
@@ -24,26 +27,32 @@ $product_type = get_post_meta($product_id, 'wpec_product_type',  true);
 		<?php
 		$step = pow( 10, -intval( $class_main_inst->get_setting( 'price_decimals_num' ) ) );
 		$min  = get_post_meta( $product_id, 'wpec_product_min_amount', true );
+		$default_custom_price = max( $price, $min );
+		//Trigger a filter that can be used to modify the default custom price.
+		$default_custom_price = apply_filters( 'wpec_payment_form_custom_amount', $default_custom_price, $product_id );
 		?>
 		<div class="wpec-custom-amount-section">
 			<span class="wpec-custom-amount-label-field">
 				<label><?php echo esc_html(  sprintf( __( 'Enter Amount (%s): ', 'wp-express-checkout' ), $currency ) ); ?></label>
 			</span>
 			<span class="wpec-custom-amount-input-field">
-				<input id="wp-ppec-custom-amount" data-ppec-button-id="<?php echo esc_attr( $shortcode_id ); ?>" type="number" step="<?php echo esc_attr( $step ); ?>" name="custom-amount" class="wp-ppec-input wp-ppec-custom-amount" min="<?php echo esc_attr( $min ); ?>" value="<?php echo esc_attr( max( $price, $min ) ); ?>">
+				<input id="wp-ppec-custom-amount" data-ppec-button-id="<?php echo esc_attr( $shortcode_id ); ?>" type="number" step="<?php echo esc_attr( $step ); ?>" name="custom-amount" class="wp-ppec-input wp-ppec-custom-amount" min="<?php echo esc_attr( $min ); ?>" value="<?php echo esc_attr( $default_custom_price ); ?>">
 				<div class="wp-ppec-form-error-msg"></div>
 			</span>
 		</div>
 	<?php } ?>
 
 	<?php if ( $custom_quantity ) { ?>
+		<?php 
+		$custom_quantity_value = apply_filters( 'wpec_payment_form_custom_quantity', $quantity, $product_id );
+		?>
 		<div class="wpec-custom-number-input-wrapper">
 			<label><?php esc_html_e( 'Quantity:', 'wp-express-checkout' ); ?></label>
 			<div class="wpec-custom-number-input">
 				<button data-action="decrement">
 					<span>&minus;</span>
 				</button>
-				<input id="wp-ppec-custom-quantity" data-ppec-button-id="<?php echo esc_attr( $shortcode_id ); ?>" type="number" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-quantity" min="1" value="<?php echo esc_attr( $quantity ); ?>">
+				<input id="wp-ppec-custom-quantity" data-ppec-button-id="<?php echo esc_attr( $shortcode_id ); ?>" type="number" name="custom-quantity" class="wp-ppec-input wp-ppec-custom-quantity" min="1" value="<?php echo esc_attr( $custom_quantity_value ); ?>">
 				<button data-action="increment">
 					<span>+</span>
 				</button>

@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 2.4.5
+Stable tag: 2.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,16 +175,20 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
-= WIP =
+
+= 2.4.6 =
 * Use of template shortcode param removed for 'wpec_show_all_products' and 'wpec_show_products_from_category' shortcode.
-* Stripe SDK loading related code updated.
+* Stripe SDK loading related code updated to remove any potential library conflict with the Accept Stripe Payments plugin.
+* Added a new filter hook 'wpec_payment_form_custom_amount' to allow modification of the default custom price in the payment form.
+* Added a new filter hook 'wpec_payment_form_custom_quantity' to allow modification of the default custom quantity in the payment form.
+* Added a new action hook 'wpec_payment_form_before_template' to allow custom actions before the payment form template output.
 
 = 2.4.5 =
 * Coupon's expiry time calculation logic updated to use server's local time.
 * Order by price sorting issue fixed for "wpec_show_all_products" shortcode.
 * Product meta update issue fixed for quick edit option.
 * Code architecture updated to support templating for 'wpec_show_all_products' and 'wpec_show_products_from_category' shortcodes.
-* Fixed a PHP 7.4 compatability issue.
+* Fixed a PHP 7.4 compatibility issue.
 * Stripe Checkout Support added for WooCommerce as a payment gateway.
 * Stripe Checkout support added for WP eMember plugin integration.
 
