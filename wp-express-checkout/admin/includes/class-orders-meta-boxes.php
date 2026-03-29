@@ -10,6 +10,7 @@ use WP_Express_Checkout\Orders;
 use WP_Express_Checkout\Products;
 use WP_Express_Checkout\Utils;
 use WP_Express_Checkout\Variations;
+use WP_Express_Checkout\Debug\Logger;
 use WP_Post;
 
 /**
@@ -36,6 +37,7 @@ class Orders_Meta_Boxes {
 		add_action( 'wp_ajax_wpec_add_order_note', array( $this, 'wpec_add_order_note_callback' ) );
 		add_action( 'wp_ajax_wpec_delete_order_note', array( $this, 'wpec_delete_order_note_callback' ) );
 		add_action( 'wp_ajax_wpec_get_order_product_by_id', array( $this, 'wpec_get_order_product_by_id_callback' ) );
+		add_action( 'wp_ajax_wpec_order_action_set_paid_and_send_email', array( $this, 'set_paid_and_send_email_callback' ) );
 	}
 
 	public function add_meta_boxes() {
@@ -354,7 +356,7 @@ class Orders_Meta_Boxes {
 
 		try {
 			$order = Orders::retrieve( $post->ID );
-			$is_manual_payment = strpos($order->get_capture_id(), 'manual');
+			$is_manual_payment = strtolower($order->get_payment_gateway()) == 'manual_checkout' || stripos($order->get_capture_id(), 'manual') !== false;
 			$is_admin_checkout = strpos($order->get_capture_id(), 'admin');
 		} catch ( Exception $exc ) {
 			return;
@@ -377,7 +379,7 @@ class Orders_Meta_Boxes {
 					</span>
 				</a>
 			</li>
-            <?php if ($is_manual_payment === false && $is_admin_checkout === false) { // Don't show refund action button for manual payment or admin checkout?>
+            <?php if ( empty($is_manual_payment) && $is_admin_checkout === false) { // Don't show refund action button for manual payment or admin checkout?>
 			<li>
 				<?php if( $order->get_status()=="refunded" ){ ?>
 					<div class="wpec-grey-box">
@@ -395,6 +397,17 @@ class Orders_Meta_Boxes {
 				<?php } ?>
 			</li>
             <?php } ?>
+			
+			<?php if ( !empty($is_manual_payment) && strtolower($order->get_status()) == 'pending' ) { ?>
+			<li>
+				<a class="button wpec-order-action" data-action="set_paid_and_send_email" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'set_paid_and_send_email' ); ?>" href="#">
+					<span class="dashicons dashicons-yes-alt" style="line-height:1.8;font-size:16px;"></span>
+					<span class="wpec-order-action-label">
+						<?php esc_html_e( 'Set Order Paid & Send Email', 'wp-express-checkout' ); ?>
+					</span>
+				</a>
+			</li>
+			<?php } ?>
 		</ul>
 		<?php
 
@@ -649,6 +662,29 @@ class Orders_Meta_Boxes {
 		}		
 
 		wp_send_json_success( __( 'Order refunded successfully!', 'wp-express-checkout' ) );
+	}
+
+	public function set_paid_and_send_email_callback(){
+
+		check_ajax_referer( 'set_paid_and_send_email', 'nonce' );
+
+		try {
+			$order = Orders::retrieve( $_POST['order'] );
+
+		} catch ( Exception $exc ) {
+			wp_send_json_error( $exc->getMessage() );
+		}
+		
+		Logger::log( "Setting order status to 'paid'." );
+		$order->set_status('paid');
+
+		$response = Emails::send_buyer_email( $order );
+
+		if ( ! $response ) {
+			wp_send_json_error( __( 'Something went wrong, email is not sent!', 'wp-express-checkout' ) );
+		}
+
+		wp_send_json_success( __( 'Order has set to paid and buyer notification email sent successfully!', 'wp-express-checkout' ) );
 	}
 
 	public function wpec_add_order_note_callback()
