@@ -175,6 +175,9 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+= WIP =
+* Digital download links now doesn't show in the thank you page for manual checkout pending order.
+* A new order action button added to set order status to paid and send sale notification email for manual checkout.
 
 = 2.4.6 =
 * Use of template shortcode param removed for 'wpec_show_all_products' and 'wpec_show_products_from_category' shortcode.

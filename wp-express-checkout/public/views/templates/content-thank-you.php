@@ -20,6 +20,9 @@ $tax_amount       = ! empty( $order->get_item( 'tax' ) ) ? $order->get_item( 'ta
 $shipping_amount  = ! empty( $order->get_item( 'shipping' ) ) ? $order->get_item( 'shipping' )['price'] : 0;
 $downloads = View_Downloads::get_order_downloads_list( $order->get_id() );
 
+$order_status = $order->get_status();
+$payment_gateway = $order->get_payment_gateway();
+
 $trial_payment_discount = $order->get_item( 'trial_discount' );
 $trial_payment = $order->get_item( 'trial' );
 ?>
@@ -125,7 +128,14 @@ $trial_payment = $order->get_item( 'trial' );
         </tbody>
     </table>
 
-	<?php if ( is_array( $downloads ) && ! empty( $downloads ) ) { ?>
+	<?php 
+    $is_manual_checkout = strtolower($payment_gateway) == 'manual_checkout' || stripos($order->get_capture_id(), 'manual') !== false;
+    $is_pending_manual_checkout = $is_manual_checkout && strtolower($order_status) == 'pending'; // Don't show digital download if its a manual checkout pending order. 
+
+    $show_downloads = apply_filters('wpec_show_downloads_on_thank_you_page', !$is_pending_manual_checkout, $order);
+
+    if ( !empty($show_downloads) && is_array( $downloads ) && ! empty( $downloads ) ) { 
+    ?>
         <h4><?php _e( "Downloads", "wp-express-checkout" ); ?></h4>
         <table class="wpec-order-downloads-table">
             <thead>
