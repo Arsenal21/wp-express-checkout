@@ -4,20 +4,28 @@ var el = wp.element.createElement,
 	PanelBody = wp.components.PanelBody,
 	SelectControl = wp.components.SelectControl,
 	ToggleControl = wp.components.ToggleControl,
-	InspectorControls = wp.blockEditor.InspectorControls;
+	InspectorControls = wp.blockEditor.InspectorControls,
+	useBlockProps = wp.blockEditor.useBlockProps
+	;
 
 registerBlockType( 'wp-express-checkout/product-block', {
+	apiVersion: 3,
 	title: wpec_block_prod_str.title,
 	icon: 'products',
 	category: 'common',
 
 	edit: function( props ) {
+		var blockProps = useBlockProps();
+
 		return [
-			el( ServerSideRender, {
-				block: 'wp-express-checkout/product-block',
-				key: 'wpec-serverSideRenderer-key',
-				attributes: props.attributes,
-			} ),
+			el( 'div', blockProps,
+				el( ServerSideRender, {
+					block: 'wp-express-checkout/product-block',
+					key: 'wpec-serverSideRenderer-key',
+					attributes: props.attributes,
+				} ),
+			),
+
 			el( InspectorControls, {
 				key: 'wpec-inspectorControls-key',
 			},
@@ -31,6 +39,8 @@ registerBlockType( 'wp-express-checkout/product-block', {
 						value: props.attributes.prod_id,
 						options: wpec_prod_opts,
 						key: 'wpec-selectControl1-key',
+						__next40pxDefaultSize: true,
+						__nextHasNoMarginBottom: true,
 						onChange: ( value ) => {
 							props.setAttributes( {
 								prod_id: value
@@ -42,6 +52,8 @@ registerBlockType( 'wp-express-checkout/product-block', {
 						value: props.attributes.template,
 						options: wpec_prod_template_opts,
 						key: 'wpec-selectControl2-key',
+						__next40pxDefaultSize: true,
+						__nextHasNoMarginBottom: true,
 						onChange: ( value ) => {
 							props.setAttributes( {
 								template: value
@@ -52,6 +64,7 @@ registerBlockType( 'wp-express-checkout/product-block', {
 						label: wpec_block_prod_str.modal,
 						value: props.attributes.modal,
 						key: 'wpec-toggleControl-key',
+						__nextHasNoMarginBottom: true,
 						onChange: ( value ) => {
 							props.setAttributes( {
 								modal: value

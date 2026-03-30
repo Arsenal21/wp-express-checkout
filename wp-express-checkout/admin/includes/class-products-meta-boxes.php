@@ -192,7 +192,7 @@ class Products_Meta_Boxes {
 			</tr>
 		</table>
 		<div class="wpec-variations-buttons-cont">
-			<button type="button" class="button wpec-variations-add-variation-btn"><span class="dashicons dashicons-plus"></span> <?php esc_html_e( 'Add Variation', 'wp-express-checkout' ); ?></button>
+			<button type="button" class="button wpec-variations-add-variation-btn"><span class="dashicons dashicons-plus-alt2"></span> <?php esc_html_e( 'Add Variation', 'wp-express-checkout' ); ?></button>
 		</div>
 	</div>
 </div>
