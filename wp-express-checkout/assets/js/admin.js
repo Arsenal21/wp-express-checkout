@@ -137,7 +137,7 @@
 						console.log('Refund successful. Reloading the page.');
 						window.location.reload();
 					} else if (button_action == 'set_paid_and_send_email'){
-						console.log('Order has set to paid and sale notification email sent. Reloading the page.');
+						console.log('Order status has been set to paid and sale notification email sent. Reloading the page.');
 						window.location.reload();
 					}
 				} )

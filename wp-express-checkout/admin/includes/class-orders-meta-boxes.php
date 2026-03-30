@@ -403,7 +403,7 @@ class Orders_Meta_Boxes {
 				<a class="button wpec-order-action" data-action="set_paid_and_send_email" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'set_paid_and_send_email' ); ?>" href="#">
 					<span class="dashicons dashicons-yes-alt" style="line-height:1.8;font-size:16px;"></span>
 					<span class="wpec-order-action-label">
-						<?php esc_html_e( 'Set Order Paid & Send Email', 'wp-express-checkout' ); ?>
+						<?php esc_html_e( 'Set Order as Paid & Send Email', 'wp-express-checkout' ); ?>
 					</span>
 				</a>
 			</li>
@@ -678,13 +678,14 @@ class Orders_Meta_Boxes {
 		Logger::log( "Setting order status to 'paid'." );
 		$order->set_status('paid');
 
+		Logger::log( "Calling send buyer email function." );
 		$response = Emails::send_buyer_email( $order );
 
 		if ( ! $response ) {
 			wp_send_json_error( __( 'Something went wrong, email is not sent!', 'wp-express-checkout' ) );
 		}
 
-		wp_send_json_success( __( 'Order has set to paid and buyer notification email sent successfully!', 'wp-express-checkout' ) );
+		wp_send_json_success( __( 'Order has been set to paid and buyer notification email sent successfully!', 'wp-express-checkout' ) );
 	}
 
 	public function wpec_add_order_note_callback()

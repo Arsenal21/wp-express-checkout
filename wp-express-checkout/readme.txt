@@ -3,8 +3,8 @@ Contributors: Tips and Tricks HQ, mra13, dikiy_forester, mbrsolution, Ivy2120, c
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
-Tested up to: 6.9
-Stable tag: 2.4.6
+Tested up to: 7.0
+Stable tag: 2.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,9 +175,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
-= WIP =
-* Digital download links now doesn't show in the thank you page for manual checkout pending order.
-* A new order action button added to set order status to paid and send sale notification email for manual checkout.
+
+= 2.4.7 =
+* Manual Checkout Improvement - Digital download links won't be shown on the thank you page for pending orders.
+* Manual Checkout Improvement - A new order action button has been added to set the order status to paid and send sale notification email.
 
 = 2.4.6 =
 * Use of template shortcode param removed for 'wpec_show_all_products' and 'wpec_show_products_from_category' shortcode.
