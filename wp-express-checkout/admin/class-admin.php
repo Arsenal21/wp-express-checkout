@@ -1180,7 +1180,7 @@ class Admin {
 			}
 		} else {
 			echo '<p class="wpec-grey-box">';
-			_e("To connect your live account, enable the live mode from the General Settings menu.", "wp-express-checkout");
+			_e("To connect your live account, enable the live mode from the General Settings menu tab.", "wp-express-checkout");
 			echo '</p>';
 		}
 	}
@@ -1220,7 +1220,7 @@ class Admin {
 
 		} else {
 			echo '<p class="wpec-grey-box">';
-			_e("To connect your test/sandbox account, disable live mode from the General Settings menu.", "wp-express-checkout");
+			_e("To connect your test/sandbox account, disable live mode from the General Settings menu tab.", "wp-express-checkout");
 			echo '</p>';
 		}
 	}
