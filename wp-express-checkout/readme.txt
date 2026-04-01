@@ -178,6 +178,7 @@ None
 = WIP =
 * Product block console warning issue fixed.
 * Some UI updates for WordPress Version 7.0.
+* API connection onboarding related issue fixed.
 
 = 2.4.7 =
 * Manual Checkout Improvement - Digital download links won't be shown on the thank you page for pending orders.

@@ -58,7 +58,7 @@ function wpec_load_classes() {
 	new TTHQ\WPEC\Lib\PayPal\PayPal_Main(
 		array(
 			'plugin_shortname' => 'wpec',
-			'api_connection_settings_page' => WPEC_MENU_PARENT_SLUG . '&page=ppec-settings-page&action=paypal-settings',
+			'api_connection_settings_page' => WPEC_MENU_PARENT_SLUG . '&page=ppec-settings-page&action=paypal-settings&subtab=api-connection',
 			'log_text_method' => '\WP_Express_Checkout\Debug\Logger::log',
 			'log_array_method' => '\WP_Express_Checkout\Debug\Logger::log_array_data',
 			'ppcp_settings_key' => 'ppdg-settings',
