@@ -1226,7 +1226,6 @@ class Admin {
 	}
 
 	public function delete_cache_field_callback() {
-		echo \TTHQ\WPEC\Lib\PayPal\PayPal_Main::$pp_api_connection_settings_menu_page . "<br>";
 		$delete_cache_url = admin_url(\TTHQ\WPEC\Lib\PayPal\PayPal_Main::$pp_api_connection_settings_menu_page);
 		$delete_cache_url = add_query_arg('wpec_ppcp_delete_cache', 1, $delete_cache_url);
 		$delete_cache_url_nonced = add_query_arg('_wpnonce', wp_create_nonce('wpec_ppcp_delete_cache'), $delete_cache_url);
