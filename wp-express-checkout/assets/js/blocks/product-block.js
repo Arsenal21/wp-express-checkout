@@ -5,7 +5,7 @@ var el = wp.element.createElement,
 	SelectControl = wp.components.SelectControl,
 	ToggleControl = wp.components.ToggleControl,
 	InspectorControls = wp.blockEditor.InspectorControls,
-	useBlockProps = wp.blockEditor.useBlockProps
+	wpec_useBlockProps = wp.blockEditor.useBlockProps
 	;
 
 registerBlockType( 'wp-express-checkout/product-block', {
@@ -15,7 +15,7 @@ registerBlockType( 'wp-express-checkout/product-block', {
 	category: 'common',
 
 	edit: function( props ) {
-		var blockProps = useBlockProps();
+		const blockProps = wpec_useBlockProps();
 
 		return [
 			el( 'div', blockProps,
