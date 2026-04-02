@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 2.4.7
+Stable tag: 2.4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,10 +175,11 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
-= WIP =
-* Product block console warning issue fixed.
-* Some UI updates for WordPress Version 7.0.
-* API connection onboarding related issue fixed.
+
+= 2.4.8 =
+* Gutenberg Product block updated to use API version 3.
+* Updated the PayPal API connection related message to be more clear and informative.
+* Minor UI updates for WordPress 7.0.
 
 = 2.4.7 =
 * Manual Checkout Improvement - Digital download links won't be shown on the thank you page for pending orders.
