@@ -227,7 +227,7 @@ class Utils {
 			'last_name' => __( 'Last name of the buyer', 'wp-express-checkout' ),
 			'payer_email' => __( 'Email Address of the buyer', 'wp-express-checkout' ),
 			'address' => __( 'Address of the buyer', 'wp-express-checkout' ),
-			'product_details' => __( 'The item details of the purchased product (this will include the download link for digital items).', 'wp-express-checkout' ),
+			'product_details' => __( 'The item details of the purchased product (this will include the download link for digital items)', 'wp-express-checkout' ),
 			'transaction_id' => __( 'The unique transaction ID of the purchase', 'wp-express-checkout' ),
 			'order_id' => __( 'The order ID reference of this transaction in the cart orders menu', 'wp-express-checkout' ),
 			'purchase_amt' => __( 'The amount paid for the current transaction', 'wp-express-checkout' ),
@@ -238,7 +238,7 @@ class Utils {
 			'product_name' => __( 'Product Name', 'wp-express-checkout' ),
 			'quantity_ordered' => __( 'Quantity ordered', 'wp-express-checkout' ),
 			'download_link' => __( 'Download link of the product (if any)', 'wp-express-checkout' ),
-			'download_link_url_only' => __( 'Download link that contains the URL only, omitting any associated product name (if any).', 'wp-express-checkout' ),
+			'download_link_url_only' => __( 'Download link that contains the URL only, omitting any associated product name (if any)', 'wp-express-checkout' ),
 			'selected_variations' => __( 'Selected variations of the order', 'wp-express-checkout' ),
 		) );
 
