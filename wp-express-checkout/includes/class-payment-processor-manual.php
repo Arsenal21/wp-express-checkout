@@ -18,6 +18,9 @@ class Payment_Processor_Manual extends Payment_Processor {
 	 * Construct the instance.
 	 */
 	public function __construct() {
+
+		parent::__construct();
+
 		add_action( 'wp_ajax_wpec_process_manual_checkout', array( $this, 'wpec_process_manual_checkout' ) );
 		add_action( 'wp_ajax_nopriv_wpec_process_manual_checkout', array( $this, 'wpec_process_manual_checkout' ) );
 	}

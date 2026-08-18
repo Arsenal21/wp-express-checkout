@@ -28,10 +28,7 @@ class Payment_Processor {
 	/**
 	 * Construct the instance.
 	 */
-	public function __construct() {
-		add_action( 'wp_ajax_wpec_process_payment', array( $this, 'wpec_process_payment' ) );
-		add_action( 'wp_ajax_nopriv_wpec_process_payment', array( $this, 'wpec_process_payment' ) );
-	}
+	public function __construct() {}
 
 	/**
 	 * Retrieves the instance.

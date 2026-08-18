@@ -20,6 +20,9 @@ class Payment_Processor_Free extends Payment_Processor {
 	 * Construct the instance.
 	 */
 	public function __construct() {
+
+		parent::__construct();
+
 		add_action( 'wp_ajax_wpec_process_empty_payment', array( $this, 'wpec_process_payment' ) );
 		add_action( 'wp_ajax_nopriv_wpec_process_empty_payment', array( $this, 'wpec_process_payment' ) );
 	}
