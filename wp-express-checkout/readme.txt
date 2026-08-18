@@ -175,6 +175,8 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+= WIP =
+* A vulnerability issue fixed.
 
 = 2.4.8 =
 * Gutenberg Product block updated to use API version 3.
