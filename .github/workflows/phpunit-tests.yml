@@ -82,8 +82,10 @@ jobs:
 #            ${{ runner.os }}-composer-
 
       - name: Install dependencies
+        run: composer global require "phpunit/phpunit=${{ matrix.phpunit }}" "yoast/phpunit-polyfills" --ignore-platform-reqs
+
 #       Locking symfony/yaml=4.4.26, version 4.4.27 causes errors with PHP 5.6.20
-        run: composer global require "phpunit/phpunit=${{ matrix.phpunit }}" "symfony/yaml=4.4.26" "yoast/phpunit-polyfills" --ignore-platform-reqs
+#        run: composer global require "phpunit/phpunit=${{ matrix.phpunit }}" "symfony/yaml=4.4.26" "yoast/phpunit-polyfills" --ignore-platform-reqs
 #        run: composer install --no-progress --prefer-dist --optimize-autoloader
 
 #      - name: Setup problem matchers for PHPUnit
