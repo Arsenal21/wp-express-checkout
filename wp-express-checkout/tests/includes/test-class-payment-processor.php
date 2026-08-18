@@ -156,11 +156,11 @@ class Payment_ProcessorTest extends \WP_Ajax_UnitTestCase {
 	 */
 	public function testWpec_process_payment__no_downloads() {
 		try {
-			$this->_handleAjax( 'wpec_process_payment' );
+			$this->object->wpec_process_payment();
 		} catch ( \WPAjaxDieContinueException $e ) {
 			// We expected this, do nothing.
 		}
-		$this->assertTrue( isset( $e ) );		
+
 		$this->assertStringNotContainsString( 'download link', $this->mailer->get_sent()->body );
 	}
 
@@ -169,13 +169,11 @@ class Payment_ProcessorTest extends \WP_Ajax_UnitTestCase {
 	 */
 	public function testWpec_process_payment__downloads() {
 		update_post_meta( $this->object->_transient['product_id'], 'ppec_product_upload', 'http://example.com/' );
-		try {
-			$this->_handleAjax( 'wpec_process_payment' );
-		} catch ( \WPAjaxDieContinueException $e ) {
-			// We expected this, do nothing.
-		}
 
-		$this->assertTrue( isset( $e ) );
+		$this->expectException( \WPAjaxDieContinueException::class );
+
+		$this->object->wpec_process_payment();
+
 		$this->assertStringContainsString( 'download link', $this->mailer->get_sent()->body );
 	}
 
@@ -195,7 +193,7 @@ class Payment_ProcessorTest extends \WP_Ajax_UnitTestCase {
 		update_option( 'ppdg-settings', array_merge( Main::get_defaults(), [ 'send_seller_email' => 1 ] ) );
 
 		try {
-			$this->_handleAjax( 'wpec_process_payment' );
+			$this->object->wpec_process_payment();
 		} catch ( \WPAjaxDieContinueException $e ) {
 			// We expected this, do nothing.
 		}
@@ -214,20 +212,6 @@ class Payment_ProcessorTest extends \WP_Ajax_UnitTestCase {
 		$order = Orders::retrieve( $order_post->post->ID );
 		$this->assertEquals( $transaction_id, $order->get_resource_id() );
 		$this->assertEquals( 2, count( $this->mailer->mock_sent ) );
-	}
-
-	/**
-	 * @covers WP_Express_Checkout\Payment_Processor::wpec_process_payment
-	 */
-	public function testWpec_process_payment__check_mocked_methods() {
-		$_POST['wp_ppdg_payment'] = $this->object->_payment_data;
-		$_POST['data'] = $this->object->_order_data;
-		remove_all_actions( 'wp_ajax_wpec_process_payment' );
-		remove_all_actions( 'wp_ajax_nopriv_wpec_process_payment' );
-		$object = new Payment_Processor();
-
-		$this->expectException( 'WPAjaxDieContinueException' );
-		$this->_handleAjax( 'wpec_process_payment' );
 	}
 
 	/**

@@ -46,4 +46,8 @@ class Mock_Payment_Processor extends Payment_Processor {
 		return $this->_transient;
 	}
 
+	protected function send_response( $data ) {
+		throw new \WPAjaxDieContinueException();
+	}
+
 }
