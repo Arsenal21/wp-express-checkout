@@ -248,3 +248,4 @@ None
 * Updated the translation POT file.
 
 [See changelog for older versions](https://plugins.svn.wordpress.org/wp-express-checkout/trunk/change-log-old-versions.txt)
+
