@@ -3,8 +3,8 @@ Contributors: Tips and Tricks HQ, mra13, dikiy_forester, mbrsolution, Ivy2120, c
 Donate link: https://wp-express-checkout.com/
 Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
-Tested up to: 7.0
-Stable tag: 2.4.8
+Tested up to: 7.1
+Stable tag: 2.4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,8 +175,9 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
-= WIP =
-* A vulnerability issue fixed.
+
+= 2.4.9 =
+* The unnecessary ajax actions registered in Payment_Processor::_construct() has been removed.
 
 = 2.4.8 =
 * Gutenberg Product block updated to use API version 3.
