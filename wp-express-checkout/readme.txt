@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.4.9
+Stable tag: 2.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,8 +175,9 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
-= WIP =
-* A vulnerability issue fixed regarding free checkout.
+
+= 2.5.0 =
+* Fixed a security issue affecting the free checkout flow when using a coupon. Thanks to Animesh from WPScan for reporting the issue.
 
 = 2.4.9 =
 * The unnecessary ajax actions registered in Payment_Processor::_construct() has been removed.
