@@ -175,6 +175,8 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+= WIP =
+* A vulnerability issue fixed regarding free checkout.
 
 = 2.4.9 =
 * The unnecessary ajax actions registered in Payment_Processor::_construct() has been removed.

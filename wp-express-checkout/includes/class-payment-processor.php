@@ -235,6 +235,9 @@ class Payment_Processor {
 		/**
 		 * Runs before processing anything.
 		 *
+		 *  Usage:
+		 *  - prevalidate_free_checkout
+		 *
 		 * @param array $payment The raw order data retrieved via API.
 		 * @param array $data    The purchase data generated on a client side.
 		 */
@@ -304,6 +307,10 @@ class Payment_Processor {
 		/**
 		 * Runs after draft order created, but before adding items.
 		 *
+		 *  Usage:
+		 *  - add_discount_to_order
+		 *  - add_variations_to_order
+		 *
 		 * @param Order $order   The order object.
 		 * @param array      $payment The raw order data retrieved via API.
 		 * @param array      $data    The purchase data generated on a client side.
@@ -323,6 +330,10 @@ class Payment_Processor {
 		if ( $amount < $order->get_total() ) {
 			// payment amount mismatch. Amount paid is less.
 			Logger::log( 'Error! Payment amount mismatch. Expected: ' . $order->get_total() . ', Received: ' . $amount, false );
+
+			// Delete the draft order as the payment is invalid.
+			wp_delete_post( $order->get_id(), true );
+
 			$this->send_error( __( 'Payment amount mismatch with the original price.', 'wp-express-checkout' ), 3005 );
 		}
 
@@ -384,6 +395,8 @@ class Payment_Processor {
 	 *
 	 * @param string $msg  Message to encode as JSON, then print and die.
 	 * @param string $code Error code for recognizing an error.
+	 *
+	 * @return never
 	 */
 	protected function send_error( $msg, $code ) {
 		Logger::log( "Code $code - $msg", false );
@@ -393,8 +406,9 @@ class Payment_Processor {
 	/**
 	 * Logs error message and sends it as a JSON response back to an Ajax request.
 	 *
-	 * @param mixed $data Variable (usually an array or object) to encode as
-	 *                    JSON, then print and die.
+	 * @param mixed $data Variable (usually an array or object) to encode as JSON, then print and die.
+	 *
+	 * @return never
 	 */
 	protected function send_response( $data ) {
 		wp_send_json( $data );
@@ -586,11 +600,11 @@ class Payment_Processor {
 	 * This difference in approach creates a lot of difficulties in the total
 	 * amount validation. This method allows override it.
 	 *
-	 * @param type $price
-	 * @param type $quantity
-	 * @param type $tax
-	 * @return type
-	 */
+	 * @param float $price
+	 * @param int $quantity
+	 * @param float $tax
+	 * @return float
+    */
 	protected function get_item_tax_amount( $price, $quantity, $tax ) {
 		return Utils::round_price( Utils::get_tax_amount( $price / $quantity, $tax ) );
 	}

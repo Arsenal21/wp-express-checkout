@@ -17,6 +17,35 @@ class Payment_Processor_FreeTest extends \WP_Ajax_UnitTestCase {
 	protected $object;
 
 	/**
+	 * Call a protected method on the processor.
+	 *
+	 * @param string $method
+	 * @param array  $args
+	 * @return mixed
+	 */
+	protected function call_protected_method( $method, array $args = array() ) {
+		$reflection = new \ReflectionClass( $this->object );
+		$callable   = $reflection->getMethod( $method );
+		$callable->setAccessible( true );
+
+		return $callable->invokeArgs( $this->object, $args );
+	}
+
+	/**
+	 * Create a test coupon post.
+	 *
+	 * @param array $meta
+	 * @return int
+	 */
+	protected function create_coupon( array $meta ) {
+		return $this->factory->post->create( array(
+			'post_type'  => 'wpec_coupons',
+			'post_title' => 'test coupon',
+			'meta_input' => $meta,
+		) );
+	}
+
+	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
@@ -42,8 +71,8 @@ class Payment_Processor_FreeTest extends \WP_Ajax_UnitTestCase {
 			'price'           => 0,
 			'currency'        => 'USD',
 			'quantity'        => 5,
-			'tax'             => 20,
-			'shipping'        => 10,
+			'tax'             => 0,
+			'shipping'        => 0,
 			'shipping_enable' => 1,
 			'url'             => 'http://example.com',
 			'custom_quantity' => 1,
@@ -67,6 +96,95 @@ class Payment_Processor_FreeTest extends \WP_Ajax_UnitTestCase {
 		$this->assertTrue( isset( $e ) );
 		$response = json_decode( $this->_last_response );
 		$this->assertNotEmpty( $response->redirect_url );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Payment_Processor_Free::calculate_free_checkout_total
+	 */
+	public function testCalculate_free_checkout_total__ignores_coupon_for_other_product() {
+		$product_id = $this->factory->post->create( array(
+			'post_type' => Products::$products_slug,
+		) );
+		$other_product_id = $this->factory->post->create( array(
+			'post_type' => Products::$products_slug,
+		) );
+
+		$this->create_coupon( array(
+			'wpec_coupon_code' => 'TEST10',
+			'wpec_coupon_active' => 1,
+			'wpec_coupon_start_date' => gmdate( 'Y-m-d', current_time( 'timestamp' ) - DAY_IN_SECONDS ),
+			'wpec_coupon_exp_date' => 0,
+			'wpec_coupon_red_limit' => 0,
+			'wpec_coupon_red_count' => 0,
+			'wpec_coupon_discount' => 10,
+			'wpec_coupon_discount_type' => 'fixed',
+			'wpec_coupon_only_for_allowed_products' => 1,
+			'wpec_coupon_allowed_products' => array( $product_id ),
+		) );
+
+		$total = $this->call_protected_method( 'calculate_free_checkout_total', array( 20, 1, 0, 0, $other_product_id, array( 'couponCode' => 'TEST10' ) ) );
+
+		$this->assertSame( 20.0, (float) $total );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Payment_Processor_Free::calculate_free_checkout_total
+	 */
+	public function testCalculate_free_checkout_total__clamps_negative_total_to_zero() {
+		$product_id = $this->factory->post->create( array(
+			'post_type' => Products::$products_slug,
+		) );
+
+		$this->create_coupon( array(
+			'wpec_coupon_code' => 'BIGFIXED',
+			'wpec_coupon_active' => 1,
+			'wpec_coupon_start_date' => gmdate( 'Y-m-d', current_time( 'timestamp' ) - DAY_IN_SECONDS ),
+			'wpec_coupon_exp_date' => 0,
+			'wpec_coupon_red_limit' => 0,
+			'wpec_coupon_red_count' => 0,
+			'wpec_coupon_discount' => 25,
+			'wpec_coupon_discount_type' => 'fixed',
+			'wpec_coupon_only_for_allowed_products' => 0,
+			'wpec_coupon_allowed_products' => array(),
+		) );
+
+		$total = $this->call_protected_method( 'calculate_free_checkout_total', array( 10, 1, 0, 0, $product_id, array( 'couponCode' => 'BIGFIXED' ) ) );
+
+		$this->assertSame( 0.0, (float) $total );
+	}
+
+	/**
+	 * @covers WP_Express_Checkout\Payment_Processor_Free::calculate_free_checkout_total
+	 */
+	public function testCalculate_free_checkout_total__multiplies_variation_price_by_quantity() {
+		$product_id = $this->factory->post->create( array(
+			'post_type'  => Products::$products_slug,
+			'meta_input' => array(
+				'wpec_variations_groups' => array( 'Color' ),
+				'wpec_variations_names'  => array( array( 'Blue' ) ),
+				'wpec_variations_prices' => array( array( 2 ) ),
+				'wpec_variations_urls'   => array( array( '' ) ),
+				'wpec_variations_opts'   => array( array( 0 ) ),
+			),
+		) );
+
+		$total = $this->call_protected_method(
+			'calculate_free_checkout_total',
+			array(
+				0,
+				3,
+				0,
+				0,
+				$product_id,
+				array(
+					'variations' => array(
+						'applied' => array( 0 ),
+					),
+				)
+			)
+		);
+
+		$this->assertSame( 6.0, (float) $total );
 	}
 
 }
