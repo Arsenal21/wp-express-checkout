@@ -276,7 +276,7 @@ class Utils {
 		$tags_desc = '';
 
 		foreach ( $tags as $tag => $desc ) {
-			$tags_desc .= "<br /><code>{{$tag}}</code> - {$desc}";
+			$tags_desc .= '<br /><code>{' . esc_html( $tag ) . '}</code> - ' . esc_html( $desc );
 		}
 
 		return $tags_desc;
@@ -289,14 +289,14 @@ class Utils {
 		$url = apply_filters( 'wpec_before_redirect_to_url', $url );
 		if ( empty( $url ) ) {
 			echo '<strong>';
-			_e( 'Error! The URL value is empty. Please specify a correct URL value to redirect to!', 'wp-express-checkout' );
+			esc_html_e( 'Error! The URL value is empty. Please specify a correct URL value to redirect to!', 'wp-express-checkout' );
 			echo '</strong>';
 			exit;
 		}
 		if ( ! headers_sent() ) {
-			header( 'Location: ' . $url );
+			header( 'Location: ' . esc_url_raw( $url ) );
 		} else {
-			echo '<meta http-equiv="refresh" content="' . $delay . ';url=' . $url . '" />';
+			echo '<meta http-equiv="refresh" content="' . esc_attr( $delay ) . ';url=' . esc_url( $url ) . '" />';
 		}
 
 		if ( $exit == '1' ) {//exit
@@ -791,5 +791,51 @@ class Utils {
 		}
 
 		return $tpl_html;
+	}
+
+	public static function wp_kses_post_tags_with_form() {
+		// Array of common standard and custom form attributes
+		$all_attributes = array(
+			'action'       => true,
+			'method'       => true,
+			'type'         => true,
+			'name'         => true,
+			'value'        => true,
+			'placeholder'  => true,
+			'id'           => true,
+			'class'        => true,
+			'style'        => true,
+			'checked'      => true,
+			'selected'     => true,
+			'required'     => true,
+			'readonly'     => true,
+			'disabled'     => true,
+			'multiple'     => true,
+			'rows'         => true,
+			'cols'         => true,
+			'for'          => true,
+			'autocomplete' => true,
+			'min'          => true,
+			'max'          => true,
+			'step'         => true,
+			'pattern'      => true,
+			'aria-*'       => true, // WP support for ARIA attributes
+			'data-*'       => true, // WP support for Data attributes
+		);
+
+		$allowed_form_tags = array(
+			'form'     => $all_attributes,
+			'input'    => $all_attributes,
+			'select'   => $all_attributes,
+			'option'   => $all_attributes,
+			'textarea' => $all_attributes,
+			'button'   => $all_attributes,
+			'label'    => $all_attributes,
+		);
+
+		// Merge with standard allowed post tags so paragraph tags, divs, etc. are still kept
+		$allowed_tags = array_merge_recursive( wp_kses_allowed_html( 'post' ), $allowed_form_tags );
+
+		return apply_filters( 'wpec_kses_post_tags_with_form', $allowed_tags );
 	}
 }

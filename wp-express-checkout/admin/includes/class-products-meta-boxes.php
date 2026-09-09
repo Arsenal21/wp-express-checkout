@@ -66,7 +66,8 @@ class Products_Meta_Boxes {
 		// Unknown type.
 		if ( ! isset( $product_types[ $product_type ] ) ) {
 			$product_types[ $product_type ] = $product_type;
-			$default_content = sprintf( '<strong>' . __( 'A product type "%s" is not registered. Please activate the appropriate addon to use this product.', 'wp-express-checkout' )  . '</strong>', $product_type );
+			/* translators: %s is the product type slug. */
+			$default_content = '<strong>' . sprintf( esc_html__( 'A product type "%s" is not registered. Please activate the appropriate addon to use this product.', 'wp-express-checkout' ), esc_html( $product_type ) ) . '</strong>';
 		}
 
 		$current_price = get_post_meta( $post->ID, 'ppec_product_price', true );
@@ -81,7 +82,7 @@ class Products_Meta_Boxes {
 		foreach ( $product_types as $type => $name ) {
 			?>
 			<label>
-				<input type="radio" class="wpec_product_type_radio" name="wpec_product_type_radio" value="<?php echo $type; ?>"<?php echo $type === $product_type ? ' checked' : ''; ?>><?php echo $name; ?>
+				<input type="radio" class="wpec_product_type_radio" name="wpec_product_type_radio" value="<?php echo esc_attr( $type ); ?>"<?php echo $type === $product_type ? ' checked' : ''; ?>><?php echo esc_html( $name ); ?>
 			</label>
 			<?php
 			$cont .= sprintf( '<div class="wpec_product_type_cont%s" data-wpec-product-type="%s">', $type === $product_type ? ' wpec_product_type_active' : '', $type );
@@ -105,7 +106,7 @@ class Products_Meta_Boxes {
 					<?php
 					break;
 				default:
-					echo $default_content;
+                    echo wp_kses_post($default_content);
 
 					do_action( 'wpec_form_product_type_' . $type, $post );
 					break;
@@ -114,7 +115,7 @@ class Products_Meta_Boxes {
 			$cont .= '</div>';
 		}
 		echo '</p>';
-		echo $cont;
+        echo wp_kses($cont, Utils::wp_kses_post_tags_with_form());
 		?>
 			<script>
 				( function ( $ ) {
@@ -135,8 +136,8 @@ class Products_Meta_Boxes {
 		?>
 <p>
 		<?php
-		// translators: %s is a link to documentation page
-		echo sprintf( __( 'You can find documentation on variations <a href="%s" target="_blank">here</a>.', 'wp-express-checkout' ), 'https://wp-express-checkout.com/creating-product-with-variations/' );
+		/* translators: %s is a link to the variations documentation page. */
+		echo sprintf( esc_html__( 'You can find documentation on variations %s.', 'wp-express-checkout' ), '<a href="' . esc_url( 'https://wp-express-checkout.com/creating-product-with-variations/' ) . '" target="_blank">' . esc_html__( 'here', 'wp-express-checkout' ) . '</a>' );
 		?>
 </p>
 		<?php
@@ -164,7 +165,7 @@ class Products_Meta_Boxes {
 		?>
 <div id="wpec-variations-cont-main">
 	<div id="wpec-variations-cont">
-		<span class="wpec-variations-no-variations-msg"><?php echo $variations_str; ?></span>
+		<span class="wpec-variations-no-variations-msg"><?php echo esc_html( $variations_str ); ?></span>
 	</div>
 	<button type="button" class="button" id="wpec-create-variations-group-btn"><span class="dashicons dashicons-welcome-add-page"></span> <?php esc_html_e( 'Create Group', 'wp-express-checkout' ); ?></button>
 </div>
@@ -174,7 +175,7 @@ class Products_Meta_Boxes {
 			<span><?php esc_html_e( 'Group Name:', 'wp-express-checkout' ); ?> </span>
 			<input type="text" value="" class="wpec-variations-group-name">
 			<button type="button" class="button wpec-variations-delete-group-btn wpec-btn-small">
-				<span class="dashicons dashicons-trash" title="<?php esc_html_e( 'Delete group', 'wp-express-checkout' ); ?>"></span>
+				<span class="dashicons dashicons-trash" title="<?php echo esc_attr__( 'Delete group', 'wp-express-checkout' ); ?>"></span>
 			</button>
 			<div class="wpec-variations-display-type-cont">
 				<label><?php esc_html_e( 'Display As:', 'wp-express-checkout' ); ?> </label>
@@ -187,7 +188,7 @@ class Products_Meta_Boxes {
 		<table class="widefat fixed wpec-variations-tbl">
 			<tr>
 				<th width="40%"><?php echo esc_html( _x( 'Name', 'Variation name', 'wp-express-checkout' ) ); ?></th>
-				<th width="20%"><?php esc_html_e( 'Price Mod', 'wp-express-checkout' ); ?> <?php echo Admin::gen_help_popup( $price_mod_help ); ?></th>
+				<th width="20%"><?php esc_html_e( 'Price Mod', 'wp-express-checkout' ); ?> <?php echo wp_kses_post( Admin::gen_help_popup( $price_mod_help ) ); ?></th>
 				<th width="30%"><?php esc_html_e( 'Product URL', 'wp-express-checkout' ); ?></th>
 			</tr>
 		</table>
@@ -271,9 +272,9 @@ class Products_Meta_Boxes {
 		$step             = pow( 10, -intval( $this->WPEC_Main->get_setting( 'price_decimals_num' ) ) );
 		$enable_shipping  = get_post_meta( $post->ID, 'wpec_product_shipping_enable', true );
 
-		// translators: %s is a link to documentation page
 		echo '<p>';
-		echo sprintf( __( 'You can find documentation on shipping and tax <a href="%s" target="_blank">here</a>.', 'wp-express-checkout' ), 'https://wp-express-checkout.com/shipping-tax-for-express-checkout/' );
+		/* translators: %s is a link to the shipping and tax documentation page. */
+		echo sprintf( esc_html__( 'You can find documentation on shipping and tax %s.', 'wp-express-checkout' ), '<a href="' . esc_url( 'https://wp-express-checkout.com/shipping-tax-for-express-checkout/' ) . '" target="_blank">' . esc_html__( 'here', 'wp-express-checkout' ) . '</a>' );
 		echo '</p>';
 		?>
 		<label>
@@ -370,14 +371,20 @@ class Products_Meta_Boxes {
 		<strong><?php esc_html_e( 'Force Download', 'wp-express-checkout' ); ?></strong>
 		<br />		
 		<p>
-			<?php _e('Read the', 'wp-express-checkout') ?> <a href="https://wp-express-checkout.com/force-download-option-for-digital-products/" target="_blank"><?php _e('force download tutorial', 'wp-express-checkout') ?></a> <?php _e('to learn how this feature works.', 'wp-express-checkout') ?>
+			<?php
+			/* translators: 1: opening link tag, 2: closing link tag. */
+			echo sprintf( esc_html__( 'Read the %1$sforce download tutorial%2$s to learn how this feature works.', 'wp-express-checkout' ), '<a href="' . esc_url( 'https://wp-express-checkout.com/force-download-option-for-digital-products/' ) . '" target="_blank">', '</a>' );
+			?>
 		</p>
 		<input type="checkbox" value="1" name="wpec_force_download" <?php echo ($post->wpec_force_download == 1) ? "checked":""; ?> ><span><?php esc_html_e( 'Enable Force Download', 'wp-express-checkout' ); ?></span>
 		<hr />
 		<strong><?php esc_html_e( 'Download Link Expiry Settings (Optional)', 'wp-express-checkout' ); ?></strong>
 		<br />
 		<p>
-			<?php _e('Read the', 'wp-express-checkout') ?> <a href="https://wp-express-checkout.com/limiting-product-download-links/" target="_blank"><?php _e('download link expiry tutorial', 'wp-express-checkout') ?></a> <?php _e('to learn how the feature works.', 'wp-express-checkout') ?>
+			<?php
+			/* translators: 1: opening link tag, 2: closing link tag. */
+			echo sprintf( esc_html__( 'Read the %1$sdownload link expiry tutorial%2$s to learn how the feature works.', 'wp-express-checkout' ), '<a href="' . esc_url( 'https://wp-express-checkout.com/limiting-product-download-links/' ) . '" target="_blank">', '</a>' );
+			?>
 		</p>
 		<label><?php esc_html_e( 'Duration of Download Link', 'wp-express-checkout' ); ?></label>
 		<br/>
@@ -402,8 +409,8 @@ class Products_Meta_Boxes {
 	</p>
 </div>
 <p>
-	<input id="wpec_select_thumbnail_btn" type="button" class="button" value="<?php esc_html_e( 'Select Image', 'wp-express-checkout' ); ?>" />
-	<input id="wpec_remove_thumbnail_button" class="button" value="<?php esc_html_e( 'Remove Image', 'wp-express-checkout' ); ?>" type="button">
+	<input id="wpec_select_thumbnail_btn" type="button" class="button" value="<?php echo esc_attr__( 'Select Image', 'wp-express-checkout' ); ?>" />
+	<input id="wpec_remove_thumbnail_button" class="button" value="<?php echo esc_attr__( 'Remove Image', 'wp-express-checkout' ); ?>" type="button">
 </p>
 <div>
 	<span id="wpec_admin_thumb_preview">
@@ -451,14 +458,14 @@ jQuery(document).ready(function($) {
 		?>
 <input type="text" name="wpec_product_thankyou_page" style="width: 100%;" value="<?php echo esc_attr( $current_val ); ?>" placeholder="https://..." />
 <p class="description">
-	<?php _e( 'Enter the Thank You page URL for this product. Leave it blank if you want to use the default Thank You page created by the plugin.', 'wp-express-checkout' ); ?>
+	<?php esc_html_e( 'Enter the Thank You page URL for this product. Leave it blank if you want to use the default Thank You page created by the plugin.', 'wp-express-checkout' ); ?>
 </p>
 		<?php
 	}
 
 	function display_shortcode_meta_box( $post ) {
 		?>
-		<input type="text" name="ppec_product_shortcode" style="width: 100%;" class="wpec-select-on-click large-text" onfocus="this.select();" readonly value="[wp_express_checkout product_id=&quot;<?php echo $post->ID; ?>&quot;]">
+		<input type="text" name="ppec_product_shortcode" style="width: 100%;" class="wpec-select-on-click large-text" onfocus="this.select();" readonly value="[wp_express_checkout product_id=&quot;<?php echo esc_attr( $post->ID ); ?>&quot;]">
 		<p class="description">
 			<?php esc_html_e( 'Use this shortcode to display button for your product.', 'wp-express-checkout' ); ?>
 			<?php esc_html_e( ' Read the ', 'wp-express-checkout' ); ?>
@@ -471,7 +478,7 @@ jQuery(document).ready(function($) {
 
 	function display_link_meta_box( $post ) {
 		?>
-		<input type="text" name="ppec_product_link" style="width: 100%;" class="wpec-select-on-click large-text" onfocus="this.select();" readonly value="<?php echo home_url('/wpec-payment-box/?product_id='.$post->ID) ?>">
+		<input type="text" name="ppec_product_link" style="width: 100%;" class="wpec-select-on-click large-text" onfocus="this.select();" readonly value="<?php echo esc_url( home_url( '/wpec-payment-box/?product_id=' . $post->ID ) ); ?>">
 		<p class="description"><?php esc_html_e( 'This URL can be used to create a custom payment button using a text or image link.', 'wp-express-checkout' ); ?></p>
 		<?php
 	}
@@ -481,13 +488,13 @@ jQuery(document).ready(function($) {
 		$button_txt = get_post_meta( $post->ID, 'wpec_product_button_text', true );
 		?>
 		<fieldset>
-			<label><?php _e( 'Popup/Modal Trigger Button Text',  'wp-express-checkout' ); ?></label>
+			<label><?php esc_html_e( 'Popup/Modal Trigger Button Text',  'wp-express-checkout' ); ?></label>
 			<br />
 			<input type="text" name="wpec_product_button_text" size="50" value="<?php echo esc_attr( $button_txt ); ?>">
-			<p class="description"><?php _e( 'Specify the text to be displayed on the button that triggers the payment popup/modal window. Leave it blank to use the text specified in General Settings page.',  'wp-express-checkout' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Specify the text to be displayed on the button that triggers the payment popup/modal window. Leave it blank to use the text specified in General Settings page.',  'wp-express-checkout' ); ?></p>
 
 			<legend><?php esc_html_e( 'Button Options', 'wp-express-checkout' ); ?></legend>
-			<label><?php _e( 'PayPal Button Type', 'wp-express-checkout' ); ?></label>
+			<label><?php esc_html_e( 'PayPal Button Type', 'wp-express-checkout' ); ?></label>
 			<br />
 			<select name="wpec_product_button_type" id="wpec_product_button_type">
 				<option value=""><?php esc_html_e( '-- Default --', 'wp-express-checkout' ); ?></option>
@@ -500,7 +507,7 @@ jQuery(document).ready(function($) {
 				);
 
 				foreach ( $options as $key => $value ) {
-					echo '<option value="' . $key . '"'. selected( $key, $button_type, false ) .'>' . $value . '</option>';
+					echo '<option value="' . esc_attr( $key ) . '"' . selected( $key, $button_type, false ) . '>' . esc_html( $value ) . '</option>';
 				}
 				?>
 			</select>
@@ -512,24 +519,30 @@ jQuery(document).ready(function($) {
 	public function display_coupons_meta_box( $post ) {
 		$current_val = get_post_meta( $post->ID, 'wpec_product_coupons_setting', true );
 		?>
-		<p><?php _e( 'Select how Coupons should be handled for this product.', 'wp-express-checkout' ); ?></p>
-		<label><input type="radio" name="wpec_product_coupons_setting" value="2" <?php echo ( $current_val === '2' || $current_val === '' ) ? ' checked' : ''; ?>><?php echo __( 'Use Global Setting', 'wp-express-checkout' ); ?> </label>
-		<label><input type="radio" name="wpec_product_coupons_setting" value="1" <?php echo ( $current_val === '1' ) ? ' checked' : ''; ?>><?php echo __( 'Enabled', 'wp-express-checkout' ); ?> </label>
-		<label><input type="radio" name="wpec_product_coupons_setting" value="0" <?php echo ( $current_val === '0' ) ? ' checked' : ''; ?>><?php echo __( 'Disabled', 'wp-express-checkout' ); ?> </label>
+		<p><?php esc_html_e( 'Select how Coupons should be handled for this product.', 'wp-express-checkout' ); ?></p>
+		<label><input type="radio" name="wpec_product_coupons_setting" value="2" <?php echo ( $current_val === '2' || $current_val === '' ) ? ' checked' : ''; ?>><?php esc_html_e( 'Use Global Setting', 'wp-express-checkout' ); ?> </label>
+		<label><input type="radio" name="wpec_product_coupons_setting" value="1" <?php echo ( $current_val === '1' ) ? ' checked' : ''; ?>><?php esc_html_e( 'Enabled', 'wp-express-checkout' ); ?> </label>
+		<label><input type="radio" name="wpec_product_coupons_setting" value="0" <?php echo ( $current_val === '0' ) ? ' checked' : ''; ?>><?php esc_html_e( 'Disabled', 'wp-express-checkout' ); ?> </label>
 		<?php
 	}
 
 	public function display_custom_email_meta_box ($post) {
 		$wpec = Main::get_instance();
 		if ( $wpec->get_setting( 'enable_per_product_email_customization' ) != 1 ) {
-			_e( 'Product specific email customization is disabled. It must be enabled <a href="'.WPEC_MENU_PARENT_SLUG.'&page=ppec-settings-page&action=email-settings#wp-ppdg-enable_per_product_email_customization" target="_blank">in the settings</a> before you can configure it for this product.', 'wp-express-checkout' );
+			echo wp_kses_post(
+				sprintf(
+					/* translators: %s is a link to the email settings page. */
+					__( 'Product specific email customization is disabled. It must be enabled %s before you can configure it for this product.', 'wp-express-checkout' ),
+					'<a href="' . esc_url( WPEC_MENU_PARENT_SLUG . '&page=ppec-settings-page&action=email-settings#wp-ppdg-enable_per_product_email_customization' ) . '" target="_blank">' . __( 'in the settings', 'wp-express-checkout' ) . '</a>'
+				)
+			);
 			return false;
 		}
 
 		$email_tags = Utils::get_dynamic_tags_white_list();
 		$email_tags_desc = '';
 		foreach ( $email_tags as $tag => $desc ) {
-			$email_tags_desc .= "<br /><code>{{$tag}}</code> - {$desc}";
+			$email_tags_desc .= '<br /><code>{{' . esc_html( $tag ) . '}}</code> - ' . esc_html( $desc );
 		}
 
         $is_html_email_type = $wpec->get_setting( 'buyer_email_type' ) == 'html';
@@ -545,40 +558,40 @@ jQuery(document).ready(function($) {
 		$buyer_email_body = empty( $buyer_email_body ) ? $wpec->get_setting( 'buyer_email_body' ) : $buyer_email_body;
 		?>
 		<p class="description">
-			<a href="https://wp-express-checkout.com/per-product-email-customization-feature/" target="_blank"><?php _e('Read the documentation', 'wp-express-checkout')?></a>
-			<?php _e(' to learn how to use the per-product email customization feature.', 'wp-express-checkout')?>
-		</p>		
+			<a href="https://wp-express-checkout.com/per-product-email-customization-feature/" target="_blank"><?php esc_html_e( 'Read the documentation', 'wp-express-checkout' ); ?></a>
+			<?php esc_html_e( ' to learn how to use the per-product email customization feature.', 'wp-express-checkout' ); ?>
+		</p>
 		<div class="nav-tab-wrapper">
-			<a href="#" data-tab-name="buyer-email" class="wpec-custom-email-nav nav-tab nav-tab-active"><?php _e('Buyer Email', 'wp-express-checkout') ?></a>
-			<a href="#" data-tab-name="seller-email" class="wpec-custom-email-nav nav-tab"><?php _e('Seller Email', 'wp-express-checkout') ?></a>
+			<a href="#" data-tab-name="buyer-email" class="wpec-custom-email-nav nav-tab nav-tab-active"><?php esc_html_e( 'Buyer Email', 'wp-express-checkout' ); ?></a>
+			<a href="#" data-tab-name="seller-email" class="wpec-custom-email-nav nav-tab"><?php esc_html_e( 'Seller Email', 'wp-express-checkout' ); ?></a>
 		</div>
 		<div data-tab-name="buyer-email" style="padding-top: 10px;">
 			<fieldset>
-				<label><input type="checkbox" name="custom_buyer_email_enabled" value="1"<?php echo ! empty( $email_enabled ) ? ' checked' : ''; ?>><?php _e('Send customized email to buyers of this product', 'wp-express-checkout')?></label>
+				<label><input type="checkbox" name="custom_buyer_email_enabled" value="1"<?php echo ! empty( $email_enabled ) ? ' checked' : ''; ?>><?php esc_html_e('Send customized email to buyers of this product', 'wp-express-checkout')?></label>
 				<br>
-				<p class="description"><?php _e( 'Enable this to send email which you can configure below to buyers of this product.', 'wp-express-checkout' ); ?></p>
-				
+				<p class="description"><?php esc_html_e( 'Enable this to send email which you can configure below to buyers of this product.', 'wp-express-checkout' ); ?></p>
+
 				<label>
-					<?php _e( 'From Email', 'wp-express-checkout' ); ?>
+					<?php esc_html_e( 'From Email', 'wp-express-checkout' ); ?>
 					<br>
 					<input type="text" name="custom_buyer_email_from" size="50" value="<?php echo esc_attr($buyer_email_from); ?>">
 				</label>
-				<p class="description"><?php _e( 'Enter from email address.', 'wp-express-checkout' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Enter from email address.', 'wp-express-checkout' ); ?></p>
 
 				<label>
-					<?php _e( 'Email Subject', 'wp-express-checkout' ); ?>
+					<?php esc_html_e( 'Email Subject', 'wp-express-checkout' ); ?>
 					<br>
 					<input type="text" name="custom_buyer_email_subj" size="50" value="<?php echo esc_attr($buyer_email_subj); ?>">
 				</label>
-				<p class="description"><?php _e( 'Enter subject of the email.', 'wp-express-checkout' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Enter subject of the email.', 'wp-express-checkout' ); ?></p>
 
 				<label>
-					<?php _e( 'Email Body', 'wp-express-checkout' ); ?>
+					<?php esc_html_e( 'Email Body', 'wp-express-checkout' ); ?>
 					<br>
                     <?php if ($is_html_email_type) {
                         add_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
                         wp_editor(
-                            html_entity_decode( $buyer_email_body ),
+                            wp_kses_post( html_entity_decode( $buyer_email_body )),
                             'custom_buyer_email_body',
                             array(
                                 'textarea_name' => "custom_buyer_email_body",
@@ -587,11 +600,11 @@ jQuery(document).ready(function($) {
                         );
                         remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
                     } else { ?>
-					    <textarea cols="70" rows="7" name="custom_buyer_email_body"><?php echo esc_attr($buyer_email_body); ?></textarea>
+					    <textarea cols="70" rows="7" name="custom_buyer_email_body"><?php echo esc_textarea($buyer_email_body); ?></textarea>
                     <?php } ?>
 				</label>
 				<p class="description">
-					<?php _e( 'This is the body of the email that will be sent to the buyer.', 'wp-express-checkout' ); ?>
+					<?php esc_html_e( 'This is the body of the email that will be sent to the buyer.', 'wp-express-checkout' ); ?>
 				</p>
 			</fieldset>
 		</div>
@@ -609,44 +622,44 @@ jQuery(document).ready(function($) {
 		?>
 		<div data-tab-name="seller-email" style="padding-top: 10px; display: none;">
 			<fieldset>
-				<label><input type="checkbox" name="custom_seller_email_enabled" value="1"<?php echo ! empty( $seller_email_enabled ) ? ' checked' : ''; ?>><?php _e('Send a customized notification email to the seller', 'wp-express-checkout') ?></label>
+				<label><input type="checkbox" name="custom_seller_email_enabled" value="1"<?php echo ! empty( $seller_email_enabled ) ? ' checked' : ''; ?>><?php esc_html_e('Send a customized notification email to the seller', 'wp-express-checkout') ?></label>
 				<br>
-				<p class="description"><?php _e( 'Enable this to send an email which you can configure below to the seller of this product.', 'wp-express-checkout' ); ?></p>
-				
-				<label>
-					<?php _e( 'Notification Email Address', 'wp-express-checkout' ); ?>
-					<br>
-					<input type="text" name="custom_seller_notification_email" size="50" value="<?php echo $seller_notification_email; ?>">
-				</label>
-				<p class="description"><?php _e( 'Enter notification email address.', 'wp-express-checkout' ); ?></p>
-				
-				<label>
-					<?php _e( 'Email Subject', 'wp-express-checkout' ); ?>
-					<br>
-					<input type="text" name="custom_seller_email_subj" size="50" value="<?php echo $seller_email_subj; ?>">
-				</label>
-				<p class="description"><?php _e( 'Enter subject of the email.', 'wp-express-checkout' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Enable this to send an email which you can configure below to the seller of this product.', 'wp-express-checkout' ); ?></p>
 
 				<label>
-					<?php _e( 'Email Body', 'wp-express-checkout' ); ?>
+					<?php esc_html_e( 'Notification Email Address', 'wp-express-checkout' ); ?>
 					<br>
-                    <?php if ($is_html_email_type) {
+					<input type="text" name="custom_seller_notification_email" size="50" value="<?php echo esc_attr( $seller_notification_email ); ?>">
+				</label>
+				<p class="description"><?php esc_html_e( 'Enter notification email address.', 'wp-express-checkout' ); ?></p>
+
+				<label>
+					<?php esc_html_e( 'Email Subject', 'wp-express-checkout' ); ?>
+					<br>
+					<input type="text" name="custom_seller_email_subj" size="50" value="<?php echo esc_attr( $seller_email_subj ); ?>">
+				</label>
+				<p class="description"><?php esc_html_e( 'Enter subject of the email.', 'wp-express-checkout' ); ?></p>
+
+				<label>
+					<?php esc_html_e( 'Email Body', 'wp-express-checkout' ); ?>
+					<br>
+                    <?php if ( $is_html_email_type ) {
                         add_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
                         wp_editor(
-                            html_entity_decode( $seller_email_body ),
+                            wp_kses_post( html_entity_decode( $seller_email_body ) ),
                             'custom_seller_email_body',
                             array(
-                                'textarea_name' => "custom_seller_email_body",
+                                'textarea_name' => 'custom_seller_email_body',
                                 'teeny'         => true,
                             )
                         );
                         remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
                     } else { ?>
-					    <textarea cols="70" rows="7" name="custom_seller_email_body"><?php echo $seller_email_body; ?></textarea>
+					    <textarea cols="70" rows="7" name="custom_seller_email_body"><?php echo esc_textarea( $seller_email_body ); ?></textarea>
                     <?php } ?>
 				</label>
 				<p class="description">
-					<?php _e( 'This is the body of the email that will be sent to the seller.', 'wp-express-checkout' ); ?>
+					<?php esc_html_e( 'This is the body of the email that will be sent to the seller.', 'wp-express-checkout' ); ?>
 				</p>
 			</fieldset>
 		</div>
@@ -728,7 +741,7 @@ jQuery(document).ready(function($) {
 			update_post_meta( $post_id, 'wpec_variations_opts', false );
 		}
 
-		$hide_amount_input = isset( $_POST['wpec_product_hide_amount_input'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_hide_amount_input'] ) ) : '';
+		$hide_amount_input = isset( $_POST['wpec_product_hide_amount_input'] ) ? sanitize_text_field( wp_unslash( $_POST['wpec_product_hide_amount_input'] ) ) : '';
 		$hide_amount_input = ! empty( $hide_amount_input ) ? true : false;
 		update_post_meta( $post_id, 'wpec_product_hide_amount_input', $hide_amount_input );
 
@@ -749,7 +762,7 @@ jQuery(document).ready(function($) {
 		update_post_meta( $post_id, 'wpec_download_count', $download_count );
 
 		// product type.
-		$product_type = isset( $_POST['wpec_product_type_radio'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_type_radio'] ) ) : '';
+		$product_type = isset( $_POST['wpec_product_type_radio'] ) ? sanitize_text_field( wp_unslash( $_POST['wpec_product_type_radio'] ) ) : '';
 		update_post_meta( $post_id, 'wpec_product_type', $product_type );
 
 		// product thumbnail.
@@ -763,13 +776,13 @@ jQuery(document).ready(function($) {
 		update_post_meta( $post_id, 'wpec_product_thankyou_page', $thank_url );
 
 		// price.
-		$price = isset( $_POST['ppec_product_price'] ) ? sanitize_text_field( stripslashes ( $_POST['ppec_product_price'] ) ) : '';
+		$price = isset( $_POST['ppec_product_price'] ) ? sanitize_text_field( wp_unslash( $_POST['ppec_product_price'] ) ) : '';
 		$price = ! empty( $price ) ? floatval( $price ) : 0;
 
 		update_post_meta( $post_id, 'ppec_product_price', $price );
 
 		// min amount.
-		$min_amount = isset( $_POST['wpec_product_min_amount'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_min_amount'] ) ) : '';
+		$min_amount = isset( $_POST['wpec_product_min_amount'] ) ? sanitize_text_field( wp_unslash( $_POST['wpec_product_min_amount'] ) ) : '';
 		$min_amount = ! empty( $min_amount ) ? floatval( $min_amount ) : 0;
 
 		update_post_meta( $post_id, 'wpec_product_min_amount', $min_amount );
@@ -788,29 +801,29 @@ jQuery(document).ready(function($) {
 		update_post_meta( $post_id, 'wpec_product_stock_items', absint( $_POST['wpec_product_stock_items'] ) );
 
 		// shipping & tax.
-		$shipping = isset( $_POST['wpec_product_shipping'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_shipping'] ) ) : '';
+		$shipping = isset( $_POST['wpec_product_shipping'] ) ? sanitize_text_field( wp_unslash( $_POST['wpec_product_shipping'] ) ) : '';
 		$shipping = ! empty( $shipping ) ? floatval( $shipping ) : $shipping;
 		update_post_meta( $post_id, 'wpec_product_shipping', $shipping );
 		// allow custom quantity.
 		$enable_shipping = filter_input( INPUT_POST, 'wpec_product_shipping_enable', FILTER_SANITIZE_NUMBER_INT );
 		update_post_meta( $post_id, 'wpec_product_shipping_enable', $enable_shipping );
 
-		$shipping_per_quantity = isset( $_POST['wpec_product_shipping_per_quantity'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_shipping_per_quantity'] ) ) : '';
+		$shipping_per_quantity = isset( $_POST['wpec_product_shipping_per_quantity'] ) ? sanitize_text_field( wp_unslash( $_POST['wpec_product_shipping_per_quantity'] ) ) : '';
 		$shipping_per_quantity = ! empty( $shipping_per_quantity ) ? floatval( $shipping_per_quantity ) : $shipping_per_quantity;
 		update_post_meta( $post_id, 'wpec_product_shipping_per_quantity', $shipping_per_quantity );
 
-		$tax = isset( $_POST['wpec_product_tax'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_tax'] ) ) : '';
+		$tax = isset( $_POST['wpec_product_tax'] ) ? sanitize_text_field( wp_unslash( $_POST['wpec_product_tax'] ) ) : '';
 		$tax = floatval( $tax );
 		$tax = empty( $tax ) ? '' : $tax;
 		update_post_meta( $post_id, 'wpec_product_tax', $tax );
 
-		$button_text = isset( $_POST['wpec_product_button_text'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_button_text'] ) ) : '';
+		$button_text = isset( $_POST['wpec_product_button_text'] ) ? sanitize_text_field( wp_unslash( $_POST['wpec_product_button_text'] ) ) : '';
 		update_post_meta( $post_id, 'wpec_product_button_text', sanitize_text_field( $button_text ) );
 
-		$button_type = isset( $_POST['wpec_product_button_type'] ) ? sanitize_text_field( stripslashes ( $_POST['wpec_product_button_type'] ) ) : '';
+		$button_type = isset( $_POST['wpec_product_button_type'] ) ? sanitize_text_field( wp_unslash( $_POST['wpec_product_button_type'] ) ) : '';
 		update_post_meta( $post_id, 'wpec_product_button_type', sanitize_text_field( $button_type ) );
 
-		update_post_meta( $post_id, 'wpec_product_coupons_setting', isset( $_POST['wpec_product_coupons_setting'] ) ? sanitize_text_field( $_POST['wpec_product_coupons_setting'] ) : '0' );
+		update_post_meta( $post_id, 'wpec_product_coupons_setting', isset( $_POST['wpec_product_coupons_setting'] ) ? sanitize_text_field( wp_unslash($_POST['wpec_product_coupons_setting']) ) : '0' );
 
 		$this->save_custom_email_data($post_id, $post, $update);
 
@@ -819,10 +832,10 @@ jQuery(document).ready(function($) {
 
 	private function save_custom_email_data( $post_id, $post, $update ) {
 		// Buyer data
-		$buyer_email_enabled = isset( $_POST['custom_buyer_email_enabled'] ) && sanitize_text_field($_POST['custom_buyer_email_enabled']) == 1 ? '1' : 0;
+		$buyer_email_enabled = isset( $_POST['custom_buyer_email_enabled'] ) && sanitize_text_field( wp_unslash($_POST['custom_buyer_email_enabled']) ) == 1 ? '1' : 0;
 		update_post_meta( $post_id, 'custom_buyer_email_enabled', $buyer_email_enabled );
 
-		$buyer_email_subj = isset( $_POST['custom_buyer_email_subj'] ) ? sanitize_text_field( stripslashes ( $_POST['custom_buyer_email_subj'] ) ) : '';
+		$buyer_email_subj = isset( $_POST['custom_buyer_email_subj'] ) ? sanitize_text_field( wp_unslash( $_POST['custom_buyer_email_subj'] ) ) : '';
 		update_post_meta( $post_id, 'custom_buyer_email_subj', $buyer_email_subj );
 
 		//Need to use 'htmlentities' on the from email address to allow the format: 'Your Name <hello@yourdomain.com>'
@@ -833,20 +846,20 @@ jQuery(document).ready(function($) {
 		update_post_meta( $post_id, 'custom_buyer_email_body', $buyer_email_body );
 
 		// Seller data
-		$seller_email_enabled = isset( $_POST['custom_seller_email_enabled'] ) && sanitize_text_field($_POST['custom_seller_email_enabled']) == 1 ? '1' : 0;
+		$seller_email_enabled = isset( $_POST['custom_seller_email_enabled'] ) && sanitize_text_field( wp_unslash($_POST['custom_seller_email_enabled'])) == 1 ? '1' : 0;
 		update_post_meta( $post_id, 'custom_seller_email_enabled', $seller_email_enabled );
 
-		$seller_email_subj = isset( $_POST['custom_seller_email_subj'] ) ? sanitize_text_field( stripslashes ( $_POST['custom_seller_email_subj'] ) ) : '';
+		$seller_email_subj = isset( $_POST['custom_seller_email_subj'] ) ? sanitize_text_field( wp_unslash( $_POST['custom_seller_email_subj'] ) ) : '';
 		update_post_meta( $post_id, 'custom_seller_email_subj', $seller_email_subj );
 
-		$seller_notification_emails = isset( $_POST['custom_seller_notification_email'] ) ? sanitize_text_field($_POST['custom_seller_notification_email']) : '';
+		$seller_notification_emails = isset( $_POST['custom_seller_notification_email'] ) ? sanitize_text_field( wp_unslash($_POST['custom_seller_notification_email']) ) : '';
         $seller_notification_emails_array = array_map('sanitize_email', explode(',' , $seller_notification_emails)); // Sanitize each email separated by comma.
         $seller_notification_emails_array = array_filter($seller_notification_emails_array); // Remove empty value.
         $seller_notification_emails_sanitized = implode(', ', $seller_notification_emails_array);
 
 		update_post_meta( $post_id, 'custom_seller_notification_email', $seller_notification_emails_sanitized );
 
-		$seller_email_body = isset($_POST['custom_seller_email_body']) ? wp_kses_post($_POST['custom_seller_email_body']) : '';
+		$seller_email_body = isset($_POST['custom_seller_email_body']) ? wp_kses_post(wp_unslash($_POST['custom_seller_email_body'])) : '';
 		update_post_meta( $post_id, 'custom_seller_email_body', $seller_email_body );
 	}
 

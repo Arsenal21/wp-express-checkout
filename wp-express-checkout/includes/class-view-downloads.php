@@ -176,7 +176,7 @@ class View_Downloads {
 		try {
 			$order = Orders::retrieve( $order_id );
 		} catch ( Exception $exc ) {
-			wp_die( $exc->getMessage() );
+			wp_die( esc_html( $exc->getMessage() ) );
 		}
 
 		$product = get_post( absint( $_GET['wpec_download_file'] ) );
@@ -205,7 +205,7 @@ class View_Downloads {
 			$var_key     = "|{$var_args['grp_id']}|{$var_args['var_id']}";
 			$var_applied = $order->get_items( 'variation' );
 			$var_applied = wp_list_pluck( $var_applied, 'meta', 'name' );
-			$variation   = wp_list_filter( $var_applied, array( 'grp_id' => $_GET['grp_id'], 'id' => $_GET['var_id'] ) );
+			$variation   = wp_list_filter( $var_applied, array( 'grp_id' => sanitize_text_field(wp_unslash($_GET['grp_id'])), 'id' => sanitize_text_field(wp_unslash($_GET['var_id'])) ) );
 			if ( ! empty( $variation ) ) {
 				$name = key( $variation );
 			}
@@ -259,7 +259,7 @@ class View_Downloads {
 		if ( isset( $_GET['var_id'] ) && isset( $_GET['grp_id'] ) ) {
 			$var_applied = $order->get_items( 'variation' );
 			$var_applied = wp_list_pluck( $var_applied, 'meta', 'name' );
-			$variation   = wp_list_filter( $var_applied, array( 'grp_id' => $_GET['grp_id'], 'id' => $_GET['var_id'] ) );
+			$variation   = wp_list_filter( $var_applied, array( 'grp_id' => sanitize_text_field(wp_unslash($_GET['grp_id'])), 'id' => sanitize_text_field(wp_unslash($_GET['var_id'])) ) );
 
 			if ( ! empty( $variation ) ) {
 				$file_name = key( $variation );
@@ -327,7 +327,7 @@ class View_Downloads {
 		if ($result !== true) {
 			$error_msg = __( 'Error occurred when trying to download the file.', 'wp-express-checkout' );
 			Logger::log( $error_msg . $result, false);
-			wp_die($error_msg . $result);
+			wp_die( esc_html($error_msg) . esc_html( $result ) );
 		}
 
 		Logger::log("Download completed successfully with no server-side errors.");
@@ -419,21 +419,22 @@ class View_Downloads {
 
 		if ( is_wp_error( $data ) ) {
 			$err = $data->get_error_message();
-			wp_die( __( 'Error occurred when trying to fetch the file using wp_remote_get().', 'wp-express-checkout' ) . ' ' . $err );
+			wp_die( esc_html__( 'Error occurred when trying to fetch the file using wp_remote_get().', 'wp-express-checkout' ) . ' ' . esc_html( $err ) );
 		}
 
 		// Check if the file exists and the response code is 200.
 		if ( $data['response']['code'] !== 200 ) {
 			if ( $data['response']['code'] === 404 ) {
 				status_header( 404 );
-				$err_msg = ( __( "Requested file could not be found (error code 404). Verify the file URL specified in the product configuration.", 'wp-express-checkout' ) );
+				$err_msg = esc_html__( "Requested file could not be found (error code 404). Verify the file URL specified in the product configuration.", 'wp-express-checkout' );
 				Logger::log( $err_msg, false );
-				wp_die( $err_msg );
+				wp_die( esc_html($err_msg) );
 			} else {
 				status_header( $data['response']['code'] );
-				$err_msg = sprintf( __( 'An HTTP error occurred during file retrieval. Error Code: %s', 'wp-express-checkout' ), $data['response']['code'] );
+				// translators: %s is https response code.
+				$err_msg = sprintf( esc_html__( 'An HTTP error occurred during file retrieval. Error Code: %s', 'wp-express-checkout' ), esc_html( $data['response']['code'] ) );
 				Logger::log( $err_msg, false );
-				wp_die( $err_msg );
+				wp_die( esc_html($err_msg) );
 			}
 		}
 

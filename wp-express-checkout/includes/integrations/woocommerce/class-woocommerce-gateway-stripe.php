@@ -32,9 +32,9 @@ class WPEC_WC_Payment_Gateway_Stripe extends WC_Payment_Gateway {
 
 	public function __construct() {
 		$this->id                 = 'wp-express-checkout-stripe';
-		$this->method_title       = __( 'WP Express Checkout - Stripe', 'wp-express-checkout' );
-		$this->method_description = __( 'Use the WP Express Checkout plugin to process payments via Stripe Checkout API.', 'wp-express-checkout' );
-		$this->notify_url         = WC()->api_request_url( 'wp_express_checkout' );
+		$this->method_title       = esc_html__( 'WP Express Checkout - Stripe', 'wp-express-checkout' );
+		$this->method_description = esc_html__( 'Use the WP Express Checkout plugin to process payments via Stripe Checkout API.', 'wp-express-checkout' );
+		$this->notify_url         = esc_url_raw( WC()->api_request_url( 'wp_express_checkout' ) );
 
 		$this->wpec = Main::get_instance();
 
@@ -100,32 +100,32 @@ class WPEC_WC_Payment_Gateway_Stripe extends WC_Payment_Gateway {
 	public function init_form_fields() {
 		$this->form_fields = array(
 			'enabled'     => array(
-				'title'    => __( 'Enable/Disable', 'wp-express-checkout' ),
+				'title'    => esc_html__( 'Enable/Disable', 'wp-express-checkout' ),
 				'type'     => 'checkbox',
-				'label'    => __( 'Enable WP Express Checkout gateway', 'wp-express-checkout' ),
+				'label'    => esc_html__( 'Enable WP Express Checkout gateway', 'wp-express-checkout' ),
 				'default'  => 'false',
 				'desc_tip' => true,
 			),
 			'title'       => array(
-				'title'       => __( 'Title', 'wp-express-checkout' ),
+				'title'       => esc_html__( 'Title', 'wp-express-checkout' ),
 				'type'        => 'text',
-				'description' => __( 'This controls the title which the user sees during checkout.', 'wp-express-checkout' ),
-				'default'     => __( 'Stripe', 'wp-express-checkout' ),
+				'description' => esc_html__( 'This controls the title which the user sees during checkout.', 'wp-express-checkout' ),
+				'default'     => esc_html__( 'Stripe', 'wp-express-checkout' ),
 				'desc_tip'    => true,
 			),
 			'description' => array(
-				'title'       => __( 'Description', 'wp-express-checkout' ),
+				'title'       => esc_html__( 'Description', 'wp-express-checkout' ),
 				'type'        => 'text',
 				'desc_tip'    => true,
-				'description' => __( 'This controls the description which the user sees during checkout.', 'wp-express-checkout' ),
-				'default'     => __( 'Pay by Stripe Checkout Session.', 'wp-express-checkout' ),
+				'description' => esc_html__( 'This controls the description which the user sees during checkout.', 'wp-express-checkout' ),
+				'default'     => esc_html__( 'Pay by Stripe Checkout Session.', 'wp-express-checkout' ),
 			),
 			'popup_title' => array(
-				'title'       => __( 'Checkout Popup Title', 'wp-express-checkout' ),
+				'title'       => esc_html__( 'Checkout Popup Title', 'wp-express-checkout' ),
 				'type'        => 'text',
 				'desc_tip'    => true,
-				'description' => __( 'This controls the popup window title which the user sees during checkout.', 'wp-express-checkout' ),
-				'default'     => __( 'Stripe Express Checkout', 'wp-express-checkout' ),
+				'description' => esc_html__( 'This controls the popup window title which the user sees during checkout.', 'wp-express-checkout' ),
+				'default'     => esc_html__( 'Stripe Express Checkout', 'wp-express-checkout' ),
 			),
 		);
 	}
@@ -204,7 +204,7 @@ class WPEC_WC_Payment_Gateway_Stripe extends WC_Payment_Gateway {
 		} catch ( ApiErrorException $e ) {
 			self::log( 'Stripe API error: ' . $e->getMessage(), WC_Log_Levels::ERROR );
 
-			throw new \Exception( __( 'Payment provider error. Please try again.', 'wp-express-checkout' ) );
+			throw new \Exception( esc_html__( 'Payment provider error. Please try again.', 'wp-express-checkout' ) );
 
 		} catch ( \Exception $e ) {
 			self::log( 'General error: ' . $e->getMessage(), WC_Log_Levels::ERROR );
@@ -239,7 +239,7 @@ class WPEC_WC_Payment_Gateway_Stripe extends WC_Payment_Gateway {
 	}
 
 	public static function check_stripe_ipn() {
-		$checkout_session_id = isset( $_GET['csid'] ) ? $_GET['csid'] : '';
+		$checkout_session_id = isset( $_GET['csid'] ) ? sanitize_text_field(wp_unslash($_GET['csid'])) : '';
 
 		if ( empty( $checkout_session_id ) ) {
 			return;

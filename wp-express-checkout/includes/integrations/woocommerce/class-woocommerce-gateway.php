@@ -28,9 +28,9 @@ class WPEC_WC_Payment_Gateway_PayPal extends WC_Payment_Gateway {
 
 	public function __construct() {
 		$this->id                 = 'wp-express-checkout';
-		$this->method_title       = __( 'WP Express Checkout - PayPal', 'wp-express-checkout' );
-		$this->method_description = __( 'Use the WP Express Checkout plugin to process payments via PayPal Checkout API.', 'wp-express-checkout' );
-		$this->notify_url         = WC()->api_request_url( 'wp_express_checkout' );
+		$this->method_title       = esc_html__( 'WP Express Checkout - PayPal', 'wp-express-checkout' );
+		$this->method_description = esc_html__( 'Use the WP Express Checkout plugin to process payments via PayPal Checkout API.', 'wp-express-checkout' );
+		$this->notify_url         = esc_url_raw( WC()->api_request_url( 'wp_express_checkout' ) );
 
 		$this->wpec = Main::get_instance();
 
@@ -92,32 +92,32 @@ class WPEC_WC_Payment_Gateway_PayPal extends WC_Payment_Gateway {
 	public function init_form_fields() {
 		$this->form_fields = array(
 			'enabled'         => array(
-				'title'    => __( 'Enable/Disable', 'wp-express-checkout' ),
+				'title'    => esc_html__( 'Enable/Disable', 'wp-express-checkout' ),
 				'type'     => 'checkbox',
-				'label'    => __( 'Enable WP Express Checkout gateway', 'wp-express-checkout' ),
+				'label'    => esc_html__( 'Enable WP Express Checkout gateway', 'wp-express-checkout' ),
 				'default'  => 'false',
 				'desc_tip' => true,
 			),
 			'title'           => array(
-				'title'       => __( 'Title', 'wp-express-checkout' ),
+				'title'       => esc_html__( 'Title', 'wp-express-checkout' ),
 				'type'        => 'text',
-				'description' => __( 'This controls the title which the user sees during checkout.', 'wp-express-checkout' ),
-				'default'     => __( 'PayPal', 'wp-express-checkout' ),
+				'description' => esc_html__( 'This controls the title which the user sees during checkout.', 'wp-express-checkout' ),
+				'default'     => esc_html__( 'PayPal', 'wp-express-checkout' ),
 				'desc_tip'    => true,
 			),
 			'description'     => array(
-				'title'       => __( 'Description', 'wp-express-checkout' ),
+				'title'       => esc_html__( 'Description', 'wp-express-checkout' ),
 				'type'        => 'text',
 				'desc_tip'    => true,
-				'description' => __( 'This controls the description which the user sees during checkout.', 'wp-express-checkout' ),
-				'default'     => __( 'Pay by PayPal Express Form.', 'wp-express-checkout' ),
+				'description' => esc_html__( 'This controls the description which the user sees during checkout.', 'wp-express-checkout' ),
+				'default'     => esc_html__( 'Pay by PayPal Express Form.', 'wp-express-checkout' ),
 			),
 			'popup_title'     => array(
-				'title'       => __( 'Checkout Popup Title', 'wp-express-checkout' ),
+				'title'       => esc_html__( 'Checkout Popup Title', 'wp-express-checkout' ),
 				'type'        => 'text',
 				'desc_tip'    => true,
-				'description' => __( 'This controls the popup window title which the user sees during checkout.', 'wp-express-checkout' ),
-				'default'     => __( 'PayPal Express Checkout', 'wp-express-checkout' ),
+				'description' => esc_html__( 'This controls the popup window title which the user sees during checkout.', 'wp-express-checkout' ),
+				'default'     => esc_html__( 'PayPal Express Checkout', 'wp-express-checkout' ),
 			),
 		);
 	}
@@ -128,7 +128,7 @@ class WPEC_WC_Payment_Gateway_PayPal extends WC_Payment_Gateway {
 	}
 
 	public function payment_fields() {
-		echo $this->get_option( 'description' );
+		echo wp_kses_post( $this->get_option( 'description' ) );
 
 		if ( ! is_ajax() ) {
 			return;
@@ -146,7 +146,7 @@ class WPEC_WC_Payment_Gateway_PayPal extends WC_Payment_Gateway {
         <div class="wpec-wc-button-container"></div>
         <script>
             jQuery( function( $ ) {
-                const wp_ajax_url = "<?php echo admin_url( 'admin-ajax.php' ); ?>";
+                const wp_ajax_url = "<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>";
                 $( '.checkout.woocommerce-checkout' ).on( 'checkout_place_order_success', function( e, result ) {
                     const get_payment_method = function() {
                         const selectedPaymentMethodInput = document.querySelector('#payment input[name="payment_method"]:checked');
@@ -167,7 +167,7 @@ class WPEC_WC_Payment_Gateway_PayPal extends WC_Payment_Gateway {
                         body: new URLSearchParams({
                             action: 'wpec_wc_generate_button',
                             order_id: order_id,
-                            modal_title: "<?php echo $this->get_option( 'popup_title' ); ?>",
+                            modal_title: "<?php echo esc_js( $this->get_option( 'popup_title' ) ); ?>",
                             nonce: "<?php echo esc_js( wp_create_nonce( 'wpec-wc-render-button-nonce' ) ); ?>",
                         }).toString()
                     }).then((response) => {

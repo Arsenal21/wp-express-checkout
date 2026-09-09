@@ -12,7 +12,7 @@ class Logger {
 
 		$enable_debug_logging = $wpec_plugin->get_setting( 'enable_debug_logging' );
 		if ( $enable_debug_logging ) {
-			file_put_contents( self::get_file_name(), date( 'Y-m-d H:i:s', time() ) . ': [' . ( $success === true ? 'SUCCESS' : 'FAIL' ) . '] ' . $msg . "\r\n", FILE_APPEND );
+			file_put_contents( self::get_file_name(), wp_date( 'Y-m-d H:i:s', time() ) . ': [' . ( $success === true ? 'SUCCESS' : 'FAIL' ) . '] ' . $msg . "\r\n", FILE_APPEND );
 		}
 	}
 
@@ -28,7 +28,7 @@ class Logger {
 
 		$output = '';
 		//Timestamp it
-		$output .= date( 'Y-m-d H:i:s', time() ) . ': [';
+		$output .= wp_date( 'Y-m-d H:i:s', time() ) . ': [';
 
 		//Flag success or failure
 		$output .= ($success === true) ? 'SUCCESS' : 'FAIL';
@@ -50,7 +50,7 @@ class Logger {
 	}
 
 	static function reset_log() {
-		file_put_contents( self::get_file_name(), date( 'Y-m-d H:i:s', time() ) . ': Log has been reset.' . "\r\n" );
+		file_put_contents( self::get_file_name(), wp_date( 'Y-m-d H:i:s', time()) . ': Log has been reset.' . "\r\n" );
 		file_put_contents( self::get_file_name(), '-------------------------------------------------------' . "\r\n", FILE_APPEND );
 	}
 

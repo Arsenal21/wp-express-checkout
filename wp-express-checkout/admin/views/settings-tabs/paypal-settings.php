@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Products;
 
@@ -33,7 +37,7 @@ $wpec_pp_settings_subtab = array(
 ?>
 <h3 class="nav-tab-wrapper">
     <?php
-    $current_subtab = isset( $_GET['subtab'] ) ? sanitize_text_field( $_GET['subtab'] ) : '';
+    $current_subtab = isset( $_GET['subtab'] ) ? sanitize_text_field( wp_unslash($_GET['subtab']) ) : '';
     if (empty($current_subtab)){
         $current_subtab = 'general';
     }
@@ -42,7 +46,7 @@ $wpec_pp_settings_subtab = array(
         ?>
         <a
             class="nav-tab<?php echo esc_attr( $class ); ?>"
-            href="<?php echo esc_url( WPEC_MENU_PARENT_SLUG . '&page=ppec-settings-page&action='.$_GET['action']. '&subtab=' . $subtab ); ?>"
+            href="<?php echo esc_url( add_query_arg( array( 'page' => 'ppec-settings-page', 'action' => isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '', 'subtab' => $subtab ), WPEC_MENU_PARENT_SLUG ) ); ?>"
         >
             <?php echo esc_html( $subtab_name ); ?>
         </a>
@@ -96,7 +100,8 @@ if ( ! in_array( 'card', $disabled_funding ) ) {
 	}
 }
 $script_url = add_query_arg( $args, 'https://www.paypal.com/sdk/js?client-id=test' );
-printf( '<script src="%s"></script>', $script_url );
+
+printf( '<script src="%s"></script>', esc_url( $script_url ) );  // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
 
 ?>
 

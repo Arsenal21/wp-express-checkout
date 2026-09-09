@@ -1,4 +1,11 @@
 <?php
+
+use WP_Express_Checkout\Utils;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /**
  * The product item template 3
  *
@@ -27,10 +34,10 @@ $wpec_sc_args["button_text"] = __( "Buy Now" , "wp-express-checkout" );
         <div style="clear:both;"></div>
         
         <div class="wpec-price-container <?php echo esc_attr( $wpec_sc_args['price_class'] );?>">
-            <?php echo $wpec_shortcode->generate_price_tag( $wpec_sc_args ); ?>
+            <?php echo wp_kses($wpec_shortcode->generate_price_tag( $wpec_sc_args ), Utils::wp_kses_post_tags_with_form()); ?>
         </div>
         <div class="wpec-product-buy-button">
-            <?php echo $wpec_shortcode->generate_express_checkout_buttons( $wpec_sc_args ); ?>
+            <?php echo $wpec_shortcode->generate_express_checkout_buttons( $wpec_sc_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         </div>
     </div>
 </div>

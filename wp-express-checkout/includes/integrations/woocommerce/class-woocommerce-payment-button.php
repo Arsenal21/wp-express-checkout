@@ -24,7 +24,7 @@ class WooCommerce_Payment_Button {
 	 * This is for classic "woocommerce_checkout" shortcode.
 	 */
 	public function wpec_generate_woo_payment_button() {
-		$modal_title = isset($_POST['modal_title']) ? sanitize_text_field( $_POST['modal_title'] ) : '';
+		$modal_title = isset($_POST['modal_title']) ? sanitize_text_field( wp_unslash($_POST['modal_title']) ) : '';
 		$btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
 		$nonce = wp_create_nonce( 'wpec-wc-pp-payment-ajax-nonce' );
 		$is_live = $this->wpec->get_setting( 'is_live' );
@@ -37,6 +37,7 @@ class WooCommerce_Payment_Button {
 		}
 
 		if ( empty( $client_id ) ) {
+            /* translators: %s is client ID. */
 			$err_msg = sprintf( __( "Please enter %s Client ID in the settings.", 'wp-express-checkout' ), $env );
 			$err     = $this->show_err_msg( $err_msg, 'client-id' );
 
@@ -78,7 +79,7 @@ class WooCommerce_Payment_Button {
 			),
 			'thank_you_url'   => $this->order->get_checkout_order_received_url(),
 			'modal_title'     => $modal_title,
-			'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
+			'price_class'     => 'wpec-price-' . substr( sha1( time() . wp_rand( 0, 1000 ) ), 0, 10 ),
 		);
 
 		// Logger::log( 'PayPal button generation data: ', true ); // Debug purpose.
@@ -150,7 +151,7 @@ class WooCommerce_Payment_Button {
                         <div class="wp-ppec-button-container">
 
                             <div class="wpec-price-container <?php echo esc_attr( $args['price_class'] ); ?>">
-								<?php echo Shortcodes::get_instance()->generate_price_tag( $args ); ?>
+								<?php echo wp_kses_post(Shortcodes::get_instance()->generate_price_tag( $args )); ?>
                             </div>
 
                             <div id="place-order-<?php echo esc_attr( $args['id'] );?>" style="display:none;">
@@ -185,7 +186,7 @@ class WooCommerce_Payment_Button {
 	}
 
     public function wpec_prepare_woo_payment_button_data() {
-        $modal_title = isset($_POST['modal_title']) ? sanitize_text_field( $_POST['modal_title'] ) : '';
+        $modal_title = isset($_POST['modal_title']) ? sanitize_text_field( wp_unslash($_POST['modal_title']) ) : '';
         $btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
         $nonce = wp_create_nonce( 'wpec-wc-pp-payment-ajax-nonce' );
         $is_live = $this->wpec->get_setting( 'is_live' );
@@ -198,6 +199,7 @@ class WooCommerce_Payment_Button {
         }
 
         if ( empty( $client_id ) ) {
+            /* translators: %s is client ID. */
             $err_msg = sprintf( __( "Please enter %s Client ID in the settings.", 'wp-express-checkout' ), $env );
             $err     = $this->show_err_msg( $err_msg, 'client-id' );
 
@@ -241,7 +243,7 @@ class WooCommerce_Payment_Button {
             ),
             'thank_you_url'   => $this->order->get_checkout_order_received_url(),
             'modal_title'     => $modal_title,
-            'price_class'     => 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
+            'price_class'     => 'wpec-price-' . substr( sha1( time() . wp_rand( 0, 1000 ) ), 0, 10 ),
         );
 
         return $data;

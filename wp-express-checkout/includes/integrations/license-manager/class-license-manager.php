@@ -87,10 +87,10 @@ class License_Manager {
 		//Lets check if any product specific expiry date is set
 		if ( ! empty ( $prod_spec_expiry_days ) ) {
 			//Found product specific SLM config data.
-			$slm_date_of_expiry = date( 'Y-m-d', strtotime( '+' . $prod_spec_expiry_days . ' days' ) );
+			$slm_date_of_expiry = wp_date( 'Y-m-d', strtotime( '+' . $prod_spec_expiry_days . ' days' ) );
 		} else {
 			//Use the default value (1 year from today).
-			$slm_date_of_expiry = date( 'Y-m-d', strtotime( '+1 year' ) );
+			$slm_date_of_expiry = wp_date( 'Y-m-d', strtotime( '+1 year' ) );
 		}
 
 		$fields = array();
@@ -102,7 +102,7 @@ class License_Manager {
 		$fields['company_name'] = ''; // Not implemented
 		$fields['txn_id'] = isset( $transaction_id ) ? $transaction_id : '';
 		$fields['max_allowed_domains'] = $max_domains;
-		$fields['date_created'] = date( "Y-m-d" ); //Today's date
+		$fields['date_created'] = wp_date( "Y-m-d" ); //Today's date
 		$fields['date_expiry'] = $slm_date_of_expiry;
 		$fields['product_ref'] = $retrieved_product->ID; //WPEC product ID
 		$fields['subscr_id'] = isset( $payer['payer_id'] ) ? $payer['payer_id'] : '';

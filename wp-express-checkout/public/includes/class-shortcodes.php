@@ -144,7 +144,7 @@ class Shortcodes {
 				'variations'      => array(),
 				'stock_enabled'   => $product->is_stock_control_enabled(),
 				'stock_items'     => $product->get_stock_items(),
-				'price_class'     => isset( $atts['price_class'] ) ? $atts['price_class'] : 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
+				'price_class'     => isset( $atts['price_class'] ) ? $atts['price_class'] : 'wpec-price-' . substr( sha1( time() . wp_rand( 0, 1000 ) ), 0, 10 ),
 			),
 			$args
 		);
@@ -330,6 +330,7 @@ class Shortcodes {
 		}
 
 		if ( empty( $client_id ) ) {
+            // translators: %s is environment mode.
 			$err_msg = sprintf( __( "Please enter %s Client ID in the settings.", 'wp-express-checkout' ), $env );
 			$err     = $this->show_err_msg( $err_msg, 'client-id' );
 			return $err;
@@ -501,7 +502,7 @@ class Shortcodes {
 			return $error_message;
 		}
 
-		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'thank_you_url' . $_GET['order_id'] ) ) {
+		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field(wp_unslash($_GET['_wpnonce'])), 'thank_you_url' . sanitize_text_field(wp_unslash($_GET['order_id'])) ) ) {
 			$error_message .= '<p>' . __( 'This page is used to show the transaction result after a customer makes a payment.', 'wp-express-checkout' ) . '</p>';
 			$error_message .= '<p>' . __( 'It will dynamically show the order details to the customers when they are redirected here after a payment. Do not access this page directly.', 'wp-express-checkout' ) . '</p>';
 			$error_message .= $this->show_err_msg( __( 'Error! Nonce value is missing in the URL or Nonce verification failed.', 'wp-express-checkout' ), 'nonce-verification' );
@@ -519,6 +520,7 @@ class Shortcodes {
         $status = $order->get_data( 'state' );
 
 		if ( ! Utils::is_completed_status($status) ) {
+            // translators: %s is payment status.
 			return $this->show_err_msg( sprintf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $order->get_data( 'state' ) ), 'order-state' );
 		}
 
@@ -638,6 +640,7 @@ class Shortcodes {
 	public function shortcode_wpec_show_all_products($params=array()) {
 		if (isset($params['template'])){
 			$doc_link = '<a href="https://wp-express-checkout.com/view-and-edit-your-shop-products-page/" target="_blank">'.__('documentation', 'wp-express-checkout').'</a>';
+            // translators: %s is plugin's documentation link.
 			return $this->show_err_msg(sprintf(__("The 'template' parameter is not supported for this shortcode. Please check the plugin's %s for a list of available parameters and options." , "wp-express-checkout") , $doc_link));
 		}
 
@@ -654,7 +657,7 @@ class Shortcodes {
 		);
 
 		//if user has changed sort by from UI
-		$sort_by = isset( $_GET['wpec-sortby'] ) ? sanitize_text_field( stripslashes ( $_GET['wpec-sortby'] ) ) : '';
+		$sort_by = isset( $_GET['wpec-sortby'] ) ? sanitize_text_field( wp_unslash( $_GET['wpec-sortby'] ) ) : '';
 
 		$page = filter_input( INPUT_GET, 'wpec_page', FILTER_SANITIZE_NUMBER_INT );
 
@@ -681,7 +684,7 @@ class Shortcodes {
 		
 		//handle search
 
-		$search = isset( $_GET['wpec_search'] ) ? sanitize_text_field( stripslashes ( $_GET['wpec_search'] ) ) : '';
+		$search = isset( $_GET['wpec_search'] ) ? sanitize_text_field( wp_unslash( $_GET['wpec_search'] ) ) : '';
 
 		$search = empty( $search ) ? false : $search;
 
@@ -715,6 +718,7 @@ class Shortcodes {
 	public function shortcode_wpec_show_products_from_category($params = array()) {
 		if (isset($params['template'])){
             $doc_link = '<a href="https://wp-express-checkout.com/using-product-categories-and-tags/" target="_blank">'.__('documentation', 'wp-express-checkout').'</a>';
+            // translators: %s is plugin's documentation link.
 			return $this->show_err_msg(sprintf(__("The 'template' parameter is not supported for this shortcode. Please check the plugin's %s for a list of available parameters and options." , "wp-express-checkout") , $doc_link));
 		}
 
@@ -783,7 +787,7 @@ class Shortcodes {
 		);
 
 		//handle search
-		$search = isset( $_GET['wpec_search'] ) ? sanitize_text_field( stripslashes ( $_GET['wpec_search'] ) ) : '';
+		$search = isset( $_GET['wpec_search'] ) ? sanitize_text_field( wp_unslash( $_GET['wpec_search'] ) ) : '';
 
 		$search = empty($search) ? false : $search;
 

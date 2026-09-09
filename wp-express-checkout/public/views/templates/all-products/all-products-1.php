@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 // The display-all-products-from-category template. Used in the shortcode [wpec_show_products_from_category]
 
 /* @var $args array Template arguments */
@@ -42,8 +47,8 @@ $sort_by = isset( $args['sort_by'] ) ? $args['sort_by'] : '';
         <div id="wpec-search-wrapper">
             <form id="wpec-search-form" method="GET">
                 <div class="wpec-listing-search-field">
-                    <input type="text" class="wpec-search-input" name="wpec_search" value="<?php echo esc_attr( $search_term ); ?>" placeholder="<?php _e( 'Search', 'wp-express-checkout' ); ?>...">
-                    <button type="submit" class="wpec-search-button" title="<?php _e( 'Search', 'wp-express-checkout' ) ?>">
+                    <input type="text" class="wpec-search-input" name="wpec_search" value="<?php echo esc_attr( $search_term ); ?>" placeholder="<?php esc_html_e( 'Search', 'wp-express-checkout' ); ?>...">
+                    <button type="submit" class="wpec-search-button" title="<?php esc_html_e( 'Search', 'wp-express-checkout' ) ?>">
                         <span class="dashicons dashicons-search"></span>
                     </button>
                 </div>
@@ -51,7 +56,7 @@ $sort_by = isset( $args['sort_by'] ) ? $args['sort_by'] : '';
         </div>
         <?php if ( ! empty( $search ) ) { ?>
             <div class="wpec-search-res-text">
-                <?php echo wp_kses_post( $search_result_text ) ?> <a href="<?php echo esc_url( $clear_search_url ) ?>"><?php _e( 'Clear search', 'wp-express-checkout' ) ?></a>
+                <?php echo wp_kses_post( $search_result_text ) ?> <a href="<?php echo esc_url( $clear_search_url ) ?>"><?php esc_html_e( 'Clear search', 'wp-express-checkout' ) ?></a>
             </div>
         <?php } ?>
 		<?php } ?>
@@ -110,7 +115,7 @@ $sort_by = isset( $args['sort_by'] ) ? $args['sort_by'] : '';
                         <div class="wpec-tpl-ap-product-name"><?php echo esc_attr( get_the_title() ); ?></div>
                         <div class="wpec-view-product-btn">
                             <a href="<?php echo esc_url( get_permalink() ) ?>" class="wpec-view-product-lnk">
-                                <button><?php _e( 'View Item', 'wp-express-checkout' ); ?></button>
+                                <button><?php esc_html_e( 'View Item', 'wp-express-checkout' ); ?></button>
                             </a>
                         </div>
                     </div>
@@ -128,9 +133,9 @@ $sort_by = isset( $args['sort_by'] ) ? $args['sort_by'] : '';
 			echo '<div class="wpec-pagination"><ul>';
 			while ( $i <= $pages ) {
 				if ( $i != $page ) {
-					echo '<li><a href="' . esc_url( add_query_arg( 'wpec_page', $i ) ) . '">' . $i . '</a></li>';
+					echo '<li><a href="' . esc_url( add_query_arg( 'wpec_page', $i ) ) . '">' . esc_attr($i) . '</a></li>';
 				} else {
-					echo '<li><span>' . $i . '</span></li>';
+					echo '<li><span>' . esc_attr($i) . '</span></li>';
 				}
 
 				$i++;

@@ -453,7 +453,8 @@ class Payment_Processor {
 		$status = $this->get_transaction_status( $payment );
 		if ( strtoupper( $status ) !== 'COMPLETED' ) {
 			// payment is unsuccessful.
-			$this->send_error( sprintf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), $status ), 3008 );
+			/* translators: %s is payment status */
+			$this->send_error( sprintf( __( 'Payment is not approved. Status: %s', 'wp-express-checkout' ), esc_attr($status) ), 3008 );
 		}
 	}
 

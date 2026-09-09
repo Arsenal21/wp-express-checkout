@@ -67,14 +67,14 @@ class Orders_List {
 			</style>
 
 			<div class="alignleft actions">
-				<input type="text" autocomplete="off" id="order_date_from" name="order_date_from" class="" value="<?php echo isset($_GET['order_date_from']) ? esc_attr($_GET['order_date_from']) : ''; ?>" placeholder="<?php _e('From Date'); ?>" />
-				<label for="order_date_to" class="screen-reader-text"><?php _e('Filter orders by date to'); ?></label>
-				<input type="text" autocomplete="off" id="order_date_to" name="order_date_to" class="" value="<?php echo isset($_GET['order_date_to']) ? esc_attr($_GET['order_date_to']) : ''; ?>" placeholder="<?php _e('To Date'); ?>" />
-				<input type="hidden" name="wpec_order_export_nonce" value="<?php echo wp_create_nonce( 'wpec_order_export_nonce' ); ?>">
-				<input type="submit" id="wpec_order_export_button" name="wpec_order_export_button" class="button button-primary" value="<?php _e('Export Orders'); ?>">
+                <input type="text" autocomplete="off" id="order_date_from" name="order_date_from" class="" value="<?php echo isset( $_GET['order_date_from'] ) ? esc_attr($_GET['order_date_from']) : ''; ?>" placeholder="<?php esc_attr_e( 'From Date', 'wp-express-checkout' ); ?>" />
+                <label for="order_date_to" class="screen-reader-text"><?php esc_html_e( 'Filter orders by date to', 'wp-express-checkout' ); ?></label>
+                <input type="text" autocomplete="off" id="order_date_to" name="order_date_to" class="" value="<?php echo isset( $_GET['order_date_to'] ) ? esc_attr($_GET['order_date_to']) : ''; ?>" placeholder="<?php esc_attr_e( 'To Date', 'wp-express-checkout' ); ?>" />
+                <input type="hidden" name="wpec_order_export_nonce" value="<?php echo esc_attr( wp_create_nonce( 'wpec_order_export_nonce' ) ); ?>">
+                <input type="submit" id="wpec_order_export_button" name="wpec_order_export_button" class="button button-primary" value="<?php esc_attr_e( 'Export Orders', 'wp-express-checkout' ); ?>">
 
                 <div id="wpec_before_export_orders_submit">
-                    <?php do_action('wpec_before_export_orders_submit'); ?>
+                    <?php do_action( 'wpec_before_export_orders_submit' ); ?>
                 </div>
 			</div>
 		<?php
@@ -84,7 +84,8 @@ class Orders_List {
 	public static function wpec_order_export( $query ) {
 		if ($query->is_main_query() && isset( $_GET['wpec_order_export_button'] )
 		 && 'ppdgorder' === $query->query_vars['post_type']
-		 && wp_verify_nonce( $_GET['wpec_order_export_nonce'], 'wpec_order_export_nonce' ) ) {		
+		 && isset( $_GET['wpec_order_export_nonce'] )
+		 && wp_verify_nonce( wp_unslash( $_GET['wpec_order_export_nonce'] ), 'wpec_order_export_nonce' ) ) {
 
 			$query->set( 'post_type', 'ppdgorder' );
 			$query->set( 'post_status', 'publish' );
@@ -92,7 +93,7 @@ class Orders_List {
 			$query->set( 'posts_per_page', -1 );
 
 			// Check if date range is set
-			if (isset($_REQUEST['order_date_from'], $_REQUEST['order_date_to'])) {
+			if ( isset( $_GET['order_date_from'], $_GET['order_date_to'] ) ) {
 			$query->set(
 				'date_query',
 				array(
@@ -112,12 +113,13 @@ class Orders_List {
 			// Get the orders
 			$orders = get_posts( $args );
 						
-			$filename = 'orders-' . date('Ymd-his') . '.csv';
-			header('Content-Type: text/csv; charset=utf-8');
-			header('Content-Disposition: attachment; filename=' . $filename);
-			
-			// Create the CSV
-			$fp = fopen('php://output', 'w');
+			$filename = 'orders-' . gmdate( 'Ymd-his' ) . '.csv';
+			header( 'Content-Type: text/csv; charset=utf-8' );
+			header( 'Content-Disposition: attachment; filename=' . $filename );
+
+			// Create the CSV.
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- writing to php://output for a one-time CSV export.
+			$fp = fopen( 'php://output', 'w' );
 
 			// Headers
 			$headers = array(
@@ -199,7 +201,8 @@ class Orders_List {
 					fputcsv($fp, $data);
 			}
 
-			fclose($fp);
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closing the php://output stream used for the CSV export.
+			fclose( $fp );
 			exit;
 		}
 	}
@@ -209,8 +212,8 @@ class Orders_List {
 		global $typenow;
 		if ($typenow === 'ppdgorder' && isset($_GET['order_date_from']) && isset($_GET['order_date_to'])) {
 			
-			$from_date = sanitize_text_field($_GET['order_date_from']);
-			$to_date = sanitize_text_field($_GET['order_date_to']);
+			$from_date = sanitize_text_field(wp_unslash($_GET['order_date_from']));
+			$to_date = sanitize_text_field(wp_unslash($_GET['order_date_to']));
 			$date_query = array(
 				array(
 					'after' => $from_date,
@@ -285,14 +288,14 @@ class Orders_List {
 
 			case 'order' :
 				if ( current_user_can( 'edit_post', $order->get_id() ) ) {
-					echo '<a href="' . get_edit_post_link( $post_id ) . '">' . $order->get_id() . '</a>';
+                	echo '<a href="' . esc_url( get_edit_post_link( $post_id ) ) . '">' . esc_html( $order->get_id() ) . '</a>';
 				} else {
-					echo $order->get_id();
+                	echo esc_html( $order->get_id() );
 				}
 				break;
 
 			case 'trans_id' :
-				echo $order->get_capture_id();
+                echo esc_html( $order->get_capture_id() );
 				break;
 
 			case 'customer':
@@ -305,22 +308,22 @@ class Orders_List {
 				// if ( $user ) {
 				// 	$output .= ' (' . $user->display_name . ')';
 				// }
-                echo $output;
+                echo esc_html( $output );
 				echo '<br>';
-				echo $order->get_ip_address();
+                echo esc_html( $order->get_ip_address() );
 				break;
 
 			case 'total':
 				$currency = $order->get_currency();
 				if ( ! empty( $currency ) ) {
-					echo Utils::price_format( $order->get_total(), $order->get_currency() );
+					echo esc_html( Utils::price_format( $order->get_total(), $order->get_currency() ) );
 				} else {
-					echo Utils::price_format( $order->get_total() );
+					echo esc_html( Utils::price_format( $order->get_total() ) );
 				}
 				break;
 
 			case 'status':
-				echo $order->get_display_status();
+				echo wp_kses_post( $order->get_display_status() );
 				break;
 
 			case 'order_date':
@@ -335,12 +338,14 @@ class Orders_List {
 
 					$time_diff = time() - $time;
 
-					if ( $time_diff > 0 && $time_diff < 24*60*60 )
+					if ( $time_diff > 0 && $time_diff < 24 * 60 * 60 ) {
+						/* translators: %s is a human-readable time difference, e.g. "2 hours". */
 						$h_time = sprintf( __( '%s ago', 'wp-express-checkout' ), human_time_diff( $time ) );
-					else
+					} else {
 						$h_time = mysql2date( _x( 'Y/m/d', 'Order Date Format', 'wp-express-checkout' ), $m_time );
+					}
 				}
-				echo '<abbr title="' . $t_time . '">' . $h_time . '</abbr>';
+				echo '<abbr title="' . esc_attr( $t_time ) . '">' . esc_html( $h_time ) . '</abbr>';
 
 				break;
 		}

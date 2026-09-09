@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /**
  * Variables from parent scope:
  *
@@ -17,7 +22,7 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
 <div id="wpec-manual-checkout-section-<?php echo esc_attr( $manual_checkout_button_id ); ?>">
     <form class="wpec-manual-checkout-form" id="wpec-manual-checkout-form-<?php echo esc_attr( $manual_checkout_button_id ); ?>" style="display:none;">
         <?php if ( ! empty( $manual_checkout_instructions ) ) {
-            echo wpautop(wp_kses_post( $manual_checkout_instructions ));
+            echo wp_kses_post(wpautop( $manual_checkout_instructions ));
         } ?>
 
         <div id="" class="wpec_billing_container">
@@ -208,6 +213,6 @@ $manual_checkout_hide_country_field = \WP_Express_Checkout\Main::get_instance()-
         </div>
     </form>
     <button class="wpec-place-order-btn" id="wpec-proceed-manual-checkout-<?php echo esc_attr( $manual_checkout_button_id ) ?>">
-        <?php esc_html_e( ! empty( $manual_checkout_btn_text ) ? $manual_checkout_btn_text : __( 'Proceed to Manual Checkout', 'wp-express-checkout' ) ); ?>
+        <?php echo esc_html( ! empty( $manual_checkout_btn_text ) ? $manual_checkout_btn_text : __( 'Proceed to Manual Checkout', 'wp-express-checkout' ) ); ?>
     </button>
 </div>

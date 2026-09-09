@@ -109,7 +109,7 @@ class Payment_Processor_Free extends Payment_Processor {
 	 * @return string
 	 */
 	protected function get_transaction_id( $payment ) {
-		return substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 20 );
+		return substr( sha1( time() . wp_rand( 0, 1000 ) ), 0, 20 );
 	}
 
 	/**
@@ -119,7 +119,7 @@ class Payment_Processor_Free extends Payment_Processor {
 	 * @return string
 	 */
 	protected function get_capture_id( $payment ) {
-		return substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 20 );
+		return substr( sha1( time() . wp_rand( 0, 1000 ) ), 0, 20 );
 	}
 
 	/**

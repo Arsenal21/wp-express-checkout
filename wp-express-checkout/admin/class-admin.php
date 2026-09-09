@@ -106,7 +106,7 @@ class Admin {
 			delete_transient( 'ppec_admin_msg_arr' );
 			$tpl = '<div class="notice notice-%1$s%3$s"><p>%2$s</p></div>';
 			foreach ( $msg_arr as $msg ) {
-				echo sprintf( $tpl, $msg['type'], $msg['text'], $msg['dism'] === true ? ' is-dismissible' : '' );
+				echo wp_kses_post( sprintf( $tpl, esc_attr( $msg['type'] ), esc_html( $msg['text'] ), $msg['dism'] === true ? ' is-dismissible' : '' ) );
 			}
 		}
 	}
@@ -152,7 +152,7 @@ class Admin {
 
 		//scripts & style for order export feature / datepicker		
 		if ( "edit-".Orders::PTYPE === $screen->id ) {
-			wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.min.css', array(), '1.11.4' );
+			wp_enqueue_style( 'jquery-ui', 'https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.min.css', array(), '1.11.4' ); // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent
 			wp_enqueue_script( 'jquery-ui-datepicker' );
 		}
 	}
@@ -225,7 +225,7 @@ class Admin {
 
 		/* Add the sections */
 		// General Settings Tab Sections
-		add_settings_section( 'ppdg-general-settings-arbitrary-section', __( '', 'wp-express-checkout' ), array( $this, 'handle_general_settings_arbitrary_section' ), $this->plugin_slug );
+		add_settings_section( 'ppdg-general-settings-arbitrary-section', '', array( $this, 'handle_general_settings_arbitrary_section' ), $this->plugin_slug );
 
 		add_settings_section( 'ppdg-global-section', __( 'Global Settings', 'wp-express-checkout' ), null, $this->plugin_slug );
 		add_settings_section( 'ppdg-form-section', __( 'Checkout Form', 'wp-express-checkout' ), null, $this->plugin_slug );
@@ -234,7 +234,7 @@ class Admin {
 		add_settings_section( 'ppdg-debug-logging-section', __( 'Debug Logging', 'wp-express-checkout' ), array( $this, 'debug_logging_note' ), $this->plugin_slug );
 
 		// PayPal Settings Tab Sections
-		add_settings_section( 'ppdg-paypal-settings-arbitrary-section', __( '', 'wp-express-checkout' ), array( $this, 'handle_paypal_settings_arbitrary_section' ), $this->plugin_slug . '-pp-arbitrary-settings' );
+		add_settings_section( 'ppdg-paypal-settings-arbitrary-section', '', array( $this, 'handle_paypal_settings_arbitrary_section' ), $this->plugin_slug . '-pp-arbitrary-settings' );
 
 		add_settings_section( 'ppdg-paypal-settings-section', __( 'PayPal General Settings', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-settings' );
 		add_settings_section( 'ppdg-live-sandbox-mode-section', __( 'Live Mode or Sandbox', 'wp-express-checkout' ), null, $this->plugin_slug . '-pp-settings' );
@@ -261,7 +261,7 @@ class Admin {
 		add_settings_section( 'wpec-access-section', __( 'Admin Dashboard Access Permission', 'wp-express-checkout' ), array( $this, 'access_description' ), $this->plugin_slug . '-advanced' );
 
 		// Stripe Settings Tab Sections
-		add_settings_section( 'wpec-stripe-settings-arbitrary-section', __( '', 'wp-express-checkout' ), array( $this, 'handle_stripe_settings_arbitrary_section' ), 'wpec-stripe-arbitrary-settings' );
+		add_settings_section( 'wpec-stripe-settings-arbitrary-section', '', array( $this, 'handle_stripe_settings_arbitrary_section' ), 'wpec-stripe-arbitrary-settings' );
 		add_settings_section( 'wpec-stripe-settings-section', __( 'Stripe General Settings', 'wp-express-checkout' ), null, 'wpec-stripe-settings' );
 		add_settings_section( 'wpec-stripe-live-sandbox-mode-section', __( 'Live Mode or Sandbox', 'wp-express-checkout' ), null, 'wpec-stripe-settings' );
 		add_settings_section( 'wpec-stripe-credentials-section', __( 'Stripe API Credentials', 'wp-express-checkout' ), null, 'wpec-stripe-api-credentials');
@@ -296,7 +296,7 @@ class Admin {
 
 		//Thank you page URL. We will style the size of the field using CSS
 		$ty_description = __( 'This is the Thank You page. This page is automatically created for you when you install the plugin. Do not delete this page from the pages menu of your site. The plugin will send the customers to this page after the payment. If you have accidentally deleted this page, then re-create it using <a href="https://wp-express-checkout.com/recreating-the-required-express-checkout-plugin-pages/" target="_blank">this documentation</a>.', 'wp-express-checkout' );
-		$ty_description .= '<br /><b>' . __( 'Important Note: ', 'stripe-payments' ) . '</b> ' . __( 'If you are using a caching solution on your site (e.g., WP Super Cache), you must exclude this page from caching. Failing to do so can result in unpredictable behavior on the Thank You page.', 'wp-express-checkout' );
+		$ty_description .= '<br /><b>' . __( 'Important Note: ', 'wp-express-checkout' ) . '</b> ' . __( 'If you are using a caching solution on your site (e.g., WP Super Cache), you must exclude this page from caching. Failing to do so can result in unpredictable behavior on the Thank You page.', 'wp-express-checkout' );
 
 		add_settings_field( 'thank_you_url', __( 'Thank You Page URL', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug, 'ppdg-global-section',
 			array(
@@ -342,7 +342,7 @@ class Admin {
 				'type' => 'number', 
 				'step' => 0.01, 
 				'class' => 'wp-ppdg-shipping', 
-				'desc' => __( 'Enter numbers only. Example: 5.50', 'wp-express-checkout' ) . '<br>' . __( 'Leave it empty if you are not charging shipping cost. You can also set shipping cost on a per product basis.', 'wp-express-checkout' ) . '<br />' . sprintf( __( '<a href="%s" target="_blank">Read this documentation</a> to learn how to configure shipping.', 'wp-express-checkout' ), 'https://wp-express-checkout.com/configuring-shipping-options/' ), 
+				'desc' => __( 'Enter numbers only. Example: 5.50', 'wp-express-checkout' ) . '<br>' . __( 'Leave it empty if you are not charging shipping cost. You can also set shipping cost on a per product basis.', 'wp-express-checkout' ) . '<br />' . sprintf( /* translators: %s is a link to the shipping configuration documentation. */ __( '<a href="%s" target="_blank">Read this documentation</a> to learn how to configure shipping.', 'wp-express-checkout' ), 'https://wp-express-checkout.com/configuring-shipping-options/' ),
 				'size' => 10 
 				) 
 		);
@@ -433,7 +433,7 @@ class Admin {
 		// button style section.
 		add_settings_field( 'btn_type', __( 'Button Type', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_type', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'checkout', 'pay', 'paypal', 'buynow' ), 'texts' => array( __( 'Checkout', 'wp-express-checkout' ), __( 'Pay', 'wp-express-checkout' ), __( 'PayPal', 'wp-express-checkout' ), __( 'Buy Now', 'wp-express-checkout' ) ) ) );
 		add_settings_field( 'btn_shape', __( 'Button Shape', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_shape', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'pill', 'rect' ), 'texts' => array( __( 'Pill', 'wp-express-checkout' ), __( 'Rectangle', 'wp-express-checkout' ) ) ) );
-		add_settings_field( 'btn_layout', __( 'Button Layout', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_layout', 'type' => 'radio', 'class' => 'wp-ppdg-button-style', 'desc' => __( '', 'wp-express-checkout' ), 'vals' => array( 'vertical', 'horizontal' ), 'texts' => array( __( 'Vertical', 'wp-express-checkout' ), __( 'Horizontal', 'wp-express-checkout' ) ) ) );
+		add_settings_field( 'btn_layout', __( 'Button Layout', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_layout', 'type' => 'radio', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'vertical', 'horizontal' ), 'texts' => array( __( 'Vertical', 'wp-express-checkout' ), __( 'Horizontal', 'wp-express-checkout' ) ) ) );
 		add_settings_field( 'btn_height', __( 'Button Height', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_height', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '', 'vals' => array( 'small', 'medium', 'large', 'xlarge' ), 'texts' => array( __( 'Small', 'wp-express-checkout' ), __( 'Medium', 'wp-express-checkout' ), __( 'Large', 'wp-express-checkout' ), __( 'Extra Large', 'wp-express-checkout' ) ) ) );
 		add_settings_field( 'btn_width', __( 'Button Width', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_width', 'type' => 'number', 'class' => 'wp-ppdg-button-style', 'placeholder' => __( 'Auto', 'wp-express-checkout' ), 'desc' => __( 'Button width in pixels. Minimum width is 150px. Leave it blank for auto width.', 'wp-express-checkout' ), 'size' => 10 ) );
 		add_settings_field( 'btn_color', __( 'Button Color', 'wp-express-checkout' ), array( $this, 'settings_field_callback' ), $this->plugin_slug . '-pp-btn-appearance', 'ppdg-button-style-section', array( 'field' => 'btn_color', 'type' => 'select', 'class' => 'wp-ppdg-button-style', 'desc' => '<div id="wp-ppdg-preview-container"><p>' . __( 'Button preview:', 'wp-express-checkout' ) . '</p><br /><div id="paypal-button-container"></div><div id="wp-ppdg-preview-protect"></div></div>', 'vals' => array( 'gold', 'blue', 'silver', 'white', 'black' ), 'texts' => array( __( 'Gold', 'wp-express-checkout' ), __( 'Blue', 'wp-express-checkout' ), __( 'Silver', 'wp-express-checkout' ), __( 'White', 'wp-express-checkout' ), __( 'Black', 'wp-express-checkout' ) ) ) );
@@ -574,7 +574,11 @@ class Admin {
 				'field' => 'stripe_allowed_countries',
 				'type'  => 'text',
 				'class' => 'wpec_input_width_full',
-				'desc'  => sprintf(__( 'Enter the countries that are allowed for shipping by specifying their two-letter ISO country codes separated by comma. For example: US, CA, AU, GE, ES etc. %s', 'wp-express-checkout' ), ' <a href="https://www.nationsonline.org/oneworld/country_code_list.htm" target="_blank">'.__('See the list of ISO country codes here.', 'wp-express-checkout').'</a>')
+				'desc'  => sprintf(
+					/* translators: %s is a link to the ISO country codes list. */
+					__( 'Enter the countries that are allowed for shipping by specifying their two-letter ISO country codes separated by comma. For example: US, CA, AU, GE, ES etc. %s', 'wp-express-checkout' ),
+					' <a href="https://www.nationsonline.org/oneworld/country_code_list.htm" target="_blank">' . esc_html__( 'See the list of ISO country codes here.', 'wp-express-checkout' ) . '</a>'
+				)
 			)
 		);
 
@@ -813,10 +817,15 @@ class Admin {
 				'desc'  => __( 'This controls the position of the currency symbol.', 'wp-express-checkout' ),
 				'vals'  => array( 'left', 'left_space', 'right', 'right_space' ),
 				'texts' => array(
+					/* translators: %s is the currency symbol. */
 					sprintf( __( 'Left (%s1.00)', 'wp-express-checkout' ), $wpec->get_setting( 'currency_symbol' ) ),
+					/* translators: %s is the currency symbol. */
 					sprintf( __( 'Left with space (%s 1.00)', 'wp-express-checkout' ), $wpec->get_setting( 'currency_symbol' ) ),
+					/* translators: %s is the currency symbol. */
 					sprintf( __( 'Right (1.00%s)', 'wp-express-checkout' ), $wpec->get_setting( 'currency_symbol' ) ),
-					sprintf( __( 'Right with space (1.00 %s)', 'wp-express-checkout' ), $wpec->get_setting( 'currency_symbol' ) ), )
+					/* translators: %s is the currency symbol. */
+					sprintf( __( 'Right with space (1.00 %s)', 'wp-express-checkout' ), $wpec->get_setting( 'currency_symbol' ) ),
+				)
 			)
 		);
 		add_settings_field(
@@ -988,9 +997,9 @@ class Admin {
 	 */
 	public function paypal_api_credentials_section_note() {
 		echo '<p class="description">';
-		$manual_pp_api_documentation_link = "https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/";
-		_e("If you have used the automatic option to connect and get your PayPal API credentials from the 'PayPal API Connection' tab, they will be displayed below. The following section also allows for manual entry of your PayPal API credentials in case the automatic option is non-functional for your PayPal account.", "wp-express-checkout");
-		echo '&nbsp;' . '<a href="' . $manual_pp_api_documentation_link . '" target="_blank">' . __('Read this documentation', 'wp-express-checkout') . '</a> ' . __('to learn how to manually set up the API credentials.', 'wp-express-checkout');
+		$manual_pp_api_documentation_link = 'https://wp-express-checkout.com/getting-live-and-sandbox-client-ids/';
+		esc_html_e( "If you have used the automatic option to connect and get your PayPal API credentials from the 'PayPal API Connection' tab, they will be displayed below. The following section also allows for manual entry of your PayPal API credentials in case the automatic option is non-functional for your PayPal account.", 'wp-express-checkout' );
+		echo '&nbsp;<a href="' . esc_url( $manual_pp_api_documentation_link ) . '" target="_blank">' . esc_html__( 'Read this documentation', 'wp-express-checkout' ) . '</a> ' . esc_html__( 'to learn how to manually set up the API credentials.', 'wp-express-checkout' );
 		echo '</p>';
 	}
 
@@ -999,10 +1008,10 @@ class Admin {
 	 */
 	public function disable_funding_note() {
 		echo '<p><i>';
-		_e( 'By default, funding source eligibility is smartly decided based on a variety of factors by PayPal. You can force disable funding options by selecting them below.', 'wp-express-checkout' );
+		esc_html_e( 'By default, funding source eligibility is smartly decided based on a variety of factors by PayPal. You can force disable funding options by selecting them below.', 'wp-express-checkout' );
 		echo '</p></i>';
 		echo '<p><i>';
-		_e( 'Note: disabled options will disappear from button preview once you save changes.', 'wp-express-checkout' );
+		esc_html_e( 'Note: disabled options will disappear from button preview once you save changes.', 'wp-express-checkout' );
 		echo '</p></i>';
 	}
 
@@ -1011,15 +1020,15 @@ class Admin {
 	 */
 	public function debug_logging_note() {
 		echo '<p><i>';
-		_e( 'Debug logging can be useful to troubleshoot transaction processing related issues on your site. keep it disabled unless you are troubleshooting.', 'wp-express-checkout' );
+		esc_html_e( 'Debug logging can be useful to troubleshoot transaction processing related issues on your site. keep it disabled unless you are troubleshooting.', 'wp-express-checkout' );
 		echo '</p></i>';
 	}
 
 	public function dl_manager_description() {
 		echo '<p>';
-		_e( 'The default settings for the ', 'wp-express-checkout');
-		echo '<a href="https://wp-express-checkout.com/force-download-option-for-digital-products/" target="_blank">'. __('force download option', 'wp-express-checkout') . '</a>';
-		_e (' should work on most sites/servers. If you encounter issues, consider trying one of the following available methods.', 'wp-express-checkout' );
+		esc_html_e( 'The default settings for the ', 'wp-express-checkout' );
+		echo '<a href="' . esc_url( 'https://wp-express-checkout.com/force-download-option-for-digital-products/' ) . '" target="_blank">' . esc_html__( 'force download option', 'wp-express-checkout' ) . '</a>';
+		esc_html_e( ' should work on most sites/servers. If you encounter issues, consider trying one of the following available methods.', 'wp-express-checkout' );
 		echo '</p>';
 	}
 
@@ -1027,15 +1036,15 @@ class Admin {
 	 * The section `wpec-access-section` callback.
 	 */
 	public function access_description() {
-		echo '<p>' . __( 'WP Express Checkout\'s admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP role to access the WPEC admin dashboard by selecting a value below.', 'wp-express-checkout' ) . '</p>';
-		echo '<p><strong>' . __( 'If you don\'t know what this is for, don\'t change the following value.', 'wp-express-checkout' ) . '</strong></p>';
+		echo '<p>' . esc_html__( 'WP Express Checkout\'s admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP role to access the WPEC admin dashboard by selecting a value below.', 'wp-express-checkout' ) . '</p>';
+		echo '<p><strong>' . esc_html__( 'If you don\'t know what this is for, don\'t change the following value.', 'wp-express-checkout' ) . '</strong></p>';
 	}
 
 	/**
 	 * The section `ppdg-tos-section` callback.
 	 */
 	public function tos_description() {
-		echo '<p>' . __( 'This section allows you to configure Terms and Conditions or Privacy Policy that customers must accept before making a payment.', 'wp-express-checkout' ) . '</p>';
+		echo '<p>' . esc_html__( 'This section allows you to configure Terms and Conditions or Privacy Policy that customers must accept before making a payment.', 'wp-express-checkout' ) . '</p>';
 	}
 
 	/**
@@ -1075,69 +1084,67 @@ class Admin {
 		extract( $args );
 
 		$field_value  = isset( $settings[ $field ] ) ? $settings[ $field ] : $default;
-		$_placeholder = $placeholder ? " placeholder='{$placeholder}'" : '';
-		$_class       = $class ? "class='{$class}'" : '';
+		$_placeholder = $placeholder ? " placeholder='" . esc_attr( $placeholder ) . "'" : '';
+		$_class       = $class ? " class='" . esc_attr( $class ) . "'" : '';
 
 		switch ( $type ) {
 			case 'checkbox':
-				echo "<input type='checkbox' id='wp-ppdg-{$field}' name='{$this->option_name}[{$field}]' {$_class} value='1' " . ( $field_value ? 'checked=checked' : '' ) . ' />';
+				echo "<input type='checkbox' id='wp-ppdg-" . esc_attr( $field ) . "' name='" . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . "]' class='" . esc_attr($_class) . "' value='1' " . ( $field_value ? 'checked=checked' : '' ) . ' />';
 				break;
 			case 'checkboxes':
-				if( isset($field) && $field == 'disabled_funding' ) {
+				if( isset($field) && $field === 'disabled_funding' ) {
 					// Handle the 'Disabled Funding Options' checkboxes
 					$counter = 0;
 					foreach ( $vals as $key => $value ) {
-						echo '<label><input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>' . $texts[ $key ] . '</label> ';
+						echo '<label><input type="checkbox" id="wp-ppdg-' . esc_attr( $field ) . '" class="' . esc_attr($_class) . '" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . '][]" value="' . esc_attr( $value ) . '"' . ( in_array( $value, $field_value, true ) ? ' checked' : '' ) . '>' . esc_html( $texts[ $key ] ) . '</label> ';
 						$counter++;
-						if ($counter % 7 == 0) {
+						if ($counter % 7 === 0) {
 							// Add a line break after every 7 checkboxes to group them in two rows.
 							echo '<br />';
 						}
 					}
 				} else {
-					// Handle any other gereic checkboxes field.
+					// Handle any other generic checkboxes field.
 					foreach ( $vals as $key => $value ) {
-						echo '<label><input type="checkbox" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . '][]" value="' . $value . '"' . ( in_array( $value, $field_value ) ? ' checked' : '') . '>' . $texts[ $key ] . '</label> ';
+						echo '<label><input type="checkbox" id="wp-ppdg-' . esc_attr( $field ) . '" class="'.esc_attr($_class).'" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . '][]" value="' . esc_attr( $value ) . '"' . ( in_array( $value, $field_value, true ) ? ' checked' : '' ) . '>' . esc_html( $texts[ $key ] ) . '</label> ';
 					}
 				}
 
 				break;
 			case 'select':
-				echo '<select id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . ']">';
-				$opts = '';
+				echo '<select id="wp-ppdg-' . esc_attr( $field ) . '" class="'.esc_attr($_class).'" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . ']">';
 				foreach ( $vals as $key => $value ) {
-					$opts .= '<option value="' . $value . '"' . ( $value === $field_value ? ' selected' : '' ) . '>' . $texts[ $key ] . '</option>';
+					echo '<option value="' . esc_attr( $value ) . '"' . ( $value === $field_value ? ' selected' : '' ) . '>' . esc_html( $texts[ $key ] ) . '</option>';
 				}
-				echo $opts;
 				echo '</select>';
 				break;
 			case 'radio':
 				foreach ( $vals as $key => $value ) {
-					echo '<label><input type="radio" id="wp-ppdg-' . $field . '" ' . $_class . ' name="' . $this->option_name . '[' . $field . ']" value="' . $value . '"' . ( $value === $field_value ? ' checked' : ( ( empty( $field_value ) && $value === "vertical" ) ? ' checked' : '' ) ) . '>' . $texts[ $key ] . '</label> ';
+					echo '<label><input type="radio" id="wp-ppdg-' . esc_attr( $field ) . '" class="'.esc_attr($_class).'" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . ']" value="' . esc_attr( $value ) . '"' . ( $value === $field_value ? ' checked' : ( ( empty( $field_value ) && 'vertical' === $value ) ? ' checked' : '' ) ) . '>' . esc_html( $texts[ $key ] ) . '</label> ';
 				}
 				break;
 			case 'textarea':
-				echo "<textarea name='{$this->option_name}[{$field}]' id='wp-ppdg-{$field}' {$_class} style='width:100%;' rows='7'>" . esc_textarea( $field_value ) . '</textarea>';
+				echo "<textarea name='" . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . "]' id='wp-ppdg-" . esc_attr( $field ) . "' class='".esc_attr($_class)."' style='width:100%;' rows='7'>" . esc_textarea( $field_value ) . '</textarea>';
 				break;
 			case 'editor':
 				add_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
 				wp_editor(
-					html_entity_decode( $field_value ),
+					wp_kses_post( html_entity_decode( $field_value ) ),
 					$field,
 					array(
-						'textarea_name' => "{$this->option_name}[{$field}]",
+						'textarea_name' => $this->option_name . '[' . $field . ']',
 						'teeny'         => true,
 					)
 				);
 				remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
 				break;
 			case 'number':
-				$input = "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='{$this->option_name}[{$field}]' value='". esc_attr($field_value) ."' size='{$size}' step='{$step}' min='{$min}' />";
-				echo $this->wrap_label( $input, $label, $label_pos );
+				$input = "<input type='" . esc_attr( $type ) . "'" . $_placeholder . " id='wp-ppdg-" . esc_attr( $field ) . "' class='" . esc_attr($_class) . "' name='" . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . "]' value='" . esc_attr( $field_value ) . "' size='" . esc_attr( $size ) . "' step='" . esc_attr( $step ) . "' min='" . esc_attr( $min ) . "' />";
+				echo wp_kses($this->wrap_label( $input, $label, $label_pos ), Utils::wp_kses_post_tags_with_form());
 				break;
 			default:
-				$input = "<input type='{$type}'{$_placeholder} id='wp-ppdg-{$field}' {$_class} name='{$this->option_name}[{$field}]' value='". esc_attr($field_value) ."' size='{$size}' />";
-				echo $this->wrap_label( $input, $label, $label_pos );
+				$input = "<input type='" . esc_attr( $type ) . "'" . $_placeholder . " id='wp-ppdg-" . esc_attr( $field ) . "' class='" . esc_attr($_class) . "' name='" . esc_attr( $this->option_name ) . "[" . esc_attr( $field ) . "]' value='" . esc_attr( $field_value ) . "' size='" . esc_attr( $size ) . "' />";
+				echo wp_kses($this->wrap_label( $input, $label, $label_pos ), Utils::wp_kses_post_tags_with_form());
 				break;
 		}
 
@@ -1161,10 +1168,10 @@ class Admin {
 		$ppcp_onboarding_instance = \TTHQ\WPEC\Lib\PayPal\Onboarding\PayPal_PPCP_Onboarding::get_instance();
 
 		if ($is_live_mode_enabled){
-			if ($live_account_connection_status == 'connected') {
+			if ($live_account_connection_status === 'connected') {
 				//Production account connected
 				echo '<div class="wpec-paypal-live-account-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-				_e("Live account is connected. If you experience any issues, please disconnect and reconnect.", "wp-express-checkout");
+				esc_html_e( 'Live account is connected. If you experience any issues, please disconnect and reconnect.', 'wp-express-checkout' );
 				echo '</div>';
 
 				// Show disconnect option for live account.
@@ -1172,7 +1179,7 @@ class Admin {
 			} else {
 				//Production account is NOT connected.
 				echo '<div class="wpec-paypal-live-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-				_e("Live PayPal account is not connected. Click the button below to authorize the app and acquire API credentials from your PayPal account.", "wp-express-checkout");
+				esc_html_e( 'Live PayPal account is not connected. Click the button below to authorize the app and acquire API credentials from your PayPal account.', 'wp-express-checkout' );
 				echo '</div>';
 
 				// Show the onboarding link
@@ -1180,7 +1187,7 @@ class Admin {
 			}
 		} else {
 			echo '<p class="wpec-grey-box">';
-			_e("To connect your live account, enable the live mode from the General Settings menu tab.", "wp-express-checkout");
+			esc_html_e( 'To connect your live account, enable the live mode from the General Settings menu tab.', 'wp-express-checkout' );
 			echo '</p>';
 		}
 	}
@@ -1201,26 +1208,25 @@ class Admin {
 
 		if ($is_sandbox_mode_enabled) {
 			if ($sandbox_account_connection_status == 'connected') {
-				//Production account connected
+				//Sandbox account connected
 				echo '<div class="wpec-paypal-sandbox-account-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-				_e("Sandbox account is connected. If you experience any issues, please disconnect and reconnect.", "wp-express-checkout");
+				esc_html_e( 'Sandbox account is connected. If you experience any issues, please disconnect and reconnect.', 'wp-express-checkout' );
 				echo '</div>';
 
-				// Show disconnect option for live account.
+				// Show disconnect option for sandbox account.
 				$ppcp_onboarding_instance->output_sandbox_ac_disconnect_link();
 			} else {
-				//Production account is NOT connected.
+				// Sandbox account is NOT connected.
 				echo '<div class="wpec-paypal-sandbox-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-				_e("Sandbox PayPal account is not connected. Click the button below to authorize the app and acquire API credentials from your PayPal account.", "wp-express-checkout");
+				esc_html_e( 'Sandbox PayPal account is not connected. Click the button below to authorize the app and acquire API credentials from your PayPal account.', 'wp-express-checkout' );
 				echo '</div>';
 
 				// Show the onboarding link
 				$ppcp_onboarding_instance->output_sandbox_onboarding_link_code();
 			}
-
 		} else {
 			echo '<p class="wpec-grey-box">';
-			_e("To connect your test/sandbox account, disable live mode from the General Settings menu tab.", "wp-express-checkout");
+			esc_html_e( 'To connect your test/sandbox account, disable live mode from the General Settings menu tab.', 'wp-express-checkout' );
 			echo '</p>';
 		}
 	}
@@ -1229,14 +1235,14 @@ class Admin {
 		$delete_cache_url = admin_url(\TTHQ\WPEC\Lib\PayPal\PayPal_Main::$pp_api_connection_settings_menu_page);
 		$delete_cache_url = add_query_arg('wpec_ppcp_delete_cache', 1, $delete_cache_url);
 		$delete_cache_url_nonced = add_query_arg('_wpnonce', wp_create_nonce('wpec_ppcp_delete_cache'), $delete_cache_url);
-		echo '<a class="button wpsc-paypal-delete-cache-btn" href="' . esc_url_raw($delete_cache_url_nonced) . '">' . __('Delete Token Cache', 'wp-express-checkout') . '</a>';
-		echo '<p class="description">' . __( 'This will delete the PayPal API access token cache. This is useful if you are having issues with the PayPal API after changing/updating the API credentials.', 'wp-express-checkout' ).'</p>';
+		echo '<a class="button wpsc-paypal-delete-cache-btn" href="' . esc_url_raw( $delete_cache_url_nonced ) . '">' . esc_html__( 'Delete Token Cache', 'wp-express-checkout' ) . '</a>';
+		echo '<p class="description">' . esc_html__( 'This will delete the PayPal API access token cache. This is useful if you are having issues with the PayPal API after changing/updating the API credentials.', 'wp-express-checkout' ) . '</p>';
 	}
 
 	protected function wrap_label( $input, $label = '', $label_pos = 'before' ) {
 		$label_wrap = '%s';
 		if ( $label ) {
-			$label_wrap = 'before' === $label_pos ? "<label>$label %s</label>" : "<label>%s $label</label>";
+			$label_wrap = 'before' === $label_pos ? '<label>' . esc_html( $label ) . ' %s</label>' : '<label>%s ' . esc_html( $label ) . '</label>';
 		}
 		return sprintf( $label_wrap, $input );
 	}
@@ -1261,7 +1267,7 @@ class Admin {
 			return $output;
 		}
 
-		$sections_for_tab = $wp_settings_fields[ $_POST['ppdg_page_tab'] ];
+		$sections_for_tab = $wp_settings_fields[ sanitize_text_field(wp_unslash($_POST['ppdg_page_tab'])) ];
 
 		// Go through the fields registered for the current section and validate
 		// the user input.
@@ -1274,7 +1280,7 @@ class Admin {
 				// Validate required fields.
 				if ( ! empty( $args['args']['required'] ) && empty( $input[ $field ] ) ) {
 					/* translators: "%s" - field title */
-					$message = sprintf( __( 'You must specify a value in the "%s" field.', 'wp-express-checkout' ), $args['title'] );
+					$message = sprintf( __( 'You must specify a value in the "%s" field.', 'wp-express-checkout' ), esc_html( $args['title'] ) );
 					add_settings_error( $this->option_name, 'invalid-' . $field, $message );
 					$action_type = 'error';
 				}
@@ -1340,7 +1346,7 @@ class Admin {
 	public function add_action_links( $links ) {
 
 		return array_merge(
-			array( 'settings' => '<a href="' . admin_url( WPEC_MENU_PARENT_SLUG . '&page=ppec-settings-page' ) . '">' . __( 'Settings', 'wp-express-checkout' ) . '</a>' ),
+			array( 'settings' => '<a href="' . admin_url( WPEC_MENU_PARENT_SLUG . '&page=ppec-settings-page' ) . '">' . esc_html__( 'Settings', 'wp-express-checkout' ) . '</a>' ),
 			$links
 		);
 	}
@@ -1364,7 +1370,7 @@ class Admin {
 			echo '<div class="postbox">';
 
 			if ( $section['title'] ) {
-				echo "<h3 class='hndle'><label for='title'>{$section['title']}</label></h3>\n";
+				echo "<h3 class='hndle'><label for='title'>" . esc_html( $section['title'] ) . '</label></h3>' . "\n";
 			}
 
 			echo '<div class="inside">';
@@ -1421,17 +1427,21 @@ class Admin {
 
 	public function handle_general_settings_arbitrary_section() {
 		echo '<p>';
-		echo __('Refer to the ', 'wp-express-checkout');
-		echo '<a href="https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/" target="_blank">'.__('plugin documentation', 'wp-express-checkout').'</a>';
-		echo __(' for a detailed guide on configuration and usage.', 'wp-express-checkout');
+		printf(
+			/* translators: %s: Documentation link. */
+			esc_html__( 'Refer to the %s for a detailed guide on configuration and usage.', 'wp-express-checkout' ),
+			'<a href="' . esc_url( 'https://wp-express-checkout.com/wp-express-checkout-plugin-documentation/' ) . '" target="_blank">' . esc_html__( 'plugin documentation', 'wp-express-checkout' ) . '</a>'
+		);
 		echo '</p>';
 	}
 
 	public function handle_paypal_settings_arbitrary_section() {
 		echo '<div class="wpec-white-box">';
-		echo __('Check the ', 'wp-express-checkout');
-		echo '<a href="https://wp-express-checkout.com/paypal-settings-configuration-api-credentials-setup/" target="_blank">'.__('PayPal settings documentation', 'wp-express-checkout').'</a>';
-		echo __(' for a step-by-step guide on configuring these settings.', 'wp-express-checkout');
+		printf(
+			/* translators: %s: Documentation link. */
+			esc_html__( 'Check the %s for a step-by-step guide on configuring these settings.', 'wp-express-checkout' ),
+			'<a href="' . esc_url( 'https://wp-express-checkout.com/paypal-settings-configuration-api-credentials-setup/' ) . '" target="_blank">' . esc_html__( 'PayPal settings documentation', 'wp-express-checkout' ) . '</a>'
+		);
 		echo '</div>';
 
 		//NOTE: We can't update/save the reset API settings keys here as WP locks the settings fields for the current page.
@@ -1462,30 +1472,31 @@ class Admin {
 	}
 
 	public static function paypal_onboard_actions_messages_handler() {
-		if (isset($_GET['wpec_ppcp_after_onboarding'])){
-			$environment_mode = isset($_GET['environment_mode']) ? sanitize_text_field($_GET['environment_mode']) : '';
-			$message = __("PayPal merchant account connection setup completed for environment mode: ", "wp-express-checkout") . esc_attr($environment_mode);
-			echo '<div class="notice notice-success"><p>' . $message . '</p></div>';
+		if ( isset( $_GET['wpec_ppcp_after_onboarding'] ) ) {
+			$environment_mode = isset( $_GET['environment_mode'] ) ? sanitize_text_field( wp_unslash( $_GET['environment_mode'] ) ) : '';
+			echo '<div class="notice notice-success"><p>' . esc_html__( 'PayPal merchant account connection setup completed for environment mode:', 'wp-express-checkout' ) . ' ' . esc_html( $environment_mode ) . '</p></div>';
 		}
 
-		if (isset($_GET['wpec_ppcp_disconnect_production'])){
-			echo '<div class="notice notice-success"><p>' . __('PayPal account disconnected.', 'wp-express-checkout') . '</p></div>';
+		if ( isset( $_GET['wpec_ppcp_disconnect_production'] ) ) {
+			echo '<div class="notice notice-success"><p>' . esc_html__( 'PayPal account disconnected.', 'wp-express-checkout' ) . '</p></div>';
 		}
 
-		if (isset($_GET['wpec_ppcp_disconnect_sandbox'])){
-			echo '<div class="notice notice-success"><p>' . __('PayPal sandbox account disconnected.', 'wp-express-checkout') . '</p></div>';
+		if ( isset( $_GET['wpec_ppcp_disconnect_sandbox'] ) ) {
+			echo '<div class="notice notice-success"><p>' . esc_html__( 'PayPal sandbox account disconnected.', 'wp-express-checkout' ) . '</p></div>';
 		}
 
-		if (isset($_GET['wpec_ppcp_delete_cache'])) {
-			echo '<div class="notice notice-success"><p>' . __('PayPal API access token cache deleted successfully.', 'wp-express-checkout') . '</p></div>';
+		if ( isset( $_GET['wpec_ppcp_delete_cache'] ) ) {
+			echo '<div class="notice notice-success"><p>' . esc_html__( 'PayPal API access token cache deleted successfully.', 'wp-express-checkout' ) . '</p></div>';
 		}
 	}
 
 	public function handle_stripe_settings_arbitrary_section() {
 		echo '<div class="wpec-white-box">';
-		echo __('Check the ', 'wp-express-checkout');
-		echo '<a href="https://wp-express-checkout.com/stripe-settings-configuration-stripe-api-credentials-setup/" target="_blank">'.__('Stripe settings documentation', 'wp-express-checkout').'</a>';
-		echo __(' for a step-by-step guide on configuring these settings.', 'wp-express-checkout');
+		printf(
+			/* translators: %s: Documentation link. */
+			esc_html__( 'Check the %s for a step-by-step guide on configuring these settings.', 'wp-express-checkout' ),
+			'<a href="' . esc_url( 'https://wp-express-checkout.com/stripe-settings-configuration-stripe-api-credentials-setup/' ) . '" target="_blank">' . esc_html__( 'Stripe settings documentation', 'wp-express-checkout' ) . '</a>'
+		);
 		echo '</div>';
 
 		//NOTE: We can't update/save the reset API settings keys here as WP locks the settings fields for the current page.

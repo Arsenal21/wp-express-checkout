@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 use WP_Express_Checkout\Admin\Admin;
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Products;
@@ -41,9 +45,9 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 
 	$current = "";
 	if ( isset( $_GET['page'] ) ) {
-		$current = sanitize_text_field( $_GET['page'] );
+		$current = sanitize_text_field( wp_unslash($_GET['page']) );
 		if ( isset( $_GET['action'] ) ) {
-			$current .= "&action=" . sanitize_text_field( $_GET['action'] );
+			$current .= "&action=" . sanitize_text_field( wp_unslash($_GET['action']) );
 		}
 	}
 	?>
@@ -77,7 +81,7 @@ if ( ! current_user_can( Main::get_instance()->get_setting( 'access_permission' 
 
 				<?php
 				if ( isset( $_GET['action'] ) ) {
-					$action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : '';
+					$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash($_GET['action']) ) : '';
 					switch ( $action ) {
 						case 'paypal-settings':
                             $wpec_admin->do_settings_sections_no_wrap( 'paypal-for-digital-goods-pp-arbitrary-settings' );

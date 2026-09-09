@@ -1,4 +1,11 @@
 <?php
+
+use WP_Express_Checkout\Utils;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /**
  * Modal window template
  *
@@ -28,11 +35,11 @@
 						<img width="150" height="150" src="<?php echo esc_url( $thumbnail_url ); ?>" class="attachment-thumbnail size-thumbnail wp-post-image" alt="">
 					</div>
 					<div class="wpec-modal-item-excerpt">
-						<?php echo wp_trim_words( get_the_content(), 30 ); ?>
+						<?php echo esc_html(wp_trim_words( get_the_content(), 30 )); ?>
 					</div>
 				</div>
 			<?php } ?>
-			<?php echo $output; ?>
+			<?php echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>
 		</div>
 	</div>
 </div>
