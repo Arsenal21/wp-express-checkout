@@ -1085,18 +1085,18 @@ class Admin {
 
 		$field_value  = isset( $settings[ $field ] ) ? $settings[ $field ] : $default;
 		$_placeholder = $placeholder ? " placeholder='" . esc_attr( $placeholder ) . "'" : '';
-		$_class       = $class ? " class='" . esc_attr( $class ) . "'" : '';
+		$_class       = $class ? esc_attr( $class ) : '';
 
 		switch ( $type ) {
 			case 'checkbox':
-				echo "<input type='checkbox' id='wp-ppdg-" . esc_attr( $field ) . "' name='" . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . "]' class='" . esc_attr($_class) . "' value='1' " . ( $field_value ? 'checked=checked' : '' ) . ' />';
+				echo "<input type='checkbox' id='wp-ppdg-" . esc_attr( $field ) . "' name='" . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . "]' class='" . $_class . "' value='1' " . ( $field_value ? 'checked=checked' : '' ) . ' />';
 				break;
 			case 'checkboxes':
 				if( isset($field) && $field === 'disabled_funding' ) {
 					// Handle the 'Disabled Funding Options' checkboxes
 					$counter = 0;
 					foreach ( $vals as $key => $value ) {
-						echo '<label><input type="checkbox" id="wp-ppdg-' . esc_attr( $field ) . '" class="' . esc_attr($_class) . '" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . '][]" value="' . esc_attr( $value ) . '"' . ( in_array( $value, $field_value, true ) ? ' checked' : '' ) . '>' . esc_html( $texts[ $key ] ) . '</label> ';
+						echo '<label><input type="checkbox" id="wp-ppdg-' . esc_attr( $field ) . '" class="' . $_class . '" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . '][]" value="' . esc_attr( $value ) . '"' . ( in_array( $value, $field_value, true ) ? ' checked' : '' ) . '>' . esc_html( $texts[ $key ] ) . '</label> ';
 						$counter++;
 						if ($counter % 7 === 0) {
 							// Add a line break after every 7 checkboxes to group them in two rows.
@@ -1106,13 +1106,13 @@ class Admin {
 				} else {
 					// Handle any other generic checkboxes field.
 					foreach ( $vals as $key => $value ) {
-						echo '<label><input type="checkbox" id="wp-ppdg-' . esc_attr( $field ) . '" class="'.esc_attr($_class).'" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . '][]" value="' . esc_attr( $value ) . '"' . ( in_array( $value, $field_value, true ) ? ' checked' : '' ) . '>' . esc_html( $texts[ $key ] ) . '</label> ';
+						echo '<label><input type="checkbox" id="wp-ppdg-' . esc_attr( $field ) . '" class="'.$_class.'" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . '][]" value="' . esc_attr( $value ) . '"' . ( in_array( $value, $field_value, true ) ? ' checked' : '' ) . '>' . esc_html( $texts[ $key ] ) . '</label> ';
 					}
 				}
 
 				break;
 			case 'select':
-				echo '<select id="wp-ppdg-' . esc_attr( $field ) . '" class="'.esc_attr($_class).'" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . ']">';
+				echo '<select id="wp-ppdg-' . esc_attr( $field ) . '" class="'.$_class.'" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . ']">';
 				foreach ( $vals as $key => $value ) {
 					echo '<option value="' . esc_attr( $value ) . '"' . ( $value === $field_value ? ' selected' : '' ) . '>' . esc_html( $texts[ $key ] ) . '</option>';
 				}
@@ -1120,11 +1120,11 @@ class Admin {
 				break;
 			case 'radio':
 				foreach ( $vals as $key => $value ) {
-					echo '<label><input type="radio" id="wp-ppdg-' . esc_attr( $field ) . '" class="'.esc_attr($_class).'" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . ']" value="' . esc_attr( $value ) . '"' . ( $value === $field_value ? ' checked' : ( ( empty( $field_value ) && 'vertical' === $value ) ? ' checked' : '' ) ) . '>' . esc_html( $texts[ $key ] ) . '</label> ';
+					echo '<label><input type="radio" id="wp-ppdg-' . esc_attr( $field ) . '" class="'.$_class.'" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . ']" value="' . esc_attr( $value ) . '"' . ( $value === $field_value ? ' checked' : ( ( empty( $field_value ) && 'vertical' === $value ) ? ' checked' : '' ) ) . '>' . esc_html( $texts[ $key ] ) . '</label> ';
 				}
 				break;
 			case 'textarea':
-				echo "<textarea name='" . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . "]' id='wp-ppdg-" . esc_attr( $field ) . "' class='".esc_attr($_class)."' style='width:100%;' rows='7'>" . esc_textarea( $field_value ) . '</textarea>';
+				echo "<textarea name='" . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . "]' id='wp-ppdg-" . esc_attr( $field ) . "' class='".$_class."' style='width:100%;' rows='7'>" . esc_textarea( $field_value ) . '</textarea>';
 				break;
 			case 'editor':
 				add_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
@@ -1139,11 +1139,11 @@ class Admin {
 				remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
 				break;
 			case 'number':
-				$input = "<input type='" . esc_attr( $type ) . "'" . $_placeholder . " id='wp-ppdg-" . esc_attr( $field ) . "' class='" . esc_attr($_class) . "' name='" . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . "]' value='" . esc_attr( $field_value ) . "' size='" . esc_attr( $size ) . "' step='" . esc_attr( $step ) . "' min='" . esc_attr( $min ) . "' />";
+				$input = "<input type='" . esc_attr( $type ) . "'" . $_placeholder . " id='wp-ppdg-" . esc_attr( $field ) . "' class='" . $_class . "' name='" . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . "]' value='" . esc_attr( $field_value ) . "' size='" . esc_attr( $size ) . "' step='" . esc_attr( $step ) . "' min='" . esc_attr( $min ) . "' />";
 				echo wp_kses($this->wrap_label( $input, $label, $label_pos ), Utils::wp_kses_post_tags_with_form());
 				break;
 			default:
-				$input = "<input type='" . esc_attr( $type ) . "'" . $_placeholder . " id='wp-ppdg-" . esc_attr( $field ) . "' class='" . esc_attr($_class) . "' name='" . esc_attr( $this->option_name ) . "[" . esc_attr( $field ) . "]' value='" . esc_attr( $field_value ) . "' size='" . esc_attr( $size ) . "' />";
+				$input = "<input type='" . esc_attr( $type ) . "'" . $_placeholder . " id='wp-ppdg-" . esc_attr( $field ) . "' class='" . $_class . "' name='" . esc_attr( $this->option_name ) . "[" . esc_attr( $field ) . "]' value='" . esc_attr( $field_value ) . "' size='" . esc_attr( $size ) . "' />";
 				echo wp_kses($this->wrap_label( $input, $label, $label_pos ), Utils::wp_kses_post_tags_with_form());
 				break;
 		}

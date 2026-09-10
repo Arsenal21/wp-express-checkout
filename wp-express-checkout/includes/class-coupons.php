@@ -459,7 +459,7 @@ class Coupons {
 	}
 
 	function save_coupon() {
-		$coupon = sanitize_text_field(wp_unslash($_POST['wpec_coupon']));
+		$coupon = isset( $_POST['wpec_coupon'] ) ? map_deep( wp_unslash( (array) $_POST['wpec_coupon'] ), 'sanitize_text_field' ) : array();
 
 		$coupon_id = isset( $_POST['wpec_coupon_id'] ) ? absint( $_POST['wpec_coupon_id'] ) : false;
 

@@ -193,7 +193,7 @@ class PayPal_PPCP_Onboarding {
 		<a class="button button-primary direct" target="_blank"
 			data-paypal-onboard-complete="wpec_ppcp_onboarded_callback_production"
 			href="<?php echo esc_url( $singup_link ); ?>"
-			data-paypal-button="true"><?php esc_html_e( 'Get PayPal Live Credentials', 'wp-express-checkout' ); ?>ckout') ?></a>
+			data-paypal-button="true"><?php esc_html_e( 'Get PayPal Live Credentials', 'wp-express-checkout' ); ?></a>
 		<?php
 		wp_enqueue_script('paypal-js', 'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js', array(), null, array(
 			'in_footer' => true,

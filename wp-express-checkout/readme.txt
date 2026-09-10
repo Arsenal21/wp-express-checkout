@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.5.0
+Stable tag: 2.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,9 +175,12 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
-= WIP =
-* Escaping functions added for enhanced security.
-* A stripe error issue fixed when managed product in enabled in stripe dashboard.
+
+= 2.5.1 =
+* Added output escaping throughout the plugin for enhanced security.
+* Fixed a Stripe checkout error that occurred when Managed Payments was enabled in the Stripe dashboard.
+* Fixed coupon creation/editing being blocked by over-eager input sanitization.
+* Fixed a stray text fragment showing on the "Get PayPal Live Credentials" button.
 
 = 2.5.0 =
 * Fixed a security issue affecting the free checkout flow when using a coupon. Thanks to Animesh from WPScan for reporting the issue.
