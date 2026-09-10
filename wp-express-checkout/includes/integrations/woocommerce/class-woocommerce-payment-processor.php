@@ -50,6 +50,7 @@ class WooCommerce_Payment_Processor {
 		$status =  $txn_data['status'];
 		if ( strtoupper( $status ) !== 'COMPLETED' ) {
 			// payment is not successful.
+			/* translators: %s is payment status. */
 			$msg =  sprintf( __( 'Payment status is not completed. Status: %s', 'wp-express-checkout' ), $status );
 			Logger::log( $msg, false );
 			$this->send_json_response($msg, false);

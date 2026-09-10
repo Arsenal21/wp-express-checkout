@@ -23,7 +23,7 @@ class Tools_Admin_Menu {
 		?>
 
 		<div class="wrap">
-			<h1><?php esc_html_e( get_admin_page_title() ); ?></h1>
+			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
 			<?php
 			/**
@@ -32,12 +32,12 @@ class Tools_Admin_Menu {
 			 * @param array $tabs An array of tabs titles keyed with the tab slug.
 			 */
 			$wpec_plugin_tabs = apply_filters( 'wpec_tools_tabs', array(
-				'general' => __( 'General Tools', 'wp-express-checkout' ),
+				'general' => esc_html__( 'General Tools', 'wp-express-checkout' ),
 			) );
 
 			$current = "general";
 			if ( isset( $_GET['tab'] ) ) {
-				$current = sanitize_text_field( $_GET['tab'] );
+				$current = sanitize_text_field( wp_unslash($_GET['tab']) );
 			}
 			?>
 
@@ -46,9 +46,9 @@ class Tools_Admin_Menu {
 				foreach ( $wpec_plugin_tabs as $tab => $tab_name ) {
 					$class = ( $current == $tab ) ? ' nav-tab-active' : '';
 					?>
-					<a class="nav-tab<?php esc_attr_e( $class ); ?>"
+					<a class="nav-tab<?php echo esc_attr( $class ); ?>"
 					   href="<?php echo esc_url( WPEC_MENU_PARENT_SLUG . '&page=wpec-tools&tab=' . $tab ); ?>">
-						<?php esc_attr_e( $tab_name ); ?>
+						<?php echo esc_attr( $tab_name ); ?>
 					</a>
 					<?php
 				}
@@ -59,7 +59,7 @@ class Tools_Admin_Menu {
 				<div id="post-body" class="metabox-holder columns-2">
 					<div id="postbox-container-2" class="postbox-container">
 						<?php
-						$tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : '';
+						$tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash($_GET['tab']) ) : '';
 
 						switch ( $tab ) {
 							default:
@@ -94,23 +94,23 @@ class Tools_Admin_Menu {
 		if ( isset( $_POST['wpec-send-custom-email-submit'] ) ){
 
 			if( ! check_admin_referer('wpec-send-custom-email-nonce-action')){
-				wp_die(__('Nonce Verification Failed!', 'wp-express-checkout'));
+				wp_die( esc_html__( 'Nonce Verification Failed!', 'wp-express-checkout' ) );
 			}
 
-			$to      = isset($_POST['customer_email_to']) ? sanitize_email($_POST['customer_email_to']) : '';
+			$to      = isset($_POST['customer_email_to']) ? sanitize_email(wp_unslash($_POST['customer_email_to'])) : '';
 			$from    = isset($_POST['customer_email_from']) ? $_POST['customer_email_from'] : $default_from_email;
-			$subject = isset($_POST['customer_email_subject']) ? sanitize_text_field($_POST['customer_email_subject']) : '';
-			$body    = isset($_POST['customer_email_body']) ? sanitize_textarea_field($_POST['customer_email_body']) : '';
+			$subject = isset($_POST['customer_email_subject']) ? sanitize_text_field(wp_unslash($_POST['customer_email_subject'])) : '';
+			$body    = isset($_POST['customer_email_body']) ? sanitize_textarea_field(wp_unslash($_POST['customer_email_body'])) : '';
 
 			if (empty($to) || empty($from) || empty($subject) || empty($body)){
-				echo '<div class="notice notice-error"><p>'. __('There are some missing fields. Email could not be sent!', 'wp-express-checkout') .'</p></div>';
+				echo '<div class="notice notice-error"><p>'. esc_html__( 'There are some missing fields. Email could not be sent!', 'wp-express-checkout' ) .'</p></div>';
 			} else {
 				$result = Emails::send( $to, $from, $subject, $body );
 				if ( $result ) {
-					echo '<div class="notice notice-success"><p>'. __('Email successfully sent!', 'wp-express-checkout') .'</p></div>';
+					echo '<div class="notice notice-success"><p>'. esc_html__( 'Email successfully sent!', 'wp-express-checkout' ) .'</p></div>';
 					Logger::log( 'Tools menu - Email sent to: ' . $to );
 				} else {
-					echo '<div class="notice notice-error"><p>'. __('Something went wrong, email is not sent!', 'wp-express-checkout') .'</p></div>';
+					echo '<div class="notice notice-error"><p>'. esc_html__( 'Something went wrong, email is not sent!', 'wp-express-checkout' ) .'</p></div>';
 				}
 			}
 
@@ -130,11 +130,11 @@ class Tools_Admin_Menu {
 		?>
 
 		<div class="postbox">
-			<h3 class='hndle'><label for='title'><?php _e( 'Send Email to Customers', 'wp-express-checkout' ) ?></label></h3>
+			<h3 class='hndle'><label for='title'><?php esc_html_e( 'Send Email to Customers', 'wp-express-checkout' ) ?></label></h3>
 			<div class="inside">
 
 				<p class="description">
-					<?php _e('You can use this feature to send a quick email to your customers. If you want to re-send a download link for an order, first get the download link(s) from the Orders menu of the order in question, then email it to them using the following option.', 'wp-express-checkout') ?>
+					<?php echo esc_html__( 'You can use this feature to send a quick email to your customers. If you want to re-send a download link for an order, first get the download link(s) from the Orders menu of the order in question, then email it to them using the following option.', 'wp-express-checkout' ); ?>
 				</p>
 
 				<form method="post" action="">
@@ -142,52 +142,52 @@ class Tools_Admin_Menu {
 						<tbody>
 						<tr>
 							<th scope="row">
-								<label for="wp-ppdg-customer_email_from"><?php _e('From Email Address', 'wp-express-checkout') ?></label>
+								<label for="wp-ppdg-customer_email_from"><?php esc_html_e('From Email Address', 'wp-express-checkout') ?></label>
 							</th>
 							<td>
 								<input type="text"
 								       id="wp-ppdg-customer_email_from"
 								       name="customer_email_from"
-								       value="<?php esc_attr_e($customer_email_from); ?>"
+								       value="<?php echo esc_attr( $customer_email_from ); ?>"
 								       size="40"
 								       required
 								>
-								<p class="description"><?php _e('This email will appear in the from field of the email.', 'wp-express-checkout'); ?></p>
+								<p class="description"><?php echo esc_html__( 'This email will appear in the from field of the email.', 'wp-express-checkout' ); ?></p>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="wp-ppdg-customer_email_to"><?php _e('To Email Address', 'wp-express-checkout') ?></label>
+								<label for="wp-ppdg-customer_email_to"><?php esc_html_e('To Email Address', 'wp-express-checkout') ?></label>
 							</th>
 							<td>
 								<input type="email"
 								       id="wp-ppdg-customer_email_to"
 								       name="customer_email_to"
-								       value="<?php esc_attr_e($customer_email_to); ?>"
+								       value="<?php echo esc_attr( $customer_email_to ); ?>"
 								       size="40"
 								       required
 								>
-								<p class="description"><?php _e('This is the email address where the email with be sent to.', 'wp-express-checkout') ?></p>
+								<p class="description"><?php echo esc_html__( 'This is the email address where the email with be sent to.', 'wp-express-checkout' ); ?></p>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="wp-ppdg-customer_email_subject"><?php _e('Email Subject', 'wp-express-checkout') ?></label>
+								<label for="wp-ppdg-customer_email_subject"><?php esc_html_e('Email Subject', 'wp-express-checkout') ?></label>
 							</th>
 							<td>
 								<input type="text"
 								       id="wp-ppdg-customer_email_subject"
 								       name="customer_email_subject"
-								       value="<?php esc_attr_e($customer_email_subject); ?>"
+								       value="<?php echo esc_attr( $customer_email_subject ); ?>"
 								       size="40"
 								       required
 								>
-								<p class="description"><?php _e('This is the email subject', 'wp-express-checkout') ?></p>
+								<p class="description"><?php echo esc_html__( 'This is the email subject', 'wp-express-checkout' ); ?></p>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="wp-ppdg-customer_email_body"><?php _e('Email Body', 'wp-express-checkout') ?></label>
+								<label for="wp-ppdg-customer_email_body"><?php esc_html_e('Email Body', 'wp-express-checkout') ?></label>
 							</th>
 							<td>
                             <textarea name="customer_email_body"
@@ -196,13 +196,13 @@ class Tools_Admin_Menu {
                                       rows="7"
                                       required
                             ><?php echo esc_textarea($customer_email_body); ?></textarea>
-								<p class="description"><?php _e('Type your email and hit the Send Email button.', 'wp-express-checkout') ?></p>
+								<p class="description"><?php echo esc_html__( 'Type your email and hit the Send Email button.', 'wp-express-checkout' ); ?></p>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row"></th>
 							<td>
-								<button type="submit" class="button"><?php _e('Send Email', 'wp-express-checkout') ?> &gt;&gt;</button>
+								<button type="submit" class="button"><?php esc_html_e('Send Email', 'wp-express-checkout'); ?> &gt;&gt;</button>
 							</td>
 						</tr>
 						</tbody>

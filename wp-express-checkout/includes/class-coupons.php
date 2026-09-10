@@ -45,28 +45,28 @@ class Coupons {
 		if ( empty( $coupon ) ) {
 			//coupon not found
 			$out['valid']   = false;
-			$out['err_msg'] = __( 'Coupon not found.', 'wp-express-checkout' );
+			$out['err_msg'] = esc_html__( 'Coupon not found.', 'wp-express-checkout' );
 			return $out;
 		}
 		$coupon = $coupon[0];
 		//check if coupon is active
 		if ( ! get_post_meta( $coupon->ID, 'wpec_coupon_active', true ) ) {
 			$out['valid']   = false;
-			$out['err_msg'] = __( 'Coupon is not active.', 'wp-express-checkout' );
+			$out['err_msg'] = esc_html__( 'Coupon is not active.', 'wp-express-checkout' );
 			return $out;
 		}
 		//check if coupon start date has come
 		$start_date = get_post_meta( $coupon->ID, 'wpec_coupon_start_date', true );
 		if ( empty( $start_date ) || strtotime( $start_date ) > current_time('timestamp') ) {
 			$out['valid']   = false;
-			$out['err_msg'] = __( 'Coupon is not available yet.', 'wp-express-checkout' );
+			$out['err_msg'] = esc_html__( 'Coupon is not available yet.', 'wp-express-checkout' );
 			return $out;
 		}
 		//check if coupon has expired
 		$exp_date = get_post_meta( $coupon->ID, 'wpec_coupon_exp_date', true );
 		if ( ! empty( $exp_date ) && strtotime( $exp_date ) < current_time('timestamp') ) {
 			$out['valid']   = false;
-			$out['err_msg'] = __( 'Coupon has expired.', 'wp-express-checkout' );
+			$out['err_msg'] = esc_html__( 'Coupon has expired.', 'wp-express-checkout' );
 			return $out;
 		}
 		//check if redemption limit is reached
@@ -74,7 +74,7 @@ class Coupons {
 		$red_count = get_post_meta( $coupon->ID, 'wpec_coupon_red_count', true );
 		if ( ! empty( $red_limit ) && intval( $red_count ) >= intval( $red_limit ) ) {
 			$out['valid']   = false;
-			$out['err_msg'] = __( 'Coupon redemption limit is reached.', 'wp-express-checkout' );
+			$out['err_msg'] = esc_html__( 'Coupon redemption limit is reached.', 'wp-express-checkout' );
 			return $out;
 		}
 		$out['id']           = $coupon->ID;
@@ -99,10 +99,10 @@ class Coupons {
 		$out = array();
 		if ( empty( $_POST['coupon_code'] ) ) {
 			$out['success'] = false;
-			$out['msg']     = __( 'Empty coupon code', 'wp-express-checkout' );
+			$out['msg']     = esc_html__( 'Empty coupon code', 'wp-express-checkout' );
 			wp_send_json( $out );
 		}
-		$coupon_code = strtoupper( $_POST['coupon_code'] );
+		$coupon_code = strtoupper( sanitize_text_field(wp_unslash($_POST['coupon_code'])) );
 
 		$coupon = self::get_coupon( $coupon_code );
 
@@ -115,16 +115,16 @@ class Coupons {
 		$prod_id = filter_input( INPUT_POST, 'product_id', FILTER_SANITIZE_NUMBER_INT );
 		if ( empty( $prod_id ) ) {
 			$out['success'] = false;
-			$out['msg']     = __( 'No product ID specified.', 'wp-express-checkout' );
+			$out['msg']     = esc_html__( 'No product ID specified.', 'wp-express-checkout' );
 			wp_send_json( $out );
 		}
 		if ( ! self::is_coupon_allowed_for_product( $coupon['id'], $prod_id ) ) {
 			$out['success'] = false;
-			$out['msg']     = __( 'Coupon is not allowed for this product.', 'wp-express-checkout' );
+			$out['msg']     = esc_html__( 'Coupon is not allowed for this product.', 'wp-express-checkout' );
 			wp_send_json( $out );
 		}
 
-		$curr = isset( $_POST['curr'] ) ? $_POST['curr'] : '';
+		$curr = isset( $_POST['curr'] ) ? sanitize_text_field(wp_unslash($_POST['curr'])) : '';
 
 		$discount      = $coupon['discount'];
 		$discount_type = $coupon['discountType'];
@@ -169,7 +169,7 @@ class Coupons {
 		$settings['coupons_enabled'] = isset( $opts['coupons_enabled'] ) ? 1 : 0;
 		unregister_setting( 'ppdg-settings-group', 'ppdg-settings' );
 		update_option( 'ppdg-settings', $settings );
-		set_transient( 'wpec_coupons_admin_notice', __( 'Settings updated.', 'wp-express-checkout' ), 60 * 60 );
+		set_transient( 'wpec_coupons_admin_notice', esc_html__( 'Settings updated.', 'wp-express-checkout' ), 60 * 60 );
 	}
 
 	function display_coupons_menu_page() {
@@ -179,7 +179,7 @@ class Coupons {
 		}
 
 		if ( isset( $_GET['action'] ) ) {
-			$action = $_GET['action'];
+			$action = sanitize_text_field(wp_unslash($_GET['action']));
 			if ( $action === 'wpec_add_edit_coupon' ) {
 				//coupon add or edit content
 				$this->display_coupon_add_edit_page();
@@ -197,7 +197,7 @@ class Coupons {
 			delete_transient( 'wpec_coupons_admin_notice' );
 			?>
             <div class="notice notice-success">
-                <p><?php echo $msg; ?></p>
+                <p><?php echo esc_html( $msg ); ?></p>
             </div>
 			<?php
 		}
@@ -208,7 +208,7 @@ class Coupons {
 			delete_transient( 'wpec_coupons_admin_error' );
 			?>
             <div class="notice notice-error">
-                <p><?php echo $msg; ?></p>
+                <p><?php echo esc_html( $msg ); ?></p>
             </div>
 			<?php
 		}
@@ -229,31 +229,31 @@ class Coupons {
 		}
 	</style>
 	<div class="wrap">
-		<h2><?php _e( 'Coupons', 'wp-express-checkout' ); ?></h2>
+	<h2><?php esc_html_e( 'Coupons', 'wp-express-checkout' ); ?></h2>
 				<div id="poststuff"><div id="post-body">
 			<div class="postbox">
-			<h3 class="hndle"><label for="title"><?php _e( 'Coupon Settings', 'wp-express-checkout' ); ?></label></h3>
+		<h3 class="hndle"><label for="title"><?php esc_html_e( 'Coupon Settings', 'wp-express-checkout' ); ?></label></h3>
 			<div class="inside">
 				<form method="post">
 				<input type="hidden" name="wpec_coupons_opts[_save-settings]" value="1">
 				<table class="form-table">
 					<tr>
-					<th scope="row"><?php _e( 'Enable Coupons', 'wp-express-checkout' ); ?></th>
+				<th scope="row"><?php esc_html_e( 'Enable Coupons', 'wp-express-checkout' ); ?></th>
 					<td>
 						<input type="checkbox" name="wpec_coupons_opts[coupons_enabled]"<?php echo $coupons_enabled ? ' checked' : ''; ?>>
-						<p class="description"><?php _e( 'Enables the discount coupon functionality.', 'wp-express-checkout' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Enables the discount coupon functionality.', 'wp-express-checkout' ); ?></p>
 					</td>
 					</tr>
 				</table>
 				<?php
 				wp_nonce_field( 'wpec-coupons-settings' );
-				submit_button( __( 'Save Settings', 'wp-express-checkout' ) );
+			submit_button( esc_html__( 'Save Settings', 'wp-express-checkout' ) );
 				?>
 				</form>
 			</div>
 			</div>
 		</div></div>
-		<h2><?php _e( 'Coupons', 'wp-express-checkout' ); ?> <a class="page-title-action" href="?post_type=<?php echo esc_attr( Products::$products_slug ); ?>&page=wpec-coupons&action=wpec_add_edit_coupon"><?php _e( 'Add a Coupon', 'wp-express-checkout' ); ?></a></h2>
+	<h2><?php esc_html_e( 'Coupons', 'wp-express-checkout' ); ?> <a class="page-title-action" href="?post_type=<?php echo esc_attr( Products::$products_slug ); ?>&page=wpec-coupons&action=wpec_add_edit_coupon"><?php esc_html_e( 'Add a Coupon', 'wp-express-checkout' ); ?></a></h2>
 		<?php $coupons_tbl->display(); ?>
 	</div>
 		<?php
@@ -262,14 +262,16 @@ class Coupons {
 	function display_coupon_add_edit_page() {
 
 		wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_register_style( 'jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css' );
+		// jQuery UI theme is not bundled with WordPress, so an external URL is required.
+		// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedResource
+		wp_register_style( 'jquery-ui', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css' ); // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent
 		wp_enqueue_style( 'jquery-ui' );
 
 		$coupon_id = isset( $_GET['wpec_coupon_id'] ) ? absint( $_GET['wpec_coupon_id'] ) : false;
 		$is_edit   = $coupon_id ? true : false;
 		if ( $is_edit ) {
 			if ( is_null( get_post( $coupon_id ) ) ) {
-				echo 'error';
+				echo esc_html__( 'error', 'wp-express-checkout' );
 				return false;
 			}
 			$coupon = array(
@@ -296,7 +298,6 @@ class Coupons {
 			)
 		);
 		$prod_inputs = '';
-		$input_tpl   = '<label><input type="checkbox" name="wpec_coupon[allowed_products][]" value="%s"%s> %s</label>';
 		if ( $posts ) {
 			foreach ( $posts as $the_post ) {
 				$checked = '';
@@ -305,11 +306,11 @@ class Coupons {
 						$checked = ' checked';
 					}
 				}
-				$prod_inputs .= sprintf( $input_tpl, $the_post->ID, $checked, $the_post->post_title );
+				$prod_inputs .= '<label><input type="checkbox" name="wpec_coupon[allowed_products][]" value="' . esc_attr( $the_post->ID ) . '"' . $checked . '> ' . esc_html( $the_post->post_title ) . '</label>';
 				$prod_inputs .= '<br>';
 			}
 		} else {
-			$prod_inputs = __( 'No products created yet.', 'wp-express-checkout' );
+			$prod_inputs = esc_html__( 'No products created yet.', 'wp-express-checkout' );
 		}
 		wp_reset_postdata();
 
@@ -328,82 +329,82 @@ class Coupons {
 		?>
 
 	<div class="wrap">
-		<h2><?php empty( $coupon_id ) ? _e( 'Add Coupon', 'wp-express-checkout' ) : _e( 'Edit Coupon', 'wp-express-checkout' ); ?></h2>
+	<h2><?php echo empty( $coupon_id ) ? esc_html__( 'Add Coupon', 'wp-express-checkout' ) : esc_html__( 'Edit Coupon', 'wp-express-checkout' ); ?></h2>
 		<form method="post">
 		<table class="form-table">
 			<tr>
-			<th scope="row"><?php _e( 'Active', 'wp-express-checkout' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Active', 'wp-express-checkout' ); ?></th>
 			<td>
 				<input type="checkbox" name="wpec_coupon[active]"<?php echo ( ! $is_edit ) || ( $is_edit && $coupon['active'] ) ? 'checked' : ''; ?>>
-				<p class="description"><?php _e( 'Use this to enable/disable this coupon.', 'wp-express-checkout' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Use this to enable/disable this coupon.', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
 			<?php if ( $is_edit ) { ?>
 				<tr>
-				<th scope="row"><?php _e( 'Coupon ID', 'wp-express-checkout' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Coupon ID', 'wp-express-checkout' ); ?></th>
 				<td>
-					<input type="hidden" name="wpec_coupon_id" value="<?php echo $coupon_id; ?>">
-				<?php echo $coupon_id; ?>
-					<p class="description"><?php _e( 'Coupon ID. This value cannot be changed.', 'wp-express-checkout' ); ?></p>
+				<input type="hidden" name="wpec_coupon_id" value="<?php echo esc_attr( $coupon_id ); ?>">
+			<?php echo esc_html( $coupon_id ); ?>
+				<p class="description"><?php esc_html_e( 'Coupon ID. This value cannot be changed.', 'wp-express-checkout' ); ?></p>
 				</td>
 				</tr>
 			<?php } ?>
 			<tr>
-			<th scope="row"><?php _e( 'Coupon Code', 'wp-express-checkout' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Coupon Code', 'wp-express-checkout' ); ?></th>
 			<td>
-				<input type="text" name="wpec_coupon[code]" value="<?php echo $is_edit ? esc_attr($coupon['code']) : ''; ?>">
-				<p class="description"><?php _e( 'Coupon code that you can share with your customers. Example: GET10OFF', 'wp-express-checkout' ); ?></p>
+			<input type="text" name="wpec_coupon[code]" value="<?php echo $is_edit ? esc_attr( $coupon['code'] ) : ''; ?>">
+			<p class="description"><?php esc_html_e( 'Coupon code that you can share with your customers. Example: GET10OFF', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
 			<tr>
-			<th scope="row"><?php _e( 'Discount', 'wp-express-checkout' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Discount', 'wp-express-checkout' ); ?></th>
 			<td>
 				<input style="vertical-align: middle;" type="text" name="wpec_coupon[discount]" value="<?php echo $is_edit ? esc_attr($coupon['discount']) : ''; ?>">
 				<select name="wpec_coupon[discount_type]">
-				<option value="perc"<?php echo $is_edit && $coupon['discount_type'] === 'perc' ? ' selected' : ''; ?>><?php _e( 'Percent (%)', 'wp-express-checkout' ); ?></option>
-				<option value="fixed"<?php echo $is_edit && $coupon['discount_type'] === 'fixed' ? ' selected' : ''; ?>><?php _e( 'Fixed amount', 'wp-express-checkout' ); ?></option>
+				<option value="perc"<?php echo $is_edit && $coupon['discount_type'] === 'perc' ? ' selected' : ''; ?>><?php esc_html_e( 'Percent (%)', 'wp-express-checkout' ); ?></option>
+				<option value="fixed"<?php echo $is_edit && $coupon['discount_type'] === 'fixed' ? ' selected' : ''; ?>><?php esc_html_e( 'Fixed amount', 'wp-express-checkout' ); ?></option>
 				</select>
-				<p class="description"><?php _e( 'Select discount amount and type. Enter a numeric value only. Example: 25', 'wp-express-checkout' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Select discount amount and type. Enter a numeric value only. Example: 25', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
 			<tr>
-			<th scope="row"><?php _e( 'Redemption Limit', 'wp-express-checkout' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Redemption Limit', 'wp-express-checkout' ); ?></th>
 			<td>
-				<input type="number" name="wpec_coupon[red_limit]"value="<?php echo $is_edit ? esc_attr($coupon['red_limit']) : 0; ?>">
-				<p class="description"><?php _e( 'Set max number of coupons available for redemption. Put 0 to make it unlimited.', 'wp-express-checkout' ); ?></p>
+				<input type="number" name="wpec_coupon[red_limit]" value="<?php echo $is_edit ? esc_attr( $coupon['red_limit'] ) : 0; ?>">
+				<p class="description"><?php esc_html_e( 'Set max number of coupons available for redemption. Put 0 to make it unlimited.', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
 			<tr>
-			<th scope="row"><?php _e( 'Redemption Count', 'wp-express-checkout' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Redemption Count', 'wp-express-checkout' ); ?></th>
 			<td>
-				<input type="number" name="wpec_coupon[red_count]"value="<?php echo $is_edit ? esc_attr($coupon['red_count']) : 0; ?>">
-				<p class="description"><?php _e( 'Number of already redeemed coupons.', 'wp-express-checkout' ); ?></p>
+				<input type="number" name="wpec_coupon[red_count]" value="<?php echo $is_edit ? esc_attr( $coupon['red_count'] ) : 0; ?>">
+				<p class="description"><?php esc_html_e( 'Number of already redeemed coupons.', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
 			<tr>
-			<th scope="row"><?php _e( 'Start Date', 'wp-express-checkout' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Start Date', 'wp-express-checkout' ); ?></th>
 			<td>
-				<input class="datepicker-input" type="text" name="wpec_coupon[start_date]"value="<?php echo $is_edit ? esc_attr($coupon['start_date']) : date( 'Y-m-d' ); ?>">
-				<p class="description"><?php _e( 'Start date when this coupon can be used.', 'wp-express-checkout' ); ?></p>
+				<input class="datepicker-input" type="text" name="wpec_coupon[start_date]" value="<?php echo $is_edit ? esc_attr( $coupon['start_date'] ) : esc_attr(gmdate( 'Y-m-d' )); ?>">
+				<p class="description"><?php esc_html_e( 'Start date when this coupon can be used.', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
 			<tr>
-			<th scope="row"><?php _e( 'Expiry Date', 'wp-express-checkout' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Expiry Date', 'wp-express-checkout' ); ?></th>
 			<td>
-				<input class="datepicker-input" type="text" name="wpec_coupon[exp_date]"value="<?php echo $is_edit ? esc_attr($coupon['exp_date']) : 0; ?>">
-				<p class="description"><?php _e( 'Date when this coupon will expire. Put 0 to disable expiry check.', 'wp-express-checkout' ); ?></p>
+				<input class="datepicker-input" type="text" name="wpec_coupon[exp_date]" value="<?php echo $is_edit ? esc_attr( $coupon['exp_date'] ) : 0; ?>">
+				<p class="description"><?php esc_html_e( 'Date when this coupon will expire. Put 0 to disable expiry check.', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
 			<tr>
-			<th scope="row"><?php _e( 'Coupon Availabe For:', 'wp-express-checkout' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Coupon Availabe For:', 'wp-express-checkout' ); ?></th>
 			<td>
-				<label><input type="radio" name="wpec_coupon[only_for_allowed_products]" value="0"<?php echo ! $is_edit || ( $is_edit && ! $coupon['only_for_allowed_products'] ) ? ' checked' : ''; ?>> <?php _e( 'All products', 'wp-express-checkout' ); ?></label>
+				<label><input type="radio" name="wpec_coupon[only_for_allowed_products]" value="0"<?php echo ! $is_edit || ( $is_edit && ! $coupon['only_for_allowed_products'] ) ? ' checked' : ''; ?>> <?php esc_html_e( 'All products', 'wp-express-checkout' ); ?></label>
 				<br>
-				<label><input type="radio" name="wpec_coupon[only_for_allowed_products]" value="1"<?php echo $is_edit && $coupon['only_for_allowed_products'] ? ' checked' : ''; ?>> <?php _e( 'Specific Products Only', 'wp-express-checkout' ); ?></label>
+				<label><input type="radio" name="wpec_coupon[only_for_allowed_products]" value="1"<?php echo $is_edit && $coupon['only_for_allowed_products'] ? ' checked' : ''; ?>> <?php esc_html_e( 'Specific Products Only', 'wp-express-checkout' ); ?></label>
 				<p class="wpec-coupons-available-products"<?php echo ( $is_edit && ! $coupon['only_for_allowed_products'] ) || ( ! $is_edit ) ? ' style="display: none;"' : ''; ?>>
-				<?php echo $prod_inputs; ?>
+				<?php echo wp_kses_post( $prod_inputs ); ?>
 				</p>
-				<p class="description"><?php _e( 'Choose availability of the coupon. You can specify which products coupon is available when "Specific Products Only" is selected.', 'wp-express-checkout' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Choose availability of the coupon. You can specify which products coupon is available when "Specific Products Only" is selected.', 'wp-express-checkout' ); ?></p>
 			</td>
 			</tr>
 			<?php
@@ -412,7 +413,7 @@ class Coupons {
 		</table>
 		<?php
 		wp_nonce_field( 'wpec-add-edit-coupon' );
-		submit_button( $is_edit ? __( 'Update Coupon', 'wp-express-checkout' ) : __( 'Create Coupon', 'wp-express-checkout' ) );
+		submit_button( $is_edit ? esc_html__( 'Update Coupon', 'wp-express-checkout' ) : esc_html__( 'Create Coupon', 'wp-express-checkout' ) );
 		?>
 		</form>
 	</div>
@@ -458,7 +459,7 @@ class Coupons {
 	}
 
 	function save_coupon() {
-		$coupon = $_POST['wpec_coupon'];
+		$coupon = sanitize_text_field(wp_unslash($_POST['wpec_coupon']));
 
 		$coupon_id = isset( $_POST['wpec_coupon_id'] ) ? absint( $_POST['wpec_coupon_id'] ) : false;
 
@@ -537,7 +538,8 @@ class Coupons {
 				$discount = $coupon['discount'];
 			}
 			$coupon_code = $data['couponCode'];
-			$order->add_item( 'coupon', sprintf( __( 'Coupon Code: %s', 'wp-express-checkout' ), $coupon_code ), abs( $discount ) * -1, 1, 0, false, array( 'code' => $coupon_code ) );
+            /* translators: %s is coupon code */
+			$order->add_item( 'coupon', sprintf( __( 'Coupon Code: %s', 'wp-express-checkout' ), esc_attr($coupon_code) ), abs( $discount ) * -1, 1, 0, false, array( 'code' => $coupon_code ) );
 		}
 	}
 

@@ -5,6 +5,10 @@
  * @package wp-express-checkout
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Shortcodes;
 
@@ -30,13 +34,14 @@ $is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_c
 
 		$min = ( defined( 'WPEC_LOAD_NON_MINIFIED' ) && WPEC_LOAD_NON_MINIFIED ) ? '' : '.min';
 
-		$scriptFrontEnd = WPEC_PLUGIN_URL . "/assets/js/public{$min}.js";
-		$styleFrontEnd = WPEC_PLUGIN_URL . "/assets/css/public{$min}.css";
-		$localVars = array(
+		$script_front_end = WPEC_PLUGIN_URL . "/assets/js/public{$min}.js";
+		$style_front_end  = WPEC_PLUGIN_URL . "/assets/css/public{$min}.css";
+		$local_vars       = array(
 			'str' => array(
 				'errorOccurred' => __( 'Error occurred', 'wp-express-checkout' ),
 				'paymentFor' => __( 'Payment for', 'wp-express-checkout' ),
 				'enterQuantity' => __( 'Please enter a valid quantity', 'wp-express-checkout' ),
+				/* translators: %d: Available stock quantity. */
 				'stockErr' => __( 'You cannot order more items than available: %d', 'wp-express-checkout' ),
 				'enterAmount' => __( 'Please enter a valid amount', 'wp-express-checkout' ),
 				'acceptTos' => __( 'Please accept the terms and conditions', 'wp-express-checkout' ),
@@ -48,50 +53,46 @@ $is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_c
 			),
 			'ajaxUrl' => get_admin_url() . 'admin-ajax.php',
 		);
-		//Allow other plugins to add their own local vars
-		$localVars = apply_filters('wpec_url_payment_box_script_local_vars', $localVars );
+		// Allow other plugins to add their own local vars.
+		$local_vars = apply_filters( 'wpec_url_payment_box_script_local_vars', $local_vars );
+
+		wp_enqueue_style( 'wpec-public', $style_front_end, array(), WPEC_PLUGIN_VER );
+		wp_enqueue_script( 'wpec-public', $script_front_end, array( 'jquery' ), WPEC_PLUGIN_VER, true );
+		wp_localize_script( 'wpec-public', 'ppecFrontVars', $local_vars );
+
+		if ( ! empty( $is_paypal_checkout_enabled ) ) {
+			$wpec_create_order_vars = array(
+				'nonce' => wp_create_nonce( 'wpec-create-order-js-ajax-nonce' ),
+			);
+			$wpec_on_approve_vars = array(
+				'nonce' => wp_create_nonce( 'wpec-onapprove-js-ajax-nonce' ),
+				'return_url' => Main::get_instance()->get_setting( 'thank_you_url' ),
+				'txn_success_message' => __( 'Transaction completed successfully!', 'wp-express-checkout' ),
+				'txn_success_extra_msg' => __( 'Feel free to browse our site further for your next purchase.', 'wp-express-checkout' ),
+			);
+
+			wp_enqueue_script( 'wpec-paypal', WPEC_PLUGIN_URL . '/assets/js/wpec-paypal.js', array( 'wpec-public' ), WPEC_PLUGIN_VER, true );
+			wp_localize_script( 'wpec-paypal', 'wpec_create_order_vars', $wpec_create_order_vars );
+			wp_localize_script( 'wpec-paypal', 'wpec_on_approve_vars', $wpec_on_approve_vars );
+		}
+
+		if ( ! empty( $is_stripe_checkout_enabled ) ) {
+			$wpec_stripe_frontend_vars = array(
+				'nonce' => wp_create_nonce( 'wpec-stripe-create-order-ajax-nonce' ),
+			);
+
+			wp_enqueue_style( 'wpec-stripe', WPEC_PLUGIN_URL . '/assets/css/wpec-stripe-related.css', array(), WPEC_PLUGIN_VER );
+			wp_enqueue_script( 'wpec-stripe', WPEC_PLUGIN_URL . '/assets/js/wpec-stripe.js', array( 'wpec-public' ), WPEC_PLUGIN_VER, true );
+			wp_localize_script( 'wpec-stripe', 'wpec_stripe_frontend_vars', $wpec_stripe_frontend_vars );
+		}
+
+		if ( ! empty( $is_manual_checkout_enabled ) ) {
+			wp_enqueue_script( 'wpec-manual-checkout', WPEC_PLUGIN_URL . '/assets/js/wpec-manual-checkout.js', array( 'wpec-public' ), WPEC_PLUGIN_VER, true );
+		}
+
+		wp_print_styles();
+		wp_print_scripts();
 		?>
-        <link rel="stylesheet" href="<?php echo $styleFrontEnd ?>" />
-
-        <script type="text/javascript">
-			var ppecFrontVars = <?php echo json_encode( $localVars ) ?>;
-        </script>
-        <script src="<?php echo $scriptFrontEnd ?>"></script>
-
-        <?php if (!empty($is_paypal_checkout_enabled)) {
-	        $wpec_create_order_vars = array(
-		        'nonce' => wp_create_nonce('wpec-create-order-js-ajax-nonce'),
-	        );
-	        $wpec_on_approve_vars = array(
-		        'nonce' => wp_create_nonce('wpec-onapprove-js-ajax-nonce'),
-		        'return_url' => Main::get_instance()->get_setting( 'thank_you_url' ),
-		        'txn_success_message' => __('Transaction completed successfully!', 'wp-express-checkout'),
-		        'txn_success_extra_msg' => __('Feel free to browse our site further for your next purchase.', 'wp-express-checkout'),
-	        );
-        ?>
-        <script type="text/javascript">
-            const wpec_create_order_vars = <?php echo json_encode( $wpec_create_order_vars ) ?>;
-            const wpec_on_approve_vars = <?php echo json_encode( $wpec_on_approve_vars ) ?>;
-        </script>
-        <script src="<?php echo WPEC_PLUGIN_URL . "/assets/js/wpec-paypal.js" ?>"></script>
-        <?php } ?>
-
-		<?php if (!empty($is_stripe_checkout_enabled)) {
-            $wpec_stripe_frontend_vars = array(
-	            'nonce' => wp_create_nonce('wpec-stripe-create-order-ajax-nonce'),
-            );
-        ?>
-        <link rel="stylesheet" href="<?php echo WPEC_PLUGIN_URL . "/assets/css/wpec-stripe-related.css" ?>" />
-        <script type="text/javascript">
-            const wpec_stripe_frontend_vars = <?php echo json_encode( $wpec_stripe_frontend_vars ) ?>;
-        </script>
-        <script src="<?php echo WPEC_PLUGIN_URL . "/assets/js/wpec-stripe.js" ?>"></script>
-        <?php } ?>
-
-		<?php if (!empty($is_manual_checkout_enabled)) { ?>
-        <script src="<?php echo WPEC_PLUGIN_URL . "/assets/js/wpec-manual-checkout.js" ?>"></script>
-        <?php } ?>
-
         <style>
 			.wpec-modal-overlay {
                 pointer-events: none;
@@ -117,7 +118,7 @@ $is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_c
 		try {
 			$product = WP_Express_Checkout\Products::retrieve( intval( $product_id ) );
 		} catch (Exception $exc) {
-			wp_die( $exc->getMessage() );
+			wp_die( esc_html($exc->getMessage()) );
 		}
 
 		$atts = array(
@@ -176,14 +177,14 @@ $is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_c
 			'variations' => array(),
 			'stock_enabled' => $product->is_stock_control_enabled(),
 			'stock_items' => $product->get_stock_items(),
-			'price_class' => isset( $atts['price_class'] ) ? $atts['price_class'] : 'wpec-price-' . substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 10 ),
+			'price_class' => isset( $atts['price_class'] ) ? $atts['price_class'] : 'wpec-price-' . substr( sha1( time() . wp_rand( 0, 1000 ) ), 0, 10 ),
 				), $sc_args
 		);
 
 		extract( $sc_args );
 
 		if ( $stock_enabled && empty( $stock_items ) ) {
-			wp_die( '<div class="wpec-out-of-stock">' . esc_html( 'Out of stock', 'wp-express-checkout' ) . '</div>' );
+			wp_die( '<div class="wpec-out-of-stock">' . esc_html__( 'Out of stock', 'wp-express-checkout' ) . '</div>' );
 		}
 
 		$shortcode_id = 'wp_express_checkout_0';
@@ -237,15 +238,18 @@ $is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_c
 		?>
         <script type="text/javascript">
             document.addEventListener( "DOMContentLoaded", function() {
-                window['<?php echo esc_js($shortcode_id) ?>'] = new ppecHandler(<?php echo json_encode($data) ?>);
+                window['<?php echo esc_js( $shortcode_id ); ?>'] = new ppecHandler(<?php echo wp_json_encode( $data ); ?>);
             });
         </script>
 		<?php
 
-        // for paypal
-		if (!empty($is_paypal_checkout_enabled)){
+        // Allowed HTML for generated button markup (contains inline JS).
+		$wpec_button_allowed_html = array( 'script' => array( 'type' => true ) );
+
+		// for paypal.
+		if ( ! empty( $is_paypal_checkout_enabled ) ) {
 			$paypal_button_id = 'paypal_button_0';
-			echo Shortcodes::get_instance()->generate_pp_express_checkout_button($paypal_button_id, $sc_args, $shortcode_id);
+			echo wp_kses( Shortcodes::get_instance()->generate_pp_express_checkout_button( $paypal_button_id, $sc_args, $shortcode_id ), $wpec_button_allowed_html );
 			WP_Express_Checkout\Main::get_instance()->load_paypal_sdk();
 		}
 
@@ -253,13 +257,13 @@ $is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_c
 		$is_stripe_checkout_enabled = apply_filters('wpec_show_stripe_checkout_option_backward_compatible', $is_stripe_checkout_enabled, $product->get_type());  // TODO: For addon backward compatibility.
 		if (!empty($is_stripe_checkout_enabled)){
 			$stripe_button_id = 'stripe_button_0';
-			echo Shortcodes::get_instance()->generate_stripe_express_checkout_button($stripe_button_id, $sc_args, $shortcode_id);
+			echo wp_kses( Shortcodes::get_instance()->generate_stripe_express_checkout_button( $stripe_button_id, $sc_args, $shortcode_id ), $wpec_button_allowed_html );
 		}
 
         // for manual checkout
-		if (!empty($is_manual_checkout_enabled) && $product->get_type() != 'subscription'){
+		if (!empty($is_manual_checkout_enabled) && $product->get_type() !== 'subscription'){
 			$manual_checkout_button_id = 'manual_checkout_button_0';
-			echo Shortcodes::get_instance()->generate_manual_checkout_button($manual_checkout_button_id, $sc_args, $shortcode_id);
+			echo wp_kses( Shortcodes::get_instance()->generate_manual_checkout_button( $manual_checkout_button_id, $sc_args, $shortcode_id ), $wpec_button_allowed_html );
 		}
 
 		?>
@@ -282,7 +286,7 @@ $is_manual_checkout_enabled = Main::get_instance()->get_setting('enable_manual_c
 							<div class="wpec-modal-item-excerpt">
 								<?php 
 								$url_payment_box_prod_desc = wp_trim_words( $post->post_content, 55 );
-								echo apply_filters( 'wpec_url_payment_box_product_description', $url_payment_box_prod_desc, $product_id); 
+								echo wp_kses_post( apply_filters( 'wpec_url_payment_box_product_description', $url_payment_box_prod_desc, $product_id ) );
 								?>
 							</div>
 						</div>

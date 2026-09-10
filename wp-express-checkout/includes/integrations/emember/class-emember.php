@@ -275,15 +275,15 @@ class Emember {
 		$current_val = get_post_meta( $post->ID, 'wpec_product_emember_level', true );
 
 		if ( ! function_exists( 'emember_get_all_membership_levels_list' ) ) {
-			_e( 'Notice: You need to update your copy of the WP eMember plugin before this feature can be used.', 'wp-express-checkout' );
+			esc_html_e( 'Notice: You need to update your copy of the WP eMember plugin before this feature can be used.', 'wp-express-checkout' );
 			return;
 		}
 
 		$all_levels = emember_get_all_membership_levels_list();
-		$levels_str = '<option value="">(' . __( 'None', 'wp-express-checkout' ) . ')</option>' . "\r\n";
+		$levels_str = '<option value="">(' . esc_html__( 'None', 'wp-express-checkout' ) . ')</option>' . "\r\n";
 
 		foreach ( $all_levels as $level ) {
-			$levels_str .= '<option value="' . $level->id . '"' . ( $level->id === $current_val ? ' selected' : '' ) . '>' . stripslashes( $level->alias ) . '</option>' . "\r\n";
+			$levels_str .= '<option value="' . esc_attr( $level->id ) . '"' . ( $level->id === $current_val ? ' selected' : '' ) . '>' . esc_html( stripslashes( $level->alias ) ) . '</option>' . "\r\n";
 		}
 		?>
 <p><?php esc_html_e( 'If you want this product to be connected to a membership level then select the membership Level here.', 'wp-express-checkout' ); ?></p>

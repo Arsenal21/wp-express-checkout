@@ -98,6 +98,7 @@ class Main {
 				'errorOccurred'    => __( 'Error occurred', 'wp-express-checkout' ),
 				'paymentFor'       => __( 'Payment for', 'wp-express-checkout' ),
 				'enterQuantity'    => __( 'Please enter a valid quantity', 'wp-express-checkout' ),
+                // translators: %s is stock quantity.
 				'stockErr'         => __( 'You cannot order more items than available: %d', 'wp-express-checkout' ),
 				'enterAmount'      => __( 'Please enter a valid amount', 'wp-express-checkout' ),
 				'acceptTos'        => __( 'Please accept the terms and conditions', 'wp-express-checkout' ),
@@ -354,9 +355,9 @@ class Main {
 		global $wpdb;
 
 		// get an array of blog ids.
-		$sql = "SELECT blog_id FROM $wpdb->blogs
+		$sql = $wpdb->prepare("SELECT blog_id FROM $wpdb->blogs
 			WHERE archived = '0' AND spam = '0'
-			AND deleted = '0'";
+			AND deleted = '0'");
 
 		return $wpdb->get_col( $sql );
 	}
@@ -633,7 +634,7 @@ class Main {
 			status_header( 200 );
 			// disable WPEngine cache for the page
 			if ( class_exists( 'WpeCommon' ) ) {
-				$cookiepath    = parse_url( get_home_url( null, Main::$link_url_slug ), PHP_URL_PATH );
+				$cookiepath    = wp_parse_url( get_home_url( null, Main::$link_url_slug ), PHP_URL_PATH );
 				$cookie_domain = ! defined( 'COOKIE_DOMAIN' ) ? false : COOKIE_DOMAIN;
 				setcookie( 'wordpress_wpe_no_cache', 1, 0, $cookiepath, $cookie_domain, true, true );
 			}

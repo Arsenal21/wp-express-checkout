@@ -44,7 +44,7 @@ class Simple_WP_Membership extends Emember {
 <select name="wpec_product_swpm_level">
 <option value=""><?php esc_html_e( 'None', 'wp-express-checkout' ); ?></option>
 		<?php
-		echo \SwpmUtils::membership_level_dropdown( $current_val );
+		echo wp_kses_post( \SwpmUtils::membership_level_dropdown( $current_val ) );
 		?>
 </select>
 		<?php

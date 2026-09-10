@@ -34,13 +34,13 @@ class Payment_Processor_Stripe {
 
 		$this->stripe_client = Utils::get_stripe_client();
 
-		$ref_id = isset( $_GET["ref_id"] ) ? $_GET["ref_id"] : 0;
+		$ref_id = isset( $_GET["ref_id"] ) ? sanitize_text_field(wp_unslash($_GET["ref_id"])) : 0;
 
 		$session_id = $ref_id;
 
 		// Make sure fulfillment hasn't already been performed for this Checkout Session
 		if ( self::check_if_checkout_session_processed( $session_id ) ) {
-			wp_die( __( 'The order has captured already!', 'wp-express-checkout' ) );
+			wp_die( esc_html__( 'The order has captured already!', 'wp-express-checkout' ) );
 		}
 
 		$this->trans = get_transient( 'wpec_checkout_session_' . $session_id );
@@ -55,7 +55,7 @@ class Payment_Processor_Stripe {
 			$order_id = $this->process_checkout_session_and_create_order( $session_id );
 		} catch ( \Exception $e ) {
 			Logger::log( $e->getMessage() , false );
-			wp_die( __('Error: Stripe payment data could not be processed!' , 'wp-express-checkout') );
+			wp_die( esc_html__('Error: Stripe payment data could not be processed!' , 'wp-express-checkout') );
 		}
 
 		//Everything passed. Redirecting user to thank you page.
@@ -106,11 +106,11 @@ class Payment_Processor_Stripe {
 			// Check the Checkout Session's payment_status property
 			// to determine if fulfillment should be performed
 			if ( $sess->payment_status != 'paid' ) {
-				wp_die( __( "The payment for this order hasn't been paid already", 'wp-express-checkout' ) );
+				wp_die( esc_html__( "The payment for this order hasn't been paid already", 'wp-express-checkout' ) );
 			}
 
 		} catch ( ApiErrorException $e ) {
-			throw new \Exception( $e->getMessage() );
+			throw new \Exception( esc_html($e->getMessage()) );
 		}
 
 		// process and save order details form ipn_data.
@@ -193,7 +193,7 @@ class Payment_Processor_Stripe {
 			$order   = Orders::create();
 			$product = Products::retrieve( $product_id );
 		} catch ( \Exception $e ) {
-			wp_die( $e->getMessage() );
+			wp_die( esc_html($e->getMessage()) );
 		}
 
 		$order_id = $order->get_id();
@@ -206,6 +206,7 @@ class Payment_Processor_Stripe {
 		$price = $this->get_price($product, $this->trans, $this->wpec_data );
 
 		$order->set_payment_gateway( 'stripe' );
+		// translators: 1: Quantity, 2: Item name, 3: Transaction status.
 		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $transaction_status ) );
 		$order->set_currency( $currency );
 		$order->set_resource_id( $resource_id );

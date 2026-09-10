@@ -98,7 +98,7 @@ class Orders {
 		);
 
 		if ( is_wp_error( $id ) ) {
-			throw new Exception( $id->get_error_message(), 2001 );
+			throw new Exception( esc_html($id->get_error_message()), 2001 );
 		}
 
 		$user_ip_address = Utils::get_user_ip_address();
@@ -129,12 +129,13 @@ class Orders {
 	static public function retrieve( $order_post_id ) {
 
 		if ( ! is_numeric( $order_post_id ) ) {
-			throw new Exception( __( 'Invalid order id given. Must be an integer', 'wp-express-checkout' ), 2002 );
+			throw new Exception( esc_html__( 'Invalid order id given. Must be an integer', 'wp-express-checkout' ), 2002 );
 		}
 
 		$order_data = get_post( $order_post_id );
 		if ( ! $order_data || $order_data->post_type !== self::PTYPE ) {
-			throw new Exception( sprintf( __( "Can't find order with ID %s", 'wp-express-checkout' ), $order_post_id ), 2003 );
+			/* translators: %s is the order id. */
+			throw new Exception( sprintf( esc_html__( "Can't find order with ID %s", 'wp-express-checkout' ), esc_attr($order_post_id) ), 2003 );
 		}
 
 		$order = new Order( $order_data );
@@ -220,6 +221,7 @@ class Orders {
 			$order->add_item( 'shipping', __( 'Shipping', 'wp-express-checkout' ), $data['shipping'] );
 		}
 		if ( $data['coupon_code'] ) {
+			/* translators: %s is the coupon code. */
 			$order->add_item( 'coupon', sprintf( __( 'Coupon Code: %s', 'wp-express-checkout' ), $data['coupon_code'] ), abs( $data['discount'] ) * -1, 1, false, array( 'code' => $data['coupon_code'] ) );
 		}
 
@@ -323,7 +325,7 @@ class Orders {
 				Logger::log( "Refund process couldn't been succeeded!", false);
 			}
 		} catch (\Exception $e){
-			return new \WP_Error(2004,__( $e->getMessage(), 'wp-express-checkout' ));
+			return new \WP_Error(2004,$e->getMessage());
 		}
 
 		return new \WP_Error(2005,__( 'Something went wrong, refund is not completed!', 'wp-express-checkout' ));

@@ -185,6 +185,10 @@ class Stripe_Payment_Button_Ajax_Handler {
 				$opts['locale'] = $stripe_locale;
 			}
 
+			$opts['managed_payments'] = array(
+				'enabled' => false,
+			);
+
 			$opts = apply_filters( 'wpec_stripe_checkout_session_opts', $opts, $wpec_data, $order_data );
 
 			$session = $stripe_client->checkout->sessions->create( $opts );

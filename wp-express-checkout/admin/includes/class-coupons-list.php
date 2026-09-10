@@ -54,14 +54,14 @@ class Coupons_List extends WP_List_Table {
 
 	public function get_columns() {
 		$columns = array(
-			'coupon'     => __( 'Coupon Code', 'wp-express-checkout' ),
-			'id'         => 'ID',
-			'active'     => __( 'Active', 'wp-express-checkout' ),
-			'discount'   => __( 'Discount Value', 'wp-express-checkout' ),
-			'red_count'  => __( 'Redemption Count', 'wp-express-checkout' ),
-			'red_limit'  => __( 'Redemption Limit', 'wp-express-checkout' ),
-			'start_date' => __( 'Start Date', 'wp-express-checkout' ),
-			'exp_date'   => __( 'Expiry Date', 'wp-express-checkout' ),
+			'coupon'     => esc_html__( 'Coupon Code', 'wp-express-checkout' ),
+			'id'         => esc_html__( 'ID', 'wp-express-checkout' ),
+			'active'     => esc_html__( 'Active', 'wp-express-checkout' ),
+			'discount'   => esc_html__( 'Discount Value', 'wp-express-checkout' ),
+			'red_count'  => esc_html__( 'Redemption Count', 'wp-express-checkout' ),
+			'red_limit'  => esc_html__( 'Redemption Limit', 'wp-express-checkout' ),
+			'start_date' => esc_html__( 'Start Date', 'wp-express-checkout' ),
+			'exp_date'   => esc_html__( 'Expiry Date', 'wp-express-checkout' ),
 		);
 		return $columns;
 	}
@@ -69,22 +69,22 @@ class Coupons_List extends WP_List_Table {
 	public function column_default( $item, $column_name ) {
 		switch ( $column_name ) {
 			case 'exp_date':
-				return $item[ $column_name ] == 0 ? __( 'No expiry', 'wp-express-checkout' ) : esc_attr($item[ $column_name ]);
+				return $item[ $column_name ] == 0 ? esc_html__( 'No expiry', 'wp-express-checkout' ) : esc_attr($item[ $column_name ]);
 			case 'active':
-				return $item[ $column_name ] == 0 ? __( 'No', 'wp-express-checkout' ) : __( 'Yes', 'wp-express-checkout' );
+				return $item[ $column_name ] == 0 ? esc_html__( 'No', 'wp-express-checkout' ) : esc_html__( 'Yes', 'wp-express-checkout' );
 			case 'coupon':
 				$str = '';
 				// translators: %s is coupon code
-				$confirm_coupon_delete_msg = sprintf( __( 'Are you sure you want to delete "%s" coupon? This can\'t be undone.', 'wp-express-checkout' ), esc_attr($item['coupon']) );
+				$confirm_coupon_delete_msg = sprintf( esc_html__( 'Are you sure you want to delete "%s" coupon? This can\'t be undone.', 'wp-express-checkout' ), esc_html( $item['coupon'] ) );
 				ob_start();
 				?>
-<a href="<?php echo WPEC_MENU_PARENT_SLUG; ?>&page=wpec-coupons&action=wpec_add_edit_coupon&wpec_coupon_id=<?php echo esc_attr( $item['id'] ); ?>" aria-label="<?php echo esc_attr( __( 'Edit coupon', 'wp-express-checkout' ) ); ?>"><?php echo esc_html( $item[ $column_name ] ); ?></a>
+<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'wpec-coupons', 'action' => 'wpec_add_edit_coupon', 'wpec_coupon_id' => $item['id'] ), WPEC_MENU_PARENT_SLUG ) ); ?>" aria-label="<?php echo esc_attr( esc_html__( 'Edit coupon', 'wp-express-checkout' ) ); ?>"><?php echo esc_html( $item[ $column_name ] ); ?></a>
 <div class="row-actions">
 	<span class="edit">
-		<a href="<?php echo WPEC_MENU_PARENT_SLUG; ?>&page=wpec-coupons&action=wpec_add_edit_coupon&wpec_coupon_id=<?php echo esc_attr( $item['id'] ); ?>" aria-label="<?php echo esc_attr( __( 'Edit coupon', 'wp-express-checkout' ) ); ?>"><?php echo esc_html( __( 'Edit', 'wp-express-checkout' ) ); ?></a> |
+		<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'wpec-coupons', 'action' => 'wpec_add_edit_coupon', 'wpec_coupon_id' => $item['id'] ), WPEC_MENU_PARENT_SLUG ) ); ?>" aria-label="<?php echo esc_attr( __( 'Edit coupon', 'wp-express-checkout' ) ); ?>"><?php echo esc_html__( 'Edit', 'wp-express-checkout' ); ?></a> |
 	</span>
 	<span class="trash">
-		<a href="<?php echo esc_attr( wp_nonce_url( WPEC_MENU_PARENT_SLUG . '&page=wpec-coupons&action=wpec_delete_coupon&wpec_coupon_id=' . $item['id'], 'delete-coupon_' . $item['id'] ) ); ?>" class="submitdelete" aria-label="<?php echo esc_attr( __( 'Delete coupon', 'wp-express-checkout' ) ); ?>" onclick="return confirm('<?php echo esc_js( $confirm_coupon_delete_msg ); ?>');"><?php echo esc_attr( __( 'Delete', 'wp-express-checkout' ) ); ?></a>
+		<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'page' => 'wpec-coupons', 'action' => 'wpec_delete_coupon', 'wpec_coupon_id' => $item['id'] ), WPEC_MENU_PARENT_SLUG ), 'delete-coupon_' . $item['id'] ) ); ?>" class="submitdelete" aria-label="<?php echo esc_attr( esc_html__( 'Delete coupon', 'wp-express-checkout' ) ); ?>" onclick="return confirm('<?php echo esc_js( $confirm_coupon_delete_msg ); ?>');"><?php echo esc_html__( 'Delete', 'wp-express-checkout' ); ?></a>
 	</span>
 </div>
 				<?php
@@ -116,11 +116,11 @@ class Coupons_List extends WP_List_Table {
 		$order   = 'desc';
 		// If orderby is set, use this as the sort column
 		if ( ! empty( $_GET['orderby'] ) ) {
-			$orderby = $_GET['orderby'];
+			$orderby = sanitize_text_field( wp_unslash( $_GET['orderby'] ) );
 		}
 		// If order is set use this as the order
 		if ( ! empty( $_GET['order'] ) ) {
-			$order = $_GET['order'];
+			$order = sanitize_text_field(wp_unslash( $_GET['order'] ) );
 		}
 		$result = strcmp( $a[ $orderby ], $b[ $orderby ] );
 		if ( $order === 'asc' ) {

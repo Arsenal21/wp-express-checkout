@@ -71,10 +71,10 @@ class Order_Summary_TableTest extends \WP_UnitTestCase {
 	 */
 	public function testShow() {
 		ob_start();
-		$this->object->show( [ 'class' => 'test-table', 'dummytrue' => true, 'dummyfalse' => false ] );
+		$this->object->show( [ 'class' => 'test-table' ] );
 		$output = ob_get_clean();
 		$this->assertEquals( ""
-			. "<table class=\"test-table\" dummytrue=\"dummytrue\">"
+			. "<table class=\"test-table\">"
 				. "<thead>"
 					. "<tr>"
 						. "<th>Product</th>"

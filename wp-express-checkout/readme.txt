@@ -175,6 +175,9 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+= WIP =
+* Escaping functions added for enhanced security.
+* A stripe error issue fixed when managed product in enabled in stripe dashboard.
 
 = 2.5.0 =
 * Fixed a security issue affecting the free checkout flow when using a coupon. Thanks to Animesh from WPScan for reporting the issue.

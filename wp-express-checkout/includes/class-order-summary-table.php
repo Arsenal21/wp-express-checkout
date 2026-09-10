@@ -98,7 +98,7 @@ class Order_Summary_Table {
 
 	public function show( $attributes = array() ) {
 		$items = $this->order->get_items();
-		echo $this->table( $items, $attributes, $this->args );
+		echo wp_kses_post($this->table( $items, $attributes, $this->args ));
 	}
 
 	protected function subtotal( $items ) {
@@ -128,7 +128,8 @@ class Order_Summary_Table {
 	protected function row( $item ) {
 		$quantity  = '';
 		if ( $item['quantity'] > 1 ) {
-			$quantity = $this->html( 'strong', sprintf( __( 'x %s', 'wp-express-checkout' ), $item['quantity'] ) );
+			/* translators: %s is item quantity */
+			$quantity = $this->html( 'strong', sprintf( __( 'x %s', 'wp-express-checkout' ), esc_attr($item['quantity']) ) );
 		}
 
 		$cells = array(

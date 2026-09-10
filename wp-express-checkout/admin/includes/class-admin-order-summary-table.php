@@ -47,6 +47,7 @@ class Admin_Order_Summary_Table extends Order_Summary_Table {
 		}
 
 		if ( $item['quantity'] > 1 ) {
+			/* translators: %s is the item quantity. */
 			$quantity = $this->html( 'strong', sprintf( __( 'x %s', 'wp-express-checkout' ), $item['quantity'] ) );
 		}
 

@@ -37,8 +37,8 @@ class Payment_Processor_Manual extends Payment_Processor {
 		}
 
 		$this->order_data         = $this->get_order_data();
-		$this->transaction_id     = 'manual_' . strtoupper( substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 20 ) );
-		$this->capture_id         = 'manual_' . strtoupper( substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 20 ) );
+		$this->transaction_id     = 'manual_' . strtoupper( substr( sha1( time() . wp_rand( 0, 1000 ) ), 0, 20 ) );
+		$this->capture_id         = 'manual_' . strtoupper( substr( sha1( time() . wp_rand( 0, 1000 ) ), 0, 20 ) );
 		$this->transaction_status = 'COMPLETED';
 
 		$payment = $this->get_payment_data();

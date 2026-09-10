@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /**
  * Thank You page template
  *
@@ -28,29 +33,29 @@ $trial_payment = $order->get_item( 'trial' );
 ?>
 
 <div class="wpec-order-details-wrap">
-    <h4><?php _e( 'Thank you for your purchase.', 'wp-express-checkout' ); ?></h4>
+    <h4><?php esc_html_e( 'Thank you for your purchase.', 'wp-express-checkout' ); ?></h4>
     <div class="wpec-order-data-box">
         <div class="wpec-order-data-box-col wpec-order-data-box-col-date">
-            <div class="wpec-order-data-box-col-label"><?php _e( "Date", "wp-express-checkout" ); ?></div>
-            <div class="wpec-order-data-box-col-value"><?php esc_attr_e(get_post_time( 'F j, Y', false, $order->get_id() ));?></div>
+            <div class="wpec-order-data-box-col-label"><?php esc_html_e( "Date", "wp-express-checkout" ); ?></div>
+            <div class="wpec-order-data-box-col-value"><?php echo esc_attr( get_post_time( 'F j, Y', false, $order->get_id() ) ); ?></div>
         </div>
         <div class="wpec-order-data-box-col wpec-order-data-box-col-email">
-            <div class="wpec-order-data-box-col-label"><?php _e( "Email", "wp-express-checkout" ); ?></div>
-            <div class="wpec-order-data-box-col-value"><?php esc_attr_e($order->get_email_address()); ?></div>
+            <div class="wpec-order-data-box-col-label"><?php esc_html_e( "Email", "wp-express-checkout" ); ?></div>
+            <div class="wpec-order-data-box-col-value"><?php echo esc_attr( $order->get_email_address() ); ?></div>
         </div>
         <div class="wpec-order-data-box-col wpec-order-data-box-col-txn-id">
-            <div class="wpec-order-data-box-col-label"><?php _e( "Transaction ID", "wp-express-checkout" ); ?></div>
-            <div class="wpec-order-data-box-col-value"><?php esc_attr_e($order->get_capture_id()); ?></div>
+            <div class="wpec-order-data-box-col-label"><?php esc_html_e( "Transaction ID", "wp-express-checkout" ); ?></div>
+            <div class="wpec-order-data-box-col-value"><?php echo esc_attr( $order->get_capture_id() ); ?></div>
         </div>
     </div>
 
-    <h4 class="wpec-order-details-heading"><?php _e( "Order Details", "wp-express-checkout" ); ?></h4>
+    <h4 class="wpec-order-details-heading"><?php esc_html_e( "Order Details", "wp-express-checkout" ); ?></h4>
 
     <table class="wpec-order-details-table">
         <thead>
             <tr>
-                <th style="text-align: start"><?php _e( "Item", "wp-express-checkout" ); ?></th>
-                <th style="text-align: end"><?php _e( "Total", "wp-express-checkout" ); ?></th>
+                <th style="text-align: start"><?php esc_html_e( "Item", "wp-express-checkout" ); ?></th>
+                <th style="text-align: end"><?php esc_html_e( "Total", "wp-express-checkout" ); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -83,12 +88,12 @@ $trial_payment = $order->get_item( 'trial' );
             } ?>
 
             <tr>
-                <th style="text-align: start"><?php _e( "Quantity: ", "wp-express-checkout" ); ?></th>
-                <th style="text-align: end">x<?php esc_attr_e($product['quantity']); ?></th>
+                <th style="text-align: start"><?php esc_html_e( "Quantity: ", "wp-express-checkout" ); ?></th>
+                <th style="text-align: end">x<?php echo esc_attr( $product['quantity'] ); ?></th>
             </tr>
             <tr>
-                <th style="text-align: start"><?php _e( "Subtotal: ", "wp-express-checkout" ); ?></th>
-                <th style="text-align: end"><?php echo Utils::price_format( $subtotal, $order->get_currency() ) ?></th>
+                <th style="text-align: start"><?php esc_html_e( "Subtotal: ", "wp-express-checkout" ); ?></th>
+                <th style="text-align: end"><?php echo esc_html(Utils::price_format( $subtotal, $order->get_currency() )) ?></th>
             </tr>
 
             <?php if ( ! empty( $trial_payment_discount ) ) {
@@ -109,21 +114,21 @@ $trial_payment = $order->get_item( 'trial' );
 
             <?php if ( ! empty( floatval( $tax_amount ) ) ) { ?>
                 <tr>
-                    <td style="text-align: start"><?php _e( "Tax: ", "wp-express-checkout" ); ?></td>
-                    <td style="text-align: end"><?php echo Utils::price_format( $tax_amount, $order->get_currency() ) ?></td>
+                    <td style="text-align: start"><?php esc_html_e( "Tax: ", "wp-express-checkout" ); ?></td>
+                    <td style="text-align: end"><?php echo esc_html(Utils::price_format( $tax_amount, $order->get_currency() )) ?></td>
                 </tr>
             <?php } ?>
 
             <?php if ( ! empty( floatval( $shipping_amount ) ) ) { ?>
                 <tr>
-                    <td style="text-align: start"><?php _e( "Shipping: ", "wp-express-checkout" ); ?></td>
-                    <td style="text-align: end"><?php echo Utils::price_format( $shipping_amount, $order->get_currency() ) ?></td>
+                    <td style="text-align: start"><?php esc_html_e( "Shipping: ", "wp-express-checkout" ); ?></td>
+                    <td style="text-align: end"><?php echo esc_html(Utils::price_format( $shipping_amount, $order->get_currency() )) ?></td>
                 </tr>
             <?php } ?>
 
             <tr>
-                <th style="text-align: start"><?php _e( "Total Amount: ", "wp-express-checkout" ); ?></th>
-                <th style="text-align: end"><?php echo Utils::price_format( $order->get_total(), $order->get_currency() ) ?></th>
+                <th style="text-align: start"><?php esc_html_e( "Total Amount: ", "wp-express-checkout" ); ?></th>
+                <th style="text-align: end"><?php echo esc_html(Utils::price_format( $order->get_total(), $order->get_currency() )) ?></th>
             </tr>
         </tbody>
     </table>
@@ -136,12 +141,12 @@ $trial_payment = $order->get_item( 'trial' );
 
     if ( !empty($show_downloads) && is_array( $downloads ) && ! empty( $downloads ) ) { 
     ?>
-        <h4><?php _e( "Downloads", "wp-express-checkout" ); ?></h4>
+        <h4><?php esc_html_e( "Downloads", "wp-express-checkout" ); ?></h4>
         <table class="wpec-order-downloads-table">
             <thead>
                 <tr>
-                    <th style="text-align: start"><?php _e( "Item", "wp-express-checkout" ); ?></th>
-                    <th style="text-align: end"><?php _e( "Download Link", "wp-express-checkout" ); ?></th>
+                    <th style="text-align: start"><?php esc_html_e( "Item", "wp-express-checkout" ); ?></th>
+                    <th style="text-align: end"><?php esc_html_e( "Download Link", "wp-express-checkout" ); ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -149,7 +154,7 @@ $trial_payment = $order->get_item( 'trial' );
                 <tr>
                     <td><?php echo esc_attr( $dl_name ) ?></td>
                     <td style="text-align: end"><a class="wpec-order-downloadable-item-link" href="<?php echo esc_url( $dl_url ) ?>"
-                           target="_blank"><?php _e( "Download", "wp-express-checkout" ) ?></a>
+                           target="_blank"><?php esc_html_e( "Download", "wp-express-checkout" ) ?></a>
                     </td>
                 </tr>
                 <?php } ?>
@@ -159,15 +164,15 @@ $trial_payment = $order->get_item( 'trial' );
 
 	<?php if ( ! empty( $shipping_address ) ) { ?>
         <div class="wpec-order-additional-data-box wpec-order-additional-data-box-shipping-address">
-            <h4><?php _e( "Shipping Address", "wp-express-checkout" ); ?></h4>
-            <div class="wpec-order-shipping-address"><?php esc_attr_e($shipping_address); ?></div>
+            <h4><?php esc_html_e( "Shipping Address", "wp-express-checkout" ); ?></h4>
+            <div class="wpec-order-shipping-address"><?php echo esc_attr( $shipping_address ); ?></div>
         </div>
 	<?php } ?>
 
 	<?php if ( ! empty( $billing_address ) ) { ?>
         <div class="wpec-order-additional-data-box wpec-order-additional-data-box-billing-address">
-            <h4><?php _e( "Billing Address", "wp-express-checkout" ); ?></h4>
-            <div class="wpec-order-billing-address"><?php esc_attr_e( $billing_address ); ?></div>
+            <h4><?php esc_html_e( "Billing Address", "wp-express-checkout" ); ?></h4>
+            <div class="wpec-order-billing-address"><?php echo esc_attr( $billing_address ); ?></div>
         </div>
 	<?php } ?>
 </div>

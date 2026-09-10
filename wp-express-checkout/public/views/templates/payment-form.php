@@ -3,7 +3,11 @@
  * Manual checkout (100% discount) Payment form template. This template is used to display the 100% discount checkout scenario.
  */
 
-//Get the main instance of the plugin so we can access the settings.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+// Get the main instance of the plugin so we can access the settings.
 $class_main_inst = WP_Express_Checkout\Main::get_instance();
 
 $product_type = get_post_meta($product_id, 'wpec_product_type',  true);
@@ -33,7 +37,10 @@ do_action( 'wpec_payment_form_before_template', $product_id );
 		?>
 		<div class="wpec-custom-amount-section">
 			<span class="wpec-custom-amount-label-field">
-				<label><?php echo esc_html(  sprintf( __( 'Enter Amount (%s): ', 'wp-express-checkout' ), $currency ) ); ?></label>
+				<label><?php
+				/* translators: %s: Currency code/symbol. */
+				echo esc_html( sprintf( __( 'Enter Amount (%s): ', 'wp-express-checkout' ), $currency ) );
+			?></label>
 			</span>
 			<span class="wpec-custom-amount-input-field">
 				<input id="wp-ppec-custom-amount" data-ppec-button-id="<?php echo esc_attr( $shortcode_id ); ?>" type="number" step="<?php echo esc_attr( $step ); ?>" name="custom-amount" class="wp-ppec-input wp-ppec-custom-amount" min="<?php echo esc_attr( $min ); ?>" value="<?php echo esc_attr( $default_custom_price ); ?>">
@@ -73,7 +80,7 @@ do_action( 'wpec_payment_form_before_template', $product_id );
 		foreach ( $variations['groups'] as $grp_id => $group ) {
 			?>
 			<div class="wpec-product-variations-cont">
-				<label class="wpec-product-variations-label"><?php echo esc_attr( $group ); ?></label>
+				<label class="wpec-product-variations-label"><?php echo esc_html( $group ); ?></label>
 				<?php
 				if ( ! empty( $variations[ $grp_id ]['opts'] ) ) {
 					// radio buttons output.
@@ -276,19 +283,22 @@ do_action( 'wpec_payment_form_before_template', $product_id );
 		<?php if ( $class_main_inst->get_setting( 'tos_enabled' ) ) { ?>
 			<div class="wpec_product_tos_input_container">
 				<label class="wpec_product_tos_label">
-					<input id="wpec-tos-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_product_tos_input" type="checkbox"> <?php echo html_entity_decode( $class_main_inst->get_setting( 'tos_text' ) ); ?>
+					<input id="wpec-tos-<?php echo esc_attr( $shortcode_id ); ?>" class="wpec_product_tos_input" type="checkbox"> <?php echo wp_kses_post( $class_main_inst->get_setting( 'tos_text' ) ); ?>
 				</label>
 				<div class="wp-ppec-form-error-msg"></div>
 			</div>
 		<?php } ?>
 
 		<?php if ( $stock_enabled ) { ?>
-			<label class="wpec_stock_items_label"><?php printf( __( 'Available Quantity: %d', 'wp-express-checkout' ), $stock_items ); ?></label>
+			<label class="wpec_stock_items_label"><?php
+				/* translators: %d: Available stock quantity. */
+				echo esc_html( sprintf( __( 'Available Quantity: %d', 'wp-express-checkout' ), $stock_items ) );
+			?></label>
 		<?php } ?>
 
 		<?php if ( $use_modal ) { ?>
 			<div class="wpec-price-container <?php echo esc_attr( $price_class );?>">
-				<?php echo WP_Express_Checkout\Shortcodes::get_instance()->generate_price_tag( $sc_args ); ?>
+				<?php echo wp_kses_post( WP_Express_Checkout\Shortcodes::get_instance()->generate_price_tag( $sc_args ) ); ?>
 			</div>
 		<?php } ?>
 
@@ -311,7 +321,7 @@ do_action( 'wpec_payment_form_before_template', $product_id );
 
             <?php if (isset($stripe_button_id)) { ?>
                 <?php if (empty(\WP_Express_Checkout\Utils::get_stripe_secret_key())) { ?>
-                    <p style="color: #cc0000"><?php esc_html_e('You have enabled the Stripe payment method, but the API key is missing. Please configure your Stripe API key in the Settings menu to proceed.'); ?></p>
+                    <p style="color: #cc0000"><?php esc_html_e( 'You have enabled the Stripe payment method, but the API key is missing. Please configure your Stripe API key in the Settings menu to proceed.', 'wp-express-checkout' ); ?></p>
                 <?php } else { ?>
                     <div id="<?php echo esc_attr( $stripe_button_id ); ?>" style="margin-bottom: 16px"></div>
                 <?php } ?>

@@ -83,7 +83,7 @@ class Utils_Downloads
             }
             //Lets try another method of conversion
             Logger::log("Trying the secondary URL conversion method.");
-            $path = parse_url($src_file_url, PHP_URL_PATH);
+            $path = wp_parse_url($src_file_url, PHP_URL_PATH);
             $abs_path = $absolute_path_root . $path;
             //$abs_path = ABSPATH.$path;//another option
             $abs_path = str_replace('//', '/', $abs_path);
@@ -111,56 +111,54 @@ class Utils_Downloads
         return false;
     }
 
-    /**
-     * Returns the size, in bytes, of a file whose path is specified by a URI.  If the URI is a qualified URL and cURL is not
-     * installed on the server, a string of "unknown" is returned.  Note: We use "URI" instead of "URL" because this is not
-     * necessarily an HTTP request.
-     *
-     * @param string $uri
-     * @param string $user
-     * @param string $pw
-     * @return string File size. Return "unknown" if no information available.
-     */
-    public static function dl_filesize($uri, $user = '', $pw = '')
-    {
-        if (preg_match("/^http/i", $uri) != 1) {
-            // Not a qualified URL...
-            $retVal = @filesize($uri); // Get file size.
-            if ($retVal === false) {
-                $retVal = 'unknown';
-            }
-            // Whitewash any stat() errors.
-            return $retVal; // Return local file size.
-        }
-        if (!function_exists('curl_init')) {
-            return 'unknown';
-        }
-        // If cURL not installed, size is "unknown."
-        $ch = curl_init($uri); // Initialize cURL for this URI.
-        if ($ch === false) {
-            return 'unknown';
-        }
-        // Return "unknown" if initialization fails.
-        curl_setopt($ch, CURLOPT_HEADER, true); // Request header in output.
-        curl_setopt($ch, CURLOPT_NOBODY, true); // Exclude body from output).
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return transfer as string on curl_exec().
-        // if auth is needed, do it here
-        if (!empty($user) && !empty($pw)) { // Set optional authentication headers...
-            $headers = array('Authorization: Basic ' . base64_encode($user . ':' . $pw));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        }
-        $header = curl_exec($ch); // Retrieve the remote file header.
-        if ($header === false) {
-            return 'unknown';
-        }
-        // Return "unknown" if header could not be retrieved.
-        // Parse the remote file header for the content length...
-        if (preg_match('/Content-Length:\s([0-9].+?)\s/', $header, $matches) == 1) {
-            return $matches[1]; // Return remote file size.
-        } else {
-            return 'unknown'; // Return "unknown" if no information available.
-        }
-    }
+	/**
+	 * Returns the size, in bytes, of a file whose path is specified by a URI.  If the URI is a qualified URL and cURL is not
+	 * installed on the server, a string of "unknown" is returned.  Note: We use "URI" instead of "URL" because this is not
+	 * necessarily an HTTP request.
+	 *
+	 * @param string $uri
+	 * @param string $user
+	 * @param string $pw
+	 * @return string File size. Return "unknown" if no information available.
+	 */
+	public static function dl_filesize( $uri, $user = '', $pw = '' )
+	{
+		if ( preg_match( "/^http/i", $uri ) !== 1 ) {
+			// Not a qualified URL.
+			$retVal = @filesize( $uri );
+
+			if ( $retVal === false ) {
+				$retVal = 'unknown';
+			}
+
+			return $retVal;
+		}
+
+		$args = array(
+			'timeout' => 10,
+		);
+
+		// Set optional authentication.
+		if ( ! empty( $user ) && ! empty( $pw ) ) {
+			$args['headers'] = array(
+				'Authorization' => 'Basic ' . base64_encode( $user . ':' . $pw ),
+			);
+		}
+
+		$response = wp_remote_head( $uri, $args );
+
+		if ( is_wp_error( $response ) ) {
+			return 'unknown';
+		}
+
+		$content_length = wp_remote_retrieve_header( $response, 'content-length' );
+
+		if ( '' === $content_length ) {
+			return 'unknown';
+		}
+
+		return $content_length;
+	}
 
     /**
      * Attempts to convert $src_file_url into either a relative path, or an absolute path, if possible.  If no
@@ -205,7 +203,8 @@ class Utils_Downloads
         // Download methods #1, #2, #4 and #5.
         // -- The Assurer, 2010-10-22.
         $chunk_size = 1024 * $chunk_blocks; // Number of bytes per chunk.
-        $fp = @fopen($file_path, "rb"); // Open source file.
+		// Open source file.
+        $fp = @fopen($file_path, "rb"); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
         if ($fp === false) {
             // File could not be opened...
             return "Error on fopen('$file_path')"; // Catch any fopen() problems.
@@ -230,16 +229,18 @@ class Utils_Downloads
         do_action('wpec_fopen_after_download_headers', $file_path);
 
         $chunks_transferred = 0; // Reset chunks transferred counter.
-        while (!feof($fp)) {
+        while (!feof($fp)) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
             // Process source file in $chunk_size byte chunks...
-            $chunk = @fread($fp, $chunk_size); // Read one chunk from the source file.
+			// Read one chunk from the source file.
+            $chunk = @fread($fp, $chunk_size); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
             if ($chunk === false) {
                 // A read error occurred...
-                @fclose($fp);
+                @fclose($fp); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
                 return 'Error on fread() after ' . number_format($chunks_transferred) . ' chunks transferred.';
             }
             // Chunk was successfully read...
-            print($chunk); // Send the chunk on its way.
+			// Send the chunk on its way.
+            print($chunk); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             flush(); // Flush the PHP output buffers.
             $chunks_transferred += 1; // Increment the transferred chunk counter.
             // Check connection status...
@@ -247,7 +248,7 @@ class Utils_Downloads
             $constat = connection_status();
             if ($constat != 0) {
                 // Something happened to the browser connection...
-                @fclose($fp);
+                @fclose($fp);  // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
                 switch ($constat) {
                     case 1:
                         return 'Connection aborted by client.';
@@ -259,7 +260,8 @@ class Utils_Downloads
             }
         }
         // Well, we finally made it without detecting any server-side errors!
-        @fclose($fp); // Close the source file.
+		// Close the source file.
+        @fclose($fp); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         return true; // Success!
     }
 
@@ -303,19 +305,19 @@ class Utils_Downloads
         //Trigger an action hook so additional headers can be added from a 3rd party plugin or custom code.
         do_action('wpec_curl_after_download_headers', $file_url);
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
-        curl_setopt($ch, CURLOPT_URL, $file_url);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        $ch = curl_init(); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_init
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_setopt
+        curl_setopt($ch, CURLOPT_HEADER, 0); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_setopt
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_setopt
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 5); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_setopt
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_setopt
+        curl_setopt($ch, CURLOPT_URL, $file_url); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_setopt
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_setopt
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_setopt
         // curl_setopt( $ch, CURLOPT_WRITEFUNCTION, array( $this, 'stream_handler' ) );
 
-        curl_exec($ch);
-        curl_close($ch);
+        curl_exec($ch); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_exec
+        curl_close($ch); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_close
 
         return true;
     }

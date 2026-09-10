@@ -81,12 +81,13 @@ class Products {
 	static public function retrieve( $product_id ) {
 
 		if ( ! is_numeric( $product_id ) ) {
-			throw new Exception( __( 'Invalid product id given. Must be an integer', 'wp-express-checkout' ), 1001 );
+			throw new Exception( esc_html__( 'Invalid product id given. Must be an integer', 'wp-express-checkout' ), 1001 );
 		}
 
 		$product_data = get_post( $product_id );
 		if ( ! $product_data || $product_data->post_type !== self::$products_slug ) {
-			throw new Exception( sprintf( __( "Can't find product with ID %s", 'wp-express-checkout' ), $product_id ), 1002 );
+			// translators: %s is product id.
+			throw new Exception( sprintf( esc_html__( "Can't find product with ID %s", 'wp-express-checkout' ), esc_attr($product_id) ), 1002 );
 		}
 
 		if ( ! empty( $product_data->wpec_product_type ) ) {
@@ -119,7 +120,8 @@ class Products {
 				$product = new Donation_Product( $product_data );
 				break;
 			default:
-				throw new Exception( sprintf( __( "Unknown product type '%s'. Activate the required addon to use this product type.", 'wp-express-checkout' ), $product_data->wpec_product_type ), 1003 );
+				/* translators: %s is product type */
+				throw new Exception( sprintf( esc_html__( "Unknown product type '%s'. Activate the required addon to use this product type.", 'wp-express-checkout' ), esc_attr($product_data->wpec_product_type) ), 1003 );
 		}
 
 		return $product;
@@ -135,7 +137,7 @@ class Products {
 			if ( $search === false ) {
 				//that wasn't search query. That means there is no products configured
 				wp_reset_postdata();
-				throw new Exception(__( "'No products have been configured yet", 'wp-express-checkout' ) , 1004 );
+				throw new Exception( esc_html__( "'No products have been configured yet", 'wp-express-checkout' ) , 1004 );
 			}
 		}		
 		
@@ -201,7 +203,7 @@ class Products {
 			if ( $search === false ) {
 				//that wasn't search query. That means there is no products configured
 				wp_reset_postdata();
-				throw new Exception(__( "No products have been configured yet", 'wp-express-checkout' ) , 1004 );
+				throw new Exception( esc_html__( "No products have been configured yet", 'wp-express-checkout' ) , 1004 );
 			}
 		}		
 		

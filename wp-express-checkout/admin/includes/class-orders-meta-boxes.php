@@ -100,7 +100,7 @@ class Orders_Meta_Boxes {
             'refunded' => __('Refunded', 'wp-express-checkout'),
 		);
 
-		$transaction_id = 'admin_checkout_' . strtoupper( substr( sha1( time() . mt_rand( 0, 1000 ) ), 0, 20 ) );
+		$transaction_id = 'admin_checkout_' . strtoupper( substr( sha1( time() . wp_rand( 0, 1000 ) ), 0, 20 ) );
 
 	    ?>
         <table class="widefat" style="border: none">
@@ -108,7 +108,7 @@ class Orders_Meta_Boxes {
 				<tr>
 					<td><?php esc_html_e( 'Product', 'wp-express-checkout' ); ?>: </td>
 					<td>
-						<?php echo $this->get_product_select_html() ?>
+						<?php echo wp_kses_post( $this->get_product_select_html() ); ?>
 						<div id="wpec_new_order_product_description"></div>
 						<div id="wpec_new_order_product_quantity"></div>
 						<div id="wpec_new_order_product_variations"></div>
@@ -124,8 +124,8 @@ class Orders_Meta_Boxes {
                     <td><?php esc_html_e( 'Status', 'wp-express-checkout' ); ?>: </td>
                     <td>
                         <select name="wpec_order_state">
-                        <?php foreach ($order_status_options as $status_value => $status_text) { ?>
-                            <option value="<?php echo esc_attr($status_value); ?>"><?php esc_html_e($status_text); ?></option>
+                        <?php foreach ( $order_status_options as $status_value => $status_text ) { ?>
+                            <option value="<?php echo esc_attr( $status_value ); ?>"><?php echo esc_html( $status_text ); ?></option>
                         <?php } ?>
                         </select>
                     </td>
@@ -246,7 +246,7 @@ class Orders_Meta_Boxes {
                     <td>
                         <select name="wpec_order_state">
                         <?php foreach ($order_status_options as $status_value => $status_text) { ?>
-                            <option value="<?php echo esc_attr($status_value); ?>" <?php echo ($status_value == $order->get_status() ? 'selected' : ''); ?> ><?php esc_html_e($status_text); ?></option>
+                            <option value="<?php echo esc_attr( $status_value ); ?>" <?php echo ( $status_value == $order->get_status() ? 'selected' : '' ); ?> ><?php echo esc_html( $status_text ); ?></option>
                         <?php } ?>
                         </select>
                     </td>
@@ -330,7 +330,7 @@ class Orders_Meta_Boxes {
 		try {
 			$order = Orders::retrieve( $post->ID );
 		} catch ( Exception $exc ) {
-			echo $error_msg;
+			echo esc_html( $error_msg );
 			return;
 		}
 
@@ -342,7 +342,7 @@ class Orders_Meta_Boxes {
 
 		$output = ! empty( $output ) ? $output : $error_msg;
 
-		echo $output;
+		echo wp_kses_post( $output );
 	}
 
 	/**
@@ -364,7 +364,7 @@ class Orders_Meta_Boxes {
 		?>
 		<ul>
 			<li>
-				<a class="button wpec-order-action" data-action="resend_email" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'resend-email' ); ?>" href="#">
+				<a class="button wpec-order-action" data-action="resend_email" data-order="<?php echo esc_attr( $order->get_id() ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'resend-email' ) ); ?>" href="#">
 					<span class="dashicons dashicons-email"></span>
 					<span class="wpec-order-action-label">
 						<?php esc_html_e( 'Resend Sale Notification Email', 'wp-express-checkout' ); ?>
@@ -372,7 +372,7 @@ class Orders_Meta_Boxes {
 				</a>
 			</li>
 			<li>
-				<a class="button wpec-order-action" data-action="reset_download_counts" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'reset-download-counts' ); ?>" href="#">
+				<a class="button wpec-order-action" data-action="reset_download_counts" data-order="<?php echo esc_attr( $order->get_id() ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'reset-download-counts' ) ); ?>" href="#">
 					<span class="dashicons dashicons-update"></span>
 					<span class="wpec-order-action-label">
 						<?php esc_html_e( 'Regenerate Download Permissions', 'wp-express-checkout' ); ?>
@@ -387,7 +387,7 @@ class Orders_Meta_Boxes {
 					</div>
 				<?php }else{ ?>
                     <?php if ($order->is_refundable()) { ?>
-                    <a class="button wpec-order-action" data-action="payment_refund" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'wpec-payment-refund' ); ?>" href="#">
+                    <a class="button wpec-order-action" data-action="payment_refund" data-order="<?php echo esc_attr( $order->get_id() ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpec-payment-refund' ) ); ?>" href="#">
                         <span class="dashicons dashicons-money"></span>
                         <span class="wpec-order-action-label">
                             <?php esc_html_e( 'Refund Transaction', 'wp-express-checkout' ); ?>
@@ -400,7 +400,7 @@ class Orders_Meta_Boxes {
 			
 			<?php if ( !empty($is_manual_payment) && strtolower($order->get_status()) == 'pending' ) { ?>
 			<li>
-				<a class="button wpec-order-action" data-action="set_paid_and_send_email" data-order="<?php echo $order->get_id() ?>" data-nonce="<?php echo wp_create_nonce( 'set_paid_and_send_email' ); ?>" href="#">
+				<a class="button wpec-order-action" data-action="set_paid_and_send_email" data-order="<?php echo esc_attr( $order->get_id() ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'set_paid_and_send_email' ) ); ?>" href="#">
 					<span class="dashicons dashicons-yes-alt"></span>
 					<span class="wpec-order-action-label">
 						<?php esc_html_e( 'Set Order as Paid & Send Email', 'wp-express-checkout' ); ?>
@@ -468,14 +468,14 @@ class Orders_Meta_Boxes {
 
             foreach ( $order_notes as $note ) {
                 $admin_name  = get_userdata( $note['admin_id'] )->display_name;
-                $date_time   = date('F j, Y \a\t g:ia', $note['timestamp'] );				
+                $date_time   = wp_date('F j, Y \a\t g:ia', $note['timestamp'] );
                 $note_content = $note['content'];
 
 				?>
-				<div class="wpec-single-note" id="wpec_single_note_<?php echo esc_attr($note["id"]); ?>">
+				<div class="wpec-single-note" id="wpec_single_note_<?php echo esc_attr( $note['id'] ); ?>">
 					<p><?php echo esc_html( $note_content ); ?></p>
 					<div class="wpec-single-note-meta">
-						<span title="Added by <?php echo esc_html($admin_name); ?>">added on <?php echo esc_html( $date_time ); ?></span>
+						<span title="Added by <?php echo esc_attr( $admin_name ); ?>">added on <?php echo esc_html( $date_time ); ?></span>
 						<a href="#" class="wpec-delete-order-note" data-orderid="<?php echo esc_attr($post->ID); ?>" data-note-id="<?php echo esc_attr( $note['id'] ) ?>">Delete</a>
 					</div>
 				</div>
@@ -512,7 +512,7 @@ class Orders_Meta_Boxes {
 			}
 
 			if ( isset( $_POST['wpec_order_customer_email'] ) ) {
-                $email_address = sanitize_email( $_POST['wpec_order_customer_email'] );
+                $email_address = sanitize_email( wp_unslash($_POST['wpec_order_customer_email']) );
 
                 $payer['email_address'] = $email_address;
 
@@ -520,29 +520,29 @@ class Orders_Meta_Boxes {
 			}
 
 			if ( isset( $_POST['wpec_order_customer_phone'] ) ) {
-				$payer['phone'] = sanitize_text_field( $_POST['wpec_order_customer_phone'] );
+				$payer['phone'] = sanitize_text_field( wp_unslash($_POST['wpec_order_customer_phone']) );
 			}
 
             if ( isset($_POST['wpec_order_state']) ){
-				update_post_meta( $post_id, 'wpec_order_state', sanitize_text_field( $_POST['wpec_order_state'] ) );
+				update_post_meta( $post_id, 'wpec_order_state', sanitize_text_field( wp_unslash($_POST['wpec_order_state']) ) );
             }
 
             if ( isset($_POST['wpec_order_customer_first_name']) ){
-                $payer['name']['given_name'] = sanitize_text_field( $_POST['wpec_order_customer_first_name'] );
+                $payer['name']['given_name'] = sanitize_text_field( wp_unslash($_POST['wpec_order_customer_first_name']) );
             }
 
 			if ( isset($_POST['wpec_order_customer_last_name']) ){
-				$payer['name']['surname'] = sanitize_text_field( $_POST['wpec_order_customer_last_name'] );
+				$payer['name']['surname'] = sanitize_text_field( wp_unslash($_POST['wpec_order_customer_last_name']) );
 			}
 
             if (isset($_POST['wpec_order_customer_billing_address'])){
-                $billing_address = sanitize_text_field($_POST['wpec_order_customer_billing_address']);
+                $billing_address = sanitize_text_field(wp_unslash($_POST['wpec_order_customer_billing_address']));
 
                 $order_data['billing_address'] = $billing_address;
             }
 
 			if (isset($_POST['wpec_order_customer_shipping_address'])){
-				$shipping_address = sanitize_text_field($_POST['wpec_order_customer_shipping_address']);
+				$shipping_address = sanitize_text_field(wp_unslash($_POST['wpec_order_customer_shipping_address']));
 
 				$order_data['shipping_address'] = $shipping_address;
 			}
@@ -555,18 +555,19 @@ class Orders_Meta_Boxes {
 				do_action('wpec_order_details_update', $post_id, $order_data);
 			} else {
 				if (isset($_POST['wpec_order_product_id']) && !empty($_POST['wpec_order_product_id'])){
-					$order_product_id = (int) sanitize_text_field($_POST['wpec_order_product_id']);
+					$order_product_id = (int) sanitize_text_field(wp_unslash($_POST['wpec_order_product_id']));
 					$product = Products::retrieve($order_product_id);
 
-					$quantity = isset($_POST['wpec_order_product_quantity']) ? (int) sanitize_text_field($_POST['wpec_order_product_quantity']) : 1;
+					$quantity = isset($_POST['wpec_order_product_quantity']) ? (int) sanitize_text_field(wp_unslash($_POST['wpec_order_product_quantity'])) : 1;
 
 					$item_name = $product->get_item_name();
 					$item_price = $product->get_price();
-					$txn_status = isset($_POST['wpec_order_state']) ? sanitize_text_field($_POST['wpec_order_state']) : 'pending';
+					$txn_status = isset($_POST['wpec_order_state']) ? sanitize_text_field(wp_unslash($_POST['wpec_order_state'])) : 'pending';
 
 					$order->set_payment_gateway( 'admin_checkout' );
 
 					remove_action('save_post_' . Orders::PTYPE, array($this, 'save')); // To Prevent the infinite loop.
+					/* translators: 1: quantity, 2: item name, 3: transaction status */
 					$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $txn_status ) );
 					add_action('save_post_' . Orders::PTYPE, array($this, 'save'));
 
@@ -604,7 +605,7 @@ class Orders_Meta_Boxes {
 				}
 
 				if ( isset($_POST['wpec_order_capture_id']) ){
-					$txn_id = sanitize_text_field( $_POST['wpec_order_capture_id'] );
+					$txn_id = sanitize_text_field( wp_unslash($_POST['wpec_order_capture_id']) );
 					$order->set_capture_id($txn_id);
 				}
 
@@ -631,7 +632,7 @@ class Orders_Meta_Boxes {
 		check_ajax_referer( 'resend-email', 'nonce' );
 
 		try {
-			$order = Orders::retrieve( $_POST['order'] );
+			$order = Orders::retrieve( sanitize_text_field(wp_unslash($_POST['order']) ) );
 		} catch ( Exception $exc ) {
 			wp_send_json_error( $exc->getMessage() );
 		}
@@ -650,7 +651,7 @@ class Orders_Meta_Boxes {
 		check_ajax_referer( 'wpec-payment-refund', 'nonce' );
 
 		try {
-			$order = Orders::retrieve( $_POST['order'] );						
+			$order = Orders::retrieve( sanitize_text_field(wp_unslash($_POST['order']) ) );
 		} catch ( Exception $exc ) {
 			wp_send_json_error( $exc->getMessage() );
 		}
@@ -669,7 +670,7 @@ class Orders_Meta_Boxes {
 		check_ajax_referer( 'set_paid_and_send_email', 'nonce' );
 
 		try {
-			$order = Orders::retrieve( $_POST['order'] );
+			$order = Orders::retrieve( sanitize_text_field(wp_unslash($_POST['order'])) );
 
 		} catch ( Exception $exc ) {
 			wp_send_json_error( $exc->getMessage() );
@@ -692,7 +693,7 @@ class Orders_Meta_Boxes {
 	{
 		check_ajax_referer( 'wpec_add_order_note_ajax_nonce', 'nonce' );
 
-		$note = isset( $_POST['wpec_note'] ) ? sanitize_textarea_field( $_POST['wpec_note'] ) : '';
+		$note = isset( $_POST['wpec_note'] ) ? sanitize_textarea_field( wp_unslash($_POST['wpec_note']) ) : '';
 		
 		if ( $note !== '' ) {
 			$current_time = current_time( 'timestamp' );
@@ -718,7 +719,7 @@ class Orders_Meta_Boxes {
 			$username  = $admin_user->user_login !== $admin_user->display_name ? $admin_user->display_name . ' (' . $admin_user->user_login . ') ' : $admin_user->user_login;
 			
 			$note_data["admin_name"]=$username;
-			$note_data["note_date"]=date('F j, Y \a\t g:ia', $current_time);		
+			$note_data["note_date"]= wp_date('F j, Y \a\t g:ia', $current_time);
 			$note_data["order_id"]	=$order_id;
 
 			wp_send_json_success( array( 'note' => $note_data ) );
@@ -732,7 +733,7 @@ class Orders_Meta_Boxes {
 	{
 		check_ajax_referer( 'wpec_delete_order_note_ajax_nonce', 'nonce' ); // Verify the AJAX request's nonce
 
-		$note_id = isset( $_POST['wpec_note_id'] ) ? sanitize_text_field( $_POST['wpec_note_id'] ) : '';
+		$note_id = isset( $_POST['wpec_note_id'] ) ? sanitize_text_field( wp_unslash($_POST['wpec_note_id']) ) : '';
 	
 		if ( $note_id !== '' ) {
 			$order_id = isset( $_POST['wpec_order_id'] ) ? intval( $_POST['wpec_order_id'] ) : 0;
@@ -763,7 +764,7 @@ class Orders_Meta_Boxes {
 		check_ajax_referer( 'reset-download-counts', 'nonce' );
 
 		try {
-			$order = Orders::retrieve( $_POST['order'] );
+			$order = Orders::retrieve( sanitize_text_field(wp_unslash($_POST['order'])) );
 		} catch ( Exception $exc ) {
 			wp_send_json_error( $exc->getMessage() );
 		}

@@ -89,10 +89,21 @@ class Init {
 			if ( isset( $_GET['wpec-debug-action'] ) ) {
 				if ( $_GET['wpec-debug-action'] === 'view_log' ) {
 					$filename = Logger::get_file_name();
-					if ( file_exists( $filename ) ) {
-						$logfile = fopen( Logger::get_file_name(), 'rb' );
-						header( 'Content-Type: text/plain' );
-						fpassthru( $logfile );
+
+					// Initialize WP_Filesystem
+					global $wp_filesystem;
+					if ( empty( $wp_filesystem ) ) {
+						require_once ABSPATH . '/wp-admin/includes/file.php';
+						WP_Filesystem();
+					}
+
+					if ( $wp_filesystem->exists( $filename ) ) {
+						$content = $wp_filesystem->get_contents( $filename );
+
+						if ( false !== $content ) {
+							header( 'Content-Type: text/plain' );
+							echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						}
 					}
 					die;
 				}

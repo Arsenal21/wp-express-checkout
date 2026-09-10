@@ -22,14 +22,14 @@ class Products_List {
 		unset( $columns );
 		$columns = array(
 			'cb'        => '<input type="checkbox">',
-			'thumbnail' => __( 'Thumbnail', 'wp-express-checkout' ),
-			'title'     => __( 'Product Name', 'wp-express-checkout' ),
-			'type'      => __( 'Product Type', 'wp-express-checkout' ),
-			'id'        => __( 'ID', 'wp-express-checkout' ),
-			'price'     => __( 'Price', 'wp-express-checkout' ),
-			'stock'     => __( 'Stock', 'wp-express-checkout' ),
-			'shortcode' => __( 'Shortcode', 'wp-express-checkout' ),
-			'date'      => __( 'Date', 'wp-express-checkout' ),
+			'thumbnail' => esc_html__( 'Thumbnail', 'wp-express-checkout' ),
+			'title'     => esc_html__( 'Product Name', 'wp-express-checkout' ),
+			'type'      => esc_html__( 'Product Type', 'wp-express-checkout' ),
+			'id'        => esc_html__( 'ID', 'wp-express-checkout' ),
+			'price'     => esc_html__( 'Price', 'wp-express-checkout' ),
+			'stock'     => esc_html__( 'Stock', 'wp-express-checkout' ),
+			'shortcode' => esc_html__( 'Shortcode', 'wp-express-checkout' ),
+			'date'      => esc_html__( 'Date', 'wp-express-checkout' ),
 		);
 		return $columns;
 	}
@@ -42,14 +42,14 @@ class Products_List {
 			if ( 1003 === $exc->getCode() ) {
 				$product = new Products\Stub_Product( get_post( $post_id ) );
 			} else {
-				echo $exc->getMessage();
+				echo esc_html( $exc->getMessage() );
 				return;
 			}
 		}
 
 		switch ( $column ) {
 			case 'id':
-				echo $post_id;
+				echo esc_attr( $post_id );
 				break;
 			case 'thumbnail':
 				$thumb_url = get_post_meta( $post_id, 'wpec_product_thumbnail', true );
@@ -57,10 +57,10 @@ class Products_List {
 					$thumb_url = WPEC_PLUGIN_URL . '/assets/img/product-thumb-placeholder.png';
 				}
 				$edit_link = get_edit_post_link( $post_id );
-				$title     = __( 'Edit Product', 'wp-express-checkout' );
+				$title     = esc_html__( 'Edit Product', 'wp-express-checkout' );
 				?>
 				<span class="wpec-product-thumbnail-container">
-					<a href="<?php echo esc_attr( $edit_link ); ?>" title="<?php echo $title; ?>">
+					<a href="<?php echo esc_url( $edit_link ); ?>" title="<?php echo esc_attr( $title ); ?>">
 						<div style="padding: 50px 0; max-width: 100px; background-image: url(<?php echo esc_url( $thumb_url ); ?>); background-size: cover; background-position: center;"></div>
 					</a>
 				</span>
@@ -70,7 +70,7 @@ class Products_List {
 				$stock_enabled = $product->is_stock_control_enabled();
 				$stock_items   = $product->get_stock_items();
 				if ( $stock_enabled ) {
-					echo ! $stock_items ? __( 'Out of stock', 'wp-express-checkout' ) : $stock_items;
+					echo ! $stock_items ? esc_html__( 'Out of stock', 'wp-express-checkout' ) : esc_html( $stock_items );
 				} else {
 					echo '—';
 				}
@@ -95,15 +95,15 @@ class Products_List {
 				$wpec_shortcode = Shortcodes::get_instance();
 				$output = $wpec_shortcode->generate_price_tag( $price_args );
 				$output = apply_filters( 'wpec_products_table_price_column', $output, $price_args, $post_id );
-				echo $output;
+				echo wp_kses_post( $output );
 				break;
 			case 'shortcode':
 				?>
-				<input type="text" name="ppec_product_shortcode" class="wpec-select-on-click large-text code" onfocus="this.select();" readonly value="[wp_express_checkout product_id=&quot;<?php echo $post_id; ?>&quot;]">
+				<input type="text" name="ppec_product_shortcode" class="wpec-select-on-click large-text code" onfocus="this.select();" readonly value="<?php echo esc_attr( '[wp_express_checkout product_id="' . $post_id . '"]' ); ?>">
 				<?php
 				break;
 			case 'type':
-				echo $product->get_type();
+				echo wp_kses_post( $product->get_type() );
 				break;
 		}
 	}
