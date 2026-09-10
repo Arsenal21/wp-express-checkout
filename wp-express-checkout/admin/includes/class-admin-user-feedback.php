@@ -101,7 +101,7 @@ class WPEC_Admin_User_Feedback {
 				<p><?php esc_html_e( 'That\'s great! Could you please do me a big favor and give it a 5-star rating on WordPress to help us spread the word and boost our motivation?', 'wp-express-checkout' ); ?></p>
 				<p><strong><?php esc_html_e( '~ WP Express Checkout Plugin Team', 'wp-express-checkout' ) ?></strong></p>
 				<p>
-					<a href="https://wordpress.org/support/plugin/wp-express-checkout/reviews/?filter=5#new-post" class="wpec-plugin-dismiss-review-notice wpec-plugin-review-out" target="_blank" rel="noopener noreferrer">
+					<a href="https://wordpress.org/support/plugin/wp-express-checkout/reviews/" class="wpec-plugin-dismiss-review-notice wpec-plugin-review-out" target="_blank" rel="noopener noreferrer">
 						<?php esc_html_e( 'OK, you deserve it', 'wp-express-checkout' ); ?>
 					</a><br>
 					<a href="#" class="wpec-plugin-dismiss-review-notice" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Nope, maybe later', 'wp-express-checkout' ); ?></a><br>
