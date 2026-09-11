@@ -355,10 +355,15 @@ class Main {
 		global $wpdb;
 
 		// get an array of blog ids.
-		$sql = $wpdb->prepare("SELECT blog_id FROM $wpdb->blogs
-			WHERE archived = '0' AND spam = '0'
-			AND deleted = '0'");
+		$sql = $wpdb->prepare(
+			"SELECT blog_id FROM {$wpdb->blogs}
+			WHERE archived = %d AND spam = %d AND deleted = %d",
+			0,
+			0,
+			0
+		);
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above and is not modified before execution.
 		return $wpdb->get_col( $sql );
 	}
 

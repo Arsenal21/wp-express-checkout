@@ -43,3 +43,7 @@ vendor/**/homepage.jpg export-ignore
 vendor/**/README.md export-ignore
 vendor/**/CHANGELOG.md export-ignore
 vendor/**/CONTRIBUTING.md export-ignore
+
+#others
+assets/css/.csslintrc export-ignore
+assets/scss/.csscomb.json export-ignore
