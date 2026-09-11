@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.5.1
+Stable tag: 2.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,6 +175,10 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+
+= 2.5.2 =
+* Improved the wpdb prepare statement in the function get_blog_ids().
+* Removed the unnecessary files 'assets/css/.csslintr' and 'assets/scss/.csscomb.jso' from the repository.
 
 = 2.5.1 =
 * Added output escaping throughout the plugin for enhanced security.
