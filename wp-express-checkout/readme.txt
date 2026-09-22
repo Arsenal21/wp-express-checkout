@@ -175,6 +175,8 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+= WIP =
+* Can't select membership level issue in product edit page has fixed.
 
 = 2.5.2 =
 * Improved the wpdb prepare statement in the function get_blog_ids().

@@ -4,6 +4,7 @@ namespace WP_Express_Checkout\Integrations;
 
 use WP_Express_Checkout\Debug\Logger;
 use WP_Express_Checkout\Products;
+use WP_Express_Checkout\Utils;
 
 class Simple_WP_Membership extends Emember {
 
@@ -40,13 +41,13 @@ class Simple_WP_Membership extends Emember {
 	public function display_meta_box( $post ) {
 		$current_val = get_post_meta( $post->ID, 'wpec_product_swpm_level', true );
 		?>
-<p><?php esc_html_e( 'If you want this product to be connected to a membership level then select the membership Level here.', 'wp-express-checkout' ); ?></p>
-<select name="wpec_product_swpm_level">
-<option value=""><?php esc_html_e( 'None', 'wp-express-checkout' ); ?></option>
-		<?php
-		echo wp_kses_post( \SwpmUtils::membership_level_dropdown( $current_val ) );
-		?>
-</select>
+		<p>
+			<?php esc_html_e( 'If you want this product to be connected to a membership level then select the membership Level here.', 'wp-express-checkout' ); ?>
+		</p>
+		<select name="wpec_product_swpm_level">
+			<option value=""><?php esc_html_e( 'None', 'wp-express-checkout' ); ?></option>
+			<?php echo wp_kses( \SwpmUtils::membership_level_dropdown( $current_val ), Utils::wp_kses_select_tags() ); ?>
+		</select>
 		<?php
 	}
 
