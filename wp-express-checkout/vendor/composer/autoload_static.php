@@ -62,6 +62,7 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WP_Express_Checkout\\Init' => __DIR__ . '/../..' . '/includes/class-init.php',
         'WP_Express_Checkout\\Integrations' => __DIR__ . '/../..' . '/includes/class-integrations.php',
         'WP_Express_Checkout\\Integrations\\Emember' => __DIR__ . '/../..' . '/includes/integrations/emember/class-emember.php',
+        'WP_Express_Checkout\\Integrations\\Integration' => __DIR__ . '/../..' . '/includes/integrations/class-integration.php',
         'WP_Express_Checkout\\Integrations\\License_Manager' => __DIR__ . '/../..' . '/includes/integrations/license-manager/class-license-manager.php',
         'WP_Express_Checkout\\Integrations\\Simple_WP_Membership' => __DIR__ . '/../..' . '/includes/integrations/simple-wp-membership/class-simple-wp-membership.php',
         'WP_Express_Checkout\\Integrations\\WPEC_WC_Payment_Gateway_PayPal' => __DIR__ . '/../..' . '/includes/integrations/woocommerce/class-woocommerce-gateway.php',
@@ -98,6 +99,7 @@ class ComposerStaticInitecb54881939c5593641ad428bda777ea
         'WP_Express_Checkout\\Tags' => __DIR__ . '/../..' . '/includes/class-tags.php',
         'WP_Express_Checkout\\Utils' => __DIR__ . '/../..' . '/includes/class-utils.php',
         'WP_Express_Checkout\\Utils_Downloads' => __DIR__ . '/../..' . '/includes/class-utils-downloads.php',
+        'WP_Express_Checkout\\Utils_Kses' => __DIR__ . '/../..' . '/includes/class-utils-kses.php',
         'WP_Express_Checkout\\Variations' => __DIR__ . '/../..' . '/includes/class-variations.php',
         'WP_Express_Checkout\\View_Downloads' => __DIR__ . '/../..' . '/includes/class-view-downloads.php',
     );

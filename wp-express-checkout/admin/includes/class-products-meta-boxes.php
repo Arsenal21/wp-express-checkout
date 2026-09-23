@@ -5,6 +5,7 @@ namespace WP_Express_Checkout\Admin;
 use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Products;
 use WP_Express_Checkout\Utils;
+use WP_Express_Checkout\Utils_Kses;
 
 class Products_Meta_Boxes {
 
@@ -115,7 +116,7 @@ class Products_Meta_Boxes {
 			$cont .= '</div>';
 		}
 		echo '</p>';
-        echo wp_kses($cont, Utils::wp_kses_post_tags_with_form());
+        echo wp_kses($cont, Utils_Kses::wp_kses_post_tags_with_form());
 		?>
 			<script>
 				( function ( $ ) {
