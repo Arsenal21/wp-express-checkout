@@ -179,6 +179,7 @@ None
 * Output escaping issues for some select dropdown has fixed.
 * Simple Membership integration support added for stripe checkout.
 * A previous integration related issue for paypal checkout has fixed.
+* Fixed the free checkout form not appearing for donation products when the payable total is zero, including after applying a full-discount coupon.
 
 = 2.5.2 =
 * Improved the wpdb prepare statement in the function get_blog_ids().
