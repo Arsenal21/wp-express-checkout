@@ -9,6 +9,7 @@ use WP_Express_Checkout\Order_Tags_Html;
 use WP_Express_Checkout\Orders;
 use WP_Express_Checkout\Products;
 use WP_Express_Checkout\Utils;
+use WP_Express_Checkout\Utils_Kses;
 use WP_Express_Checkout\Variations;
 use WP_Express_Checkout\Debug\Logger;
 use WP_Post;
@@ -108,7 +109,20 @@ class Orders_Meta_Boxes {
 				<tr>
 					<td><?php esc_html_e( 'Product', 'wp-express-checkout' ); ?>: </td>
 					<td>
-						<?php echo wp_kses_post( $this->get_product_select_html() ); ?>
+						<?php
+						echo wp_kses(
+							$this->get_product_select_html(),
+							array_merge(
+								Utils_Kses::wp_kses_select_tags(),
+								array(
+									'div' => array(
+										'class'            => true,
+										'data-placeholder' => true,
+									),
+								)
+							)
+						);
+						?>
 						<div id="wpec_new_order_product_description"></div>
 						<div id="wpec_new_order_product_quantity"></div>
 						<div id="wpec_new_order_product_variations"></div>
@@ -794,7 +808,7 @@ class Orders_Meta_Boxes {
 		) );
 
 		$html = '';
-		$html .= '<div class="wpec-search-select" data-placeholder="'.__('Select Product', 'wp-express-checkout').'">';
+		$html .= '<div class="wpec-search-select" data-placeholder="'.esc_attr__('Select Product', 'wp-express-checkout').'">';
 		$html .= '<select name="wpec_order_product_id" id="wpec_add_new_order_product_id" style="width: 100%" required>';
 
 		// Loop through posts and create options

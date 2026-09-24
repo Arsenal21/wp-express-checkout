@@ -34,6 +34,7 @@ return array(
     'WP_Express_Checkout\\Init' => $baseDir . '/includes/class-init.php',
     'WP_Express_Checkout\\Integrations' => $baseDir . '/includes/class-integrations.php',
     'WP_Express_Checkout\\Integrations\\Emember' => $baseDir . '/includes/integrations/emember/class-emember.php',
+    'WP_Express_Checkout\\Integrations\\Integration' => $baseDir . '/includes/integrations/class-integration.php',
     'WP_Express_Checkout\\Integrations\\License_Manager' => $baseDir . '/includes/integrations/license-manager/class-license-manager.php',
     'WP_Express_Checkout\\Integrations\\Simple_WP_Membership' => $baseDir . '/includes/integrations/simple-wp-membership/class-simple-wp-membership.php',
     'WP_Express_Checkout\\Integrations\\WPEC_WC_Payment_Gateway_PayPal' => $baseDir . '/includes/integrations/woocommerce/class-woocommerce-gateway.php',
@@ -70,6 +71,7 @@ return array(
     'WP_Express_Checkout\\Tags' => $baseDir . '/includes/class-tags.php',
     'WP_Express_Checkout\\Utils' => $baseDir . '/includes/class-utils.php',
     'WP_Express_Checkout\\Utils_Downloads' => $baseDir . '/includes/class-utils-downloads.php',
+    'WP_Express_Checkout\\Utils_Kses' => $baseDir . '/includes/class-utils-kses.php',
     'WP_Express_Checkout\\Variations' => $baseDir . '/includes/class-variations.php',
     'WP_Express_Checkout\\View_Downloads' => $baseDir . '/includes/class-view-downloads.php',
 );

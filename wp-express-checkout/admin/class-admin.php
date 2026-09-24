@@ -6,6 +6,7 @@ use WP_Express_Checkout\Main;
 use WP_Express_Checkout\Products;
 use WP_Express_Checkout\Orders;
 use WP_Express_Checkout\Utils;
+use WP_Express_Checkout\Utils_Kses;
 
 class Admin {
 
@@ -1140,11 +1141,11 @@ class Admin {
 				break;
 			case 'number':
 				$input = "<input type='" . esc_attr( $type ) . "'" . $_placeholder . " id='wp-ppdg-" . esc_attr( $field ) . "' class='" . esc_attr($_class) . "' name='" . esc_attr( $this->option_name ) . '[' . esc_attr( $field ) . "]' value='" . esc_attr( $field_value ) . "' size='" . esc_attr( $size ) . "' step='" . esc_attr( $step ) . "' min='" . esc_attr( $min ) . "' />";
-				echo wp_kses($this->wrap_label( $input, $label, $label_pos ), Utils::wp_kses_post_tags_with_form());
+				echo wp_kses($this->wrap_label( $input, $label, $label_pos ), Utils_Kses::wp_kses_post_tags_with_form());
 				break;
 			default:
 				$input = "<input type='" . esc_attr( $type ) . "'" . $_placeholder . " id='wp-ppdg-" . esc_attr( $field ) . "' class='" . esc_attr($_class) . "' name='" . esc_attr( $this->option_name ) . "[" . esc_attr( $field ) . "]' value='" . esc_attr( $field_value ) . "' size='" . esc_attr( $size ) . "' />";
-				echo wp_kses($this->wrap_label( $input, $label, $label_pos ), Utils::wp_kses_post_tags_with_form());
+				echo wp_kses($this->wrap_label( $input, $label, $label_pos ), Utils_Kses::wp_kses_post_tags_with_form());
 				break;
 		}
 

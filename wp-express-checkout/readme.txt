@@ -176,7 +176,9 @@ None
 
 == Changelog ==
 = WIP =
-* Can't select membership level issue in product edit page has fixed.
+* Output escaping issues for some select dropdown has fixed.
+* Simple Membership integration support added for stripe checkout.
+* A previous integration related issue for paypal checkout has fixed.
 
 = 2.5.2 =
 * Improved the wpdb prepare statement in the function get_blog_ids().
