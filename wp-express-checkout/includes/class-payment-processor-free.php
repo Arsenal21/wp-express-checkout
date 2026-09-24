@@ -157,6 +157,12 @@ class Payment_Processor_Free extends Payment_Processor {
 		$currency = $trans['currency'];
 		$item_id  = $trans['product_id'];
 
+		// A custom amount (donation) must be greater than zero. A zero total is only allowed via a full discount coupon.
+		if ( $this->is_custom_amount( $trans['custom_amount'] ) && floatval( $price ) <= 0 ) {
+			Logger::log( 'Error! Custom amount must be greater than zero for free checkout. Entered amount: ' . $price, false );
+			$this->send_error( __( 'Please enter a valid amount.', 'wp-express-checkout' ), 3005 );
+		}
+
 		if ( $trans['custom_quantity'] ) {
 			// custom quantity enabled. let's take quantity from PayPal results.
 			$quantity = $this->get_quantity( $payment );

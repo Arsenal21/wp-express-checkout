@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.5.2
+Stable tag: 2.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,11 +175,12 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
-= WIP =
-* Output escaping issues for some select dropdown has fixed.
-* Simple Membership integration support added for stripe checkout.
-* A previous integration related issue for paypal checkout has fixed.
-* Fixed the free checkout form not appearing for donation products when the payable total is zero, including after applying a full-discount coupon.
+
+= 2.5.3 =
+* Added Stripe checkout support to the Simple Membership integration.
+* Fixed output escaping in some select dropdowns.
+* Fixed an issue where membership integrations did not correctly handle PayPal subscription payments and cancellations.
+* Fixed the free checkout form not appearing for donation products when a full-discount coupon brings the total to zero.
 
 = 2.5.2 =
 * Improved the wpdb prepare statement in the function get_blog_ids().

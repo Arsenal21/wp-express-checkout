@@ -96,7 +96,8 @@ var ppecHandler = function( data ) {
 		const min_val = input.getAttribute( 'min' );
 		let error = false;
 		const errMsg = ppecFrontVars.str.enterAmount;
-		if ( !isNaN( val ) && min_val <= val ) {
+		// Custom amount must be greater than zero. A zero total is only allowed via a full discount coupon.
+		if ( !isNaN( val ) && val > 0 && min_val <= val ) {
 			parent.data.orig_price = val;
 			parent.data.price = parent.applyVariations( val );
 		} else {
