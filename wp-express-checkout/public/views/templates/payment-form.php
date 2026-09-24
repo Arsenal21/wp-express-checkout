@@ -136,8 +136,9 @@ do_action( 'wpec_payment_form_before_template', $product_id );
 	<?php } ?>
 	<?php
 	//Billing info fields section. 
-	//Trigger a filter that can be used to hide the billing info fields.
-	$hide_billing_info = apply_filters( 'wpec_hide_billing_info_fields', $custom_amount );
+	// Allow free checkout for both fixed-price and custom-amount products.
+	// Trigger a filter that can be used to hide the billing info fields.
+	$hide_billing_info = apply_filters( 'wpec_hide_billing_info_fields', false );
 	?>
 	<div id="wpec_billing_<?php echo esc_attr( $shortcode_id ); echo $hide_billing_info ? '_hide' : ''; ?>" class="wpec_billing_container" style="display: none;">
 
