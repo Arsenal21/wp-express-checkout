@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.5.3
+Stable tag: 2.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,7 +175,8 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
-= WIP =
+
+= 2.5.4 =
 * Product specific coupon configuration checkbox related issue fixed in coupon details page.
 
 = 2.5.3 =
