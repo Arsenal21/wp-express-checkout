@@ -5,6 +5,7 @@ namespace WP_Express_Checkout;
 use Exception;
 use WP_Express_Checkout\Admin\Coupons_List;
 use WP_Express_Checkout\Debug\Logger;
+use WP_Express_Checkout\Utils_Kses;
 
 class Coupons {
 
@@ -402,7 +403,7 @@ class Coupons {
 				<br>
 				<label><input type="radio" name="wpec_coupon[only_for_allowed_products]" value="1"<?php echo $is_edit && $coupon['only_for_allowed_products'] ? ' checked' : ''; ?>> <?php esc_html_e( 'Specific Products Only', 'wp-express-checkout' ); ?></label>
 				<p class="wpec-coupons-available-products"<?php echo ( $is_edit && ! $coupon['only_for_allowed_products'] ) || ( ! $is_edit ) ? ' style="display: none;"' : ''; ?>>
-				<?php echo wp_kses_post( $prod_inputs ); ?>
+				<?php echo wp_kses($prod_inputs, Utils_Kses::wp_kses_post_tags(Utils_Kses::wp_kses_checkbox_tags())); ?>
 				</p>
 				<p class="description"><?php esc_html_e( 'Choose availability of the coupon. You can specify which products coupon is available when "Specific Products Only" is selected.', 'wp-express-checkout' ); ?></p>
 			</td>
