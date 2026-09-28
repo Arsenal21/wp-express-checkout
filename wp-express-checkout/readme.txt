@@ -175,6 +175,8 @@ https://wp-express-checkout.com/
 None
 
 == Changelog ==
+= WIP =
+* Product specific coupon configuration checkbox related issue fixed in coupon details page.
 
 = 2.5.3 =
 * Added Stripe checkout support to the Simple Membership integration.

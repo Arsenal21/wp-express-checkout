@@ -17,7 +17,7 @@ class Utils_Kses {
 		return apply_filters( 'wpec_kses_common_attributes', $common_attributes );
 	}
 
-	public static function wp_kses_select_option_tags(){
+	public static function wp_kses_select_option_tags( $additional_tags = array() ){
 
 		$common_attributes = self::wp_kses_common_attributes();
 
@@ -33,7 +33,7 @@ class Utils_Kses {
 			) ),
 		);
 
-		return apply_filters( 'wpec_kses_select_option_tags', $allowed_tags );
+		return apply_filters( 'wpec_kses_select_option_tags', array_merge( $allowed_tags, $additional_tags ) );
 	}
 
 	/**
@@ -41,7 +41,7 @@ class Utils_Kses {
 	 *
 	 * @return array Allowed HTML tags and attributes.
 	 */
-	public static function wp_kses_select_tags() {
+	public static function wp_kses_select_tags( $additional_tags = array() ) {
 		$allowed_tags = array(
 			'select' => array_merge( self::wp_kses_common_attributes(), array(
 				'name'         => true,
@@ -56,7 +56,29 @@ class Utils_Kses {
 		);
 		$allowed_tags = array_merge( $allowed_tags, self::wp_kses_select_option_tags() );
 
-		return apply_filters( 'wpec_kses_select_tags', $allowed_tags );
+		return apply_filters( 'wpec_kses_select_tags', array_merge( $allowed_tags, $additional_tags ) );
+	}
+
+	public static function wp_kses_checkbox_tags( $additional_tags = array() ) {
+
+		$common_attributes = self::wp_kses_common_attributes();
+
+		$allowed_tags = array(
+			'input' => array_merge( $common_attributes, array(
+				'type'         => true,
+				'name'         => true,
+				'value'        => true,
+				'checked'      => true,
+				'form'         => true,
+				'autocomplete' => true,
+				'autofocus'    => true,
+				'tabindex'     => true,
+				'required'     => true,
+			) ),
+			'label' => $common_attributes,
+		);
+
+		return apply_filters( 'wpec_kses_checkbox_tags', array_merge( $allowed_tags, $additional_tags ) );
 	}
 
 	public static function wp_kses_post_tags_with_form() {
@@ -99,10 +121,12 @@ class Utils_Kses {
 			'label'    => $all_attributes,
 		);
 
-		// Merge with standard allowed post tags so paragraph tags, divs, etc. are still kept
-		$allowed_tags = array_merge_recursive( wp_kses_allowed_html( 'post' ), $allowed_form_tags );
-
-		return apply_filters( 'wpec_kses_post_tags_with_form', $allowed_tags );
+		return self::wp_kses_post_tags( $allowed_form_tags );
 	}
 
+	public static function wp_kses_post_tags($additional_tags = array()){
+		$allowed_tags = array_merge_recursive( wp_kses_allowed_html( 'post' ), $additional_tags );
+
+		return apply_filters( 'wp_kses_post_tags', $allowed_tags );
+	}
 }
