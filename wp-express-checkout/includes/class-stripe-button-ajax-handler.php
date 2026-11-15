@@ -42,6 +42,9 @@ class Stripe_Payment_Button_Ajax_Handler {
 		// Get the shortcode data transient.
 		$sc_data_transient = get_transient( 'wp-ppdg-' . sanitize_title_with_dashes( $product_name ) );
 
+		// Make sure the values used to build the Stripe line item (from 'wpec_data') are the same ones that get validated (from 'data').
+		$this->validate_charge_data_matches_order_data( $order_data, $wpec_data );
+
 		$this->do_api_pre_submission_validation( $order_data, $wpec_data );
 
 		$stripe_ipn_url = add_query_arg( array(
@@ -256,51 +259,44 @@ class Stripe_Payment_Button_Ajax_Handler {
 				//It's a subscription payment product. The extension will handle the validation using filter.
 				break;
 			case 'donation':
-				//It's a donation product.
-				Logger::log( "This is a donation type product. API pre-submission amount validation is not required.", true );
+				//It's a donation product. The customer chooses the amount, so only the minimum amount (if configured) is enforced.
+				$min_amount = get_post_meta( $item_for_validation->get_id(), 'wpec_product_min_amount', true );
+				$min_amount = is_numeric( $min_amount ) ? floatval( $min_amount ) : 0;
+
+				if ( $min_amount <= 0 ) {
+					Logger::log( "This is a donation type product with no minimum amount. API pre-submission amount validation is not required.", true );
+				} else {
+					// The minimum applies to the entered amount (before coupon discount), same as the frontend.
+					$min_item_total = $this->get_discounted_item_total( $item_for_validation, $min_amount, $quantity, $array_wpec_data );
+
+					if ( ! $this->is_submitted_unit_price_acceptable( $array_wpec_data, $min_item_total, $quantity ) ) {
+						$error_msg .= __( 'Price validation failed. The submitted amount is less than the minimum donation amount. ', 'wp-express-checkout' );
+						$validated  = false;
+					}
+				}
+
+				// Check if the expected currency matches the given currency.
+				$configured_currency = Main::get_instance()->get_setting( 'currency_code' );
+				if ( $submitted_currency != $configured_currency ) {
+					Logger::log( "API pre-submission validation currency mismatch. Expected currency: " . $configured_currency . ", Submitted currency: " . $submitted_currency . "\n", false );
+
+					$error_msg .= __( "Currency validation failed. The submitted currency does not match the configured currency. ", 'wp-express-checkout' );
+					$error_msg .= "Expected: " . $configured_currency . ", Submitted: " . $submitted_currency;
+
+					$validated = false;
+				}
 				break;
 			default:
 				//It's a one-time product. API pre-submission amount validation is required.
 
-				// Calculate product price amount.
-				$product_price = $item_for_validation->get_price();
-
-				$variations               = ( new Variations( $item_for_validation->get_id() ) )->variations;
-				$variation_price_total    = 0;
-				$price_variations_applied = isset( $array_wpec_data['variations']['applied'] ) ? $array_wpec_data['variations']['applied'] : array();
-				if ( is_array( $variations ) && ! empty( $price_variations_applied ) ) {
-					foreach ( $variations as $index => $variation ) {
-						$applied_var_index     = (int) $price_variations_applied[ $index ];
-						$variation_price       = Utils::round_price( $variation['prices'][ $applied_var_index ] );
-						$variation_price_total += $variation_price;
-					}
-					if ( ! empty( $variation_price_total ) ) {
-						$construct_final_price = get_post_meta( $product_id, 'wpec_product_hide_amount_input', true );
-						$product_price         = ! empty( $construct_final_price ) ? $variation_price_total : $product_price + $variation_price_total;
-					}
-				}
-
-				// Calculate total product price amount.
-				$total_product_price = Utils::round_price( $product_price * $quantity );
+				// Calculate the total product price amount (with variations and coupon discount applied).
+				$total_product_price = $this->get_discounted_item_total( $item_for_validation, $item_for_validation->get_price(), $quantity, $array_wpec_data );
 				// Logger::log( "Total product price: " . $total_product_price, true );
 
-				// Calculate coupon discount amount.
-				if ( isset( $array_wpec_data['couponCode'] ) ) {
-					$coupon_code = $array_wpec_data['couponCode'];
-					$coupon      = Coupons::get_coupon( $coupon_code );
-					$discount    = 0;
-					if ( $coupon['valid'] && Coupons::is_coupon_allowed_for_product( $coupon['id'], $product_id ) ) {
-						// Get the discount amount.
-						if ( $coupon['discountType'] === 'perc' ) {
-							// Discount type percentage.
-							$discount = Utils::round_price( $total_product_price * ( $coupon['discount'] / 100 ) );
-						} else {
-							// Discount type fixed.
-							$discount = $coupon['discount'];
-						}
-					}
-
-					$total_product_price = $total_product_price - $discount;
+				// Validate the unit price that will actually be charged by Stripe ('newPrice' becomes the line item 'unit_amount').
+				if ( ! $this->is_submitted_unit_price_acceptable( $array_wpec_data, $total_product_price, $quantity ) ) {
+					$error_msg .= __( "Price validation failed. The submitted amount does not match the product's configured price. ", 'wp-express-checkout' );
+					$validated  = false;
 				}
 
 				// Calculate tax amount.
@@ -376,6 +372,120 @@ class Stripe_Payment_Button_Ajax_Handler {
 
 		}
 		//Validation is successful, return nothing.
+	}
+
+	/**
+	 * Calculates the item total (unit price x quantity) with the price variations and coupon discount applied, using server side data.
+	 *
+	 * @param \WP_Express_Checkout\Products\Product $product         The product object.
+	 * @param float                                 $base_unit_price The base unit price (product price, or minimum amount for donations).
+	 * @param int                                   $quantity        The quantity.
+	 * @param array                                 $array_wpec_data The data sent from the client (used for applied variations and coupon code only).
+	 *
+	 * @return float
+	 */
+	private function get_discounted_item_total( $product, $base_unit_price, $quantity, $array_wpec_data ) {
+		$product_id    = $product->get_id();
+		$product_price = floatval( $base_unit_price );
+
+		$variations               = ( new Variations( $product_id ) )->variations;
+		$variation_price_total    = 0;
+		$price_variations_applied = isset( $array_wpec_data['variations']['applied'] ) ? $array_wpec_data['variations']['applied'] : array();
+		if ( is_array( $variations ) && ! empty( $price_variations_applied ) ) {
+			foreach ( $variations as $index => $variation ) {
+				$applied_var_index     = (int) $price_variations_applied[ $index ];
+				$variation_price       = Utils::round_price( $variation['prices'][ $applied_var_index ] );
+				$variation_price_total += $variation_price;
+			}
+			if ( ! empty( $variation_price_total ) ) {
+				$construct_final_price = get_post_meta( $product_id, 'wpec_product_hide_amount_input', true );
+				$product_price         = ! empty( $construct_final_price ) ? $variation_price_total : $product_price + $variation_price_total;
+			}
+		}
+
+		// Calculate total product price amount.
+		$total_product_price = Utils::round_price( $product_price * $quantity );
+
+		// Calculate coupon discount amount.
+		if ( isset( $array_wpec_data['couponCode'] ) ) {
+			$coupon_code = $array_wpec_data['couponCode'];
+			$coupon      = Coupons::get_coupon( $coupon_code );
+			$discount    = 0;
+			if ( $coupon['valid'] && Coupons::is_coupon_allowed_for_product( $coupon['id'], $product_id ) ) {
+				// Get the discount amount.
+				if ( $coupon['discountType'] === 'perc' ) {
+					// Discount type percentage.
+					$discount = Utils::round_price( $total_product_price * ( $coupon['discount'] / 100 ) );
+				} else {
+					// Discount type fixed.
+					$discount = $coupon['discount'];
+				}
+			}
+
+			$total_product_price = $total_product_price - $discount;
+		}
+
+		return $total_product_price;
+	}
+
+	/**
+	 * Checks that the unit price Stripe will charge ('newPrice', used as the line item 'unit_amount') is not less than
+	 * the server side calculated unit price. The client rounds the discounted unit price, so a difference of up to
+	 * one smallest currency unit is allowed.
+	 *
+	 * @param array $array_wpec_data     The data sent from the client.
+	 * @param float $expected_item_total The server side calculated item total (unit price x quantity, after discount).
+	 * @param int   $quantity            The quantity.
+	 *
+	 * @return bool
+	 */
+	private function is_submitted_unit_price_acceptable( $array_wpec_data, $expected_item_total, $quantity ) {
+		$submitted_unit_price = isset( $array_wpec_data['newPrice'] ) ? $array_wpec_data['newPrice'] : null;
+		$expected_unit_price  = $expected_item_total / max( 1, intval( $quantity ) );
+		$price_decimals       = intval( Main::get_instance()->get_setting( 'price_decimals_num' ) );
+		$unit_price_tolerance = 1 / pow( 10, max( 0, $price_decimals ) ) + 0.000001;
+
+		if ( is_numeric( $submitted_unit_price ) && floatval( $submitted_unit_price ) >= ( $expected_unit_price - $unit_price_tolerance ) ) {
+			return true;
+		}
+
+		Logger::log( 'API pre-submission validation unit price mismatch. Expected unit price: ' . $expected_unit_price . ', Submitted unit price: ' . ( is_scalar( $submitted_unit_price ) ? $submitted_unit_price : '' ), false );
+
+		return false;
+	}
+
+	/**
+	 * Makes sure the quantity and currency used to create the Stripe checkout session (from 'wpec_data')
+	 * match the ones that get validated (from 'data'). The legitimate frontend always sends identical values.
+	 * Sends a JSON error back to the client on mismatch.
+	 */
+	private function validate_charge_data_matches_order_data( $order_data_array, $array_wpec_data ) {
+		$order_data_array = is_array( $order_data_array ) ? $order_data_array : array();
+		$array_wpec_data  = is_array( $array_wpec_data ) ? $array_wpec_data : array();
+
+		$charge_quantity    = isset( $array_wpec_data['quantity'] ) ? $array_wpec_data['quantity'] : null;
+		$validated_quantity = isset( $order_data_array['quantity'] ) ? $order_data_array['quantity'] : null;
+
+		$charge_currency    = isset( $array_wpec_data['currency'] ) && is_scalar( $array_wpec_data['currency'] ) ? strtoupper( trim( (string) $array_wpec_data['currency'] ) ) : '';
+		$validated_currency = isset( $order_data_array['currency_code'] ) && is_scalar( $order_data_array['currency_code'] ) ? strtoupper( trim( (string) $order_data_array['currency_code'] ) ) : '';
+
+		$quantity_ok = is_numeric( $charge_quantity ) && is_numeric( $validated_quantity )
+			&& intval( $charge_quantity ) >= 1
+			&& intval( $charge_quantity ) === intval( $validated_quantity );
+
+		$currency_ok = '' !== $charge_currency && $charge_currency === $validated_currency;
+
+		if ( $quantity_ok && $currency_ok ) {
+			return;
+		}
+
+		Logger::log( 'API pre-submission validation failed. The checkout session quantity/currency does not match the submitted order data.', false );
+
+		wp_send_json_error(
+			array(
+				'message' => __( 'Validation Error: ', 'wp-express-checkout' ) . __( 'The submitted order data is inconsistent.', 'wp-express-checkout' ),
+			)
+		);
 	}
 
 	public function get_stripe_allowed_countries() {

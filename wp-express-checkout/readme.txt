@@ -176,6 +176,10 @@ None
 
 == Changelog ==
 
+= WIP =
+* Fixed a Stripe checkout price validation issue where a modified checkout request could be charged less than the product's configured price. The charged unit price, quantity and currency are now validated on the server. Thanks to kta1kri for the disclosure.
+* Stripe checkout now enforces the minimum donation amount (when one is configured) on the server.
+
 = 2.5.4 =
 * Product specific coupon configuration checkbox related issue fixed in coupon details page.
 
