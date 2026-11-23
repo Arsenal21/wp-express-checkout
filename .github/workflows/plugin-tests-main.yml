@@ -50,7 +50,6 @@ jobs:
             -not -path 'wp-express-checkout/vendor/paypal/*' \
             -not -path 'wp-express-checkout/vendor/composer/*' \
             -not -path 'wp-express-checkout/node_modules/*' \
-            -not -path 'wp-express-checkout/tests/*' \
             -not -path 'tests/phpunit/vendor/*' -print0)
           if [ "$failed" -ne 0 ]; then
             echo "Syntax errors found."
