@@ -54,3 +54,8 @@ wp-express-checkout/*_debug_log.txt
 wp-express-checkout.zip
 other-helpful-files/temp/
 .idea
+# PHPUnit tests (tests/phpunit) #
+##############
+/tests/phpunit/vendor
+/tests/phpunit/composer.lock
+.phpunit.result.cache
