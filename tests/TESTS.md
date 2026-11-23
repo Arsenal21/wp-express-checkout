@@ -16,12 +16,14 @@ A separate, light workflow, [.github/workflows/php-compatibility-test.yml](../.g
 |---|---|---|---|
 | Lint | PHP syntax check of the plugin and the test files (the Stripe SDK in `lib/stripe` and the PayPal SDK in `vendor/paypal` are skipped) | 7.4, 8.5 | (in the workflow) |
 | PHPUnit | Tests with the WordPress test library and a real database | 7.4, 8.4 | [phpunit/](phpunit/) |
+| Endpoint tests | A real WordPress site with the plugin and fake Stripe and PayPal APIs: sends the checkout requests over HTTP and checks the database | 7.4, 8.4 | [e2e/](e2e/) |
 
 Which group a new test belongs in:
-- Plugin functions and classes that need WordPress and the database, and the AJAX handlers: **PHPUnit**.
+- Plugin functions and classes that need WordPress and the database, and the AJAX handlers' checks: **PHPUnit**.
   [phpunit/includes/class-wpec-ajax-test-case.php](phpunit/includes/class-wpec-ajax-test-case.php) sends an AJAX request as a visitor
   who isn't logged in and keeps the JSON response; it can stop the request right before the plugin calls the Stripe or PayPal API.
-- A request handler that reads the real HTTP request (for example with `filter_input()`): the endpoint tests (Phase B, to be added).
+- A whole checkout (page, payment requests, return from Stripe, Thank You page, download), a request handler that reads the real
+  HTTP request (for example with `filter_input()`), or code that ends with `exit` or a redirect: **Endpoint tests**.
 
 PHPUnit converts PHP notices and warnings into test failures, so a notice in the plugin code fails the test that runs it.
 The test files must stay PHP 7.4-compatible (the oldest PHP version in the workflow).
@@ -33,11 +35,61 @@ If the JavaScript changes how it calculates the amounts, change the factory too.
 
 ### Running the tests on your computer
 
-The tests need PHP with the `mysqli` extension, a MySQL or MariaDB server, Composer and Subversion:
+The tests need PHP with the `mysqli` and `curl` extensions, a MySQL or MariaDB server, Composer and Subversion (WP-CLI for the endpoint tests):
 ```
 bash tests/bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest
 cd tests/phpunit && composer install && vendor/bin/phpunit --testdox
 ```
+For the endpoint tests, follow the steps of the `endpoint-tests` job in the workflow (a WordPress site, the plugin, the must-use plugin,
+`setup-site.php`, `php -S`), then run `tests/e2e/run-endpoint-tests.php` with the same environment variables.
+
+---
+
+## Endpoint tests ([e2e/run-endpoint-tests.php](e2e/run-endpoint-tests.php))
+
+The site is set up with WP-CLI; [e2e/setup-site.php](e2e/setup-site.php) saves the settings (PayPal and Stripe in test mode, manual checkout,
+coupons, the emails), creates the products (one-time, physical with tax and shipping, with stock, a donation with a minimum, a download,
+coupons turned off, variations), the coupons, and a page with the product shortcode for each product.
+[e2e/mu-plugin-e2e-fakes.php](e2e/mu-plugin-e2e-fakes.php) is a fake Stripe API (checkout sessions, tax rates; given to the Stripe SDK as its
+HTTP client) and a fake PayPal API (access token, create order, capture order; it replaces the PayPal SDK's `PayPalHttp\Curl` class).
+It also keeps the emails instead of sending them, and blocks any other request to Stripe or PayPal.
+There is no browser, so a Stripe checkout session is paid as soon as it is created, and a PayPal order is captured for the amount it was
+created with; the runner changes the fakes' data directly for the other cases (an unpaid session, a PayPal order made outside the plugin).
+The tests read the nonces and the JS data from the product page and build the requests like the browser does (the factory's `calc_total()`).
+
+**Product page and coupon check request**
+- The page loads with the checkout data, the nonces and the PayPal, Stripe and manual checkout buttons.
+- The coupon check request: a valid code (in any case) with its discount, an unknown code, a coupon only for another product (rejected)
+  and only for this product (accepted).
+
+**Stripe** (checkout session request, then the return from Stripe)
+- 2 items with a 10% coupon: Stripe is asked to charge 2 x $9.00; the return creates a paid $18.00 order with the session ID and the charge ID,
+  the coupon line, the buyer's email address; the coupon is redeemed; the buyer and seller emails are sent; the Thank You page shows the order.
+- Tax and shipping: a tax rate on the line item, the shipping option ($5 + $1 per item), the $51.00 total, the tax and shipping lines in the order;
+  the saved tax rate is used again.
+- The stock goes from 2 to 0 and the product page then shows "Out of stock"; a $25 donation.
+- Rejected before Stripe is called: a donation below the minimum, a lower unit price, another currency in the charged data (fixed in 2.5.5), a wrong nonce.
+- Returning from an unpaid session, and with an unknown session ID, shows an error and creates no order.
+
+**PayPal** (create order, then capture)
+- 3 items: the order sent to PayPal is $30.00; the capture creates a paid order with the PayPal order and capture IDs; the buyer and seller
+  emails (the buyer email's merge tags are replaced); the Thank You page shows the order. Capturing the same order again fails and creates no order.
+- A price variation (the variation line), a $1 coupon (then the coupon is used up: the coupon check request rejects it, redemption limit 1).
+- A donation below the minimum passes the create order request and is rejected after the capture.
+- Rejected: a lower total (no PayPal order is created), the capture of a $0.01 PayPal order made outside the plugin (amount mismatch, no paid order),
+  a capture request with a wrong nonce.
+
+**Free checkout** (100% coupon)
+- A paid $0.00 order; the Thank You page shows the download link; the link delivers the file; a wrong key doesn't.
+- Rejected: without a coupon (no order is created), a wrong nonce.
+
+**Manual checkout**
+- A pending order with the buyer's quantity; the buyer gets the payment instructions and the seller is notified.
+- A lower total is rejected and creates no pending order.
+
+**Thank You page**: without an order ID, and with a wrong nonce (no order details), it shows the error.
+
+**PHP errors**: a PHP fatal error on the test site fails the tests; the plugin's PHP warnings, notices and deprecations are listed in the output.
 
 ---
 
@@ -105,14 +157,18 @@ The tests pass a capture response like PayPal's.
 ## Known issues (tests that report without failing)
 
 A test for a known or suspected bug runs, but doesn't fail the workflow, so the output shows on every run whether the problem still happens:
-the test calls `markTestIncomplete()` with "KNOWN ISSUE (still happens)" when the bug happens (shown as incomplete, with the reason);
-any other wrong result fails.
-The commit that fixes an issue removes the `markTestIncomplete()` part, so its test becomes a normal test.
+- PHPUnit: the test calls `markTestIncomplete()` with "KNOWN ISSUE (still happens)" when the bug happens (shown as incomplete, with the reason);
+  any other wrong result fails.
+- Endpoint tests: the issue is in `KNOWN_ISSUES` in [e2e/run-endpoint-tests.php](e2e/run-endpoint-tests.php); its checks print
+  `KNOWN ISSUE (still happens)` or `KNOWN ISSUE NOW PASSES`.
+
+The commit that fixes an issue removes the `markTestIncomplete()` part (or the `KNOWN_ISSUES` entry), so its test becomes a normal test.
 
 | Issue | Tests |
 |---|---|
-| Coupons turned off (in the settings, or for the product) are not checked on the server: the coupon check request, the pre-submission validation and the order discount all accept a valid coupon code. The coupon field isn't shown, so a buyer needs to know a valid code and send the request themselves. | `test_a_coupon_does_not_lower_the_price_when_coupons_are_turned_off` (2 cases) |
-| The Stripe checkout session request retrieves the product outside of a try block, so a product ID that isn't a product ends the request with an uncaught exception (PHP fatal error, HTTP 500) instead of an error response. Nothing is charged. | `test_an_unknown_product_is_rejected_without_a_fatal_error` |
+| **Opening the Stripe return URL again creates another paid order** (a reload of the page, the back button): it sends the emails again, lowers the stock again, redeems the coupon again and runs `wpec_payment_completed` again (new download links, membership integrations). `check_if_checkout_session_processed()` looks for the session ID in the order's capture ID (`wpec_order_capture_id`), but `create_order()` saves the session ID as the resource ID; the capture ID is the charge ID. | Endpoint: `stripe-return-duplicate-order` |
+| Coupons turned off (in the settings, or for the product) are not checked on the server: the coupon check request, the pre-submission validation and the order discount all accept a valid coupon code. The coupon field isn't shown, so a buyer needs to know a valid code and send the request themselves. | PHPUnit: `test_a_coupon_does_not_lower_the_price_when_coupons_are_turned_off` (2 cases); Endpoint: `coupons-turned-off` |
+| The Stripe checkout session request retrieves the product outside of a try block, so a product ID that isn't a product ends the request with an uncaught exception (PHP fatal error, HTTP 500) instead of an error response. Nothing is charged. | PHPUnit: `test_an_unknown_product_is_rejected_without_a_fatal_error` |
 
 ## Decisions (behavior that is kept on purpose)
 
@@ -126,17 +182,14 @@ The commit that fixes an issue removes the `markTestIncomplete()` part, so its t
 
 ## Not covered yet (ideas for new tests)
 
-Phase B (endpoint tests: a real test site with fake Stripe and PayPal APIs)
-- The Stripe checkout session through to the return URL (`wpec_process_stripe_ipn`): the order, the emails, the stock, the coupon, the duplicate return.
-- The PayPal create and capture requests over HTTP, the manual checkout and the free checkout (100% coupon).
-- The coupon check request with a product ID; the Thank You page and the download links.
-
 Phase C
 - The Stripe return doesn't compare the amount Stripe collected with the product price (it trusts the session it created).
 - The subscription products (the Subscriptions add-on) are not validated on the server.
 - Stripe charges the shipping only for products with "This is a physical product" ticked, but the validation adds the shipping for any product with a shipping cost.
-- The integrations (Simple Membership, eMember, WooCommerce), the emails' merge tags, the order summary, the admin pages.
-- PHP 8.2+ deprecation notices in the WooCommerce gateway (dynamic properties).
+- The manual checkout form sends the address fields shifted by one (`assets/js/wpec-manual-checkout.js`: the city is sent as the state,
+  the country as the city, the state as the postal code, the postal code as the country). Found by reading the code; JavaScript isn't tested.
+- The integrations (Simple Membership, eMember, WooCommerce), the order summary and the order tags, the admin pages.
+- PHP 8.2+ deprecation notices in the WooCommerce gateway (dynamic properties), and in the PayPal SDK (`vendor/paypal`, PHP 8.4: implicitly nullable parameters).
 
 Manual
 - How the payment popup looks and behaves in a browser (the PayPal and Stripe buttons, the coupon field, the variations); real email delivery.

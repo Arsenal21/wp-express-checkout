@@ -566,8 +566,8 @@ class Coupons {
 			
 			// Redeem coupon count if needed.
 			if ( $coupon && $coupon['valid'] ) {
-				$curr_redeem_cnt = get_post_meta( $coupon['id'], 'wpec_coupon_red_count', true );
-				$curr_redeem_cnt++;
+				// The count is an empty string for a coupon that hasn't been used yet (incrementing an empty string is deprecated in PHP 8.3+).
+				$curr_redeem_cnt = intval( get_post_meta( $coupon['id'], 'wpec_coupon_red_count', true ) ) + 1;
 				update_post_meta( $coupon['id'], 'wpec_coupon_red_count', $curr_redeem_cnt );
 			}
 		}

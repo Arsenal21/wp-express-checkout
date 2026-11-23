@@ -184,8 +184,21 @@ class WPEC_Test_Factory {
 			'variations'            => $product->get_variations(),
 		);
 
+		return self::apply_buyer_choices( $data, $args );
+	}
+
+	/**
+	 * Applies what the buyer chose to the shortcode's JS data, then runs calcTotal(). It doesn't need WordPress
+	 * (the endpoint tests use it with the JS data they read from the product page).
+	 *
+	 * @param array $data The JS data (as the shortcode prints it for ppecHandler, with 'quantity' set to the buyer's quantity).
+	 * @param array $args 'variations' and 'coupon' (see frontend_data()).
+	 */
+	public static function apply_buyer_choices( $data, $args ) {
+		$dec = intval( $data['dec_num'] );
+
 		//Variations (applyVariations(): the base price plus each applied variation's price).
-		if ( null !== $args['variations'] ) {
+		if ( isset( $args['variations'] ) ) {
 			$data['variations']['applied'] = $args['variations'];
 			foreach ( $args['variations'] as $grp_id => $var_index ) {
 				$data['price'] += floatval( $data['variations'][ $grp_id ]['prices'][ $var_index ] );
@@ -194,13 +207,21 @@ class WPEC_Test_Factory {
 		}
 
 		//Coupon (the coupon check request's response is merged into the data).
-		if ( null !== $args['coupon'] ) {
+		if ( isset( $args['coupon'] ) ) {
 			$data['couponCode']   = $args['coupon']['code'];
 			$data['discount']     = $args['coupon']['discount'];
 			$data['discountType'] = $args['coupon']['discountType'];
 		}
 
-		//calcTotal().
+		return self::calc_total( $data );
+	}
+
+	/**
+	 * The frontend's calcTotal() (assets/js/public.js): sets newPrice (the unit price after the coupon), discountAmount,
+	 * tax_amount (per item), total and subtotal. It doesn't need WordPress.
+	 */
+	public static function calc_total( $data ) {
+		$dec       = intval( $data['dec_num'] );
 		$item_subt = floatval( $data['price'] );
 		$quantity  = intval( $data['quantity'] );
 		$t_amount  = floatval( number_format( $item_subt * $quantity, 2, '.', '' ) );

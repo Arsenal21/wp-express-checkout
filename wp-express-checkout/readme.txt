@@ -176,6 +176,9 @@ None
 
 == Changelog ==
 
+= WIP =
+* Fixed a PHP 8.3+ deprecation notice when a coupon is redeemed for the first time.
+
 = 2.5.5 =
 * Fixed a Stripe checkout price validation issue where a modified checkout request could be charged less than the product's configured price. The charged unit price, quantity and currency are now validated on the server. Thanks to kta1kri for the disclosure.
 * Stripe checkout now enforces the minimum donation amount (when one is configured) on the server.
