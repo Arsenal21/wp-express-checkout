@@ -4,7 +4,7 @@ Donate link: https://wp-express-checkout.com/
 Tags: paypal, stripe, payment, ecommerce, sell
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.5.4
+Stable tag: 2.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,7 +176,7 @@ None
 
 == Changelog ==
 
-= WIP =
+= 2.5.5 =
 * Fixed a Stripe checkout price validation issue where a modified checkout request could be charged less than the product's configured price. The charged unit price, quantity and currency are now validated on the server. Thanks to kta1kri for the disclosure.
 * Stripe checkout now enforces the minimum donation amount (when one is configured) on the server.
 
