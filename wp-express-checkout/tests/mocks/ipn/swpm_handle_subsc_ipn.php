@@ -1,2 +1,0 @@
-<?php
-// Just a stub

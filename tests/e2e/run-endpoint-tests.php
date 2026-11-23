@@ -32,7 +32,6 @@ if ( ! is_array( $ids ) ) {
 //the output shows "KNOWN ISSUE (still happens)" or "KNOWN ISSUE NOW PASSES". The commit that fixes one removes it from this list,
 //so its check becomes a normal check.
 const KNOWN_ISSUES = array(
-	'stripe-return-duplicate-order' => 'Opening the Stripe return URL again (a reload, the back button) creates another paid order and sends the emails again: check_if_checkout_session_processed() looks for the session ID in the order\'s capture ID, but create_order() saves the session ID as the resource ID (the capture ID is the charge ID).',
 	'coupons-turned-off'            => 'Coupons turned off (in the settings, or for the product) are not checked on the server: the coupon check request accepts a valid code.',
 );
 
@@ -509,11 +508,14 @@ if ( $order ) {
 	$thank_you = http_request( 'GET', $response['location'] );
 	check( 'Stripe: the Thank You page shows the order', 200 === $thank_you['status'] && contains( $thank_you['body'], 'E2E Basic' ) && ! contains( $thank_you['body'], 'wpec-error-message' ), response_text( $thank_you ) );
 
-	$emails   = count( emails() );
-	$before   = order_ids();
-	$again    = stripe_return( $session );
-	check_known( 'stripe-return-duplicate-order', 'Stripe: opening the return URL again does not create another order', 0 === count( new_order_ids( $before ) ), 'New orders: ' . json_encode( new_order_ids( $before ) ) );
-	check_known( 'stripe-return-duplicate-order', 'Stripe: opening the return URL again does not send the emails again', 0 === count( emails_since( $emails ) ) );
+	//A reload of the return page, or the back button (fixed after 2.5.5: it created another paid order).
+	$emails = count( emails() );
+	$before = order_ids();
+	$again  = stripe_return( $session );
+	check( 'Stripe: opening the return URL again says the order is already processed', contains( $again['body'], 'The order has captured already' ), response_text( $again ) );
+	check( 'Stripe: opening the return URL again does not create another order', 0 === count( new_order_ids( $before ) ), 'New orders: ' . json_encode( new_order_ids( $before ) ) );
+	check( 'Stripe: opening the return URL again does not send the emails again', 0 === count( emails_since( $emails ) ) );
+	check( 'Stripe: opening the return URL again does not redeem the coupon again', '1' === (string) post_meta( $tenoff_id, 'wpec_coupon_red_count' ), (string) post_meta( $tenoff_id, 'wpec_coupon_red_count' ) );
 }
 
 section( 'Stripe: tax and shipping' );

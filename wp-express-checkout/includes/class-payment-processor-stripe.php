@@ -333,10 +333,18 @@ class Payment_Processor_Stripe {
 
 
 	public static function check_if_checkout_session_processed( $session_id ) {
+		// create_order() saves the checkout session ID as the order's resource ID (the capture ID is the charge ID).
+		// The capture ID is checked too, in case an order was saved with the session ID there.
 		$query = new \WP_Query( array(
 			'post_type'      => 'ppdgorder',
+			'post_status'    => 'any',
 			'posts_per_page' => 1, // Only need to know if it exists
 			'meta_query'     => [
+				'relation' => 'OR',
+				[
+					'key'   => 'wpec_order_resource_id',
+					'value' => sanitize_text_field( $session_id ),
+				],
 				[
 					'key'   => 'wpec_order_capture_id',
 					'value' => sanitize_text_field( $session_id ),

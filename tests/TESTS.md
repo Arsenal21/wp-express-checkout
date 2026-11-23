@@ -136,6 +136,38 @@ The tests pass a capture response like PayPal's.
   items than ordered, with a made-up coupon, a donation below the minimum, another currency, a capture that isn't completed, more items than
   in stock (the stock doesn't change), a product whose price data wasn't saved (the product wasn't shown).
 
+**Stripe return** (test-stripe-return-processing.php, `Payment_Processor_Stripe::check_if_checkout_session_processed()`)
+- A session with an order (the session ID saved as the order's resource ID) is processed, so opening the return URL again doesn't create
+  another order (fixed after 2.5.5); a session without an order isn't; an order with the session ID as the capture ID is found too.
+
+**Orders, order tags and emails** (test-orders-and-emails.php)
+- A new order is an incomplete "Transaction" with the buyer's IP address; the total is the sum of the items and never negative;
+  a unique item replaces the previous one; items can be removed; an order is saved and read back (status, gateway, currency, IDs, email,
+  total, data, quantity); a status change runs its action once; a post that isn't an order is rejected.
+- The order tags (the email merge tags and the Thank You page parts): names, email, transaction ID, amount (without the symbol),
+  currency, coupon code, order ID, product ID and name, quantity, address, date; the product details (item, coupon, total, download link);
+  the download link tags; the selected variations.
+- The buyer email: to the buyer, with the subject and body tags replaced and the From address, saved as sent on the order; the HTML type;
+  a product's own buyer email; none when it's turned off. The seller email: only when it's turned on, to the notification address.
+- The Thank You page shortcodes (`[wpec_ty field=...]`, `[wpec_thank_you]`) with a valid nonce, a wrong nonce, no order ID,
+  and an order that isn't completed.
+
+**Integrations** (test-integrations.php; the other plugins are faked in [phpunit/includes/integration-fakes.php](phpunit/includes/integration-fakes.php))
+- Simple Membership: the PayPal buyer is signed up to the product's level with the buyer details (names, email, address, the country name)
+  and the PayPal order ID; a logged-in member is upgraded; a Stripe buyer is signed up with the Stripe customer details and the charge ID;
+  nothing for a product without a level; it runs on `wpec_payment_completed`; the PayPal subscription events (cancelled, expired, suspended,
+  payment) call the right function; other events and events without a subscription ID do nothing.
+- WP eMember: the buyer is signed up to the product's level; a logged-in member is upgraded; a Stripe payment; nothing without a level.
+- Software License Manager: one license per item (prefix, status, buyer, transaction ID, the product's domains and expiry, or the defaults
+  and one year), the keys replace `{wpec_slm_data}` in the buyer email; nothing for a product without licenses or without an order.
+- A subscription product without the updated Subscriptions add-on is treated as a one-time product.
+
+**Settings, PayPal and the product block** (test-settings-paypal-and-blocks.php)
+- A setting that isn't saved uses its default.
+- The PayPal SDK script: the sandbox or live client ID, the currency, the disabled funding sources and cards, the sandbox buyer country.
+- The PayPal API client: the sandbox or live credentials (from the setting, or the mode passed).
+- The product block is registered, shows the product, and shows a placeholder without a product.
+
 **Coupons** (test-coupons.php, `Coupons::get_coupon()`, `is_coupon_allowed_for_product()`)
 - A valid coupon is found with its discount and type; a coupon below its redemption limit is valid.
 - Rejected with the right message: unknown code, inactive, starts later, no start date, expired, redemption limit reached.
@@ -166,9 +198,14 @@ The commit that fixes an issue removes the `markTestIncomplete()` part (or the `
 
 | Issue | Tests |
 |---|---|
-| **Opening the Stripe return URL again creates another paid order** (a reload of the page, the back button): it sends the emails again, lowers the stock again, redeems the coupon again and runs `wpec_payment_completed` again (new download links, membership integrations). `check_if_checkout_session_processed()` looks for the session ID in the order's capture ID (`wpec_order_capture_id`), but `create_order()` saves the session ID as the resource ID; the capture ID is the charge ID. | Endpoint: `stripe-return-duplicate-order` |
 | Coupons turned off (in the settings, or for the product) are not checked on the server: the coupon check request, the pre-submission validation and the order discount all accept a valid coupon code. The coupon field isn't shown, so a buyer needs to know a valid code and send the request themselves. | PHPUnit: `test_a_coupon_does_not_lower_the_price_when_coupons_are_turned_off` (2 cases); Endpoint: `coupons-turned-off` |
 | The Stripe checkout session request retrieves the product outside of a try block, so a product ID that isn't a product ends the request with an uncaught exception (PHP fatal error, HTTP 500) instead of an error response. Nothing is charged. | PHPUnit: `test_an_unknown_product_is_rejected_without_a_fatal_error` |
+
+Fixed after 2.5.5 (their tests are normal tests now):
+- Opening the Stripe return URL again (a reload, the back button) created another paid order, sent the emails again, lowered the stock and
+  redeemed the coupon again: `check_if_checkout_session_processed()` looked for the session ID in the capture ID, but the session ID is saved
+  as the resource ID. Tests: test-stripe-return-processing.php, and the endpoint tests' "opening the return URL again" checks.
+- A PHP 8.3+ deprecation notice when a coupon was redeemed for the first time (the empty redemption count was incremented).
 
 ## Decisions (behavior that is kept on purpose)
 
@@ -188,12 +225,14 @@ Phase C
 - Stripe charges the shipping only for products with "This is a physical product" ticked, but the validation adds the shipping for any product with a shipping cost.
 - The manual checkout form sends the address fields shifted by one (`assets/js/wpec-manual-checkout.js`: the city is sent as the state,
   the country as the city, the state as the postal code, the postal code as the country). Found by reading the code; JavaScript isn't tested.
-- The integrations (Simple Membership, eMember, WooCommerce), the order summary and the order tags, the admin pages.
+- The WooCommerce integration (the PayPal and Stripe gateways): it needs WooCommerce installed, so it belongs in the endpoint tests
+  (a test site with WooCommerce). The admin pages (the settings, the product and coupon edit pages, the orders list).
 - PHP 8.2+ deprecation notices in the WooCommerce gateway (dynamic properties), and in the PayPal SDK (`vendor/paypal`, PHP 8.4: implicitly nullable parameters).
+- The subscription webhooks (the Subscriptions add-on), tested with the add-on installed.
 
 Manual
 - How the payment popup looks and behaves in a browser (the PayPal and Stripe buttons, the coupon field, the variations); real email delivery.
 
-Old test suite
-- [wp-express-checkout/tests/](../wp-express-checkout/tests/) (run by [.github/workflows/phpunit-tests.yml](../.github/workflows/phpunit-tests.yml) on every push to master)
-  is the previous suite: 330 tests, 100 of them empty (`markTestIncomplete`). It is removed once the new suite covers what it checks.
+The previous test suite (`wp-express-checkout/tests/` and the `phpunit-tests.yml` workflow: 330 tests, 100 of them empty) was removed
+in November 2026, once this suite covered what it checked. Only its WooCommerce gateway tests (with fake WooCommerce classes) aren't
+replaced yet (see above).
