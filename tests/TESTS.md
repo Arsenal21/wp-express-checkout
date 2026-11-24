@@ -210,6 +210,9 @@ Fixed after 2.5.5 (their tests are normal tests now):
   without escaping, and the manual and free checkouts saved them as sent by the browser. Now the HTML order tags are escaped (custom tags
   from add-ons go through `wp_kses_post()`), the plain text tags for the emails are not, and the buyer details are saved as text only.
   Tests: test-buyer-data-escaping.php.
+- The order item name was the name sent by the browser (`data[name]`), so it could contain HTML (shown by the `download_link` order tag)
+  or another product's name. The name is still used to find the product's price data, but the PayPal capture, the free and manual
+  checkouts and the Stripe line item now use the product's name. Tests: test-buyer-data-escaping.php.
 
 ## Decisions (behavior that is kept on purpose)
 

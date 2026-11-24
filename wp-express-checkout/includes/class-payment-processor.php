@@ -111,6 +111,9 @@ class Payment_Processor {
 			$this->send_error( $exc->getMessage(), $exc->getCode() );
 		}
 
+		// The name sent by the browser is only used to find the product's price data (the transient); the order gets the product's name.
+		$item_name = $product->get_item_name();
+
 		$order->set_payment_gateway( 'paypal' );
 		/* translators: Order title: {Quantity} {Item name} - {Status} */
 		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $this->get_transaction_status( $payment ) ) );
@@ -284,6 +287,9 @@ class Payment_Processor {
 		} catch ( Exception $exc ) {
 			$this->send_error( $exc->getMessage(), $exc->getCode() );
 		}
+
+		// The name sent by the browser is only used to find the product's price data (the transient); the order gets the product's name.
+		$item_name = $product->get_item_name();
 
 		$order->set_payment_gateway( 'paypal' );
 		/* translators: Order title: {Quantity} {Item name} - {Status} */

@@ -123,6 +123,106 @@ class Test_Buyer_Data_Escaping extends WPEC_Ajax_Test_Case {
 		$this->assertStringNotContainsString( '<i>', $html );
 	}
 
+	// ---- The order item name (fixed after 2.5.5: it was the name sent by the browser) ----
+
+	/**
+	 * The purchase data with HTML added to the product name. The plugin finds the product's price data by the name
+	 * (sanitize_title_with_dashes() removes the HTML), so the request still finds the product.
+	 */
+	private function data_with_html_name( $product_id, $args = array() ) {
+		do_shortcode( '[wp_express_checkout product_id="' . $product_id . '"]' );
+		$data          = WPEC_Test_Factory::frontend_data( $product_id, $args );
+		$data['name']  = $data['name'] . self::PAYLOAD;
+		$data['nonce'] = wp_create_nonce( $data['id'] . $product_id );
+		return $data;
+	}
+
+	private function order_from_response() {
+		$response = $this->response();
+		$this->assertArrayHasKey( 'redirect_url', $response, 'The checkout succeeds. Response: ' . $this->response_body );
+		preg_match( '/order_id=(\d+)/', $response['redirect_url'], $m );
+		return \WP_Express_Checkout\Orders::retrieve( (int) $m[1] );
+	}
+
+	private function assert_order_has_the_product_name( $order, $name ) {
+		$this->assertSame( $name, $order->get_item( 'ppec-products' )['name'] );
+		$this->assertStringNotContainsString( '<img', $order->get_description() );
+	}
+
+	public function test_the_paypal_capture_saves_the_product_name_not_the_name_sent_by_the_browser() {
+		$product_id = WPEC_Test_Factory::create_product( '10', array(), 'PayPal Product' );
+		$data       = $this->data_with_html_name( $product_id );
+		$payment    = array(
+			'id'             => 'PAYPAL-ORDER-1',
+			'status'         => 'COMPLETED',
+			'payer'          => array( 'email_address' => 'buyer@example.com' ),
+			'purchase_units' => array(
+				array(
+					'payments' => array(
+						'captures' => array(
+							array(
+								'id'     => 'CAPTURE-1',
+								'amount' => array(
+									'value'         => '10.00',
+									'currency_code' => 'USD',
+								),
+							),
+						),
+					),
+				),
+			),
+		);
+
+		$this->run_request(
+			function () use ( $payment, $data ) {
+				\WP_Express_Checkout\Payment_Processor::get_instance()->wpec_server_side_process_payment( $payment, $data );
+			}
+		);
+
+		$this->assert_order_has_the_product_name( $this->order_from_response(), 'PayPal Product' );
+	}
+
+	public function test_the_free_checkout_saves_the_product_name_not_the_name_sent_by_the_browser() {
+		WPEC_Test_Factory::update_settings( array( 'coupons_enabled' => 1 ) );
+		$product_id = WPEC_Test_Factory::create_product( '10', array( 'ppec_product_upload' => 'http://example.org/file.zip' ), 'Free Product' );
+		WPEC_Test_Factory::create_coupon( 'FREE100', 100, 'perc' );
+		$data = $this->data_with_html_name( $product_id, array( 'coupon' => array( 'code' => 'FREE100', 'discount' => '100', 'discountType' => 'perc' ) ) );
+
+		$this->send_ajax(
+			wp_slash(
+				array(
+					'action'          => 'wpec_process_empty_payment',
+					'wp_ppdg_payment' => array( 'payer' => array( 'email_address' => 'buyer@example.com' ) ),
+					'data'            => $data,
+					'nonce'           => $data['nonce'],
+				)
+			)
+		);
+
+		$order = $this->order_from_response();
+		$this->assert_order_has_the_product_name( $order, 'Free Product' );
+		//The report's sink: the download link on the Thank You page.
+		$this->assertStringNotContainsString( '<img', ( new \WP_Express_Checkout\Order_Tags_Html( $order ) )->download_link() );
+	}
+
+	public function test_the_manual_checkout_saves_the_product_name_not_the_name_sent_by_the_browser() {
+		$product_id = WPEC_Test_Factory::create_product( '10', array(), 'Manual Product' );
+		$data       = $this->data_with_html_name( $product_id );
+
+		$this->send_ajax(
+			wp_slash(
+				array(
+					'action'          => 'wpec_process_manual_checkout',
+					'wp_ppdg_payment' => array( 'payer' => array( 'email_address' => 'buyer@example.com' ) ),
+					'data'            => $data,
+					'nonce'           => $data['nonce'],
+				)
+			)
+		);
+
+		$this->assert_order_has_the_product_name( $this->order_from_response(), 'Manual Product' );
+	}
+
 	/**
 	 * The manual checkout request (assets/js/wpec-manual-checkout.js) with HTML in the buyer details.
 	 */

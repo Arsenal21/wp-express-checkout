@@ -72,7 +72,8 @@ class Stripe_Payment_Button_Ajax_Handler {
 				'price_data' => array(
 					'currency'     => $currency,
 					'product_data' => array(
-						'name'     => $product_name,
+						// The product's name (the name sent by the browser is only used to find the product's price data).
+						'name'     => $product->get_item_name(),
 						'metadata' => array(
 							'wpec_product_id' => $product_id,
 							'wpec_item_key' => 'main',

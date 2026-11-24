@@ -104,6 +104,9 @@ class Payment_Processor_Manual extends Payment_Processor {
 			$this->send_error( $exc->getMessage(), $exc->getCode() );
 		}
 
+		// The name sent by the browser is only used to find the product's price data (the transient); the order gets the product's name.
+		$item_name = $product->get_item_name();
+
 		$order->set_payment_gateway( 'manual_checkout' );
 		/* translators: Order title: {Quantity} {Item name} - {Status} */
 		$order->set_description( sprintf( __( '%1$d %2$s - %3$s', 'wp-express-checkout' ), $quantity, $item_name, $this->transaction_status ) );
