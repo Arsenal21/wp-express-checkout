@@ -421,6 +421,8 @@ class Payment_Processor {
 	 */
 	protected function get_payment_data() {
 		$payment = isset( $_POST['wp_ppdg_payment'] ) ? stripslashes_deep( $_POST['wp_ppdg_payment'] ) : array();
+		// The buyer details (name, email, phone, address) come from the browser: keep text only.
+		$payment = is_array( $payment ) ? map_deep( $payment, 'sanitize_text_field' ) : array();
 		return $payment;
 	}
 

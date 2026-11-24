@@ -10,6 +10,28 @@ namespace WP_Express_Checkout;
 class Order_Tags_Plain extends Order_Tags_Html {
 
 	/**
+	 * Plain text: the values are not escaped (the emails are plain text).
+	 *
+	 * @param mixed $value The value.
+	 *
+	 * @return mixed
+	 */
+	protected function output( $value ) {
+		return $value;
+	}
+
+	/**
+	 * Plain text: a custom order tag's value is not changed.
+	 *
+	 * @param mixed $value The value.
+	 *
+	 * @return mixed
+	 */
+	protected function output_custom_tag( $value ) {
+		return $value;
+	}
+
+	/**
 	 * Generates Order Summary Table.
 	 *
 	 * @return string

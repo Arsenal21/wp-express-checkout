@@ -206,6 +206,10 @@ Fixed after 2.5.5 (their tests are normal tests now):
   redeemed the coupon again: `check_if_checkout_session_processed()` looked for the session ID in the capture ID, but the session ID is saved
   as the resource ID. Tests: test-stripe-return-processing.php, and the endpoint tests' "opening the return URL again" checks.
 - A PHP 8.3+ deprecation notice when a coupon was redeemed for the first time (the empty redemption count was incremented).
+- Stored XSS: the `[wpec_ty field=...]` Thank You page shortcode showed the buyer details (name, phone, address, coupon code, variations)
+  without escaping, and the manual and free checkouts saved them as sent by the browser. Now the HTML order tags are escaped (custom tags
+  from add-ons go through `wp_kses_post()`), the plain text tags for the emails are not, and the buyer details are saved as text only.
+  Tests: test-buyer-data-escaping.php.
 
 ## Decisions (behavior that is kept on purpose)
 

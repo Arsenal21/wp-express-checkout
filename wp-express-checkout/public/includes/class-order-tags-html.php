@@ -5,6 +5,9 @@ namespace WP_Express_Checkout;
 /**
  * Order tags generator with HTML output.
  *
+ * The values come from the order (much of it entered by the buyer), so they are escaped for HTML here.
+ * The plain text generator (Order_Tags_Plain, used for the emails) returns them unescaped.
+ *
  * @since 2.1.0
  */
 class Order_Tags_Html {
@@ -24,13 +27,36 @@ class Order_Tags_Html {
 	}
 
 	/**
+	 * Prepares a text value for output: escaped for HTML.
+	 *
+	 * @param mixed $value The value.
+	 *
+	 * @return string
+	 */
+	protected function output( $value ) {
+		return esc_html( (string) $value );
+	}
+
+	/**
+	 * Prepares the output of a custom order tag (added with the 'wpec_render_custom_order_tag' filter):
+	 * HTML is allowed, but not scripts or event handler attributes.
+	 *
+	 * @param mixed $value The value.
+	 *
+	 * @return mixed
+	 */
+	protected function output_custom_tag( $value ) {
+		return is_scalar( $value ) ? wp_kses_post( (string) $value ) : $value;
+	}
+
+	/**
 	 * Order author first name.
 	 *
 	 * @return string
 	 */
 	public function first_name() {
 		$payer_details = $this->order->get_data( 'payer' );
-		return $payer_details['name']['given_name'];
+		return $this->output( isset( $payer_details['name']['given_name'] ) ? $payer_details['name']['given_name'] : '' );
 	}
 
 	/**
@@ -40,7 +66,7 @@ class Order_Tags_Html {
 	 */
 	public function last_name() {
 		$payer_details = $this->order->get_data( 'payer' );
-		return $payer_details['name']['surname'];
+		return $this->output( isset( $payer_details['name']['surname'] ) ? $payer_details['name']['surname'] : '' );
 	}
 
 	/**
@@ -63,7 +89,7 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function payer_email() {
-		return $this->order->get_info( 'email' );
+		return $this->output( $this->order->get_info( 'email' ) );
 	}
 
 	/**
@@ -72,7 +98,7 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function payer_phone() {
-		return $this->order->get_phone();
+		return $this->output( $this->order->get_phone() );
 	}
 
 	/**
@@ -81,7 +107,7 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function transaction_id() {
-		return $this->order->get_capture_id();
+		return $this->output( $this->order->get_capture_id() );
 	}
 
 	/**
@@ -90,7 +116,7 @@ class Order_Tags_Html {
 	 * @return float
 	 */
 	public function purchase_amt() {
-		return $this->order->get_total();
+		return $this->output( $this->order->get_total() );
 	}
 
 	/**
@@ -99,15 +125,15 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function purchase_date() {
-		return get_post_time( 'F j, Y, g:i a', false, $this->order->get_id() );
+		return $this->output( get_post_time( 'F j, Y, g:i a', false, $this->order->get_id() ) );
 	}
 
 	public function quantity_ordered() {
-		return $this->order->get_quantity_ordered();
+		return $this->output( $this->order->get_quantity_ordered() );
 	}
 
 	public function selected_variations() {
-		return $this->order->get_selected_variations_string();
+		return $this->output( $this->order->get_selected_variations_string() );
 	}
 
 	/**
@@ -116,7 +142,7 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function currency_code() {
-		return $this->order->get_currency();
+		return $this->output( $this->order->get_currency() );
 	}
 
 	/**
@@ -126,7 +152,7 @@ class Order_Tags_Html {
 	 */
 	public function coupon_code() {
 		$coupon_item = $this->order->get_item( 'coupon' );
-		return ! empty( $coupon_item['meta']['code'] ) ? $coupon_item['meta']['code'] : '0';
+		return $this->output( ! empty( $coupon_item['meta']['code'] ) ? $coupon_item['meta']['code'] : '0' );
 	}
 
 	/**
@@ -135,7 +161,7 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function address() {
-		return $this->order->get_shipping_address();
+		return $this->output( $this->order->get_shipping_address() );
 	}
 
 	/**
@@ -144,7 +170,7 @@ class Order_Tags_Html {
 	 * @return int
 	 */
 	public function order_id() {
-		return $this->order->get_id();
+		return $this->output( $this->order->get_id() );
 	}
 
 	/**
@@ -188,7 +214,7 @@ class Order_Tags_Html {
 		foreach ( $downloads as $name => $download_url ) {
 			$count = ! empty( $counter[ $name ] ) ? $counter[ $name ] : 0;
 			$text = ! empty( $args['anchor_text'] ) ? $args['anchor_text'] : $download_url;
-			$content .= sprintf( $link_tpl, $name, $download_url, $args['target'], $text, $count, $limit ? $limit : '&infin;' );
+			$content .= sprintf( $link_tpl, esc_html( $name ), esc_url( $download_url ), esc_attr( $args['target'] ), esc_html( $text ), (int) $count, $limit ? $limit : '&infin;' );
 		}
 
 		return $content;
@@ -201,7 +227,7 @@ class Order_Tags_Html {
 	 */
 	public function product_id() {
 		$product_item = $this->order->get_item( 'ppec-products' );
-		return ! empty( $product_item['post_id'] ) ? $product_item['post_id'] : 0;
+		return $this->output( ! empty( $product_item['post_id'] ) ? $product_item['post_id'] : 0 );
 	}
 
 	/**
@@ -210,8 +236,9 @@ class Order_Tags_Html {
 	 * @return string
 	 */
 	public function product_name() {
-		$product = get_post( $this->product_id() );
-		return $product ? $product->post_title : '';
+		$product_item = $this->order->get_item( 'ppec-products' );
+		$product      = ! empty( $product_item['post_id'] ) ? get_post( $product_item['post_id'] ) : null;
+		return $this->output( $product ? $product->post_title : '' );
 	}
 
 	/**
@@ -222,7 +249,7 @@ class Order_Tags_Html {
 	 */
 	public function __call( $name, $arguments ) {
 		$arguments['renderer'] = $this;
-		return apply_filters( 'wpec_render_custom_order_tag', null, $name, $arguments );
+		return $this->output_custom_tag( apply_filters( 'wpec_render_custom_order_tag', null, $name, $arguments ) );
 	}
 
 }

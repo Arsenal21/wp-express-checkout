@@ -179,6 +179,7 @@ None
 = WIP =
 * Fixed a PHP 8.3+ deprecation notice when a coupon is redeemed for the first time.
 * Fixed an issue where opening the Stripe checkout return URL again (for example, reloading the page) created a duplicate order and sent the notification emails again.
+* The order details shown by the [wpec_ty] Thank You page shortcode are now escaped, and the buyer details submitted with the manual and free checkout are sanitized when saved (stored XSS).
 
 = 2.5.5 =
 * Fixed a Stripe checkout price validation issue where a modified checkout request could be charged less than the product's configured price. The charged unit price, quantity and currency are now validated on the server. Thanks to kta1kri for the disclosure.
