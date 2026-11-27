@@ -725,6 +725,42 @@ $response      = process_payment( 'wpec_process_manual_checkout', $data );
 check( 'Manual checkout with a lower total is rejected', 'Payment amount mismatch with the original price.' === json_of( $response ), response_text( $response ) );
 check( 'Manual checkout: no pending order is created for it', 0 === count( array_filter( array_map( 'order', new_order_ids( $before ) ), function ( $o ) { return 'pending' === $o['status']; } ) ) );
 
+section( 'Manual checkout: downloads only after the payment (fixed after 2.5.6)' );
+//The product's own Thank You page shows the downloads with [wpec_ty_downloads]. The order is pending until the admin marks it as paid
+//(here the runner changes the order's status in the database, like the admin's "Set paid and send email" button does).
+$page     = product_page( 'manualdl' );
+$before   = order_ids();
+$response = process_payment( 'wpec_process_manual_checkout', purchase( $page ), payer( 'manual-dl-buyer@example.com' ) );
+$json     = json_of( $response );
+$new      = new_order_ids( $before );
+if ( check( 'Manual checkout of a download product: a pending order is created', 1 === count( $new ) && ! empty( $json['redirect_url'] ) && 'pending' === order( $new[0] )['status'], response_text( $response ) ) ) {
+	$order_id  = $new[0];
+	$thank_you = http_request( 'GET', $json['redirect_url'] );
+	check( 'The Thank You page shows the pending order without a download link', contains( $thank_you['body'], 'Jane' ) && ! contains( $thank_you['body'], 'wpec_download_file=' ), response_text( $thank_you ) );
+
+	set_post_meta( $order_id, 'wpec_order_state', 'paid' );
+	$thank_you = http_request( 'GET', $json['redirect_url'] );
+	$link      = preg_match( '/href="([^"]*wpec_download_file=[^"]*)"/', $thank_you['body'], $m ) ? html_entity_decode( $m[1] ) : '';
+	check( 'When the order is paid, the Thank You page shows the download link', '' !== $link, response_text( $thank_you ) );
+
+	if ( '' !== $link ) {
+		foreach ( array( 'pending', 'refunded' ) as $status ) {
+			set_post_meta( $order_id, 'wpec_order_state', $status );
+			$download = http_request( 'GET', $link );
+			check(
+				"The download link of a {$status} order is rejected",
+				contains( $download['body'], 'payment for this order has not been completed' ) && ! contains( $download['body'], 'E2E downloaded file content' ) && ! contains( $download['location'], 'e2e-download.txt' ),
+				response_text( $download )
+			);
+		}
+
+		set_post_meta( $order_id, 'wpec_order_state', 'paid' );
+		$download = http_request( 'GET', $link );
+		$body     = '' !== $download['location'] ? http_request( 'GET', $download['location'] )['body'] : $download['body'];
+		check( 'The download link of the paid order delivers the file', contains( $body, 'E2E downloaded file content' ), response_text( $download ) );
+	}
+}
+
 // ---- Thank You page ----
 
 section( 'Thank You page' );

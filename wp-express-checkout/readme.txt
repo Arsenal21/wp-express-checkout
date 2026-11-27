@@ -176,6 +176,10 @@ None
 
 == Changelog ==
 
+= WIP =
+* Download links now work only for paid orders. Previously, a pending manual checkout order (not yet marked as paid) could show and use its download link on a Thank You page that uses the [wpec_ty_downloads] or [wpec_ty field=download_link] shortcode, and the links of refunded orders kept working. Thanks to Mike Reavey for the responsible disclosure.
+* Added the 'wpec_downloadable_order_statuses' filter to change which order statuses allow downloads (default: paid).
+
 = 2.5.6 =
 * The order details shown by the [wpec_ty] Thank You page shortcode are now escaped, and the buyer details submitted with the manual and free checkout are sanitized when saved (stored XSS).
 * The order item name is now always the product's name from the product settings, not the name sent with the checkout request.

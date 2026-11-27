@@ -48,6 +48,7 @@ class Test_Buyer_Data_Escaping extends WPEC_Ajax_Test_Case {
 			)
 		);
 		$order->add_data( 'shipping_address', self::PAYLOAD );
+		$order->set_status( 'paid' );
 		return \WP_Express_Checkout\Orders::retrieve( $order->get_id() );
 	}
 

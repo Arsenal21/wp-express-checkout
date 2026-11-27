@@ -77,6 +77,25 @@ $ids = array(
 	//$10 with coupons turned off for the product.
 	'nocoupon' => WPEC_Test_Factory::create_product( '10', array( 'wpec_product_coupons_setting' => '0' ), 'E2E No Coupons' ),
 );
+//$12 with a download link, and its own Thank You page that shows the downloads with [wpec_ty_downloads]
+//(bought with the manual checkout: the order is pending until the admin marks it as paid).
+$downloads_page = wp_insert_post(
+	array(
+		'post_type'    => 'page',
+		'post_status'  => 'publish',
+		'post_title'   => 'E2E downloads Thank You page',
+		'post_content' => '[wpec_ty field=first_name] [wpec_ty_downloads]',
+	)
+);
+$ids['manualdl'] =WPEC_Test_Factory::create_product(
+	'12',
+	array(
+		'ppec_product_upload'        => $uploads['baseurl'] . '/e2e-download.txt',
+		'wpec_product_thankyou_page' => get_permalink( $downloads_page ),
+	),
+	'E2E Manual Download'
+);
+
 //$10, Size: Small (+$0) or Large (+$5).
 $ids['variations'] = WPEC_Test_Factory::create_product( '10', array(), 'E2E Variations' );
 WPEC_Test_Factory::add_variations( $ids['variations'], array( 'Size' => array( 'Small' => 0, 'Large' => 5 ) ) );
@@ -111,6 +130,7 @@ foreach ( $ids as $key => $product_id ) {
 	}
 }
 
-$ids['thank_you_page'] = (int) $settings['thank_you_page_id'];
+$ids['thank_you_page']           = (int) $settings['thank_you_page_id'];
+$ids['downloads_thank_you_page'] = $downloads_page;
 
 echo wp_json_encode( $ids ) . "\n";

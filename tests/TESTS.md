@@ -214,6 +214,13 @@ Fixed after 2.5.5 (their tests are normal tests now):
   or another product's name. The name is still used to find the product's price data, but the PayPal capture, the free and manual
   checkouts and the Stripe line item now use the product's name. Tests: test-buyer-data-escaping.php.
 
+Fixed after 2.5.6:
+- Unpaid downloads: a manual checkout order is pending until the admin marks it as paid, but the `[wpec_ty_downloads]` and
+  `[wpec_ty field=download_link]` shortcodes showed its download link, and the download request checked only the link's key (a refunded
+  order's link kept working too). Now `View_Downloads::is_order_downloadable()` (status `paid`, filter `wpec_downloadable_order_statuses`)
+  is checked when the download links are listed (the Thank You page, the shortcodes, the email tags, the admin downloads box) and when a
+  file is downloaded. Tests: test-downloads.php, and the endpoint tests' "Manual checkout: downloads only after the payment" section.
+
 ## Decisions (behavior that is kept on purpose)
 
 - **The Stripe unit price check allows one cent (one unit for zero-decimal currencies) less than the expected unit price.**

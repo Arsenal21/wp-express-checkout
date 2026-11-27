@@ -116,6 +116,11 @@ class View_Downloads {
 			return $downloads;
 		}
 
+		// No download links for an order that isn't paid (for example a manual checkout order before the admin marks it as paid).
+		if ( ! self::is_order_downloadable( $order ) ) {
+			return $downloads;
+		}
+
 		if ( ! empty( $product->get_download_url() ) ) {
 			$downloads[ $product_item['name'] ] = self::get_download_url( $order_id );
 		}
@@ -131,6 +136,25 @@ class View_Downloads {
 		}
 
 		return $downloads;
+	}
+
+	/**
+	 * Whether the order's files can be downloaded: only a paid order, not a pending (manual checkout), incomplete or refunded one.
+	 *
+	 * @param Order $order The order.
+	 *
+	 * @return bool
+	 */
+	public static function is_order_downloadable( $order ) {
+		/**
+		 * Filters the order statuses whose files can be downloaded.
+		 *
+		 * @param array $statuses The order statuses. Default array( 'paid' ).
+		 * @param Order $order    The order.
+		 */
+		$statuses = (array) apply_filters( 'wpec_downloadable_order_statuses', array( 'paid' ), $order );
+
+		return in_array( $order->get_status(), $statuses, true );
 	}
 
 	/**
@@ -184,6 +208,10 @@ class View_Downloads {
 
 		if ( empty( $product ) || (int) $item['post_id'] !== $product->ID ) {
 			wp_die( esc_html__( 'Invalid product ID!', 'wp-express-checkout' ) );
+		}
+
+		if ( ! self::is_order_downloadable( $order ) ) {
+			wp_die( esc_html__( 'The download is not available because the payment for this order has not been completed.', 'wp-express-checkout' ) );
 		}
 
 		if ( ! $product->ppec_product_upload && ( ! isset( $_GET['var_id'] ) || ! isset( $_GET['grp_id'] ) ) ) {
